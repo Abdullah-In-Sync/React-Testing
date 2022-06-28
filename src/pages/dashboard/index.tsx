@@ -6,7 +6,7 @@ const Dashboard: React.FunctionComponent<any> = (props) => {
 
     return (
         <>
-            <h1>Dashboard</h1>
+           
             <Layout />
         </>
     );
