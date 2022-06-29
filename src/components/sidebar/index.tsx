@@ -95,6 +95,7 @@ export default function SideBar() {
         sx: {
           backgroundColor: 'primary.main',
           color: navTextColor,
+          zIndex:0
         }
       }}
       sx={{

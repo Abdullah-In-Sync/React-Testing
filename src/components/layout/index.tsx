@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 // import CssBaseline from '@mui/material/CssBaseline';
 
 import NavBar from '../navbar';
-import SideBar from '../sidebar'
+import SideBar from '../sidebar';
+import Footer from '../footer';
 
 const contentStyle = {
     marginTop: 55,
@@ -26,6 +27,7 @@ export default function Layout(props) {
                     {props.children}
                 </Box>
             </Box>
+            <Footer/>
         </Box>
     );
 }
