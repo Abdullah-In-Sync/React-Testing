@@ -79,11 +79,11 @@ export default function SideBar() {
   const handleListItemClick = (e, index) => {
     setSelectedIndex(index);
   };
-  const handleClick = (e,id) => {
+  const handleClick = (e, id) => {
     setExpanded({
-            ...expanded,
-            [id]: !expanded[id]
-          });
+      ...expanded,
+      [id]: !expanded[id]
+    });
   };
 
 
@@ -110,7 +110,7 @@ export default function SideBar() {
             if (Array.isArray(val)) {
               return (
                 <>
-                  <ListItemButton onClick={(e) => handleClick(e,val[0]?.key)} style={{ margin: '0px 16px' }} >
+                  <ListItemButton onClick={(e) => handleClick(e, val[0]?.key)} style={{ margin: '0px 16px' }} >
                     <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
                       {val[0]?.icon}
                     </ListItemIcon>
@@ -119,22 +119,21 @@ export default function SideBar() {
                   </ListItemButton>
                   {
                     val?.slice(1)?.map((item, index) => (
-                      <ListItem key={item.label} style={listItem}  >
-                        <Collapse in={expanded[val[0]?.key]|| false} timeout="auto" unmountOnExit>
-                          <List component="div" disablePadding >
-                            <NextLink href={item.path} passHref>
-                              <ListButton sx={{ pl: 4 }} component="a" 
-                                  // onClick={(e) => handleListItemClick(e, item.key)} 
-                                  selected={selectedIndex === item.key}  >
-                                <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}>
-                                  {item.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={item.label} primaryTypographyProps={{ fontSize: 14 }} />
-                              </ListButton>
-                            </NextLink>
-                          </List>
-                        </Collapse>
-                      </ListItem>
+                      <Collapse in={expanded[val[0]?.key] || false} timeout="auto" unmountOnExit >
+                        <ListItem key={item.label} style={listItem}  >
+                          <NextLink href={item.path} passHref>
+                            <ListButton sx={{ pl: 4 }} component="a"
+                              onClick={(e) => handleListItemClick(e, item.key)}
+                              selected={selectedIndex === item.key}  >
+                              <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}>
+                                {item.icon}
+                              </ListItemIcon>
+                              <ListItemText primary={item.label} primaryTypographyProps={{ fontSize: 14 }} />
+                            </ListButton>
+                          </NextLink>
+                        </ListItem>
+                      </Collapse>
+
                     )
                     )
                   }
@@ -147,8 +146,8 @@ export default function SideBar() {
                 <>
                   <ListItem key={val.label} style={listItem} >
                     <NextLink href={val.path} passHref>
-                      <ListButton onClick={(e) => handleListItemClick(e, val.key)}  
-                                  selected={selectedIndex === val.key} component="a" >
+                      <ListButton onClick={(e) => handleListItemClick(e, val.key)}
+                        selected={selectedIndex === val.key} component="a" >
                         <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
                           {val.icon}
                         </ListItemIcon>

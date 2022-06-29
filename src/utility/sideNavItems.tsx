@@ -49,8 +49,8 @@ export const superadmin_routes = [
     { key:20,label: "CPD", path: "/cpd", icon: <DifferenceIcon /> }
   ],
   { key:21,label: "File", path: "/file", icon: <FilePresentIcon /> },
-  { key:22,label: "TODOs", path: "todo", icon: <ListAltIcon /> },
-  { key:23, label:"Relapse", path: "/relapse", icon: <TungstenIcon /> },
+  [{ key:22,label: "TODOs", path: "todo", icon: <ListAltIcon /> },
+  { key:23, label:"Relapse", path: "/relapse", icon: <TungstenIcon /> }],
 ];
 
 //** THERAPIST ROUTES **//
