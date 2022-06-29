@@ -20,8 +20,9 @@ import FilePresentIcon from '@mui/icons-material/FilePresent';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import TungstenIcon from '@mui/icons-material/Tungsten';
 
-export const routes = [
-  { label: "Home", path: "/home", icon: <HomeIcon /> },
+//** SUPER ADMIN ROUTES **//
+export const superadmin_routes = [
+  { label: "Home", path: "/dashboard", icon: <HomeIcon /> },
   [
     { label: "Hospital", path: "/hospital", icon: <ApartmentIcon /> },
     { label: "Therapist", path: "/therapist", icon: <PersonIcon /> }
@@ -36,12 +37,12 @@ export const routes = [
   ],
   { label: "Risks", path: "/risks", icon: <CrisisAlertIcon /> },
   { label: "Keywords", path: "/keywords", icon: <StyleIcon /> },
-  [ 
+  [
     { label: "Clinical Analysis", path: "/clinical-analysis", icon: <MedicalInformationIcon /> },
-    { label: "Safety Plan", path: "/safety-plan", icon: <BadgeIcon /> },
+    { label: "Safety Plan", path: "/clinical-analysis/safety-plan", icon: <BadgeIcon /> },
     { label: "Measures", path: "/measures", icon: <StraightenIcon /> },
     { label: "Monitor", path: "/monitor", icon: <EqualizerIcon /> },
-    { label: "Feedback", path: "/feedback", icon: <ThumbUpAltIcon /> },
+    { label: "Feedback", path: "/clinical-analysis/feedback", icon: <ThumbUpAltIcon /> },
     { label: "Agenda", path: "/agenda", icon: <AppRegistrationIcon /> },
     { label: "Contacts", path: "/contacts", icon: <ContactPhoneIcon /> },
     { label: "Diary", path: "/diary", icon: <AutoStoriesIcon /> },
@@ -52,19 +53,8 @@ export const routes = [
   { label: "Relapse", path: "/relapse", icon: <TungstenIcon /> },
 ];
 
-//   {
-//     label: 'Dashboard',
-//     icon: dashboardIcon,
-//     path: '/dashboard',
-//     key: 'sa_dashbaord',
-//     onlySA: false,
-//     component: Dashboard,
-//     visible: false,
-//     background: false,
-// },
-
-
-// export const routes = [
+//** THERAPIST ROUTES **//
+// export const therapist_routes = [
 //   { label: "Home", path: "/home" ,icon:<HomeIcon/>},
 //   { label: "Calender", path: "/calender",icon:<MailIcon/> },
 //   { label: "Patients", path: "/Patients" },

@@ -1,4 +1,6 @@
-import React ,{useRef} from "react";
+import React, { useRef } from "react";
+import { useRouter } from 'next/router';
+import NextLink from 'next/link';
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,32 +12,77 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { makeStyles } from '@mui/styles';
-import { routes } from "../../utility/sideNavItems";
+import { withStyles } from '@mui/styles';
+import { superadmin_routes } from "../../utility/sideNavItems";
 
 const drawerWidth = 240;
 const navTextColor = "white"
 
+const listItem = {
+  paddingTop: "0px",
+  paddingBottom: "0px"
+}
 
-const useStyles = makeStyles((theme) => ({
-  drawer: {
-    backgroundColor: theme.palette.primary.main,
+const scrollStyle = {
+  overflowY: "auto",
+  margin: 0,
+  padding: 0,
+  listStyle: "none",
+  height: "100%",
+  '&::-webkit-scrollbar': {
+    width: '0.4em'
   },
-  listItem: {
-    paddingTop: "0px",
-    paddingBottom: "0px",
-    // "&:hover": {
-    //   background: "#eeeeee",
-    // },
+  '&::-webkit-scrollbar-track': {
+    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'rgba(0,0,0,.1)',
+    outline: '1px solid slategrey'
   }
-}));
+}
+// MuiListItemIcon-root css-cveggr-MuiListItemIcon-root
+const ListButton = withStyles({
+  root: {
+    "&$selected": {
+      backgroundColor: "#6ca08e",
+      color: "white",
+      "& .MuiListItemIcon-root": {
+        color: "white"
+      }
+    },
+    "&$selected:hover": {
+      backgroundColor: "#6ca08e",
+      color: "white",
+      "& .MuiListItemIcon-root": {
+        color: "white"
+      }
+    },
+    "&:hover": {
+      backgroundColor: "#6ca08e",
+      color: "white",
+      "& .MuiListItemIcon-root": {
+        color: "black"
+      }
+    }
+  },
+  selected: {}
+})(ListItemButton);
 
 
 export default function SideBar() {
 
-  const classes = useStyles();
+  const router = useRouter();
+  const currentRoute = router.pathname;
+
   const navDropDownRef = useRef(null);
   const [open, setOpen] = React.useState(true);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+  const handleListItemClick = (e, index) => {
+    setSelectedIndex(index);
+  };
+
 
   const handleClick = (e) => {
     if (navDropDownRef.current && navDropDownRef.current.contains(e.target)) {
@@ -44,10 +91,11 @@ export default function SideBar() {
     setOpen(!open);
   };
 
+
+
   return (
     <Drawer
       variant="permanent"
-      className={classes.drawer}
       PaperProps={{
         sx: {
           backgroundColor: 'primary.main',
@@ -61,13 +109,13 @@ export default function SideBar() {
       }}
     >
       <Toolbar />
-      <Box sx={{ overflow: "auto" }}>
+      <Box sx={{ overflow: "auto" }} style={scrollStyle}>
         <List>
-          {routes.map((val, index) => {
+          {superadmin_routes.map((val, index) => {
             if (Array.isArray(val)) {
               return (
                 <>
-                  <ListItemButton onClick={handleClick} style={{ margin: '0px 16px' }} ref={navDropDownRef}>
+                  <ListItemButton onClick={(e) => handleClick(e)} style={{ margin: '0px 16px' }} ref={navDropDownRef}>
                     <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
                       {val[0]?.icon}
                     </ListItemIcon>
@@ -76,15 +124,17 @@ export default function SideBar() {
                   </ListItemButton>
                   {
                     val?.slice(1)?.map((item, index) => (
-                      <ListItem key={item.label} className={classes.listItem}  >
+                      <ListItem key={item.label} style={listItem}  >
                         <Collapse in={!open} timeout="auto" unmountOnExit anchorEl={navDropDownRef.current}>
                           <List component="div" disablePadding >
-                            <ListItemButton sx={{ pl: 4 }}   >
-                              <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}>
-                                {item.icon}
-                              </ListItemIcon>
-                              <ListItemText primary={item.label} primaryTypographyProps={{ fontSize: 14 }} />
-                            </ListItemButton>
+                            <NextLink href={item.path} passHref>
+                              <ListItemButton sx={{ pl: 4 }} component="a" onClick={(e) => handleListItemClick(e, index)} selected={selectedIndex === index} className={currentRoute === item.path ? 'active' : ''}  >
+                                <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}>
+                                  {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.label} primaryTypographyProps={{ fontSize: 14 }} />
+                              </ListItemButton>
+                            </NextLink>
                           </List>
                         </Collapse>
                       </ListItem>
@@ -98,13 +148,15 @@ export default function SideBar() {
             else {
               return (
                 <>
-                  <ListItem key={val.label} className={classes.listItem} >
-                    <ListItemButton onClick={handleClick}>
-                      <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
-                        {val.icon}
-                      </ListItemIcon>
-                      <ListItemText primary={val.label} primaryTypographyProps={{ fontSize: 14 }} />
-                    </ListItemButton>
+                  <ListItem key={val.label} style={listItem} >
+                    <NextLink href={val.path} passHref>
+                      <ListButton onClick={(e) => handleListItemClick(e, index)} selected={selectedIndex === index} component="a" className={currentRoute === val.path ? 'active' : ''}>
+                        <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
+                          {val.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={val.label} primaryTypographyProps={{ fontSize: 14 }} />
+                      </ListButton>
+                    </NextLink>
                   </ListItem>
                 </>
               )
