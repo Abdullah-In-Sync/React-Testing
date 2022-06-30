@@ -8,18 +8,18 @@ import Footer from '../footer';
 
 const contentStyle = {
     marginTop: 55,
-    backgroundColor: "#F5F5F5",
     width: '100vw',
-    height: '90vh'
+    paddingBottom: 55,
 };
 const wrapper = {
-    backgroundColor: "white",
+    backgroundColor: "custom.light",
     borderRadius: "10px",
-    margin: '5px 10px'
+    margin: '25px 10px',
+    padding: "5px 20px"
 }
 export default function Layout(props) {
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex',backgroundColor: "#F5F5F5" }} >
             <NavBar />
             <SideBar />
             <Box style={contentStyle}>

@@ -1,33 +1,34 @@
-
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+
 
 const footerStyle = {
-    paddingRop: 5,
+    paddin: 2,
     fontSize: '0.6em',
     justifyContent: 'flex-end',
     zIndex: 1,
     background: 'rgb(58, 58, 60)',
-    color: 'white',
-    width: '100vw',
-    paddingRight: '40px',
-    paddingBottom: '3px',
+    color: 'custom.light',
+    width: '100%',
+    // paddingRight: '40px',
+    // paddingBottom: '3px',
     right: 0,
     bottom: 0,
     position: 'fixed'
 }
 
 const footerLink = {
-    color: 'white',
+    color: 'custom.light',
     textDecoration: 'none',
-    marginRight: 2
+    margin: 2
 }
 const Footer = () => {
 
     return (
-        <Container maxWidth="xl" sx={footerStyle}>
+        <Box  sx={footerStyle}>
            
             <Grid item md={12}>
                 <Grid container pt={0.5}>
@@ -49,7 +50,7 @@ const Footer = () => {
                 </Grid>
             </Grid>
 
-        </Container>
+        </Box>
     );
 };
 export default Footer;

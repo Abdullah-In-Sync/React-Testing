@@ -8,11 +8,17 @@ const theme = createTheme({
       main: "#6EC9DB",
     },
     secondary: {
-      main: "#19857b",
+      main: "#6ba08e",
     },
     error: {
       main: red.A400,
     },
+    custom: {
+      light: '#ffffff',
+      main: '#f57c00',
+      dark: '#ef6c00',
+      contrastText: 'rgba(0, 0, 0, 0.87)',
+    }
   },
   components: {
     MuiListItemButton: {
@@ -20,20 +26,6 @@ const theme = createTheme({
         root: {
           paddingTop: "2px",
           paddingBottom: "2px"
-        },
-      },
-    },
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
-            width: "0.4em",
-          },
-          "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
-            borderRadius: 8,
-            minHeight: 24,
-            border: "3px solid #6ba08e",
-          },
         },
       },
     },

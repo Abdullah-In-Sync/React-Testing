@@ -16,7 +16,7 @@ import { withStyles } from '@mui/styles';
 import { superadmin_routes } from "../../utility/sideNavItems";
 
 const drawerWidth = 240;
-const navTextColor = "white"
+const navTextColor = "custom.light"
 
 const listItem = {
   paddingTop: "0px",
@@ -46,23 +46,23 @@ const ListButton = withStyles({
   root: {
     "&$selected": {
       backgroundColor: "#6ca08e",
-      color: "white",
+      color: "custom.light",
       "& .MuiListItemIcon-root": {
-        color: "white"
+        color: "custom.light"
       }
     },
     "&$selected:hover": {
       backgroundColor: "#6ca08e",
-      color: "white",
+      color: "custom.light",
       "& .MuiListItemIcon-root": {
-        color: "white"
+        color: "custom.light"
       }
     },
     "&:hover": {
       backgroundColor: "#6ca08e",
-      color: "white",
+      color: "custom.light",
       "& .MuiListItemIcon-root": {
-        color: "black"
+        color: "custom.light"
       }
     }
   },
@@ -94,7 +94,7 @@ export default function SideBar() {
       PaperProps={{
         sx: {
           backgroundColor: 'primary.main',
-          color: navTextColor,
+          color: 'custom.light',
           zIndex:0
         }
       }}
@@ -111,8 +111,8 @@ export default function SideBar() {
             if (Array.isArray(val)) {
               return (
                 <>
-                  <ListItemButton onClick={(e) => handleClick(e, val[0]?.key)} style={{ margin: '0px 16px' }} >
-                    <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
+                  <ListItemButton onClick={(e) => handleClick(e, val[0]?.key)} sx={{ margin: '0px 16px' }} >
+                    <ListItemIcon sx={{ color: 'custom.light', minWidth: '32px' }}  >
                       {val[0]?.icon}
                     </ListItemIcon>
                     <ListItemText primary={val[0]?.label} primaryTypographyProps={{ fontSize: 14 }} />
@@ -121,12 +121,12 @@ export default function SideBar() {
                   {
                     val?.slice(1)?.map((item, index) => (
                       <Collapse in={expanded[val[0]?.key] || false} timeout="auto" unmountOnExit >
-                        <ListItem key={item.label} style={listItem}  >
+                        <ListItem key={item.label} sx={listItem}  >
                           <NextLink href={item.path} passHref>
                             <ListButton sx={{ pl: 4 }} component="a"
                               onClick={(e) => handleListItemClick(e, item.key)}
                               selected={selectedIndex === item.key}  >
-                              <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}>
+                              <ListItemIcon sx={{ color: 'custom.light', minWidth: '32px' }}>
                                 {item.icon}
                               </ListItemIcon>
                               <ListItemText primary={item.label} primaryTypographyProps={{ fontSize: 14 }} />
@@ -145,11 +145,11 @@ export default function SideBar() {
             else {
               return (
                 <>
-                  <ListItem key={val.label} style={listItem} >
+                  <ListItem key={val.label} sx={listItem} >
                     <NextLink href={val.path} passHref>
                       <ListButton onClick={(e) => handleListItemClick(e, val.key)}
                         selected={selectedIndex === val.key} component="a" >
-                        <ListItemIcon style={{ color: navTextColor, minWidth: '32px' }}  >
+                        <ListItemIcon sx={{ color: 'custom.light', minWidth: '32px' }}  >
                           {val.icon}
                         </ListItemIcon>
                         <ListItemText primary={val.label} primaryTypographyProps={{ fontSize: 14 }} />
