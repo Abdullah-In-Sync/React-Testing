@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import { Clear ,ArrowDropDownIcon} from "@mui/icons-material";
+import { Clear, ArrowDropDownIcon } from "@mui/icons-material";
 import _isEmpty from "lodash/isEmpty"
 
 const SelectField = (props) => {
     const { field, values = {} } = props;
-    const {clearField = false} = field;
+    const { clearField = false } = field;
     const [isClearable, setClearable] = useState(false)
     const [isEditable, setEditValue] = useState(false)
     let _value = props.fieldValues[field.key] || values[field.key] || field.defaultValue;
@@ -22,7 +22,7 @@ const SelectField = (props) => {
     }
 
     useEffect(() => {
-        if(clearField){
+        if (clearField) {
             clear();
         }
     }, [clearField])

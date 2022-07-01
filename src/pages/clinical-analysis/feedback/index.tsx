@@ -1,14 +1,23 @@
-import React, { useState,useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Layout from '../../../components/layout';
 import TableGenerator from "../../../components/common/TableGenerator";
 import ContentHeader from "../../../components/common/ContentHeader";
-import { IconButton } from '@mui/material';
+import { IconButton, Chip, TextField, Autocomplete } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
+// import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+// import { Chip, TextField } from "@material-ui/core";
+// import { Autocomplete } from "@material-ui/lab";
 
 const fields = [
     {
@@ -84,35 +93,39 @@ const dialogFields = [[{
     show: true,
     type: "autocomplete",
     options: [
-      { label: "Enable", value: "Enable" },
-      { label: "Disable", value: "Disable" },
+        { label: "Enable", value: "Enable" },
+        { label: "Disable", value: "Disable" },
     ],
-    defaultValue:{ label: "Enable", value: "Enable" }
-  },
-  {key: "session",
-  label: "Session Name",
-  visible: true,
-  freeSolo: false,
-  show: true,
-  type: "autocomplete",
-  options: [
-    { label: "Enable", value: "Enable" },
-    { label: "Disable", value: "Disable" },
-  ],
-  defaultValue:{ label: "Enable", value: "Enable" }
-}],
-{key: "feedback_type",
-  label: "Feedback Type",
-  visible: true,
-  freeSolo: false,
-  show: true,
-  type: "autocomplete",
-  options: [
-    { label: "Enable", value: "Enable" },
-    { label: "Disable", value: "Disable" },
-  ],
-  defaultValue:{ label: "Enable", value: "Enable" }
+    defaultValue: { label: "Enable", value: "Enable" }
+},
+{
+    key: "session",
+    label: "Session Name",
+    visible: true,
+    freeSolo: false,
+    show: true,
+    type: "autocomplete",
+    options: [
+        { label: "Enable", value: "Enable" },
+        { label: "Disable", value: "Disable" },
+    ],
+    defaultValue: { label: "Enable", value: "Enable" }
 }
+    ,
+{
+    key: "session",
+    label: "Session Name",
+    visible: true,
+    freeSolo: false,
+    show: true,
+    type: "autocomplete",
+    options: [
+        { label: "Enable", value: "Enable" },
+        { label: "Disable", value: "Disable" },
+    ],
+    defaultValue: { label: "Enable", value: "Enable" }
+}
+],
 
 ]
 
@@ -126,6 +139,7 @@ const crudButtons = {
 const Feedback: React.FunctionComponent<any> = (props) => {
 
     const [addModal, setAddModal] = useState<boolean>(false);
+    const [formValues, setFormValues] = useState([])
     const [dataList, setDataList] = useState<any>([
         {
             session_no: '2',
@@ -178,7 +192,30 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         },
     ]);
 
+    let addFormFields = () => {
+        setFormValues([...formValues, { question_details: "", answer_type: "", answer_options: "" }])
+    }
 
+    let handleChange = (i, e, chip_val) => {
+        if (e.target.name == "answer_options") {
+            let newFormValues = [...formValues];
+            newFormValues[i][e.target.name] = chip_val;
+            setFormValues(newFormValues);
+        }
+        else {
+            let newFormValues = [...formValues];
+            newFormValues[i][e.target.name] = e.target.value;
+            setFormValues(newFormValues);
+        }
+
+    }
+
+    let removeFormFields = (i) => {
+        let newFormValues = [...formValues];
+        newFormValues.splice(i, 1);
+        setFormValues(newFormValues)
+    }
+    console.log("Form Data", formValues)
 
     return (
         <>
@@ -189,7 +226,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         className="mr-3"
                         label="Create Questionnaire"
 
-                    onClick={() => setAddModal(true)}
+                        onClick={() => setAddModal(true)}
                     />
 
                 </Box>
@@ -231,41 +268,33 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                     //     setModulesSelected(modulesSelected)
                     //   }
                     />
-                
- {/* {useMemo(() => {
-    <CrudDialog
-  title="Add Product"
-  okText="Add Product"
-  fields={dialogFields}
-  // submitButtonDisabled={isMutating}
-  description="Please fill in the details below."
-  // onFieldChange= {(_,images) => {
-  //   handlUploadImages(images);
-  // }}
-  onSubmit={(values, hasErrors) => {
-      // handleAdd(values);
-  }}
-  open={addModal}
-  onClose={() => setAddModal(false)}
-/>;
-}, [addModal])} */}
 
-<CrudDialog
-  title="Create Questionnaire"
-  okText="Save"
-  fields={dialogFields}
-  // submitButtonDisabled={isMutating}
-  description="Please fill in the details below."
-  // onFieldChange= {(_,images) => {
-  //   handlUploadImages(images);
-  // }}
-  onSubmit={(values, hasErrors) => {
-      // handleAdd(values);
-  }}
-  open={addModal}
-  onClose={() => setAddModal(false)}
-/>
-                   
+
+
+
+                    <CrudDialog
+                        title="Create Questionnaire"
+                        okText="Save"
+                        fields={dialogFields}
+                        // submitButtonDisabled={isMutating}
+                        description="Please fill in the details below."
+                        // onFieldChange= {(_,images) => {
+                        //   handlUploadImages(images);
+                        // }}
+                        onSubmit={(values, hasErrors) => {
+                            // handleAdd(values);
+                        }}
+                        extraButtonText="Add Question"
+                        onExtraButton={() => {
+                            // alert('onExtraButton')
+                            addFormFields()
+                            // setAdPresentationModal(true);
+                        }}
+                        dynamicForm={<DynamicForm formValues={formValues} handleChange={handleChange} removeFormFields={removeFormFields} />}
+                        open={addModal}
+                        onClose={() => setAddModal(false)}
+                    />
+
                 </Box>
 
             </Layout >
@@ -274,3 +303,110 @@ const Feedback: React.FunctionComponent<any> = (props) => {
 };
 
 export default Feedback;
+
+
+
+
+
+const DynamicForm = (props) => {
+    const { children, handleSubmit, formValues, handleChange, removeFormFields, ...other } = props;
+
+    return (
+        <form onSubmit={handleSubmit}>
+            {formValues.map((element, index) => (
+                <div className="form-inline" key={index}>
+                    <IconButton
+                        size="small"
+                        variant="contained"
+                        onClick={() => removeFormFields(index)}
+                    >
+                        <CancelIcon sx={{ color: "error.main" }} />
+                    </IconButton>
+                    <TextField
+                        value={element.question_details || ""} onChange={e => handleChange(index, e)}
+                        name="question_details"
+                        label="Type your Question"
+                        multiline
+                        rows={4}
+                        sx={{ width: '100%' }}
+                        m={2}
+                    />
+
+                    <FormControl sx={{ mt: 2, mb: 2, minWidth: 220 }} size="small">
+                        <InputLabel id="answer_type">Choose answer type</InputLabel>
+                        <Select
+                            labelId="answer_type"
+                            name="answer_type"
+                            value={element.answer_type || ""}
+                            label="Choose answer type"
+                            onChange={e => handleChange(index, e)}
+                        >
+                            <MenuItem value="Text">Text</MenuItem>
+                            <MenuItem value="List">List</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    {element.answer_type == "List" &&
+                        //  <TextField
+                        //            value={element.answer_options || ""} onChange={e => handleChange(index, e)}
+                        //           name="answer_options"
+                        //           label="List of answer options"
+                        //         //   multiline
+                        //         //   rows={4}
+                        //           sx={{width:'100%'}}
+                        //           m={2}
+                        //         />
+                        <Autocomplete
+                            multiple
+                            id="tags-filled"
+                            name="answer_options"
+                            options={[]}
+                            defaultValue={["sdd", "sds"]}
+                            // defaultValue={_.isEmpty(value) ? field.defaultValue : value }
+                            // inputValue={element.answer_options || ""}
+                            // getOptionLabel={(option) => option.label}
+                            onChange={(_, val) => {
+                                handleChange(index, _, val)
+                            }}
+                            // onInputChange={e => handleChange(index, e)}
+                            freeSolo
+                            renderTags={(value: string[], getTagProps) =>
+                                value.map((option: string, index: number) => {
+
+                                    return (
+                                        <Chip
+                                            key={index}
+                                            variant="outlined"
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                        />
+                                    );
+                                })
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="filled"
+                                    label="freeSolo"
+                                    placeholder="Favorites"
+                                    name="answer_options"
+                                />
+                            )}
+                        />
+
+
+
+
+
+                    }
+
+
+                </div>
+            ))}
+            <div className="button-section">
+                {/* <button className="button add" type="button" onClick={() => addFormFields()}>Add</button> */}
+                {/* <button className="button submit" type="submit">Submit</button> */}
+            </div>
+        </form>
+    );
+};

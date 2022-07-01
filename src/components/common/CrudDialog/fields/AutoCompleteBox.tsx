@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { TextField ,Autocomplete} from '@mui/material';
+import { TextField, Autocomplete } from '@mui/material';
 import _ from "lodash";
 
 const AutoCompleteBox = ({
   field = {},
   values = {},
-  onChange = () => {},
+  onChange = () => { },
   ...props
 }) => {
   let _value = props.fieldValues[field.key] || values[field.key] || "";
@@ -15,7 +15,7 @@ const AutoCompleteBox = ({
   let _valueObj = field.options.find((x) => x.value == _value) || {};
 
   const [value, setValue] = useState(
-    !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable'  ? _valueObj  : _value 
+    !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
   );
   const [inputValue, setInputValue] = useState("");
 
@@ -27,8 +27,8 @@ const AutoCompleteBox = ({
 
   useEffect(() => {
     setValue(
-      !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable'  ? _valueObj  : _value 
-      );
+      !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
+    );
   }, [_value]);
 
   return (
@@ -41,7 +41,7 @@ const AutoCompleteBox = ({
         className="mb-3"
         style={{ display: field.show ? "block" : "none" }}
         // defaultValue={_valueObj}
-        defaultValue={_.isEmpty(value) ? field.defaultValue : value }
+        defaultValue={_.isEmpty(value) ? field.defaultValue : value}
         inputValue={inputValue}
         getOptionLabel={(option) => option.label}
         onChange={(_, val) => {
@@ -61,7 +61,7 @@ const AutoCompleteBox = ({
             label={field.label}
             // inputProps={field.inputProps || {}}
             variant="outlined"
-            required= {field.required}
+            required={field.required}
           />
         )}
       />

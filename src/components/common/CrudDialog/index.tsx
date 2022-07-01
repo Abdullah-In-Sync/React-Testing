@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 
 // import { FieldsLayout } from './fields';
 // import FieldsLayout from './fields/FieldsLayout'
-const FieldsLayout =  dynamic(import('./fields/FieldsLayout'), { ssr: false })
+const FieldsLayout = dynamic(import('./fields/FieldsLayout'), { ssr: false })
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -36,7 +36,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2,backgroundColor:"primary.main", color:"custom.light"}}   {...other}>
+    <DialogTitle sx={{ m: 0, p: 2, backgroundColor: "primary.main", color: "custom.light" }}   {...other}>
       {children}
       {onClose ? (
         <IconButton
@@ -46,7 +46,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
             position: 'absolute',
             right: 8,
             top: 8,
-            color:"custom.light",
+            color: "custom.light",
           }}
         >
           <CloseIcon />
@@ -57,26 +57,28 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 };
 
 const CrudDialog = ({
-  onRef= () => { },
-  open=false,
-  fields= [],
-  onClose= () => { },
-  submitButtonDisabled=false,
-  onFieldChange= () => { },
-  title= "Dialog Title",
-  onSubmit= () => { },
-  values= {},
-  okText= 'Create',
-  cancelText= 'Cancel',
-  info= false,
-  mode= "Add",
-  closable= true,
-  extraButtonLoading= false,
-  hide= false
-}) =>{
+  onRef = () => { },
+  open = false,
+  fields = [],
+  onClose = () => { },
+  submitButtonDisabled = false,
+  onFieldChange = () => { },
+  title = "Dialog Title",
+  onSubmit = () => { },
+  values = {},
+  okText = 'Create',
+  cancelText = 'Cancel',
+  info = false,
+  mode = "Add",
+  closable = true,
+  extraButtonLoading = false,
+  hide = false,
+  extraButtonText = false,
+  onExtraButton = () => { },
+  dynamicForm
+}) => {
 
   const [fieldValues, setFieldValues] = useState<any>({});
-debugger
   return (
     <div>
       <BootstrapDialog
@@ -84,43 +86,51 @@ debugger
         aria-labelledby="customized-dialog-title"
         open={open}
         maxWidth="md"
-        style={{display: hide? 'none': 'block'}}
+        style={{ display: hide ? 'none' : 'block' }}
       >
         <BootstrapDialogTitle id="customized-dialog-title" >
-         {title}
+          {title}
         </BootstrapDialogTitle>
-           <form onSubmit={()=>{}}>
-                    <DialogContent style={{ overflowX: 'hidden' }}>
-                        {/* <div style={{ width: 500 }}> */}
-                            {/* <div style={{ display: 'flex', flexDirection: 'column' }} className="mb-4">
-                                <Typography variant="h6" className={classes.modalTitle}>{props.title}{props.info && <Link to={props.info}><HelpIcon color="primary" style={{ width: 18, height: 18, marginLeft: 5 }} /></Link>}</Typography>
-                                <Typography variant="body2" className={classes.modalDesc}>{props.description}</Typography>
-                                {props.notes ? <span dangerouslySetInnerHTML={{ __html: props.notes }} style={{ marginTop: 12, fontSize: 13, color: "#645f5f" }} /> : null}
-                            </div> */}
-                            <Box sx={{ width: 800 }}>
-                            <FieldsLayout
-                                fields={fields}
-                                values={values}
-                                fieldValues={fieldValues}
-                                // fieldErrors={this.state.fieldErrors}
-                                // validate={this.validate.bind(this)}
-                                // onChange={this.handleFieldChange.bind(this)}
-                                mode={mode}
-                            />
-                            </Box>
-                        {/* </div> */}
-                    </DialogContent>
-                    <DialogActions>
-                    <Button variant="contained" sx={{color:'custom.light'}} onClick={onClose}>
-            {okText}
-          </Button>
-          <Button variant="contained" sx={{backgroundColor:'secondary.main',color:'custom.light'}} onClick={onClose}>
-            {cancelText}
-          </Button>
-                    </DialogActions>
-                </form>
+        <form onSubmit={() => { }}>
+          <DialogContent style={{ overflowX: 'hidden' }}>
+            <Box sx={{ width: 800 }}>
+              <FieldsLayout
+                fields={fields}
+                values={values}
+                fieldValues={fieldValues}
+                // fieldErrors={this.state.fieldErrors}
+                // validate={this.validate.bind(this)}
+                // onChange={this.handleFieldChange.bind(this)}
+                mode={mode}
+              />
+            </Box>
+
+            {
+              extraButtonText ? (
+                <Button onClick={onExtraButton} variant="outlined"  >
+                  {extraButtonText}
+                </Button>
+              ) : extraComponent ? extraComponent : null
+
+
+            }
+            <Box sx={{ marginTop: 1 }}>
+              {dynamicForm}
+            </Box>
+
+
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" sx={{ color: 'custom.light' }} onClick={onClose}>
+              {okText}
+            </Button>
+            <Button variant="contained" sx={{ backgroundColor: 'secondary.main', color: 'custom.light' }} onClick={onClose}>
+              {cancelText}
+            </Button>
+          </DialogActions>
+        </form>
       </BootstrapDialog>
     </div>
   );
 }
-export default  CrudDialog;
+export default CrudDialog;

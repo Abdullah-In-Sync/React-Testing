@@ -26,32 +26,31 @@ const FieldsLayout = ({
     onChange,
     values,
     mode
-  }) => {
+}) => {
     return (
         fields.map((field, index) => {
             if (Array.isArray(field)) {
-                debugger
-             
+
                 return (
-                       //
-            //     <Grid container pt={0.5} key={index}>
-            //     <Grid item xs={12} md={9} >
-            //         1
-            //     </Grid>
-            //     <Grid item xs={12} md={3} style={{ textAlign: 'right', paddingRight: '40px' }}>
-            //         © {new Date().getFullYear()} MyHelp
-            //     </Grid>
-            // </Grid>
-                //
+                    //
+                    //     <Grid container pt={0.5} key={index}>
+                    //     <Grid item xs={12} md={9} >
+                    //         1
+                    //     </Grid>
+                    //     <Grid item xs={12} md={3} style={{ textAlign: 'right', paddingRight: '40px' }}>
+                    //         © {new Date().getFullYear()} MyHelp
+                    //     </Grid>
+                    // </Grid>
+                    //
                     <Grid container spacing={2} pt={0.5} key={index}>
                         {
                             field.map((_field, _index) => {
-                                if(_field.form === false) return null;
+                                if (_field.form === false) return null;
                                 const FieldComponent = FIELD_COMPONENTS[_field.type] || Text;
-                                if(_field.type === 'checkbox'){
-                                    return <Grid item xs={12} md={6}>
+                                if (_field.type === 'checkbox') {
+                                    return <Grid item xs p={1}>
                                         <FieldComponent
-                                            field={{..._field, value: fieldValues.is_open}}
+                                            field={{ ..._field, value: fieldValues.is_open }}
                                             fieldValues={fieldValues}
                                             fieldErrors={fieldErrors}
                                             validate={validate}
@@ -59,7 +58,7 @@ const FieldsLayout = ({
                                         />
                                     </Grid>
                                 }
-                                return <Grid item xs={12} md={6} >
+                                return <Grid item xs p={1}>
                                     <FieldComponent
                                         field={_field}
                                         values={values}
@@ -67,7 +66,7 @@ const FieldsLayout = ({
                                         fieldErrors={fieldErrors}
                                         validate={validate}
                                         onChange={onChange}
-                                       mode={mode}
+                                        mode={mode}
                                     />
                                 </Grid>
                             })
@@ -75,7 +74,7 @@ const FieldsLayout = ({
                     </Grid>
                 )
             } else {
-                if(field.form === false) return null;
+                if (field.form === false) return null;
                 const FieldComponent = FIELD_COMPONENTS[field.type] || Text;
                 return (
                     <Grid container key={index} pt={2}>
