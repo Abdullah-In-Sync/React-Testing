@@ -23,24 +23,7 @@ const listItem = {
   paddingBottom: "0px"
 }
 
-const scrollStyle = {
-  overflowY: "auto",
-  margin: 0,
-  padding: 0,
-  listStyle: "none",
-  height: "100%",
-  '&::-webkit-scrollbar': {
-    width: '0.4em'
-  },
-  '&::-webkit-scrollbar-track': {
-    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
-  },
-  '&::-webkit-scrollbar-thumb': {
-    backgroundColor: 'rgba(0,0,0,.1)',
-    outline: '1px solid slategrey'
-  }
-}
+
 // MuiListItemIcon-root css-cveggr-MuiListItemIcon-root
 const ListButton = withStyles({
   root: {
@@ -105,7 +88,7 @@ export default function SideBar() {
       }}
     >
       <Toolbar />
-      <Box sx={{ overflow: "auto" }} style={scrollStyle}>
+      <Box sx={{ overflow: "auto" }} >
         <List>
           {superadmin_routes.map((val, index) => {
             if (Array.isArray(val)) {

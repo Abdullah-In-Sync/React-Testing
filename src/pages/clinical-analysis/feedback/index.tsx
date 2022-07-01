@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Layout from '../../../components/layout';
 import TableGenerator from "../../../components/common/TableGenerator";
@@ -8,7 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AddButton } from "../../../components/common/Buttons";
-
+import CrudDialog from "../../../components/common/CrudDialog";
 
 const fields = [
     {
@@ -76,15 +76,56 @@ const fields = [
 
 ];
 
-const crudButtons ={
+const dialogFields = [[{
+    key: "organization",
+    label: "Organization Name",
+    visible: true,
+    freeSolo: false,
+    show: true,
+    type: "autocomplete",
+    options: [
+      { label: "Enable", value: "Enable" },
+      { label: "Disable", value: "Disable" },
+    ],
+    defaultValue:{ label: "Enable", value: "Enable" }
+  },
+  {key: "session",
+  label: "Session Name",
+  visible: true,
+  freeSolo: false,
+  show: true,
+  type: "autocomplete",
+  options: [
+    { label: "Enable", value: "Enable" },
+    { label: "Disable", value: "Disable" },
+  ],
+  defaultValue:{ label: "Enable", value: "Enable" }
+}],
+{key: "feedback_type",
+  label: "Feedback Type",
+  visible: true,
+  freeSolo: false,
+  show: true,
+  type: "autocomplete",
+  options: [
+    { label: "Enable", value: "Enable" },
+    { label: "Disable", value: "Disable" },
+  ],
+  defaultValue:{ label: "Enable", value: "Enable" }
+}
+
+]
+
+const crudButtons = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom:1,
-    flexDirection:'row-reverse'
+    marginBottom: 1,
+    flexDirection: 'row-reverse'
 }
 const Feedback: React.FunctionComponent<any> = (props) => {
 
+    const [addModal, setAddModal] = useState<boolean>(false);
     const [dataList, setDataList] = useState<any>([
         {
             session_no: '2',
@@ -148,7 +189,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         className="mr-3"
                         label="Create Questionnaire"
 
-                    // onClick={() => setAddModal(true)}
+                    onClick={() => setAddModal(true)}
                     />
 
                 </Box>
@@ -190,6 +231,41 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                     //     setModulesSelected(modulesSelected)
                     //   }
                     />
+                
+ {/* {useMemo(() => {
+    <CrudDialog
+  title="Add Product"
+  okText="Add Product"
+  fields={dialogFields}
+  // submitButtonDisabled={isMutating}
+  description="Please fill in the details below."
+  // onFieldChange= {(_,images) => {
+  //   handlUploadImages(images);
+  // }}
+  onSubmit={(values, hasErrors) => {
+      // handleAdd(values);
+  }}
+  open={addModal}
+  onClose={() => setAddModal(false)}
+/>;
+}, [addModal])} */}
+
+<CrudDialog
+  title="Create Questionnaire"
+  okText="Save"
+  fields={dialogFields}
+  // submitButtonDisabled={isMutating}
+  description="Please fill in the details below."
+  // onFieldChange= {(_,images) => {
+  //   handlUploadImages(images);
+  // }}
+  onSubmit={(values, hasErrors) => {
+      // handleAdd(values);
+  }}
+  open={addModal}
+  onClose={() => setAddModal(false)}
+/>
+                   
                 </Box>
 
             </Layout >

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Icon, InputAdornment, IconButton, Tooltip } from '@material-ui/core';
-import { FileCopy, Check } from '@material-ui/icons';
+import { TextField, Icon, InputAdornment, IconButton, Tooltip } from '@mui/material';
+import { FileCopy, Check } from '@mui/icons-material';
 
 const Text = (props) => {
     const { field, values = {} } = props;

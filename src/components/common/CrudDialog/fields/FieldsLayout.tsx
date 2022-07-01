@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, SelectField, Checkbox, ImageUp, RadioSelect, File, AutoCompleteBox, DatePicker, MultiAutoComplete } from '.';
+import Grid from '@mui/material/Grid';
+import { Text, SelectField, Checkbox, ImageUp, RadioSelect, File, AutoCompleteBox, MultiAutoComplete } from './index';
 
 const FIELD_COMPONENTS = {
     autocomplete: AutoCompleteBox,
@@ -9,7 +10,7 @@ const FIELD_COMPONENTS = {
     password: Text,
     tel: Text,
     number: Text,
-    date: DatePicker,
+    // date: DatePicker,
     select: SelectField,
     checkbox: Checkbox,
     image: ImageUp,
@@ -29,14 +30,26 @@ const FieldsLayout = ({
     return (
         fields.map((field, index) => {
             if (Array.isArray(field)) {
+                debugger
+             
                 return (
-                    <div className="row" key={index}>
+                       //
+            //     <Grid container pt={0.5} key={index}>
+            //     <Grid item xs={12} md={9} >
+            //         1
+            //     </Grid>
+            //     <Grid item xs={12} md={3} style={{ textAlign: 'right', paddingRight: '40px' }}>
+            //         © {new Date().getFullYear()} MyHelp
+            //     </Grid>
+            // </Grid>
+                //
+                    <Grid container spacing={2} pt={0.5} key={index}>
                         {
                             field.map((_field, _index) => {
                                 if(_field.form === false) return null;
                                 const FieldComponent = FIELD_COMPONENTS[_field.type] || Text;
                                 if(_field.type === 'checkbox'){
-                                    return <div className="col-sm">
+                                    return <Grid item xs={12} md={6}>
                                         <FieldComponent
                                             field={{..._field, value: fieldValues.is_open}}
                                             fieldValues={fieldValues}
@@ -44,9 +57,9 @@ const FieldsLayout = ({
                                             validate={validate}
                                             onChange={onChange}
                                         />
-                                    </div>
+                                    </Grid>
                                 }
-                                return <div className="col-sm">
+                                return <Grid item xs={12} md={6} >
                                     <FieldComponent
                                         field={_field}
                                         values={values}
@@ -56,17 +69,17 @@ const FieldsLayout = ({
                                         onChange={onChange}
                                        mode={mode}
                                     />
-                                </div>
+                                </Grid>
                             })
                         }
-                    </div>
+                    </Grid>
                 )
             } else {
                 if(field.form === false) return null;
                 const FieldComponent = FIELD_COMPONENTS[field.type] || Text;
                 return (
-                    <div className="row" key={index}>
-                        <div className="col-sm">
+                    <Grid container key={index} pt={2}>
+                        <Grid item xs={12} md={12}>
                             <FieldComponent
                                 field={field}
                                 values={values}
@@ -76,8 +89,8 @@ const FieldsLayout = ({
                                 onChange={onChange}
                                 mode={mode}
                             />
-                        </div>
-                    </div>
+                        </Grid>
+                    </Grid>
                 )
             }
         })

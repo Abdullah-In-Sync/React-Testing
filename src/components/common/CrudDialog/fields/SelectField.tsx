@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { MenuItem, Select, FormControl, InputLabel } from '@material-ui/core';
-import { Clear } from "@material-ui/icons";
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Clear ,ArrowDropDownIcon} from "@mui/icons-material";
 import _isEmpty from "lodash/isEmpty"
 
 const SelectField = (props) => {

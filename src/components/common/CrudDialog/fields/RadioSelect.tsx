@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {FormControlLabel, Radio, RadioGroup} from "@material-ui/core/index";
+import {FormControlLabel, Radio, RadioGroup} from "@mui/material/index";
 
 const RadioSelect = ({field = {}, onChange = () => {}}) => {
     const [type, setType] = useState((field.options[0] || {}).value);

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Typography } from "@material-ui/core";
-import CheckboxField from "@material-ui/core/Checkbox";
+import { Typography,CheckboxField } from "@mui/material";
 
 const Checkbox = (props) => {
   const { field } = props;

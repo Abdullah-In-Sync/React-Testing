@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
-import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import {Chip,TextField,Autocomplete} from '@mui/material';
 
 export default function MultiAutoComplete({ field = {}, values = {}, onChange = () => { }, ...props }) {
   let _value = props.fieldValues[field.key] || values[field.key];

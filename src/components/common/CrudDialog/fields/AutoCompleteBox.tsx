@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { TextField } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { TextField ,Autocomplete} from '@mui/material';
+import _ from "lodash";
 
 const AutoCompleteBox = ({
   field = {},
@@ -14,9 +14,10 @@ const AutoCompleteBox = ({
   }
   let _valueObj = field.options.find((x) => x.value == _value) || {};
 
-  const [inputValue, setInputValue] = useState(
-    !isNaN(Number(_value)) ? _valueObj.label || "" : _value || ""
+  const [value, setValue] = useState(
+    !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable'  ? _valueObj  : _value 
   );
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     if (!field.show) {
@@ -25,23 +26,26 @@ const AutoCompleteBox = ({
   }, [field.show]);
 
   useEffect(() => {
-    setInputValue(
-      !isNaN(Number(_value)) ? _valueObj.label || "" : _value || ""
-    );
+    setValue(
+      !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable'  ? _valueObj  : _value 
+      );
   }, [_value]);
 
   return (
     <>
       <Autocomplete
         id="combo-box-demo"
+        size="small"
         options={field.options}
         freeSolo={field.freeSolo === false ? false : true}
         className="mb-3"
         style={{ display: field.show ? "block" : "none" }}
-        defaultValue={_valueObj}
+        // defaultValue={_valueObj}
+        defaultValue={_.isEmpty(value) ? field.defaultValue : value }
         inputValue={inputValue}
         getOptionLabel={(option) => option.label}
         onChange={(_, val) => {
+          setValue(val);
           onChange(field, (val || {}).value);
         }}
         onInputChange={(_, val) => {
@@ -55,7 +59,9 @@ const AutoCompleteBox = ({
             {...params}
             style={{ width: "100%" }}
             label={field.label}
+            // inputProps={field.inputProps || {}}
             variant="outlined"
+            required= {field.required}
           />
         )}
       />
