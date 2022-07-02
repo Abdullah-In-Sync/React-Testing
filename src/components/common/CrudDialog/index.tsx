@@ -64,7 +64,7 @@ const CrudDialog = ({
   submitButtonDisabled = false,
   onFieldChange = () => { },
   title = "Dialog Title",
-  onSubmit = () => { },
+  onsubmit = () => { },
   values = {},
   okText = 'Create',
   cancelText = 'Cancel',
@@ -79,6 +79,31 @@ const CrudDialog = ({
 }) => {
 
   const [fieldValues, setFieldValues] = useState<any>({});
+
+  const handleFieldChange=(field, value) =>{
+    if (field.type === 'select') {
+        if (field.multiple) {
+            value = (value || []).includes('selectall') ? (field.options || []).map(x => x.value) : value
+        }
+    }
+    // const fieldErrors = this.state.fieldErrors;
+    // const fieldValues = fieldValues;
+    // fieldErrors[field.key] = undefined;
+    fieldValues[field.key] = field.key === 'is_open' ? !!value : value;
+    setFieldValues( fieldValues );
+    onFieldChange(field, value);
+}
+
+  const onSubmit=(e)=> {
+    debugger
+    e.preventDefault()
+    // this.props.fields.forEach((field) => { this.validate(field); });
+    // const hasError = (Object.keys(this.state.fieldErrors).filter(x => this.state.fieldErrors[x])).length;
+    // if (hasError === 0) {
+    //     onSubmit({ ...this.state.fieldValues }, hasError ? { ...this.state.fieldErrors } : null);
+    // }
+    onsubmit(fieldValues);
+}
   return (
     <div>
       <BootstrapDialog
@@ -91,7 +116,7 @@ const CrudDialog = ({
         <BootstrapDialogTitle id="customized-dialog-title" >
           {title}
         </BootstrapDialogTitle>
-        <form onSubmit={() => { }}>
+        <form onSubmit={onSubmit}>
           <DialogContent style={{ overflowX: 'hidden' }}>
             <Box sx={{ width: 800 }}>
               <FieldsLayout
@@ -100,7 +125,7 @@ const CrudDialog = ({
                 fieldValues={fieldValues}
                 // fieldErrors={this.state.fieldErrors}
                 // validate={this.validate.bind(this)}
-                // onChange={this.handleFieldChange.bind(this)}
+                onChange={e=>handleFieldChange(e)}
                 mode={mode}
               />
             </Box>
@@ -121,7 +146,7 @@ const CrudDialog = ({
 
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" sx={{ color: 'custom.light' }} onClick={onClose}>
+            <Button variant="contained" sx={{ color: 'custom.light' }} type="submit">
               {okText}
             </Button>
             <Button variant="contained" sx={{ backgroundColor: 'secondary.main', color: 'custom.light' }} onClick={onClose}>

@@ -15,6 +15,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import _ from "lodash";
 
 // import { Chip, TextField } from "@material-ui/core";
 // import { Autocomplete } from "@material-ui/lab";
@@ -193,10 +194,17 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     ]);
 
     let addFormFields = () => {
-        setFormValues([...formValues, { question_details: "", answer_type: "", answer_options: "" }])
+        setFormValues([...formValues, { question_details: "", answer_type: "Text", answer_options: "" }])
     }
 
     let handleChange = (i, e, chip_val) => {
+
+        if (e.target.name == "answer_type" && e.target.value == "Text") {
+            let newFormValues = [...formValues];
+            newFormValues[i]["answer_options"] = "";
+            setFormValues(newFormValues);
+        }
+
         if (e.target.name == "answer_options") {
             let newFormValues = [...formValues];
             newFormValues[i][e.target.name] = chip_val;
@@ -211,11 +219,17 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     }
 
     let removeFormFields = (i) => {
-        let newFormValues = [...formValues];
-        newFormValues.splice(i, 1);
-        setFormValues(newFormValues)
+        const newData = formValues.filter((val,index)=>{
+            return i!=index
+        } )
+        setFormValues(newData)
     }
-    console.log("Form Data", formValues)
+
+    let handleAdd = (val)=>{
+        debugger
+        console.log("Form Data", formValues)
+    }
+    
 
     return (
         <>
@@ -278,11 +292,13 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         fields={dialogFields}
                         // submitButtonDisabled={isMutating}
                         description="Please fill in the details below."
-                        // onFieldChange= {(_,images) => {
+                        onFieldChange= {(_,images) => {
+                            debugger
                         //   handlUploadImages(images);
-                        // }}
-                        onSubmit={(values, hasErrors) => {
-                            // handleAdd(values);
+                        }}
+                        onsubmit={(values, hasErrors) => {
+                            debugger
+                            handleAdd(values);
                         }}
                         extraButtonText="Add Question"
                         onExtraButton={() => {
@@ -292,7 +308,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         }}
                         dynamicForm={<DynamicForm formValues={formValues} handleChange={handleChange} removeFormFields={removeFormFields} />}
                         open={addModal}
-                        onClose={() => setAddModal(false)}
+                        onClose={() => {setAddModal(false); setFormValues([])}}
                     />
 
                 </Box>
@@ -361,14 +377,12 @@ const DynamicForm = (props) => {
                             id="tags-filled"
                             name="answer_options"
                             options={[]}
-                            defaultValue={["sdd", "sds"]}
-                            // defaultValue={_.isEmpty(value) ? field.defaultValue : value }
-                            // inputValue={element.answer_options || ""}
-                            // getOptionLabel={(option) => option.label}
+                            defaultValue={ element.answer_options ||[]}
+                            // defaultValue={_.isEmpty(element.answer_options) ? []: [element.answer_options]  }
+                            
                             onChange={(_, val) => {
                                 handleChange(index, _, val)
                             }}
-                            // onInputChange={e => handleChange(index, e)}
                             freeSolo
                             renderTags={(value: string[], getTagProps) =>
                                 value.map((option: string, index: number) => {
@@ -386,16 +400,13 @@ const DynamicForm = (props) => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    variant="filled"
-                                    label="freeSolo"
-                                    placeholder="Favorites"
+                                    variant="outlined"
+                                    label="Question Options"
+                                    placeholder="Add a option by pressing enter after write it "
                                     name="answer_options"
                                 />
                             )}
                         />
-
-
-
 
 
                     }
