@@ -20,7 +20,7 @@ const Text = (props) => {
             <TextField
                 type={field.type}
                 required={field.required || false}
-                error={props.fieldErrors[field.key] ? true : false}
+                // error={props.fieldErrors[field.key] ? true : false}
                 autoComplete={props.mode === "Add" && field.type === "password" ? "new-password" : props.mode === "Edit" ? "" : "off"}
                 key={field.key}
                 id={`textfield_${field.key}`}
@@ -28,12 +28,13 @@ const Text = (props) => {
                 inputProps={{ min: 0, tabIndex: 1, maxLength: field.maxLength, ...(field.inputProps || {}) }}
                 style={field.big && { minWidth: 325 }}
                 onChange={(e) => props.onChange(field, field.type === "number" ? Number(e.target.value) : e.target.value)}
+                
                 value={props.fieldValues[field.key] || field.value || ''}
                 defaultValue={values[field.key] || field.value}
                 hidden={!field.visible}
-                helperText={props.fieldErrors[field.key] ? props.fieldErrors[field.key] : undefined}
+                // helperText={props.fieldErrors[field.key] ? props.fieldErrors[field.key] : undefined}
                 variant="outlined"
-                onBlur={props.validate.bind(this, field)}
+                // onBlur={props.validate(this, field)}
                 InputLabelProps={{
                     shrink: props.fieldValues[field.key] || field.type === "date" ? true : false
                 }}

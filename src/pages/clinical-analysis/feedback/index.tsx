@@ -37,7 +37,7 @@ const fields = [
         visible: true,
     },
     {
-        key: "type",
+        key: "feedback_type",
         columnName: "Type",
         visible: true,
     },
@@ -86,7 +86,9 @@ const fields = [
 
 ];
 
-const dialogFields = [[{
+const dialogFields = [[
+    
+    {
     key: "organization",
     label: "Organization Name",
     visible: true,
@@ -94,10 +96,11 @@ const dialogFields = [[{
     show: true,
     type: "autocomplete",
     options: [
-        { label: "Enable", value: "Enable" },
-        { label: "Disable", value: "Disable" },
+        { label: "Pepsi", value: "Pepsi" },
+        { label: "Coca Cola", value: "Coca Cola" },
+        { label: "Nestle", value: "Nestle" },
     ],
-    defaultValue: { label: "Enable", value: "Enable" }
+    // defaultValue: { label: "Pepsi", value: "Pepsi" }
 },
 {
     key: "session",
@@ -107,24 +110,26 @@ const dialogFields = [[{
     show: true,
     type: "autocomplete",
     options: [
-        { label: "Enable", value: "Enable" },
-        { label: "Disable", value: "Disable" },
+        { label: "Session-1", value: "Session-1" },
+        { label: "Session-2", value: "Session-2" },
+        { label: "Session-3", value: "Session-3" },
+        { label: "Session-4", value: "Session-4" },
     ],
-    defaultValue: { label: "Enable", value: "Enable" }
+    // defaultValue: { label: "Enable", value: "Enable" }
 }
     ,
 {
-    key: "session",
-    label: "Session Name",
+    key: "feedback_type",
+    label: "Feedback Type",
     visible: true,
     freeSolo: false,
     show: true,
     type: "autocomplete",
     options: [
-        { label: "Enable", value: "Enable" },
-        { label: "Disable", value: "Disable" },
+        { label: "Quality", value: "Quality" },
+        { label: "Session", value: "Session" },
     ],
-    defaultValue: { label: "Enable", value: "Enable" }
+    // defaultValue: { label: "Enable", value: "Enable" }
 }
 ],
 
@@ -146,49 +151,49 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
         {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
         {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
         {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
         {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
         {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
         {
             session_no: '2',
             organization: 'Pepsi',
             questions: '2',
-            type: 'Quality',
+            feedback_type: 'Quality',
             created_on: '10 May 22'
         },
     ]);
@@ -199,7 +204,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
 
     let handleChange = (i, e, chip_val) => {
 
-        if (e.target.name == "answer_type" && e.target.value == "Text") {
+        if (e.target.name == "answer_type" && e.target.value == "Textarea") {
             let newFormValues = [...formValues];
             newFormValues[i]["answer_options"] = "";
             setFormValues(newFormValues);
@@ -293,11 +298,11 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         // submitButtonDisabled={isMutating}
                         description="Please fill in the details below."
                         onFieldChange= {(_,images) => {
-                            debugger
+                            // debugger
                         //   handlUploadImages(images);
                         }}
                         onsubmit={(values, hasErrors) => {
-                            debugger
+                            // debugger
                             handleAdd(values);
                         }}
                         extraButtonText="Add Question"
@@ -356,9 +361,13 @@ const DynamicForm = (props) => {
                             value={element.answer_type || ""}
                             label="Choose answer type"
                             onChange={e => handleChange(index, e)}
-                        >
-                            <MenuItem value="Text">Text</MenuItem>
+                        >   
+                        <MenuItem value="Checkbox">Checkbox</MenuItem>
+                        <MenuItem value="Textarea">Textarea</MenuItem>
+                            <MenuItem value="Radio button">Radio button</MenuItem>
                             <MenuItem value="List">List</MenuItem>
+                            
+
                         </Select>
                     </FormControl>
 
