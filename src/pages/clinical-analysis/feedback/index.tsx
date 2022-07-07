@@ -1,4 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
+import _ from "lodash";
+
+// GRAPHQL 
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_FEEDBACK_DATA, GET_ORG_DATA } from "../../../graphql/query"
+import { ADD_FEEDBACK } from "../../../graphql/mutation";
+
+// MUI COMPONENTS
 import Box from '@mui/material/Box';
 import Layout from '../../../components/layout';
 import TableGenerator from "../../../components/common/TableGenerator";
@@ -10,41 +18,46 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
-// import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import _ from "lodash";
+import Select from '@mui/material/Select';
 
-// import { Chip, TextField } from "@material-ui/core";
-// import { Autocomplete } from "@material-ui/lab";
 
+
+
+
+//**  TABLE DATA COLUMNS **//
 const fields = [
     {
         key: "session_no",
         columnName: "Session No.",
         visible: true,
+        render: (val) => val ?? "---"
     },
     {
-        key: "organization",
+        key: "org_id",
         columnName: "Organization",
         visible: true,
+        render: (val) => val ?? "---"
     },
     {
-        key: "questions",
+        key: "question",
         columnName: "Questions",
         visible: true,
+        render: (val) => val ?? "---"
     },
     {
         key: "feedback_type",
         columnName: "Type",
         visible: true,
+        render: (val) => val ?? "---"
     },
     {
-        key: "created_on",
+        key: "created_date",
         columnName: "Created on",
         visible: true,
+        render: (val) => val ?? "---"
     },
     {
         key: "actions",
@@ -86,55 +99,7 @@ const fields = [
 
 ];
 
-const dialogFields = [[
-    
-    {
-    key: "organization",
-    label: "Organization Name",
-    visible: true,
-    freeSolo: false,
-    show: true,
-    type: "autocomplete",
-    options: [
-        { label: "Pepsi", value: "Pepsi" },
-        { label: "Coca Cola", value: "Coca Cola" },
-        { label: "Nestle", value: "Nestle" },
-    ],
-    // defaultValue: { label: "Pepsi", value: "Pepsi" }
-},
-{
-    key: "session",
-    label: "Session Name",
-    visible: true,
-    freeSolo: false,
-    show: true,
-    type: "autocomplete",
-    options: [
-        { label: "Session-1", value: "Session-1" },
-        { label: "Session-2", value: "Session-2" },
-        { label: "Session-3", value: "Session-3" },
-        { label: "Session-4", value: "Session-4" },
-    ],
-    // defaultValue: { label: "Enable", value: "Enable" }
-}
-    ,
-{
-    key: "feedback_type",
-    label: "Feedback Type",
-    visible: true,
-    freeSolo: false,
-    show: true,
-    type: "autocomplete",
-    options: [
-        { label: "Quality", value: "Quality" },
-        { label: "Session", value: "Session" },
-    ],
-    // defaultValue: { label: "Enable", value: "Enable" }
-}
-],
-
-]
-
+// COMPONENT STYLES
 const crudButtons = {
     display: 'flex',
     alignItems: 'center',
@@ -142,64 +107,78 @@ const crudButtons = {
     marginBottom: 1,
     flexDirection: 'row-reverse'
 }
+
 const Feedback: React.FunctionComponent<any> = (props) => {
 
+    // COMPONENT STATE
     const [addModal, setAddModal] = useState<boolean>(false);
-    const [formValues, setFormValues] = useState([])
-    const [dataList, setDataList] = useState<any>([
+    const [formValues, setFormValues] = useState<any>([]);
+    const [sessionList, setSessionList] = useState<any>([]);
+    const [dataList, setDataList] = useState<any>([]);
+
+
+    // GRAPHQL 
+    const [addFeedback, { data, loading, error }] = useMutation(ADD_FEEDBACK);
+    const { loading: orgLoading, error: orgError, data: orgData } = useQuery(GET_ORG_DATA);
+    const { loading: dataListLoading, error: dataListError, data: dataListData } = useQuery(GET_FEEDBACK_DATA, {
+        variables: { status: 'active' },
+        // pollInterval: 500,
+    });
+
+
+    useEffect(() => {
+        for (var i = 1; i <= 50; i++) {
+            setSessionList((prev) => [...prev, { label: `Session-${i}`, value: i }])
+        }
+    }, [])
+
+    // ADD DIALOG FIELDS
+    const dialogFields = [[
         {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-        {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-        {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-        {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-        {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-        {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-        {
-            session_no: '2',
-            organization: 'Pepsi',
-            questions: '2',
-            feedback_type: 'Quality',
-            created_on: '10 May 22'
-        },
-    ]);
+            key: "org_id",
+            label: "Organization Name",
+            visible: true,
+            freeSolo: false,
+            show: true,
+            type: "autocomplete",
+            options: orgData?.getOrganizationData?.length > 0 ? [...orgData?.getOrganizationData?.map(val => ({ "label": val.name, "value": val._id }))] : []
+            // defaultValue: { label: "Pepsi", value: "Pepsi" }
+        }, {
+            key: "session_no",
+            label: "Session Name",
+            visible: true,
+            freeSolo: false,
+            show: true,
+            type: "autocomplete",
+            options: sessionList.length > 0 ? sessionList : []
+            // defaultValue: { label: "Enable", value: "Enable" }
+        }, {
+            key: "feedback_type",
+            label: "Feedback Type",
+            visible: true,
+            freeSolo: false,
+            show: true,
+            type: "autocomplete",
+            options: [
+                { label: "Quality", value: "quality" },
+                { label: "Session", value: "session" },
+            ],
+            // defaultValue: { label: "Enable", value: "Enable" }
+        }
+    ],
+
+    ]
+    if (loading) return 'Submitting...';
+    if (error) return `Submission error! ${error.message}`;
+
+    let handleAdd = (val) => {
+        const dataJson = JSON.stringify([{ ...val, feedQuesData: { ...formValues } }]);
+        addFeedback({ variables: { feedQuesData: dataJson } });
+    }
+
 
     let addFormFields = () => {
-        setFormValues([...formValues, { question_details: "", answer_type: "Text", answer_options: "" }])
+        setFormValues([...formValues, { question: "", answer_type: "Text", answer_options: "" }])
     }
 
     let handleChange = (i, e, chip_val) => {
@@ -224,17 +203,11 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     }
 
     let removeFormFields = (i) => {
-        const newData = formValues.filter((val,index)=>{
-            return i!=index
-        } )
+        const newData = formValues.filter((val, index) => {
+            return i != index
+        })
         setFormValues(newData)
     }
-
-    let handleAdd = (val)=>{
-        debugger
-        console.log("Form Data", formValues)
-    }
-    
 
     return (
         <>
@@ -256,7 +229,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         //   searchColumnsFilter={true}
                         fields={fields}
                         //   loader={loader}
-                        data={dataList}
+                        data={dataListData?.getAdminFeedbackList}
                         //   currentPage={page}
                         //   handleSortChange={(ordering) => {
                         //     setOrdering(ordering);
@@ -297,12 +270,10 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         fields={dialogFields}
                         // submitButtonDisabled={isMutating}
                         description="Please fill in the details below."
-                        onFieldChange= {(_,images) => {
-                            // debugger
-                        //   handlUploadImages(images);
+                        onFieldChange={(_, images) => {
+                            //   handlUploadImages(images);
                         }}
                         onsubmit={(values, hasErrors) => {
-                            // debugger
                             handleAdd(values);
                         }}
                         extraButtonText="Add Question"
@@ -313,11 +284,9 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         }}
                         dynamicForm={<DynamicForm formValues={formValues} handleChange={handleChange} removeFormFields={removeFormFields} />}
                         open={addModal}
-                        onClose={() => {setAddModal(false); setFormValues([])}}
+                        onClose={() => { setAddModal(false); setFormValues([]) }}
                     />
-
                 </Box>
-
             </Layout >
         </>
     );
@@ -328,7 +297,7 @@ export default Feedback;
 
 
 
-
+// DYNAMIC FORM
 const DynamicForm = (props) => {
     const { children, handleSubmit, formValues, handleChange, removeFormFields, ...other } = props;
 
@@ -344,8 +313,8 @@ const DynamicForm = (props) => {
                         <CancelIcon sx={{ color: "error.main" }} />
                     </IconButton>
                     <TextField
-                        value={element.question_details || ""} onChange={e => handleChange(index, e)}
-                        name="question_details"
+                        value={element.question || ""} onChange={e => handleChange(index, e)}
+                        name="question"
                         label="Type your Question"
                         multiline
                         rows={4}
@@ -361,41 +330,28 @@ const DynamicForm = (props) => {
                             value={element.answer_type || ""}
                             label="Choose answer type"
                             onChange={e => handleChange(index, e)}
-                        >   
-                        <MenuItem value="Checkbox">Checkbox</MenuItem>
-                        <MenuItem value="Textarea">Textarea</MenuItem>
+                        >
+                            <MenuItem value="Checkbox">Checkbox</MenuItem>
+                            <MenuItem value="Textarea">Textarea</MenuItem>
                             <MenuItem value="Radio button">Radio button</MenuItem>
                             <MenuItem value="List">List</MenuItem>
-                            
-
                         </Select>
                     </FormControl>
 
                     {element.answer_type == "List" &&
-                        //  <TextField
-                        //            value={element.answer_options || ""} onChange={e => handleChange(index, e)}
-                        //           name="answer_options"
-                        //           label="List of answer options"
-                        //         //   multiline
-                        //         //   rows={4}
-                        //           sx={{width:'100%'}}
-                        //           m={2}
-                        //         />
                         <Autocomplete
                             multiple
                             id="tags-filled"
                             name="answer_options"
                             options={[]}
-                            defaultValue={ element.answer_options ||[]}
+                            defaultValue={element.answer_options || []}
                             // defaultValue={_.isEmpty(element.answer_options) ? []: [element.answer_options]  }
-                            
                             onChange={(_, val) => {
                                 handleChange(index, _, val)
                             }}
                             freeSolo
                             renderTags={(value: string[], getTagProps) =>
                                 value.map((option: string, index: number) => {
-
                                     return (
                                         <Chip
                                             key={index}
