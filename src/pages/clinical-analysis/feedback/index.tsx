@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic'
 import _ from "lodash";
 
 // GRAPHQL 
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_FEEDBACK_DATA, GET_ORG_DATA } from "../../../graphql/query"
-import { ADD_FEEDBACK } from "../../../graphql/mutation";
+import { useMutation, useQuery,useLazyQuery } from '@apollo/client';
+import { GET_FEEDBACK_DATA, GET_ORG_DATA,GET_FEEDBACK_BY_ID } from "../../../graphql/query"
+import { ADD_FEEDBACK,DELETE_FEEDBACK,UPDATE_FEEDBACK } from "../../../graphql/mutation";
 
 // MUI COMPONENTS
 import Box from '@mui/material/Box';
 import Layout from '../../../components/layout';
-import TableGenerator from "../../../components/common/TableGenerator";
+const TableGenerator = dynamic(import('../../../components/common/TableGenerator'), { ssr: false })
 import ContentHeader from "../../../components/common/ContentHeader";
 import { IconButton, Chip, TextField, Autocomplete } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -22,13 +23,66 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Paper from '@mui/material/Paper';
 
 
+// COMPONENT STYLES
+const crudButtons = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 1,
+    flexDirection: 'row-reverse'
+}
+
+const Feedback: React.FunctionComponent<any> = (props) => {
+
+    // COMPONENT STATE
+    const [addModal, setAddModal] = useState<boolean>(false);
+    const [editModal, setEditModal] = useState<boolean>(false);
+    const [viewModal, setViewModal] = useState<boolean>(false);
+    const [formValues, setFormValues] = useState<any>([]);
+    const [sessionList, setSessionList] = useState<any>([]);
+    const [dataList, setDataList] = useState<any>([]);
+
+    // TABLE PROPS
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [dataCount, setDataCount] = useState(0);
+    const [page, setPage] = useState(0);
+    const [loader, setLoader] = useState(false);
 
 
+    // GRAPHQL 
+    const [addFeedback, { data, loading, error }] = useMutation(ADD_FEEDBACK);
+    const { loading: orgLoading, error: orgError, data: orgData } = useQuery(GET_ORG_DATA);
+    const { loading: dataListLoading, error: dataListError, data: dataListData } = useQuery(GET_FEEDBACK_DATA, {
+        variables: { status: 'active',pageNo:1 },
+        // pollInterval: 500,
+    });
 
-//**  TABLE DATA COLUMNS **//
-const fields = [
+    
+  const [viewFeedback, { loading:feedbackLoader, error:feedbackError, data:feedbackData }] = useLazyQuery(GET_FEEDBACK_BY_ID);
+
+    const [deleteFeedback, { loading: deleteDataLoading, error: deleteDataError, data: deleteData }] = useMutation(DELETE_FEEDBACK);
+    const [updateFeedback, { loading: updateDataLoading, error: updateDataError, data: updateData }] = useMutation(UPDATE_FEEDBACK);
+    
+    
+    
+    if ( dataListLoading) {
+        console.log("Loading")
+        // setLoader(true);
+    };
+
+
+    useEffect(() => {
+        for (var i = 1; i <= 50; i++) {
+            setSessionList((prev) => [...prev, { label: `Session-${i}`, value: i }])
+        }
+        // setLoader(true);
+    }, [])
+
+    //**  TABLE DATA COLUMNS **//
+    const fields = [
     {
         key: "session_no",
         columnName: "Session No.",
@@ -36,7 +90,7 @@ const fields = [
         render: (val) => val ?? "---"
     },
     {
-        key: "org_id",
+        key: "organization_name",
         columnName: "Organization",
         visible: true,
         render: (val) => val ?? "---"
@@ -69,7 +123,7 @@ const fields = [
                     size="small"
                     variant="contained"
                     onClick={
-                        () => { }
+                        () => {viewFeedback({ variables: { feedbackId: value._id },onCompleted:()=>setViewModal(true) }) }
                     }
                 >
                     <VisibilityIcon />
@@ -78,16 +132,17 @@ const fields = [
                     size="small"
                     variant="contained"
                     onClick={
-                        () => { }
+                        () => {viewFeedback({ variables: { feedbackId: value._id },onCompleted:()=>setEditModal(true) }) }
                     }
                 >
                     <CreateIcon />
                 </IconButton>
                 <IconButton
                     size="small"
-                    variant="contained"
+                    variant="contained"                                 
                     onClick={
-                        () => { }
+                        () => {deleteFeedback({ variables: {feedbackId:value._id,update:{status:"deleted"}  } }); }
+                        
                     }
                 >
                     <DeleteIcon />
@@ -98,39 +153,6 @@ const fields = [
     }
 
 ];
-
-// COMPONENT STYLES
-const crudButtons = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 1,
-    flexDirection: 'row-reverse'
-}
-
-const Feedback: React.FunctionComponent<any> = (props) => {
-
-    // COMPONENT STATE
-    const [addModal, setAddModal] = useState<boolean>(false);
-    const [formValues, setFormValues] = useState<any>([]);
-    const [sessionList, setSessionList] = useState<any>([]);
-    const [dataList, setDataList] = useState<any>([]);
-
-
-    // GRAPHQL 
-    const [addFeedback, { data, loading, error }] = useMutation(ADD_FEEDBACK);
-    const { loading: orgLoading, error: orgError, data: orgData } = useQuery(GET_ORG_DATA);
-    const { loading: dataListLoading, error: dataListError, data: dataListData } = useQuery(GET_FEEDBACK_DATA, {
-        variables: { status: 'active' },
-        // pollInterval: 500,
-    });
-
-
-    useEffect(() => {
-        for (var i = 1; i <= 50; i++) {
-            setSessionList((prev) => [...prev, { label: `Session-${i}`, value: i }])
-        }
-    }, [])
 
     // ADD DIALOG FIELDS
     const dialogFields = [[
@@ -168,13 +190,27 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     ],
 
     ]
-    if (loading) return 'Submitting...';
-    if (error) return `Submission error! ${error.message}`;
+    // if (loading) return 'Submitting...';
+    // if (error) return `Submission error! ${error.message}`;
 
     let handleAdd = (val) => {
-        const dataJson = JSON.stringify([{ ...val, feedQuesData: { ...formValues } }]);
+        const data =formValues.map(x =>({...x,...val,session_no:[x.session_no]}))
+        const dataJson = JSON.stringify(data);
         addFeedback({ variables: { feedQuesData: dataJson } });
     }
+    // let handleAdd = (val) => {
+    //     const dataJson = JSON.stringify([{ ...val, feedQuesData: { ...formValues } }]);
+    //     addFeedback({ variables: { feedQuesData: dataJson } });
+    // }
+
+    let handleEdit = (val) => {
+        debugger
+        const data =formValues.map(x =>({...x,...val,session_no:[x.session_no]}))
+        const dataJson = JSON.stringify(data);
+        updateFeedback({ variables: { feedQuesData: dataJson } });
+    }
+
+    
 
 
     let addFormFields = () => {
@@ -182,7 +218,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     }
 
     let handleChange = (i, e, chip_val) => {
-
+            debugger
         if (e.target.name == "answer_type" && e.target.value == "Textarea") {
             let newFormValues = [...formValues];
             newFormValues[i]["answer_options"] = "";
@@ -228,30 +264,30 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         //   initialSort={"id"}
                         //   searchColumnsFilter={true}
                         fields={fields}
-                        //   loader={loader}
+                          loader={loader}
                         data={dataListData?.getAdminFeedbackList}
-                        //   currentPage={page}
+                          currentPage={page}
                         //   handleSortChange={(ordering) => {
                         //     setOrdering(ordering);
                         //     getDeviceType(ordering);
                         //   }}
-                        //   onPageChange={(page, direction) => {
-                        //     setPage(page);
-                        //     if (direction === "next") {
-                        //       changePage(nextPage);
-                        //     } else if (direction === "back") {
-                        //       changePage(previousPage);
-                        //     } else if (direction === "first") {
-                        //       changePage(firstPage);
-                        //     } else if (direction === "last") {
-                        //       changePage(lastPage);
-                        //     }
-                        //   }}
+                          onPageChange={(page, direction) => {
+                            setPage(page);
+                            if (direction === "next") {
+                              changePage(nextPage);
+                            } else if (direction === "back") {
+                              changePage(previousPage);
+                            } else if (direction === "first") {
+                              changePage(firstPage);
+                            } else if (direction === "last") {
+                              changePage(lastPage);
+                            }
+                          }}
                         backendPagination={true}
-                        //   onRowPerPageChange={(rows) => {
-                        //     getDeviceType(null, rows);
-                        //     setRowsPerPage(rows);
-                        //   }}
+                          onRowPerPageChange={(rows) => {
+                            // getDeviceType(null, rows);
+                            setRowsPerPage(rows);
+                          }}
                         //   dataCount={dataCount}
                         //   // onChangePage={(page) => console.log(page)}
                         //   selectedRecords={modulesSelected}
@@ -278,15 +314,41 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         }}
                         extraButtonText="Add Question"
                         onExtraButton={() => {
-                            // alert('onExtraButton')
                             addFormFields()
-                            // setAdPresentationModal(true);
                         }}
                         dynamicForm={<DynamicForm formValues={formValues} handleChange={handleChange} removeFormFields={removeFormFields} />}
                         open={addModal}
                         onClose={() => { setAddModal(false); setFormValues([]) }}
                     />
-                </Box>
+
+        <CrudDialog
+          title="Edit Question"
+          okText="Update"
+          fields={dialogFields}
+          values={feedbackData?.getFeedbackQuestionById[0]}
+          onFieldChange={(_, images) => {
+            debugger
+            //   handlUploadImages(images);
+        }}
+          onsubmit={(values, hasErrors) => {
+            handleEdit(values);
+        }}
+          dynamicForm={<DynamicForm formValues={feedbackData?.getFeedbackQuestionById}  handleChange={handleChange} removeFormFields={removeFormFields}  />}
+          open={editModal}
+          onClose={() => setEditModal(false)}
+        />
+
+<CrudDialog
+          title="View Question"
+          viewData={true}
+          fields={dialogFields}
+          values={feedbackData?.getFeedbackQuestionById[0]}
+          dynamicForm={<DynamicForm formValues={feedbackData?.getFeedbackQuestionById}  />}
+          open={viewModal}
+          onClose={() => setViewModal(false)}
+        />
+
+              </Box>
             </Layout >
         </>
     );
@@ -299,21 +361,28 @@ export default Feedback;
 
 // DYNAMIC FORM
 const DynamicForm = (props) => {
-    const { children, handleSubmit, formValues, handleChange, removeFormFields, ...other } = props;
-
+    const { children, handleSubmit, formValues=[], handleChange, removeFormFields, ...other } = props;
+debugger
     return (
         <form onSubmit={handleSubmit}>
-            {formValues.map((element, index) => (
+            {formValues?.map((element, index) => (
                 <div className="form-inline" key={index}>
+                    <Paper elevation={3} sx={{padding: '5px 11px', marginBottom:'15px'}} >
+                    <Box sx={{display:'flex', justifyContent: 'end'}}>
                     <IconButton
                         size="small"
                         variant="contained"
                         onClick={() => removeFormFields(index)}
+                        sx={{position: 'relative',
+                            left: '14px',
+                            top: '-7px'}}
                     >
                         <CancelIcon sx={{ color: "error.main" }} />
                     </IconButton>
+                    </Box>
                     <TextField
-                        value={element.question || ""} onChange={e => handleChange(index, e)}
+                        value={element.question || ""} 
+                        onChange={e => handleChange(index, e)}
                         name="question"
                         label="Type your Question"
                         multiline
@@ -376,7 +445,7 @@ const DynamicForm = (props) => {
 
                     }
 
-
+                </Paper >
                 </div>
             ))}
             <div className="button-section">

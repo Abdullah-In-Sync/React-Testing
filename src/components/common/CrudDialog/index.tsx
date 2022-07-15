@@ -76,11 +76,10 @@ const CrudDialog = ({
   hide = false,
   extraButtonText = false,
   onExtraButton = () => { },
-  dynamicForm
+  dynamicForm,
+  viewData = false
 }) => {
   const [fieldValues, setFieldValues] = useState<any>({});
-
- 
 //   const parseValues=(props)=> {
 //     const values = {};
 //     _flatten(fields).forEach((field) => {
@@ -153,11 +152,11 @@ const CrudDialog = ({
             </Box>
 
             {
-              extraButtonText ? (
+              extraButtonText && (
                 <Button onClick={onExtraButton} variant="outlined"  >
                   {extraButtonText}
                 </Button>
-              ) : extraComponent ? extraComponent : null
+              ) 
 
 
             }
@@ -168,9 +167,12 @@ const CrudDialog = ({
 
           </DialogContent>
           <DialogActions>
+            {viewData ? " ": 
             <Button variant="contained" sx={{ color: 'custom.light' }} type="submit">
-              {okText}
-            </Button>
+            {okText}
+          </Button>
+            }
+            
             <Button variant="contained" sx={{ backgroundColor: 'secondary.main', color: 'custom.light' }} onClick={()=>{onClose();setFieldValues( {});}}>
               {cancelText}
             </Button>

@@ -9,13 +9,14 @@ const AutoCompleteBox = ({
   ...props
 }) => {
   let _value = props.fieldValues[field.key] || values[field.key] || "";
+  
   if (typeof _value === "object") {
     _value = (_value || {}).id || "";
   }
   let _valueObj = field.options.find((x) => x.value == _value) || {};
 
   const [value, setValue] = useState(
-    !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
+    _value || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
   );
   const [inputValue, setInputValue] = useState("");
 
@@ -27,7 +28,7 @@ const AutoCompleteBox = ({
 
   useEffect(() => {
     setValue(
-      !isNaN(Number(_value)) || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
+      _value || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
     );
   }, [_value]);
 

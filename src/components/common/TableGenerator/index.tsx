@@ -10,6 +10,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
 
 
 import TablePagination from '@mui/material/TablePagination';
@@ -280,7 +282,19 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
             onSelectAll={handleSelectAll}
           />
           <TableBody>
-            { 
+            <>
+            {   (!props.loader && data.length === 0) ? (
+              <div
+                // className="d-flex align-items-center justify-content-center"
+                style={{
+                  position: "absolute",
+                  height: "20%",
+                  width: "100%",
+                }}
+              >
+                <div style={{display:"list-item",textAlign:'center'}} > No records found</div>
+              </div>
+            ):
                 data
                 .slice(backendPagination? 0 : page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((record, index) => {
@@ -312,7 +326,10 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
                       }
                     </TableRow>
                   );
-                })}
+                })
+                
+                }
+               </>
           </TableBody>
           <TableFooter>
             <TableRow>

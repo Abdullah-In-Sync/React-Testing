@@ -8,3 +8,5 @@ export { default as Checkbox } from './Checkbox';
 export { default as ImageUp } from './ImageUp';
 export { default as File } from './File';
 export { default as FieldsLayout } from './FieldsLayout';
+export { default as FilterSelect } from './MultiSelect';
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import { Text, SelectField, Checkbox, ImageUp, RadioSelect, File, AutoCompleteBox, MultiAutoComplete } from './index';
+import { Text, SelectField, Checkbox, ImageUp, RadioSelect, File, AutoCompleteBox, MultiAutoComplete,FilterSelect } from './index';
 
 const FIELD_COMPONENTS = {
     autocomplete: AutoCompleteBox,
@@ -10,6 +10,7 @@ const FIELD_COMPONENTS = {
     password: Text,
     tel: Text,
     number: Text,
+    multiSelect:FilterSelect,
     // date: DatePicker,
     select: SelectField,
     checkbox: Checkbox,
@@ -47,6 +48,7 @@ const FieldsLayout = ({
                             field.map((_field, _index) => {
                                 if (_field.form === false) return null;
                                 const FieldComponent = FIELD_COMPONENTS[_field.type] || Text;
+                                
                                 if (_field.type === 'checkbox') {
                                     return <Grid item xs p={1}>
                                         <FieldComponent
