@@ -42,6 +42,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const [addModal, setAddModal] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
     const [viewModal, setViewModal] = useState<boolean>(false);
+    const [deletConfirmationModal, setDeletConfirmationModal] = useState<boolean>(false);
     const [formValues, setFormValues] = useState<any>([]);
     const [sessionList, setSessionList] = useState<any>([]);
     const [dataList, setDataList] = useState<any>([]);
@@ -146,7 +147,9 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                     <IconButton
                         size="small"
                         variant="contained"
-                        onClick={() => handleDelete(value._id)}
+                        // onClick={() => handleDelete(value._id)}
+                        onClick={() => {setDeletConfirmationModal(true),setSelectedId(value._id)}}
+
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -236,7 +239,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                 feedbackId: id,
                 update: { status: "deleted" }
             },
-            onCompleted: () => { refetch() }
+            onCompleted: () => {setDeletConfirmationModal(false); refetch(); }
         });
     }
 
@@ -348,6 +351,18 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         open={viewModal}
                         onClose={() => setViewModal(false)}
                     />
+
+                    <CrudDialog
+                        title="Delete Question"
+                        description= "Are you sure you want to delete this question? You 
+                        will not be able to restore this again." 
+                    
+                        okText="Delete"
+                        onsubmit={() => handleDelete(selectedId) }
+                        open={deletConfirmationModal}
+                        onClose={() => setDeletConfirmationModal(false)}
+                    />
+
 
                 </Box>
             </Layout >

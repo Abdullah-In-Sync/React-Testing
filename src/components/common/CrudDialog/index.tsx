@@ -74,6 +74,7 @@ const CrudDialog = ({
   closable = true,
   extraButtonLoading = false,
   hide = false,
+  description,
   extraButtonText = false,
   onExtraButton = () => { },
   dynamicForm,
@@ -137,6 +138,9 @@ const CrudDialog = ({
         <BootstrapDialogTitle id="customized-dialog-title" >
           {title}
         </BootstrapDialogTitle>
+        <Typography variant="h5" sx={{margin: '45px',textAlign: 'center', fontWeight: 200}} >
+          {description}
+        </Typography>
         <form onSubmit={onSubmit}>
           <DialogContent style={{ overflowX: 'hidden' }}>
             <Box sx={{ width: 800 }}>
