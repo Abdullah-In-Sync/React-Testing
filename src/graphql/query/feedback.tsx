@@ -17,9 +17,12 @@ export const GET_FEEDBACK_DATA = gql`
         created_date
         org_id
         feedback_type
+        answer_options
         organization_name
         session_no
         question
+        answer_type
+        status
     }
   }
 `;

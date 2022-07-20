@@ -260,7 +260,7 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
   return (
     <Box sx={classes.root}>
       <Paper sx={classes.paper}>
-        <Loader visible={props.loader} />
+        {/* <Loader visible={props.loader} /> */}
         <Table
           sx={classes.table}
           aria-labelledby="tableTitle"
@@ -283,6 +283,7 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
           />
           <TableBody>
             <>
+            <div style={{textAlign:'center'}} > <Loader visible={props.loader} /></div> 
             {   (!props.loader && data.length === 0) ? (
               <div
                 // className="d-flex align-items-center justify-content-center"

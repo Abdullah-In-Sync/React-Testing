@@ -33,16 +33,6 @@ const FieldsLayout = ({
             if (Array.isArray(field)) {
 
                 return (
-                    //
-                    //     <Grid container pt={0.5} key={index}>
-                    //     <Grid item xs={12} md={9} >
-                    //         1
-                    //     </Grid>
-                    //     <Grid item xs={12} md={3} style={{ textAlign: 'right', paddingRight: '40px' }}>
-                    //         © {new Date().getFullYear()} MyHelp
-                    //     </Grid>
-                    // </Grid>
-                    //
                     <Grid container spacing={2} pt={0.5} key={index}>
                         {
                             field.map((_field, _index) => {
