@@ -11,8 +11,8 @@ query MyQuery {
 `;
 
 export const GET_FEEDBACK_DATA = gql`
-  query GetAdminFeedback($status: String!) {
-    getAdminFeedbackList(status: $status) {
+  query GetAdminFeedback($status: String!,$pageNo: Int!) {
+    getAdminFeedbackList(status: $status,pageNo: $pageNo) {
         answer_type
         created_date
         org_id

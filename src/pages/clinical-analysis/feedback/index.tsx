@@ -121,7 +121,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const [addFeedback, { data, loading, error }] = useMutation(ADD_FEEDBACK);
     const { loading: orgLoading, error: orgError, data: orgData } = useQuery(GET_ORG_DATA);
     const { loading: dataListLoading, error: dataListError, data: dataListData } = useQuery(GET_FEEDBACK_DATA, {
-        variables: { status: 'active' },
+        variables: { status: 'active',pageNo: 1 },
         // pollInterval: 500,
     });
 
