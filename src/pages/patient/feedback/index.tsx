@@ -37,7 +37,17 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const [therapy, setTherapy] = React.useState('');
     const [sessionNo, setsessionNo] = React.useState('');
     const [feedbackType, setfeedbackType] = React.useState('session');
-    const [sessionQuestion, setSessionQuestion] = React.useState([]);
+    const [sessionQuestionAns, setSessionQuestionAns] = React.useState([]);
+    const [formValues, setFormValues] = useState<any>([]);
+    // const initialFormData = Object.freeze({
+    //     "therapist_id":"",
+    //     "session_no":"",
+    //     "question_id":"",
+    //     "answer":"",
+    // });
+    // const [formData, updateFormData] = React.useState(initialFormData);
+
+    
     //const [patientSessionData, setpatientSessionData] = React.useState([]);
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
@@ -85,7 +95,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         
     }
     async function postPatientFeedback() {
-        console.log("d");
+         console.log(formValues);
         
     }
     var callvalue = true;
@@ -93,11 +103,56 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         
         if(callvalue==true){
             callvalue = false;
-            console.log(feedbackType);
+            //console.log(feedbackType);
             setfeedbackType(feedbackType);
             setsessionNo(seesionNo);             
         }
     }
+
+    
+    var jsonData = [];
+   function handleInputChange(i,e){    
+    
+    //newFormValues[i][e.target.name] = e.target.value;
+    //setFormValues(newFormValues);
+    console.log(formValues);
+        //console.log(e.target.id);
+        //console.log(e.target.value);
+        // var val = e.target.value;
+        // var p =val.split('='); 
+         //jsonData[i] = {'therapist_id':p[3],'session_no':p[2],'question_id':p[1],'answer':p[0]};        
+        // console.log(jsonData);   
+        
+        // updateFormData({
+        //     ...formData,
+      
+        //     // Trimming any whitespace
+        //     ['therapist_id']: p[3],
+        //     ['session_no']: p[2],
+        //     ['question_id']: p[1],
+        //     ['answer']: p[0]
+        //   });
+        ///setFormValues(jsonData);
+    };
+    
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(event.target.question_id);
+        //const data = new FormData(event.target);
+        //console.log(data);
+        // console.log(data.get('email')); // reference by form input's `name` tag
+    
+        // fetch('/api/form-submit-url', {
+        //   method: 'POST',
+        //   body: data,
+        // });
+      }
+
+    // const handleSubmit = (e) => {
+    //     console.log(formValues);
+        
+    // };
 
     const { loading: feedbackLoading, error: feedbackError, data: patientFeedbackData } = useQuery(GET_PATIENTFEEDBACKLIST_DATA, {
         variables: { feedbackType:feedbackType,sessionNo:sessionNo },
@@ -133,7 +188,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                    patientSessionData?.getPatientSessionList != null && patientSessionData?.getPatientSessionList.map((v, k) => {  
                        let p = k+1;
                        let panelName = 'panel'+p
-                       return <Accordion sx={{ marginTop:"4px",borderRadius: "12px",border: 'none' }} onClick={()=>getQuestionByType('session',p)} expanded={expanded === panelName} onChange={handleChange(panelName)}>
+                       return <form onSubmit={handleSubmit}><input type="hidden" name="therapist_id" value="686802e5123a482681a680a673ef7f53" /><input type="hidden" name="session" value={1}/><Accordion sx={{ marginTop:"4px",borderRadius: "12px",border: 'none' }} onClick={()=>getQuestionByType('session',p)} expanded={expanded === panelName} onChange={handleChange(panelName)}>
                                <AccordionSummary
                                expandIcon={<ExpandMoreIcon />}
                                aria-controls={panelName+"bh-content"}
@@ -158,7 +213,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                               
                                 {
                                     patientFeedbackData?.getPatientFeedbackList != null && patientFeedbackData?.getPatientFeedbackList.map((fv, fk) => {
-                                        return <Typography  gutterBottom component="div">
+                                        return <Typography  gutterBottom component="div"><input type="hidden" name="question_id" value={fv._id}/>
                                             { fv.answer_type == "list" && <Typography sx={{ backgroundColor: "#dadada52 !important",border: "1px solid #dadada52 !important",
                                         color: "#3f4040b0 !important",fontSize: "15px", paddingLeft: "5px", fontWeight: "1px !important" }}>
                                                                         {fk+1}. {fv.question} 
@@ -174,7 +229,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         name="row-radio-buttons-group">                          
                                         {
                                             fv.answer_type == "list" && fv.answer_options  && fv.answer_options.map((av, ak) => {
-                                                return <FormControlLabel sx={{fontSize:"15px", color: "#3f4040b0 !important"}} value={av} control={<Radio size="small" />} label={av} />
+                                                return <FormControlLabel sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(ak, e)}  value={av} control={<Radio size="small" />} label={av} />
                                             })
                                         }
 
@@ -192,14 +247,14 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         </Typography>                            
                                     })
                                 }
-                                {patientSessionData?.getPatientSessionList != null && <Typography sx={{textAlign:'center'}}><Button variant="contained" onClick={()=>postPatientFeedback()}>Submit</Button></Typography>}
+                                {patientSessionData?.getPatientSessionList != null && <Typography sx={{textAlign:'center'}}><Button type="submit" variant="contained">Submit</Button></Typography>}
                                 {
                                     patientFeedbackData?.getPatientFeedbackList ==null || patientFeedbackData?.getPatientFeedbackList.length == 0 && <Typography  gutterBottom component="div">No Data Found</Typography>
                                 }
                                                   
                                 
                                </AccordionDetails>
-                       </Accordion>
+                       </Accordion></form>
                    })
                    }
 
