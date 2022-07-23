@@ -5,7 +5,7 @@ import _ from "lodash";
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { GET_PATIENTTHERAPY_DATA, GET_PATIENTFEEDBACKLIST_DATA } from "../../../graphql/query/common"
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient"
-import { ADD_FEEDBACK } from "../../../graphql/mutation";
+import { POST_PATIENT_FEEDBACK } from "../../../graphql/mutation";
 
 // MUI COMPONENTS
 import Box from '@mui/material/Box';
@@ -30,40 +30,23 @@ import Text from '@mui/material/Text';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Divider from '@mui/material/Divider';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 const Feedback: React.FunctionComponent<any> = (props) => {
 
     // COMPONENT STATE
     const [expanded, setExpanded] = React.useState<string | false>(false);
-    const [therapy, setTherapy] = React.useState('');
-    const [sessionNo, setsessionNo] = React.useState('');
-    const [feedbackType, setfeedbackType] = React.useState('session');
-    const [sessionQuestionAns, setSessionQuestionAns] = React.useState([]);
-    const [formValues, setFormValues] = useState<any>([]);
-    // const initialFormData = Object.freeze({
-    //     "therapist_id":"",
-    //     "session_no":"",
-    //     "question_id":"",
-    //     "answer":"",
-    // });
-    // const [formData, updateFormData] = React.useState(initialFormData);
-
-    
-    //const [patientSessionData, setpatientSessionData] = React.useState([]);
+    const [therapy, setTherapy] = React.useState('');    
+    const [feedbackType, setfeedbackType] = React.useState('session');    
+    const [formValues, setFormValues] = useState([]);
+    const [sessionNo, setsessionNo] = useState(1);    
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
         onCompleted: (data) => {
-            console.log(data);
-            const pttherapyId = data?.getPatientTherapy[0]['_id'];
             
-            console.log(pttherapyId);
+            const pttherapyId = data?.getPatientTherapy[0]['_id'];
             if(pttherapyId){
-                // const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useLazyQuery(GET_PATIENTSESSION_DATA, {
-                //         variables: { pttherapyId:pttherapyId },
-                        
-                // });
-                setTherapy(pttherapyId);
-                //getPatientSessionData(pttherapyId);
-                //console.log(patientSessionData);
+                setTherapy(pttherapyId);                
             }
             
         }
@@ -72,12 +55,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             variables: { pttherapyId:therapy },
             
     });
-    console.log(therapy);
-    console.log(patientSessionData);
     
-    
-    
-
     const handleChange =
       (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
@@ -87,77 +65,60 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         setTherapy(event.target.value);
     };
 
-    // useEffect(() => {
-
-    // }, [feedbackType]);
+    
     async function getPatientSessionData(pttherapyId) {
         
         
     }
-    async function postPatientFeedback() {
-         console.log(formValues);
-        
-    }
+    
     var callvalue = true;
     async function getQuestionByType(feedbackType,seesionNo) {        
         
         if(callvalue==true){
-            callvalue = false;
-            //console.log(feedbackType);
+            callvalue = false;            
             setfeedbackType(feedbackType);
             setsessionNo(seesionNo);             
         }
     }
 
     
-    var jsonData = [];
-   function handleInputChange(i,e){    
     
-    //newFormValues[i][e.target.name] = e.target.value;
-    //setFormValues(newFormValues);
-    console.log(formValues);
-        //console.log(e.target.id);
-        //console.log(e.target.value);
-        // var val = e.target.value;
-        // var p =val.split('='); 
-         //jsonData[i] = {'therapist_id':p[3],'session_no':p[2],'question_id':p[1],'answer':p[0]};        
-        // console.log(jsonData);   
+    let handleInputChange = (i, e) => {
+        let newFormValues = [...formValues];
+        var val = e.target.value;
+        if(e.target.id && e.target.id!='undefined'){
+            val = e.target.id;    
+        }
         
-        // updateFormData({
-        //     ...formData,
-      
-        //     // Trimming any whitespace
-        //     ['therapist_id']: p[3],
-        //     ['session_no']: p[2],
-        //     ['question_id']: p[1],
-        //     ['answer']: p[0]
-        //   });
-        ///setFormValues(jsonData);
+        var p =val.split('=');
+        if(p[0]=='text'){
+           p[0] =  e.target.value;
+        }
+        //console.log(p);
+        if(p[0]){
+            setFormValues([...formValues, { therapist_id: p[3], session_no: sessionNo, question_id: p[1],answer:p[0] }])
+        }
     };
-    
+    const [postPatientFeedback, { data, loading, error }] = useMutation(POST_PATIENT_FEEDBACK);
 
-    const handleSubmit = (event) => {
+    const handleAdd = (event) => {        
         event.preventDefault();
-        console.log(event.target.question_id);
-        //const data = new FormData(event.target);
-        //console.log(data);
-        // console.log(data.get('email')); // reference by form input's `name` tag
+        //console.log(JSON.stringify(formValues));   
+        postPatientFeedback({ variables: { feedQuesAnsData: JSON.stringify(formValues),sessionNo:sessionNo,feedbackType:feedbackType} });         
+        //console.log("sssss");
+        //console.log(data.postPatientFeedback);
+        if(data.postPatientFeedback!=null){            
+            return  (<Stack sx={{ width: '100%' }} spacing={2}><Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+            This is a success alert — check it out!
+          </Alert></Stack>)
+        }
+    }
     
-        // fetch('/api/form-submit-url', {
-        //   method: 'POST',
-        //   body: data,
-        // });
-      }
-
-    // const handleSubmit = (e) => {
-    //     console.log(formValues);
-        
-    // };
 
     const { loading: feedbackLoading, error: feedbackError, data: patientFeedbackData } = useQuery(GET_PATIENTFEEDBACKLIST_DATA, {
         variables: { feedbackType:feedbackType,sessionNo:sessionNo },
     });
-    console.log(patientFeedbackData?.getPatientFeedbackList);
+    //console.log(patientFeedbackData?.getPatientFeedbackList);
 
     return (
         <>
@@ -188,7 +149,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                    patientSessionData?.getPatientSessionList != null && patientSessionData?.getPatientSessionList.map((v, k) => {  
                        let p = k+1;
                        let panelName = 'panel'+p
-                       return <form onSubmit={handleSubmit}><input type="hidden" name="therapist_id" value="686802e5123a482681a680a673ef7f53" /><input type="hidden" name="session" value={1}/><Accordion sx={{ marginTop:"4px",borderRadius: "12px",border: 'none' }} onClick={()=>getQuestionByType('session',p)} expanded={expanded === panelName} onChange={handleChange(panelName)}>
+                       return <form  onSubmit={(values, hasErrors) => {handleAdd(values);}}><Accordion sx={{ marginTop:"4px",borderRadius: "12px",border: 'none' }} onClick={()=>getQuestionByType('session',p)} expanded={expanded === panelName} onChange={handleChange(panelName)}>
                                <AccordionSummary
                                expandIcon={<ExpandMoreIcon />}
                                aria-controls={panelName+"bh-content"}
@@ -213,7 +174,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                               
                                 {
                                     patientFeedbackData?.getPatientFeedbackList != null && patientFeedbackData?.getPatientFeedbackList.map((fv, fk) => {
-                                        return <Typography  gutterBottom component="div"><input type="hidden" name="question_id" value={fv._id}/>
+                                        return <Typography  gutterBottom component="div">
                                             { fv.answer_type == "list" && <Typography sx={{ backgroundColor: "#dadada52 !important",border: "1px solid #dadada52 !important",
                                         color: "#3f4040b0 !important",fontSize: "15px", paddingLeft: "5px", fontWeight: "1px !important" }}>
                                                                         {fk+1}. {fv.question} 
@@ -229,13 +190,15 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         name="row-radio-buttons-group">                          
                                         {
                                             fv.answer_type == "list" && fv.answer_options  && fv.answer_options.map((av, ak) => {
-                                                return <FormControlLabel sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(ak, e)}  value={av} control={<Radio size="small" />} label={av} />
+                                                return <FormControlLabel sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)} value={av+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk} control={<Radio size="small" />} label={av} />
                                             })
                                         }
 
                                        {
                                             fv.answer_type == "text" && <TextareaAutosize
-                                            aria-label="empty textarea"                                            
+                                            aria-label="empty textarea"
+                                            id={fv.answer_type+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk}                                            
+                                            onBlur={e => handleInputChange(fk, e)}
                                             style={{ width: 855.5, height: 216, left: 454.32, top: 1044,backgroundColor: "#C4C4C4",borderRadius: "12px",border: 'none' }}
                                           />
                                             
