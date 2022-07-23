@@ -30,8 +30,10 @@ import Text from '@mui/material/Text';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Divider from '@mui/material/Divider';
-import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import CircularProgress from '@mui/material/CircularProgress';
 const Feedback: React.FunctionComponent<any> = (props) => {
 
     // COMPONENT STATE
@@ -40,10 +42,17 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const [feedbackType, setfeedbackType] = React.useState('session');    
     const [formValues, setFormValues] = useState([]);
     const [sessionNo, setsessionNo] = useState(1);    
+    const [loader, setLoader] = useState(true);
+    const [feedbackLoader, setFeedbackLoader] = useState(true);
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState({
+        open: false,
+        vertical: 'top',
+        horizontal: 'center',
+      });
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
-        onCompleted: (data) => {
-            
+        onCompleted: (data) => {            
             const pttherapyId = data?.getPatientTherapy[0]['_id'];
             if(pttherapyId){
                 setTherapy(pttherapyId);                
@@ -51,17 +60,26 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             
         }
     });
+    
     const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useQuery(GET_PATIENTSESSION_DATA, {
             variables: { pttherapyId:therapy },
+            onCompleted: (data) => {  
+                
+                setTimeout(() => {
+                    setLoader(false);
+                }, 500);
+            }
             
     });
     
     const handleChange =
       (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
+        setFeedbackLoader(true);
     };
 
     const onhandleChange = (event: SelectChangeEvent) => {
+        setLoader(true);
         setTherapy(event.target.value);
     };
 
@@ -100,24 +118,38 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         }
     };
     const [postPatientFeedback, { data, loading, error }] = useMutation(POST_PATIENT_FEEDBACK);
-
+    const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+        props,
+        ref,
+      ) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+      });
     const handleAdd = (event) => {        
-        event.preventDefault();
-        //console.log(JSON.stringify(formValues));   
+        event.preventDefault();        
         postPatientFeedback({ variables: { feedQuesAnsData: JSON.stringify(formValues),sessionNo:sessionNo,feedbackType:feedbackType} });         
-        //console.log("sssss");
         //console.log(data.postPatientFeedback);
-        if(data.postPatientFeedback!=null){            
-            return  (<Stack sx={{ width: '100%' }} spacing={2}><Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-            This is a success alert — check it out!
-          </Alert></Stack>)
+        if(data){            
+            setOpen(true);    
         }
     }
     
 
     const { loading: feedbackLoading, error: feedbackError, data: patientFeedbackData } = useQuery(GET_PATIENTFEEDBACKLIST_DATA, {
         variables: { feedbackType:feedbackType,sessionNo:sessionNo },
+        onCompleted: (data) => {  
+            setTimeout(() => {
+                setFeedbackLoader(false);
+            }, 500);
+        }
     });
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+    };
     //console.log(patientFeedbackData?.getPatientFeedbackList);
 
     return (
@@ -142,8 +174,16 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                 </Select>
                 </FormControl>    
                 </Box>
-                <Box>
-                
+                {loader ==true && <Box style={{ display: 'flex',marginLeft: '450px' }}><CircularProgress /></Box>}
+                <Box>   
+                <Snackbar open={open} anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                Feedback Successfully Submited
+                </Alert>
+                </Snackbar>                
                 { 
                    
                    patientSessionData?.getPatientSessionList != null && patientSessionData?.getPatientSessionList.map((v, k) => {  
@@ -154,7 +194,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                expandIcon={<ExpandMoreIcon />}
                                aria-controls={panelName+"bh-content"}
                                id={panelName+"bh-header"}
-                               sx={{backgroundColor:'#6ba08e',borderRadius: "12px",border:'none' }}
+                               sx={{backgroundColor:'#6ba08e',borderRadius: "12px",border:'none',marginTop:"10px" }}
                                >
                                <Typography sx={{ width: '33%', flexShrink: 0 }}>
                                    Session {p}
@@ -171,7 +211,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
 
                                 </Stack> 
                                 </Typography>
-                              
+                                {feedbackLoader==true && <Box style={{ display: 'flex',marginLeft: '450px' }}><CircularProgress /></Box>}
                                 {
                                     patientFeedbackData?.getPatientFeedbackList != null && patientFeedbackData?.getPatientFeedbackList.map((fv, fk) => {
                                         return <Typography  gutterBottom component="div">
