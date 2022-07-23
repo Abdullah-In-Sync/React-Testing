@@ -59,6 +59,16 @@ export const GET_PATIENTFEEDBACKLIST_DATA = gql`
       status
       created_date
       updated_date
+      feedback_ans {
+        _id
+        answer
+        created_date
+        patient_id
+        question_id
+        status
+        therapist_id
+        updated_date
+      }
     }
   }
 `;

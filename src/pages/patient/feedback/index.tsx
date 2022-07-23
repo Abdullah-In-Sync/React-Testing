@@ -75,7 +75,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const handleChange =
       (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
-        setFeedbackLoader(true);
+        //setFeedbackLoader(true);
     };
 
     const onhandleChange = (event: SelectChangeEvent) => {
