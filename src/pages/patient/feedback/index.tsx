@@ -127,7 +127,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const handleAdd = (event) => {        
         event.preventDefault();        
         postPatientFeedback({ variables: { feedQuesAnsData: JSON.stringify(formValues),sessionNo:sessionNo,feedbackType:feedbackType} });         
-        //console.log(data.postPatientFeedback);
+        console.log(data);
         if(data){            
             setOpen(true);    
         }
@@ -181,7 +181,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
           horizontal: 'center',
         }} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                Feedback Successfully Submited
+                Feedback submitted successfully
                 </Alert>
                 </Snackbar>                
                 { 
