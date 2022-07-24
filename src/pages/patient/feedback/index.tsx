@@ -227,19 +227,10 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                                                         <RadioGroup
                                         row
                                         aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"                                        
-                                        >                          
-                                        
+                                        name="row-radio-buttons-group" defaultValue={fv.feedback_ans && fv.feedback_ans.answer?fv.feedback_ans.answer:''}>                          
                                         {
                                             fv.answer_type == "list" && fv.answer_options  && fv.answer_options.map((av, ak) => {
-                                                //return <FormControlLabel  sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)} value={av+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk} control={<Radio  size="small" />} label={av} />
-                                                return <Radio
-                                                checked={fv.feedback_ans && fv.feedback_ans.answer === av}
-                                                onChange={e => handleInputChange(fk, e)}
-                                                value={av}
-                                                name={"question_"+fv._id}
-                                                inputProps={{ 'aria-label': av }}
-                                              />
+                                                return <FormControlLabel  sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)} value={av+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk} control={<Radio size="small" />} label={av} />
                                             })
                                         }
 
@@ -248,6 +239,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                             aria-label="empty textarea"
                                             id={fv.answer_type+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk}                                            
                                             onBlur={e => handleInputChange(fk, e)}
+                                            value={fv.feedback_ans && fv.feedback_ans.answer?fv.feedback_ans.answer:''}
                                             style={{ width: 855.5, height: 216, left: 454.32, top: 1044,backgroundColor: "#C4C4C4",borderRadius: "12px",border: 'none' }}
                                           />
                                             
@@ -259,7 +251,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         </Typography>                            
                                     })
                                 }
-                                {patientSessionData?.getPatientFeedbackList != null && <Typography sx={{textAlign:'center'}}><Button type="submit" variant="contained">Submit</Button></Typography>}
+                                {patientFeedbackData?.getPatientFeedbackList != null && <Typography sx={{textAlign:'center'}}><Button type="submit" variant="contained">Submit</Button></Typography>}
                                 {
                                     patientFeedbackData?.getPatientFeedbackList ==null || patientFeedbackData?.getPatientFeedbackList.length == 0 && <Typography  gutterBottom component="div">No Data Found</Typography>
                                 }
