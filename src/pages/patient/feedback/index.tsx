@@ -227,10 +227,19 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                                                         <RadioGroup
                                         row
                                         aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group">                          
+                                        name="row-radio-buttons-group"                                        
+                                        >                          
+                                        
                                         {
                                             fv.answer_type == "list" && fv.answer_options  && fv.answer_options.map((av, ak) => {
-                                                return <FormControlLabel sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)} value={av+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk} control={<Radio size="small" />} label={av} />
+                                                //return <FormControlLabel  sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)} value={av+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk} control={<Radio  size="small" />} label={av} />
+                                                return <Radio
+                                                checked={fv.feedback_ans && fv.feedback_ans.answer === av}
+                                                onChange={e => handleInputChange(fk, e)}
+                                                value={av}
+                                                name={"question_"+fv._id}
+                                                inputProps={{ 'aria-label': av }}
+                                              />
                                             })
                                         }
 
@@ -250,7 +259,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         </Typography>                            
                                     })
                                 }
-                                {patientSessionData?.getPatientSessionList != null && <Typography sx={{textAlign:'center'}}><Button type="submit" variant="contained">Submit</Button></Typography>}
+                                {patientSessionData?.getPatientFeedbackList != null && <Typography sx={{textAlign:'center'}}><Button type="submit" variant="contained">Submit</Button></Typography>}
                                 {
                                     patientFeedbackData?.getPatientFeedbackList ==null || patientFeedbackData?.getPatientFeedbackList.length == 0 && <Typography  gutterBottom component="div">No Data Found</Typography>
                                 }
