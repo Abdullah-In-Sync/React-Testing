@@ -238,8 +238,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                             fv.answer_type == "text" && <TextareaAutosize
                                             aria-label="empty textarea"
                                             id={fv.answer_type+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk}                                            
-                                            onBlur={e => handleInputChange(fk, e)}
-                                            value={fv.feedback_ans && fv.feedback_ans.answer?fv.feedback_ans.answer:''}
+                                            onBlur={e => handleInputChange(fk, e)}                                            
                                             style={{ width: 855.5, height: 216, left: 454.32, top: 1044,backgroundColor: "#C4C4C4",borderRadius: "12px",border: 'none' }}
                                           />
                                             
