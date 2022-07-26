@@ -1,14 +1,27 @@
 /** @type {import('next').NextConfig} */
 
-// BASE URL
 const env = {
   GRAPHQL_SERVER: "https://xhyntnjiffgmxfu7aux3ohr24q.appsync-api.eu-west-1.amazonaws.com/graphql",
 }
 
-module.exports = {
-  reactStrictMode: false,
+const nextConfig = {
+  reactStrictMode: true,
+  basePath: '/v2',
+  async redirects() {
+    return [
+        {
+            source: '/',
+            destination: '/v2',
+            basePath: false,
+            permanent: false
+        }
+    ]
+  },
+  images: {
+    loader: 'akamai',
+    path: '',
+  },
   env
 }
 
-
-
+module.exports = nextConfig;
