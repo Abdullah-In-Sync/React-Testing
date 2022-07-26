@@ -1,5 +1,3 @@
-/** @type {import('next').NextConfig} */
-
 const env = {
   GRAPHQL_SERVER: "https://xhyntnjiffgmxfu7aux3ohr24q.appsync-api.eu-west-1.amazonaws.com/graphql",
 }
@@ -19,7 +17,7 @@ const nextConfig = {
   },
   images: {
     loader: 'akamai',
-    path: '',
+    path: '/',
   },
   env
 }
