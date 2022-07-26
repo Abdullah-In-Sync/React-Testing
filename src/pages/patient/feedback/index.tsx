@@ -3,7 +3,7 @@ import _ from "lodash";
 
 // GRAPHQL 
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
-import { GET_PATIENTTHERAPY_DATA, GET_PATIENTFEEDBACKLIST_DATA } from "../../../graphql/query/common"
+import { GET_PATIENTTHERAPY_DATA, GET_PATIENTFEEDBACKLIST_DATA,GET_TOKEN_DATA } from "../../../graphql/query/common"
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient"
 import { POST_PATIENT_FEEDBACK } from "../../../graphql/mutation";
 
@@ -53,6 +53,19 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         vertical: 'top',
         horizontal: 'center',
       });
+    const { loading: tokenLoading, error: tokenError, data: tokenData } = useQuery(GET_TOKEN_DATA);  
+    //return tokenData; return false;
+    if(tokenData && tokenData?.getTokenData.user_type){
+        var user_type = tokenData?.getTokenData.user_type;
+        user_type = user_type.replace('[',"");
+        user_type = user_type.replace(']',"");        
+        if(user_type!='patient'){
+            window.location.href="http://localhost:3000";
+            return false;
+        }
+    }
+    //console.log(tokenData?.getTokenData.user_type);
+    //console.log(JSON.stringify(tokenData?.getTokenData.user_type));
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
         onCompleted: (data) => {            
