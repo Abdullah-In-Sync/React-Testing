@@ -1,0 +1,28 @@
+name-template: v$NEXT_PATCH_VERSION 🌈
+tag-template: v$NEXT_PATCH_VERSION
+categories:
+  - title: 🚀 New features
+    label: new
+  - title: 🚨 Bug fixes
+    label: bug
+  - title: 💉 Updated features
+    label: update
+  - title: 🧹 Housekeeping
+    label: housekeeping
+  - title: 🚢 Software delivery lifecycle
+    label: sdlc
+  - title: 📝 Documentation
+    label: doc
+  - title: 🚦 Tests
+    label: test
+  - title: 🔒 Security
+    label: security
+change-template: '- #$NUMBER: $TITLE (thanks to @$AUTHOR)'
+template: |
+  ## What's Changed
+
+  $CHANGES
+
+  ## Thanks to
+
+  $CONTRIBUTORS
