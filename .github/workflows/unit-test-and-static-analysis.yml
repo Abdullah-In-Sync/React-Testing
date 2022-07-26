@@ -150,10 +150,6 @@ jobs:
           **/.eslintcache
           ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
         key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
-
-    - name: Remove Nested Dependencies
-      run: find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;
-      working-directory: src/lib
       
     - name: Run test suite
       run: yarn test:cov
