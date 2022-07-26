@@ -22,6 +22,7 @@ module.exports = {
   coverageDirectory: '<rootDir>/coverage',
   collectCoverageFrom: [
     '<rootDir>/**/*.[t]s?(x)',
+    '!<rootDir>/pages/_app.tsx',
     '!<rootDir>/.next/',
     '!<rootDir>/coverage/',
     '!<rootDir>/**/__tests__/',
@@ -32,6 +33,7 @@ module.exports = {
     '!<rootDir>/out/',
   ],
   coveragePathIgnorePatterns: [
+    '_app.tsx',
     '.test.tsx',
     '.test.ts',
     '.spec.tsx',
@@ -45,9 +47,7 @@ module.exports = {
     '.storybook',
     'coverage',
     '.next',
-    'build',
-    'style-dictionary',
-    'generated',
+    'out',
   ],
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/setup-tests.ts'],
