@@ -1,0 +1,229 @@
+name: Unit Test and Static Analysis
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    paths-ignore:
+      - README.md
+      - SECURITY.md
+      - docs/**
+      - .github/**
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  install-dependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-latest  
+
+    outputs:
+      cache-hash: ${{ steps.cache-settings.outputs.hash }}
+      yarn-cache-dir: ${{ steps.cache-settings.outputs.dir }}
+      yarn-version: ${{ steps.cache-settings.outputs.version }}
+
+    steps:
+      - run: env
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Get Cache Settings
+        id: cache-settings
+        run: |
+          hashSrcYarnLock=($(md5sum src/yarn.lock | awk '{ print $1 }'))
+          echo "::set-output name=hash::$hashSrcYarnLock"
+          echo "::set-output name=dir::$(yarn cache dir)"
+          echo "::set-output name=version::$(yarn -v)"
+
+      - name: Cache Packages
+        id: yarn-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+            ${{ steps.cache-settings.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ steps.cache-settings.outputs.version }}-${{ steps.cache-settings.outputs.hash }}
+
+      - name: Install Packages
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 10
+          retry_wait_seconds: 60
+          max_attempts: 3
+          command: pushd src && yarn install --frozen-lockfile
+
+  build-job:
+    name: Check Build and Export
+    needs: install-dependencies
+    runs-on: ubuntu-latest    
+
+    steps:
+    - run: env
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: "14.x"
+
+    - name: Restore Cached Packages
+      id: yarn-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+          **/.eslintcache
+          ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
+        key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
+
+    - name: Build
+      run: yarn build
+      working-directory: src
+
+    - name: Export
+      run: yarn export
+      working-directory: src
+
+  linting-job:
+    name: Linting Checks
+    needs: install-dependencies
+    runs-on: ubuntu-latest    
+
+    steps:
+    - run: env
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: "14.x"
+
+    - name: Restore Cached Packages
+      id: yarn-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+          **/.eslintcache
+          ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
+        key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
+
+    - name: Run Lint Checks
+      run: yarn lint
+      working-directory: src
+
+  unit-test-job:
+    name: Run Unit Tests
+    needs: install-dependencies
+    runs-on: ubuntu-latest    
+
+    steps:
+    - run: env
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: "14.x"
+
+    - name: Restore Cached Packages
+      id: yarn-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+          **/.eslintcache
+          ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
+        key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
+      
+    - name: Run test suite
+      run: yarn test:cov
+      working-directory: src
+    
+    - name: Archive coverage report results
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: coverage-report
+        path: src/coverage/lcov.info
+
+    - name: Archive tests report results
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: tests-report
+        path: src/test-report.xml
+
+  static-analysis-job:
+    name: Perform Static Analysis
+    needs: unit-test-job
+    runs-on: ubuntu-latest
+    steps:
+      - run: env
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+    
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Download coverage report result
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: src/coverage/
+
+      - name: Download tests report result
+        uses: actions/download-artifact@v3
+        with:
+          name: tests-report
+          path: src/
+
+      - name: Fix test report paths
+        working-directory: src/
+        run: |
+          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' test-report.xml
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  cleanup-job:
+    name: Cleanup
+    if: always()
+    needs: 
+      - install-dependencies
+      - build-job
+      - linting-job
+      - unit-test-job
+      - static-analysis-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete coverage report result
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: coverage-report
+
+      - name: Delete tests report result
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: tests-report
