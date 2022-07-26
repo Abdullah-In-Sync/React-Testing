@@ -5,7 +5,7 @@ const env = {
 }
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   basePath: '/v2',
   async redirects() {
     return [
