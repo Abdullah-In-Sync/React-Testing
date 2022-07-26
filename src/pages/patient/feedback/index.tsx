@@ -45,6 +45,9 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const [loader, setLoader] = useState(true);
     const [feedbackLoader, setFeedbackLoader] = useState(true);
     const [open, setOpen] = React.useState(false);
+    const [erroropen, setErrorOpen] = React.useState(false);
+    const [btndiabled, setBtndiabled] = React.useState(false);
+    const [therapistId, settherapistId] = React.useState('686802e5123a482681a680a673ef7f53');
     const [state, setState] = React.useState({
         open: false,
         vertical: 'top',
@@ -103,18 +106,20 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     
     let handleInputChange = (i, e) => {
         let newFormValues = [...formValues];
-        var val = e.target.value;
+        var val = e.target.name;
+        //console.log(val); return false;
         if(e.target.id && e.target.id!='undefined'){
             val = e.target.id;    
         }
         
-        var p =val.split('=');
-        if(p[0]=='text'){
-           p[0] =  e.target.value;
-        }
+        var p =val.split('_');
+        //console.log(p); return false;
+        // if(p[0]=='text'){
+        //    p[0] =  e.target.value;
+        // }
         //console.log(p);
         if(p[0]){
-            setFormValues([...formValues, { therapist_id: p[3], session_no: sessionNo, question_id: p[1],answer:p[0] }])
+            setFormValues([...formValues, { therapist_id: therapistId, session_no: sessionNo, question_id: p[1],answer:e.target.value }])
         }
     };
     const [postPatientFeedback, { data, loading, error }] = useMutation(POST_PATIENT_FEEDBACK);
@@ -124,11 +129,17 @@ const Feedback: React.FunctionComponent<any> = (props) => {
       ) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
       });
-    const handleAdd = (event) => {        
-        event.preventDefault();        
-        postPatientFeedback({ variables: { feedQuesAnsData: JSON.stringify(formValues),sessionNo:sessionNo,feedbackType:feedbackType} });         
-        console.log(data);
-        if(data){            
+    const handleAdd = (event) => { 
+        event.preventDefault(); 
+        console.log(formValues.length);
+        if(formValues.length==0){            
+            setErrorOpen(true);
+        }else{
+                   
+            console.log(JSON.stringify(formValues));
+            setBtndiabled(true);
+            postPatientFeedback({ variables: { feedQuesAnsData: JSON.stringify(formValues),sessionNo:sessionNo,feedbackType:feedbackType} });         
+            console.log(data);
             setOpen(true);    
         }
     }
@@ -147,10 +158,16 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         if (reason === 'clickaway') {
           return;
         }
-    
+        window.location.reload();
         setOpen(false);
     };
-    //console.log(patientFeedbackData?.getPatientFeedbackList);
+    const handleCloseError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+          return;
+        }        
+        setErrorOpen(false);
+    };
+    console.log(patientFeedbackData?.getPatientFeedbackList.length);
 
     return (
         <>
@@ -182,6 +199,14 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         }} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                 Feedback submitted successfully
+                </Alert>
+                </Snackbar>                
+                <Snackbar open={erroropen} anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }} autoHideDuration={6000} onClose={handleCloseError}>
+                <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+                Field can not be left blank
                 </Alert>
                 </Snackbar>                
                 { 
@@ -230,15 +255,16 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         name="row-radio-buttons-group" defaultValue={fv.feedback_ans && fv.feedback_ans.answer?fv.feedback_ans.answer:''}>                          
                                         {
                                             fv.answer_type == "list" && fv.answer_options  && fv.answer_options.map((av, ak) => {
-                                                return <FormControlLabel  sx={{fontSize:"15px", color: "#3f4040b0 !important"}} name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)} value={av+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk} control={<Radio size="small" />} label={av} />
+                                                return <FormControlLabel  disabled={fv.feedback_ans && fv.feedback_ans.answer?true:false} sx={{fontSize:"15px", color: "#3f4040b0 !important"}}  name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)}  value={av} control={<Radio size="small" />} label={av} />
                                             })
                                         }
 
                                        {
                                             fv.answer_type == "text" && <TextareaAutosize
                                             aria-label="empty textarea"
-                                            id={fv.answer_type+"="+fv._id+"="+(fk+1)+"=686802e5123a482681a680a673ef7f53"+"="+fk}                                            
-                                            onBlur={e => handleInputChange(fk, e)}                                            
+                                            id={fv.answer_type+"_"+fv._id}                                            
+                                            onBlur={e => handleInputChange(fk, e)} 
+                                            value={fv.feedback_ans && fv.feedback_ans.answer?fv.feedback_ans.answer:''}                                           
                                             style={{ width: 855.5, height: 216, left: 454.32, top: 1044,backgroundColor: "#C4C4C4",borderRadius: "12px",border: 'none' }}
                                           />
                                             
@@ -250,7 +276,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         </Typography>                            
                                     })
                                 }
-                                {patientFeedbackData?.getPatientFeedbackList != null && <Typography sx={{textAlign:'center'}}><Button type="submit" variant="contained">Submit</Button></Typography>}
+                                {(patientFeedbackData?.getPatientFeedbackList != null && patientFeedbackData?.getPatientFeedbackList.length != 0) && <Typography sx={{textAlign:'center'}}><Button type="submit" disabled={btndiabled==true?true:false} variant="contained">Submit</Button></Typography>}
                                 {
                                     patientFeedbackData?.getPatientFeedbackList ==null || patientFeedbackData?.getPatientFeedbackList.length == 0 && <Typography  gutterBottom component="div">No Data Found</Typography>
                                 }
