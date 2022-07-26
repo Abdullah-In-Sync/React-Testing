@@ -12,7 +12,7 @@ module.exports = {
     },
   },
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-  testPathIgnorePatterns: ['<rootDir>/dist/'],
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/out/'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
     '\\.(scss|sass|css)$': 'identity-obj-proxy',
@@ -28,7 +28,6 @@ module.exports = {
     '!<rootDir>/**/__tests__/',
     '!<rootDir>/**/__mocks__/',
     '!<rootDir>/node_modules/',
-    '!<rootDir>/test-reports/',
     '!<rootDir>/.storybook/',
     '!<rootDir>/out/',
   ],
