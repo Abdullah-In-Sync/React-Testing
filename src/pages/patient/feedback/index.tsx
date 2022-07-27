@@ -56,12 +56,18 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     const { loading: tokenLoading, error: tokenError, data: tokenData } = useQuery(GET_TOKEN_DATA);  
     //return tokenData; return false;
     if(tokenData && tokenData?.getTokenData.user_type){
+        //console.log(tokenData?.getTokenData.patient_data.therapist_id);
+        
         var user_type = tokenData?.getTokenData.user_type;
         user_type = user_type.replace('[',"");
         user_type = user_type.replace(']',"");        
         if(user_type!='patient'){
             window.location.href="http://localhost:3000";
             return false;
+        } else {
+            if(tokenData?.getTokenData.patient_data){
+                settherapistId(tokenData?.getTokenData.patient_data.therapist_id);
+            }
         }
     }
     //console.log(tokenData?.getTokenData.user_type);
