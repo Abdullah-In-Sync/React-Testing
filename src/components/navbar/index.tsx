@@ -10,7 +10,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image'
-import Logo from "../../assets/images/Logo.png";
+import Logo from "../../assets/images/logo.png";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const NavBar = () => {
