@@ -168,6 +168,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             visible: true,
             freeSolo: false,
             show: true,
+            required:true,
             type: "autocomplete",
             options: orgData?.getOrganizationData?.length > 0 ? [...orgData?.getOrganizationData?.map(val => ({ "label": val.name, "value": val._id }))] : []
 
@@ -177,6 +178,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             visible: true,
             freeSolo: false,
             show: true,
+            required:true,
             type: "autocomplete",
             options: sessionList.length > 0 ? sessionList : []
         }, {
@@ -185,6 +187,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             visible: true,
             freeSolo: false,
             show: true,
+            required:true,
             type: "autocomplete",
             options: [
                 { label: "Quality", value: "quality" },
@@ -198,6 +201,22 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     // if (error) return `Submission error! ${error.message}`;
 
     let handleAdd = (val) => {
+
+        if(formValues.length===0 ){
+            alert("Please add values")
+            return null
+        }else{
+
+            formValues.map(x => {
+                if(!x.question || !x.answer_type  ){
+                    alert("Value do")
+                    return null
+                }
+            })
+            // return null
+        }
+
+        
         const data = formValues.map(x => ({ ...x, ...val, session_no: [x.session_no] }))
 
         const dataJson = JSON.stringify(data);
