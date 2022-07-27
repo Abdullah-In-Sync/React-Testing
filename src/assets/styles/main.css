@@ -1,0 +1,15 @@
+.bg-themegreen {
+    background-color: #6ba08e !important;
+}
+.text-blue {
+    color: #6EC9DB;
+}
+.text-white {
+    color: #fff !important;
+}
+.tit {
+    text-transform: capitalize;
+    font-size: 20px;
+    padding-top: 20px;
+    font-weight: 400 !important;
+}

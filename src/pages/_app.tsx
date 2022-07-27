@@ -13,6 +13,7 @@ import '@fontsource/roboto/700.css';
 
 import createEmotionCache from '../utility/createEmotionCache';
 import theme from '../styles/theme/theme';
+import '../assets/styles/main.css'
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
