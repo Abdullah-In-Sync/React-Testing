@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import InputLabel from '@mui/material/InputLabel'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../../../components/layout'
 import Loader from '../../../components/common/Loader'
 import User from "../../../assets/images/user.png"
@@ -24,12 +24,17 @@ export default function Feedback() {
     const [sessionPanelExpanded, setSessionPanelExpanded] = useState<string | false>(false);
     const [feedbackType, setFeedbackType] = useState<string>('');
     const [sessionNo, setSessionNo] = useState(0);
+    const [patientData, setPatientData] = useState<{ patient_id: string; patient_name: string }>({ patient_id: '', patient_name: '' });
 
-    const patientId = Cookies.get('myhelp_patientId');
-    const patientName = Cookies.get('myhelp_patientName');
+    useEffect(() => {
+        setPatientData({
+            patient_id: localStorage.getItem("patient_id"),
+            patient_name: localStorage.getItem("patient_name")
+        })
+    }, [])
 
     const { loading: therapyLoading, error: therapyError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
-        variables: { patientId: "4937a27dc00d48bf983fdcd4b0762ebd" },
+        variables: { patientId: patientData.patient_id },
         onCompleted: (data) => {
             if (data?.getPatientTherapy) {
                 const pttherapyId = data?.getPatientTherapy[0]['_id'];
@@ -41,9 +46,9 @@ export default function Feedback() {
         }
     });
     const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useQuery(GET_PATIENTSESSION_DATA, {
-        variables: { pttherapyId: therapy, patientId: "4937a27dc00d48bf983fdcd4b0762ebd" },
+        variables: { pttherapyId: therapy, patientId: patientData.patient_id },
         onCompleted: (data) => {
-            if (patientSessionData?.getPatientSessionList != null) {
+            if (data?.getPatientSessionList != null) {
                 setFeedbackType('session');
                 setSessionNo(1);
             }
@@ -52,7 +57,7 @@ export default function Feedback() {
 
     });
     const { loading: feedbackLoading, error: feedbackError, data: therapistFeedbackData } = useQuery(GET_THERAPISTFEEDBACKLIST_DATA, {
-        variables: { feedbackType: feedbackType, sessionNo: sessionNo, patientId: "4937a27dc00d48bf983fdcd4b0762ebd" },
+        variables: { feedbackType: feedbackType, sessionNo: sessionNo, patientId: patientData.patient_id },
         onCompleted: (data) => {
             setLoader(false);
         }
@@ -81,8 +86,8 @@ export default function Feedback() {
                             <Image alt="Patient" src={User} width="100" height="100" style={{ borderRadius: "50%" }} />
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography variant='h4' className='text-white tit'>Anshi UI Developer</Typography>
-                            <Box className='text-white'>Risk of Suicide</Box>
+                            <Typography variant='h4' className='text-white tit'>{patientData.patient_name}</Typography>
+                            {/* <Box className='text-white'>Risk of Suicide</Box> */}
                         </Grid>
                         <Grid item xs={4}>
                             <FormControl sx={{ mt: 3, minWidth: 120 }} size="small">
@@ -104,8 +109,8 @@ export default function Feedback() {
                                     }}
                                 >
                                     {
-                                        patientTherapryData?.getPatientTherapy.map((v, i) => {
-                                            return (<MenuItem key={"therapy"+v._id} value={v._id}>{v.therapy_detail.therapy_name}/{v.disorder_detail.disorder_name}/{v.model_detail.model_name}</MenuItem>)
+                                        patientTherapryData?.getPatientTherapy != null && patientTherapryData?.getPatientTherapy.map((v, i) => {
+                                            return (<MenuItem key={"therapy" + v._id} value={v._id}>{v.therapy_detail.therapy_name}/{v.disorder_detail.disorder_name}/{v.model_detail.model_name}</MenuItem>)
                                         })
                                     }
                                 </Select>
@@ -124,7 +129,7 @@ export default function Feedback() {
                             return (<Accordion sx={{ marginTop: "4px", borderRadius: "4px" }}
                                 expanded={sessionPanelExpanded === panelName}
                                 onChange={handleSessionPanelChange(panelName)}
-                                onClick={()=>setSessionNo(p)}
+                                onClick={() => setSessionNo(p)}
                                 key={v._id}
                             >
                                 <AccordionSummary
