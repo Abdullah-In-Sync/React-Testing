@@ -1,0 +1,118 @@
+name: Production Environment
+
+on:
+  workflow_dispatch:
+
+env:
+  deploy-aws-access-key-id: ${{ secrets.AWS_PROD_DEPLOY_ACCESS_KEY_ID }}
+  deploy-aws-secret-access-key: ${{ secrets.AWS_PROD_DEPLOY_SECRET_ACCESS_KEY }}
+  deploy-aws-region: eu-west-1
+  deploy-cloudfront-dist-id: ${{ secrets.AWS_PROD_DEPLOY_CLOUDFRONT_DIST_ID }}
+  deploy-s3-bucket: ${{ secrets.AWS_PROD_DEPLOY_S3_BUCKET }}
+  deploy-s3-bucket-region: eu-west-1
+
+jobs:
+  install-dependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-latest  
+
+    outputs:
+      cache-hash: ${{ steps.cache-settings.outputs.hash }}
+      yarn-cache-dir: ${{ steps.cache-settings.outputs.dir }}
+      yarn-version: ${{ steps.cache-settings.outputs.version }}
+
+    steps:
+      - run: env
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Get Cache Settings
+        id: cache-settings
+        run: |
+          hashSrcYarnLock=($(md5sum src/yarn.lock | awk '{ print $1 }'))
+          echo "::set-output name=hash::$hashSrcYarnLock"
+          echo "::set-output name=dir::$(yarn cache dir)"
+          echo "::set-output name=version::$(yarn -v)"
+
+      - name: Cache Packages
+        id: yarn-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+            ${{ steps.cache-settings.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ steps.cache-settings.outputs.version }}-${{ steps.cache-settings.outputs.hash }}
+
+      - name: Install Packages
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 10
+          retry_wait_seconds: 60
+          max_attempts: 3
+          command: pushd src && yarn install --frozen-lockfile
+
+  deploy-job:
+    name: Deploy
+    needs: install-dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+    - run: env
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: "14.x"
+
+    - name: Restore Cached Packages
+      id: yarn-cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/node_modules
+          **/.eslintcache
+          ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
+        key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
+
+    - name: Build
+      run: yarn build
+      working-directory: src
+
+    - name: Export
+      run: yarn export
+      working-directory: src
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ env.deploy-aws-access-key-id }}
+        aws-secret-access-key: ${{ env.deploy-aws-secret-access-key }}
+        aws-region: ${{ env.deploy-aws-region }}
+
+    - name: Prepare Upload
+      run: mkdir -p ./dist/v2; mv ./out/* ./dist/v2 
+      working-directory: src
+
+    - name: Upload
+      uses: reggionick/s3-deploy@v3
+      with:
+        folder: src/dist
+        bucket: ${{ env.deploy-s3-bucket }}
+        bucket-region: ${{ env.deploy-s3-bucket-region }}
+        dist-id: ${{ env.deploy-cloudfront-dist-id }}
+        invalidation: /v2
+        delete-removed: true
+        no-cache: true
+        private: true
+        filesToInclude: ".*/*,*/*,**"
