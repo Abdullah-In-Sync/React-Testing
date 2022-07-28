@@ -11,11 +11,40 @@ mutation ($feedQuesData: String!) {
       question
       status
       updated_date
-      user_id
-      
+      user_id 
   }
 }
 `;
+
+
+export const UPDATE_FEEDBACK = gql`
+mutation ($feedbackId:ID!,$update:UpdateFeedbackInput!) {
+  updateFeedbackQuestionById(feedbackId:$feedbackId, update:$update) {
+    _id
+    answer_options
+    answer_type
+    created_date
+    feedback_type
+    org_id
+  }
+}
+`;
+
+export const DELETE_FEEDBACK = gql`
+mutation ($feedbackId:ID!,$update:UpdateFeedbackInput!) {
+  updateFeedbackQuestionById(feedbackId:$feedbackId, update:$update) {
+    _id
+    answer_options
+    answer_type
+    created_date
+    feedback_type
+    org_id
+  }
+}
+`;
+
+
+// updateFeedbackQuestionById(feedbackId: ID! ,update: UpdateFeedbackInput): FeedbackQuestion
 export const POST_PATIENT_FEEDBACK = gql`
 mutation ($feedQuesAnsData: String!,$sessionNo: String!,$feedbackType: String) {
     postPatientFeedback(feedQuesAnsData: $feedQuesAnsData, sessionNo: $sessionNo, feedbackType: $feedbackType) {

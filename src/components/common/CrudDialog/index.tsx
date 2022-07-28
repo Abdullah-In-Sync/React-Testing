@@ -1,3 +1,5 @@
+// 👇️ ts-nocheck ignores all ts errors in the file
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic'
 import Button from '@mui/material/Button';
@@ -74,13 +76,13 @@ const CrudDialog = ({
   closable = true,
   extraButtonLoading = false,
   hide = false,
+  description,
   extraButtonText = false,
   onExtraButton = () => { },
-  dynamicForm
+  dynamicForm,
+  viewData = false
 }) => {
   const [fieldValues, setFieldValues] = useState<any>({});
-
- 
 //   const parseValues=(props)=> {
 //     const values = {};
 //     _flatten(fields).forEach((field) => {
@@ -138,6 +140,9 @@ const CrudDialog = ({
         <BootstrapDialogTitle id="customized-dialog-title" >
           {title}
         </BootstrapDialogTitle>
+        <Typography variant="h5" sx={{margin: '45px',textAlign: 'center', fontWeight: 200}} >
+          {description}
+        </Typography>
         <form onSubmit={onSubmit}>
           <DialogContent style={{ overflowX: 'hidden' }}>
             <Box sx={{ width: 800 }}>
@@ -153,11 +158,11 @@ const CrudDialog = ({
             </Box>
 
             {
-              extraButtonText ? (
+              extraButtonText && (
                 <Button onClick={onExtraButton} variant="outlined"  >
                   {extraButtonText}
                 </Button>
-              ) : extraComponent ? extraComponent : null
+              ) 
 
 
             }
@@ -168,9 +173,12 @@ const CrudDialog = ({
 
           </DialogContent>
           <DialogActions>
+            {viewData ? " ": 
             <Button variant="contained" sx={{ color: 'custom.light' }} type="submit">
-              {okText}
-            </Button>
+            {okText}
+          </Button>
+            }
+            
             <Button variant="contained" sx={{ backgroundColor: 'secondary.main', color: 'custom.light' }} onClick={()=>{onClose();setFieldValues( {});}}>
               {cancelText}
             </Button>

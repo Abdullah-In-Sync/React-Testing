@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core";
+import { withStyles } from '@mui/styles';
 import {
   Select,
   MenuItem,
@@ -7,12 +7,34 @@ import {
   Checkbox,
   ListItemText,
   FormControl,
-} from "@material-ui/core";
+  InputLabel,
+  OutlinedInput
+} from "@mui/material";
+// {fields.length > 1 && (
+//   <FilterSelect
+//     multiple={multiple}
+//     fields={fields}
+//     selectedFields={selectedFields}
+//     onChange={onChange}
+//   />
+// )}
 
-export const FilterSelect = ({
-  fields = [],
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const FilterSelect = ({
+  fields ,  
   selectedFields = [],
-  onChange = () => {},
+  onChange ,
   multiple = true,
 }) => {
   const [selectedAll, setSelectedAll] = useState(
@@ -42,26 +64,38 @@ export const FilterSelect = ({
   };
 
   return (
-    <FormControl>
+    <FormControl variant="outlined" fullWidth >
+      <InputLabel >Tag</InputLabel>
       <Select
-        labelId="demo-mutiple-checkbox-label"
-        id="demo-mutiple-checkbox"
-        className="ml-3"
-        style={{ width: 30, border: "none !important" }}
+        label={"Tag"}
+        variant="outlined"
+        // size="small"
+        // className="ml-3"
+        // style={{ width: 30, border: "none !important" }}
+        // className="mb-3"
+        // style={{ display: field.show ? "block" : "none" }}
+        style={{ display: "block" }}
+// size="small"
         onChange={handleChange}
         multiple={multiple}
-        IconComponent={(props) => (
-          <i {...props} className={`material-icons ${props.className} mr-1`}>
-            filter_list
-          </i>
-        )}
-        input={<SelectInput />}
+        // IconComponent={(props) => (
+        //   <i {...props} className={`material-icons ${props.className} mr-1`}>
+        //     filter_list
+        //   </i>
+        // )}
+        // input={<OutlinedInput label="Tag" />}
+        // input={<SelectInput />}
         value={selectedFields}
+        // style={ { minWidth: '100%' }}
+        fullWidth
+        className="mb-3"
         renderValue={(selected) => ""}
+        // MenuProps={MenuProps}
       >
         {!multiple ? null : (
           <MenuItem
-            style={{ minHeight: 25, padding: "0px 7px" }}
+          // style={{ width: "100%" }}
+            // style={{ minHeight: 25, padding: "0px 7px" }}
             value={"Select All"}
           >
             <Checkbox color="primary" checked={selectedAll} />
@@ -71,7 +105,8 @@ export const FilterSelect = ({
         {fields.map((name) => {
           return (
             <MenuItem
-              style={{ minHeight: 25, padding: "0px 7px" }}
+            // style={{ width: "100%" }}
+              // style={{ minHeight: 25, padding: "0px 7px" }}
               key={name}
               value={name}
             >
@@ -87,7 +122,7 @@ export const FilterSelect = ({
                 primary={name
                   .toLowerCase()
                   .split("_")
-                  .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                  .map((s, key) => key === 0 && s.length === 2 ? s.toUpperCase() : s.charAt(0).toUpperCase() + s.substring(1)) // for Vm to VM
                   .join(" ")}
               />
             </MenuItem>
@@ -163,34 +198,34 @@ const BootstrapInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
-const CustomSelectBox = ({
-  value = null,
-  values = [],
-  onChange = () => {},
-  style = {},
-  disabled = false,
-}) => {
-  const handleChange = ({ target }) => {
-    const val = target.value;
-    onChange(val);
-  };
+// const CustomSelectBox = ({
+//   value = null,
+//   values = [],
+//   onChange = () => {},
+//   style = {},
+//   disabled = false,
+// }) => {
+//   const handleChange = ({ target }) => {
+//     const val = target.value;
+//     onChange(val);
+//   };
+//   return (
+//     <Select
+//       disabled={disabled}
+//       style={style}
+//       input={<BootstrapInput />}
+//       onChange={handleChange}
+//       value={value}
+//       defaultValue={value}
+//     >
+//       {values.map(({ value = "", label = "", unselect = false }) => (
+//         <MenuItem disabled={unselect} key={value} value={value}>
+//           {label}
+//         </MenuItem>
+//       ))}
+//     </Select>
+//   );
+// };
 
-  return (
-    <Select
-      disabled={disabled}
-      style={style}
-      input={<BootstrapInput />}
-      onChange={handleChange}
-      value={value}
-      defaultValue={value}
-    >
-      {values.map(({ value = "", label = "", unselect = false }) => (
-        <MenuItem disabled={unselect} key={value} value={value}>
-          {label}
-        </MenuItem>
-      ))}
-    </Select>
-  );
-};
-
-export default CustomSelectBox;
+// export CustomSelectBox;
+export default FilterSelect;

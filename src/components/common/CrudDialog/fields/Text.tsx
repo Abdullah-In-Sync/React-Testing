@@ -7,7 +7,7 @@ const Text = (props) => {
     const [copied, setCopied] = useState(false);
 
     const copyThat = () => {
-        document.getElementById(`textfield_copyable_${field.key}`).select();
+        // document.getElementById(`textfield_copyable_${field.key}`).select();
         document.execCommand('copy');
         setCopied(true);
         setTimeout(() => {
@@ -43,7 +43,7 @@ const Text = (props) => {
                 InputProps={{
                     endAdornment: field.copyable ? (
                         <InputAdornment style={{ cursor: 'pointer' }} position="end">
-                            <Tooltip placement="top" size="large" title={copied ? 'Copied' : 'Copy'} aria-label="add">
+                            <Tooltip placement="top"  title={copied ? 'Copied' : 'Copy'} aria-label="add">
                                 {copied ? <Check style={{ color: "#44cd44" }} /> : <FileCopy color="primary" onClick={copyThat} />}
                             </Tooltip>
                         </InputAdornment>

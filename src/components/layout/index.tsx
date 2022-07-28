@@ -16,7 +16,7 @@ const contentStyle = {
     paddingBottom: 55,
 };
 const wrapper = {
-    backgroundColor: "custom.light",
+    backgroundColor: "white",
     borderRadius: "10px",
     margin: '25px 10px',
     padding: "5px 20px"

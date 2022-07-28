@@ -1,3 +1,5 @@
+// 👇️ ts-nocheck ignores all ts errors in the file
+// @ts-nocheck
 import React, { useRef } from "react";
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
@@ -103,7 +105,7 @@ export default function SideBar() {
                   </ListItemButton>
                   {
                     val?.slice(1)?.map((item, index) => (
-                      <Collapse in={expanded[val[0]?.key] || false} timeout="auto" unmountOnExit >
+                      <Collapse key={val[0]?.key} in={expanded[val[0]?.key] || false} timeout="auto" unmountOnExit >
                         <ListItem key={item.label} sx={listItem}  >
                           <NextLink href={item.path} passHref>
                             <ListButton sx={{ pl: 4 }} component="a"

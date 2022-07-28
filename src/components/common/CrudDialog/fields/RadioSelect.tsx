@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {FormControlLabel, Radio, RadioGroup} from "@mui/material/index";
 
-const RadioSelect = ({field = {}, onChange = () => {}}) => {
+const RadioSelect = ({field , onChange }) => {
     const [type, setType] = useState((field.options[0] || {}).value);
 
     const handleTypeChange = ({target}) => {
@@ -12,9 +12,9 @@ const RadioSelect = ({field = {}, onChange = () => {}}) => {
     return (
         <RadioGroup row aria-label="sensor" name="sensor" value={type} onChange={handleTypeChange}>
             {
-                (field.options || []).map(val => {
+                (field.options || []).map((val,index) => {
                     return (
-                        <FormControlLabel style={{height: 30, flex: 1}} value={val.value} control={<Radio color="primary" />} label={val.label} />
+                        <FormControlLabel key={index} style={{height: 30, flex: 1}} value={val.value} control={<Radio color="primary" />} label={val.label} />
                     )
                 })
             }
