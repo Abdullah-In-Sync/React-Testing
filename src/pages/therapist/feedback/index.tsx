@@ -12,7 +12,7 @@ import { GET_PATIENTTHERAPY_DATA } from '../../../graphql/query/common'
 import { Accordion, AccordionDetails, AccordionSummary, Button, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Typography } from '@mui/material'
 import { GET_PATIENTSESSION_DATA } from '../../../graphql/query/patient'
 import { GET_THERAPISTFEEDBACKLIST_DATA } from '../../../graphql/query'
-import QuestionTypeRadiobox from './questionTypeRadiobox'
+import QuestionTypeRadiobox from './QuestionTypeRadiobox'
 import QuestionTypeText from './QuestionTypeText'
 import Cookies from 'js-cookie';
 
