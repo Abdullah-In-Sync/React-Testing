@@ -1,13 +1,6 @@
 name: Staging Environment
 
 on:
-  push:
-    paths-ignore:
-      - README.md
-      - SECURITY.md
-      - docs/**
-      - .github/**
-      - sonar-project.properties
   workflow_dispatch:
 
 env:
