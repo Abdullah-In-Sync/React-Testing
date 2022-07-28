@@ -55,3 +55,30 @@ export const GET_ORG_DATA = gql`
   }
 `;
 
+export const GET_THERAPISTFEEDBACKLIST_DATA = gql`
+  query getTherapistFeedbackList($patientId: String!, $sessionNo: String!, $feedbackType: String!) {
+    getTherapistFeedbackList(feedbackType: $feedbackType, patientId: $patientId, sessionNo: $sessionNo) {
+    _id
+    answer_options
+    answer_type
+    created_date
+    feedback_ans {
+      _id
+      answer
+      created_date
+      patient_id
+      question_id
+      status
+      therapist_id
+      updated_date
+    }
+    feedback_type
+    org_id
+    question
+    session_no
+    status
+    updated_date
+    user_id
+  }
+  }
+`;
