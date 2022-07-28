@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect } from 'react';
 import _ from "lodash";
 
@@ -26,15 +28,16 @@ import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import RadioGroup from '@mui/material/RadioGroup';
-import Text from '@mui/material/Text';
-import TextField from '@mui/material/TextField';
+
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Divider from '@mui/material/Divider';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
-const Feedback: React.FunctionComponent<any> = (props) => {
+
+
+export default function Feedback() {
 
     // COMPONENT STATE
     const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -62,16 +65,16 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         user_type = user_type.replace('[',"");
         user_type = user_type.replace(']',"");        
         if(user_type!='patient'){
-            window.location.href="http://localhost:3000";
+            window.location.href="https://"+window.location.hostname+"/account";
             return false;
         } else {
             if(tokenData?.getTokenData.patient_data){
-                settherapistId(tokenData?.getTokenData.patient_data.therapist_id);
+                //settherapistId(tokenData?.getTokenData.patient_data.therapist_id);
             }
         }
     }
-    //console.log(tokenData?.getTokenData.user_type);
-    //console.log(JSON.stringify(tokenData?.getTokenData.user_type));
+    
+    
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
         onCompleted: (data) => {            
@@ -212,7 +215,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                 </Box>
                 {loader ==true && <Box style={{ display: 'flex',marginLeft: '450px' }}><CircularProgress /></Box>}
                 <Box>   
-                <Snackbar open={open} anchorOrigin={{
+                <Snackbar key="1" open={open} anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',
         }} autoHideDuration={6000} onClose={handleClose}>
@@ -220,7 +223,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                 Feedback submitted successfully
                 </Alert>
                 </Snackbar>                
-                <Snackbar open={erroropen} anchorOrigin={{
+                <Snackbar key="2" open={erroropen} anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',
         }} autoHideDuration={6000} onClose={handleCloseError}>
@@ -233,7 +236,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                    patientSessionData?.getPatientSessionList != null && patientSessionData?.getPatientSessionList.map((v, k) => {  
                        let p = k+1;
                        let panelName = 'panel'+p
-                       return <form  onSubmit={(values, hasErrors) => {handleAdd(values);}}><Accordion sx={{ marginTop:"4px",borderRadius: "12px",border: 'none' }} onClick={()=>getQuestionByType('session',p)} expanded={expanded === panelName} onChange={handleChange(panelName)}>
+                       return <form key={p}  onSubmit={(values) => {handleAdd(values);}}><Accordion sx={{ marginTop:"4px",borderRadius: "12px",border: 'none' }} onClick={()=>getQuestionByType('session',p)} expanded={expanded === panelName} onChange={handleChange(panelName)}>
                                <AccordionSummary
                                expandIcon={<ExpandMoreIcon />}
                                aria-controls={panelName+"bh-content"}
@@ -258,7 +261,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                 {feedbackLoader==true && <Box style={{ display: 'flex',marginLeft: '450px' }}><CircularProgress /></Box>}
                                 {
                                     patientFeedbackData?.getPatientFeedbackList != null && patientFeedbackData?.getPatientFeedbackList.map((fv, fk) => {
-                                        return <Typography  gutterBottom component="div">
+                                        return <Typography key={fk+""}  gutterBottom component="div">
                                             { fv.answer_type == "list" && <Typography sx={{ backgroundColor: "#dadada52 !important",border: "1px solid #dadada52 !important",
                                         color: "#3f4040b0 !important",fontSize: "15px", paddingLeft: "5px", fontWeight: "1px !important" }}>
                                                                         {fk+1}. {fv.question} 
@@ -274,7 +277,8 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                                         name="row-radio-buttons-group" defaultValue={fv.feedback_ans && fv.feedback_ans.answer?fv.feedback_ans.answer:''}>                          
                                         {
                                             fv.answer_type == "list" && fv.answer_options  && fv.answer_options.map((av, ak) => {
-                                                return <FormControlLabel  disabled={fv.feedback_ans && fv.feedback_ans.answer?true:false} sx={{fontSize:"15px", color: "#3f4040b0 !important"}}  name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)}  value={av} control={<Radio size="small" />} label={av} />
+                                                let j = ak+1;
+                                                return <FormControlLabel key={j}  disabled={fv.feedback_ans && fv.feedback_ans.answer?true:false} sx={{fontSize:"15px", color: "#3f4040b0 !important"}}  name={"question_"+fv._id} onChange={e => handleInputChange(fk, e)}  value={av} control={<Radio size="small" />} label={av} />
                                             })
                                         }
 
@@ -315,7 +319,6 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     );
 };
 
-export default Feedback;
 
 
 
