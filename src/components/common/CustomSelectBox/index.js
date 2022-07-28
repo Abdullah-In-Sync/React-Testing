@@ -21,7 +21,7 @@ export const FilterSelect = ({
 
   useEffect(() => {
     setSelectedAll(selectedFields.length === fields.length);
-  }, [selectedFields]);
+  }, [selectedFields,fields]);
 
   const handleChange = (event) => {
     if (fields.length > 1) {

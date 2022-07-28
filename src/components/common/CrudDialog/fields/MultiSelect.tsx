@@ -32,9 +32,9 @@ const MenuProps = {
 };
 
 const FilterSelect = ({
-  fields = ["dd","rer"],  
+  fields ,  
   selectedFields = [],
-  onChange = () => {},
+  onChange ,
   multiple = true,
 }) => {
   const [selectedAll, setSelectedAll] = useState(
@@ -43,7 +43,7 @@ const FilterSelect = ({
 
   useEffect(() => {
     setSelectedAll(selectedFields.length === fields.length);
-  }, [selectedFields]);
+  }, [selectedFields,fields]);
 
   const handleChange = (event) => {
     if (fields.length > 1) {

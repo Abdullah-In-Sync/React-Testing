@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Typography,CheckboxField } from "@mui/material";
+import { Typography } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
 
-const Checkbox = (props) => {
+const CheckboxField = (props) => {
   const { field } = props;
   const [check, setCheck] = useState(
     Boolean(props.fieldValues[field.key] || field.value || false)
@@ -17,11 +18,10 @@ const Checkbox = (props) => {
 
   return (
     <div className="d-flex align-items-center mb-3">
-      <CheckboxField
-        checked={check}
+      <Checkbox
         onChange={handleChange}
         value={field.key}
-        checked={props.fieldValues[field.key] || field.value || false}
+        checked={props.fieldValues[field.key]|| check || field.value || false}
         required={field.required || false}
         color="primary"
         key={field.key}
@@ -31,9 +31,9 @@ const Checkbox = (props) => {
         className="mr-2"
         disabled={field.disabled}
       />
-      <Typography variant="body">{field.label}</Typography>
+      <Typography variant="body1">{field.label}</Typography>
     </div>
   );
 };
 
-export default Checkbox;
+export default CheckboxField;

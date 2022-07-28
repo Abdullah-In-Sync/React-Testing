@@ -1,6 +1,9 @@
+
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 import _ from "lodash";
+import { useSnackbar } from "notistack";
 
 // GRAPHQL 
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
@@ -27,6 +30,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 
+
 // COMPONENT STYLES
 const crudButtons = {
     display: 'flex',
@@ -37,6 +41,8 @@ const crudButtons = {
 }
 
 const Feedback: React.FunctionComponent<any> = (props) => {
+
+    const { enqueueSnackbar } = useSnackbar();
 
     // COMPONENT STATE
     const [addModal, setAddModal] = useState<boolean>(false);
@@ -86,10 +92,11 @@ const Feedback: React.FunctionComponent<any> = (props) => {
 
 
     useEffect(() => {
+        let session = []
         for (var i = 1; i <= 50; i++) {
-            setSessionList((prev) => [...prev, { label: `Session-${i}`, value: i }])
+            session.push({ label: `Session-${i}`, value: i })
         }
-        // setLoader(true);
+        setSessionList(session)
     }, [])
 
     //**  TABLE DATA COLUMNS **//
@@ -148,7 +155,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         size="small"
                         variant="contained"
                         // onClick={() => handleDelete(value._id)}
-                        onClick={() => {setDeletConfirmationModal(true),setSelectedId(value._id)}}
+                        onClick={() => { setDeletConfirmationModal(true), setSelectedId(value._id) }}
 
                     >
                         <DeleteIcon />
@@ -168,7 +175,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             visible: true,
             freeSolo: false,
             show: true,
-            required:true,
+            required: true,
             type: "autocomplete",
             options: orgData?.getOrganizationData?.length > 0 ? [...orgData?.getOrganizationData?.map(val => ({ "label": val.name, "value": val._id }))] : []
 
@@ -178,7 +185,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             visible: true,
             freeSolo: false,
             show: true,
-            required:true,
+            required: true,
             type: "autocomplete",
             options: sessionList.length > 0 ? sessionList : []
         }, {
@@ -187,7 +194,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
             visible: true,
             freeSolo: false,
             show: true,
-            required:true,
+            required: true,
             type: "autocomplete",
             options: [
                 { label: "Quality", value: "quality" },
@@ -201,32 +208,35 @@ const Feedback: React.FunctionComponent<any> = (props) => {
     // if (error) return `Submission error! ${error.message}`;
 
     let handleAdd = (val) => {
-
-        if(formValues.length===0 ){
-            alert("Please add values")
+        let valid = false
+        if (formValues.length === 0) {
+            enqueueSnackbar("Please fill the all fields");
             return null
-        }else{
+        } else {
 
             formValues.map(x => {
-                if(!x.question || !x.answer_type  ){
-                    alert("Value do")
-                    return null
+                if (!x.question || !x.answer_type) {
+                    enqueueSnackbar("Please fill the all fields");
+                    return valid = false
+                }
+                else {
+                    return valid = true
                 }
             })
-            // return null
         }
 
-        
-        const data = formValues.map(x => ({ ...x, ...val, session_no: [x.session_no] }))
+        if (valid) {
+            const data = formValues.map(x => ({ ...x, ...val, session_no: [x.session_no] }))
 
-        const dataJson = JSON.stringify(data);
-        addFeedback({
-            variables: { feedQuesData: dataJson },
-            onCompleted: () => {
-                refetch();
-                setAddModal(false)
-            }
-        });
+            const dataJson = JSON.stringify(data);
+            addFeedback({
+                variables: { feedQuesData: dataJson },
+                onCompleted: () => {
+                    refetch();
+                    setAddModal(false)
+                }
+            });
+        }
     }
 
     let handleFormValues = (val) => {
@@ -258,7 +268,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                 feedbackId: id,
                 update: { status: "deleted" }
             },
-            onCompleted: () => {setDeletConfirmationModal(false); refetch(); }
+            onCompleted: () => { setDeletConfirmationModal(false); refetch(); }
         });
     }
 
@@ -373,11 +383,10 @@ const Feedback: React.FunctionComponent<any> = (props) => {
 
                     <CrudDialog
                         title="Delete Question"
-                        description= "Are you sure you want to delete this question? You 
-                        will not be able to restore this again." 
-                    
+                        description="Are you sure you want to delete this question? You will not be able to restore this again."
+
                         okText="Delete"
-                        onsubmit={() => handleDelete(selectedId) }
+                        onsubmit={() => handleDelete(selectedId)}
                         open={deletConfirmationModal}
                         onClose={() => setDeletConfirmationModal(false)}
                     />

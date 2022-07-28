@@ -1,3 +1,5 @@
+// 👇️ ts-nocheck ignores all ts errors in the file
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic'
 import Button from '@mui/material/Button';

@@ -1,3 +1,5 @@
+// 👇️ ts-nocheck ignores all ts errors in the file
+// @ts-nocheck
 import { createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 

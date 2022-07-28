@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import { Clear, ArrowDropDownIcon } from "@mui/icons-material";
+import { Clear } from "@mui/icons-material";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import _isEmpty from "lodash/isEmpty"
 
 const SelectField = (props) => {
@@ -29,7 +30,7 @@ const SelectField = (props) => {
 
     return (
         <>
-            <FormControl variant="outlined" fullWidth required={field.required} error={props.fieldErrors[field.key] ? true : false} helperText={props.fieldErrors[field.key] ? props.fieldErrors[field.key] : undefined}>
+            {/* <FormControl variant="outlined" fullWidth required={field.required} error={props.fieldErrors[field.key] ? true : false} helperText={props.fieldErrors[field.key] ? props.fieldErrors[field.key] : undefined}>
                 <InputLabel> {field.label} </InputLabel>
 
                 <Select
@@ -77,7 +78,7 @@ const SelectField = (props) => {
                         })
                     }
                 </Select>
-            </FormControl>
+            </FormControl> */}
             {field.info && <span style={{ fontSize: 10, display: 'block', marginTop: '-10px', marginLeft: 5, ...(field.infoStyle || {}) }}>{renderInfo(_value, props)}</span>}
         </>
     )

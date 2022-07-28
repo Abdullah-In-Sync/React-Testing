@@ -3,12 +3,12 @@ import { TextField, Autocomplete } from '@mui/material';
 import _ from "lodash";
 
 const AutoCompleteBox = ({
-  field = {},
+  field ,
   values = {},
-  onChange = () => { },
+  onChange ,
   ...props
 }) => {
-  let _value = props.fieldValues[field.key] || values[field.key] || "";
+  let _value = props.fieldValues[field?.key] || values[field?.key] || "";
   
   if (typeof _value === "object") {
     _value = (_value || {}).id || "";

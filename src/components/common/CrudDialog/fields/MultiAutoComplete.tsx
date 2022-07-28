@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Chip,TextField,Autocomplete} from '@mui/material';
 
-export default function MultiAutoComplete({ field = {}, values = {}, onChange = () => { }, ...props }) {
+export default function MultiAutoComplete({ field , values = {}, onChange , ...props }) {
   let _value = props.fieldValues[field.key] || values[field.key];
 
   let defaultValue = field.options.filter(x => (field.value || _value || []).includes(x.value));
@@ -29,6 +29,7 @@ export default function MultiAutoComplete({ field = {}, values = {}, onChange = 
       renderTags={(value, getTagProps) =>
           value.map((option, index) => (
             <Chip
+              key={index}
               variant="outlined"
               label={option.label}
               size="small"

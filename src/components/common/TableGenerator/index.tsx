@@ -1,3 +1,6 @@
+// 👇️ ts-nocheck ignores all ts errors in the file
+
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, withStyles, useTheme } from '@mui/styles';
