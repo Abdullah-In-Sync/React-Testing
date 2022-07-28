@@ -8,8 +8,6 @@ on:
       - docs/**
       - .github/**
       - sonar-project.properties
-    branches:
-      - master
   workflow_dispatch:
 
 env:
