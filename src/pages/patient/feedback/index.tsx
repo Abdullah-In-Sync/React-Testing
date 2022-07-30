@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, SyntheticEvent, forwardRef } from 'react';
 import _ from "lodash";
 
 // GRAPHQL 
@@ -40,18 +40,18 @@ import CircularProgress from '@mui/material/CircularProgress';
 export default function Feedback() {
 
     // COMPONENT STATE
-    const [expanded, setExpanded] = React.useState<string | false>(false);
-    const [therapy, setTherapy] = React.useState('');    
-    const [feedbackType, setfeedbackType] = React.useState('session');    
+    const [expanded, setExpanded] = useState<string | false>(false);
+    const [therapy, setTherapy] = useState('');    
+    const [feedbackType, setfeedbackType] = useState('session');    
     const [formValues, setFormValues] = useState([]);
     const [sessionNo, setsessionNo] = useState(1);    
     const [loader, setLoader] = useState(true);
     const [feedbackLoader, setFeedbackLoader] = useState(true);
-    const [open, setOpen] = React.useState(false);
-    const [erroropen, setErrorOpen] = React.useState(false);
-    const [btndiabled, setBtndiabled] = React.useState(false);
-    const [therapistId, settherapistId] = React.useState('686802e5123a482681a680a673ef7f53');
-    const [state, setState] = React.useState({
+    const [open, setOpen] = useState(false);
+    const [erroropen, setErrorOpen] = useState(false);
+    const [btndiabled, setBtndiabled] = useState(false);
+    const [therapistId, settherapistId] = useState('686802e5123a482681a680a673ef7f53');
+    const [state, setState] = useState({
         open: false,
         vertical: 'top',
         horizontal: 'center',
@@ -98,7 +98,7 @@ export default function Feedback() {
     });
     
     const handleChange =
-      (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => {
         setExpanded(isExpanded ? panel : false);
         //setFeedbackLoader(true);
     };
@@ -145,7 +145,7 @@ export default function Feedback() {
         }
     };
     const [postPatientFeedback, { data, loading, error }] = useMutation(POST_PATIENT_FEEDBACK);
-    const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
         props,
         ref,
       ) {
@@ -176,14 +176,14 @@ export default function Feedback() {
         }
     });
 
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
           return;
         }
         window.location.reload();
         setOpen(false);
     };
-    const handleCloseError = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleCloseError = (event?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
           return;
         }        

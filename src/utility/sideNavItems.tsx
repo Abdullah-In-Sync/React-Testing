@@ -1,4 +1,3 @@
-import * as React from "react";
 import HomeIcon from '@mui/icons-material/Home';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';
@@ -52,16 +51,5 @@ export const superadmin_routes = [
   [{ key:22,label: "TODOs", path: "todo", icon: <ListAltIcon /> },
   { key:23, label:"Relapse", path: "/relapse", icon: <TungstenIcon /> }],
 ];
-
-//** THERAPIST ROUTES **//
-// export const therapist_routes = [
-//   { label: "Home", path: "/home" ,icon:<HomeIcon/>},
-//   { label: "Calender", path: "/calender",icon:<MailIcon/> },
-//   { label: "Patients", path: "/Patients" },
-//   { label: "Library", path: "/Library" },
-//   { label: "Connect", path: "/connect" },
-//   { label: "Packages", path: "/packages" },
-//   { label: "Settings", path: "/settings" }
-// ];
 
 

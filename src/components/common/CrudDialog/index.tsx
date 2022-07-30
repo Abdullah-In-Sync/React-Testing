@@ -83,25 +83,7 @@ const CrudDialog = ({
   viewData = false
 }) => {
   const [fieldValues, setFieldValues] = useState<any>({});
-//   const parseValues=(props)=> {
-//     const values = {};
-//     _flatten(fields).forEach((field) => {
-//         if (field.form === false) { return }
-//         let _value = values[field.key];
-//         if (field.type === 'select') {
-//             if (!field.multiple) {
-//                 _value = (typeof _value === 'object' && _value !== null) ? _value.id : _value;
-//             }
-//         }
-//         values[field.key] = _value || field.value;
-//     });
-//     // return values;
-//     setFieldValues(values)
-// }
-// useEffect(()=>{
-//   parseValues();
-  
-// },[])
+
   const handleFieldChange=(field, value) =>{
     
     if (field.type === 'select') {
@@ -121,11 +103,6 @@ const CrudDialog = ({
   const onSubmit=(e)=> {
     // debugger
     e.preventDefault()
-    // this.props.fields.forEach((field) => { this.validate(field); });
-    // const hasError = (Object.keys(this.state.fieldErrors).filter(x => this.state.fieldErrors[x])).length;
-    // if (hasError === 0) {
-    //     onSubmit({ ...this.state.fieldValues }, hasError ? { ...this.state.fieldErrors } : null);
-    // // }
     onsubmit(fieldValues);
 }
   return (

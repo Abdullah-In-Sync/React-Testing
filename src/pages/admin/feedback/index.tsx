@@ -88,9 +88,6 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         }
     }, [dataListData])
 
-
-
-
     useEffect(() => {
         let session = []
         for (var i = 1; i <= 50; i++) {
@@ -293,17 +290,10 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                 </Box>
                 <Box >
                     <TableGenerator
-                        //   searchQuery={query}
-                        //   initialSort={"id"}
-                        //   searchColumnsFilter={true}
                         fields={fields}
                         loader={loader}
                         data={dataListData?.getAdminFeedbackList}
                         currentPage={page}
-                        //   handleSortChange={(ordering) => {
-                        //     setOrdering(ordering);
-                        //     getDeviceType(ordering);
-                        //   }}
                         onPageChange={(page, direction) => {
                             setPage(page);
                             if (direction === "next") {
@@ -321,13 +311,7 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                             // getDeviceType(null, rows);
                             setRowsPerPage(rows);
                         }}
-                        //   dataCount={dataCount}
-                        //   // onChangePage={(page) => console.log(page)}
-                        //   selectedRecords={modulesSelected}
                         rowOnePage={10}
-                    //   onChangeSelected={(modulesSelected) =>
-                    //     setModulesSelected(modulesSelected)
-                    //   }
                     />
 
 
@@ -345,10 +329,6 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         onsubmit={(values, hasErrors) => {
                             handleAdd(values);
                         }}
-                        // extraButtonText="Add Question"
-                        // onExtraButton={() => {
-                        //     addFormFields()
-                        // }}
                         dynamicForm={<DynamicForm buttonText="Add Question" callBackFormValues={handleFormValues} />}
                         open={addModal}
                         onClose={() => { setAddModal(false); setFormValues([]) }}
@@ -359,10 +339,6 @@ const Feedback: React.FunctionComponent<any> = (props) => {
                         okText="Update"
                         fields={dialogFields}
                         values={selectedUserData[0]}
-                        // onFieldChange={(_, images) => {
-                        //     debugger
-                        //     //   handlUploadImages(images);
-                        // }}
                         onsubmit={(values, hasErrors) => {
                             handleEdit(values);
                         }}
@@ -519,7 +495,6 @@ const DynamicForm = ({ callBackFormValues = () => { }, values = {}, buttonText =
                                 options={[]}
                                 disabled={type === "view" ? true : false}
                                 defaultValue={element.answer_options || []}
-                                // defaultValue={_.isEmpty(element.answer_options) ? []: [element.answer_options]  }
                                 onChange={(_, val) => {
                                     handleChange(index, _, val)
                                 }}

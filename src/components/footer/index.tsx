@@ -13,8 +13,6 @@ const footerStyle = {
     background: 'rgb(58, 58, 60)',
     color: 'custom.light',
     width: '100%',
-    // paddingRight: '40px',
-    // paddingBottom: '3px',
     right: 0,
     bottom: 0,
     position: 'fixed'

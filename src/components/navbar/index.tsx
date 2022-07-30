@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, MouseEvent } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,13 +10,12 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image'
-import Logo from "../../assets/images/logo.png";
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const NavBar = () => {
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -38,7 +37,7 @@ const NavBar = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}>
-                 <Image alt="My Help" src={Logo} height="40" width="150" />
+                 <Image alt="My Help" src="/assets/images/logo.png" height="40" width="150" />
             </Box>
          
 

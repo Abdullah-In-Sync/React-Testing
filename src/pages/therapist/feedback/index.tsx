@@ -4,7 +4,6 @@ import InputLabel from '@mui/material/InputLabel'
 import React, { useEffect, useState } from 'react'
 import Layout from '../../../components/layout'
 import Loader from '../../../components/common/Loader'
-import User from "../../../assets/images/user.png"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Image from 'next/image'
 import { useQuery } from '@apollo/client'
@@ -83,7 +82,7 @@ export default function Feedback() {
                 <Box sx={{ flexGrow: 1 }} p={5} borderRadius="7px" className='bg-themegreen' >
                     <Grid container spacing={2}>
                         <Grid item xs={2} sx={{ textAlign: 'center' }}>
-                            <Image alt="Patient" src={User} width="100" height="100" style={{ borderRadius: "50%" }} />
+                            <Image alt="Patient" src="../../../assets/images/user.png" width="100" height="100" style={{ borderRadius: "50%" }} />
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant='h4' className='text-white tit'>{patientData.patient_name}</Typography>

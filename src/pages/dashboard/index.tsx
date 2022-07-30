@@ -7,7 +7,7 @@ const Dashboard: React.FunctionComponent<any> = (props) => {
     return (
         <>
             <Layout >
-                {<h1>Dashboard</h1>}
+                {<h1 aria-label='Dashboard'>Dashboard</h1>}
             </Layout >
         </>
     );
