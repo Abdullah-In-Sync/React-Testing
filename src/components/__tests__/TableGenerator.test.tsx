@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import dynamic from 'next/dynamic'
 
-const TableGenerator = dynamic(import('../../../components/common/TableGenerator'), { ssr: false })
+const TableGenerator = dynamic(import('../common/TableGenerator'), { ssr: false })
 const fields = [
     {
         key: "session_no",

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { FunctionComponent } from 'react';
 import Layout from '../../../components/layout';
 
 
-const SafetyPlan: React.FunctionComponent<any> = (props) => {
+const SafetyPlan: FunctionComponent<any> = (props) => {
 
     return (
         <>

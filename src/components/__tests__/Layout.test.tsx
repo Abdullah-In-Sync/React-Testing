@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import Layout from '../../../components/layout';
+import Layout from '../layout';
 import Box from "@mui/material/Box";
 
 const footerStyle = {

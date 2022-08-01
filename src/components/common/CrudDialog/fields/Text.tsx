@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TextField, Icon, InputAdornment, IconButton, Tooltip } from '@mui/material';
 import { FileCopy, Check } from '@mui/icons-material';
 
@@ -7,12 +7,7 @@ const Text = (props) => {
     const [copied, setCopied] = useState(false);
 
     const copyThat = () => {
-        // document.getElementById(`textfield_copyable_${field.key}`).select();
-        document.execCommand('copy');
-        setCopied(true);
-        setTimeout(() => {
-            setCopied(false);
-        }, 3000);
+        setCopied(false);
     }
 
     return (

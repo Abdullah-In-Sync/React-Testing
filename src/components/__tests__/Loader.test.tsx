@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import Loader from "../../../components/common/Loader";
+import Loader from "../common/Loader";
 
 describe("when rendered with a `visible` prop", () => {
     it("should visible or hide", () => {

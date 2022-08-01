@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { FunctionComponent } from 'react';
 import Layout from '../../components/layout';
 
 
-const File: React.FunctionComponent<any> = (props) => {
+const File: FunctionComponent<any> = (props) => {
 
     return (
         <>

@@ -1,6 +1,6 @@
 // 👇️ ts-nocheck ignores all ts errors in the file
 // @ts-nocheck
-import React, { useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import dynamic from 'next/dynamic'
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -31,7 +31,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export interface DialogTitleProps {
   id: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   onClose: () => void;
 }
 
@@ -59,7 +59,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const CrudDialog = ({
+export const CrudDialog = ({
   onRef = () => { },
   open = false,
   fields = [],
@@ -165,4 +165,3 @@ const CrudDialog = ({
     </div>
   );
 }
-export default CrudDialog;

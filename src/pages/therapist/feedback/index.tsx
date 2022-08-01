@@ -16,7 +16,7 @@ import QuestionTypeText from './QuestionTypeText'
 import Cookies from 'js-cookie';
 
 
-export default function Feedback() {
+export function Feedback() {
 
     const [therapy, setTherapy] = useState<string>('');
     const [loader, setLoader] = useState<boolean>(false);
@@ -61,10 +61,6 @@ export default function Feedback() {
             setLoader(false);
         }
     });
-    // if (therapyLoading || feedbackLoading || sessionLoading) return "Loading...";
-    // if (therapyError) return `Error! ${therapyError.message}`;
-    // if (feedbackError) return `Error! ${feedbackError.message}`;
-    // if (sessionError) return `Error! ${sessionError.message}`;
 
     const onTherapyChange = (event: SelectChangeEvent) => {
         setLoader(true);
@@ -82,7 +78,7 @@ export default function Feedback() {
                 <Box sx={{ flexGrow: 1 }} p={5} borderRadius="7px" className='bg-themegreen' >
                     <Grid container spacing={2}>
                         <Grid item xs={2} sx={{ textAlign: 'center' }}>
-                            <Image alt="Patient" src="../../../assets/images/user.png" width="100" height="100" style={{ borderRadius: "50%" }} />
+                            <Image alt="Patient" src="/assets/images/user.png" width="100" height="100" style={{ borderRadius: "50%" }} />
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant='h4' className='text-white tit'>{patientData.patient_name}</Typography>

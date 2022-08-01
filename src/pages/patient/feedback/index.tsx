@@ -37,7 +37,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
-export default function Feedback() {
+export function Feedback() {
 
     // COMPONENT STATE
     const [expanded, setExpanded] = useState<string | false>(false);
@@ -56,24 +56,18 @@ export default function Feedback() {
         vertical: 'top',
         horizontal: 'center',
       });
-    const { loading: tokenLoading, error: tokenError, data: tokenData } = useQuery(GET_TOKEN_DATA);  
-    //return tokenData; return false;
-    if(tokenData && tokenData?.getTokenData.user_type){
-        //console.log(tokenData?.getTokenData.patient_data.therapist_id);
-        
-        var user_type = tokenData?.getTokenData.user_type;
-        user_type = user_type.replace('[',"");
-        user_type = user_type.replace(']',"");        
-        if(user_type!='patient'){
-            window.location.href="https://"+window.location.hostname+"/account";
-            return false;
-        } else {
-            if(tokenData?.getTokenData.patient_data){
-                //settherapistId(tokenData?.getTokenData.patient_data.therapist_id);
+    const { loading: tokenLoading, error: tokenError, data: tokenData } = useQuery(GET_TOKEN_DATA, {
+        onCompleted: (data) => {
+            if(tokenData && tokenData?.getTokenData.user_type){
+                var user_type = tokenData?.getTokenData.user_type;
+                user_type = user_type.toString();      
+                if(user_type!='patient'){
+                    window.location.href="https://"+window.location.hostname+"/account";
+                } 
             }
+            setLoader(false);
         }
-    }
-    
+    }); 
     
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
@@ -129,17 +123,12 @@ export default function Feedback() {
     let handleInputChange = (i, e) => {
         let newFormValues = [...formValues];
         var val = e.target.name;
-        //console.log(val); return false;
+
         if(e.target.id && e.target.id!='undefined'){
             val = e.target.id;    
         }
         
         var p =val.split('_');
-        //console.log(p); return false;
-        // if(p[0]=='text'){
-        //    p[0] =  e.target.value;
-        // }
-        //console.log(p);
         if(p[0]){
             setFormValues([...formValues, { therapist_id: therapistId, session_no: sessionNo, question_id: p[1],answer:e.target.value }])
         }
@@ -177,16 +166,10 @@ export default function Feedback() {
     });
 
     const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-          return;
-        }
         window.location.reload();
         setOpen(false);
     };
-    const handleCloseError = (event?: SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-          return;
-        }        
+    const handleCloseError = (event?: SyntheticEvent | Event, reason?: string) => {      
         setErrorOpen(false);
     };
     console.log(patientFeedbackData?.getPatientFeedbackList.length);

@@ -1,5 +1,4 @@
 import { TextareaAutosize, Typography } from '@mui/material'
-import React from 'react'
 
 export default function QuestionTypeText({ fv, fk, disable }): JSX.Element {
   return (

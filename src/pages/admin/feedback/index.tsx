@@ -40,7 +40,7 @@ const crudButtons = {
     flexDirection: 'row-reverse'
 }
 
-const Feedback: React.FunctionComponent<any> = (props) => {
+export const Feedback: React.FunctionComponent<any> = (props) => {
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -373,11 +373,6 @@ const Feedback: React.FunctionComponent<any> = (props) => {
         </>
     );
 };
-
-export default Feedback;
-
-
-
 
 // DYNAMIC FORM
 const DynamicForm = ({ callBackFormValues = () => { }, values = {}, buttonText = false, type }) => {

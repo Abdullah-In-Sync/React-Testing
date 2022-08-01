@@ -1,5 +1,4 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
-import React from 'react'
 
 export default function QuestionTypeRadiobox({ fv, fk, disable }): JSX.Element {
     return (

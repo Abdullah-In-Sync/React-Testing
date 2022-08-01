@@ -1,20 +1,4 @@
-
-import React from 'react';
-// import ReactDatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-// import moment from 'moment';
-
 const DatePicker = ({fieldValues = {}, field = {}, onChange = () => {}}) => {
-
-    // const isValidDate = (d) => {
-    //     return d instanceof Date && !isNaN(d);
-    // }
-
-    // const handleDateChange = date => {
-    //     if(isValidDate(date)){
-    //         onChange(field, moment(date).format('YYYY-MM-DD'));
-    //     }
-    // };
 
     return (
         <>
