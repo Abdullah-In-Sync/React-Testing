@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/react';
-import { MockedProvider } from "@apollo/react-testing";
+import { MockedProvider } from "@apollo/client/testing";
 import { Feedback } from '../pages/therapist/feedback';
 import { GET_PATIENTTHERAPY_DATA,GET_TOKEN_DATA } from "../graphql/query/common"
 import { GET_PATIENTSESSION_DATA } from '../graphql/query/patient'
@@ -32,7 +32,7 @@ const mocks = [
           query: GET_THERAPISTFEEDBACKLIST_DATA,
           variables: {
             patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
-            sessionNo: "1",
+            sessionNo: 1,
             feedbackType: "session"
           },
         },
@@ -134,7 +134,7 @@ const mocks = [
             getPatientSessionList : [
             {
                 "_id": "bc1199d296b9437d8db350d6bad68666",
-                "patient_id": "a1ff0e01e54f4c5ca4cd4b7edff3c7d3",
+                "patient_id": "4937a27dc00d48bf983fdcd4b0762ebd",
                 "therapist_id": "15b2fce928064732a6df4ffd3e513ed2",
                 "pttherapy_id": "f98a6095ca524338973da5f20f8d0ad3",
                 "ptsession_no": 1,
@@ -151,6 +151,8 @@ const mocks = [
   
 
 test('renders Therapist feedback list', async () => {
+  localStorage.setItem("patient_id","4937a27dc00d48bf983fdcd4b0762ebd");
+  localStorage.setItem("patient_name","test");
   const { container } = render(
     <MockedProvider mocks={mocks}>
       <Feedback />

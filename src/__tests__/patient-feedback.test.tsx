@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/react';
-import { MockedProvider } from "@apollo/react-testing";
+import { MockedProvider } from "@apollo/client/testing";
 import { Feedback } from '../pages/patient/feedback';
 import { GET_PATIENTTHERAPY_DATA, GET_PATIENTFEEDBACKLIST_DATA,GET_TOKEN_DATA } from "../graphql/query/common"
 
@@ -16,7 +16,7 @@ const mocks = [
             getTokenData : [
               {
               "_id":"9a6cdd23-0cef-4d4d-a94a-51d6896cabfd",
-              "user_type":["patient"],
+              "user_type":"patient",
               "parent_id":"73ddc746-b473-428c-a719-9f6d39bdef81",
               "perm_ids":"9,10,14,21,191,65,66",
               "user_status":"1",
@@ -56,13 +56,13 @@ const mocks = [
         request: {
           query: GET_PATIENTTHERAPY_DATA,
           variables: {
-            patientId: "abcd",
+            patientId: "abcdefghijkl",
           },
         },
         result: {
           data:  [
             {
-              "patient_id" : "abcd",
+              "patient_id" : "abcdefghijkl",
               "therapy_detail": {
                 "therapy_name": "localhost",
                 "_id": "305884c59f804bb6b93001f1bef958da"
