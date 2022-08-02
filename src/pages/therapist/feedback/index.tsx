@@ -187,8 +187,9 @@ const Feedback: NextPage = () => {
                     },
                   }}
                 >
-                  {patientTherapryData?.getPatientTherapy != null &&
-                    patientTherapryData?.getPatientTherapy.map((v: any) => {
+                  {patientTherapryData &&
+                    patientTherapryData.getPatientTherapy &&
+                    patientTherapryData.getPatientTherapy.map((v: any) => {
                       return (
                         <MenuItem key={"therapy" + v._id} value={v._id}>
                           {v.therapy_detail.therapy_name}/
@@ -212,8 +213,9 @@ const Feedback: NextPage = () => {
           >
             Feedback
           </Typography>
-          {patientSessionData?.getPatientSessionList != null &&
-            patientSessionData?.getPatientSessionList.map((v, k) => {
+          {patientSessionData &&
+            patientSessionData.getPatientSessionList &&
+            patientSessionData.getPatientSessionList.map((v, k) => {
               const p = k + 1;
               const panelName = "panel" + p;
               return (
@@ -278,8 +280,9 @@ const Feedback: NextPage = () => {
                         </Button>
                       </Stack>
                     </Typography>
-                    {therapistFeedbackData?.getTherapistFeedbackList != null &&
-                      therapistFeedbackData?.getTherapistFeedbackList.map(
+                    {therapistFeedbackData &&
+                      therapistFeedbackData.getTherapistFeedbackList &&
+                      therapistFeedbackData.getTherapistFeedbackList.map(
                         (fv, fk) => {
                           return (
                             <>
@@ -301,13 +304,14 @@ const Feedback: NextPage = () => {
                           );
                         }
                       )}
-                    {therapistFeedbackData?.getTherapistFeedbackList == null ||
-                      (therapistFeedbackData?.getTherapistFeedbackList.length ==
+                    {therapistFeedbackData &&
+                      therapistFeedbackData.getTherapistFeedbackList &&
+                      therapistFeedbackData.getTherapistFeedbackList.length ==
                         0 && (
                         <Typography gutterBottom component="div">
                           No Data Found
                         </Typography>
-                      ))}
+                      )}
                   </AccordionDetails>
                 </Accordion>
               );
