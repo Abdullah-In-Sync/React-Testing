@@ -1,14 +1,18 @@
-import { Typography ,Box} from '@mui/material';
+import { Typography, Box } from "@mui/material";
 
-const header= {
+const header = {
   padding: "10px 0",
-}
+};
 
 const ContentHeader = (props) => {
   // const classes = styles();
   return (
     <Box sx={header}>
-      <Typography variant="h4" sx={{fontWeight:'bold'}} color='secondary.main' >
+      <Typography
+        variant="h4"
+        sx={{ fontWeight: "bold" }}
+        color="secondary.main"
+      >
         {props.title}
       </Typography>
       <Typography

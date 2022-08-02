@@ -16,18 +16,18 @@ const theme = createTheme({
       main: red.A400,
     },
     custom: {
-      light: '#ffffff',
-      main: '#f57c00',
-      dark: '#ef6c00',
-      contrastText: 'rgba(0, 0, 0, 0.87)',
-    }
+      light: "#ffffff",
+      main: "#f57c00",
+      dark: "#ef6c00",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
   },
   components: {
     MuiListItemButton: {
       styleOverrides: {
         root: {
           paddingTop: "2px",
-          paddingBottom: "2px"
+          paddingBottom: "2px",
         },
       },
     },

@@ -1,9 +1,8 @@
-const DatePicker = ({fieldValues = {}, field = {}, onChange = () => {}}) => {
-
-    return (
-        <>
-            <div className="inputDatePicker">
-                {/* <ReactDatePicker
+const DatePicker = ({ fieldValues = {}, field = {}, onChange = () => {} }) => {
+  return (
+    <>
+      <div className="inputDatePicker">
+        {/* <ReactDatePicker
                     selected={isValidDate(new Date(fieldValues[field.key]))? new Date(fieldValues[field.key]) : ""}
                     onChange={handleDateChange}
                     className="mb-3"
@@ -18,9 +17,9 @@ const DatePicker = ({fieldValues = {}, field = {}, onChange = () => {}}) => {
                     showYearDropdown
                     placeholderText={field.label? field.label : "DD-MM-YYYY"}
                 /> */}
-            </div>
-        </>
-    )
-}
+      </div>
+    </>
+  );
+};
 
 export default DatePicker;

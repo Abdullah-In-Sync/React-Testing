@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 import { Clear } from "@mui/icons-material";
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import _isEmpty from "lodash/isEmpty"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import _isEmpty from "lodash/isEmpty";
 
 const SelectField = (props) => {
-    const { field, values = {} } = props;
-    const { clearField = false } = field;
-    const [isClearable, setClearable] = useState(false)
-    const [isEditable, setEditValue] = useState(false)
-    let _value = props.fieldValues[field.key] || values[field.key] || field.defaultValue;
-    if (!field.multiple) {
-        _value = (typeof _value === 'object' && _value !== null) ? _value.id : _value;
+  const { field, values = {} } = props;
+  const { clearField = false } = field;
+  const [isClearable, setClearable] = useState(false);
+  const [isEditable, setEditValue] = useState(false);
+  let _value =
+    props.fieldValues[field.key] || values[field.key] || field.defaultValue;
+  if (!field.multiple) {
+    _value = typeof _value === "object" && _value !== null ? _value.id : _value;
+  }
+
+  const clear = () => {
+    props.onChange(field, "");
+    setClearable(false);
+    if (!_isEmpty(values)) {
+      setEditValue(true);
     }
+  };
 
-    const clear = () => {
-        props.onChange(field, '')
-        setClearable(false)
-        if (!_isEmpty(values)) {
-            setEditValue(true)
-        }
+  useEffect(() => {
+    if (clearField) {
+      clear();
     }
+  }, [clearField]);
 
-    useEffect(() => {
-        if (clearField) {
-            clear();
-        }
-    }, [clearField])
-
-    return (
-        <>
-            {/* <FormControl variant="outlined" fullWidth required={field.required} error={props.fieldErrors[field.key] ? true : false} helperText={props.fieldErrors[field.key] ? props.fieldErrors[field.key] : undefined}>
+  return (
+    <>
+      {/* <FormControl variant="outlined" fullWidth required={field.required} error={props.fieldErrors[field.key] ? true : false} helperText={props.fieldErrors[field.key] ? props.fieldErrors[field.key] : undefined}>
                 <InputLabel> {field.label} </InputLabel>
 
                 <Select
@@ -79,20 +80,31 @@ const SelectField = (props) => {
                     }
                 </Select>
             </FormControl> */}
-            {field.info && <span style={{ fontSize: 10, display: 'block', marginTop: '-10px', marginLeft: 5, ...(field.infoStyle || {}) }}>{renderInfo(_value, props)}</span>}
-        </>
-    )
-}
+      {field.info && (
+        <span
+          style={{
+            fontSize: 10,
+            display: "block",
+            marginTop: "-10px",
+            marginLeft: 5,
+            ...(field.infoStyle || {}),
+          }}
+        >
+          {renderInfo(_value, props)}
+        </span>
+      )}
+    </>
+  );
+};
 
 const renderInfo = (value, props) => {
-    const info = props.field.info;
-    switch (typeof info) {
-        case 'function':
-            return info(value);
-        default:
-            return info;
-    }
-}
-
+  const info = props.field.info;
+  switch (typeof info) {
+    case "function":
+      return info(value);
+    default:
+      return info;
+  }
+};
 
 export default SelectField;

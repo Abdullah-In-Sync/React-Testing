@@ -1,37 +1,35 @@
-import * as React from 'react';
-import dynamic from 'next/dynamic'
-import Box from '@mui/material/Box';
+import * as React from "react";
+import dynamic from "next/dynamic";
+import Box from "@mui/material/Box";
 // import CssBaseline from '@mui/material/CssBaseline';
 
-import NavBar from '../navbar';
-import SideBar from '../sidebar';
+import NavBar from "../navbar";
+import SideBar from "../sidebar";
 // const SideBar = dynamic(() => import('../sidebar'), {
 //     ssr: false,
 //   });
-import Footer from '../footer';
+import Footer from "../footer";
 
 const contentStyle = {
-    marginTop: 55,
-    width: '100vw',
-    paddingBottom: 55,
+  marginTop: 55,
+  width: "100vw",
+  paddingBottom: 55,
 };
 const wrapper = {
-    backgroundColor: "white",
-    borderRadius: "10px",
-    margin: '25px 10px',
-    padding: "5px 20px"
-}
+  backgroundColor: "white",
+  borderRadius: "10px",
+  margin: "25px 10px",
+  padding: "5px 20px",
+};
 export default function Layout(props) {
-    return (
-        <Box sx={{ display: 'flex',backgroundColor: "#F5F5F5" }} >
-            <NavBar />
-            <SideBar />
-            <Box style={contentStyle}>
-                <Box style={wrapper}>
-                    {props.children}
-                </Box>
-            </Box>
-            <Footer/>
-        </Box>
-    );
+  return (
+    <Box sx={{ display: "flex", backgroundColor: "#F5F5F5" }}>
+      <NavBar />
+      <SideBar />
+      <Box style={contentStyle}>
+        <Box style={wrapper}>{props.children}</Box>
+      </Box>
+      <Footer />
+    </Box>
+  );
 }

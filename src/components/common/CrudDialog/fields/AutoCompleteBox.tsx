@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
-import { TextField, Autocomplete } from '@mui/material';
+import { TextField, Autocomplete } from "@mui/material";
 import _ from "lodash";
 
-const AutoCompleteBox = ({
-  field ,
-  values = {},
-  onChange ,
-  ...props
-}) => {
+const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
   let _value = props.fieldValues[field?.key] || values[field?.key] || "";
-  
+
   if (typeof _value === "object") {
     _value = (_value || {}).id || "";
   }
-  let _valueObj = field.options.find((x) => x.value == _value) || {};
+  const _valueObj = field.options.find((x) => x.value == _value) || {};
 
   const [value, setValue] = useState(
-    _value || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
+    _value || _value == "Disable" || _value == "Enable" ? _valueObj : _value
   );
   const [inputValue, setInputValue] = useState("");
 
@@ -28,7 +23,7 @@ const AutoCompleteBox = ({
 
   useEffect(() => {
     setValue(
-      _value || _value == 'Disable' || _value == 'Enable' ? _valueObj : _value
+      _value || _value == "Disable" || _value == "Enable" ? _valueObj : _value
     );
   }, [_value]);
 

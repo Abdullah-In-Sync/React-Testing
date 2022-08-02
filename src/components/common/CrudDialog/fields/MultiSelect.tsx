@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from '@mui/styles';
+import { withStyles } from "@mui/styles";
 import {
   Select,
   MenuItem,
@@ -8,7 +8,7 @@ import {
   ListItemText,
   FormControl,
   InputLabel,
-  OutlinedInput
+  OutlinedInput,
 } from "@mui/material";
 // {fields.length > 1 && (
 //   <FilterSelect
@@ -18,7 +18,6 @@ import {
 //     onChange={onChange}
 //   />
 // )}
-
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,9 +31,9 @@ const MenuProps = {
 };
 
 const FilterSelect = ({
-  fields ,  
+  fields,
   selectedFields = [],
-  onChange ,
+  onChange,
   multiple = true,
 }) => {
   const [selectedAll, setSelectedAll] = useState(
@@ -43,7 +42,7 @@ const FilterSelect = ({
 
   useEffect(() => {
     setSelectedAll(selectedFields.length === fields.length);
-  }, [selectedFields,fields]);
+  }, [selectedFields, fields]);
 
   const handleChange = (event) => {
     if (fields.length > 1) {
@@ -64,8 +63,8 @@ const FilterSelect = ({
   };
 
   return (
-    <FormControl variant="outlined" fullWidth >
-      <InputLabel >Tag</InputLabel>
+    <FormControl variant="outlined" fullWidth>
+      <InputLabel>Tag</InputLabel>
       <Select
         label={"Tag"}
         variant="outlined"
@@ -75,7 +74,7 @@ const FilterSelect = ({
         // className="mb-3"
         // style={{ display: field.show ? "block" : "none" }}
         style={{ display: "block" }}
-// size="small"
+        // size="small"
         onChange={handleChange}
         multiple={multiple}
         // IconComponent={(props) => (
@@ -94,7 +93,7 @@ const FilterSelect = ({
       >
         {!multiple ? null : (
           <MenuItem
-          // style={{ width: "100%" }}
+            // style={{ width: "100%" }}
             // style={{ minHeight: 25, padding: "0px 7px" }}
             value={"Select All"}
           >
@@ -105,7 +104,7 @@ const FilterSelect = ({
         {fields.map((name) => {
           return (
             <MenuItem
-            // style={{ width: "100%" }}
+              // style={{ width: "100%" }}
               // style={{ minHeight: 25, padding: "0px 7px" }}
               key={name}
               value={name}
@@ -122,7 +121,11 @@ const FilterSelect = ({
                 primary={name
                   .toLowerCase()
                   .split("_")
-                  .map((s, key) => key === 0 && s.length === 2 ? s.toUpperCase() : s.charAt(0).toUpperCase() + s.substring(1)) // for Vm to VM
+                  .map((s, key) =>
+                    key === 0 && s.length === 2
+                      ? s.toUpperCase()
+                      : s.charAt(0).toUpperCase() + s.substring(1)
+                  ) // for Vm to VM
                   .join(" ")}
               />
             </MenuItem>

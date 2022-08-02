@@ -1,9 +1,9 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const ADD_FEEDBACK = gql`
-mutation ($feedQuesData: String!) {
-  adminCreateFeedback(feedQuesData: $feedQuesData) {
-     _id
+  mutation ($feedQuesData: String!) {
+    adminCreateFeedback(feedQuesData: $feedQuesData) {
+      _id
       answer_type
       created_date
       session_no
@@ -11,43 +11,49 @@ mutation ($feedQuesData: String!) {
       question
       status
       updated_date
-      user_id 
+      user_id
+    }
   }
-}
 `;
 
-
 export const UPDATE_FEEDBACK = gql`
-mutation ($feedbackId:ID!,$update:UpdateFeedbackInput!) {
-  updateFeedbackQuestionById(feedbackId:$feedbackId, update:$update) {
-    _id
-    answer_options
-    answer_type
-    created_date
-    feedback_type
-    org_id
+  mutation ($feedbackId: ID!, $update: UpdateFeedbackInput!) {
+    updateFeedbackQuestionById(feedbackId: $feedbackId, update: $update) {
+      _id
+      answer_options
+      answer_type
+      created_date
+      feedback_type
+      org_id
+    }
   }
-}
 `;
 
 export const DELETE_FEEDBACK = gql`
-mutation ($feedbackId:ID!,$update:UpdateFeedbackInput!) {
-  updateFeedbackQuestionById(feedbackId:$feedbackId, update:$update) {
-    _id
-    answer_options
-    answer_type
-    created_date
-    feedback_type
-    org_id
+  mutation ($feedbackId: ID!, $update: UpdateFeedbackInput!) {
+    updateFeedbackQuestionById(feedbackId: $feedbackId, update: $update) {
+      _id
+      answer_options
+      answer_type
+      created_date
+      feedback_type
+      org_id
+    }
   }
-}
 `;
-
 
 // updateFeedbackQuestionById(feedbackId: ID! ,update: UpdateFeedbackInput): FeedbackQuestion
 export const POST_PATIENT_FEEDBACK = gql`
-mutation ($feedQuesAnsData: String!,$sessionNo: String!,$feedbackType: String) {
-    postPatientFeedback(feedQuesAnsData: $feedQuesAnsData, sessionNo: $sessionNo, feedbackType: $feedbackType) {
+  mutation (
+    $feedQuesAnsData: String!
+    $sessionNo: String!
+    $feedbackType: String
+  ) {
+    postPatientFeedback(
+      feedQuesAnsData: $feedQuesAnsData
+      sessionNo: $sessionNo
+      feedbackType: $feedbackType
+    ) {
       _id
       user_id
       org_id
@@ -70,7 +76,5 @@ mutation ($feedQuesAnsData: String!,$sessionNo: String!,$feedbackType: String) {
         updated_date
       }
     }
-
-  
-}
+  }
 `;

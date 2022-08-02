@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
-import Checkbox from '@mui/material/Checkbox';
+import Checkbox from "@mui/material/Checkbox";
 
 const CheckboxField = (props) => {
   const { field } = props;
@@ -21,7 +21,7 @@ const CheckboxField = (props) => {
       <Checkbox
         onChange={handleChange}
         value={field.key}
-        checked={props.fieldValues[field.key]|| check || field.value || false}
+        checked={props.fieldValues[field.key] || check || field.value || false}
         required={field.required || false}
         color="primary"
         key={field.key}

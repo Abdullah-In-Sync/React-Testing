@@ -3,11 +3,7 @@ import ContentHeader from "../common/ContentHeader";
 
 describe("when rendered with a `title` prop", () => {
   it("should paste it into the header text", () => {
-    render(<ContentHeader title="Feedback" />); 
-    expect(
-      <ContentHeader title="Feedback" />
-    );
+    render(<ContentHeader title="Feedback" />);
+    expect(<ContentHeader title="Feedback" />);
   });
 });
-      
-

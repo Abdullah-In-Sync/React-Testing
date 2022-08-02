@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from "@material-ui/core";
 import {
+  withStyles,
   Select,
   MenuItem,
   InputBase,
@@ -21,7 +21,7 @@ export const FilterSelect = ({
 
   useEffect(() => {
     setSelectedAll(selectedFields.length === fields.length);
-  }, [selectedFields,fields]);
+  }, [selectedFields, fields]);
 
   const handleChange = (event) => {
     if (fields.length > 1) {

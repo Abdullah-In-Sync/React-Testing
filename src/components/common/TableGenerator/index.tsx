@@ -1,88 +1,116 @@
 // 👇️ ts-nocheck ignores all ts errors in the file
 
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles, withStyles, useTheme } from '@mui/styles';
-import isEmpty from 'lodash/isEmpty';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { makeStyles, withStyles, useTheme } from "@mui/styles";
+import isEmpty from "lodash/isEmpty";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
-
-
-import TablePagination from '@mui/material/TablePagination';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import TableFooter from '@mui/material/TableFooter';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import  Loader  from '../Loader';
-import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import TablePagination from "@mui/material/TablePagination";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import TableFooter from "@mui/material/TableFooter";
+import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import Loader from "../Loader";
+import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 
 function TablePaginationActions(props, compProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleFirstPageButtonClick = event => {
-    onPageChange(event, 0, 'first');
+  const handleFirstPageButtonClick = (event) => {
+    onPageChange(event, 0, "first");
   };
 
-  const handleBackButtonClick = event => {
-    onPageChange(event, page - 1, 'back');
+  const handleBackButtonClick = (event) => {
+    onPageChange(event, page - 1, "back");
   };
 
-  const handleNextButtonClick = event => {
-    onPageChange(event, page + 1, 'next');
+  const handleNextButtonClick = (event) => {
+    onPageChange(event, page + 1, "next");
   };
 
-  const handleLastPageButtonClick = event => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1), 'last');
+  const handleLastPageButtonClick = (event) => {
+    onPageChange(
+      event,
+      Math.max(0, Math.ceil(count / rowsPerPage) - 1),
+      "last"
+    );
   };
 
   return (
     <>
-      <Box sx={classes.root} style={{
-        paddingTop: compProps.selectedRecords && compProps.selectedRecords.length && !isEmpty(compProps.selectedRecords[0]) ?
-          '20px' : '0px'
-      }}
+      <Box
+        sx={classes.root}
+        style={{
+          paddingTop:
+            compProps.selectedRecords &&
+            compProps.selectedRecords.length &&
+            !isEmpty(compProps.selectedRecords[0])
+              ? "20px"
+              : "0px",
+        }}
       >
         <IconButton
           onClick={handleFirstPageButtonClick}
           disabled={page === 0}
           aria-label="first page"
         >
-          {theme?.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+          {theme?.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
         </IconButton>
-        <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-          {theme?.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        <IconButton
+          onClick={handleBackButtonClick}
+          disabled={page === 0}
+          aria-label="previous page"
+        >
+          {theme?.direction === "rtl" ? (
+            <KeyboardArrowRight />
+          ) : (
+            <KeyboardArrowLeft />
+          )}
         </IconButton>
         <IconButton
           onClick={handleNextButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="next page"
         >
-          {theme?.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+          {theme?.direction === "rtl" ? (
+            <KeyboardArrowLeft />
+          ) : (
+            <KeyboardArrowRight />
+          )}
         </IconButton>
         <IconButton
           onClick={handleLastPageButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="last page"
         >
-          {theme?.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+          {theme?.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
         </IconButton>
       </Box>
-      {compProps.selectedRecords && compProps.selectedRecords.length && !isEmpty(compProps.selectedRecords[0]) ? <div style={{ display: 'inline-block' }}> {compProps.selectedRecords.length} Record{compProps.selectedRecords.length === 1 ? '' : 's'} Selected </div> : null}
+      {compProps.selectedRecords &&
+      compProps.selectedRecords.length &&
+      !isEmpty(compProps.selectedRecords[0]) ? (
+        <div style={{ display: "inline-block" }}>
+          {" "}
+          {compProps.selectedRecords.length} Record
+          {compProps.selectedRecords.length === 1 ? "" : "s"} Selected{" "}
+        </div>
+      ) : null}
     </>
   );
 }
@@ -96,36 +124,40 @@ TablePaginationActions.propTypes = {
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields } = props;
-  const createSortHandler = property => event => {
+  const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
   return (
-    <TableHead  sx={classes.tableHead}>
+    <TableHead sx={classes.tableHead}>
       <TableRow>
-        {(fields.filter(x => x.visible)).map(headCell => (
-          <TableCell
-            key={headCell.key}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.key ? order : false}
-            sx={{color:"custom.light"}}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.key}
-              direction={orderBy === headCell.key ? order : 'asc'}
-              onClick={createSortHandler(headCell.key)}
-              sx={classes.headCell}
+        {fields
+          .filter((x) => x.visible)
+          .map((headCell) => (
+            <TableCell
+              key={headCell.key}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "default"}
+              sortDirection={orderBy === headCell.key ? order : false}
+              sx={{ color: "custom.light" }}
             >
-              {headCell.columnName}
-              {orderBy === headCell.key ? (
-                <Box sx={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+              <TableSortLabel
+                active={orderBy === headCell.key}
+                direction={orderBy === headCell.key ? order : "asc"}
+                onClick={createSortHandler(headCell.key)}
+                sx={classes.headCell}
+              >
+                {headCell.columnName}
+                {orderBy === headCell.key ? (
+                  <Box sx={classes.visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
       </TableRow>
     </TableHead>
   );
@@ -135,7 +167,7 @@ EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
   fields: PropTypes.array.isRequired,
@@ -143,77 +175,92 @@ EnhancedTableHead.propTypes = {
 
 const classes = {
   tableHead: {
-    backgroundColor: 'primary.main',
+    backgroundColor: "primary.main",
   },
   root: {
-    width: '100%',
-    display: 'inline'
+    width: "100%",
+    display: "inline",
   },
   paper: {
-    position: 'relative',
-    width: '100%',
-    overflowX: 'auto'
+    position: "relative",
+    width: "100%",
+    overflowX: "auto",
   },
   table: {
     minWidth: 750,
   },
   visuallyHidden: {
     border: 0,
-    clip: 'rect(0 0 0 0)',
+    clip: "rect(0 0 0 0)",
     height: 1,
     margin: -1,
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: 0,
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     width: 1,
   },
-  
+
   headCell: {
-    fontWeight: 'bold',
-    fontSize: '12px',
-     width:'100%',
-     textAlign: 'center',
-    lineHeight: '12px'
+    fontWeight: "bold",
+    fontSize: "12px",
+    width: "100%",
+    textAlign: "center",
+    lineHeight: "12px",
   },
   pagination: {
-    fontSize: '10px'
+    fontSize: "10px",
   },
   tableRowSelected: {
     "&$selected, &$selected:hover": {
-      backgroundColor: "#ECF0F1"
-    }
+      backgroundColor: "#ECF0F1",
+    },
   },
   tableCell: {
-    fontSize: '12px',
-    marginLeft:'100px'
+    fontSize: "12px",
+    marginLeft: "100px",
   },
   selected: {},
-}
+};
 
-
-
-
-const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, currentPage = 0, initialSort = "", backendPagination = false, dataCount, searchQuery = "", onPageChange = () => { }, onChangeSelected = () => { }, onRowPerPageChange = () => {}, rowOnePage = 10, radio = false, size = "medium", sensorTable = false, ...props }) => {
- 
-  const [order, setOrder] = useState('desc');
+const TableGenerator = ({
+  fields = [],
+  data = [],
+  handleSortChange = () => {},
+  currentPage = 0,
+  initialSort = "",
+  backendPagination = false,
+  dataCount,
+  searchQuery = "",
+  onPageChange = () => {},
+  onChangeSelected = () => {},
+  onRowPerPageChange = () => {},
+  rowOnePage = 10,
+  radio = false,
+  size = "medium",
+  sensorTable = false,
+  ...props
+}) => {
+  const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState(initialSort);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowOnePage);
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-    handleSortChange(`${isAsc? '': '-'}${property}`);
+    handleSortChange(`${isAsc ? "" : "-"}${property}`);
   };
 
   useEffect(() => {
-    setPage(currentPage)
-  }, [currentPage])
+    setPage(currentPage);
+  }, [currentPage]);
 
   const handleClick = (event, name) => {
-    const selectedIndex = props.selectedRecords.findIndex(val => val.id === name.id);
+    const selectedIndex = props.selectedRecords.findIndex(
+      (val) => val.id === name.id
+    );
     let newSelected = [];
 
     if (radio) {
@@ -232,7 +279,7 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
       } else if (selectedIndex > 0) {
         newSelected = newSelected.concat(
           props.selectedRecords.slice(0, selectedIndex),
-          props.selectedRecords.slice(selectedIndex + 1),
+          props.selectedRecords.slice(selectedIndex + 1)
         );
       }
     }
@@ -244,21 +291,22 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
     onPageChange(newPage, towards);
   };
 
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     onRowPerPageChange(event.target.value);
   };
 
-  const handleSelectAll = selected => {
+  const handleSelectAll = (selected) => {
     if (selected) {
       onChangeSelected(data);
     } else {
       onChangeSelected([]);
     }
-  }
+  };
 
-  const isSelected = record => props.selectedRecords.findIndex(x => x.id === record.id) !== -1;
+  const isSelected = (record) =>
+    props.selectedRecords.findIndex((x) => x.id === record.id) !== -1;
 
   return (
     <Box sx={classes.root}>
@@ -286,70 +334,81 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
           />
           <TableBody>
             <>
-            <div style={{textAlign:'center'}} > <Loader visible={props.loader} /></div> 
-            {   (!props.loader && data.length === 0) ? (
-              <div
-                // className="d-flex align-items-center justify-content-center"
-                style={{
-                  position: "absolute",
-                  height: "20%",
-                  width: "100%",
-                }}
-              >
-                <div style={{display:"list-item",textAlign:'center'}} > No records found</div>
+              <div style={{ textAlign: "center" }}>
+                {" "}
+                <Loader visible={props.loader} />
               </div>
-            ):
+              {!props.loader && data.length === 0 ? (
+                <div
+                  // className="d-flex align-items-center justify-content-center"
+                  style={{
+                    position: "absolute",
+                    height: "20%",
+                    width: "100%",
+                  }}
+                >
+                  <div style={{ display: "list-item", textAlign: "center" }}>
+                    {" "}
+                    No records found
+                  </div>
+                </div>
+              ) : (
                 data
-                .slice(backendPagination? 0 : page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((record, index) => {
-                  const isItemSelected = isSelected(record);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                  .slice(
+                    backendPagination ? 0 : page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                  .map((record, index) => {
+                    const isItemSelected = isSelected(record);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={record.id}
-                      classes={{ selected: classes.selected }}
-                      sx={classes.tableRowSelected}
-                      selected={isItemSelected}
-                       style={{ height: 10 }}
-                    >
-                      {
-                        (fields.filter(x => x.visible)).map(field => (
-                          <TableCell key={field.key} sx={classes.tableCell} padding={field.padding? "checkbox": "default"} align="left">
-                            {
-                              (field.render && typeof field.render === 'function') ? (
-                                field.render(record[field.key], record, index)
-                              ) : record[field.key]
-                            }
-                          </TableCell>
-                        ))
-                      }
-                    </TableRow>
-                  );
-                })
-                
-                }
-               </>
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={record.id}
+                        classes={{ selected: classes.selected }}
+                        sx={classes.tableRowSelected}
+                        selected={isItemSelected}
+                        style={{ height: 10 }}
+                      >
+                        {fields
+                          .filter((x) => x.visible)
+                          .map((field) => (
+                            <TableCell
+                              key={field.key}
+                              sx={classes.tableCell}
+                              padding={field.padding ? "checkbox" : "default"}
+                              align="left"
+                            >
+                              {field.render &&
+                              typeof field.render === "function"
+                                ? field.render(record[field.key], record, index)
+                                : record[field.key]}
+                            </TableCell>
+                          ))}
+                      </TableRow>
+                    );
+                  })
+              )}
+            </>
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[3, 5, 7, 8, 10, 25,50, 100]}
+                rowsPerPageOptions={[3, 5, 7, 8, 10, 25, 50, 100]}
                 colSpan={fields.length}
-                count={dataCount !== undefined ? dataCount: data.length}
+                count={dataCount !== undefined ? dataCount : data.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
-                  inputProps: { 'aria-label': 'rows per page' },
+                  inputProps: { "aria-label": "rows per page" },
                 }}
                 onPageChange={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
                 ActionsComponent={(e) => TablePaginationActions(e, props)}
-                
               />
             </TableRow>
           </TableFooter>
@@ -357,12 +416,12 @@ const TableGenerator = ({ fields = [], data = [], handleSortChange = () => {}, c
       </Paper>
     </Box>
   );
-}
+};
 
 TableGenerator.defaultProps = {
   selectedRecords: [],
   showSelectAll: true,
-  handleSortChange: () => {}
-}
+  handleSortChange: () => {},
+};
 
 export default withStyles({}, { withTheme: true })(TableGenerator);
