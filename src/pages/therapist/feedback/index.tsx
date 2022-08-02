@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from 'react'
+import type { NextPage } from 'next'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import InputLabel from '@mui/material/InputLabel'
-import React, { useEffect, useState } from 'react'
 import Layout from '../../../components/layout'
 import Loader from '../../../components/common/Loader'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -15,9 +16,7 @@ import QuestionTypeRadiobox from './QuestionTypeRadiobox'
 import QuestionTypeText from './QuestionTypeText'
 import Cookies from 'js-cookie';
 
-
-export function Feedback() {
-
+const Feedback: NextPage = () => {
     const [therapy, setTherapy] = useState<string>('');
     const [loader, setLoader] = useState<boolean>(false);
     const [sessionPanelExpanded, setSessionPanelExpanded] = useState<string | false>(false);
@@ -171,3 +170,5 @@ export function Feedback() {
         </>
     )
 }
+
+export default Feedback
