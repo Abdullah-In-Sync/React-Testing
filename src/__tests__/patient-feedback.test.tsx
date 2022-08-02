@@ -196,15 +196,15 @@ const mocks = [
     
   ];
   
+describe('Patient feedback list', () => {
+  test('renders patient feedback list', async () => {
+    const { container } = render(
+      <MockedProvider mocks={mocks}>
+        <Feedback />
+      </MockedProvider>
+    );
 
-test('renders patient feedback list', async () => {
-  const { container } = render(
-    <MockedProvider mocks={mocks}>
-      <Feedback />
-    </MockedProvider>
-  );
-
-  await waitFor(() => new Promise((res) => setTimeout(res, 0)));
-
-  expect(container).toMatchSnapshot();
+    await waitFor(() => new Promise((res) => setTimeout(res, 0)));
+    expect(container).toMatchSnapshot();
+  });
 });

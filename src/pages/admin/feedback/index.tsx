@@ -42,7 +42,7 @@ const crudButtons = {
 
 export const Feedback: React.FunctionComponent<any> = (props) => {
 
-    const { enqueueSnackbar } = useSnackbar();
+    const { enqueueSnackbar } = props.notistackService || useSnackbar();
 
     // COMPONENT STATE
     const [addModal, setAddModal] = useState<boolean>(false);

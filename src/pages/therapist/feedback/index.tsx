@@ -42,25 +42,33 @@ export function Feedback() {
                 }
             }
             setLoader(false);
+            getPatientSession();
         }
     });
-    const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useQuery(GET_PATIENTSESSION_DATA, {
-        variables: { pttherapyId: "f98a6095ca524338973da5f20f8d0ad3", patientId: patientData.patient_id  },
-        onCompleted: (data) => {
-            if (data!.getPatientSessionList) {
-                setFeedbackType('session');
-                setSessionNo(1);
+    
+    const getPatientSession = () => {
+        const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useQuery(GET_PATIENTSESSION_DATA, {
+            variables: { pttherapyId: therapy, patientId: patientData.patient_id  },
+            onCompleted: (data) => {
+                if (data!.getPatientSessionList) {
+                    setFeedbackType('session');
+                    setSessionNo(1);
+                }
+                setLoader(false);
+                getPatientFeedbackList();
             }
-            setLoader(false);
-        }
+    
+        });
+    }
 
-    });
-    const { loading: feedbackLoading, error: feedbackError, data: therapistFeedbackData } = useQuery(GET_THERAPISTFEEDBACKLIST_DATA, {
-        variables: { feedbackType: "session", sessionNo: 1, patientId: patientData.patient_id },
-        onCompleted: (data) => {
-            setLoader(false);
-        }
-    });
+    const getPatientFeedbackList = () => {
+        const { loading: feedbackLoading, error: feedbackError, data: therapistFeedbackData } = useQuery(GET_THERAPISTFEEDBACKLIST_DATA, {
+            variables: { feedbackType: feedbackType, sessionNo: sessionNo, patientId: patientData.patient_id },
+            onCompleted: (data) => {
+                setLoader(false);
+            }
+        });
+    }
 
     /* istanbul ignore next */
     const onTherapyChange = (event: SelectChangeEvent) => {
