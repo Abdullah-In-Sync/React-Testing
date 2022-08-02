@@ -34,6 +34,7 @@ export function Feedback() {
 
     const { loading: therapyLoading, error: therapyError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId: patientData.patient_id },
+        skip: !patientData,
         onCompleted: (data) => {
             if (data!.getPatientTherapy) {
                 const pttherapyId = data!.getPatientTherapy[0]._id;
@@ -44,8 +45,10 @@ export function Feedback() {
             setLoader(false);
         }
     });
+
     const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useQuery(GET_PATIENTSESSION_DATA, {
-        variables: { pttherapyId: "f98a6095ca524338973da5f20f8d0ad3", patientId: patientData.patient_id  },
+        variables: { pttherapyId: therapy, patientId: patientData.patient_id  },
+        skip: !therapy,
         onCompleted: (data) => {
             if (data!.getPatientSessionList) {
                 setFeedbackType('session');
@@ -55,8 +58,10 @@ export function Feedback() {
         }
 
     });
+
     const { loading: feedbackLoading, error: feedbackError, data: therapistFeedbackData } = useQuery(GET_THERAPISTFEEDBACKLIST_DATA, {
-        variables: { feedbackType: "session", sessionNo: 1, patientId: patientData.patient_id },
+        variables: { feedbackType: feedbackType, sessionNo: sessionNo, patientId: patientData.patient_id },
+        skip: !sessionNo && !feedbackType,
         onCompleted: (data) => {
             setLoader(false);
         }
