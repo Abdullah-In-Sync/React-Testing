@@ -2,7 +2,7 @@ import {
   screen,
   render,
   waitForElementToBeRemoved,
-  fireEvent
+  fireEvent,
 } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import Feedback from "../pages/therapist/feedback";
@@ -169,28 +169,46 @@ describe("Therapist feedback list", () => {
         <Feedback />
       </MockedProvider>
     );
-    await waitForElementToBeRemoved(() => screen.queryByTestId("activity-indicator"));
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
   });
 
   test("is collaped by default", async () => {
     getPatientSessionList.forEach((_v, _k) => {
       const p = _k + 1;
       const panelName = "panel" + p;
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent("Session " + p);
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute("aria-expanded", "false");
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute("aria-controls", panelName + "bh-content");
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent(
+        "Session " + p
+      );
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+        "aria-expanded",
+        "false"
+      );
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+        "aria-controls",
+        panelName + "bh-content"
+      );
     });
   });
 
   test("to have the correct number of sessions shown", async () => {
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(getPatientSessionList.length);
+    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
+      getPatientSessionList.length
+    );
   });
 
   test("can select a different therapy", async () => {
     getPatientTherapy.forEach(async (_v, _k) => {
-      fireEvent.change(screen.queryByTestId("selectTherapy"), { target: { value: _v._id } });
-      await waitForElementToBeRemoved(() => screen.queryByTestId("activity-indicator"));
-      expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(getPatientSessionList.length);
+      fireEvent.change(screen.queryByTestId("selectTherapy"), {
+        target: { value: _v._id },
+      });
+      await waitForElementToBeRemoved(() =>
+        screen.queryByTestId("activity-indicator")
+      );
+      expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
+        getPatientSessionList.length
+      );
     });
   });
 
@@ -199,9 +217,15 @@ describe("Therapist feedback list", () => {
       const p = _k + 1;
       const panelName = "panel" + p;
       fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute("aria-expanded", "true");
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+        "aria-expanded",
+        "true"
+      );
       fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute("aria-expanded", "false");
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+        "aria-expanded",
+        "false"
+      );
     });
   });
 
@@ -210,8 +234,12 @@ describe("Therapist feedback list", () => {
       const p = _k + 1;
       const panelName = "panel" + p;
       fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-content-session-button")).toHaveClass("bg-themegreen");
-      expect(screen.queryByTestId(panelName + "bh-content-quality-button")).not.toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).not.toHaveClass("bg-themegreen");
     });
   });
 
@@ -220,10 +248,18 @@ describe("Therapist feedback list", () => {
       const p = _k + 1;
       const panelName = "panel" + p;
       fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(screen.queryByTestId(panelName + "bh-content-session-button"));
-      expect(screen.queryByTestId(panelName + "bh-content-session-button")).toHaveClass("bg-themegreen");
-      expect(screen.queryByTestId(panelName + "bh-content-quality-button")).not.toHaveClass("bg-themegreen");
-      expect(screen.queryByTestId(panelName + "bh-content-session-button")).toHaveTextContent("Session Feedback");
+      fireEvent.click(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      );
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).not.toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).toHaveTextContent("Session Feedback");
     });
   });
 
@@ -232,10 +268,18 @@ describe("Therapist feedback list", () => {
       const p = _k + 1;
       const panelName = "panel" + p;
       fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(screen.queryByTestId(panelName + "bh-content-quality-button"));
-      expect(screen.queryByTestId(panelName + "bh-content-session-button")).not.toHaveClass("bg-themegreen");
-      expect(screen.queryByTestId(panelName + "bh-content-quality-button")).toHaveClass("bg-themegreen");
-      expect(screen.queryByTestId(panelName + "bh-content-quality-button")).toHaveTextContent("Quality Feedback");
+      fireEvent.click(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      );
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).not.toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).toHaveTextContent("Quality Feedback");
     });
   });
 });

@@ -125,7 +125,9 @@ const Feedback: NextPage = () => {
 
   const handleSessionPanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setSessionPanelExpanded(/* istanbul ignore else */ isExpanded ? panel : false);
+      setSessionPanelExpanded(
+        /* istanbul ignore else */ isExpanded ? panel : false
+      );
     };
 
   return (
