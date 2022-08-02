@@ -126,7 +126,7 @@ const Feedback: NextPage = () => {
 
   const handleSessionPanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setSessionPanelExpanded(isExpanded ? panel : false);
+      setSessionPanelExpanded(/* istanbul ignore else */ isExpanded ? panel : false);
     };
 
   return (
@@ -163,6 +163,7 @@ const Feedback: NextPage = () => {
                 <Select
                   labelId="lblSelectTherapy"
                   id="selectTherapy"
+                  inputProps={{ "data-testid": "selectTherapy" }}
                   value={therapy}
                   autoWidth
                   label="Select Therapy"
@@ -212,11 +213,13 @@ const Feedback: NextPage = () => {
                   onChange={handleSessionPanelChange(panelName)}
                   onClick={() => setSessionNo(p)}
                   key={v._id}
+                  data-testid="SessionPanelItem"
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon className="text-white" />}
                     aria-controls={panelName + "bh-content"}
                     id={panelName + "bh-header"}
+                    data-testid={panelName + "bh-header"}
                     sx={{
                       backgroundColor: "#6ba08e",
                       border: "none",
@@ -244,6 +247,7 @@ const Feedback: NextPage = () => {
                           }}
                           variant="contained"
                           sx={{ textTransform: "none" }}
+                          data-testid={panelName + "bh-content-session-button"}
                         >
                           Session Feedback
                         </Button>
@@ -258,6 +262,7 @@ const Feedback: NextPage = () => {
                           }}
                           variant="contained"
                           sx={{ textTransform: "none" }}
+                          data-testid={panelName + "bh-content-quality-button"}
                         >
                           Quality Feedback
                         </Button>
