@@ -16,6 +16,7 @@ const Loader = (props) => {
         top: "50%",
         transform: "translate(-50%, -50%)",
       }}
+      data-testid="activity-indicator"
     >
       <CircularProgress />
     </div>

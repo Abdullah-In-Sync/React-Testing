@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react";
+import { act, render, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import Feedback from "../pages/therapist/feedback";
 import {
@@ -153,12 +153,13 @@ describe("Therapist feedback list", () => {
   test("renders Therapist feedback list", async () => {
     localStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
     localStorage.setItem("patient_name", "test");
-    const { container } = render(
+    const { asFragment } = render(
       <MockedProvider mocks={mocks}>
         <Feedback />
       </MockedProvider>
     );
-    await waitFor(() => new Promise((res) => setTimeout(res, 0)));
-    expect(container).toMatchSnapshot();
+    await waitForElementToBeRemoved(document.querySelector('div[data-testid="activity-indicator"]')).then(() => {
+      expect(asFragment()).toMatchSnapshot();
+    })
   });
 });

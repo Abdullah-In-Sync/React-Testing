@@ -45,13 +45,14 @@ const Feedback: NextPage = () => {
     { loading: therapyLoading, data: patientTherapryData },
   ] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
     onCompleted: (data) => {
+      /* istanbul ignore else */
       if (data!.getPatientTherapy) {
         const pttherapyId = data!.getPatientTherapy[0]._id;
+        /* istanbul ignore else */
         if (pttherapyId) {
           setTherapy(pttherapyId);
         }
       }
-      setLoader(false);
     },
   });
 
@@ -60,24 +61,21 @@ const Feedback: NextPage = () => {
     { loading: sessionLoading, data: patientSessionData },
   ] = useLazyQuery(GET_PATIENTSESSION_DATA, {
     onCompleted: (data) => {
+      /* istanbul ignore else */
       if (data!.getPatientSessionList) {
         setFeedbackType("session");
         setSessionNo(1);
       }
-      setLoader(false);
     },
   });
 
   const [
     getTherapistFeedbackListData,
     { loading: feedbackLoading, data: therapistFeedbackData },
-  ] = useLazyQuery(GET_THERAPISTFEEDBACKLIST_DATA, {
-    onCompleted: (data) => {
-      setLoader(false);
-    },
-  });
+  ] = useLazyQuery(GET_THERAPISTFEEDBACKLIST_DATA);
 
   useEffect(() => {
+    setLoader(true);
     setPatientData({
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       patient_name: localStorage.getItem("patient_name"),
@@ -85,16 +83,19 @@ const Feedback: NextPage = () => {
   }, []);
 
   useEffect(() => {
+    setLoader(true);
     getPatientTherapyData({ variables: { patientId: patientData.patient_id } });
   }, [patientData]);
 
   useEffect(() => {
+    setLoader(true);
     getPatientSessionData({
       variables: { pttherapyId: therapy, patientId: patientData.patient_id },
     });
   }, [therapy]);
 
   useEffect(() => {
+    setLoader(true);
     getTherapistFeedbackListData({
       variables: {
         feedbackType: feedbackType,
@@ -104,9 +105,14 @@ const Feedback: NextPage = () => {
     });
   }, [sessionNo, feedbackType]);
 
+  useEffect(() => {
+    if (!therapyLoading && !sessionLoading && !feedbackLoading) {
+      setLoader(false);
+    }
+  }, [patientData, therapy, sessionNo, feedbackType]);
+
   /* istanbul ignore next */
   const onTherapyChange = (event: SelectChangeEvent) => {
-    setLoader(true);
     setTherapy(event.target.value);
   };
 
