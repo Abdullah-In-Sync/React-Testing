@@ -106,17 +106,24 @@ const Feedback: NextPage = () => {
   }, [sessionNo, feedbackType]);
 
   useEffect(() => {
-    if (!therapyLoading && !sessionLoading && !feedbackLoading) {
+    /* istanbul ignore else */
+    if (
+      !therapyLoading &&
+      !feedbackLoading &&
+      !sessionLoading &&
+      patientData &&
+      therapy &&
+      sessionNo &&
+      feedbackType
+    ) {
       setLoader(false);
     }
   }, [patientData, therapy, sessionNo, feedbackType]);
 
-  /* istanbul ignore next */
   const onTherapyChange = (event: SelectChangeEvent) => {
     setTherapy(event.target.value);
   };
 
-  /* istanbul ignore next */
   const handleSessionPanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setSessionPanelExpanded(isExpanded ? panel : false);
