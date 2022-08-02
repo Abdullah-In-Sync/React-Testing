@@ -163,8 +163,8 @@ const buildMocks = (): {
     },
   });
   // fetch patient therapy query
-  const patientTherapy = getPatientTherapy(_patient_id);
-  _mockDataMap["patientTherapy"] = patientTherapy;
+  const _patientTherapy = getPatientTherapy(_patient_id);
+  _mockDataMap["patientTherapy"] = _patientTherapy;
   _mocks.push({
     request: {
       query: GET_PATIENTTHERAPY_DATA,
@@ -174,15 +174,15 @@ const buildMocks = (): {
     },
     result: {
       data: {
-        getPatientTherapy: patientTherapy,
+        getPatientTherapy: _patientTherapy,
       },
     },
   });
   // build mocks for each "PatientTherapy" record
-  patientTherapy.forEach((_pt: Record<string, any>) => {
+  _patientTherapy.forEach((_pt: Record<string, any>) => {
     // fetch therapist feedback list query
-    const therapistFeedbackList = getTherapistFeedbackList(_pt);
-    _mockDataMap["therapistFeedbackList:" + _pt._id] = therapistFeedbackList;
+    const _therapistFeedbackList = getTherapistFeedbackList(_pt);
+    _mockDataMap["therapistFeedbackList:" + _pt._id] = _therapistFeedbackList;
     _mocks.push({
       request: {
         query: GET_THERAPISTFEEDBACKLIST_DATA,
@@ -194,13 +194,13 @@ const buildMocks = (): {
       },
       result: {
         data: {
-          getTherapistFeedbackList: therapistFeedbackList,
+          getTherapistFeedbackList: _therapistFeedbackList,
         },
       },
     });
     // fetch patient session query
-    const patientSessionList = getPatientSessionList(_pt);
-    _mockDataMap["patientSessionList:" + _pt._id] = patientSessionList;
+    const _patientSessionList = getPatientSessionList(_pt);
+    _mockDataMap["patientSessionList:" + _pt._id] = _patientSessionList;
     _mocks.push({
       request: {
         query: GET_PATIENTSESSION_DATA,
@@ -211,7 +211,7 @@ const buildMocks = (): {
       },
       result: {
         data: {
-          getPatientSessionList: patientSessionList,
+          getPatientSessionList: _patientSessionList,
         },
       },
     });
