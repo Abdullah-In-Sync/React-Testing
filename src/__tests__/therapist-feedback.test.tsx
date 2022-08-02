@@ -1,7 +1,4 @@
-import {
-  render,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, waitForElementToBeRemoved } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
 import Feedback from "../pages/therapist/feedback";
 import {

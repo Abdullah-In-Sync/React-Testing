@@ -60,19 +60,14 @@ const FilterSelect = ({
         renderValue={() => ""}
       >
         {!multiple ? null : (
-          <MenuItem
-            value={"Select All"}
-          >
+          <MenuItem value={"Select All"}>
             <Checkbox color="primary" checked={selectedAll} />
             <ListItemText primary={"Select All"} />
           </MenuItem>
         )}
         {fields.map((name) => {
           return (
-            <MenuItem
-              key={name}
-              value={name}
-            >
+            <MenuItem key={name} value={name}>
               <Checkbox
                 color="primary"
                 checked={

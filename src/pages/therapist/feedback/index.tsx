@@ -176,7 +176,7 @@ const Feedback: NextPage = () => {
                   }}
                 >
                   {patientTherapryData?.getPatientTherapy != null &&
-                    patientTherapryData?.getPatientTherapy.map((v:any) => {
+                    patientTherapryData?.getPatientTherapy.map((v: any) => {
                       return (
                         <MenuItem key={"therapy" + v._id} value={v._id}>
                           {v.therapy_detail.therapy_name}/
