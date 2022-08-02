@@ -13,20 +13,6 @@ import {
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
 
-import { mount } from "enzyme";
-
-function NotistackServiceMock() {
-  return {
-    enqueueSnackbar: () => jest.fn(),
-    closeSnackbar: () => jest.fn(),
-  };
-}
-
-let notistackServiceMock;
-beforeEach(() => {
-  notistackServiceMock = NotistackServiceMock();
-});
-
 const mocks = [
   {
     request: {

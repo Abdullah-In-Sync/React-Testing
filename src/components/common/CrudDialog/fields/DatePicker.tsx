@@ -1,4 +1,4 @@
-const DatePicker = ({ fieldValues = {}, field = {}, onChange = () => {} }) => {
+const DatePicker = () => {
   return (
     <>
       <div className="inputDatePicker">

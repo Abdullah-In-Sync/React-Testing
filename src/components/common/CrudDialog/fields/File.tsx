@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-// import { FileUploadButton } from "../../Buttons";
 
 const File = ({ field, onChange }) => {
   const [fileName, setFileName] = useState("");
+  /* @typescript-eslint/no-unused-vars */
   const handleChange = async (e) => {
     setFileName(e[0].name);
     onChange(field, e[0]);
@@ -14,16 +14,7 @@ const File = ({ field, onChange }) => {
       className={field.align ? "mb-3" : "mb-3 d-flex justify-content-end"}
     >
       <div style={{ width: "100%" }}>
-        {/* <FileUploadButton
-          key={field.key}
-          value={field.key}
-          onChange={handleChange}
-          uploaded={fileName !== ""}
-          size="medium"
-          label={field.formLabel || field.label || "UPLOAD FILE"}
-          style={{ whiteSpace: 'nowrap' }}
-          className="mr-2"
-        /> */}
+        {}
         <label style={{ fontSize: 13, display: "block", color: "#858585" }}>
           {field.hint}
         </label>

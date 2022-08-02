@@ -45,7 +45,6 @@ describe("when rendered with a `visible` prop", () => {
         loader={false}
         data={[]}
         currentPage={1}
-        onPageChange={(page = 0, direction = "next") => {}}
         backendPagination={true}
         rowOnePage={10}
       />

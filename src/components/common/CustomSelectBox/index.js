@@ -57,7 +57,7 @@ export const FilterSelect = ({
         )}
         input={<SelectInput />}
         value={selectedFields}
-        renderValue={(selected) => ""}
+        renderValue={() => ""}
       >
         {!multiple ? null : (
           <MenuItem
@@ -166,7 +166,7 @@ const BootstrapInput = withStyles((theme) => ({
 const CustomSelectBox = ({
   value = null,
   values = [],
-  onChange = () => {},
+  onChange = {},
   style = {},
   disabled = false,
 }) => {
