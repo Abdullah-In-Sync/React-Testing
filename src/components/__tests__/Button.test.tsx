@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { AddButton } from "../common/Buttons";
 
 describe("when rendered with a `size` prop", () => {

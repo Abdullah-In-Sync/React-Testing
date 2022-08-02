@@ -1,9 +1,7 @@
 import { useState } from "react";
 import {
   TextField,
-  Icon,
   InputAdornment,
-  IconButton,
   Tooltip,
 } from "@mui/material";
 import { FileCopy, Check } from "@mui/icons-material";

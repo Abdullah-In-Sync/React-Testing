@@ -25,7 +25,6 @@ import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
 import { GET_THERAPISTFEEDBACKLIST_DATA } from "../../../graphql/query";
 import QuestionTypeRadiobox from "./QuestionTypeRadiobox";
 import QuestionTypeText from "./QuestionTypeText";
-import Cookies from "js-cookie";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
@@ -177,7 +176,7 @@ const Feedback: NextPage = () => {
                   }}
                 >
                   {patientTherapryData?.getPatientTherapy != null &&
-                    patientTherapryData?.getPatientTherapy.map((v, i) => {
+                    patientTherapryData?.getPatientTherapy.map((v:any) => {
                       return (
                         <MenuItem key={"therapy" + v._id} value={v._id}>
                           {v.therapy_detail.therapy_name}/
