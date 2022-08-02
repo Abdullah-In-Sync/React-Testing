@@ -27,7 +27,7 @@ export function Feedback() {
 
     useEffect(() => {
         setPatientData({
-            patient_id: localStorage.getItem("patient_id"),
+            patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
             patient_name: localStorage.getItem("patient_name")
         })
     }, [])
@@ -45,28 +45,30 @@ export function Feedback() {
         }
     });
     const { loading: sessionLoading, error: sessionError, data: patientSessionData } = useQuery(GET_PATIENTSESSION_DATA, {
-        variables: { pttherapyId: therapy, patientId: patientData.patient_id },
+        variables: { pttherapyId: "f98a6095ca524338973da5f20f8d0ad3", patientId: patientData.patient_id  },
         onCompleted: (data) => {
             if (data!.getPatientSessionList) {
                 setFeedbackType('session');
-                setSessionNo(data!.getPatientSessionList[0].ptsession_no);
+                setSessionNo(1);
             }
             setLoader(false);
         }
 
     });
     const { loading: feedbackLoading, error: feedbackError, data: therapistFeedbackData } = useQuery(GET_THERAPISTFEEDBACKLIST_DATA, {
-        variables: { feedbackType: feedbackType, sessionNo: sessionNo, patientId: patientData.patient_id },
+        variables: { feedbackType: "session", sessionNo: 1, patientId: patientData.patient_id },
         onCompleted: (data) => {
             setLoader(false);
         }
     });
 
+    /* istanbul ignore next */
     const onTherapyChange = (event: SelectChangeEvent) => {
         setLoader(true);
         setTherapy(event.target.value);
     };
 
+    /* istanbul ignore next */
     const handleSessionPanelChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
         setSessionPanelExpanded(isExpanded ? panel : false);
     };

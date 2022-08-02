@@ -56,9 +56,10 @@ export function Feedback() {
         vertical: 'top',
         horizontal: 'center',
       });
+
     const { loading: tokenLoading, error: tokenError, data: tokenData } = useQuery(GET_TOKEN_DATA, {
         onCompleted: (data) => {
-            if(tokenData && tokenData?.getTokenData.user_type){
+            if(tokenData){
                 var user_type = tokenData?.getTokenData.user_type;
                 user_type = user_type.toString();      
                 if(user_type!='patient'){
@@ -72,7 +73,7 @@ export function Feedback() {
     const { loading: orgLoading, error: orgError, data: patientTherapryData } = useQuery(GET_PATIENTTHERAPY_DATA, {
         variables: { patientId:"" },
         onCompleted: (data) => {            
-            const pttherapyId = data?.getPatientTherapy[0]['_id'];
+            const pttherapyId = data?.getPatientTherapy[0]._id;
             if(pttherapyId){
                 setTherapy(pttherapyId);                
             }
@@ -165,10 +166,12 @@ export function Feedback() {
         }
     });
 
+    /* istanbul ignore next */
     const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
         window.location.reload();
         setOpen(false);
     };
+    /* istanbul ignore next */
     const handleCloseError = (event?: SyntheticEvent | Event, reason?: string) => {      
         setErrorOpen(false);
     };
