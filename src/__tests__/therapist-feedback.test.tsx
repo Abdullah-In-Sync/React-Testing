@@ -1,6 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
-import { Feedback } from "../pages/therapist/feedback";
+import Feedback from "../pages/therapist/feedback";
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_TOKEN_DATA,
