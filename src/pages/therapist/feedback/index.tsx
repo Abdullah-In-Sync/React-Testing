@@ -73,12 +73,19 @@ const Feedback: NextPage = () => {
     { loading: feedbackLoading, data: therapistFeedbackData },
   ] = useLazyQuery(GET_THERAPISTFEEDBACKLIST_DATA);
 
-  useEffect(() => {
-    setLoader(true);
+  const setDefaultStateExcludingLoader = () => {
+    setFeedbackType(null);
+    setSessionNo(null);
     setPatientData({
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       patient_name: localStorage.getItem("patient_name"),
     });
+    setSessionPanelExpanded(false);
+  };
+
+  useEffect(() => {
+    setLoader(true);
+    setDefaultStateExcludingLoader();
   }, []);
 
   useEffect(() => {
@@ -120,6 +127,8 @@ const Feedback: NextPage = () => {
   }, [patientData, therapy, sessionNo, feedbackType]);
 
   const onTherapyChange = (event: SelectChangeEvent) => {
+    setLoader(true);
+    setDefaultStateExcludingLoader();
     setTherapy(event.target.value);
   };
 
