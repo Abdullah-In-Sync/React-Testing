@@ -1,7 +1,7 @@
 import * as React from "react";
 import Layout from "../../components/layout";
 
-const Dashboard: React.FunctionComponent<any> = (props) => {
+const Dashboard: React.FunctionComponent<any> = () => {
   return (
     <>
       <Layout>{<h1 aria-label="Dashboard">Dashboard</h1>}</Layout>

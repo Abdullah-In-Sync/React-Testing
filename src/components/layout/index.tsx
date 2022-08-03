@@ -1,13 +1,8 @@
 import * as React from "react";
-import dynamic from "next/dynamic";
 import Box from "@mui/material/Box";
-// import CssBaseline from '@mui/material/CssBaseline';
 
 import NavBar from "../navbar";
 import SideBar from "../sidebar";
-// const SideBar = dynamic(() => import('../sidebar'), {
-//     ssr: false,
-//   });
 import Footer from "../footer";
 
 const contentStyle = {
