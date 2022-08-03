@@ -77,7 +77,7 @@ const Feedback: NextPage = () => {
     setFeedbackType(null);
     setSessionNo(null);
     setPatientData({
-      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      patient_id: localStorage.getItem("patient_id"),
       patient_name: localStorage.getItem("patient_name"),
     });
     setSessionPanelExpanded(false);
@@ -104,9 +104,9 @@ const Feedback: NextPage = () => {
     setLoader(true);
     getTherapistFeedbackListData({
       variables: {
-        feedbackType: feedbackType,
-        sessionNo: sessionNo,
         patientId: patientData.patient_id,
+        sessionNo: sessionNo,
+        feedbackType: feedbackType,
       },
     });
   }, [sessionNo, feedbackType]);
@@ -120,11 +120,22 @@ const Feedback: NextPage = () => {
       patientData &&
       therapy &&
       sessionNo &&
-      feedbackType
+      feedbackType &&
+      patientTherapryData &&
+      patientSessionData &&
+      therapistFeedbackData
     ) {
       setLoader(false);
     }
-  }, [patientData, therapy, sessionNo, feedbackType]);
+  }, [
+    patientData,
+    therapy,
+    sessionNo,
+    feedbackType,
+    patientTherapryData,
+    patientSessionData,
+    therapistFeedbackData,
+  ]);
 
   const onTherapyChange = (event: SelectChangeEvent) => {
     setLoader(true);
@@ -308,7 +319,11 @@ const Feedback: NextPage = () => {
                       therapistFeedbackData.getTherapistFeedbackList &&
                       therapistFeedbackData.getTherapistFeedbackList.length ==
                         0 && (
-                        <Typography gutterBottom component="div">
+                        <Typography
+                          gutterBottom
+                          component="div"
+                          data-testid="no-data-found-therapist-feedback-list"
+                        >
                           No Data Found
                         </Typography>
                       )}
