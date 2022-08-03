@@ -194,7 +194,7 @@ const buildMocks = (): {
     result: {
       data: [
         {
-          _id: _first_patient_id, // use first "PatientTherapy" record
+          _id: _first_patient_id, // use first "Patient" record
           user_type: ["therapist"],
           parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
           perm_ids: "9,10,14,21,191,65,66",
@@ -205,7 +205,7 @@ const buildMocks = (): {
       ],
     },
   });
-  // fetch patient therapy query
+  // setup and store "Patients" with "MockOptions"
   const _patients: GetPatientTherapyType[] = [];
   _patients.push(
     getPatientTherapy(_first_patient_id, {
@@ -222,6 +222,7 @@ const buildMocks = (): {
   _mockDataMap["patients"] = _patients;
   // build mocks for each "Patient" record
   _patients.forEach((_p: GetPatientTherapyType) => {
+    // fetch patient therapy query
     _mocks.push({
       request: {
         query: GET_PATIENTTHERAPY_DATA,
