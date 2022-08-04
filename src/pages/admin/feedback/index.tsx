@@ -1,8 +1,9 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import type { NextPage } from "next";
 import _ from "lodash";
 import { useSnackbar } from "notistack";
+import moment from "moment";
 
 // GRAPHQL
 import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
@@ -18,26 +19,20 @@ import {
 } from "../../../graphql/mutation";
 
 // MUI COMPONENTS
-import Box from "@mui/material/Box";
 import Layout from "../../../components/layout";
 const TableGenerator = dynamic(
   import("../../../components/common/TableGenerator"),
   { ssr: false }
 );
 import ContentHeader from "../../../components/common/ContentHeader";
-import { IconButton, Chip, TextField, Autocomplete } from "@mui/material";
+import DynamicForm from "./components/DynamicForm";
+import { IconButton, Tooltip, Box } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CancelIcon from "@mui/icons-material/Cancel";
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
+import { makeStyles } from "@mui/styles";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -48,8 +43,8 @@ const crudButtons = {
   flexDirection: "row-reverse",
 };
 
-export const Feedback: React.FunctionComponent<any> = (props) => {
-  const { enqueueSnackbar } = props.notistackService || useSnackbar();
+const Feedback: NextPage = () =>{
+  const { enqueueSnackbar } = useSnackbar();
 
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
@@ -64,10 +59,14 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
   const [selectedUserData, setSelectedUserData] = useState<any>([]);
 
   // TABLE PROPS
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [dataCount, setDataCount] = useState(0);
-  const [page, setPage] = useState(0);
-  const [loader, setLoader] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [dataCount, setDataCount] = useState<number>(0);
+  const [page, setPage] = useState<number>(0);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [nextPage, setNextPage] = useState<string>(null);
+  const [previousPage, setPreviousPage] = useState<any>(null);
+  const [firstPage, setFirstPage] = useState<any>(null);
+  const [lastPage, setLastPage] = useState<any>(null);
 
   // GRAPHQL
   const [addFeedback, { data, loading, error }] = useMutation(ADD_FEEDBACK);
@@ -99,15 +98,24 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
     { loading: updateDataLoading, error: updateDataError, data: updateData },
   ] = useMutation(UPDATE_FEEDBACK);
 
+  // if (dataListError) {
+  //     console.log("dataListError",dataListError)
+  //     handleServerErrors(
+  //         dataListError?.message,
+  //         enqueueSnackbar,
+  //         "Could not get data. Try again."
+  //     );
+  // }
+
   useEffect(() => {
     // do some checking here to ensure data exist
     setLoader(true);
-    if (dataListData) {
+    if (dataListData || dataListError) {
       // mutate data if you need to
       setDataList(dataListData?.getAdminFeedbackList);
       setLoader(false);
     }
-  }, [dataListData]);
+  }, [dataListData, dataListError]);
 
   useEffect(() => {
     const session = [];
@@ -129,13 +137,27 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
       key: "organization_name",
       columnName: "Organization",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) =>
+        val.length > 50 ? (
+          <Tooltip title={val} arrow>
+            <p>{val.substring(0, 50) + "..."}</p>
+          </Tooltip>
+        ) : (
+          val ?? "---"
+        ),
     },
     {
       key: "question",
       columnName: "Questions",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) =>
+        val.length > 50 ? (
+          <Tooltip title={val} arrow>
+            <p>{val.substring(0, 50) + "..."}</p>
+          </Tooltip>
+        ) : (
+          val ?? "---"
+        ),
     },
     {
       key: "feedback_type",
@@ -147,7 +169,7 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
       key: "created_date",
       columnName: "Created on",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) => moment(val).format("DD MMM YYYY hh:mm:ss A") ?? "---",
     },
     {
       key: "actions",
@@ -155,16 +177,11 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton
-            size="small"
-            variant="contained"
-            onClick={() => handleView(value._id)}
-          >
+          <IconButton size="small" onClick={() => handleView(value._id)}>
             <VisibilityIcon />
           </IconButton>
           <IconButton
             size="small"
-            variant="contained"
             onClick={() => {
               handleViewEdit(value._id);
               setSelectedId(value._id);
@@ -174,7 +191,6 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
           </IconButton>
           <IconButton
             size="small"
-            variant="contained"
             // onClick={() => handleDelete(value._id)}
             onClick={() => {
               setDeletConfirmationModal(true), setSelectedId(value._id);
@@ -197,6 +213,7 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
         freeSolo: false,
         show: true,
         required: true,
+        disabled: viewModal ? true : false,
         type: "autocomplete",
         options:
           orgData?.getOrganizationData?.length > 0
@@ -212,10 +229,11 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
         key: "session_no",
         label: "Session Name",
         visible: true,
-        freeSolo: false,
         show: true,
         required: true,
-        type: "autocomplete",
+        disabled: viewModal ? true : false,
+        type: addModal ? "select" : "autocomplete",
+        multiple: true,
         options: sessionList.length > 0 ? sessionList : [],
       },
       {
@@ -224,6 +242,7 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
         visible: true,
         freeSolo: false,
         show: true,
+        disabled: viewModal || editModal ? true : false,
         required: true,
         type: "autocomplete",
         options: [
@@ -256,7 +275,6 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
       const data = formValues.map((x) => ({
         ...x,
         ...val,
-        session_no: [x.session_no],
       }));
 
       const dataJson = JSON.stringify(data);
@@ -274,23 +292,29 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
     setFormValues(val);
   };
 
-  const handleEdit = (val) => {
+  const handleEdit = async (val) => {
     const data = formValues.map((x) => ({
       question: x.question,
       answer_type: x.answer_type,
+      answer_options: JSON.stringify(x.answer_options),
       ...val,
-    })); // ,answer_options: x.answer_options
+    }));
 
-    updateFeedback({
-      variables: {
-        feedbackId: selectedId,
-        update: data[0],
-      },
-      onCompleted: () => {
-        refetch();
-        setEditModal(false);
-      },
-    });
+    try {
+      await updateFeedback({
+        variables: {
+          feedbackId: selectedId,
+          update: data[0],
+        },
+        onCompleted: () => {
+          refetch();
+          setEditModal(false);
+        },
+      });
+      enqueueSnackbar("Updated data successfully");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleViewEdit = (id) => {
@@ -299,7 +323,7 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
     setEditModal(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     deleteFeedback({
       variables: {
         feedbackId: id,
@@ -310,12 +334,29 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
         refetch();
       },
     });
+
+    // try {
+    //     const { data: da } = await updateFeedback({
+    //         variables: {
+    //             feedbackId: selectedId,
+    //             update: data[0]
+    //         },
+    //         onCompleted: () => { refetch(); setEditModal(false); },
+    //     });
+    //     enqueueSnackbar("Updated data successfully");
+    // }
+    // catch (e) {
+    //     console.log(e)
+    // }
   };
 
   const handleView = (id) => {
     const val = dataList.filter((x) => x._id === id);
     setSelectedUserData(val);
     setViewModal(true);
+  };
+  const changePage = (url: any) => {
+    console.log("CHANGE PAGE", url);
   };
 
   return (
@@ -331,10 +372,17 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
         </Box>
         <Box>
           <TableGenerator
+            //   searchQuery={query}
+            //   initialSort={"id"}
+            //   searchColumnsFilter={true}
             fields={fields}
             loader={loader}
             data={dataListData?.getAdminFeedbackList}
             currentPage={page}
+            //   handleSortChange={(ordering) => {
+            //     setOrdering(ordering);
+            //     getDeviceType(ordering);
+            //   }}
             onPageChange={(page, direction) => {
               setPage(page);
               if (direction === "next") {
@@ -352,18 +400,20 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
               // getDeviceType(null, rows);
               setRowsPerPage(rows);
             }}
+            dataCount={dataListData?.getAdminFeedbackList.length}
+            //   onChangePage={(page) => console.log(page)}
+            //   selectedRecords={modulesSelected}
             rowOnePage={10}
+            //   onChangeSelected={(modulesSelected) =>
+            //     setModulesSelected(modulesSelected)
+            //   }
           />
 
           <CrudDialog
             title="Create Questionnaire"
             okText="Save"
             fields={dialogFields}
-            // submitButtonDisabled={isMutating}
             description="Please fill in the details below."
-            onFieldChange={(_, images) => {
-              //   handlUploadImages(images);
-            }}
             onsubmit={(values, hasErrors) => {
               handleAdd(values);
             }}
@@ -385,6 +435,10 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
             okText="Update"
             fields={dialogFields}
             values={selectedUserData[0]}
+            // onFieldChange={(_, images) => {
+            //     debugger
+            //     //   handlUploadImages(images);
+            // }}
             onsubmit={(values, hasErrors) => {
               handleEdit(values);
             }}
@@ -424,166 +478,4 @@ export const Feedback: React.FunctionComponent<any> = (props) => {
   );
 };
 
-// DYNAMIC FORM
-const DynamicForm = ({
-  callBackFormValues = () => {},
-  values = {},
-  buttonText = false,
-  type,
-}) => {
-  // debugger
-  const [formValues, setFormValues] = useState<any>([]);
-
-  useEffect(() => {
-    if (values && Object.keys(values).length > 0) {
-      setFormValues([
-        {
-          question: values.question,
-          answer_type: values.answer_type,
-          answer_options: values.answer_options,
-        },
-      ]);
-    }
-  }, []);
-  callBackFormValues(formValues);
-
-  const addFormFields = () => {
-    setFormValues([
-      ...formValues,
-      { question: "", answer_type: "text", answer_options: "" },
-    ]);
-  };
-
-  const handleChange = (i, e, chip_val) => {
-    if (e.target.name == "answer_type" && e.target.value == "text") {
-      const newFormValues = [...formValues];
-      newFormValues[i]["answer_options"] = "";
-      setFormValues(newFormValues);
-    }
-
-    if (e.target.name == "answer_options") {
-      const newFormValues = [...formValues];
-      newFormValues[i][e.target.name] = chip_val;
-      setFormValues(newFormValues);
-    } else {
-      const newFormValues = [...formValues];
-      newFormValues[i][e.target.name] = e.target.value;
-      setFormValues(newFormValues);
-    }
-  };
-
-  const removeFormFields = (i) => {
-    const newData = formValues.filter((val, index) => {
-      return i != index;
-    });
-    setFormValues(newData);
-  };
-  // console.log("formValues",formValues)
-  return (
-    <form>
-      {buttonText && (
-        <Button
-          onClick={() => addFormFields()}
-          sx={{ marginBottom: 1 }}
-          variant="outlined"
-        >
-          {buttonText}
-        </Button>
-      )}
-      {formValues?.map((element, index) => (
-        <div className="form-inline" key={index}>
-          <Paper
-            elevation={3}
-            sx={{ padding: "15px 11px", marginBottom: "15px" }}
-          >
-            {Object.keys(values).length === 0 && (
-              <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <IconButton
-                  size="small"
-                  variant="contained"
-                  onClick={() => removeFormFields(index)}
-                  sx={{
-                    position: "relative",
-                    left: "14px",
-                    top: "-7px",
-                  }}
-                >
-                  <CancelIcon sx={{ color: "error.main" }} />
-                </IconButton>
-              </Box>
-            )}
-            <TextField
-              value={element.question}
-              onChange={(e) => handleChange(index, e)}
-              name="question"
-              disabled={type === "view" ? true : false}
-              label="Type your Question"
-              multiline
-              rows={4}
-              sx={{ width: "100%" }}
-              m={2}
-            />
-
-            <FormControl sx={{ mt: 2, mb: 2, minWidth: 220 }} size="small">
-              <InputLabel id="answer_type">Choose answer type</InputLabel>
-              <Select
-                labelId="answer_type"
-                name="answer_type"
-                disabled={type === "view" ? true : false}
-                value={element.answer_type || ""}
-                label="Choose answer type"
-                onChange={(e) => handleChange(index, e)}
-              >
-                {/* <MenuItem value="Checkbox">Checkbox</MenuItem> */}
-                <MenuItem value="text">Text</MenuItem>
-                {/* <MenuItem value="Radio button">Radio button</MenuItem> */}
-                <MenuItem value="list">List</MenuItem>
-              </Select>
-            </FormControl>
-
-            {element.answer_type === "list" && (
-              <Autocomplete
-                multiple
-                id="tags-filled"
-                name="answer_options"
-                options={[]}
-                disabled={type === "view" ? true : false}
-                defaultValue={element.answer_options || []}
-                onChange={(_, val) => {
-                  handleChange(index, _, val);
-                }}
-                freeSolo
-                renderTags={(value: string[], getTagProps) =>
-                  value.map((option: string, index: number) => {
-                    return (
-                      <Chip
-                        key={index}
-                        variant="outlined"
-                        label={option}
-                        {...getTagProps({ index })}
-                      />
-                    );
-                  })
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    label="Question Options"
-                    placeholder="Add a option by pressing enter after write it "
-                    name="answer_options"
-                  />
-                )}
-              />
-            )}
-          </Paper>
-        </div>
-      ))}
-      <div className="button-section">
-        {/* <button className="button add" type="button" onClick={() => addFormFields()}>Add</button> */}
-
-        {/* <button className="button submit" type="submit">Submit</button> */}
-      </div>
-    </form>
-  );
-};
+export default Feedback;

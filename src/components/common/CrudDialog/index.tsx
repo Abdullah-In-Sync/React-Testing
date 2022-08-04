@@ -30,7 +30,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export interface DialogTitleProps {
   id: string;
   children?: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
@@ -65,6 +65,34 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
+interface CrudDialogProps {
+  [x: string]: any;
+  type?: string; // 👈️ marked optional
+  values?: any;
+  buttonText?: any;
+  callBackFormValues?: (params: any) => any;
+  onRef?: (params: any) => any;
+  open: boolean;
+  fields?: any;
+  onClose?: () => void;
+  submitButtonDisabled?: boolean;
+  onFieldChange?: (params: any) => any;
+  title: string;
+  onsubmit?: (values: any, hasErrors: any) => void;
+  okText?: string;
+  cancelText?: string;
+  info?: boolean;
+  mode?: string;
+  closable?: boolean;
+  extraButtonLoading?: boolean;
+  hide?: boolean;
+  description?: string;
+  extraButtonText?: boolean;
+  onExtraButton?: (params: any) => any;
+  dynamicForm?: any;
+  viewData?: any;
+}
+
 const CrudDialog = ({
   onRef = () => {},
   open = false,
@@ -87,7 +115,7 @@ const CrudDialog = ({
   onExtraButton = () => {},
   dynamicForm,
   viewData = false,
-}) => {
+}: CrudDialogProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
   //   const parseValues=(props)=> {
   //     const values = {};
@@ -150,9 +178,14 @@ const CrudDialog = ({
         <BootstrapDialogTitle id="customized-dialog-title">
           {title}
         </BootstrapDialogTitle>
+
         <Typography
-          variant="h5"
-          sx={{ margin: "45px", textAlign: "center", fontWeight: 200 }}
+          variant={okText == "Delete" ? "h5" : "body2"}
+          sx={
+            okText == "Delete"
+              ? { margin: "45px", textAlign: "center", fontWeight: 200 }
+              : { margin: "15px" }
+          }
         >
           {description}
         </Typography>
