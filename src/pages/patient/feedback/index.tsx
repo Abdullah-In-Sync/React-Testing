@@ -1,10 +1,7 @@
-/* eslint-disable react/jsx-key */
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useState, useEffect, SyntheticEvent, forwardRef } from "react";
-import _ from "lodash";
-
+import type { NextPage } from "next";
 // GRAPHQL
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_PATIENTFEEDBACKLIST_DATA,
@@ -16,117 +13,170 @@ import { POST_PATIENT_FEEDBACK } from "../../../graphql/mutation";
 // MUI COMPONENTS
 import Box from "@mui/material/Box";
 import Layout from "../../../components/layout";
-
+import Loader from "../../../components/common/Loader";
 import ContentHeader from "../../../components/common/ContentHeader";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import Radio from "@mui/material/Radio";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import RadioGroup from "@mui/material/RadioGroup";
-
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import Divider from "@mui/material/Divider";
-import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import CheckIcon from "@mui/icons-material/Check";
 import CircularProgress from "@mui/material/CircularProgress";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+  InputLabel,
+  Radio,
+  FormControlLabel,
+  RadioGroup,
+  TextareaAutosize,
+  Snackbar,
+} from "@mui/material";
 
-export function Feedback() {
-  // COMPONENT STATE
-  const [expanded, setExpanded] = useState<string | false>(false);
-  const [therapy, setTherapy] = useState("");
-  const [feedbackType, setfeedbackType] = useState("session");
+const Feedback: NextPage = () => {
+  const [therapy, setTherapy] = useState<string>("");
+  const [feedbackType, setFeedbackType] = useState<string>("session");
   const [formValues, setFormValues] = useState([]);
-  const [sessionNo, setsessionNo] = useState(1);
-  const [loader, setLoader] = useState(true);
-  const [feedbackLoader, setFeedbackLoader] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [erroropen, setErrorOpen] = useState(false);
-  const [btndiabled, setBtndiabled] = useState(false);
-  const [therapistId, settherapistId] = useState(
-    "686802e5123a482681a680a673ef7f53"
-  );
-  const [state, setState] = useState({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-  });
+  const [sessionNo, setSessionNo] = useState(1);
+  const [loader, setLoader] = useState<boolean>(true);
+  const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
+    string | false
+  >(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [erroropen, setErrorOpen] = useState<boolean>(false);
+  const [btndiabled, setBtndiabled] = useState<boolean>(false);
+  const [therapistId, settherapistId] = useState<string>("");
 
-  const {
-    loading: tokenLoading,
-    error: tokenError,
-    data: tokenData,
-  } = useQuery(GET_TOKEN_DATA, {
+  const [gettokenData, { loading: tokenLoading, data: tokenData }] =
+    useLazyQuery(GET_TOKEN_DATA, {
+      onCompleted: (data) => {
+        /* istanbul ignore else */
+        if (data.getTokenData) {
+          let user_type = data!.getTokenData.user_type;
+          user_type = user_type.replace('[',"");
+          user_type = user_type.replace(']',"");  
+          if (user_type != "patient") {
+           window.location.href = "https://" + window.location.hostname + "/account";
+          }
+          settherapistId(data!.getTokenData.patient_data.therapist_id);
+        }
+      },
+    });
+
+  const [
+    getPatientTherapyData,
+    { loading: therapyLoading, data: patientTherapryData },
+  ] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
     onCompleted: (data) => {
-      if (tokenData) {
-        let user_type = tokenData?.getTokenData.user_type;
-        user_type = user_type.toString();
-        if (user_type != "patient") {
-          window.location.href =
-            "https://" + window.location.hostname + "/account";
+      /* istanbul ignore else */
+      if (data!.getPatientTherapy) {
+        const pttherapyId = data!.getPatientTherapy[0]._id;
+        /* istanbul ignore else */
+        if (pttherapyId) {
+          setTherapy(pttherapyId);
         }
       }
-      setLoader(false);
     },
   });
 
-  const {
-    loading: orgLoading,
-    error: orgError,
-    data: patientTherapryData,
-  } = useQuery(GET_PATIENTTHERAPY_DATA, {
-    variables: { patientId: "" },
+  const [
+    getPatientSessionData,
+    { loading: sessionLoading, data: patientSessionData },
+  ] = useLazyQuery(GET_PATIENTSESSION_DATA, {
     onCompleted: (data) => {
-      const pttherapyId = data?.getPatientTherapy[0]._id;
-      if (pttherapyId) {
-        setTherapy(pttherapyId);
+      /* istanbul ignore else */
+      if (data!.getPatientSessionList) {
+        setFeedbackType("session");
+        setSessionNo(1);
       }
     },
   });
 
-  const {
-    loading: sessionLoading,
-    error: sessionError,
-    data: patientSessionData,
-  } = useQuery(GET_PATIENTSESSION_DATA, {
-    variables: { pttherapyId: therapy },
-    onCompleted: (data) => {
-      setTimeout(() => {
-        setLoader(false);
-      }, 500);
-    },
-  });
+  const [
+    getPatientFeedbackListData,
+    { loading: feedbackLoading, data: patientFeedbackData },
+  ] = useLazyQuery(GET_PATIENTFEEDBACKLIST_DATA);
 
-  const handleChange =
-    (panel: string) => (event: SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-      //setFeedbackLoader(true);
-    };
+  const setDefaultStateExcludingLoader = () => {
+    setFeedbackType(null);
+    setSessionNo(null);
+    setSessionPanelExpanded(false);
+  };
 
-  const onhandleChange = (event: SelectChangeEvent) => {
+  useEffect(() => {
     setLoader(true);
+    setDefaultStateExcludingLoader();
+  }, []);
+
+  useEffect(() => {
+    setLoader(true);
+    gettokenData({ variables: {} });
+  }, []);
+
+  useEffect(() => {
+    setLoader(true);
+    getPatientTherapyData({ variables: {} });
+  }, [therapistId]);
+
+  useEffect(() => {
+    setLoader(true);
+    getPatientSessionData({
+      variables: { pttherapyId: therapy },
+    });
+  }, [therapy]);
+
+  useEffect(() => {
+    setLoader(true);
+    getPatientFeedbackListData({
+      variables: {
+        sessionNo: sessionNo,
+        feedbackType: feedbackType,
+      },
+    });
+  }, [sessionNo, feedbackType]);
+
+  useEffect(() => {
+    /* istanbul ignore else */
+    if (
+      !tokenLoading &&
+      !therapyLoading &&
+      !feedbackLoading &&
+      !sessionLoading &&
+      therapistId &&
+      therapy &&
+      sessionNo &&
+      feedbackType &&
+      patientTherapryData &&
+      patientSessionData &&
+      patientFeedbackData
+    ) {
+      setLoader(false);
+    }
+  }, [
+    therapy,
+    sessionNo,
+    feedbackType,
+    patientTherapryData,
+    patientSessionData,
+    patientFeedbackData,
+  ]);
+
+  const onTherapyChange = (event: SelectChangeEvent) => {
+    setLoader(true);
+    setDefaultStateExcludingLoader();
     setTherapy(event.target.value);
   };
 
-  async function getPatientSessionData(pttherapyId) {}
-
-  let callvalue = true;
-  async function getQuestionByType(feedbackType, seesionNo) {
-    if (callvalue == true) {
-      callvalue = false;
-      setfeedbackType(feedbackType);
-      setsessionNo(seesionNo);
-    }
-  }
+  const handleSessionPanelChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setSessionPanelExpanded(
+        /* istanbul ignore else */ isExpanded ? panel : false
+      );
+    };
 
   const handleInputChange = (i, e) => {
     const newFormValues = [...formValues];
@@ -160,11 +210,9 @@ export function Feedback() {
   });
   const handleAdd = (event) => {
     event.preventDefault();
-    console.log(formValues.length);
     if (formValues.length == 0) {
       setErrorOpen(true);
     } else {
-      console.log(JSON.stringify(formValues));
       setBtndiabled(true);
       postPatientFeedback({
         variables: {
@@ -173,23 +221,9 @@ export function Feedback() {
           feedbackType: feedbackType,
         },
       });
-      console.log(data);
       setOpen(true);
     }
   };
-
-  const {
-    loading: feedbackLoading,
-    error: feedbackError,
-    data: patientFeedbackData,
-  } = useQuery(GET_PATIENTFEEDBACKLIST_DATA, {
-    variables: { feedbackType: feedbackType, sessionNo: sessionNo },
-    onCompleted: (data) => {
-      setTimeout(() => {
-        setFeedbackLoader(false);
-      }, 500);
-    },
-  });
 
   /* istanbul ignore next */
   const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
@@ -203,39 +237,38 @@ export function Feedback() {
   ) => {
     setErrorOpen(false);
   };
-  console.log(patientFeedbackData?.getPatientFeedbackList.length);
 
   return (
     <>
       <Layout>
+      <Loader visible={loader} />
         <ContentHeader title="Feedback" />
         <Box style={{ textAlign: "right" }}>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="demo-select-small">Select Therapy</InputLabel>
+            <InputLabel id="lblSelectTherapy" >Select Therapy</InputLabel>
             <Select
-              labelId="demo-select-small"
-              id="demo-select-small"
+              labelId="lblSelectTherapy"
+              id="selectTherapy"
+              inputProps={{ "data-testid": "selectTherapy" }}
               value={therapy}
+              autoWidth
               label="Select Therapy"
-              onChange={onhandleChange}
+              onChange={onTherapyChange}
             >
-              {patientTherapryData?.getPatientTherapy.map((v, i) => {
-                return (
-                  <MenuItem key={i + ""} value={v._id}>
-                    {v.therapy_detail.therapy_name}/
-                    {v.disorder_detail.disorder_name}/
-                    {v.model_detail.model_name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              {patientTherapryData &&
+                    patientTherapryData.getPatientTherapy &&
+                    patientTherapryData.getPatientTherapy.map((v: any) => {
+                      return (
+                        <MenuItem key={"therapy" + v._id} value={v._id}>
+                          {v.therapy_detail.therapy_name}/
+                          {v.disorder_detail.disorder_name}/
+                          {v.model_detail.model_name}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
           </FormControl>
         </Box>
-        {loader == true && (
-          <Box style={{ display: "flex", marginLeft: "450px" }}>
-            <CircularProgress />
-          </Box>
-        )}
         <Box>
           <Snackbar
             key="1"
@@ -285,19 +318,18 @@ export function Feedback() {
                   }}
                 >
                   <Accordion
-                    sx={{
-                      marginTop: "4px",
-                      borderRadius: "12px",
-                      border: "none",
-                    }}
-                    onClick={() => getQuestionByType("session", p)}
-                    expanded={expanded === panelName}
-                    onChange={handleChange(panelName)}
+                    sx={{ marginTop: "4px", borderRadius: "4px" }}
+                    expanded={sessionPanelExpanded === panelName}
+                    onChange={handleSessionPanelChange(panelName)}
+                    onClick={() => setSessionNo(p)}
+                    key={v._id}
+                    data-testid="SessionPanelItem"
                   >
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls={panelName + "bh-content"}
                       id={panelName + "bh-header"}
+                      data-testid={panelName + "bh-header"}
                       sx={{
                         backgroundColor: "#6ba08e",
                         borderRadius: "12px",
@@ -312,25 +344,38 @@ export function Feedback() {
                     <AccordionDetails>
                       <Typography sx={{ marginBottom: "40px" }}>
                         <Stack spacing={2} direction="row">
-                          <Button
-                            variant="contained"
-                            onClick={() => getQuestionByType("session", p)}
-                          >
-                            Session Feedback
-                          </Button>
-                          <Button
-                            variant="contained"
-                            onClick={() => getQuestionByType("quality", p)}
-                          >
-                            Quality Feedback
-                          </Button>
+                        <Button
+                          className={`text-white ${
+                            feedbackType == "session" ? "bg-themegreen" : ""
+                          }`}
+                          onClick={() => {
+                            setLoader(true);
+                            setFeedbackType("session");
+                            setSessionNo(p);
+                          }}
+                          variant="contained"
+                          sx={{ textTransform: "none" }}
+                          data-testid={panelName + "bh-content-session-button"}
+                        >
+                          Session Feedback
+                        </Button>
+                        <Button
+                          className={`text-white ${
+                            feedbackType == "quality" ? "bg-themegreen" : ""
+                          }`}
+                          onClick={() => {
+                            setLoader(true);
+                            setFeedbackType("quality");
+                            setSessionNo(p);
+                          }}
+                          variant="contained"
+                          sx={{ textTransform: "none" }}
+                          data-testid={panelName + "bh-content-quality-button"}
+                        >
+                          Quality Feedback
+                        </Button>
                         </Stack>
                       </Typography>
-                      {feedbackLoader == true && (
-                        <Box style={{ display: "flex", marginLeft: "450px" }}>
-                          <CircularProgress />
-                        </Box>
-                      )}
                       {patientFeedbackData?.getPatientFeedbackList != null &&
                         patientFeedbackData?.getPatientFeedbackList.map(
                           (fv, fk) => {
@@ -450,7 +495,11 @@ export function Feedback() {
                       {patientFeedbackData?.getPatientFeedbackList == null ||
                         (patientFeedbackData?.getPatientFeedbackList.length ==
                           0 && (
-                          <Typography gutterBottom component="div">
+                            <Typography
+                            gutterBottom
+                            component="div"
+                            data-testid="no-data-found-therapist-feedback-list"
+                          >
                             No Data Found
                           </Typography>
                         ))}
@@ -463,4 +512,6 @@ export function Feedback() {
       </Layout>
     </>
   );
-}
+};
+
+export default Feedback;
