@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import {
   MenuItem,
@@ -7,25 +6,12 @@ import {
   InputLabel,
   Checkbox,
   ListItemText,
+  IconButton,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import { Clear } from "@mui/icons-material/";
-// import ClearIcon from '@mui/icons-material/Clear';
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { Clear } from "@mui/icons-material";
 import _isEmpty from "lodash/isEmpty";
 
-const useStyles = makeStyles((theme) => ({
-  menu: {
-    "& .MuiPaper-root .MuiMenu-paper .MuiPaper-elevation": {
-      backgroundColor: "red",
-      left: "404px",
-    },
-  },
-}));
-
-// MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiMenu-paper MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation8 MuiPopover-paper css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper
 const SelectField = (props) => {
-  const classes = useStyles();
   const { field, values = {} } = props;
   const { clearField = false } = field;
   const [isClearable, setClearable] = useState(false);
@@ -70,16 +56,13 @@ const SelectField = (props) => {
             !field.unclosable &&
             (() => {
               return (
-                <Clear
+                <IconButton
+                  size="small"
                   title="Clear All"
-                  style={{
-                    cursor: "pointer",
-                    fontSize: "20",
-                    color: "#3580ba",
-                    margin: "0 5px",
-                  }}
                   onClick={clear}
-                />
+                >
+                  <Clear />
+                </IconButton>
               );
             })
           }
@@ -104,14 +87,11 @@ const SelectField = (props) => {
           onClose={() => setClearable(false)}
           required={field.required}
           multiple={field.multiple ? true : false}
-          // input={<OutlinedInput label="Tag" />}
           renderValue={field.multiple && ((selected) => selected.join(","))}
-          className={classes.menu}
           MenuProps={{
             PaperProps: {
               style: {
                 maxHeight: 48 * 4.5 + 8,
-                // width: 250,
                 width: "246px",
                 left: "405px",
               },

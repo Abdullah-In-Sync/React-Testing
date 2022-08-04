@@ -1,6 +1,4 @@
-// 👇️ ts-nocheck ignores all ts errors in the file
-// @ts-nocheck
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -12,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import _flatten from "lodash/flatten";
+// import _flatten from "lodash/flatten";
 
 // import { FieldsLayout } from './fields';
 // import FieldsLayout from './fields/FieldsLayout'
@@ -71,20 +69,15 @@ interface CrudDialogProps {
   values?: any;
   buttonText?: any;
   callBackFormValues?: (params: any) => any;
-  onRef?: (params: any) => any;
   open: boolean;
   fields?: any;
   onClose?: () => void;
-  submitButtonDisabled?: boolean;
-  onFieldChange?: (params: any) => any;
+  // onFieldChange?: (params: any) => void;
   title: string;
-  onsubmit?: (values: any, hasErrors: any) => void;
+  onsubmit?: (values: any) => void;
   okText?: string;
   cancelText?: string;
-  info?: boolean;
   mode?: string;
-  closable?: boolean;
-  extraButtonLoading?: boolean;
   hide?: boolean;
   description?: string;
   extraButtonText?: boolean;
@@ -94,25 +87,20 @@ interface CrudDialogProps {
 }
 
 const CrudDialog = ({
-  onRef = () => {},
   open = false,
   fields = [],
-  onClose = () => {},
-  submitButtonDisabled = false,
-  onFieldChange = () => {},
+  onClose,
+  // onFieldChange,
   title = "Dialog Title",
-  onsubmit = () => {},
+  onsubmit,
   values = {},
   okText = "Create",
   cancelText = "Cancel",
-  info = false,
   mode = "Add",
-  closable = true,
-  extraButtonLoading = false,
   hide = false,
   description,
   extraButtonText = false,
-  onExtraButton = () => {},
+  onExtraButton,
   dynamicForm,
   viewData = false,
 }: CrudDialogProps) => {
@@ -150,7 +138,7 @@ const CrudDialog = ({
     _fieldValues[field.key] = field.key === "is_open" ? !!value : value;
     setFieldValues(_fieldValues);
 
-    onFieldChange(field, value);
+    // onFieldChange(field, value);
   };
 
   const onSubmit = (e) => {

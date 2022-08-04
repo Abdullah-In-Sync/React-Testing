@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { withStyles } from "@mui/styles";
 import {
   Select,
   MenuItem,
-  InputBase,
   Checkbox,
   ListItemText,
   FormControl,
   InputLabel,
 } from "@mui/material";
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 
 const FilterSelect = ({
   fields,

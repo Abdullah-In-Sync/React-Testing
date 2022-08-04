@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React, { useState, useEffect } from "react";
-import _ from "lodash";
 
 // MUI COMPONENTS
 import Box from "@mui/material/Box";
@@ -23,11 +22,10 @@ interface FormProps {
 
 // DYNAMIC FORM
 const DynamicForm = ({
-  callBackFormValues = () => {},
+  callBackFormValues,
   values = {},
   buttonText = false,
   type,
-  ...props
 }: FormProps) => {
   const [formValues, setFormValues] = useState<any>([]);
 
@@ -42,7 +40,10 @@ const DynamicForm = ({
       ]);
     }
   }, [values]);
-  callBackFormValues(formValues);
+
+  if (type !== "view") {
+    callBackFormValues(formValues);
+  }
 
   const addFormFields = () => {
     setFormValues([

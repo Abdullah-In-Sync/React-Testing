@@ -7,12 +7,10 @@ const buttonStyle = {
 };
 
 export const AddButton = ({
-  className,
   size,
   ...props
 }: {
   [x: string]: any;
-  className: any;
   size?: any;
 }) => {
   return (

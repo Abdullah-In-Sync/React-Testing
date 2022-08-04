@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { NextPage } from "next";
-import _ from "lodash";
 import { useSnackbar } from "notistack";
 import moment from "moment";
 
 // GRAPHQL
-import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   GET_FEEDBACK_DATA,
   GET_ORG_DATA,
-  GET_FEEDBACK_BY_ID,
+  // GET_FEEDBACK_BY_ID,
 } from "../../../graphql/query";
 import {
   ADD_FEEDBACK,
@@ -32,7 +31,6 @@ import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
-import { makeStyles } from "@mui/styles";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -43,7 +41,7 @@ const crudButtons = {
   flexDirection: "row-reverse",
 };
 
-const Feedback: NextPage = () =>{
+const Feedback: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   // COMPONENT STATE
@@ -59,24 +57,19 @@ const Feedback: NextPage = () =>{
   const [selectedUserData, setSelectedUserData] = useState<any>([]);
 
   // TABLE PROPS
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
-  const [dataCount, setDataCount] = useState<number>(0);
+  // const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  // const [dataCount, setDataCount] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
-  const [nextPage, setNextPage] = useState<string>(null);
-  const [previousPage, setPreviousPage] = useState<any>(null);
-  const [firstPage, setFirstPage] = useState<any>(null);
-  const [lastPage, setLastPage] = useState<any>(null);
+  const [nextPage] = useState<string>(null);
+  const [previousPage] = useState<any>(null);
+  const [firstPage] = useState<any>(null);
+  const [lastPage] = useState<any>(null);
 
   // GRAPHQL
-  const [addFeedback, { data, loading, error }] = useMutation(ADD_FEEDBACK);
+  const [addFeedback] = useMutation(ADD_FEEDBACK);
+  const { data: orgData } = useQuery(GET_ORG_DATA);
   const {
-    loading: orgLoading,
-    error: orgError,
-    data: orgData,
-  } = useQuery(GET_ORG_DATA);
-  const {
-    loading: dataListLoading,
     error: dataListError,
     data: dataListData,
     refetch,
@@ -84,19 +77,12 @@ const Feedback: NextPage = () =>{
     variables: { status: "active", pageNo: 1 },
   });
 
-  const [
-    viewFeedback,
-    { loading: feedbackLoader, error: feedbackError, data: feedbackData },
-  ] = useLazyQuery(GET_FEEDBACK_BY_ID);
+  // const [
+  //   viewFeedback,
+  //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
 
-  const [
-    deleteFeedback,
-    { loading: deleteDataLoading, error: deleteDataError, data: deleteData },
-  ] = useMutation(DELETE_FEEDBACK);
-  const [
-    updateFeedback,
-    { loading: updateDataLoading, error: updateDataError, data: updateData },
-  ] = useMutation(UPDATE_FEEDBACK);
+  const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
+  const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
 
   // if (dataListError) {
   //     console.log("dataListError",dataListError)
@@ -193,7 +179,8 @@ const Feedback: NextPage = () =>{
             size="small"
             // onClick={() => handleDelete(value._id)}
             onClick={() => {
-              setDeletConfirmationModal(true), setSelectedId(value._id);
+              setDeletConfirmationModal(true);
+              setSelectedId(value._id);
             }}
           >
             <DeleteIcon />
@@ -218,7 +205,7 @@ const Feedback: NextPage = () =>{
         options:
           orgData?.getOrganizationData?.length > 0
             ? [
-                ...orgData?.getOrganizationData?.map((val) => ({
+                ...orgData.getOrganizationData.map((val) => ({
                   label: val.name,
                   value: val._id,
                 })),
@@ -396,13 +383,13 @@ const Feedback: NextPage = () =>{
               }
             }}
             backendPagination={true}
-            onRowPerPageChange={(rows) => {
-              // getDeviceType(null, rows);
-              setRowsPerPage(rows);
-            }}
+            // onRowPerPageChange={(rows) => {
+            //   // getDeviceType(null, rows);
+            //   // setRowsPerPage(rows);
+            // }}
             dataCount={dataListData?.getAdminFeedbackList.length}
             //   onChangePage={(page) => console.log(page)}
-            //   selectedRecords={modulesSelected}
+            selectedRecords={[]}
             rowOnePage={10}
             //   onChangeSelected={(modulesSelected) =>
             //     setModulesSelected(modulesSelected)
@@ -414,7 +401,7 @@ const Feedback: NextPage = () =>{
             okText="Save"
             fields={dialogFields}
             description="Please fill in the details below."
-            onsubmit={(values, hasErrors) => {
+            onsubmit={(values) => {
               handleAdd(values);
             }}
             dynamicForm={
@@ -439,7 +426,7 @@ const Feedback: NextPage = () =>{
             //     debugger
             //     //   handlUploadImages(images);
             // }}
-            onsubmit={(values, hasErrors) => {
+            onsubmit={(values) => {
               handleEdit(values);
             }}
             dynamicForm={

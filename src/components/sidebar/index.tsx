@@ -1,7 +1,4 @@
-// 👇️ ts-nocheck ignores all ts errors in the file
-// @ts-nocheck
-import React, { useRef } from "react";
-import { useRouter } from "next/router";
+import React, { useState } from "react";
 import NextLink from "next/link";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -18,7 +15,6 @@ import { withStyles } from "@mui/styles";
 import { superadmin_routes } from "../../utility/sideNavItems";
 
 const drawerWidth = 240;
-const navTextColor = "custom.light";
 
 const listItem = {
   paddingTop: "0px",
@@ -54,8 +50,8 @@ const ListButton = withStyles({
 })(ListItemButton);
 
 export default function SideBar() {
-  const [expanded, setExpanded] = React.useState({});
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [expanded, setExpanded] = useState({});
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleListItemClick = (e, index) => {
     setSelectedIndex(index);
@@ -86,7 +82,7 @@ export default function SideBar() {
       <Toolbar />
       <Box sx={{ overflow: "auto" }}>
         <List>
-          {superadmin_routes.map((val, index) => {
+          {superadmin_routes.map((val) => {
             if (Array.isArray(val)) {
               return (
                 <>
@@ -105,7 +101,7 @@ export default function SideBar() {
                     />
                     {expanded[val[0]?.key] ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
-                  {val?.slice(1)?.map((item, index) => (
+                  {val?.slice(1)?.map((item) => (
                     <Collapse
                       key={val[0]?.key}
                       in={expanded[val[0]?.key] || false}
@@ -116,7 +112,6 @@ export default function SideBar() {
                         <NextLink href={item.path} passHref>
                           <ListButton
                             sx={{ pl: 4 }}
-                            component="a"
                             onClick={(e) => handleListItemClick(e, item.key)}
                             selected={selectedIndex === item.key}
                           >
@@ -144,7 +139,6 @@ export default function SideBar() {
                       <ListButton
                         onClick={(e) => handleListItemClick(e, val.key)}
                         selected={selectedIndex === val.key}
-                        component="a"
                       >
                         <ListItemIcon
                           sx={{ color: "custom.light", minWidth: "32px" }}
