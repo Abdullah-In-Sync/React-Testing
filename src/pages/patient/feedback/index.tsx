@@ -5,7 +5,6 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_PATIENTFEEDBACKLIST_DATA,
-  GET_TOKEN_DATA,
 } from "../../../graphql/query/common";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
 import { POST_PATIENT_FEEDBACK } from "../../../graphql/mutation";
@@ -36,13 +35,14 @@ import {
   TextareaAutosize,
   Snackbar,
 } from "@mui/material";
+import { buildPatientTokenValidationQuery } from "../../../lib/helpers/auth";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
   const [feedbackType, setFeedbackType] = useState<string>("session");
   const [formValues, setFormValues] = useState([]);
   const [sessionNo, setSessionNo] = useState(1);
-  const [loader, setLoader] = useState<boolean>(true);
+  const [loader, setLoader] = useState<boolean>(false);
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
     string | false
   >(false);
@@ -51,21 +51,11 @@ const Feedback: NextPage = () => {
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
 
-  const [gettokenData, { loading: tokenLoading, data: tokenData }] =
-    useLazyQuery(GET_TOKEN_DATA, {
-      onCompleted: (data) => {
-        /* istanbul ignore else */
-        if (data.getTokenData) {
-          let user_type = data!.getTokenData.user_type;
-          user_type = user_type.replace('[',"");
-          user_type = user_type.replace(']',"");  
-          if (user_type != "patient") {
-           window.location.href = "https://" + window.location.hostname + "/account";
-          }
-          settherapistId(data!.getTokenData.patient_data.therapist_id);
-        }
-      },
-    });
+  const [gettokenData, tokenLoading, tokenData] = buildPatientTokenValidationQuery(
+    (therapistId) => {
+      settherapistId(therapistId);
+    }
+  );
 
   const [
     getPatientTherapyData,
@@ -110,10 +100,6 @@ const Feedback: NextPage = () => {
   useEffect(() => {
     setLoader(true);
     setDefaultStateExcludingLoader();
-  }, []);
-
-  useEffect(() => {
-    setLoader(true);
     gettokenData({ variables: {} });
   }, []);
 
@@ -241,11 +227,11 @@ const Feedback: NextPage = () => {
   return (
     <>
       <Layout>
-      <Loader visible={loader} />
+        <Loader visible={loader} />
         <ContentHeader title="Feedback" />
         <Box style={{ textAlign: "right" }}>
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="lblSelectTherapy" >Select Therapy</InputLabel>
+            <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
             <Select
               labelId="lblSelectTherapy"
               id="selectTherapy"
@@ -256,17 +242,17 @@ const Feedback: NextPage = () => {
               onChange={onTherapyChange}
             >
               {patientTherapryData &&
-                    patientTherapryData.getPatientTherapy &&
-                    patientTherapryData.getPatientTherapy.map((v: any) => {
-                      return (
-                        <MenuItem key={"therapy" + v._id} value={v._id}>
-                          {v.therapy_detail.therapy_name}/
-                          {v.disorder_detail.disorder_name}/
-                          {v.model_detail.model_name}
-                        </MenuItem>
-                      );
-                    })}
-                </Select>
+                patientTherapryData.getPatientTherapy &&
+                patientTherapryData.getPatientTherapy.map((v: any) => {
+                  return (
+                    <MenuItem key={"therapy" + v._id} value={v._id}>
+                      {v.therapy_detail.therapy_name}/
+                      {v.disorder_detail.disorder_name}/
+                      {v.model_detail.model_name}
+                    </MenuItem>
+                  );
+                })}
+            </Select>
           </FormControl>
         </Box>
         <Box>
@@ -344,36 +330,40 @@ const Feedback: NextPage = () => {
                     <AccordionDetails>
                       <Typography sx={{ marginBottom: "40px" }}>
                         <Stack spacing={2} direction="row">
-                        <Button
-                          className={`text-white ${
-                            feedbackType == "session" ? "bg-themegreen" : ""
-                          }`}
-                          onClick={() => {
-                            setLoader(true);
-                            setFeedbackType("session");
-                            setSessionNo(p);
-                          }}
-                          variant="contained"
-                          sx={{ textTransform: "none" }}
-                          data-testid={panelName + "bh-content-session-button"}
-                        >
-                          Session Feedback
-                        </Button>
-                        <Button
-                          className={`text-white ${
-                            feedbackType == "quality" ? "bg-themegreen" : ""
-                          }`}
-                          onClick={() => {
-                            setLoader(true);
-                            setFeedbackType("quality");
-                            setSessionNo(p);
-                          }}
-                          variant="contained"
-                          sx={{ textTransform: "none" }}
-                          data-testid={panelName + "bh-content-quality-button"}
-                        >
-                          Quality Feedback
-                        </Button>
+                          <Button
+                            className={`text-white ${
+                              feedbackType == "session" ? "bg-themegreen" : ""
+                            }`}
+                            onClick={() => {
+                              setLoader(true);
+                              setFeedbackType("session");
+                              setSessionNo(p);
+                            }}
+                            variant="contained"
+                            sx={{ textTransform: "none" }}
+                            data-testid={
+                              panelName + "bh-content-session-button"
+                            }
+                          >
+                            Session Feedback
+                          </Button>
+                          <Button
+                            className={`text-white ${
+                              feedbackType == "quality" ? "bg-themegreen" : ""
+                            }`}
+                            onClick={() => {
+                              setLoader(true);
+                              setFeedbackType("quality");
+                              setSessionNo(p);
+                            }}
+                            variant="contained"
+                            sx={{ textTransform: "none" }}
+                            data-testid={
+                              panelName + "bh-content-quality-button"
+                            }
+                          >
+                            Quality Feedback
+                          </Button>
                         </Stack>
                       </Typography>
                       {patientFeedbackData?.getPatientFeedbackList != null &&
@@ -495,7 +485,7 @@ const Feedback: NextPage = () => {
                       {patientFeedbackData?.getPatientFeedbackList == null ||
                         (patientFeedbackData?.getPatientFeedbackList.length ==
                           0 && (
-                            <Typography
+                          <Typography
                             gutterBottom
                             component="div"
                             data-testid="no-data-found-therapist-feedback-list"

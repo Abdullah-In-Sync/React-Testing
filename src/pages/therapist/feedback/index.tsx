@@ -89,8 +89,12 @@ const Feedback: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    setLoader(true);
-    getPatientTherapyData({ variables: { patientId: patientData.patient_id } });
+    if (patientData.patient_id.length > 0) {
+      setLoader(true);
+      getPatientTherapyData({
+        variables: { patientId: patientData.patient_id },
+      });
+    }
   }, [patientData]);
 
   useEffect(() => {
@@ -101,14 +105,16 @@ const Feedback: NextPage = () => {
   }, [therapy]);
 
   useEffect(() => {
-    setLoader(true);
-    getTherapistFeedbackListData({
-      variables: {
-        patientId: patientData.patient_id,
-        sessionNo: sessionNo,
-        feedbackType: feedbackType,
-      },
-    });
+    if (patientData.patient_id.length > 0) {
+      setLoader(true);
+      getTherapistFeedbackListData({
+        variables: {
+          patientId: patientData.patient_id,
+          sessionNo: sessionNo,
+          feedbackType: feedbackType,
+        },
+      });
+    }
   }, [sessionNo, feedbackType]);
 
   useEffect(() => {
@@ -163,8 +169,8 @@ const Feedback: NextPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={2} sx={{ textAlign: "center" }}>
               <Image
-                alt="Patient"
-                src="/assets/images/user.png"
+                alt="Therapist"
+                src="/v2/images/user.png"
                 width="100"
                 height="100"
                 style={{ borderRadius: "50%" }}

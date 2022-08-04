@@ -161,7 +161,6 @@ const filteredPatientSessionList = (
   return mockDataMap["patientSessionList:" + _pttherapy_id];
 };
 
-
 const sut = async (patient_id: string) => {
   // system under test
   localStorage.setItem("patient_id", patient_id);
@@ -188,7 +187,7 @@ const buildMocks = (): {
   _mocks.push({
     request: {
       query: GET_TOKEN_DATA,
-      variables: { },
+      variables: {},
     },
     result: {
       data: [
@@ -239,10 +238,7 @@ const buildMocks = (): {
     // build mocks for each "PatientTherapy" record
     _p.patientsTherapy.forEach((_pt: Record<string, any>) => {
       // fetch patient feedback list query
-      const _patientFeedbackList = getPatientFeedbackList(
-        _pt,
-        _p.mockOptions
-      );
+      const _patientFeedbackList = getPatientFeedbackList(_pt, _p.mockOptions);
       _mockDataMap["patientFeedbackList:" + _pt._id] = _patientFeedbackList;
       _mocks.push({
         request: {
@@ -290,7 +286,6 @@ describe("Patient feedback list", () => {
     await sut(patient_id);
     const _pt = filteredPatientTherapy(patient_id, 0);
     filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      
       const p = _k + 1;
       const panelName = "panel" + p;
       expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent(
@@ -306,6 +301,4 @@ describe("Patient feedback list", () => {
       );
     });
   });
-
-  
 });
