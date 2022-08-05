@@ -45,7 +45,7 @@ const NavBar = () => {
           >
             <Image
               alt="My Help"
-              src="/assets/images/logo.png"
+              src="/v2/images/logo.png"
               height="40"
               width="150"
             />
