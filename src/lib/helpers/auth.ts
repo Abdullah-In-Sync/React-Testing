@@ -19,7 +19,7 @@ export const buildPatientTokenValidationQuery = (
           if (user_type != "patient") {
             window.location.href =
               "https://" + window.location.hostname + "/account";
-          }else{
+          } else {
             await onCompleted(data!.getTokenData.patient_data.therapist_id);
           }
         }

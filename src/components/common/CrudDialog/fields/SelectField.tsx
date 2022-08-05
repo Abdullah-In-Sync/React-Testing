@@ -56,11 +56,7 @@ const SelectField = (props) => {
             !field.unclosable &&
             (() => {
               return (
-                <IconButton
-                  size="small"
-                  title="Clear All"
-                  onClick={clear}
-                >
+                <IconButton size="small" title="Clear All" onClick={clear}>
                   <Clear />
                 </IconButton>
               );

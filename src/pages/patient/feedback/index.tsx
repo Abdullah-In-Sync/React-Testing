@@ -51,11 +51,10 @@ const Feedback: NextPage = () => {
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
 
-  const [gettokenData, tokenLoading, tokenData] = buildPatientTokenValidationQuery(
-    (therapistId) => {
+  const [gettokenData, tokenLoading, tokenData] =
+    buildPatientTokenValidationQuery((therapistId) => {
       settherapistId(therapistId);
-    }
-  );
+    });
 
   const [
     getPatientTherapyData,
