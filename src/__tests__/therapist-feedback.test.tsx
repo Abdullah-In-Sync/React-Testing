@@ -321,15 +321,12 @@ describe("Therapist feedback list", () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
     const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
+
     fireEvent.change(screen.queryByTestId("selectTherapy"), {
       target: { value: patientTherapyId },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
-      filteredPatientSessionList(patientTherapyId).length
-    );
+
+    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(0);
   });
 
   test("can expand and collapse when clicked", async () => {
