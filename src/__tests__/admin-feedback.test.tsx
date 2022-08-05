@@ -1,6 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
-import Feedback  from "../pages/admin/feedback";
+import Feedback from "../pages/admin/feedback";
 
 import {
   GET_FEEDBACK_DATA,

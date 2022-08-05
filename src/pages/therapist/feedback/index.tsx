@@ -147,6 +147,7 @@ const Feedback: NextPage = () => {
 
   const onTherapyChange = (event: SelectChangeEvent) => {
     setLoader(true);
+    setSessionPanelExpanded(false);
     setTherapy(event.target.value);
   };
 

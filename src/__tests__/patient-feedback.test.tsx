@@ -162,8 +162,6 @@ const filteredPatientSessionList = (
 };
 
 const sut = async (patient_id: string) => {
-  // system under test
-  localStorage.setItem("patient_id", patient_id);
   render(
     <MockedProvider mocks={mocks}>
       <Feedback />
@@ -187,20 +185,22 @@ const buildMocks = (): {
   _mocks.push({
     request: {
       query: GET_TOKEN_DATA,
-      variables: {},
     },
     result: {
-      data: [
-        {
+      data: {
+        getTokenData: {
           _id: _first_patient_id, // use first "Patient" record
-          user_type: ["therapist"],
+          user_type: "patient",
           parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
           perm_ids: "9,10,14,21,191,65,66",
           user_status: "1",
           created_date: "2021-12-20 16:20:55",
           updated_date: "2021-12-20 16:20:55",
+          patient_data: {
+            therapist_id: "therapist_id",
+          },
         },
-      ],
+      },
     },
   });
   // setup and store "Patients" with "MockOptions"
@@ -224,9 +224,6 @@ const buildMocks = (): {
     _mocks.push({
       request: {
         query: GET_PATIENTTHERAPY_DATA,
-        variables: {
-          patientId: _p.patient_id,
-        },
       },
       result: {
         data: {
@@ -283,6 +280,7 @@ const { mocks, mockDataMap } = buildMocks();
 describe("Patient feedback list", () => {
   test("is collaped by default", async () => {
     const patient_id = mockDataMap["first_patient_id"];
+
     await sut(patient_id);
     const _pt = filteredPatientTherapy(patient_id, 0);
     filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
@@ -299,6 +297,111 @@ describe("Patient feedback list", () => {
         "aria-controls",
         panelName + "bh-content"
       );
+    });
+  });
+
+  test("to have the correct number of sessions shown", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    const _pt = filteredPatientTherapy(patient_id, 0);
+    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
+      filteredPatientSessionList(_pt._id).length
+    );
+  });
+
+  test("can select a different therapy", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
+    fireEvent.change(screen.queryByTestId("selectTherapy"), {
+      target: { value: patientTherapyId },
+    });
+
+    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
+      filteredPatientSessionList(patientTherapyId).length
+    );
+  });
+
+  test("can expand and collapse when clicked", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    const _pt = filteredPatientTherapy(patient_id, 0);
+    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+      const p = _k + 1;
+      const panelName = "panel" + p;
+      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+        "aria-expanded",
+        "true"
+      );
+      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+        "aria-expanded",
+        "false"
+      );
+    });
+  });
+
+  test("when expanded the default view is session feedback", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    const _pt = filteredPatientTherapy(patient_id, 0);
+    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+      const p = _k + 1;
+      const panelName = "panel" + p;
+      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).not.toHaveClass("bg-themegreen");
+    });
+  });
+
+  test("the session feedback is displayed correctly when expanded", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    const _pt = filteredPatientTherapy(patient_id, 0);
+    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+      const p = _k + 1;
+      const panelName = "panel" + p;
+      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+      fireEvent.click(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      );
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).not.toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).toHaveTextContent("Session Feedback");
+    });
+  });
+
+  test("the quality feedback is displayed correctly when expanded", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    const _pt = filteredPatientTherapy(patient_id, 0);
+    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+      const p = _k + 1;
+      const panelName = "panel" + p;
+      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+      fireEvent.click(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      );
+      expect(
+        screen.queryByTestId(panelName + "bh-content-session-button")
+      ).not.toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).toHaveClass("bg-themegreen");
+      expect(
+        screen.queryByTestId(panelName + "bh-content-quality-button")
+      ).toHaveTextContent("Quality Feedback");
     });
   });
 });

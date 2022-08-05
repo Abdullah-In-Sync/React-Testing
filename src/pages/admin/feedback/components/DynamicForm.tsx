@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 
 // MUI COMPONENTS
@@ -52,7 +51,7 @@ const DynamicForm = ({
     ]);
   };
 
-  const handleChange = (index, e, chip_val) => {
+  const handleChange = (index: number, e: any, chip_val?: any) => {
     if (e.target.name == "answer_type" && e.target.value == "text") {
       const newFormValues = [...formValues];
       newFormValues[index]["answer_options"] = "";
@@ -70,8 +69,8 @@ const DynamicForm = ({
     }
   };
 
-  const removeFormFields = (i) => {
-    const newData = formValues.filter((val, index) => {
+  const removeFormFields = (i: number) => {
+    const newData = formValues.filter((val: any, index: number) => {
       return i != index;
     });
     setFormValues(newData);
@@ -88,93 +87,102 @@ const DynamicForm = ({
           {buttonText}
         </Button>
       )}
-      {formValues?.map((element, index) => (
-        <div className="form-inline" key={index}>
-          <Paper
-            elevation={3}
-            sx={{ padding: "15px 11px", marginBottom: "15px" }}
-          >
-            {Object.keys(values).length === 0 && (
-              <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <IconButton
-                  size="small"
-                  onClick={() => removeFormFields(index)}
-                  sx={{
-                    position: "relative",
-                    left: "14px",
-                    top: "-7px",
-                  }}
-                >
-                  <CancelIcon sx={{ color: "error.main" }} />
-                </IconButton>
-              </Box>
-            )}
-            <TextField
-              value={element.question}
-              onChange={(e) => handleChange(index, e)}
-              name="question"
-              disabled={type === "view" ? true : false}
-              label="Type your Question"
-              multiline
-              rows={4}
-              sx={{ width: "100%" }}
-            />
-
-            <FormControl sx={{ mt: 2, mb: 2, minWidth: 220 }} size="small">
-              <InputLabel id="answer_type">Choose answer type</InputLabel>
-              <Select
-                labelId="answer_type"
-                name="answer_type"
-                disabled={type === "view" ? true : false}
-                value={element.answer_type || ""}
-                label="Choose answer type"
+      {formValues?.map(
+        (
+          element: {
+            question: string;
+            answer_type: string;
+            answer_options: string[];
+          },
+          index
+        ) => (
+          <div className="form-inline" key={index}>
+            <Paper
+              elevation={3}
+              sx={{ padding: "15px 11px", marginBottom: "15px" }}
+            >
+              {Object.keys(values).length === 0 && (
+                <Box sx={{ display: "flex", justifyContent: "end" }}>
+                  <IconButton
+                    size="small"
+                    onClick={() => removeFormFields(index)}
+                    sx={{
+                      position: "relative",
+                      left: "14px",
+                      top: "-7px",
+                    }}
+                  >
+                    <CancelIcon sx={{ color: "error.main" }} />
+                  </IconButton>
+                </Box>
+              )}
+              <TextField
+                value={element.question}
                 onChange={(e) => handleChange(index, e)}
-              >
-                {/* <MenuItem value="Checkbox">Checkbox</MenuItem> */}
-                <MenuItem value="text">Text</MenuItem>
-                {/* <MenuItem value="Radio button">Radio button</MenuItem> */}
-                <MenuItem value="list">List</MenuItem>
-              </Select>
-            </FormControl>
-
-            {element.answer_type === "list" && (
-              <Autocomplete
-                multiple
-                id="tags-filled"
-                options={[]}
+                name="question"
                 disabled={type === "view" ? true : false}
-                defaultValue={element.answer_options || []}
-                // defaultValue={_.isEmpty(element.answer_options) ? []: [element.answer_options]  }
-                onChange={(_, val) => {
-                  handleChange(index, _, val);
-                }}
-                freeSolo
-                renderTags={(value: string[], getTagProps) =>
-                  value.map((option: string, index: number) => {
-                    return (
-                      <Chip
-                        key={index}
-                        variant="outlined"
-                        label={option}
-                        {...getTagProps({ index })}
-                      />
-                    );
-                  })
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    label="Question Options"
-                    placeholder="Add a option by pressing enter after write it "
-                    name="answer_options"
-                  />
-                )}
+                label="Type your Question"
+                multiline
+                rows={4}
+                sx={{ width: "100%" }}
               />
-            )}
-          </Paper>
-        </div>
-      ))}
+
+              <FormControl sx={{ mt: 2, mb: 2, minWidth: 220 }} size="small">
+                <InputLabel id="answer_type">Choose answer type</InputLabel>
+                <Select
+                  labelId="answer_type"
+                  name="answer_type"
+                  disabled={type === "view" ? true : false}
+                  value={element.answer_type || ""}
+                  label="Choose answer type"
+                  onChange={(e) => handleChange(index, e)}
+                >
+                  {/* <MenuItem value="Checkbox">Checkbox</MenuItem> */}
+                  <MenuItem value="text">Text</MenuItem>
+                  {/* <MenuItem value="Radio button">Radio button</MenuItem> */}
+                  <MenuItem value="list">List</MenuItem>
+                </Select>
+              </FormControl>
+
+              {element.answer_type === "list" && (
+                <Autocomplete
+                  multiple
+                  id="tags-filled"
+                  options={[]}
+                  disabled={type === "view" ? true : false}
+                  defaultValue={element.answer_options || []}
+                  // defaultValue={_.isEmpty(element.answer_options) ? []: [element.answer_options]  }
+                  onChange={(_, val) => {
+                    handleChange(index, _, val);
+                  }}
+                  freeSolo
+                  renderTags={(value: string[][], getTagProps) =>
+                    value.map((option: string[], index: number) => {
+                      return (
+                        <Chip
+                          key={index}
+                          variant="outlined"
+                          label={option}
+                          {...getTagProps({ index })}
+                        />
+                      );
+                    })
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Question Options"
+                      placeholder="Add a option by pressing enter after write it "
+                      name="answer_options"
+                    />
+                  )}
+                />
+              )}
+            </Paper>
+          </div>
+        )
+      )}
     </form>
   );
 };

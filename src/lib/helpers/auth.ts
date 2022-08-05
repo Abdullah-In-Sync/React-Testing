@@ -13,7 +13,7 @@ export const buildPatientTokenValidationQuery = (
       onCompleted: async (data) => {
         /* istanbul ignore else */
         if (data.getTokenData) {
-          let user_type = data!.getTokenData.user_type;
+          let user_type: string = data!.getTokenData.user_type;
           user_type = user_type.replace("[", "");
           user_type = user_type.replace("]", "");
           if (user_type != "patient") {

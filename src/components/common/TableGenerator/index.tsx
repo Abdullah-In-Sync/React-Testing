@@ -1,6 +1,5 @@
-//@ts-nocheck
 import React, { useState, useEffect } from "react";
-import { withStyles, useTheme } from "@mui/styles";
+import { withStyles } from "@mui/styles";
 import isEmpty from "lodash/isEmpty";
 
 import Table from "@mui/material/Table";
@@ -21,7 +20,6 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import Loader from "../Loader";
 
 function TablePaginationActions(props, compProps) {
-  const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
   const handleFirstPageButtonClick = (event) => {
@@ -62,36 +60,40 @@ function TablePaginationActions(props, compProps) {
           disabled={page === 0}
           aria-label="first page"
         >
-          {theme?.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+          <FirstPageIcon />
+          {/* {theme?.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />} */}
         </IconButton>
         <IconButton
           onClick={handleBackButtonClick}
           disabled={page === 0}
           aria-label="previous page"
         >
-          {theme?.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+          {/* {theme?.direction === "rtl" ? (
             <KeyboardArrowRight />
           ) : (
             <KeyboardArrowLeft />
-          )}
+          )} */}
         </IconButton>
         <IconButton
           onClick={handleNextButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="next page"
         >
-          {theme?.direction === "rtl" ? (
+          <KeyboardArrowRight />
+          {/* {theme?.direction === "rtl" ? (
             <KeyboardArrowLeft />
           ) : (
             <KeyboardArrowRight />
-          )}
+          )} */}
         </IconButton>
         <IconButton
           onClick={handleLastPageButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="last page"
         >
-          {theme?.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+          <LastPageIcon />
+          {/* {theme?.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />} */}
         </IconButton>
       </Box>
       {compProps.selectedRecords &&
@@ -222,7 +224,7 @@ const TableGenerator = ({
   initialSort = "",
   backendPagination = false,
   dataCount,
-  onPageChange,
+  // onPageChange,
   onChangeSelected,
   onRowPerPageChange,
   rowOnePage = 10,
@@ -274,9 +276,12 @@ const TableGenerator = ({
   //   onChangeSelected(newSelected);
   // };
 
-  const handleChangePage = (event, newPage, towards) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    newPage: number
+  ) => {
     setPage(newPage);
-    onPageChange(newPage, towards);
+    // onPageChange(newPage, towards);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -393,7 +398,7 @@ const TableGenerator = ({
                   inputProps: { "aria-label": "rows per page" },
                 }}
                 onPageChange={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={(e) => TablePaginationActions(e, props)}
               />
             </TableRow>

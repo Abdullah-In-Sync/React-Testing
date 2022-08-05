@@ -15,7 +15,6 @@ import Layout from "../../../components/layout";
 import Loader from "../../../components/common/Loader";
 import ContentHeader from "../../../components/common/ContentHeader";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
@@ -51,10 +50,11 @@ const Feedback: NextPage = () => {
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
 
-  const [gettokenData, tokenLoading, tokenData] =
-    buildPatientTokenValidationQuery((therapistId) => {
+  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
+    (therapistId) => {
       settherapistId(therapistId);
-    });
+    }
+  );
 
   const [
     getPatientTherapyData,
@@ -184,9 +184,7 @@ const Feedback: NextPage = () => {
       ]);
     }
   };
-  const [postPatientFeedback, { data, loading, error }] = useMutation(
-    POST_PATIENT_FEEDBACK
-  );
+  const [postPatientFeedback] = useMutation(POST_PATIENT_FEEDBACK);
   const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref
@@ -487,7 +485,7 @@ const Feedback: NextPage = () => {
                           <Typography
                             gutterBottom
                             component="div"
-                            data-testid="no-data-found-therapist-feedback-list"
+                            data-testid="no-data-found-patient-feedback-list"
                           >
                             No Data Found
                           </Typography>
