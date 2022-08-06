@@ -34,7 +34,7 @@ export default function QuestionTypeRadiobox({ fv, fk, disable }): JSX.Element {
           }
         >
           {fv.answer_options &&
-            fv.answer_options.map((av: any) => {
+            fv.answer_options.map((av, ak) => {
               return (
                 <FormControlLabel
                   sx={{ fontSize: "15px", color: "#3f4040b0 !important" }}

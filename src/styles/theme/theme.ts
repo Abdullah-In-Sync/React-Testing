@@ -1,9 +1,17 @@
-// 👇️ ts-nocheck ignores all ts errors in the file
-// @ts-nocheck
 import { createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 
-// Create a theme instance.
+declare module "@mui/material/styles" {
+  interface Palette {
+    custom: Palette["primary"];
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    custom?: PaletteOptions["primary"];
+  }
+}
+
 const theme = createTheme({
   palette: {
     primary: {

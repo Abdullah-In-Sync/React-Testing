@@ -100,10 +100,12 @@ const Feedback: NextPage = () => {
   }, [patientData]);
 
   useEffect(() => {
-    setLoader(true);
-    getPatientSessionData({
-      variables: { pttherapyId: therapy, patientId: patientData.patient_id },
-    });
+    if (patientData.patient_id.length > 0) {
+      setLoader(true);
+      getPatientSessionData({
+        variables: { pttherapyId: therapy, patientId: patientData.patient_id },
+      });
+    }
   }, [therapy]);
 
   useEffect(() => {
@@ -147,7 +149,7 @@ const Feedback: NextPage = () => {
 
   const onTherapyChange = (event: SelectChangeEvent) => {
     setLoader(true);
-    setDefaultStateExcludingLoader();
+    setSessionPanelExpanded(false);
     setTherapy(event.target.value);
   };
 

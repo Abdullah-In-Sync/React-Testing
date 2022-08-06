@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 
-const File = ({ field, onChange }) => {
-  const [fileName, setFileName] = useState("");
-  /* @typescript-eslint/no-unused-vars */
-  const handleChange = async (e) => {
-    setFileName(e[0].name);
-    onChange(field, e[0]);
-  };
+const File = ({ field }) => {
+  const [fileName] = useState("");
 
   return (
     <div

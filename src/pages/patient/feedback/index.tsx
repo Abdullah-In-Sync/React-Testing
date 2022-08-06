@@ -15,7 +15,6 @@ import Layout from "../../../components/layout";
 import Loader from "../../../components/common/Loader";
 import ContentHeader from "../../../components/common/ContentHeader";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import CircularProgress from "@mui/material/CircularProgress";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
@@ -51,7 +50,7 @@ const Feedback: NextPage = () => {
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
 
-  const [gettokenData, tokenLoading, tokenData] = buildPatientTokenValidationQuery(
+  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (therapistId) => {
       settherapistId(therapistId);
     }
@@ -165,7 +164,6 @@ const Feedback: NextPage = () => {
     };
 
   const handleInputChange = (i, e) => {
-    const newFormValues = [...formValues];
     let val = e.target.name;
 
     if (e.target.id && e.target.id != "undefined") {
@@ -185,9 +183,7 @@ const Feedback: NextPage = () => {
       ]);
     }
   };
-  const [postPatientFeedback, { data, loading, error }] = useMutation(
-    POST_PATIENT_FEEDBACK
-  );
+  const [postPatientFeedback] = useMutation(POST_PATIENT_FEEDBACK);
   const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref
@@ -212,15 +208,12 @@ const Feedback: NextPage = () => {
   };
 
   /* istanbul ignore next */
-  const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+  const handleClose = () => {
     window.location.reload();
     setOpen(false);
   };
   /* istanbul ignore next */
-  const handleCloseError = (
-    event?: SyntheticEvent | Event,
-    reason?: string
-  ) => {
+  const handleCloseError = () => {
     setErrorOpen(false);
   };
 
@@ -488,7 +481,7 @@ const Feedback: NextPage = () => {
                           <Typography
                             gutterBottom
                             component="div"
-                            data-testid="no-data-found-therapist-feedback-list"
+                            data-testid="no-data-found-patient-feedback-list"
                           >
                             No Data Found
                           </Typography>
