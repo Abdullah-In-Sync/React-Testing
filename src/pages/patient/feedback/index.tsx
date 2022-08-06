@@ -50,10 +50,11 @@ const Feedback: NextPage = () => {
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
 
-  const [gettokenData, tokenLoading] =
-    buildPatientTokenValidationQuery((therapistId) => {
+  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
+    (therapistId) => {
       settherapistId(therapistId);
-    });
+    }
+  );
 
   const [
     getPatientTherapyData,
@@ -183,9 +184,7 @@ const Feedback: NextPage = () => {
       ]);
     }
   };
-  const [postPatientFeedback] = useMutation(
-    POST_PATIENT_FEEDBACK
-  );
+  const [postPatientFeedback] = useMutation(POST_PATIENT_FEEDBACK);
   const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref
