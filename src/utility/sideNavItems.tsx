@@ -64,7 +64,7 @@ export const superadmin_routes = [
     {
       key: 16,
       label: "Feedback",
-      path: "/clinical-analysis/feedback",
+      path: "admin/feedback",
       icon: <ThumbUpAltIcon />,
     },
     {

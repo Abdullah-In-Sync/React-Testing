@@ -1,6 +1,4 @@
-// 👇️ ts-nocheck ignores all ts errors in the file
-// @ts-nocheck
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -12,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import _flatten from "lodash/flatten";
+// import _flatten from "lodash/flatten";
 
 // import { FieldsLayout } from './fields';
 // import FieldsLayout from './fields/FieldsLayout'
@@ -30,7 +28,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export interface DialogTitleProps {
   id: string;
   children?: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const BootstrapDialogTitle = (props: DialogTitleProps) => {
@@ -65,29 +63,47 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
+interface CrudDialogProps {
+  [x: string]: any;
+  type?: string; // 👈️ marked optional
+  values?: any;
+  buttonText?: any;
+  callBackFormValues?: (params: any) => any;
+  open: boolean;
+  fields?: any;
+  onClose?: () => void;
+  // onFieldChange?: (params: any) => void;
+  title: string;
+  onsubmit?: (values: any) => void;
+  okText?: string;
+  cancelText?: string;
+  mode?: string;
+  hide?: boolean;
+  description?: string;
+  extraButtonText?: boolean;
+  onExtraButton?: (params: any) => any;
+  dynamicForm?: any;
+  viewData?: any;
+}
+
 const CrudDialog = ({
-  onRef = () => {},
   open = false,
   fields = [],
-  onClose = () => {},
-  submitButtonDisabled = false,
-  onFieldChange = () => {},
+  onClose,
+  // onFieldChange,
   title = "Dialog Title",
-  onsubmit = () => {},
+  onsubmit,
   values = {},
   okText = "Create",
   cancelText = "Cancel",
-  info = false,
   mode = "Add",
-  closable = true,
-  extraButtonLoading = false,
   hide = false,
   description,
   extraButtonText = false,
-  onExtraButton = () => {},
+  onExtraButton,
   dynamicForm,
   viewData = false,
-}) => {
+}: CrudDialogProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
   //   const parseValues=(props)=> {
   //     const values = {};
@@ -122,7 +138,7 @@ const CrudDialog = ({
     _fieldValues[field.key] = field.key === "is_open" ? !!value : value;
     setFieldValues(_fieldValues);
 
-    onFieldChange(field, value);
+    // onFieldChange(field, value);
   };
 
   const onSubmit = (e) => {
@@ -150,9 +166,14 @@ const CrudDialog = ({
         <BootstrapDialogTitle id="customized-dialog-title">
           {title}
         </BootstrapDialogTitle>
+
         <Typography
-          variant="h5"
-          sx={{ margin: "45px", textAlign: "center", fontWeight: 200 }}
+          variant={okText == "Delete" ? "h5" : "body2"}
+          sx={
+            okText == "Delete"
+              ? { margin: "45px", textAlign: "center", fontWeight: 200 }
+              : { margin: "15px" }
+          }
         >
           {description}
         </Typography>

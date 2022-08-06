@@ -6,7 +6,13 @@ const buttonStyle = {
   color: "custom.light",
 };
 
-export const AddButton = ({ size, ...props }) => {
+export const AddButton = ({
+  size,
+  ...props
+}: {
+  [x: string]: any;
+  size?: any;
+}) => {
   return (
     <Button
       size={size || "medium"}

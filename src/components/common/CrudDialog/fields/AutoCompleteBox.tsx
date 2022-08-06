@@ -39,6 +39,7 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
         // defaultValue={_valueObj}
         defaultValue={_.isEmpty(value) ? field.defaultValue : value}
         inputValue={inputValue}
+        disabled={field.disabled}
         getOptionLabel={(option) => option.label}
         onChange={(_, val) => {
           setValue(val);

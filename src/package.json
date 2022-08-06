@@ -27,6 +27,7 @@
     "enzyme": "^3.11.0",
     "graphql": "^16.5.0",
     "js-cookie": "^3.0.1",
+    "moment": "^2.29.4",
     "next": "^12.1.6",
     "notistack": "^2.0.5",
     "prop-types": "^15.8.1",

@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { Text, AutoCompleteBox } from "./index";
+import { Text, AutoCompleteBox, SelectField } from "./index";
 
 const FIELD_COMPONENTS = {
   autocomplete: AutoCompleteBox,
@@ -11,7 +11,7 @@ const FIELD_COMPONENTS = {
   number: Text,
   // multiSelect:FilterSelect,
   // date: DatePicker,
-  // select: SelectField,
+  select: SelectField,
   // checkbox: CheckboxField,
   // radio: RadioSelect,
   // file: File,

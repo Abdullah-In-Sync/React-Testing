@@ -1,35 +1,25 @@
-// 👇️ ts-nocheck ignores all ts errors in the file
-
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { makeStyles, withStyles, useTheme } from "@mui/styles";
+import { withStyles } from "@mui/styles";
 import isEmpty from "lodash/isEmpty";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-
 import TablePagination from "@mui/material/TablePagination";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import TableFooter from "@mui/material/TableFooter";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 import Loader from "../Loader";
-import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 
 function TablePaginationActions(props, compProps) {
-  const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
   const handleFirstPageButtonClick = (event) => {
@@ -70,36 +60,40 @@ function TablePaginationActions(props, compProps) {
           disabled={page === 0}
           aria-label="first page"
         >
-          {theme?.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+          <FirstPageIcon />
+          {/* {theme?.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />} */}
         </IconButton>
         <IconButton
           onClick={handleBackButtonClick}
           disabled={page === 0}
           aria-label="previous page"
         >
-          {theme?.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+          {/* {theme?.direction === "rtl" ? (
             <KeyboardArrowRight />
           ) : (
             <KeyboardArrowLeft />
-          )}
+          )} */}
         </IconButton>
         <IconButton
           onClick={handleNextButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="next page"
         >
-          {theme?.direction === "rtl" ? (
+          <KeyboardArrowRight />
+          {/* {theme?.direction === "rtl" ? (
             <KeyboardArrowLeft />
           ) : (
             <KeyboardArrowRight />
-          )}
+          )} */}
         </IconButton>
         <IconButton
           onClick={handleLastPageButtonClick}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="last page"
         >
-          {theme?.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+          <LastPageIcon />
+          {/* {theme?.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />} */}
         </IconButton>
       </Box>
       {compProps.selectedRecords &&
@@ -115,12 +109,12 @@ function TablePaginationActions(props, compProps) {
   );
 }
 
-TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-};
+// TablePaginationActions.propTypes = {
+//   count: PropTypes.number.isRequired,
+//   onPageChange: PropTypes.func.isRequired,
+//   page: PropTypes.number.isRequired,
+//   rowsPerPage: PropTypes.number.isRequired,
+// };
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields } = props;
@@ -137,7 +131,7 @@ function EnhancedTableHead(props) {
             <TableCell
               key={headCell.key}
               align={headCell.numeric ? "right" : "left"}
-              padding={headCell.disablePadding ? "none" : "default"}
+              padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.key ? order : false}
               sx={{ color: "custom.light" }}
             >
@@ -163,15 +157,15 @@ function EnhancedTableHead(props) {
   );
 }
 
-EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-  fields: PropTypes.array.isRequired,
-};
+// EnhancedTableHead.propTypes = {
+//   classes: PropTypes.object.isRequired,
+//   numSelected: PropTypes.number.isRequired,
+//   onRequestSort: PropTypes.func.isRequired,
+//   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+//   orderBy: PropTypes.string.isRequired,
+//   rowCount: PropTypes.number.isRequired,
+//   fields: PropTypes.array.isRequired,
+// };
 
 const classes = {
   tableHead: {
@@ -220,25 +214,21 @@ const classes = {
     fontSize: "12px",
     marginLeft: "100px",
   },
-  selected: {},
 };
 
 const TableGenerator = ({
   fields = [],
   data = [],
-  handleSortChange = () => {},
+  handleSortChange,
   currentPage = 0,
   initialSort = "",
   backendPagination = false,
   dataCount,
-  searchQuery = "",
-  onPageChange = () => {},
-  onChangeSelected = () => {},
-  onRowPerPageChange = () => {},
+  // onPageChange,
+  onChangeSelected,
+  onRowPerPageChange,
   rowOnePage = 10,
-  radio = false,
-  size = "medium",
-  sensorTable = false,
+  size,
   ...props
 }) => {
   const [order, setOrder] = useState("desc");
@@ -257,38 +247,41 @@ const TableGenerator = ({
     setPage(currentPage);
   }, [currentPage]);
 
-  const handleClick = (event, name) => {
-    const selectedIndex = props.selectedRecords.findIndex(
-      (val) => val.id === name.id
-    );
-    let newSelected = [];
+  // const handleClick = (event, name) => {
+  //   const selectedIndex = props.selectedRecords.findIndex(
+  //     (val) => val.id === name.id
+  //   );
+  //   let newSelected = [];
 
-    if (radio) {
-      if (selectedIndex) {
-        newSelected = [name];
-      } else {
-        newSelected = [];
-      }
-    } else {
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(props.selectedRecords, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(props.selectedRecords.slice(1));
-      } else if (selectedIndex === props.selectedRecords.length - 1) {
-        newSelected = newSelected.concat(props.selectedRecords.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          props.selectedRecords.slice(0, selectedIndex),
-          props.selectedRecords.slice(selectedIndex + 1)
-        );
-      }
-    }
-    onChangeSelected(newSelected);
-  };
+  //   if (radio) {
+  //     if (selectedIndex) {
+  //       newSelected = [name];
+  //     } else {
+  //       newSelected = [];
+  //     }
+  //   } else {
+  //     if (selectedIndex === -1) {
+  //       newSelected = newSelected.concat(props.selectedRecords, name);
+  //     } else if (selectedIndex === 0) {
+  //       newSelected = newSelected.concat(props.selectedRecords.slice(1));
+  //     } else if (selectedIndex === props.selectedRecords.length - 1) {
+  //       newSelected = newSelected.concat(props.selectedRecords.slice(0, -1));
+  //     } else if (selectedIndex > 0) {
+  //       newSelected = newSelected.concat(
+  //         props.selectedRecords.slice(0, selectedIndex),
+  //         props.selectedRecords.slice(selectedIndex + 1)
+  //       );
+  //     }
+  //   }
+  //   onChangeSelected(newSelected);
+  // };
 
-  const handleChangePage = (event, newPage, towards) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    newPage: number
+  ) => {
     setPage(newPage);
-    onPageChange(newPage, towards);
+    // onPageChange(newPage, towards);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -360,7 +353,6 @@ const TableGenerator = ({
                   )
                   .map((record, index) => {
                     const isItemSelected = isSelected(record);
-                    const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
@@ -369,7 +361,6 @@ const TableGenerator = ({
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={record.id}
-                        classes={{ selected: classes.selected }}
                         sx={classes.tableRowSelected}
                         selected={isItemSelected}
                         style={{ height: 10 }}
@@ -380,7 +371,7 @@ const TableGenerator = ({
                             <TableCell
                               key={field.key}
                               sx={classes.tableCell}
-                              padding={field.padding ? "checkbox" : "default"}
+                              padding={field.padding ? "checkbox" : "normal"}
                               align="left"
                             >
                               {field.render &&
@@ -407,7 +398,7 @@ const TableGenerator = ({
                   inputProps: { "aria-label": "rows per page" },
                 }}
                 onPageChange={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
                 ActionsComponent={(e) => TablePaginationActions(e, props)}
               />
             </TableRow>
@@ -418,10 +409,10 @@ const TableGenerator = ({
   );
 };
 
-TableGenerator.defaultProps = {
-  selectedRecords: [],
-  showSelectAll: true,
-  handleSortChange: () => {},
-};
+// TableGenerator.defaultProps = {
+//   selectedRecords: [],
+//   showSelectAll: true,
+//   handleSortChange,
+// };
 
 export default withStyles({}, { withTheme: true })(TableGenerator);
