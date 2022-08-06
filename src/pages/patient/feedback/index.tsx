@@ -164,7 +164,6 @@ const Feedback: NextPage = () => {
     };
 
   const handleInputChange = (i, e) => {
-    const newFormValues = [...formValues];
     let val = e.target.name;
 
     if (e.target.id && e.target.id != "undefined") {
@@ -209,15 +208,12 @@ const Feedback: NextPage = () => {
   };
 
   /* istanbul ignore next */
-  const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+  const handleClose = () => {
     window.location.reload();
     setOpen(false);
   };
   /* istanbul ignore next */
-  const handleCloseError = (
-    event?: SyntheticEvent | Event,
-    reason?: string
-  ) => {
+  const handleCloseError = () => {
     setErrorOpen(false);
   };
 
