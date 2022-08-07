@@ -1,4 +1,4 @@
-import { useState, useEffect, SyntheticEvent, forwardRef } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import type { NextPage } from "next";
 // GRAPHQL
 import { useMutation, useLazyQuery } from "@apollo/client";
@@ -16,6 +16,7 @@ import Loader from "../../../components/common/Loader";
 import ContentHeader from "../../../components/common/ContentHeader";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import {
   Accordion,
   AccordionDetails,
@@ -149,7 +150,7 @@ const Feedback: NextPage = () => {
     patientSessionData,
     patientFeedbackData,
   ]);
-
+  
   const onTherapyChange = (event: SelectChangeEvent) => {
     setLoader(true);
     setDefaultStateExcludingLoader();
@@ -295,6 +296,7 @@ const Feedback: NextPage = () => {
                   onSubmit={(values) => {
                     handleAdd(values);
                   }}
+                  data-testid='feedbackForm'
                 >
                   <Accordion
                     sx={{ marginTop: "4px", borderRadius: "4px" }}
@@ -470,6 +472,7 @@ const Feedback: NextPage = () => {
                               type="submit"
                               disabled={btndiabled == true ? true : false}
                               variant="contained"
+                              data-testid="submitFeedback"
                             >
                               Submit
                             </Button>
