@@ -150,7 +150,7 @@ const Feedback: NextPage = () => {
     patientSessionData,
     patientFeedbackData,
   ]);
-  
+
   const onTherapyChange = (event: SelectChangeEvent) => {
     setLoader(true);
     setDefaultStateExcludingLoader();
@@ -296,7 +296,7 @@ const Feedback: NextPage = () => {
                   onSubmit={(values) => {
                     handleAdd(values);
                   }}
-                  data-testid='feedbackForm'
+                  data-testid="feedbackForm"
                 >
                   <Accordion
                     sx={{ marginTop: "4px", borderRadius: "4px" }}
