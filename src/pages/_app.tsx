@@ -13,6 +13,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import createEmotionCache from "../utility/createEmotionCache";
+import { SidebarProvider } from "../contexts/SidebarContext";
 import theme from "../styles/theme/theme";
 import "../styles/main.css";
 const clientSideEmotionCache = createEmotionCache();
@@ -31,14 +32,16 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
       }}
       autoHideDuration={1500}
     >
-      <ApolloProvider client={client}>
-        <CacheProvider value={emotionCache}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </CacheProvider>
-      </ApolloProvider>
+      <SidebarProvider>
+        <ApolloProvider client={client}>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </CacheProvider>
+        </ApolloProvider>
+      </SidebarProvider>
     </SnackbarProvider>
   );
 };

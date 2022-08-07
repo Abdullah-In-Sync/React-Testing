@@ -16,15 +16,18 @@ const wrapper = {
   margin: "25px 10px",
   padding: "5px 20px",
 };
-export default function Layout(props) {
+
+const Layout = ({ children }) => {
   return (
     <Box sx={{ display: "flex", backgroundColor: "#F5F5F5" }}>
       <NavBar />
       <SideBar />
       <Box style={contentStyle}>
-        <Box style={wrapper}>{props.children}</Box>
+        <Box style={wrapper}>{children}</Box>
       </Box>
       <Footer />
     </Box>
   );
-}
+};
+
+export default Layout;

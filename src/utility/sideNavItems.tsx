@@ -19,8 +19,22 @@ import FilePresentIcon from "@mui/icons-material/FilePresent";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import TungstenIcon from "@mui/icons-material/Tungsten";
 
+type superadminRoutesType =
+  | {
+      key: number;
+      label: string;
+      path: string;
+      icon: JSX.Element;
+    }
+  | {
+      key: number;
+      label: string;
+      path: string;
+      icon: JSX.Element;
+    }[];
+
 //** SUPER ADMIN ROUTES **//
-export const superadmin_routes = [
+export const superadmin_routes: superadminRoutesType[] = [
   { key: 1, label: "Home", path: "/dashboard", icon: <HomeIcon /> },
   [
     { key: 2, label: "Hospital", path: "/hospital", icon: <ApartmentIcon /> },

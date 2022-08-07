@@ -1,163 +1,115 @@
-import React, { useState } from "react";
-import NextLink from "next/link";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import { withStyles } from "@mui/styles";
-import { superadmin_routes } from "../../utility/sideNavItems";
+import { useContext } from "react";
+import Scrollbar from "../common/Scrollbar";
+import { SidebarContext } from "../../contexts/SidebarContext";
 
-const drawerWidth = 240;
+import { Box, Drawer, styled, Divider, useTheme } from "@mui/material";
 
-const listItem = {
-  paddingTop: "0px",
-  paddingBottom: "0px",
-};
+import SidebarMenu from "./SidebarMenu";
+// import Logo from 'src/components/LogoSign';
 
-// MuiListItemIcon-root css-cveggr-MuiListItemIcon-root
-const ListButton = withStyles({
-  root: {
-    "&$selected": {
-      backgroundColor: "#6ca08e",
-      color: "custom.light",
-      "& .MuiListItemIcon-root": {
-        color: "custom.light",
-      },
-    },
-    "&$selected:hover": {
-      backgroundColor: "#6ca08e",
-      color: "custom.light",
-      "& .MuiListItemIcon-root": {
-        color: "custom.light",
-      },
-    },
-    "&:hover": {
-      backgroundColor: "#6ca08e",
-      color: "custom.light",
-      "& .MuiListItemIcon-root": {
-        color: "custom.light",
-      },
-    },
-  },
-  selected: {},
-})(ListItemButton);
+const SidebarWrapper = styled(Box)(
+  ({ theme }) => `
+        width:  240px;
+        min-width:  240px;
+        color: ${theme.palette.custom.light};
+        position: relative;
+        z-index: 7;
+        height: 100%;
+        padding-bottom: 68px;
+`
+);
 
-export default function SideBar() {
-  const [expanded, setExpanded] = useState({});
-  const [selectedIndex, setSelectedIndex] = useState(1);
-
-  const handleListItemClick = (e, index) => {
-    setSelectedIndex(index);
-  };
-  const handleClick = (e, id) => {
-    setExpanded({
-      ...expanded,
-      [id]: !expanded[id],
-    });
-  };
+function SideBar() {
+  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+  const closeSidebar = () => toggleSidebar();
+  const theme = useTheme();
 
   return (
-    <Drawer
-      variant="permanent"
-      PaperProps={{
-        sx: {
-          backgroundColor: "primary.main",
-          color: "custom.light",
-          zIndex: 0,
-        },
-      }}
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: "auto" }}>
-        <List>
-          {superadmin_routes.map((val) => {
-            if (Array.isArray(val)) {
-              return (
-                <>
-                  <ListItemButton
-                    onClick={(e) => handleClick(e, val[0]?.key)}
-                    sx={{ margin: "0px 16px" }}
-                  >
-                    <ListItemIcon
-                      sx={{ color: "custom.light", minWidth: "32px" }}
-                    >
-                      {val[0]?.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={val[0]?.label}
-                      primaryTypographyProps={{ fontSize: 14 }}
-                    />
-                    {expanded[val[0]?.key] ? <ExpandLess /> : <ExpandMore />}
-                  </ListItemButton>
-                  {val?.slice(1)?.map((item) => (
-                    <Collapse
-                      key={val[0]?.key}
-                      in={expanded[val[0]?.key] || false}
-                      timeout="auto"
-                      unmountOnExit
-                    >
-                      <ListItem key={item.label} sx={listItem}>
-                        <NextLink href={item.path} passHref>
-                          <ListButton
-                            sx={{ pl: 4 }}
-                            onClick={(e) => handleListItemClick(e, item.key)}
-                            selected={selectedIndex === item.key}
-                          >
-                            <ListItemIcon
-                              sx={{ color: "custom.light", minWidth: "32px" }}
-                            >
-                              {item.icon}
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={item.label}
-                              primaryTypographyProps={{ fontSize: 14 }}
-                            />
-                          </ListButton>
-                        </NextLink>
-                      </ListItem>
-                    </Collapse>
-                  ))}
-                </>
-              );
-            } else {
-              return (
-                <>
-                  <ListItem key={val.label} sx={listItem}>
-                    <NextLink href={val.path} passHref>
-                      <ListButton
-                        onClick={(e) => handleListItemClick(e, val.key)}
-                        selected={selectedIndex === val.key}
-                      >
-                        <ListItemIcon
-                          sx={{ color: "custom.light", minWidth: "32px" }}
-                        >
-                          {val.icon}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={val.label}
-                          primaryTypographyProps={{ fontSize: 14 }}
-                        />
-                      </ListButton>
-                    </NextLink>
-                  </ListItem>
-                </>
-              );
-            }
-          })}
-        </List>
-      </Box>
-    </Drawer>
+    <>
+      <SidebarWrapper
+        sx={{
+          display: {
+            xs: "none",
+            lg: "inline-block",
+          },
+          position: "fixed",
+          left: 0,
+          top: 0,
+          background: theme.palette.primary.main,
+          // theme.palette.mode === 'dark'
+          //   ? alpha(lighten(theme.header.background, 0.1), 0.5)
+          //   : darken(theme.colors.alpha.black[100], 0.5),
+          // boxShadow:
+          //   theme.palette.mode === 'dark' ? theme.sidebar.boxShadow : 'none'
+        }}
+      >
+        <Scrollbar>
+          <Box mt={3}>
+            <Box
+              mx={2}
+              sx={{
+                width: 52,
+                height: 15,
+              }}
+            >
+              {/* <Logo /> */}
+            </Box>
+          </Box>
+          <Divider
+            sx={{
+              mt: theme.spacing(3),
+              mx: theme.spacing(2),
+              background: theme.palette.custom.light,
+            }}
+          />
+          <SidebarMenu />
+        </Scrollbar>
+      </SidebarWrapper>
+
+      {/* Small Screen */}
+      <Drawer
+        // sx={{
+        //   boxShadow: `${theme.sidebar.boxShadow}`
+        // }}
+        anchor={theme.direction === "rtl" ? "right" : "left"}
+        open={sidebarToggle}
+        onClose={closeSidebar}
+        variant="temporary"
+        elevation={9}
+      >
+        <SidebarWrapper
+          sx={{
+            background: theme.palette.primary.main,
+            // theme.palette.mode === 'dark'
+            //   ? theme.colors.alpha.white[100]
+            //   : darken(theme.colors.alpha.black[100], 0.5)
+          }}
+        >
+          <Scrollbar>
+            <Box mt={3}>
+              <Box
+                mx={2}
+                sx={{
+                  width: 52,
+                  height: 10,
+                }}
+              >
+                {/* <Logo /> */}
+              </Box>
+            </Box>
+            <Divider
+              sx={{
+                mt: theme.spacing(3),
+                mx: theme.spacing(2),
+                background: theme.palette.primary.main[10],
+              }}
+            />
+            <SidebarMenu />
+          </Scrollbar>
+        </SidebarWrapper>
+      </Drawer>
+    </>
   );
 }
+
+export default SideBar;

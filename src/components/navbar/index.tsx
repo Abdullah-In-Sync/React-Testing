@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,6 +10,10 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
+import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
+import { SidebarContext } from "../../contexts/SidebarContext";
+import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const NavBar = () => {
@@ -23,6 +27,8 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
+  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+  console.log("sidebarToggle", sidebarToggle);
   return (
     <AppBar
       position="fixed"
@@ -86,6 +92,24 @@ const NavBar = () => {
                 </MenuItem>
               ))}
             </Menu>
+          </Box>
+
+          <Box
+            component="span"
+            sx={{
+              ml: 2,
+              display: { lg: "none", xs: "inline-block" },
+            }}
+          >
+            <Tooltip arrow title="Toggle Menu">
+              <IconButton color="primary" onClick={toggleSidebar}>
+                {!sidebarToggle ? (
+                  <MenuTwoToneIcon fontSize="small" />
+                ) : (
+                  <CloseTwoToneIcon fontSize="small" />
+                )}
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </Container>
