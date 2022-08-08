@@ -1,6 +1,6 @@
 import { TextareaAutosize, Typography } from "@mui/material";
 
-export default function QuestionTypeText({ fv, fk, disable }): JSX.Element {
+export default function QuestionTypeText({ fv, disable }): JSX.Element {
   return (
     <Typography gutterBottom component="div">
       <Typography
