@@ -24,7 +24,7 @@ const TableGenerator = dynamic(
   { ssr: false }
 );
 import ContentHeader from "../../../components/common/ContentHeader";
-import DynamicForm from "./components/DynamicForm";
+import DynamicForm from "../../../components/admin/feedback/DynamicForm";
 import { IconButton, Tooltip, Box } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CreateIcon from "@mui/icons-material/Create";
