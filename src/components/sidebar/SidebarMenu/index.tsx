@@ -9,12 +9,12 @@ import { SidebarContext } from "../../../contexts/SidebarContext";
 import { superadmin_routes } from "../../../utility/sideNavItems";
 
 const listItem = {
-    paddingTop: "0px",
-    paddingBottom: "0px",
+  paddingTop: "0px",
+  paddingBottom: "0px",
 };
 
 const MenuWrapper = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
   .MuiList-root {
     padding: ${theme.spacing(1)};
     & > .MuiList-root {
@@ -33,7 +33,7 @@ const MenuWrapper = styled(Box)(
 );
 
 const SubMenuWrapper = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     .MuiList-root {
       .MuiListItem-root {
         padding: 1px 0;
@@ -110,9 +110,9 @@ const SubMenuWrapper = styled(Box)(
                 background: ${theme.palette.custom.light[100]};
                 opacity: 0;
                 transition: ${theme.transitions.create([
-        "transform",
-        "opacity",
-    ])};
+                  "transform",
+                  "opacity",
+                ])};
                 width: 6px;
                 height: 6px;
                 transform: scale(0);
@@ -136,110 +136,110 @@ const SubMenuWrapper = styled(Box)(
 );
 
 function SidebarMenu() {
-    const { closeSidebar } = useContext(SidebarContext);
-    const router = useRouter();
-    const currentRoute = router.pathname;
-    const [expanded, setExpanded] = useState({});
-    const handleClick = (e, id) => {
-        setExpanded({
-            ...expanded,
-            [id]: !expanded[id],
-        });
-    };
+  const { closeSidebar } = useContext(SidebarContext);
+  const router = useRouter();
+  const currentRoute = router.pathname;
+  const [expanded, setExpanded] = useState({});
+  const handleClick = (e, id) => {
+    setExpanded({
+      ...expanded,
+      [id]: !expanded[id],
+    });
+  };
 
-    return (
-        <>
-            <MenuWrapper>
-                <List component="div">
-                    <SubMenuWrapper>
-                        <List component="div">
-                            {superadmin_routes.map((val) => {
-                                if (Array.isArray(val)) {
-                                    return (
-                                        <>
-                                            <ListItem
-                                                component="div"
-                                                key={val[0]?.label}
-                                                sx={listItem}
-                                            >
-                                                <Button
-                                                    disableRipple
-                                                    sx={{ color: "white" }}
-                                                    component="a"
-                                                    onClick={(e) => handleClick(e, val[0]?.key)}
-                                                    startIcon={val[0]?.icon}
-                                                    endIcon={
-                                                        expanded[val[0]?.key] ? (
-                                                            <ExpandLess />
-                                                        ) : (
-                                                            <ExpandMore />
-                                                        )
-                                                    }
-                                                >
-                                                    {val[0]?.label}
-                                                </Button>
-                                            </ListItem>
+  return (
+    <>
+      <MenuWrapper>
+        <List component="div">
+          <SubMenuWrapper>
+            <List component="div">
+              {superadmin_routes.map((val) => {
+                if (Array.isArray(val)) {
+                  return (
+                    <>
+                      <ListItem
+                        component="div"
+                        key={val[0]?.label}
+                        sx={listItem}
+                      >
+                        <Button
+                          disableRipple
+                          sx={{ color: "white" }}
+                          component="a"
+                          onClick={(e) => handleClick(e, val[0]?.key)}
+                          startIcon={val[0]?.icon}
+                          endIcon={
+                            expanded[val[0]?.key] ? (
+                              <ExpandLess />
+                            ) : (
+                              <ExpandMore />
+                            )
+                          }
+                        >
+                          {val[0]?.label}
+                        </Button>
+                      </ListItem>
 
-                                            {val?.slice(1)?.map((item) => (
-                                                <Collapse
-                                                    key={val[0]?.key}
-                                                    in={expanded[val[0]?.key] || false}
-                                                    timeout="auto"
-                                                    unmountOnExit
-                                                >
-                                                    <ListItem
-                                                        component="div"
-                                                        key={item.label}
-                                                        sx={listItem}
-                                                    >
-                                                        <NextLink href={item.path} passHref>
-                                                            <Button
-                                                                className={
-                                                                    currentRoute === `${item.path}`
-                                                                        ? "active"
-                                                                        : ""
-                                                                }
-                                                                disableRipple
-                                                                component="a"
-                                                                onClick={closeSidebar}
-                                                                startIcon={item.icon}
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        </NextLink>
-                                                    </ListItem>
-                                                </Collapse>
-                                            ))}
-                                        </>
-                                    );
-                                } else {
-                                    return (
-                                        <>
-                                            <ListItem component="div" key={val.label} sx={listItem}>
-                                                <NextLink href={val.path} passHref>
-                                                    <Button
-                                                        className={
-                                                            currentRoute === `${val.path}` ? "active" : ""
-                                                        }
-                                                        disableRipple
-                                                        component="a"
-                                                        onClick={closeSidebar}
-                                                        startIcon={val.icon}
-                                                    >
-                                                        {val.label}
-                                                    </Button>
-                                                </NextLink>
-                                            </ListItem>
-                                        </>
-                                    );
+                      {val?.slice(1)?.map((item) => (
+                        <Collapse
+                          key={val[0]?.key}
+                          in={expanded[val[0]?.key] || false}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <ListItem
+                            component="div"
+                            key={item.label}
+                            sx={listItem}
+                          >
+                            <NextLink href={item.path} passHref>
+                              <Button
+                                className={
+                                  currentRoute === `${item.path}`
+                                    ? "active"
+                                    : ""
                                 }
-                            })}
-                        </List>
-                    </SubMenuWrapper>
-                </List>
-            </MenuWrapper>
-        </>
-    );
+                                disableRipple
+                                component="a"
+                                onClick={closeSidebar}
+                                startIcon={item.icon}
+                              >
+                                {item.label}
+                              </Button>
+                            </NextLink>
+                          </ListItem>
+                        </Collapse>
+                      ))}
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <ListItem component="div" key={val.label} sx={listItem}>
+                        <NextLink href={val.path} passHref>
+                          <Button
+                            className={
+                              currentRoute === `${val.path}` ? "active" : ""
+                            }
+                            disableRipple
+                            component="a"
+                            onClick={closeSidebar}
+                            startIcon={val.icon}
+                          >
+                            {val.label}
+                          </Button>
+                        </NextLink>
+                      </ListItem>
+                    </>
+                  );
+                }
+              })}
+            </List>
+          </SubMenuWrapper>
+        </List>
+      </MenuWrapper>
+    </>
+  );
 }
 
 export default SidebarMenu;

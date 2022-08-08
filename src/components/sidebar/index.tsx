@@ -29,7 +29,7 @@ function SideBar() {
             lg: "inline-block",
           },
           position: "fixed",
-          zIndex: 'auto',
+          zIndex: "auto",
           left: 0,
           top: 0,
           background: theme.palette.primary.main,

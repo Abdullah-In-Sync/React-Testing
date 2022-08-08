@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react';
-import { Box, alpha, useTheme } from '@mui/material';
+import { FC, ReactNode } from "react";
+import { Box, alpha, useTheme } from "@mui/material";
 
 import NavBar from "../navbar";
 import SideBar from "../sidebar";
@@ -23,44 +23,42 @@ const Layout: FC<SidebarLayoutProps> = ({ children }) => {
       <Box
         sx={{
           flex: 1,
-          height: '100%',
+          height: "100%",
           backgroundColor: "#f3f3f3",
           borderRadius: "10px",
           padding: "5px 10px 5px 0",
 
-          '.MuiPageTitle-wrapper': {
+          ".MuiPageTitle-wrapper": {
             marginBottom: `${theme.spacing(4)}`,
             boxShadow: `0px 2px 4px -3px ${alpha(
               theme.palette.primary.main,
               0.1
-            )}, 0px 5px 12px -4px ${alpha(
-              theme.palette.primary.main,
-              0.05
-            )}`
-          }
+            )}, 0px 5px 12px -4px ${alpha(theme.palette.primary.main, 0.05)}`,
+          },
         }}
       >
         <NavBar />
         <SideBar />
         <Box
           sx={{
-            position: 'relative',
+            position: "relative",
             zIndex: 5,
-            display: 'block',
+            display: "block",
             flex: 1,
             pt: 10,
-            [theme.breakpoints.up('lg')]: {
-              ml: '250px'
-            }
+            [theme.breakpoints.up("lg")]: {
+              ml: "250px",
+            },
           }}
         >
-          <Box display="block" style={wrapper}>{children}</Box>
+          <Box display="block" style={wrapper}>
+            {children}
+          </Box>
           <Footer />
         </Box>
       </Box>
     </>
   );
 };
-
 
 export default Layout;
