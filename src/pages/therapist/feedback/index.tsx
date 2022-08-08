@@ -23,8 +23,10 @@ import {
 } from "@mui/material";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
 import { GET_THERAPISTFEEDBACKLIST_DATA } from "../../../graphql/query";
-import QuestionTypeRadiobox from "./QuestionTypeRadiobox";
-import QuestionTypeText from "./QuestionTypeText";
+import PatientViewMenu from "../../../components/therapist/patientViewMenu";
+import PatientViewTherapyTab from "../../../components/therapist/patientViewTherapyTab";
+import QuestionTypeRadiobox from "../../../components/therapist/feedback/questionTypeRadiobox";
+import QuestionTypeText from "../../../components/therapist/feedback/questionTypeText";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
@@ -223,6 +225,16 @@ const Feedback: NextPage = () => {
           </Grid>
         </Box>
         <Box>
+          <Box>
+            <PatientViewMenu
+              activeTab="therapy"
+              patientID={patientData.patient_id}
+            />
+            <PatientViewTherapyTab
+              activeTab="feedback"
+              patientID={patientData.patient_id}
+            />
+          </Box>
           <Typography
             variant="h4"
             mt={4}
@@ -313,11 +325,7 @@ const Feedback: NextPage = () => {
                                 />
                               )}
                               {fv.answer_type == "text" && (
-                                <QuestionTypeText
-                                  disable={true}
-                                  fv={fv}
-                                  fk={fk}
-                                />
+                                <QuestionTypeText disable={true} fv={fv} />
                               )}
                             </>
                           );

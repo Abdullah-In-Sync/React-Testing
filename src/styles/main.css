@@ -13,3 +13,10 @@
     padding-top: 20px;
     font-weight: 400 !important;
 }
+.patientviewtabs .active {
+    color: #fff;
+    background-color: #6ba08e;
+}
+.patientviewtherapy_tabs .active {
+    background-color: #6ba08e;
+}
