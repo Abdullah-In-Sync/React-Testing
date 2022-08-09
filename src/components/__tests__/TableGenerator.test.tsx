@@ -47,6 +47,7 @@ describe("when rendered with a `visible` prop", () => {
         currentPage={1}
         backendPagination={true}
         rowOnePage={10}
+        selectedRecords={[]}
       />
     );
   });
