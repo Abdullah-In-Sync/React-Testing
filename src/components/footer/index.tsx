@@ -9,7 +9,7 @@ const footerStyle = {
   justifyContent: "flex-end",
   zIndex: 1,
   background: "rgb(58, 58, 60)",
-  color: "custom.light",
+  color: "primary.contrastText",
   width: "100%",
   right: 0,
   bottom: 0,
@@ -17,7 +17,7 @@ const footerStyle = {
 };
 
 const footerLink = {
-  color: "custom.light",
+  color: "primary.contrastText",
   textDecoration: "none",
   margin: 2,
 };

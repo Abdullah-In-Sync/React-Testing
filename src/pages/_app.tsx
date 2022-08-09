@@ -2,7 +2,6 @@ import * as React from "react";
 import type { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { SnackbarProvider } from "notistack";
 
 import { ApolloProvider } from "@apollo/client";
 import client from "../apollo-client";
@@ -25,24 +24,16 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
-    <SnackbarProvider
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "center",
-      }}
-      autoHideDuration={1500}
-    >
+    <ApolloProvider client={client}>
       <SidebarProvider>
-        <ApolloProvider client={client}>
-          <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </CacheProvider>
-        </ApolloProvider>
+        <CacheProvider value={emotionCache}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </CacheProvider>
       </SidebarProvider>
-    </SnackbarProvider>
+    </ApolloProvider>
   );
 };
 

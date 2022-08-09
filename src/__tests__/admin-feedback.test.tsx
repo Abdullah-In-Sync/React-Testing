@@ -225,6 +225,12 @@ const mocks = [
   },
 ];
 
+describe("Feedback page", () => {
+  it("should render", () => {
+    render(<Feedback />);
+  });
+});
+
 describe("Admin feedback page", () => {
   test("Renders Admin feedback list", async () => {
     const { container } = render(
@@ -238,3 +244,16 @@ describe("Admin feedback page", () => {
     expect(container).toMatchSnapshot();
   });
 });
+
+// const sut = async (patient_id: string) => {
+//   // system under test
+//   localStorage.setItem("patient_id", patient_id);
+//   render(
+//     <MockedProvider mocks={mocks}>
+//       <Feedback />
+//     </MockedProvider>
+//   );
+//   await waitForElementToBeRemoved(() =>
+//     screen.queryByTestId("activity-indicator")
+//   );
+// };

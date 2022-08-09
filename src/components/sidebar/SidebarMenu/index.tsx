@@ -51,7 +51,7 @@ const SubMenuWrapper = styled(Box)(
     
         .MuiButton-root {
           display: flex;
-          color: ${theme.palette.custom.light};
+          color: ${theme.palette.primary.contrastText};
           background-color: transparent;
           width: 100%;
           justify-content: flex-start;
@@ -79,10 +79,10 @@ const SubMenuWrapper = styled(Box)(
           &.active,
           &:hover {
             background-color: ${theme.palette.secondary.main};
-            color: ${theme.palette.custom.light};
+            color: ${theme.palette.primary.contrastText};
             .MuiButton-startIcon,
             .MuiButton-endIcon {
-              color: ${theme.palette.custom.light};
+              color: ${theme.palette.primary.contrastText};
             }
           }
         }
@@ -107,7 +107,7 @@ const SubMenuWrapper = styled(Box)(
               }
               &:before {
                 content: ' ';
-                background: ${theme.palette.custom.light[100]};
+                background: ${theme.palette.primary.contrastText};
                 opacity: 0;
                 transition: ${theme.transitions.create([
                   "transform",
@@ -138,7 +138,7 @@ const SubMenuWrapper = styled(Box)(
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
-  const currentRoute = router.pathname;
+  const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
   const handleClick = (e, id) => {
     setExpanded({
@@ -164,7 +164,7 @@ function SidebarMenu() {
                       >
                         <Button
                           disableRipple
-                          sx={{ color: "white" }}
+                          // sx={{ color: "white" }}
                           component="a"
                           onClick={(e) => handleClick(e, val[0]?.key)}
                           startIcon={val[0]?.icon}

@@ -5,10 +5,9 @@ import { SidebarContext } from "../../contexts/SidebarContext";
 import SidebarMenu from "./SidebarMenu";
 
 const SidebarWrapper = styled(Box)(
-  ({ theme }) => `
+  () => `
         width:  240px;
         min-width:  240px;
-        color: ${theme.palette.custom.light};
         position: relative;
         z-index: 7;
         height: 100%;
@@ -43,15 +42,12 @@ function SideBar() {
                 width: 52,
                 height: 15,
               }}
-            >
-              {/* <Logo /> */}
-            </Box>
+            ></Box>
           </Box>
           <Divider
             sx={{
               mt: theme.spacing(3),
               mx: theme.spacing(2),
-              background: theme.palette.custom.light,
             }}
           />
           <SidebarMenu />
@@ -79,9 +75,7 @@ function SideBar() {
                   width: 52,
                   height: 10,
                 }}
-              >
-                {/* <Logo /> */}
-              </Box>
+              ></Box>
             </Box>
             <Divider
               sx={{
