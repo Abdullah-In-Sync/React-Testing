@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { NextPage } from "next";
-import { useSnackbar } from "notistack";
 import moment from "moment";
 
 // GRAPHQL
@@ -42,7 +41,7 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
@@ -83,15 +82,6 @@ const Feedback: NextPage = () => {
 
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
   const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
-
-  // if (dataListError) {
-  //     console.log("dataListError",dataListError)
-  //     handleServerErrors(
-  //         dataListError?.message,
-  //         enqueueSnackbar,
-  //         "Could not get data. Try again."
-  //     );
-  // }
 
   useEffect(() => {
     // do some checking here to ensure data exist
@@ -245,12 +235,12 @@ const Feedback: NextPage = () => {
   const handleAdd = (val) => {
     let valid = false;
     if (formValues.length === 0) {
-      enqueueSnackbar("Please fill the all fields");
+      // enqueueSnackbar("Please fill the all fields");
       return null;
     } else {
       formValues.map((x) => {
         if (!x.question || !x.answer_type) {
-          enqueueSnackbar("Please fill the all fields");
+          // enqueueSnackbar("Please fill the all fields");
           return (valid = false);
         } else {
           return (valid = true);
@@ -298,7 +288,7 @@ const Feedback: NextPage = () => {
           setEditModal(false);
         },
       });
-      enqueueSnackbar("Updated data successfully");
+      // enqueueSnackbar("Updated data successfully");
     } catch (e) {
       console.log(e);
     }

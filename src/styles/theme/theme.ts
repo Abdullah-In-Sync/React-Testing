@@ -16,6 +16,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "#6EC9DB",
+      contrastText: "#ffffff",
     },
     secondary: {
       main: "#6ba08e",
@@ -28,16 +29,6 @@ const theme = createTheme({
       main: "#f57c00",
       dark: "#ef6c00",
       contrastText: "rgba(0, 0, 0, 0.87)",
-    },
-  },
-  components: {
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          paddingTop: "2px",
-          paddingBottom: "2px",
-        },
-      },
     },
   },
 });

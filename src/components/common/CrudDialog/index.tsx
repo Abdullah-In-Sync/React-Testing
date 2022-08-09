@@ -40,7 +40,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
         m: 0,
         p: 2,
         backgroundColor: "primary.main",
-        color: "custom.light",
+        color: "primary.contrastText",
       }}
       {...other}
     >
@@ -53,7 +53,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
             position: "absolute",
             right: 8,
             top: 8,
-            color: "custom.light",
+            color: "primary.contrastText",
           }}
         >
           <CloseIcon />
@@ -204,7 +204,7 @@ const CrudDialog = ({
             ) : (
               <Button
                 variant="contained"
-                sx={{ color: "custom.light" }}
+                sx={{ color: "primary.contrastText" }}
                 type="submit"
               >
                 {okText}
@@ -213,7 +213,10 @@ const CrudDialog = ({
 
             <Button
               variant="contained"
-              sx={{ backgroundColor: "secondary.main", color: "custom.light" }}
+              sx={{
+                backgroundColor: "secondary.main",
+                color: "primary.contrastText",
+              }}
               onClick={() => {
                 onClose();
                 setFieldValues({});
