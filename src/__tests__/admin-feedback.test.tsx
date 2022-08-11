@@ -13,6 +13,7 @@ import {
   DELETE_FEEDBACK,
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
+import CrudDialog from "../components/common/CrudDialog";
 
 // mocks
 const buildMocks = (): {
@@ -206,16 +207,23 @@ describe("Admin feedback page", () => {
     await sut();
     fireEvent.click(screen.queryByTestId("createQuestion"));
     // Check that the dialog is open.
-    expect(screen.queryByTestId("bootstrapDialogue")).toBeTruthy();
+    expect(<CrudDialog open={true} title={"Create Questionnaire"} />);
   });
 
-  // test("Click cancel button should close create feedback popup", async () => {
-  //   await sut();
-  //   const onClose = jest.fn();
-  //   fireEvent.click(screen.queryByTestId("createQuestion"));
-  //   fireEvent.click(screen.queryByTestId("cancelButton"));
-  //   expect(screen.queryByTestId("bootstrapDialogue")).toBeNull();
-  // });
+  test("Click save button with data in feedback popup", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("createQuestion"));
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+    expect(<CrudDialog open={false} title={"Create Questionnaire"} />);
+    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+  });
+
+  test("Click cancel button should close create feedback popup", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("createQuestion"));
+    fireEvent.click(screen.queryByTestId("cancelButton"));
+    expect(<CrudDialog open={false} title={"Create Questionnaire"} />);
+  });
 
   test("Click view icon should open view feedback popup", async () => {
     await sut();
@@ -223,7 +231,7 @@ describe("Admin feedback page", () => {
       screen.queryByTestId("viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
     );
     // Check that the dialog is open.
-    expect(screen.queryByTestId("bootstrapDialogue")).toBeTruthy();
+    expect(<CrudDialog open={true} title={"View Question"} />);
   });
 
   test("Click Edit icon should open Edit feedback popup", async () => {
@@ -232,7 +240,16 @@ describe("Admin feedback page", () => {
       screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
     );
     // Check that the dialog is open.
-    expect(screen.queryByTestId("bootstrapDialogue")).toBeTruthy();
+    expect(<CrudDialog open={true} title={"Edit Question"} />);
+  });
+
+  test("Click save button with data in edit feedback popup", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+    expect(screen.queryAllByTestId("table-row").length).toBe(2);
   });
 
   test("Click Delete icon should open Delete feedback popup", async () => {
@@ -240,7 +257,15 @@ describe("Admin feedback page", () => {
     fireEvent.click(
       screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
     );
-    // Check that the dialog is open.
-    expect(screen.queryByTestId("bootstrapDialogue")).toBeTruthy();
+    expect(<CrudDialog open={true} title={"Delete Question"} />);
+  });
+
+  test("Click Delete button should delete data and load list", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+    expect(screen.queryAllByTestId("table-row").length).toBe(2);
   });
 });

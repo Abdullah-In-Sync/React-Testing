@@ -154,7 +154,6 @@ const CrudDialog = ({
   return (
     <div>
       <BootstrapDialog
-        data-testid="bootstrapDialogue"
         onClose={() => {
           onClose();
           setFieldValues({});
