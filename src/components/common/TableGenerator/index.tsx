@@ -356,6 +356,7 @@ const TableGenerator = ({
 
                     return (
                       <TableRow
+                        data-testid="table-row"
                         hover
                         role="checkbox"
                         aria-checked={isItemSelected}

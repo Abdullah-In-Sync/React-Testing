@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { NextPage } from "next";
 import moment from "moment";
+import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
@@ -75,6 +76,7 @@ const Feedback: NextPage = () => {
   } = useQuery(GET_FEEDBACK_DATA, {
     variables: { status: "active", pageNo: 1 },
   });
+  
 
   // const [
   //   viewFeedback,
@@ -114,7 +116,7 @@ const Feedback: NextPage = () => {
       columnName: "Organization",
       visible: true,
       render: (val) =>
-        val.length > 50 ? (
+        10 > 50 ? (
           <Tooltip title={val} arrow>
             <p>{val.substring(0, 50) + "..."}</p>
           </Tooltip>
@@ -154,7 +156,7 @@ const Feedback: NextPage = () => {
       render: (_, value) => (
         <>
           <IconButton size="small" onClick={() => handleView(value._id)}>
-            <VisibilityIcon />
+            <VisibilityIcon  data-testid={"viewIcon_"+value._id}/>
           </IconButton>
           <IconButton
             size="small"
@@ -163,7 +165,7 @@ const Feedback: NextPage = () => {
               setSelectedId(value._id);
             }}
           >
-            <CreateIcon />
+            <CreateIcon data-testid={"editIcon_"+value._id}/>
           </IconButton>
           <IconButton
             size="small"
@@ -173,7 +175,7 @@ const Feedback: NextPage = () => {
               setSelectedId(value._id);
             }}
           >
-            <DeleteIcon />
+            <DeleteIcon data-testid={"deleteIcon_"+value._id} />
           </IconButton>
         </>
       ),
@@ -249,6 +251,7 @@ const Feedback: NextPage = () => {
     }
 
     if (valid) {
+      setLoader(true);
       const data = formValues.map((x) => ({
         ...x,
         ...val,
@@ -259,6 +262,7 @@ const Feedback: NextPage = () => {
         variables: { feedQuesData: dataJson },
         onCompleted: () => {
           refetch();
+          setLoader(false);
           setAddModal(false);
         },
       });
@@ -339,6 +343,7 @@ const Feedback: NextPage = () => {
   return (
     <>
       <Layout>
+      <Loader visible={loader} />
         <ContentHeader title="Feedback" />
         <Box sx={crudButtons}>
           <AddButton
@@ -353,7 +358,6 @@ const Feedback: NextPage = () => {
             //   initialSort={"id"}
             //   searchColumnsFilter={true}
             fields={fields}
-            loader={loader}
             data={dataListData?.getAdminFeedbackList}
             currentPage={page}
             //   handleSortChange={(ordering) => {

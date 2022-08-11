@@ -15,6 +15,7 @@ export const AddButton = ({
 }) => {
   return (
     <Button
+      data-testid="createQuestion"
       size={size || "medium"}
       sx={buttonStyle}
       variant="contained"
