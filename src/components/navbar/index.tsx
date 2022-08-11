@@ -28,7 +28,6 @@ const NavBar = () => {
   };
 
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
-  console.log("sidebarToggle", sidebarToggle);
   return (
     <AppBar
       position="fixed"
