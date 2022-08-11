@@ -1,5 +1,4 @@
 import { Paper, Stack, styled } from "@mui/material";
-import React from "react";
 
 export default function PatientViewMenu({ activeTab, patientID }) {
   const Item = styled(Paper)(() => ({

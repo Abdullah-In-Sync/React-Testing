@@ -1,5 +1,3 @@
-import React from "react";
-
 export type QuestionType = {
   category: string;
   correct_answer: string;

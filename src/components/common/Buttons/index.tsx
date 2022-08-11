@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 
 const buttonStyle = {
   minWidth: 100,

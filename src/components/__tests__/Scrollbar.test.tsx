@@ -5,10 +5,12 @@ import Box from "@mui/material/Box";
 describe("when rendered with a scrollbar", () => {
   it("should visible or hide", () => {
     render(<Scrollbar />);
-    expect(<Box
+    expect(
+      <Box
         sx={{
-          width: 5
+          width: 5,
         }}
-      />);
+      />
+    );
   });
 });

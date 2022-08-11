@@ -76,7 +76,6 @@ const Feedback: NextPage = () => {
   } = useQuery(GET_FEEDBACK_DATA, {
     variables: { status: "active", pageNo: 1 },
   });
-  
 
   // const [
   //   viewFeedback,
@@ -116,7 +115,7 @@ const Feedback: NextPage = () => {
       columnName: "Organization",
       visible: true,
       render: (val) =>
-        10 > 50 ? (
+        val > 50 ? (
           <Tooltip title={val} arrow>
             <p>{val.substring(0, 50) + "..."}</p>
           </Tooltip>
@@ -156,7 +155,7 @@ const Feedback: NextPage = () => {
       render: (_, value) => (
         <>
           <IconButton size="small" onClick={() => handleView(value._id)}>
-            <VisibilityIcon  data-testid={"viewIcon_"+value._id}/>
+            <VisibilityIcon data-testid={"viewIcon_" + value._id} />
           </IconButton>
           <IconButton
             size="small"
@@ -165,7 +164,7 @@ const Feedback: NextPage = () => {
               setSelectedId(value._id);
             }}
           >
-            <CreateIcon data-testid={"editIcon_"+value._id}/>
+            <CreateIcon data-testid={"editIcon_" + value._id} />
           </IconButton>
           <IconButton
             size="small"
@@ -175,7 +174,7 @@ const Feedback: NextPage = () => {
               setSelectedId(value._id);
             }}
           >
-            <DeleteIcon data-testid={"deleteIcon_"+value._id} />
+            <DeleteIcon data-testid={"deleteIcon_" + value._id} />
           </IconButton>
         </>
       ),
@@ -343,7 +342,7 @@ const Feedback: NextPage = () => {
   return (
     <>
       <Layout>
-      <Loader visible={loader} />
+        <Loader visible={loader} />
         <ContentHeader title="Feedback" />
         <Box sx={crudButtons}>
           <AddButton

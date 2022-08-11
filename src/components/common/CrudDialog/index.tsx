@@ -154,7 +154,7 @@ const CrudDialog = ({
   return (
     <div>
       <BootstrapDialog
-        data-testid = "bootstrapDialogue"
+        data-testid="bootstrapDialogue"
         onClose={() => {
           onClose();
           setFieldValues({});
@@ -204,7 +204,7 @@ const CrudDialog = ({
               " "
             ) : (
               <Button
-                data-testid = "saveButton"
+                data-testid="saveButton"
                 variant="contained"
                 sx={{ color: "primary.contrastText" }}
                 type="submit"
@@ -214,7 +214,7 @@ const CrudDialog = ({
             )}
 
             <Button
-              data-testid = "cancelButton"
+              data-testid="cancelButton"
               variant="contained"
               sx={{
                 backgroundColor: "secondary.main",

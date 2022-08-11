@@ -1,5 +1,4 @@
 import { Paper, Stack, styled } from "@mui/material";
-import React from "react";
 
 export default function PatientViewTherapyTab({ activeTab, patientID }) {
   const Item = styled(Paper)(() => ({
