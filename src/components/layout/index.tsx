@@ -21,6 +21,7 @@ const Layout: FC<SidebarLayoutProps> = ({ children }) => {
   return (
     <>
       <Box
+        data-testid="layoutUi"
         sx={{
           flex: 1,
           height: "100%",

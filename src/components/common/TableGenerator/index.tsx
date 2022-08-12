@@ -45,6 +45,7 @@ function TablePaginationActions(props, compProps) {
   return (
     <>
       <Box
+        data-testid="tableBox"
         sx={classes.root}
         style={{
           paddingTop:
@@ -123,8 +124,8 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead sx={classes.tableHead}>
-      <TableRow>
+    <TableHead sx={classes.tableHead} data-testid="tableHead">
+      <TableRow data-testid="tableRow">
         {fields
           .filter((x) => x.visible)
           .map((headCell) => (

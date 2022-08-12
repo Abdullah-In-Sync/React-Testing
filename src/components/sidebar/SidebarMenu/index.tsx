@@ -149,7 +149,7 @@ function SidebarMenu() {
 
   return (
     <>
-      <MenuWrapper>
+      <MenuWrapper data-testid="sideBar">
         <List component="div">
           <SubMenuWrapper>
             <List component="div">

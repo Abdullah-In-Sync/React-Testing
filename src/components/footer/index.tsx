@@ -23,7 +23,7 @@ const footerLink = {
 };
 const Footer = () => {
   return (
-    <Box sx={footerStyle}>
+    <Box sx={footerStyle} data-testid="footerLinks">
       <Grid item md={12}>
         <Grid container pt={0.5}>
           <Grid item xs={12} md={9}>
