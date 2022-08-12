@@ -307,6 +307,7 @@ const TableGenerator = ({
       <Paper sx={classes.paper}>
         {/* <Loader visible={props.loader} /> */}
         <Table
+          data-testid="tableId"
           sx={classes.table}
           aria-labelledby="tableTitle"
           size={size}
