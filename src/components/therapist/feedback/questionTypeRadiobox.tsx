@@ -28,6 +28,7 @@ export default function QuestionTypeRadiobox({ fv, fk, disable }): JSX.Element {
           aria-labelledby={`question-radio-${fv._id}`}
           name={`question-radio-${fv._id}`}
           defaultValue={
+            /* istanbul ignore next */
             fv.feedback_ans && fv.feedback_ans.answer
               ? fv.feedback_ans.answer
               : ""

@@ -6,4 +6,14 @@ describe("when rendered with a sidebarmenu component", () => {
     render(<CrudDialog open={true} title={"Create Question"} />);
     expect(screen.getByText("Create Question")).toBeInTheDocument();
   });
+
+  it("should render", () => {
+    render(<CrudDialog open={true} title={"View Question"} />);
+    expect(screen.getByText("View Question")).toBeInTheDocument();
+  });
+
+  it("should render", () => {
+    render(<CrudDialog open={true} title={"Delete Question"} />);
+    expect(screen.getByText("Delete Question")).toBeInTheDocument();
+  });
 });

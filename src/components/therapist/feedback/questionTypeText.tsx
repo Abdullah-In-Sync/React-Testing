@@ -21,6 +21,7 @@ export default function QuestionTypeText({ fv, disable }): JSX.Element {
             id={`question-text-${fv._id}`}
             disabled={disable}
             value={
+              /* istanbul ignore next */
               fv.feedback_ans && fv.feedback_ans.answer
                 ? fv.feedback_ans.answer
                 : ""

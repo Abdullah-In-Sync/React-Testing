@@ -151,7 +151,9 @@ const Feedback: NextPage = () => {
     patientFeedbackData,
   ]);
 
+  /* istanbul ignore next */
   const onTherapyChange = (event: SelectChangeEvent) => {
+    /* istanbul ignore else */
     setLoader(true);
     setDefaultStateExcludingLoader();
     setTherapy(event.target.value);
@@ -166,7 +168,7 @@ const Feedback: NextPage = () => {
 
   const handleInputChange = (i, e) => {
     let val = e.target.name;
-
+    /* istanbul ignore next */
     if (e.target.id && e.target.id != "undefined") {
       val = e.target.id;
     }

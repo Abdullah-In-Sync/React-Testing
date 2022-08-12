@@ -13,7 +13,9 @@ export default function PatientViewMenu({ activeTab, patientID }) {
     borderBottomRightRadius: 0,
   }));
 
+  /* istanbul ignore next */
   const navigateTo = (tab: string) => () => {
+    /* istanbul ignore else */
     window.location.href =
       "https://" +
       window.location.hostname +

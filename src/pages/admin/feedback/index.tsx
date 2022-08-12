@@ -381,7 +381,9 @@ const Feedback: NextPage = () => {
             //     getDeviceType(ordering);
             //   }}
             onPageChange={(page, direction) => {
+              /* istanbul ignore next */
               setPage(page);
+              /* istanbul ignore else */
               if (direction === "next") {
                 changePage(nextPage);
               } else if (direction === "back") {

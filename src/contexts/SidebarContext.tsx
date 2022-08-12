@@ -25,6 +25,7 @@ export function SidebarProvider({ children }: Props) {
 
   return (
     <SidebarContext.Provider
+      data-testid="sidebarContext"
       value={{ sidebarToggle, toggleSidebar, closeSidebar }}
     >
       {children}

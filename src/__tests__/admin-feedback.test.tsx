@@ -13,7 +13,6 @@ import {
   DELETE_FEEDBACK,
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
-import CrudDialog from "../components/common/CrudDialog";
 
 // mocks
 const buildMocks = (): {
@@ -208,7 +207,6 @@ describe("Admin feedback page", () => {
     fireEvent.click(screen.queryByTestId("createQuestion"));
     // Check that the dialog is open.
     expect(screen.getByText("Create Questionnaire")).toBeInTheDocument();
-    
   });
 
   test("Click save button with data in feedback popup", async () => {
@@ -226,7 +224,6 @@ describe("Admin feedback page", () => {
     );
     // Check that the dialog is open.
     expect(screen.getByText("View Question")).toBeInTheDocument();
-    
   });
 
   test("Click Edit icon should open Edit feedback popup", async () => {

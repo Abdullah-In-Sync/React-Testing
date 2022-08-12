@@ -12,7 +12,9 @@ export default function PatientViewTherapyTab({ activeTab, patientID }) {
     borderRadius: "7px",
   }));
 
+  /* istanbul ignore next */
   const navigateTo = (tab: string) => () => {
+    /* istanbul ignore else */
     window.location.href =
       "https://" +
       window.location.hostname +

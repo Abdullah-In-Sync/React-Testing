@@ -13,37 +13,36 @@ const Dashboard: NextPage = () => {
       key: "session_no",
       columnName: "Session No.",
       visible: true,
-      render: (val) => val ?? "---"
+      render: (val) => val ?? "---",
     },
     {
       key: "organization_name",
       columnName: "Organization",
       visible: true,
-      render: (val) => val ?? "---"
+      render: (val) => val ?? "---",
     },
   ];
   return (
     <>
       <Layout>{<h1 aria-label="Dashboard">Dashboard</h1>}</Layout>
       <TableGenerator
-            fields={fields}
-            data={[
-              {
-                session_no: 1,
-                organization_name: "myHelp",
-              },
-              {
-                session_no: 2,
-                organization_name: "restEasy",
-              },
-            ]}
-            currentPage={1}
-            
-            backendPagination={true}
-            dataCount={2}
-            selectedRecords={[]}
-            rowOnePage={10}
-          />
+        fields={fields}
+        data={[
+          {
+            session_no: 1,
+            organization_name: "myHelp",
+          },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
+        ]}
+        currentPage={1}
+        backendPagination={true}
+        dataCount={2}
+        selectedRecords={[]}
+        rowOnePage={10}
+      />
     </>
   );
 };
