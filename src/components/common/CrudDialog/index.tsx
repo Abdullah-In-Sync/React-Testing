@@ -124,7 +124,9 @@ const CrudDialog = ({
   //   parseValues();
 
   // },[])
+  /* istanbul ignore next */
   const handleFieldChange = (field, value) => {
+    /* istanbul ignore else */
     if (field.type === "select") {
       if (field.multiple) {
         value = (value || []).includes("selectall")

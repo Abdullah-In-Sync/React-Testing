@@ -29,6 +29,7 @@ export default function PatientViewMenu({ activeTab, patientID }) {
   return (
     <>
       <Stack
+        data-testid="patientViewMenu"
         className="patientviewtabs"
         direction="row"
         mt={3}

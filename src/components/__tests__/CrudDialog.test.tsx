@@ -9,6 +9,7 @@ describe("when rendered with a sidebarmenu component", () => {
 
   it("should render", () => {
     render(<CrudDialog open={true} title={"View Question"} />);
+    expect(screen.getByTestId("bootstrapModal")).toBeInTheDocument();
     expect(screen.getByText("View Question")).toBeInTheDocument();
   });
 

@@ -30,6 +30,7 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
   return (
     <>
       <Autocomplete
+        data-testid="autoCompleteBox"
         id="combo-box-demo"
         size="small"
         options={field.options}

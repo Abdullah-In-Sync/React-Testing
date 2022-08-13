@@ -28,6 +28,7 @@ export default function PatientViewTherapyTab({ activeTab, patientID }) {
   return (
     <>
       <Stack
+        data-testid="patientViewTherapyTab"
         className="patientviewtherapy_tabs"
         direction="row"
         mt={3}

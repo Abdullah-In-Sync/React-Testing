@@ -11,11 +11,12 @@ export const buildPatientTokenValidationQuery = (
   const [gettokenData, { loading: tokenLoading, data: tokenData }] =
     useLazyQuery(GET_TOKEN_DATA, {
       onCompleted: async (data) => {
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         if (data.getTokenData) {
           let user_type: string = data!.getTokenData.user_type;
           user_type = user_type.replace("[", "");
           user_type = user_type.replace("]", "");
+          /* istanbul ignore else */
           if (user_type != "patient") {
             window.location.href =
               "https://" + window.location.hostname + "/account";
