@@ -425,7 +425,5 @@ describe("Therapist feedback list", () => {
     await sut(patient_id);
     expect(screen.getByTestId("patientViewTherapyTab")).toBeInTheDocument();
     expect(screen.getByTestId("patientViewMenu")).toBeInTheDocument();
-
   });
-
 });
