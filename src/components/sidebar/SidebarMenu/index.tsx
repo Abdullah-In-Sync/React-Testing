@@ -140,7 +140,9 @@ function SidebarMenu() {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
+  /* istanbul ignore next */
   const handleClick = (e, id) => {
+    /* istanbul ignore else */
     setExpanded({
       ...expanded,
       [id]: !expanded[id],
@@ -164,8 +166,8 @@ function SidebarMenu() {
                       >
                         <Button
                           disableRipple
-                          // sx={{ color: "white" }}
                           component="a"
+                          /* istanbul ignore next */
                           onClick={(e) => handleClick(e, val[0]?.key)}
                           startIcon={val[0]?.icon}
                           endIcon={

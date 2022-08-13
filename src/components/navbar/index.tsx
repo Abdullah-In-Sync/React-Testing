@@ -30,6 +30,7 @@ const NavBar = () => {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
   return (
     <AppBar
+      data-testid="navBar"
       position="fixed"
       color="inherit"
       sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
