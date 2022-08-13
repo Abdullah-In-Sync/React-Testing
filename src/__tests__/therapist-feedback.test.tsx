@@ -419,4 +419,13 @@ describe("Therapist feedback list", () => {
       screen.queryByTestId("no-data-found-therapist-feedback-list")
     ).toHaveTextContent("No Data Found");
   });
+
+  test("check patient view tabs is rendered", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
+    expect(screen.getByTestId("patientViewTherapyTab")).toBeInTheDocument();
+    expect(screen.getByTestId("patientViewMenu")).toBeInTheDocument();
+
+  });
+
 });
