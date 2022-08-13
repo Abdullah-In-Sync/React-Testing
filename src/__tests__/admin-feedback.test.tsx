@@ -206,14 +206,13 @@ describe("Admin feedback page", () => {
     await sut();
     fireEvent.click(screen.queryByTestId("createQuestion"));
     // Check that the dialog is open.
-    expect(screen.getByText("Create Questionnaire")).toBeInTheDocument();
+    expect(screen.queryByTestId("bootstrapModal")).toBeInTheDocument();
   });
 
   test("Click save button with data in feedback popup", async () => {
     await sut();
     fireEvent.click(screen.queryByTestId("createQuestion"));
     fireEvent.submit(screen.queryByTestId("saveButton"));
-    expect(screen.getByText("Create Questionnaire")).toBeInTheDocument();
     expect(screen.queryAllByTestId("table-row").length).toBe(2);
   });
 

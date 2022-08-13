@@ -1,10 +1,6 @@
-import Box from "@mui/material/Box";
 import { render, screen } from "@testing-library/react";
-import dynamic from "next/dynamic";
+import TableGenerator from "../common/TableGenerator";
 
-const TableGenerator = dynamic(import("../common/TableGenerator"), {
-  ssr: false,
-});
 const fields = [
   {
     key: "session_no",
@@ -21,9 +17,8 @@ const fields = [
 ];
 
 describe("when rendered with a table with data", () => {
-  it("should render", () => {
-    render(
-      <Box>
+  test("should render", () => {
+    const a = render(
         <TableGenerator
           fields={fields}
           data={[
@@ -41,8 +36,7 @@ describe("when rendered with a table with data", () => {
           selectedRecords={[]}
           rowOnePage={10}
         />
-      </Box>
     );
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    expect(screen.getByTestId("tableId")).toBeInTheDocument();
   });
 });
