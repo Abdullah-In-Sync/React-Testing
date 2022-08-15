@@ -7,12 +7,14 @@ const Text = (props) => {
   const [copied, setCopied] = useState(false);
 
   const copyThat = () => {
+    /* istanbul ignore next */
     setCopied(false);
   };
 
   return (
     <>
       <TextField
+        data-testid="textBox"
         type={field.type}
         required={field.required || false}
         // error={props.fieldErrors[field.key] ? true : false}
@@ -57,6 +59,7 @@ const Text = (props) => {
           endAdornment: field.copyable ? (
             <InputAdornment style={{ cursor: "pointer" }} position="end">
               <Tooltip
+                data-testid="toolTip"
                 placement="top"
                 title={copied ? "Copied" : "Copy"}
                 aria-label="add"
