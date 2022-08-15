@@ -30,11 +30,36 @@ describe("when rendered with a table with data", () => {
             session_no: 2,
             organization_name: "restEasy",
           },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
+          {
+            session_no: 2,
+            organization_name: "restEasy",
+          },
         ]}
         currentPage={1}
-        dataCount={2}
+        dataCount={8}
         selectedRecords={[]}
-        rowOnePage={10}
+        backendPagination={true}
+        rowOnePage={2}
       />
     );
     expect(screen.getByTestId("tableId")).toBeInTheDocument();
