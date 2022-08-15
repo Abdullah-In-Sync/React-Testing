@@ -180,7 +180,7 @@ const CrudDialog = ({
         >
           {description}
         </Typography>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} data-testid="feedForm">
           <DialogContent style={{ overflowX: "hidden" }}>
             <Box sx={{ width: 800 }}>
               <FieldsLayout
