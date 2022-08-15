@@ -1,4 +1,4 @@
-//export { default as Text } from "./Text";
+export { default as Text } from "./Text";
 // export { default as DatePicker } from './DatePicker';
 export { default as AutoCompleteBox } from "./AutoCompleteBox";
 // export { default as MultiAutoComplete } from './MultiAutoComplete';
