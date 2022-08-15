@@ -442,7 +442,7 @@ const Feedback: NextPage = () => {
                                       <TextareaAutosize
                                         aria-label="empty textarea"
                                         id={fv.answer_type + "_" + fv._id}
-                                        /* istanbul ignore next */
+                                        /* istanbul ignore else */
                                         onBlur={(e) => handleInputChange(fk, e)}
                                         value={
                                           fv.feedback_ans &&

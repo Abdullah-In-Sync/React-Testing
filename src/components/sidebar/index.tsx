@@ -56,6 +56,7 @@ function SideBar() {
 
       {/* Small Screen */}
       <Drawer
+        /* istanbul ignore next */
         anchor={theme.direction === "rtl" ? "right" : "left"}
         open={sidebarToggle}
         onClose={closeSidebar}

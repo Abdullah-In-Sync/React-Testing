@@ -167,7 +167,7 @@ function SidebarMenu() {
                         <Button
                           disableRipple
                           component="a"
-                          /* istanbul ignore next */
+                          /* istanbul ignore else */
                           onClick={(e) => handleClick(e, val[0]?.key)}
                           startIcon={val[0]?.icon}
                           endIcon={

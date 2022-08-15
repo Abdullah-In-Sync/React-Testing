@@ -50,14 +50,15 @@ const DynamicForm = ({
       { question: "", answer_type: "text", answer_options: "" },
     ]);
   };
-
+  /* istanbul ignore next */
   const handleChange = (index: number, e: any, chip_val?: any) => {
+    /* istanbul ignore else */
     if (e.target.name == "answer_type" && e.target.value == "text") {
       const newFormValues = [...formValues];
       newFormValues[index]["answer_options"] = "";
       setFormValues(newFormValues);
     }
-
+    /* istanbul ignore next */
     if (e.target.name == "answer_options") {
       const newFormValues = [...formValues];
       newFormValues[index][e.target.name] = chip_val;

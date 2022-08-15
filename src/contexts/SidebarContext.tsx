@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useState, ReactNode, createContext } from "react";
 type SidebarContext = {
   sidebarToggle: any;
