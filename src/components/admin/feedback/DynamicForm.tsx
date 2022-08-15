@@ -75,7 +75,7 @@ const DynamicForm = ({
     });
     setFormValues(newData);
   };
-  // console.log("formValues",formValues)
+   console.debug("formValues",formValues)
   return (
     <form data-testid="formData">
       {buttonText && (
