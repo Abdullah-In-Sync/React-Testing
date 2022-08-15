@@ -199,6 +199,7 @@ describe("Admin feedback page", () => {
   // check for admin feedback list
   test("Renders Admin feedback list screen", async () => {
     await sut();
+    expect(screen.queryByTestId("tableId")).toBeInTheDocument();
     expect(screen.queryAllByTestId("table-row").length).toBe(2);
   });
 
