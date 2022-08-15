@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import createCache from "@emotion/cache";
 
 const createEmotionCache = () => {
