@@ -148,6 +148,7 @@ const DynamicForm = ({
 
               {element.answer_type === "list" && (
                 <Autocomplete
+                  data-testid="answerOptions"
                   multiple
                   id="tags-filled"
                   options={[]}

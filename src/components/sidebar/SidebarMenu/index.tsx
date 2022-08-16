@@ -165,9 +165,9 @@ function SidebarMenu() {
                         sx={listItem}
                       >
                         <Button
+                          data-testid={"menu_" + val[0]?.key}
                           disableRipple
                           component="a"
-                          /* istanbul ignore else */
                           onClick={(e) => handleClick(e, val[0]?.key)}
                           startIcon={val[0]?.icon}
                           endIcon={
@@ -196,6 +196,7 @@ function SidebarMenu() {
                           >
                             <NextLink href={item.path} passHref>
                               <Button
+                                data-testid={"menu_" + item.label}
                                 className={
                                   currentRoute === `${item.path}`
                                     ? "active"

@@ -352,6 +352,7 @@ describe("Admin feedback page", () => {
     fireEvent.change(screen.getByTestId("answerType"), {
       target: { value: "list" },
     });
+    fireEvent.click(screen.getByTestId("answerOptions"));
     fireEvent.change(
       screen.getByPlaceholderText(
         "Add a option by pressing enter after write it"
