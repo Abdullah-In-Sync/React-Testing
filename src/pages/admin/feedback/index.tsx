@@ -77,10 +77,6 @@ const Feedback: NextPage = () => {
     variables: { status: "active", pageNo: 1 },
   });
 
-  // const [
-  //   viewFeedback,
-  //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
-
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
   const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
 
@@ -88,7 +84,7 @@ const Feedback: NextPage = () => {
     // do some checking here to ensure data exist
     setLoader(true);
     if (dataListData || dataListError) {
-      // mutate data if you need to
+      /* istanbul ignore next */
       setDataList(dataListData?.getAdminFeedbackList);
       setLoader(false);
     }
@@ -239,10 +235,10 @@ const Feedback: NextPage = () => {
   // if (loading) return 'Submitting...';
   // if (error) return `Submission error! ${error.message}`;
 
-  /* istanbul ignore next */
+
   const handleAdd = (val) => {
     let valid = false;
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     if (formValues.length === 0) {
       // enqueueSnackbar("Please fill the all fields");
       return null;
@@ -256,22 +252,22 @@ const Feedback: NextPage = () => {
         }
       });
     }
-    /* istanbul ignore next */
     if (valid) {
       setLoader(true);
-      /* istanbul ignore next */
       const data = formValues.map((x) => ({
         ...x,
         ...val,
       }));
 
       const dataJson = JSON.stringify(data);
-      /* istanbul ignore else */
       addFeedback({
         variables: { feedQuesData: dataJson },
         onCompleted: () => {
+          /* istanbul ignore next */
           refetch();
+          /* istanbul ignore next */
           setLoader(false);
+          /* istanbul ignore next */
           setAddModal(false);
         },
       });
@@ -282,9 +278,7 @@ const Feedback: NextPage = () => {
     setFormValues(val);
   };
 
-  /* istanbul ignore next */
   const handleEdit = async (val) => {
-    /* istanbul ignore else */
     const data = formValues.map((x) => ({
       question: x.question,
       answer_type: x.answer_type,
@@ -299,7 +293,9 @@ const Feedback: NextPage = () => {
           update: data[0],
         },
         onCompleted: () => {
+          /* istanbul ignore next */
           refetch();
+          /* istanbul ignore next */
           setEditModal(false);
         },
       });
@@ -309,17 +305,13 @@ const Feedback: NextPage = () => {
     }
   };
 
-  /* istanbul ignore next */
   const handleViewEdit = (id) => {
-    /* istanbul ignore else */
     const val = dataList.filter((x) => x._id === id);
     setSelectedUserData(val);
     setEditModal(true);
   };
 
-  /* istanbul ignore next */
   const handleDelete = async (id) => {
-    /* istanbul ignore else */
     deleteFeedback({
       variables: {
         feedbackId: id,
@@ -345,13 +337,14 @@ const Feedback: NextPage = () => {
     //     console.log(e)
     // }
   };
-  /* istanbul ignore next */
   const handleView = (id) => {
     /* istanbul ignore else */
     const val = dataList.filter((x) => x._id === id);
     setSelectedUserData(val);
     setViewModal(true);
   };
+
+  /* istanbul ignore next */
   const changePage = (url: any) => {
     console.log("CHANGE PAGE", url);
   };
@@ -383,7 +376,7 @@ const Feedback: NextPage = () => {
             onPageChange={(page, direction) => {
               /* istanbul ignore next */
               setPage(page);
-              /* istanbul ignore else */
+              /* istanbul ignore next */
               if (direction === "next") {
                 changePage(nextPage);
               } else if (direction === "back") {

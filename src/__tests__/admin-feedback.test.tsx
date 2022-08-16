@@ -104,7 +104,7 @@ const buildMocks = (): {
         feedbackId: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
         update: {
           org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
-          session_no: ["1"],
+          session_no: ["2"],
           feedback_type: "session",
           question: "test12",
           answer_options: ["a", "b", "c", "d"],
@@ -118,7 +118,7 @@ const buildMocks = (): {
           _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
           user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
           org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
-          session_no: 1,
+          session_no: 2,
           question: "test1",
           answer_type: "list",
           status: "active",
@@ -201,7 +201,13 @@ describe("Admin feedback page", () => {
   test("Renders Admin feedback list screen", async () => {
     await sut();
     expect(screen.queryByTestId("tableId")).toBeInTheDocument();
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    await waitFor(() => expect(screen.queryAllByTestId("table-row").length).toBe(2));
+    expect(screen.queryByTestId("tableColumn_organization_name")).toBeInTheDocument();
+    expect(screen.queryByTestId("tableColumn_question")).toBeInTheDocument();
+    expect(screen.queryByTestId("tableColumn_feedback_type")).toBeInTheDocument();
+    expect(screen.queryByTestId("tableColumn_created_date")).toBeInTheDocument();
+    expect(screen.queryByTestId("tableColumn_actions")).toBeInTheDocument();
+    expect(screen.queryByTestId("tableColumn_session_no")).toBeInTheDocument();
   });
 
   test("Click add feedback button should open create feedback popup", async () => {
@@ -234,8 +240,9 @@ describe("Admin feedback page", () => {
     fireEvent.click(
       screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
     );
+    fireEvent.change(screen.getByPlaceholderText("Session Name"), {target: {value: '2'}});
     fireEvent.submit(screen.queryByTestId("saveButton"));
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    await waitFor(() => expect(screen.queryAllByTestId("table-row").length).toBe(2));
   });
 
   test("Click Delete icon should open Delete feedback popup", async () => {
@@ -268,8 +275,58 @@ describe("Admin feedback page", () => {
     fireEvent.click(screen.queryByTestId("createQuestion"));
     fireEvent.click(screen.queryByTestId("addField"));
     fireEvent.click(screen.queryByTestId("CancelIcon"));
-    fireEvent.submit(screen.queryByTestId("cancelButton"));
+    fireEvent.click(screen.queryByTestId("cancelButton"));
     expect(screen.queryAllByTestId("table-row").length).toBe(2);
+  });
+
+  test("Click edit feedback button with saveButton", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    expect(screen.getByText("Edit Question")).toBeInTheDocument();
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+    await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
+  });
+
+  test("Click view feedback button with cancelButton", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    expect(screen.getByText("View Question")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("cancelButton"));
+    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
+  });
+
+  test("Click delete feedback button with saveButton", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    expect(screen.getByText("Delete Question")).toBeInTheDocument();
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+    await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
+  });
+
+  test("Click edit feedback button with cancelButton", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    expect(screen.getByText("Edit Question")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("cancelButton"));
+    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
+  });
+
+  test("Click delete feedback button with cancelButton", async () => {
+    await sut();
+    fireEvent.click(
+      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    );
+    expect(screen.getByText("Delete Question")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("cancelButton"));
+    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
   });
 
   test("Click add feedback button with data", async () => {
@@ -285,7 +342,5 @@ describe("Admin feedback page", () => {
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
   });
-
-  
 
 });
