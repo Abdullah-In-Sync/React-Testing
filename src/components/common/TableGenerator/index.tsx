@@ -130,7 +130,7 @@ function EnhancedTableHead(props) {
           .filter((x) => x.visible)
           .map((headCell) => (
             <TableCell
-              data-testid={"tableColumn_"+headCell.key}
+              data-testid={"tableColumn_" + headCell.key}
               key={headCell.key}
               align={headCell.numeric ? "right" : "left"}
               padding={headCell.disablePadding ? "none" : "normal"}

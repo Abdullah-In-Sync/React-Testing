@@ -235,7 +235,6 @@ const Feedback: NextPage = () => {
   // if (loading) return 'Submitting...';
   // if (error) return `Submission error! ${error.message}`;
 
-
   const handleAdd = (val) => {
     let valid = false;
     /* istanbul ignore next */

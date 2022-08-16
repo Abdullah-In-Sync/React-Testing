@@ -38,7 +38,7 @@ describe("when rendered with a crudDialogue component", () => {
       {
         key: "feedback_type",
         label: "Feedback Type",
-        placeholder:"Feedback Type",
+        placeholder: "Feedback Type",
         visible: true,
         freeSolo: false,
         show: true,

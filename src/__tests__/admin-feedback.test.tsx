@@ -201,11 +201,19 @@ describe("Admin feedback page", () => {
   test("Renders Admin feedback list screen", async () => {
     await sut();
     expect(screen.queryByTestId("tableId")).toBeInTheDocument();
-    await waitFor(() => expect(screen.queryAllByTestId("table-row").length).toBe(2));
-    expect(screen.queryByTestId("tableColumn_organization_name")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+    );
+    expect(
+      screen.queryByTestId("tableColumn_organization_name")
+    ).toBeInTheDocument();
     expect(screen.queryByTestId("tableColumn_question")).toBeInTheDocument();
-    expect(screen.queryByTestId("tableColumn_feedback_type")).toBeInTheDocument();
-    expect(screen.queryByTestId("tableColumn_created_date")).toBeInTheDocument();
+    expect(
+      screen.queryByTestId("tableColumn_feedback_type")
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByTestId("tableColumn_created_date")
+    ).toBeInTheDocument();
     expect(screen.queryByTestId("tableColumn_actions")).toBeInTheDocument();
     expect(screen.queryByTestId("tableColumn_session_no")).toBeInTheDocument();
   });
@@ -240,9 +248,13 @@ describe("Admin feedback page", () => {
     fireEvent.click(
       screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
     );
-    fireEvent.change(screen.getByPlaceholderText("Session Name"), {target: {value: '2'}});
+    fireEvent.change(screen.getByPlaceholderText("Session Name"), {
+      target: { value: "2" },
+    });
     fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() => expect(screen.queryAllByTestId("table-row").length).toBe(2));
+    await waitFor(() =>
+      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+    );
   });
 
   test("Click Delete icon should open Delete feedback popup", async () => {
@@ -286,7 +298,9 @@ describe("Admin feedback page", () => {
     );
     expect(screen.getByText("Edit Question")).toBeInTheDocument();
     fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
+    await waitFor(() =>
+      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+    );
   });
 
   test("Click view feedback button with cancelButton", async () => {
@@ -306,7 +320,9 @@ describe("Admin feedback page", () => {
     );
     expect(screen.getByText("Delete Question")).toBeInTheDocument();
     fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
+    await waitFor(() =>
+      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+    );
   });
 
   test("Click edit feedback button with cancelButton", async () => {
@@ -333,14 +349,30 @@ describe("Admin feedback page", () => {
     await sut();
     fireEvent.click(screen.queryByTestId("createQuestion"));
     fireEvent.click(screen.queryByTestId("addField"));
-    fireEvent.change(screen.getByTestId("answerType"), {target: {value: 'list'}});
-    fireEvent.change(screen.getByPlaceholderText("Add a option by pressing enter after write it"), {target: {value: 'a,b,c,d'}});
-    fireEvent.change(screen.getByPlaceholderText("Feedback Type"), {target: {value: 'session'}});
-    fireEvent.change(screen.getByPlaceholderText("Organization Name"), {target: {value: 'c557283d1b5e4d7abf19625bf268cdf8'}});
-    fireEvent.change(screen.getByPlaceholderText("Session Name"), {target: {value: '1'}});
-    fireEvent.change(screen.getByLabelText("Type your Question"), {target: {value: 'test1'}});
+    fireEvent.change(screen.getByTestId("answerType"), {
+      target: { value: "list" },
+    });
+    fireEvent.change(
+      screen.getByPlaceholderText(
+        "Add a option by pressing enter after write it"
+      ),
+      { target: { value: "a,b,c,d" } }
+    );
+    fireEvent.change(screen.getByPlaceholderText("Feedback Type"), {
+      target: { value: "session" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Organization Name"), {
+      target: { value: "c557283d1b5e4d7abf19625bf268cdf8" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Session Name"), {
+      target: { value: "1" },
+    });
+    fireEvent.change(screen.getByLabelText("Type your Question"), {
+      target: { value: "test1" },
+    });
     fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
+    await waitFor(() =>
+      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+    );
   });
-
 });
