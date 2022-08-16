@@ -47,6 +47,7 @@ const SelectField = (props) => {
         <InputLabel> {field.label} </InputLabel>
 
         <Select
+          placeholder={field.label}
           label={field.label}
           size="small"
           variant="outlined"

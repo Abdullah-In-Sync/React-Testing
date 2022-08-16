@@ -3,6 +3,7 @@ import {
   render,
   waitForElementToBeRemoved,
   fireEvent,
+  waitFor,
 } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/admin/feedback";
@@ -66,7 +67,7 @@ const buildMocks = (): {
       variables: {
         feedQuesData: [
           {
-            org_id: "c557283d1b5e4d7abf19625bf268cdf8",
+            org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
             session_no: ["1"],
             feedback_type: "session",
             question: "test1",
@@ -100,7 +101,7 @@ const buildMocks = (): {
     request: {
       query: UPDATE_FEEDBACK,
       variables: {
-        feedbackId: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+        feedbackId: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
         update: {
           org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
           session_no: ["1"],
@@ -113,7 +114,7 @@ const buildMocks = (): {
     },
     result: {
       data: {
-        adminCreateFeedback: {
+        updateFeedbackQuestionById: {
           _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
           user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
           org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
@@ -135,7 +136,7 @@ const buildMocks = (): {
     request: {
       query: DELETE_FEEDBACK,
       variables: {
-        feedbackId: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+        feedbackId: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
         update: {
           status: "deleted",
         },
@@ -143,7 +144,7 @@ const buildMocks = (): {
     },
     result: {
       data: {
-        adminCreateFeedback: {
+        updateFeedbackQuestionById: {
           _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
           user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
           org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
@@ -207,14 +208,7 @@ describe("Admin feedback page", () => {
     await sut();
     fireEvent.click(screen.queryByTestId("createQuestion"));
     // Check that the dialog is open.
-    expect(screen.queryByTestId("bootstrapModal")).toBeInTheDocument();
-  });
-
-  test("Click save button with data in feedback popup", async () => {
-    await sut();
-    fireEvent.click(screen.queryByTestId("createQuestion"));
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    expect(screen.queryByTestId("bootstrapModal")).toBeVisible();
   });
 
   test("Click view icon should open view feedback popup", async () => {
@@ -260,4 +254,38 @@ describe("Admin feedback page", () => {
     fireEvent.submit(screen.queryByTestId("saveButton"));
     expect(screen.queryAllByTestId("table-row").length).toBe(2);
   });
+
+  test("Click add feedback button with cancel button", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("createQuestion"));
+    fireEvent.click(screen.queryByTestId("addField"));
+    fireEvent.click(screen.queryByTestId("cancelButton"));
+    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
+  });
+
+  test("Click add feedback button with cancel button", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("createQuestion"));
+    fireEvent.click(screen.queryByTestId("addField"));
+    fireEvent.click(screen.queryByTestId("CancelIcon"));
+    fireEvent.submit(screen.queryByTestId("cancelButton"));
+    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+  });
+
+  test("Click add feedback button with data", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("createQuestion"));
+    fireEvent.click(screen.queryByTestId("addField"));
+    fireEvent.change(screen.getByTestId("answerType"), {target: {value: 'list'}});
+    fireEvent.change(screen.getByPlaceholderText("Add a option by pressing enter after write it"), {target: {value: 'a,b,c,d'}});
+    fireEvent.change(screen.getByPlaceholderText("Feedback Type"), {target: {value: 'session'}});
+    fireEvent.change(screen.getByPlaceholderText("Organization Name"), {target: {value: 'c557283d1b5e4d7abf19625bf268cdf8'}});
+    fireEvent.change(screen.getByPlaceholderText("Session Name"), {target: {value: '1'}});
+    fireEvent.change(screen.getByLabelText("Type your Question"), {target: {value: 'test1'}});
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+    await waitFor(() =>  expect(screen.queryAllByTestId("table-row").length).toBe(2));
+  });
+
+  
+
 });

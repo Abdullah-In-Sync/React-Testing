@@ -76,11 +76,11 @@ const DynamicForm = ({
     });
     setFormValues(newData);
   };
-  console.debug("formValues", formValues);
   return (
     <form data-testid="formData">
       {buttonText && (
         <Button
+          data-testid="addField"
           onClick={() => addFormFields()}
           sx={{ marginBottom: 1 }}
           variant="outlined"
@@ -131,6 +131,7 @@ const DynamicForm = ({
               <FormControl sx={{ mt: 2, mb: 2, minWidth: 220 }} size="small">
                 <InputLabel id="answer_type">Choose answer type</InputLabel>
                 <Select
+                  inputProps={{ "data-testid": "answerType" }}
                   labelId="answer_type"
                   name="answer_type"
                   disabled={type === "view" ? true : false}
@@ -174,7 +175,7 @@ const DynamicForm = ({
                       {...params}
                       variant="outlined"
                       label="Question Options"
-                      placeholder="Add a option by pressing enter after write it "
+                      placeholder="Add a option by pressing enter after write it"
                       name="answer_options"
                     />
                   )}

@@ -57,9 +57,10 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
             {...params}
             style={{ width: "100%" }}
             label={field.label}
-            // inputProps={field.inputProps || {}}
+            //inputProps={{}}
             variant="outlined"
             required={field.required}
+            placeholder={field.label}
           />
         )}
       />
