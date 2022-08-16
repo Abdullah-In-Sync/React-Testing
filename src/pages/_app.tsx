@@ -14,6 +14,7 @@ import "@fontsource/roboto/700.css";
 
 import createEmotionCache from "../utility/createEmotionCache";
 import { SidebarProvider } from "../contexts/SidebarContext";
+import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import "../styles/main.css";
 const clientSideEmotionCache = createEmotionCache();
@@ -26,14 +27,23 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
 
   return (
     <ApolloProvider client={client}>
-      <SidebarProvider>
-        <CacheProvider value={emotionCache}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </CacheProvider>
-      </SidebarProvider>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        autoHideDuration={1500}
+      >
+        <SidebarProvider>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </CacheProvider>
+        </SidebarProvider>
+      </SnackbarProvider>
     </ApolloProvider>
   );
 };
