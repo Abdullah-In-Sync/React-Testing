@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="0" errors="0" time="2.961">
-  <testsuite name="therapistDataFn lambda" errors="0" failures="0" skipped="0" timestamp="2022-07-26T17:52:06" time="2.333" tests="1">
-    <testcase classname="therapistDataFn lambda example test" name="therapistDataFn lambda example test" time="0.001">
-    </testcase>
-  </testsuite>
-</testsuites>
