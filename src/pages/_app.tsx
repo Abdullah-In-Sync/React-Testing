@@ -33,7 +33,7 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
           vertical: "top",
           horizontal: "center",
         }}
-        autoHideDuration={1500}
+        autoHideDuration={6000}
       >
         <SidebarProvider>
           <CacheProvider value={emotionCache}>

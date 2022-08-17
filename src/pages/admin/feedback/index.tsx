@@ -43,7 +43,7 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
+  
 
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
@@ -84,6 +84,8 @@ const Feedback: NextPage = () => {
 
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
   const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     // do some checking here to ensure data exist
