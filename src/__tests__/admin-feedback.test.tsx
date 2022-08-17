@@ -15,6 +15,17 @@ import {
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
 
+const mockEnqueue = jest.fn();
+
+jest.mock('notistack', () => ({
+  ...jest.requireActual('notistack'),
+  useSnackbar: () => {
+    return {
+      enqueueSnackbar: mockEnqueue
+    };
+  }
+}));
+
 // mocks
 const buildMocks = (): {
   mocks: MockedResponse[];
