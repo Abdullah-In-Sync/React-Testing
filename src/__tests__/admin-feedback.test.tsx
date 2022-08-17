@@ -5,7 +5,7 @@ import {
   fireEvent,
   waitFor,
 } from "@testing-library/react";
-import { SnackbarProvider } from "notistack"
+import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/admin/feedback";
 
@@ -18,13 +18,13 @@ import {
 
 const mockEnqueue = jest.fn();
 
-jest.mock('notistack', () => ({
-  ...jest.requireActual('notistack'),
+jest.mock("notistack", () => ({
+  ...jest.requireActual("notistack"),
   useSnackbar: () => {
     return {
-      enqueueSnackbar: mockEnqueue
+      enqueueSnackbar: mockEnqueue,
     };
-  }
+  },
 }));
 
 // mocks

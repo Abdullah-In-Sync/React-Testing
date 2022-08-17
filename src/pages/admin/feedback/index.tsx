@@ -43,8 +43,6 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
-  
-
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
