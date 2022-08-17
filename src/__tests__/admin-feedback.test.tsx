@@ -5,6 +5,7 @@ import {
   fireEvent,
   waitFor,
 } from "@testing-library/react";
+import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/admin/feedback";
 
@@ -14,6 +15,17 @@ import {
   DELETE_FEEDBACK,
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
+
+const mockEnqueue = jest.fn();
+
+jest.mock("notistack", () => ({
+  ...jest.requireActual("notistack"),
+  useSnackbar: () => {
+    return {
+      enqueueSnackbar: mockEnqueue,
+    };
+  },
+}));
 
 // mocks
 const buildMocks = (): {
@@ -188,7 +200,9 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <Feedback />
+      <SnackbarProvider>
+        <Feedback />
+      </SnackbarProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>

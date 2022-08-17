@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import type { NextPage } from "next";
 import moment from "moment";
 import Loader from "../../../components/common/Loader";
+import { useSnackbar } from "notistack";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
@@ -42,8 +43,6 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
-  // const { enqueueSnackbar } = useSnackbar();
-
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
@@ -77,14 +76,20 @@ const Feedback: NextPage = () => {
     variables: { status: "active", pageNo: 1 },
   });
 
+  // const [
+  //   viewFeedback,
+  //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
+
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
   const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     // do some checking here to ensure data exist
     setLoader(true);
     if (dataListData || dataListError) {
-      /* istanbul ignore next */
+      // mutate data if you need to
       setDataList(dataListData?.getAdminFeedbackList);
       setLoader(false);
     }
@@ -235,39 +240,43 @@ const Feedback: NextPage = () => {
   // if (loading) return 'Submitting...';
   // if (error) return `Submission error! ${error.message}`;
 
+  /* istanbul ignore next */
   const handleAdd = (val) => {
     let valid = false;
-    /* istanbul ignore next */
+    /* istanbul ignore else */
     if (formValues.length === 0) {
-      // enqueueSnackbar("Please fill the all fields");
+      enqueueSnackbar("Please fill the all fields", { variant: "error" });
       return null;
     } else {
       formValues.map((x) => {
         if (!x.question || !x.answer_type) {
-          // enqueueSnackbar("Please fill the all fields");
+          enqueueSnackbar("Please fill the all fields", { variant: "error" });
           return (valid = false);
         } else {
           return (valid = true);
         }
       });
     }
+    /* istanbul ignore next */
     if (valid) {
       setLoader(true);
+      /* istanbul ignore next */
       const data = formValues.map((x) => ({
         ...x,
         ...val,
       }));
 
       const dataJson = JSON.stringify(data);
+      /* istanbul ignore else */
       addFeedback({
         variables: { feedQuesData: dataJson },
         onCompleted: () => {
-          /* istanbul ignore next */
           refetch();
-          /* istanbul ignore next */
           setLoader(false);
-          /* istanbul ignore next */
           setAddModal(false);
+          enqueueSnackbar("Feedback added successfully", {
+            variant: "success",
+          });
         },
       });
     }
@@ -277,7 +286,9 @@ const Feedback: NextPage = () => {
     setFormValues(val);
   };
 
+  /* istanbul ignore next */
   const handleEdit = async (val) => {
+    /* istanbul ignore else */
     const data = formValues.map((x) => ({
       question: x.question,
       answer_type: x.answer_type,
@@ -285,32 +296,30 @@ const Feedback: NextPage = () => {
       ...val,
     }));
 
-    try {
-      await updateFeedback({
-        variables: {
-          feedbackId: selectedId,
-          update: data[0],
-        },
-        onCompleted: () => {
-          /* istanbul ignore next */
-          refetch();
-          /* istanbul ignore next */
-          setEditModal(false);
-        },
-      });
-      // enqueueSnackbar("Updated data successfully");
-    } catch (e) {
-      console.log(e);
-    }
+    updateFeedback({
+      variables: {
+        feedbackId: selectedId,
+        update: data[0],
+      },
+      onCompleted: () => {
+        refetch();
+        setEditModal(false);
+        enqueueSnackbar("Updated data successfully!", { variant: "success" });
+      },
+    });
   };
 
+  /* istanbul ignore next */
   const handleViewEdit = (id) => {
+    /* istanbul ignore else */
     const val = dataList.filter((x) => x._id === id);
     setSelectedUserData(val);
     setEditModal(true);
   };
 
+  /* istanbul ignore next */
   const handleDelete = async (id) => {
+    /* istanbul ignore else */
     deleteFeedback({
       variables: {
         feedbackId: id,
@@ -319,6 +328,7 @@ const Feedback: NextPage = () => {
       onCompleted: () => {
         setDeletConfirmationModal(false);
         refetch();
+        enqueueSnackbar("Delete data successfully!", { variant: "error" });
       },
     });
 
@@ -336,14 +346,13 @@ const Feedback: NextPage = () => {
     //     console.log(e)
     // }
   };
+  /* istanbul ignore next */
   const handleView = (id) => {
     /* istanbul ignore else */
     const val = dataList.filter((x) => x._id === id);
     setSelectedUserData(val);
     setViewModal(true);
   };
-
-  /* istanbul ignore next */
   const changePage = (url: any) => {
     console.log("CHANGE PAGE", url);
   };
@@ -375,7 +384,7 @@ const Feedback: NextPage = () => {
             onPageChange={(page, direction) => {
               /* istanbul ignore next */
               setPage(page);
-              /* istanbul ignore next */
+              /* istanbul ignore else */
               if (direction === "next") {
                 changePage(nextPage);
               } else if (direction === "back") {
