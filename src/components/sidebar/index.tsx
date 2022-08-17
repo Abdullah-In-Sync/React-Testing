@@ -1,13 +1,8 @@
 import { useContext } from "react";
-import dynamic from "next/dynamic";
 import { Box, Drawer, styled, Divider, useTheme } from "@mui/material";
 import Scrollbar from "../common/Scrollbar";
 import { SidebarContext } from "../../contexts/SidebarContext";
-// import SidebarMenu from "./SidebarMenu";
-const SidebarMenu = dynamic(
-  import("./SidebarMenu"),
-  { ssr: false }
-);
+import SidebarMenu from "./SidebarMenu";
 
 const SidebarWrapper = styled(Box)(
   () => `

@@ -119,57 +119,7 @@ export const patient_routes: RoutesType[] = [
     icon: <CorporateFareIcon />,
   },
   { key: 6, label: "Therapies", path: "/therapies", icon: <PersonIcon /> },
-  // [
-  //   { key: 7, label: "Users", path: "/Users", icon: <PersonIcon /> },
-  //   { key: 8, label: "Library", path: "/library", icon: <LibraryBooksIcon /> },
-  //   {
-  //     key: 9,
-  //     label: "Formulation",
-  //     path: "/formulation",
-  //     icon: <FactCheckIcon />,
-  //   },
-  // ],
   { key: 10, label: "Risks", path: "/risks", icon: <CrisisAlertIcon /> },
   { key: 11, label: "Keywords", path: "/keywords", icon: <StyleIcon /> },
-  // [
-  //   {
-  //     key: 12,
-  //     label: "Clinical Analysis",
-  //     path: "/clinical-analysis",
-  //     icon: <MedicalInformationIcon />,
-  //   },
-  //   {
-  //     key: 13,
-  //     label: "Safety Plan",
-  //     path: "/clinical-analysis/safety-plan",
-  //     icon: <BadgeIcon />,
-  //   },
-  //   { key: 14, label: "Measures", path: "/measures", icon: <StraightenIcon /> },
-  //   { key: 15, label: "Monitor", path: "/monitor", icon: <EqualizerIcon /> },
-  //   {
-  //     key: 16,
-  //     label: "Feedback",
-  //     path: "admin/feedback",
-  //     icon: <ThumbUpAltIcon />,
-  //   },
-  //   {
-  //     key: 17,
-  //     label: "Agenda",
-  //     path: "/agenda",
-  //     icon: <AppRegistrationIcon />,
-  //   },
-  //   {
-  //     key: 18,
-  //     label: "Contacts",
-  //     path: "/contacts",
-  //     icon: <ContactPhoneIcon />,
-  //   },
-  //   { key: 19, label: "Diary", path: "/diary", icon: <AutoStoriesIcon /> },
-  //   { key: 20, label: "CPD", path: "/cpd", icon: <DifferenceIcon /> },
-  // ],
-  // { key: 21, label: "File", path: "/file", icon: <FilePresentIcon /> },
-  // [
-  //   { key: 22, label: "TODOs", path: "todo", icon: <ListAltIcon /> },
-  //   { key: 23, label: "Relapse", path: "/relapse", icon: <TungstenIcon /> },
-  // ],
+  
 ];
