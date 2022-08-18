@@ -95,7 +95,7 @@ jobs:
         envkey_NEXT_PUBLIC_V1_ROOT_URL: https://dev-myhelp.co.uk
         directory: src
         file_name: .env.local
-        fail_on_empty: false
+        fail_on_empty: true
         
     - name: Build
       run: yarn build
