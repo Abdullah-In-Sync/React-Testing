@@ -88,8 +88,9 @@ const Feedback: NextPage = () => {
   useEffect(() => {
     // do some checking here to ensure data exist
     setLoader(true);
+    /* istanbul ignore next */
     if (dataListData || dataListError) {
-      // mutate data if you need to
+      /* istanbul ignore next */
       setDataList(dataListData?.getAdminFeedbackList);
       setLoader(false);
     }
@@ -296,17 +297,22 @@ const Feedback: NextPage = () => {
       ...val,
     }));
 
-    updateFeedback({
-      variables: {
-        feedbackId: selectedId,
-        update: data[0],
-      },
-      onCompleted: () => {
-        refetch();
-        setEditModal(false);
-        enqueueSnackbar("Updated data successfully!", { variant: "success" });
-      },
-    });
+    try{
+      await updateFeedback({
+        variables: {
+          feedbackId: selectedId,
+          update: data[0],
+        },
+        onCompleted: () => {
+          refetch();
+          setEditModal(false);
+          enqueueSnackbar("Updated data successfully!", { variant: "success" });
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+
   };
 
   /* istanbul ignore next */
@@ -331,20 +337,6 @@ const Feedback: NextPage = () => {
         enqueueSnackbar("Delete data successfully!", { variant: "error" });
       },
     });
-
-    // try {
-    //     const { data: da } = await updateFeedback({
-    //         variables: {
-    //             feedbackId: selectedId,
-    //             update: data[0]
-    //         },
-    //         onCompleted: () => { refetch(); setEditModal(false); },
-    //     });
-    //     enqueueSnackbar("Updated data successfully");
-    // }
-    // catch (e) {
-    //     console.log(e)
-    // }
   };
   /* istanbul ignore next */
   const handleView = (id) => {
@@ -354,6 +346,7 @@ const Feedback: NextPage = () => {
     setViewModal(true);
   };
   const changePage = (url: any) => {
+    /* istanbul ignore next */
     console.log("CHANGE PAGE", url);
   };
 
@@ -384,7 +377,7 @@ const Feedback: NextPage = () => {
             onPageChange={(page, direction) => {
               /* istanbul ignore next */
               setPage(page);
-              /* istanbul ignore else */
+              /* istanbul ignore next */
               if (direction === "next") {
                 changePage(nextPage);
               } else if (direction === "back") {
