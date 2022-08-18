@@ -85,6 +85,16 @@ jobs:
           ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
         key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
 
+    - name: Make Env File
+      uses: SpicyPizza/create-envfile@v1.3
+      with:
+        envkey_NEXT_PUBLIC_ENVIRONMENT: prod
+        envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.PROD_APPSYNC_URL }}
+        envkey_NEXT_PUBLIC_V1_ROOT_URL: https://portal.myhelp.co.uk
+        directory: src
+        file_name: .env.local
+        fail_on_empty: false
+
     - name: Build
       run: yarn build
       working-directory: src
