@@ -16,7 +16,7 @@ export const buildPatientTokenValidationQuery = (
           let user_type: string = data!.getTokenData.user_type;
           user_type = user_type.replace("[", "");
           user_type = user_type.replace("]", "");
-          /* istanbul ignore else */
+          /* istanbul ignore next */
           if (user_type != "patient") {
             window.location.href =
               "https://" + window.location.hostname + "/account";

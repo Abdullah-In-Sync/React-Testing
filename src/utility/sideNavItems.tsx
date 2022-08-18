@@ -19,7 +19,7 @@ import FilePresentIcon from "@mui/icons-material/FilePresent";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import TungstenIcon from "@mui/icons-material/Tungsten";
 
-type superadminRoutesType =
+type RoutesType =
   | {
       key: number;
       label: string;
@@ -34,7 +34,7 @@ type superadminRoutesType =
     }[];
 
 //** SUPER ADMIN ROUTES **//
-export const superadmin_routes: superadminRoutesType[] = [
+export const superadmin_routes: RoutesType[] = [
   { key: 1, label: "Home", path: "/dashboard", icon: <HomeIcon /> },
   [
     { key: 2, label: "Hospital", path: "/hospital", icon: <ApartmentIcon /> },
@@ -101,4 +101,23 @@ export const superadmin_routes: superadminRoutesType[] = [
     { key: 22, label: "TODOs", path: "todo", icon: <ListAltIcon /> },
     { key: 23, label: "Relapse", path: "/relapse", icon: <TungstenIcon /> },
   ],
+];
+
+//** PATINET ROUTES **//
+export const patient_routes: RoutesType[] = [
+  { key: 1, label: "Home", path: "/dashboard", icon: <HomeIcon /> },
+  [
+    { key: 2, label: "Hospital", path: "/hospital", icon: <ApartmentIcon /> },
+    { key: 3, label: "Therapist", path: "/therapist", icon: <PersonIcon /> },
+  ],
+  { key: 4, label: "Package", path: "/package", icon: <PersonIcon /> },
+  {
+    key: 5,
+    label: "Organization",
+    path: "/organization",
+    icon: <CorporateFareIcon />,
+  },
+  { key: 6, label: "Therapies", path: "/therapies", icon: <PersonIcon /> },
+  { key: 10, label: "Risks", path: "/risks", icon: <CrisisAlertIcon /> },
+  { key: 11, label: "Keywords", path: "/keywords", icon: <StyleIcon /> },
 ];

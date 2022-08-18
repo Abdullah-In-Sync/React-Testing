@@ -1,12 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
+import { ReactSession } from "react-client-session";
 
 import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 import { SidebarContext } from "../../../contexts/SidebarContext";
-import { superadmin_routes } from "../../../utility/sideNavItems";
+import {
+  superadmin_routes,
+  patient_routes,
+} from "../../../utility/sideNavItems";
 
 const listItem = {
   paddingTop: "0px",
@@ -140,6 +144,20 @@ function SidebarMenu() {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
+  const [userType, setUserType] = useState("");
+
+  useEffect(() => setUserType(ReactSession.get("user_type")), []);
+
+  const userRoute = {
+    patient: patient_routes,
+    therapist: patient_routes,
+    admin: superadmin_routes,
+  };
+
+  const getRouteByUser = (user) => {
+    return userRoute[user] || superadmin_routes;
+  };
+
   /* istanbul ignore next */
   const handleClick = (e, id) => {
     /* istanbul ignore else */
@@ -155,7 +173,7 @@ function SidebarMenu() {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {superadmin_routes.map((val) => {
+              {getRouteByUser(userType).map((val) => {
                 if (Array.isArray(val)) {
                   return (
                     <>
@@ -165,9 +183,9 @@ function SidebarMenu() {
                         sx={listItem}
                       >
                         <Button
+                          data-testid={"menu_" + val[0]?.key}
                           disableRipple
                           component="a"
-                          /* istanbul ignore else */
                           onClick={(e) => handleClick(e, val[0]?.key)}
                           startIcon={val[0]?.icon}
                           endIcon={
@@ -196,6 +214,7 @@ function SidebarMenu() {
                           >
                             <NextLink href={item.path} passHref>
                               <Button
+                                data-testid={"menu_" + item.label}
                                 className={
                                   currentRoute === `${item.path}`
                                     ? "active"
