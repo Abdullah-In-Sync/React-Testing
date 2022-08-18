@@ -18,6 +18,16 @@ import DifferenceIcon from "@mui/icons-material/Difference";
 import FilePresentIcon from "@mui/icons-material/FilePresent";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import TungstenIcon from "@mui/icons-material/Tungsten";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import DescriptionIcon from "@mui/icons-material/Description";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import SettingsIcon from "@mui/icons-material/Settings";
+import FeedbackIcon from "@mui/icons-material/Feedback";
+
+import {env} from "../lib/env";
+
+const Link = env.v1.rootUrl;
 
 type RoutesType =
   | {
@@ -35,46 +45,101 @@ type RoutesType =
 
 //** SUPER ADMIN ROUTES **//
 export const superadmin_routes: RoutesType[] = [
-  { key: 1, label: "Home", path: "/dashboard", icon: <HomeIcon /> },
+  {
+    key: 1,
+    label: "Home",
+    path: Link + "/superadmin/dashboard",
+    icon: <HomeIcon />,
+  },
   [
-    { key: 2, label: "Hospital", path: "/hospital", icon: <ApartmentIcon /> },
-    { key: 3, label: "Therapist", path: "/therapist", icon: <PersonIcon /> },
+    {
+      key: 2,
+      label: "Hospital",
+      path: Link + "/superadmin/hospital/list",
+      icon: <ApartmentIcon />,
+    },
+    {
+      key: 3,
+      label: "Therapist",
+      path: Link + "/superadmin/therapist/list",
+      icon: <PersonIcon />,
+    },
   ],
-  { key: 4, label: "Package", path: "/package", icon: <PersonIcon /> },
+  {
+    key: 4,
+    label: "Package",
+    path: Link + "/superadmin/package/list",
+    icon: <PersonIcon />,
+  },
   {
     key: 5,
     label: "Organization",
-    path: "/organization",
+    path: Link + "/superadmin/organization/list",
     icon: <CorporateFareIcon />,
   },
-  { key: 6, label: "Therapies", path: "/therapies", icon: <PersonIcon /> },
+  {
+    key: 6,
+    label: "Therapies",
+    path: Link + "/superadmin/therapies",
+    icon: <PersonIcon />,
+  },
   [
-    { key: 7, label: "Users", path: "/Users", icon: <PersonIcon /> },
-    { key: 8, label: "Library", path: "/library", icon: <LibraryBooksIcon /> },
+    {
+      key: 7,
+      label: "Users",
+      path: Link + "/superadmin/users/list",
+      icon: <PersonIcon />,
+    },
+    {
+      key: 8,
+      label: "Library",
+      path: Link + "/superadmin/resource/resourcemodel",
+      icon: <LibraryBooksIcon />,
+    },
     {
       key: 9,
       label: "Formulation",
-      path: "/formulation",
+      path: Link + "/superadmin/formulationmodel",
       icon: <FactCheckIcon />,
     },
   ],
-  { key: 10, label: "Risks", path: "/risks", icon: <CrisisAlertIcon /> },
-  { key: 11, label: "Keywords", path: "/keywords", icon: <StyleIcon /> },
+  {
+    key: 10,
+    label: "Risks",
+    path: Link + "/superadmin/risks/list",
+    icon: <CrisisAlertIcon />,
+  },
+  {
+    key: 11,
+    label: "Keywords",
+    path: Link + "/superadmin/keywords/list",
+    icon: <StyleIcon />,
+  },
   [
     {
       key: 12,
       label: "Clinical Analysis",
-      path: "/clinical-analysis",
+      path: Link + "/superadmin/clinical-analysis",
       icon: <MedicalInformationIcon />,
     },
     {
       key: 13,
       label: "Safety Plan",
-      path: "/clinical-analysis/safety-plan",
+      path: Link + "/superadmin/safety/list",
       icon: <BadgeIcon />,
     },
-    { key: 14, label: "Measures", path: "/measures", icon: <StraightenIcon /> },
-    { key: 15, label: "Monitor", path: "/monitor", icon: <EqualizerIcon /> },
+    {
+      key: 14,
+      label: "Measures",
+      path: Link + "/superadmin/measure",
+      icon: <StraightenIcon />,
+    },
+    {
+      key: 15,
+      label: "Monitor",
+      path: Link + "/superadmin/monitor/list",
+      icon: <EqualizerIcon />,
+    },
     {
       key: 16,
       label: "Feedback",
@@ -84,23 +149,115 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 17,
       label: "Agenda",
-      path: "/agenda",
+      path: Link + "/superadmin/agenda/list",
       icon: <AppRegistrationIcon />,
     },
     {
       key: 18,
       label: "Contacts",
-      path: "/contacts",
+      path: Link + "/superadmin/contact/list",
       icon: <ContactPhoneIcon />,
     },
-    { key: 19, label: "Diary", path: "/diary", icon: <AutoStoriesIcon /> },
-    { key: 20, label: "CPD", path: "/cpd", icon: <DifferenceIcon /> },
+    {
+      key: 19,
+      label: "Diary",
+      path: Link + "/superadmin/diary/list",
+      icon: <AutoStoriesIcon />,
+    },
+    {
+      key: 20,
+      label: "CPD",
+      path: Link + "/superadmin/cpd/list",
+      icon: <DifferenceIcon />,
+    },
   ],
-  { key: 21, label: "File", path: "/file", icon: <FilePresentIcon /> },
+  {
+    key: 21,
+    label: "File",
+    path: Link + "/superadmin/patientfiles",
+    icon: <FilePresentIcon />,
+  },
   [
-    { key: 22, label: "TODOs", path: "todo", icon: <ListAltIcon /> },
-    { key: 23, label: "Relapse", path: "/relapse", icon: <TungstenIcon /> },
+    {
+      key: 22,
+      label: "TODOs",
+      path: Link + "/superadmin/patienttodo",
+      icon: <ListAltIcon />,
+    },
+    {
+      key: 23,
+      label: "Relapse",
+      path: Link + "/superadmin/relapse/list",
+      icon: <TungstenIcon />,
+    },
   ],
+];
+
+//** THERAPIST ROUTES **//
+export const therapistRoutes: RoutesType[] = [
+  {
+    key: 1,
+    label: "Home",
+    path: Link + "/therapist/dashboard",
+    icon: <HomeIcon />,
+  },
+  [
+    {
+      key: 2,
+      label: "Calendar",
+      path: Link + "/therapist/calendar",
+      icon: <CalendarMonthIcon />,
+    },
+    {
+      key: 3,
+      label: "Patients",
+      path: Link + "/therapist/patient/list",
+      icon: <PersonIcon />,
+    },
+  ],
+  {
+    key: 4,
+    label: "Library",
+    path: Link + "/therapist/resoure/resourcemodel",
+    icon: <LibraryBooksIcon />,
+  },
+  {
+    key: 5,
+    label: "Connect",
+    path: Link + "/therapist/communication",
+    icon: <ConnectWithoutContactIcon />,
+  },
+  {
+    key: 6,
+    label: "Contacts",
+    path: Link + "/therapist/contact/list",
+    icon: <ContactPhoneIcon />,
+  },
+  {
+    key: 10,
+    label: "Diary",
+    path: Link + "/therapist/diary/list",
+    icon: <DescriptionIcon />,
+  },
+  {
+    key: 11,
+    label: "CPD",
+    path: Link + "/therapist/cpd/list",
+    icon: <DifferenceIcon />,
+  },
+  {
+    key: 12,
+    label: "Packages",
+    path: Link + "/therapist/packages",
+    icon: <InventoryIcon />,
+  },
+  {
+    key: 11,
+    label: "Settings",
+    path: Link + "/therapist/settings",
+    icon: <SettingsIcon />,
+  },
+  { key: 11, label: "Feedback", path: "/feedback", icon: <FeedbackIcon /> },
 ];
 
 //** PATINET ROUTES **//
