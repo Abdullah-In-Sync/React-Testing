@@ -103,7 +103,6 @@ export const superadmin_routes: RoutesType[] = [
   ],
 ];
 
-
 //** PATINET ROUTES **//
 export const patient_routes: RoutesType[] = [
   { key: 1, label: "Home", path: "/dashboard", icon: <HomeIcon /> },
@@ -121,5 +120,4 @@ export const patient_routes: RoutesType[] = [
   { key: 6, label: "Therapies", path: "/therapies", icon: <PersonIcon /> },
   { key: 10, label: "Risks", path: "/risks", icon: <CrisisAlertIcon /> },
   { key: 11, label: "Keywords", path: "/keywords", icon: <StyleIcon /> },
-  
 ];

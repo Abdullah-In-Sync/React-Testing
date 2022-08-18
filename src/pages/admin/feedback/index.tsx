@@ -297,7 +297,7 @@ const Feedback: NextPage = () => {
       ...val,
     }));
 
-    try{
+    try {
       await updateFeedback({
         variables: {
           feedbackId: selectedId,
@@ -312,7 +312,6 @@ const Feedback: NextPage = () => {
     } catch (e) {
       console.log(e);
     }
-
   };
 
   /* istanbul ignore next */

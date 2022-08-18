@@ -16,8 +16,6 @@ import {
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
 
-
-
 // mocks
 const buildMocks = (): {
   mocks: MockedResponse[];

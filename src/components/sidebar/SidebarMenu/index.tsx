@@ -1,13 +1,16 @@
-import React, { useState, useContext ,useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import { ReactSession } from 'react-client-session';
+import { ReactSession } from "react-client-session";
 
 import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 import { SidebarContext } from "../../../contexts/SidebarContext";
-import { superadmin_routes,patient_routes } from "../../../utility/sideNavItems";
+import {
+  superadmin_routes,
+  patient_routes,
+} from "../../../utility/sideNavItems";
 
 const listItem = {
   paddingTop: "0px",
@@ -141,23 +144,19 @@ function SidebarMenu() {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [userType , setUserType] = useState("")
+  const [userType, setUserType] = useState("");
 
+  useEffect(() => setUserType(ReactSession.get("user_type")), []);
 
-  useEffect(() => setUserType(
-                            ReactSession.get("user_type")
-                  ), [])
-  
+  const userRoute = {
+    patient: patient_routes,
+    therapist: patient_routes,
+    admin: superadmin_routes,
+  };
 
-  const userRoute ={
-    patient:patient_routes,
-    therapist:patient_routes,
-    admin:superadmin_routes
-  }
-
-  const getRouteByUser = user =>{
-    return userRoute[user] || superadmin_routes
-  }
+  const getRouteByUser = (user) => {
+    return userRoute[user] || superadmin_routes;
+  };
 
   /* istanbul ignore next */
   const handleClick = (e, id) => {
