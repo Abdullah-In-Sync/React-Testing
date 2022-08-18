@@ -5,7 +5,7 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 
 import { ApolloProvider } from "@apollo/client";
-import client from "../apollo-client";
+import client from "../lib/apollo-client";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";

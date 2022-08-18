@@ -1,10 +1,6 @@
-const env = {
-  GRAPHQL_SERVER:
-    "https://xhyntnjiffgmxfu7aux3ohr24q.appsync-api.eu-west-1.amazonaws.com/graphql",
-};
-
 const nextConfig = {
   reactStrictMode: false,
+  trailingSlash: true,
   basePath: "/v2",
   async redirects() {
     return [
@@ -19,8 +15,7 @@ const nextConfig = {
   images: {
     loader: "akamai",
     path: "/",
-  },
-  env,
+  }
 };
 
 module.exports = nextConfig;

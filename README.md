@@ -7,16 +7,14 @@ This is a [Next.js](https://nextjs.org/), [MUI v5](https://mui.com/) and [Typesc
 3. Run this command in the project directory to install dependencies:
 
 ```bash
-npm i
-# or
+cd src
 yarn
 ```
 
 4. You can run dev server with the following command:
 
 ```bash
-npm run dev
-# or
+cd src
 yarn dev
 ```
 
