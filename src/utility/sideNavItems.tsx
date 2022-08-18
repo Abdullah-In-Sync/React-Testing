@@ -25,7 +25,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 
-import {env} from "../lib/env";
+import { env } from "../lib/env";
 
 const Link = env.v1.rootUrl;
 
