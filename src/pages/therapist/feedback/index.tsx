@@ -79,8 +79,8 @@ const Feedback: NextPage = () => {
     setFeedbackType(null);
     setSessionNo(null);
     setPatientData({
-      patient_id: localStorage.getItem("patient_id"),
-      patient_name: localStorage.getItem("patient_name"),
+      patient_id: sessionStorage.getItem("patient_id"),
+      patient_name: sessionStorage.getItem("patient_name"),
     });
     setSessionPanelExpanded(false);
   };

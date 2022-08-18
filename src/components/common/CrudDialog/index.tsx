@@ -157,10 +157,6 @@ const CrudDialog = ({
     <div>
       <BootstrapDialog
         data-testid="bootstrapModal"
-        onClose={() => {
-          onClose();
-          setFieldValues({});
-        }}
         aria-labelledby="customized-dialog-title"
         open={open}
         maxWidth="md"

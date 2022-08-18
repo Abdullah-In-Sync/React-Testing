@@ -5642,6 +5642,11 @@ randexp@0.4.6:
     discontinuous-range "1.0.0"
     ret "~0.1.10"
 
+react-client-session@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-client-session/-/react-client-session-0.0.8.tgz#b5b5b5824b4d70490999adceb405dcba88de2b72"
+  integrity sha512-wHCTD4lEE8mzl6kxL8viL4q5kGx2TJJNaWdvzmx3KeiMgP+Yv5/Bx476jCpPD0pKc5VvdVuhkH4EM20XqtT/sQ==
+
 react-custom-scrollbars-2@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/react-custom-scrollbars-2/-/react-custom-scrollbars-2-4.5.0.tgz#cff18e7368bce9d570aea0be780045eda392c745"

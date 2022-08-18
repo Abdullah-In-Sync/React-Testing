@@ -164,7 +164,7 @@ const filteredPatientSessionList = (
 
 const sut = async (patient_id: string) => {
   // system under test
-  localStorage.setItem("patient_id", patient_id);
+  sessionStorage.setItem("patient_id", patient_id);
   render(
     <MockedProvider mocks={mocks}>
       <Feedback />
