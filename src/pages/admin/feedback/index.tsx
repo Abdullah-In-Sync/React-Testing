@@ -56,7 +56,7 @@ const Feedback: NextPage = () => {
   const [selectedUserData, setSelectedUserData] = useState<any>([]);
 
   // TABLE PROPS
-  // const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  //const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   // const [dataCount, setDataCount] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
@@ -73,7 +73,7 @@ const Feedback: NextPage = () => {
     data: dataListData,
     refetch,
   } = useQuery(GET_FEEDBACK_DATA, {
-    variables: { status: "active", pageNo: 1 },
+    variables: { status: "active", pageNo: 1, limit: 10 },
   });
 
   // const [
@@ -91,7 +91,7 @@ const Feedback: NextPage = () => {
     /* istanbul ignore next */
     if (dataListData || dataListError) {
       /* istanbul ignore next */
-      setDataList(dataListData?.getAdminFeedbackList);
+      setDataList(dataListData?.getAdminFeedbackList.feedbackdata);
       setLoader(false);
     }
   }, [dataListData, dataListError]);
@@ -367,7 +367,7 @@ const Feedback: NextPage = () => {
             //   initialSort={"id"}
             //   searchColumnsFilter={true}
             fields={fields}
-            data={dataListData?.getAdminFeedbackList}
+            data={dataListData?.getAdminFeedbackList.feedbackdata}
             currentPage={page}
             //   handleSortChange={(ordering) => {
             //     setOrdering(ordering);
@@ -392,7 +392,7 @@ const Feedback: NextPage = () => {
             //   // getDeviceType(null, rows);
             //   // setRowsPerPage(rows);
             // }}
-            dataCount={dataListData?.getAdminFeedbackList.length}
+            dataCount={dataListData?.getAdminFeedbackList.totalcount}
             //   onChangePage={(page) => console.log(page)}
             selectedRecords={[]}
             rowOnePage={10}

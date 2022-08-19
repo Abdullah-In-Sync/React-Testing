@@ -29,34 +29,38 @@ const buildMocks = (): {
       variables: {
         status: "active",
         pageNo: 1,
+        limit: 10,
       },
     },
     result: {
       data: {
-        getAdminFeedbackList: [
-          {
-            _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
-            answer_type: "list",
-            created_date: "2022-06-23T08:26:33.663Z",
-            org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
-            question: "test1",
-            session_no: 1,
-            status: 1,
-            updated_date: "2022-06-23T08:26:33.663Z",
-            user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
-          },
-          {
-            _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
-            answer_type: "list",
-            created_date: "2022-06-23T08:32:44.547Z",
-            org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
-            question: "test2",
-            session_no: 1,
-            status: 1,
-            updated_date: "2022-06-23T08:32:44.547Z",
-            user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
-          },
-        ],
+        getAdminFeedbackList: {
+          totalcount: 2,
+          feedbackdata: [
+            {
+              _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+              answer_type: "list",
+              created_date: "2022-06-23T08:26:33.663Z",
+              org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+              question: "test1",
+              session_no: 1,
+              status: 1,
+              updated_date: "2022-06-23T08:26:33.663Z",
+              user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+            },
+            {
+              _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
+              answer_type: "list",
+              created_date: "2022-06-23T08:32:44.547Z",
+              org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+              question: "test2",
+              session_no: 1,
+              status: 1,
+              updated_date: "2022-06-23T08:32:44.547Z",
+              user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+            },
+          ],
+        },
       },
     },
   });

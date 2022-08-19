@@ -24,10 +24,27 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FeedbackIcon from "@mui/icons-material/Feedback";
+import StarsIcon from "@mui/icons-material/Stars";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import PreviewIcon from "@mui/icons-material/Preview";
+import ChatIcon from "@mui/icons-material/Chat";
+import VideoCallIcon from "@mui/icons-material/VideoCall";
+import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
 
 import { env } from "../lib/env";
 
 const Link = env.v1.rootUrl;
+
+// used for patient platform
+let patientId = "";
+if (typeof window !== "undefined") {
+  patientId =
+    sessionStorage.getItem("patient_id") == undefined ||
+    sessionStorage.getItem("patient_id") == null
+      ? ""
+      : sessionStorage.getItem("patient_id");
+}
 
 type RoutesType =
   | {
@@ -260,19 +277,97 @@ export const therapistRoutes: RoutesType[] = [
 
 //** PATINET ROUTES **//
 export const patient_routes: RoutesType[] = [
-  { key: 1, label: "Home", path: "/dashboard", icon: <HomeIcon /> },
-  [
-    { key: 2, label: "Hospital", path: "/hospital", icon: <ApartmentIcon /> },
-    { key: 3, label: "Therapist", path: "/therapist", icon: <PersonIcon /> },
-  ],
-  { key: 4, label: "Package", path: "/package", icon: <PersonIcon /> },
+  {
+    key: 1,
+    label: "Home",
+    path: Link + "/patient/dashboard",
+    icon: <HomeIcon />,
+  },
+  {
+    key: 2,
+    label: "My Profile",
+    path: Link + "/patient/view/" + patientId,
+    icon: <PersonIcon />,
+  },
+  {
+    key: 3,
+    label: "Appointments",
+    path: Link + "/patient/appointments",
+    icon: <CalendarMonthIcon />,
+  },
+  { key: 4, label: "Goals", path: Link + "/patient/goal", icon: <StarsIcon /> },
   {
     key: 5,
-    label: "Organization",
-    path: "/organization",
-    icon: <CorporateFareIcon />,
+    label: "Safety Plan",
+    path: Link + "/patient/safety_plan",
+    icon: <BadgeIcon />,
   },
-  { key: 6, label: "Therapies", path: "/therapies", icon: <PersonIcon /> },
-  { key: 10, label: "Risks", path: "/risks", icon: <CrisisAlertIcon /> },
-  { key: 11, label: "Keywords", path: "/keywords", icon: <StyleIcon /> },
+  [
+    { key: 6, label: "Therapy", path: "/therapies", icon: <NewspaperIcon /> },
+    {
+      key: 7,
+      label: "Homework",
+      path: Link + "/patient/homework",
+      icon: <HomeWorkIcon />,
+    },
+    {
+      key: 8,
+      label: "Relapse",
+      path: Link + "/patient/relapse",
+      icon: <HomeWorkIcon />,
+    },
+  ],
+  [
+    { key: 9, label: "Review", path: "/review", icon: <PreviewIcon /> },
+    {
+      key: 10,
+      label: "Measures",
+      path: Link + "/patient/measure/patientmeasure",
+      icon: <PreviewIcon />,
+    },
+    {
+      key: 11,
+      label: "Monitoring",
+      path: Link + "/patient/monitoring",
+      icon: <PreviewIcon />,
+    },
+  ],
+  {
+    key: 12,
+    label: "Resource",
+    path: Link + "/patient/patientresource",
+    icon: <CrisisAlertIcon />,
+  },
+  [
+    {
+      key: 13,
+      label: "Communication",
+      path: "/communication",
+      icon: <ChatIcon />,
+    },
+    {
+      key: 14,
+      label: "Video",
+      path: Link + "/patient/communication/1",
+      icon: <VideoCallIcon />,
+    },
+    {
+      key: 15,
+      label: "Audio",
+      path: Link + "/patient/communication/2",
+      icon: <HeadsetMicIcon />,
+    },
+    {
+      key: 16,
+      label: "Messages",
+      path: Link + "/patient/communication/4",
+      icon: <ChatIcon />,
+    },
+  ],
+  {
+    key: 17,
+    label: "Feedback",
+    path: "/patient/feedback",
+    icon: <StyleIcon />,
+  },
 ];

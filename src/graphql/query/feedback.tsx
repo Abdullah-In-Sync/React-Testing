@@ -10,18 +10,21 @@ export const GET_USER_TOKEN = gql`
 `;
 
 export const GET_FEEDBACK_DATA = gql`
-  query GetAdminFeedback($status: String!, $pageNo: Int!) {
-    getAdminFeedbackList(status: $status, pageNo: $pageNo) {
-      _id
-      created_date
-      org_id
-      feedback_type
-      answer_options
-      organization_name
-      session_no
-      question
-      answer_type
-      status
+  query GetAdminFeedback($status: String!, $pageNo: Int!, $limit: Int!) {
+    getAdminFeedbackList(status: $status, pageNo: $pageNo, limit: $limit) {
+      totalcount
+      feedbackdata {
+        _id
+        created_date
+        org_id
+        feedback_type
+        answer_options
+        organization_name
+        session_no
+        question
+        answer_type
+        status
+      }
     }
   }
 `;
