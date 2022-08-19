@@ -10,6 +10,7 @@ import { SidebarContext } from "../../../contexts/SidebarContext";
 import {
   superadmin_routes,
   patient_routes,
+  therapistRoutes,
 } from "../../../utility/sideNavItems";
 
 const listItem = {
@@ -150,7 +151,7 @@ function SidebarMenu() {
 
   const userRoute = {
     patient: patient_routes,
-    therapist: patient_routes,
+    therapist: therapistRoutes,
     admin: superadmin_routes,
   };
 
