@@ -201,24 +201,22 @@ export const therapistRoutes: RoutesType[] = [
     path: Link + "/therapist/dashboard",
     icon: <HomeIcon />,
   },
-  [
-    {
-      key: 2,
-      label: "Calendar",
-      path: Link + "/therapist/calendar",
-      icon: <CalendarMonthIcon />,
-    },
-    {
-      key: 3,
-      label: "Patients",
-      path: Link + "/therapist/patient/list",
-      icon: <PersonIcon />,
-    },
-  ],
+  {
+    key: 2,
+    label: "Calendar",
+    path: Link + "/therapist/calendar",
+    icon: <CalendarMonthIcon />,
+  },
+  {
+    key: 3,
+    label: "Patients",
+    path: Link + "/therapist/patient/list",
+    icon: <PersonIcon />,
+  },
   {
     key: 4,
     label: "Library",
-    path: Link + "/therapist/resoure/resourcemodel",
+    path: Link + "/therapist/resource/resourcemodel",
     icon: <LibraryBooksIcon />,
   },
   {
