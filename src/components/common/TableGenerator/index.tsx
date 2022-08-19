@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { withStyles } from "@mui/styles";
-import isEmpty from "lodash/isEmpty";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,110 +10,8 @@ import TablePagination from "@mui/material/TablePagination";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import TableFooter from "@mui/material/TableFooter";
 import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import LastPageIcon from "@mui/icons-material/LastPage";
 import Loader from "../Loader";
 
-function TablePaginationActions(props, compProps) {
-  const { count, page, rowsPerPage, onPageChange } = props;
-
-  const handleFirstPageButtonClick = (event) => {
-    onPageChange(event, 0, "first");
-  };
-
-  const handleBackButtonClick = (event) => {
-    onPageChange(event, page - 1, "back");
-  };
-
-  const handleNextButtonClick = (event) => {
-    onPageChange(event, page + 1, "next");
-  };
-
-  const handleLastPageButtonClick = (event) => {
-    onPageChange(
-      event,
-      Math.max(0, Math.ceil(count / rowsPerPage) - 1),
-      "last"
-    );
-  };
-
-  return (
-    <>
-      <Box
-        data-testid="tableBox"
-        sx={classes.root}
-        style={{
-          paddingTop:
-            compProps.selectedRecords &&
-            compProps.selectedRecords.length &&
-            !isEmpty(compProps.selectedRecords[0])
-              ? "20px"
-              : "0px",
-        }}
-      >
-        <IconButton
-          onClick={handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label="first page"
-        >
-          <FirstPageIcon />
-          {/* {theme?.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />} */}
-        </IconButton>
-        <IconButton
-          onClick={handleBackButtonClick}
-          disabled={page === 0}
-          aria-label="previous page"
-        >
-          <KeyboardArrowLeft />
-          {/* {theme?.direction === "rtl" ? (
-            <KeyboardArrowRight />
-          ) : (
-            <KeyboardArrowLeft />
-          )} */}
-        </IconButton>
-        <IconButton
-          onClick={handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="next page"
-        >
-          <KeyboardArrowRight />
-          {/* {theme?.direction === "rtl" ? (
-            <KeyboardArrowLeft />
-          ) : (
-            <KeyboardArrowRight />
-          )} */}
-        </IconButton>
-        <IconButton
-          onClick={handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="last page"
-        >
-          <LastPageIcon />
-          {/* {theme?.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />} */}
-        </IconButton>
-      </Box>
-      {compProps.selectedRecords &&
-      compProps.selectedRecords.length &&
-      !isEmpty(compProps.selectedRecords[0]) ? (
-        <div style={{ display: "inline-block" }}>
-          {" "}
-          {compProps.selectedRecords.length} Record
-          {compProps.selectedRecords.length === 1 ? "" : "s"} Selected{" "}
-        </div>
-      ) : null}
-    </>
-  );
-}
-
-// TablePaginationActions.propTypes = {
-//   count: PropTypes.number.isRequired,
-//   onPageChange: PropTypes.func.isRequired,
-//   page: PropTypes.number.isRequired,
-//   rowsPerPage: PropTypes.number.isRequired,
-// };
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields } = props;
@@ -159,15 +55,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-// EnhancedTableHead.propTypes = {
-//   classes: PropTypes.object.isRequired,
-//   numSelected: PropTypes.number.isRequired,
-//   onRequestSort: PropTypes.func.isRequired,
-//   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-//   orderBy: PropTypes.string.isRequired,
-//   rowCount: PropTypes.number.isRequired,
-//   fields: PropTypes.array.isRequired,
-// };
+
 
 const classes = {
   tableHead: {
@@ -226,7 +114,7 @@ const TableGenerator = ({
   initialSort = "",
   backendPagination = false,
   dataCount,
-  // onPageChange,
+  onPageChange,
   onChangeSelected,
   onRowPerPageChange,
   rowOnePage = 10,
@@ -249,44 +137,18 @@ const TableGenerator = ({
     setPage(currentPage);
   }, [currentPage]);
 
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = props.selectedRecords.findIndex(
-  //     (val) => val.id === name.id
-  //   );
-  //   let newSelected = [];
-
-  //   if (radio) {
-  //     if (selectedIndex) {
-  //       newSelected = [name];
-  //     } else {
-  //       newSelected = [];
-  //     }
-  //   } else {
-  //     if (selectedIndex === -1) {
-  //       newSelected = newSelected.concat(props.selectedRecords, name);
-  //     } else if (selectedIndex === 0) {
-  //       newSelected = newSelected.concat(props.selectedRecords.slice(1));
-  //     } else if (selectedIndex === props.selectedRecords.length - 1) {
-  //       newSelected = newSelected.concat(props.selectedRecords.slice(0, -1));
-  //     } else if (selectedIndex > 0) {
-  //       newSelected = newSelected.concat(
-  //         props.selectedRecords.slice(0, selectedIndex),
-  //         props.selectedRecords.slice(selectedIndex + 1)
-  //       );
-  //     }
-  //   }
-  //   onChangeSelected(newSelected);
-  // };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
   ) => {
     setPage(newPage);
-    // onPageChange(newPage, towards);
+    onPageChange(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     onRowPerPageChange(event.target.value);
@@ -336,7 +198,6 @@ const TableGenerator = ({
               </div>
               {!props.loader && data.length === 0 ? (
                 <div
-                  // className="d-flex align-items-center justify-content-center"
                   style={{
                     position: "absolute",
                     height: "20%",
@@ -379,7 +240,7 @@ const TableGenerator = ({
                               align="left"
                             >
                               {field.render &&
-                              typeof field.render === "function"
+                                typeof field.render === "function"
                                 ? field.render(record[field.key], record, index)
                                 : record[field.key]}
                             </TableCell>
@@ -392,8 +253,9 @@ const TableGenerator = ({
           </TableBody>
           <TableFooter>
             <TableRow>
+
               <TablePagination
-                rowsPerPageOptions={[3, 5, 7, 8, 10, 25, 50, 100]}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 colSpan={fields.length}
                 count={dataCount !== undefined ? dataCount : data.length}
                 rowsPerPage={rowsPerPage}
@@ -403,7 +265,6 @@ const TableGenerator = ({
                 }}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={(e) => TablePaginationActions(e, props)}
               />
             </TableRow>
           </TableFooter>
@@ -412,11 +273,5 @@ const TableGenerator = ({
     </Box>
   );
 };
-
-// TableGenerator.defaultProps = {
-//   selectedRecords: [],
-//   showSelectAll: true,
-//   handleSortChange,
-// };
 
 export default withStyles({}, { withTheme: true })(TableGenerator);
