@@ -12,7 +12,6 @@ import TableFooter from "@mui/material/TableFooter";
 import Paper from "@mui/material/Paper";
 import Loader from "../Loader";
 
-
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields } = props;
   const createSortHandler = (property) => (event) => {
@@ -54,8 +53,6 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-
-
 
 const classes = {
   tableHead: {
@@ -137,7 +134,6 @@ const TableGenerator = ({
     setPage(currentPage);
   }, [currentPage]);
 
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
@@ -147,7 +143,7 @@ const TableGenerator = ({
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -240,7 +236,7 @@ const TableGenerator = ({
                               align="left"
                             >
                               {field.render &&
-                                typeof field.render === "function"
+                              typeof field.render === "function"
                                 ? field.render(record[field.key], record, index)
                                 : record[field.key]}
                             </TableCell>
@@ -253,7 +249,6 @@ const TableGenerator = ({
           </TableBody>
           <TableFooter>
             <TableRow>
-
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 colSpan={fields.length}

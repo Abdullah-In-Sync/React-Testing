@@ -203,11 +203,11 @@ const Feedback: NextPage = () => {
         options:
           orgData?.getOrganizationData?.length > 0
             ? [
-              ...orgData.getOrganizationData.map((val) => ({
-                label: val.name,
-                value: val._id,
-              })),
-            ]
+                ...orgData.getOrganizationData.map((val) => ({
+                  label: val.name,
+                  value: val._id,
+                })),
+              ]
             : [],
       },
       {
