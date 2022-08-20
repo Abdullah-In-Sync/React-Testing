@@ -56,6 +56,7 @@ const SubMenuWrapper = styled(Box)(
         .MuiButton-root {
           display: flex;
           color: ${theme.palette.primary.contrastText};
+          text-transform: none;
           background-color: transparent;
           width: 100%;
           justify-content: flex-start;
