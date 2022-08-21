@@ -5,7 +5,6 @@ const header = {
 };
 
 const ContentHeader = (props) => {
-  // const classes = styles();
   return (
     <Box sx={header}>
       <Typography
@@ -14,6 +13,20 @@ const ContentHeader = (props) => {
         color="secondary.main"
       >
         {props.title}
+      </Typography>
+      <Typography
+        variant="body2"
+        style={{
+          paddingTop: 0,
+          paddingBottom: 0,
+          marginTop:"-15px",
+          marginBottom:"-15px",
+          fontSize: "1em",
+          fontWeight: "bold"
+        }}
+        color="primary.main"
+      >
+        {props.subtitle}
       </Typography>
       <Typography
         style={{
