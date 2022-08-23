@@ -19,9 +19,6 @@ const tabs = [
     value: "work-sheet",
     component: <WorkSheet />,
   },
-
-
-
 ];
 
 const Resource: NextPage = () => {
@@ -33,7 +30,6 @@ const Resource: NextPage = () => {
       </Layout>
     </>
   );
-
 };
 
 export default Resource;

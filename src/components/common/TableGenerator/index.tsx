@@ -188,7 +188,12 @@ const TableGenerator = ({
           />
           <TableBody>
             <>
-              <div style={{ textAlign: "center", marginTop:props.loader?"70px":0 }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: props.loader ? "70px" : 0,
+                }}
+              >
                 {" "}
                 <Loader visible={props.loader} />
               </div>
@@ -236,7 +241,7 @@ const TableGenerator = ({
                               align="left"
                             >
                               {field.render &&
-                                typeof field.render === "function"
+                              typeof field.render === "function"
                                 ? field.render(record[field.key], record, index)
                                 : record[field.key]}
                             </TableCell>

@@ -19,10 +19,10 @@ const ContentHeader = (props) => {
         style={{
           paddingTop: 0,
           paddingBottom: 0,
-          marginTop:"-15px",
-          marginBottom:"-15px",
+          marginTop: "-15px",
+          marginBottom: "-15px",
           fontSize: "1em",
-          fontWeight: "bold"
+          fontWeight: "bold",
         }}
         color="primary.main"
       >
