@@ -60,7 +60,7 @@ const TabsGenerator = ({ tabsList, activeTabs }) => {
       {/** Render tab screens here */}
 
       {tabsList.map(
-        ({ label, value, component }) =>
+        ({  value, component }) =>
           activeTab === value && (
             <TabPanel key={value} value={value} index={value}>
               {component}

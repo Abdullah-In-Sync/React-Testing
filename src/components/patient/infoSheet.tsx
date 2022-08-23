@@ -12,6 +12,12 @@ const TableGenerator = dynamic(
     { ssr: false }
 );
 
+// GRAPHQL
+import { useQuery } from "@apollo/client";
+import {
+    GET_PATIENT_RESOURCE_DATA
+} from "../../graphql/query/resource";
+
 
 const InfoSheet = () => {
 
@@ -19,6 +25,9 @@ const InfoSheet = () => {
     const [rowsPerPage, setRowsPerPage] = useState<number>(10);
     const [page, setPage] = useState<number>(0);
     const [loader, setLoader] = useState<boolean>(false);
+
+    // GRAPHQL
+    const { data: resData, loading } = useQuery(GET_PATIENT_RESOURCE_DATA);
 
     //**  TABLE DATA COLUMNS **//
     /* istanbul ignore next */
@@ -30,17 +39,18 @@ const InfoSheet = () => {
             render: (val) => moment(val).format("DD MMM YYYY hh:mm:ss A") ?? "---",
         },
         {
-            key: "session_no",
+            key: "ptsharres_session",
             columnName: "Session No.",
             visible: true,
             render: (val) => val ?? "---",
         },
 
         {
-            key: "resource_name",
+            key: "resource_data",
             columnName: "Resource Name",
             visible: true,
-            render: (val) => val ?? "---",
+            render: (val) => val[0]?.resource_name ?? "---",
+
         },
 
         {
@@ -63,12 +73,11 @@ const InfoSheet = () => {
 
     return (
         <>
-            <Loader visible={loader} />
             <ContentHeader subtitle="Session Resource" />
             <Box>
                 <TableGenerator
                     fields={fields}
-                    data={[]}
+                    data={resData?.getPatientResourceList}
                     currentPage={page}
                     onPageChange={(page) => {
                         /* istanbul ignore next */
@@ -79,9 +88,11 @@ const InfoSheet = () => {
                     onRowPerPageChange={(rows) => {
                         setRowsPerPage(rows);
                     }}
+                    loader={loading}
                     dataCount={10}
                     selectedRecords={[]}
                     rowOnePage={10}
+                    showPagination={false}
                 />
             </Box>
         </>
