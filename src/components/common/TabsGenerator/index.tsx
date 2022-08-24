@@ -27,6 +27,7 @@ const TabsGenerator = ({ tabsList, activeTabs }) => {
   return (
     <div style={{ overflowX: "hidden", minHeight: 500 }}>
       <Tabs
+      data-testid="tabId"
         value={activeTab}
         indicatorColor="primary"
         textColor="primary"

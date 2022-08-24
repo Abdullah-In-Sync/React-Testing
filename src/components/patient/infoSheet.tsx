@@ -6,6 +6,7 @@ import moment from "moment";
 import { Box, IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ContentHeader from "../../components/common/ContentHeader";
+import Loader from "../../components/common/Loader";
 const TableGenerator = dynamic(
   import("../../components/common/TableGenerator"),
   { ssr: false }
@@ -63,6 +64,7 @@ const InfoSheet = () => {
 
   return (
     <>
+     <Loader visible={loading} />
       <ContentHeader subtitle="Session Resource" />
       <Box>
         <TableGenerator
@@ -75,7 +77,6 @@ const InfoSheet = () => {
             /* istanbul ignore next */
           }}
           backendPagination={true}
-          loader={loading}
           dataCount={10}
           selectedRecords={[]}
           rowOnePage={10}
