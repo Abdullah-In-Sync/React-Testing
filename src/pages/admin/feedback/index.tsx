@@ -32,6 +32,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
+import { buildAdminTokenValidationQuery } from "../../../lib/helpers/auth";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -84,9 +85,24 @@ const Feedback: NextPage = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const [adminId, setadminId] = useState<string>("");
+
+  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
+    (adminId) => {
+      setadminId(adminId);
+    }
+  );
+
+  /* istanbul ignore next */
+  if (gettokenData && !tokenLoading && adminId) {
+    // can use it for later
+    console.log(adminId);
+  }
+
   useEffect(() => {
     // do some checking here to ensure data exist
     setLoader(true);
+    gettokenData({ variables: {} });
     /* istanbul ignore next */
     if (dataListData || dataListError) {
       /* istanbul ignore next */
