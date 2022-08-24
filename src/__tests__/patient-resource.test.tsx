@@ -117,4 +117,3 @@ describe("Patient Inforsheet Tab page", () => {
     expect(screen.queryByTestId("tableColumn_actions")).toBeInTheDocument();
   });
 });
-
