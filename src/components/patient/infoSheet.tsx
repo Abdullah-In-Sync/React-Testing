@@ -64,7 +64,7 @@ const InfoSheet = () => {
 
   return (
     <>
-     <Loader visible={loading} />
+      <Loader visible={loading} />
       <ContentHeader subtitle="Session Resource" />
       <Box>
         <TableGenerator
