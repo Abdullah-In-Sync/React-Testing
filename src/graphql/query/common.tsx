@@ -46,7 +46,7 @@ export const GET_PATIENTTHERAPY_DATA = gql`
 `;
 
 export const GET_PATIENTFEEDBACKLIST_DATA = gql`
-  query GetPatientFeedbackList($feedbackType: String!, $sessionNo: String!) {
+  query GetPatientFeedbackList($feedbackType: String!, $sessionNo: Int!) {
     getPatientFeedbackList(feedbackType: $feedbackType, sessionNo: $sessionNo) {
       _id
       user_id

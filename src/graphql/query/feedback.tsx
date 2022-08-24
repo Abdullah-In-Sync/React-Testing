@@ -58,7 +58,7 @@ export const GET_ORG_DATA = gql`
 export const GET_THERAPISTFEEDBACKLIST_DATA = gql`
   query getTherapistFeedbackList(
     $patientId: String!
-    $sessionNo: String!
+    $sessionNo: Int!
     $feedbackType: String!
   ) {
     getTherapistFeedbackList(
