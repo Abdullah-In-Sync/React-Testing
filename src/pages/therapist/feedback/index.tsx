@@ -27,6 +27,7 @@ import PatientViewMenu from "../../../components/therapist/patientViewMenu";
 import PatientViewTherapyTab from "../../../components/therapist/patientViewTherapyTab";
 import QuestionTypeRadiobox from "../../../components/therapist/feedback/questionTypeRadiobox";
 import QuestionTypeText from "../../../components/therapist/feedback/questionTypeText";
+import { buildTherapistTokenValidationQuery } from "../../../lib/helpers/auth";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
@@ -41,6 +42,20 @@ const Feedback: NextPage = () => {
     patient_name: string;
   }>({ patient_id: "", patient_name: "" });
 
+  const [therapistId, settherapistId] = useState<string>("");
+
+  const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
+    (therapistId) => {
+      settherapistId(therapistId);
+    }
+  );
+
+  /* istanbul ignore next */
+  if(therapistId){
+    // can use it for later
+    console.log(therapistId);
+  }
+  
   const [
     getPatientTherapyData,
     { loading: therapyLoading, data: patientTherapryData },
@@ -88,6 +103,7 @@ const Feedback: NextPage = () => {
   useEffect(() => {
     setLoader(true);
     setDefaultStateExcludingLoader();
+    gettokenData({ variables: {} });
   }, []);
 
   useEffect(() => {
@@ -124,6 +140,7 @@ const Feedback: NextPage = () => {
   useEffect(() => {
     /* istanbul ignore else */
     if (
+      !tokenLoading && 
       !therapyLoading &&
       !feedbackLoading &&
       !sessionLoading &&
@@ -138,6 +155,7 @@ const Feedback: NextPage = () => {
       setLoader(false);
     }
   }, [
+    gettokenData,
     patientData,
     therapy,
     sessionNo,
@@ -265,6 +283,7 @@ const Feedback: NextPage = () => {
                     data-testid={panelName + "bh-header"}
                     sx={{
                       backgroundColor: "#6ba08e",
+                      borderRadius: "12px",
                       border: "none",
                       marginTop: "10px",
                     }}

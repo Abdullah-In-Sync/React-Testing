@@ -309,7 +309,7 @@ const Feedback: NextPage = () => {
                     data-testid="SessionPanelItem"
                   >
                     <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
+                      expandIcon={<ExpandMoreIcon className="text-white" />}
                       aria-controls={panelName + "bh-content"}
                       id={panelName + "bh-header"}
                       data-testid={panelName + "bh-header"}
@@ -320,7 +320,7 @@ const Feedback: NextPage = () => {
                         marginTop: "10px",
                       }}
                     >
-                      <Typography sx={{ width: "33%", flexShrink: 0 }}>
+                      <Typography className="text-white" sx={{ width: "33%", flexShrink: 0 }}>
                         Session {p}
                       </Typography>
                     </AccordionSummary>
