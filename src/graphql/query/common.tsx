@@ -155,3 +155,66 @@ export const GET_TOKEN_DATA = gql`
     }
   }
 `;
+
+export const GET_DISORDER_DATA = gql`
+  query MyQuery {
+    getAllDisorder {
+      _id
+      created_date
+      disorder_name
+      disorder_status
+      therapy_id
+      updated_date
+      user_id
+      user_type
+    }
+  }
+`;
+
+export const GET_MODEL_BY_DISORDERID_DATA = gql`
+  query MyQuery($disorderId: String!) {
+    getModelByDisorderId(disorderId: $disorderId) {
+      _id
+      created_date
+      disorder_id
+      model_name
+      model_status
+      updated_date
+      user_id
+      user_type
+    }
+  }
+`;
+
+export const GET_CATEGORY_BY_MODELID_DATA = gql`
+  query MyQuery($modelId: String!) {
+    getCategoryByModelId(modelId: $modelId) {
+      _id
+      category_name
+      category_status
+      created_date
+      disorder_id
+      model_id
+      updated_date
+      user_id
+      user_type
+    }
+  }
+`;
+
+export const GET_AGENDA_BY_DISORDER_AND_MODEL_DATA = gql`
+  query MyQuery($disorderId: String!, $modelId: String!) {
+    getAgendaByDisorderAndModel(disorderId: $disorderId, modelId: $modelId) {
+      _id
+      agenda_name
+      agenda_status
+      created_date
+      disorder_id
+      model_id
+      session
+      therapy_id
+      user_id
+      user_type
+    }
+  }
+`;
