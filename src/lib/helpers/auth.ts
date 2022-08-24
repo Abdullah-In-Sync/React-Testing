@@ -13,7 +13,7 @@ export const buildPatientTokenValidationQuery = (
       onCompleted: async (data) => {
         /* istanbul ignore next */
         if (data.getTokenData) {
-          let user_type: string = data!.getTokenData.user_type;
+          const user_type: string = data!.getTokenData.user_type;
           /* istanbul ignore next */
           if (user_type != "patient") {
             window.location.href =
@@ -27,7 +27,6 @@ export const buildPatientTokenValidationQuery = (
   return [gettokenData, tokenLoading, tokenData];
 };
 
-
 export const buildTherapistTokenValidationQuery = (
   onCompleted: (therapistId: string) => void
 ): [LazyQueryExecFunction<any, OperationVariables>, boolean, any] => {
@@ -36,7 +35,7 @@ export const buildTherapistTokenValidationQuery = (
       onCompleted: async (data) => {
         /* istanbul ignore next */
         if (data.getTokenData) {
-          let user_type: string = data!.getTokenData.user_type;
+          const user_type: string = data!.getTokenData.user_type;
           /* istanbul ignore next */
           if (user_type != "therapist") {
             window.location.href =
@@ -58,7 +57,7 @@ export const buildAdminTokenValidationQuery = (
       onCompleted: async (data) => {
         /* istanbul ignore next */
         if (data.getTokenData) {
-          let user_type: string = data!.getTokenData.user_type;
+          const user_type: string = data!.getTokenData.user_type;
           /* istanbul ignore next */
           if (user_type != "admin") {
             window.location.href =

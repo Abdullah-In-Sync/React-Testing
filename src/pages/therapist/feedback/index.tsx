@@ -51,11 +51,11 @@ const Feedback: NextPage = () => {
   );
 
   /* istanbul ignore next */
-  if(therapistId){
+  if (therapistId) {
     // can use it for later
     console.log(therapistId);
   }
-  
+
   const [
     getPatientTherapyData,
     { loading: therapyLoading, data: patientTherapryData },
@@ -140,7 +140,7 @@ const Feedback: NextPage = () => {
   useEffect(() => {
     /* istanbul ignore else */
     if (
-      !tokenLoading && 
+      !tokenLoading &&
       !therapyLoading &&
       !feedbackLoading &&
       !sessionLoading &&

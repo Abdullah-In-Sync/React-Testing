@@ -320,7 +320,10 @@ const Feedback: NextPage = () => {
                         marginTop: "10px",
                       }}
                     >
-                      <Typography className="text-white" sx={{ width: "33%", flexShrink: 0 }}>
+                      <Typography
+                        className="text-white"
+                        sx={{ width: "33%", flexShrink: 0 }}
+                      >
                         Session {p}
                       </Typography>
                     </AccordionSummary>

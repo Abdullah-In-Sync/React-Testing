@@ -94,7 +94,7 @@ const Feedback: NextPage = () => {
   );
 
   /* istanbul ignore next */
-  if(gettokenData && !tokenLoading && adminId){
+  if (gettokenData && !tokenLoading && adminId) {
     // can use it for later
     console.log(adminId);
   }
