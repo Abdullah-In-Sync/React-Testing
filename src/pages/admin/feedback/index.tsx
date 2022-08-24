@@ -32,6 +32,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
+import { buildAdminTokenValidationQuery } from "../../../lib/helpers/auth";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -56,8 +57,7 @@ const Feedback: NextPage = () => {
   const [selectedUserData, setSelectedUserData] = useState<any>([]);
 
   // TABLE PROPS
-  //const [rowsPerPage, setRowsPerPage] = useState<number>(10);
-  // const [dataCount, setDataCount] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
   const [nextPage] = useState<string>(null);
@@ -73,7 +73,7 @@ const Feedback: NextPage = () => {
     data: dataListData,
     refetch,
   } = useQuery(GET_FEEDBACK_DATA, {
-    variables: { status: "active", pageNo: 1, limit: 10 },
+    variables: { status: "active", pageNo: page + 1, limit: rowsPerPage },
   });
 
   // const [
@@ -85,13 +85,28 @@ const Feedback: NextPage = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const [adminId, setadminId] = useState<string>("");
+
+  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
+    (adminId) => {
+      setadminId(adminId);
+    }
+  );
+
+  /* istanbul ignore next */
+  if (gettokenData && !tokenLoading && adminId) {
+    // can use it for later
+    console.log(adminId);
+  }
+
   useEffect(() => {
     // do some checking here to ensure data exist
     setLoader(true);
+    gettokenData({ variables: {} });
     /* istanbul ignore next */
     if (dataListData || dataListError) {
       /* istanbul ignore next */
-      setDataList(dataListData?.getAdminFeedbackList.feedbackdata);
+      setDataList(dataListData?.getAdminFeedbackList?.feedbackdata);
       setLoader(false);
     }
   }, [dataListData, dataListError]);
@@ -363,16 +378,9 @@ const Feedback: NextPage = () => {
         </Box>
         <Box>
           <TableGenerator
-            //   searchQuery={query}
-            //   initialSort={"id"}
-            //   searchColumnsFilter={true}
             fields={fields}
-            data={dataListData?.getAdminFeedbackList.feedbackdata}
+            data={dataListData?.getAdminFeedbackList?.feedbackdata}
             currentPage={page}
-            //   handleSortChange={(ordering) => {
-            //     setOrdering(ordering);
-            //     getDeviceType(ordering);
-            //   }}
             onPageChange={(page, direction) => {
               /* istanbul ignore next */
               setPage(page);
@@ -388,17 +396,12 @@ const Feedback: NextPage = () => {
               }
             }}
             backendPagination={true}
-            // onRowPerPageChange={(rows) => {
-            //   // getDeviceType(null, rows);
-            //   // setRowsPerPage(rows);
-            // }}
-            dataCount={dataListData?.getAdminFeedbackList.totalcount}
-            //   onChangePage={(page) => console.log(page)}
+            onRowPerPageChange={(rows) => {
+              setRowsPerPage(rows);
+            }}
+            dataCount={dataListData?.getAdminFeedbackList?.totalcount}
             selectedRecords={[]}
             rowOnePage={10}
-            //   onChangeSelected={(modulesSelected) =>
-            //     setModulesSelected(modulesSelected)
-            //   }
           />
           <CrudDialog
             title="Create Questionnaire"

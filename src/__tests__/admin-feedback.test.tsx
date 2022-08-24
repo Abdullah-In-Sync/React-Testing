@@ -8,7 +8,7 @@ import {
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/admin/feedback";
-
+import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { GET_FEEDBACK_DATA, GET_ORG_DATA } from "../graphql/query";
 import {
   ADD_FEEDBACK,
@@ -186,6 +186,27 @@ const buildMocks = (): {
       },
     },
   });
+
+  _mocks.push({
+    request: {
+      query: GET_TOKEN_DATA,
+      variables: {},
+    },
+    result: {
+      data: [
+        {
+          _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
+          user_type: "admin",
+          parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+          perm_ids: "9,10,14,21,191,65,66",
+          user_status: 1,
+          created_date: "2021-12-20 16:20:55",
+          updated_date: "2021-12-20 16:20:55",
+        },
+      ],
+    },
+  });
+
   return { mocks: _mocks };
 };
 

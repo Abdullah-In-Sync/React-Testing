@@ -1,4 +1,4 @@
-import { useState, MouseEvent, useContext } from "react";
+import { useState, MouseEvent, useContext, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,10 +14,26 @@ import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import {
+  superadmin_routes,
+  patient_routes,
+  therapistRoutes,
+} from "../../utility/navItems";
 
 const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [userType, setUserType] = useState<string>("admin");
+
+  useEffect(() => setUserType(sessionStorage.getItem("user_type")), []);
+
+  const userRoute = {
+    patient: patient_routes,
+    therapist: therapistRoutes,
+    admin: superadmin_routes,
+  };
+  const getRouteByUser = (user) => {
+    return userRoute[user] || superadmin_routes;
+  };
 
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -86,9 +102,13 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {getRouteByUser(userType).map((setting) => (
+                <MenuItem
+                  key={setting.label}
+                  component={"a"}
+                  href={setting.path}
+                >
+                  <Typography textAlign="center">{setting.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>

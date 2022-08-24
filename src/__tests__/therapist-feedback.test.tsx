@@ -187,15 +187,13 @@ const buildMocks = (): {
   _mocks.push({
     request: {
       query: GET_TOKEN_DATA,
-      variables: {
-        queryString: "javascript", //TODO: this does not look correct
-      },
+      variables: {},
     },
     result: {
       data: [
         {
-          _id: _first_patient_id, // use first "Patient" record
-          user_type: ["therapist"],
+          _id: _first_patient_id,
+          user_type: "therapist",
           parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
           perm_ids: "9,10,14,21,191,65,66",
           user_status: "1",
