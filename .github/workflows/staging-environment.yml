@@ -90,7 +90,7 @@ jobs:
       with:
         envkey_NEXT_PUBLIC_ENVIRONMENT: staging
         envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.STAGING_APPSYNC_URL }}
-        envkey_NEXT_PUBLIC_V1_ROOT_URL: https://staging-myhelp.co.uk
+        envkey_NEXT_PUBLIC_V1_ROOT_URL: https://portal.staging-myhelp.co.uk
         directory: src
         file_name: .env.local
         fail_on_empty: true
