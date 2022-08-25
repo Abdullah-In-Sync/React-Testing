@@ -188,7 +188,12 @@ const TableGenerator = ({
           />
           <TableBody>
             <>
-              <div style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: props.loader ? "70px" : 0,
+                }}
+              >
                 {" "}
                 <Loader visible={props.loader} />
               </div>
