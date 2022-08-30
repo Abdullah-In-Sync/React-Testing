@@ -16,7 +16,7 @@ const TableGenerator = dynamic(
 import { useQuery } from "@apollo/client";
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 
-const InfoSheet = () => {
+const AudioClips = () => {
   // TABLE PROPS
   const [page, setPage] = useState<number>(0);
 
@@ -70,7 +70,7 @@ const InfoSheet = () => {
         <TableGenerator
           fields={fields}
           data={resData?.getPatientResourceList?.filter(
-            (val) => val?.resource_data[0]?.resource_type === "1"
+            (val) => val?.resource_data[0]?.resource_type === "3"
           )}
           currentPage={page}
           onPageChange={(page) => {
@@ -89,4 +89,4 @@ const InfoSheet = () => {
   );
 };
 
-export default InfoSheet;
+export default AudioClips;

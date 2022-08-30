@@ -8,6 +8,7 @@ export const GET_PATIENT_RESOURCE_DATA = gql`
       created_date
       resource_data {
         resource_name
+        resource_type
       }
     }
   }
