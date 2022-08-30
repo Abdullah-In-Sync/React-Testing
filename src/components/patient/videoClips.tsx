@@ -16,7 +16,7 @@ const TableGenerator = dynamic(
 import { useQuery } from "@apollo/client";
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 
-const InfoSheet = () => {
+const VideoClips = () => {
   // TABLE PROPS
   const [page, setPage] = useState<number>(0);
 
@@ -69,7 +69,8 @@ const InfoSheet = () => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.filter(val => val?.resource_data[0]?.resource_type === "1")}
+          data={resData?.getPatientResourceList?.filter(val => val?.resource_data[0]?.resource_type === "4")}
+
           currentPage={page}
           onPageChange={(page) => {
             /* istanbul ignore next */
@@ -87,4 +88,4 @@ const InfoSheet = () => {
   );
 };
 
-export default InfoSheet;
+export default VideoClips;

@@ -6,7 +6,7 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import InfoSheet from "../patient/infoSheet";
+import AudioClips from "../patient/audioClips";
 
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 
@@ -92,7 +92,7 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
       <SnackbarProvider>
-        <InfoSheet />
+        <AudioClips />
       </SnackbarProvider>
     </MockedProvider>
   );
@@ -107,7 +107,7 @@ describe("Patient Inforsheet Tab page", () => {
     await sut();
     expect(screen.queryByTestId("tableId")).toBeInTheDocument();
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(1)
     );
     expect(
       screen.queryByTestId("tableColumn_created_date")
