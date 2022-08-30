@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import moment from "moment";
@@ -6,9 +5,9 @@ import moment from "moment";
 // MUI COMPONENTS
 import { Box, IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ContentHeader from "../../components/common/ContentHeader";
 import Loader from "../../components/common/Loader";
 const TableGenerator = dynamic(
@@ -56,38 +55,34 @@ const WorkSheet = () => {
       visible: true,
       render: (_, value) => (
         <>
-
           <IconButton
             size="small"
             data-testid={"viewIcon_" + value._id}
-          // onClick={() => handleView(value._id)}
+            // onClick={() => handleView(value._id)}
           >
             <CloudUploadIcon />
           </IconButton>
           <IconButton
             size="small"
             data-testid={"viewIcon_" + value._id}
-          // onClick={() => handleView(value._id)}
+            // onClick={() => handleView(value._id)}
           >
             <AttachFileIcon />
           </IconButton>
           <IconButton
             size="small"
             data-testid={"viewIcon_" + value._id}
-          // onClick={() => handleView(value._id)}
+            // onClick={() => handleView(value._id)}
           >
             <VisibilityIcon />
           </IconButton>
           <IconButton
             size="small"
             data-testid={"viewIcon_" + value._id}
-          // onClick={() => handleView(value._id)}
+            // onClick={() => handleView(value._id)}
           >
             <CloudDownloadIcon />
           </IconButton>
-
-
-
         </>
       ),
     },
@@ -100,8 +95,9 @@ const WorkSheet = () => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.filter(val => val?.resource_data[0]?.resource_type === "2")}
-
+          data={resData?.getPatientResourceList?.filter(
+            (val) => val?.resource_data[0]?.resource_type === "2"
+          )}
           currentPage={page}
           onPageChange={(page) => {
             /* istanbul ignore next */
@@ -120,4 +116,3 @@ const WorkSheet = () => {
 };
 
 export default WorkSheet;
-

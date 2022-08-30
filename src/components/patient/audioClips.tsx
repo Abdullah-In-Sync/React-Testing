@@ -54,7 +54,7 @@ const AudioClips = () => {
         <IconButton
           size="small"
           data-testid={"viewIcon_" + value._id}
-        // onClick={() => handleView(value._id)}
+          // onClick={() => handleView(value._id)}
         >
           <VisibilityIcon />
         </IconButton>
@@ -69,7 +69,9 @@ const AudioClips = () => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.filter(val => val?.resource_data[0]?.resource_type === "3")}
+          data={resData?.getPatientResourceList?.filter(
+            (val) => val?.resource_data[0]?.resource_type === "3"
+          )}
           currentPage={page}
           onPageChange={(page) => {
             /* istanbul ignore next */
