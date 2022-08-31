@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -109,6 +109,12 @@ const CrudDialog = ({
 }: CrudDialogProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
 
+  useEffect(()=>{
+    if(open == false){
+      setFieldValues({});
+    }
+  },[open])
+
   //   const parseValues=(props)=> {
   //     const values = {};
   //     _flatten(fields).forEach((field) => {
@@ -156,6 +162,7 @@ const CrudDialog = ({
     //     onSubmit({ ...this.state.fieldValues }, hasError ? { ...this.state.fieldErrors } : null);
     // // }
     onsubmit(fieldValues);
+
   };
   return (
     <div>
