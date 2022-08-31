@@ -6,7 +6,7 @@ import {
 import { GET_TOKEN_DATA } from "../../graphql/query/common";
 
 export const buildPatientTokenValidationQuery = (
-  onCompleted: (therapistId: string) => void
+  onCompleted: (patientData: any) => void
 ): [LazyQueryExecFunction<any, OperationVariables>, boolean, any] => {
   const [gettokenData, { loading: tokenLoading, data: tokenData }] =
     useLazyQuery(GET_TOKEN_DATA, {
@@ -19,7 +19,7 @@ export const buildPatientTokenValidationQuery = (
             window.location.href =
               "https://" + window.location.hostname + "/account";
           } else {
-            await onCompleted(data!.getTokenData.patient_data.therapist_id);
+            await onCompleted(data!.getTokenData);
           }
         }
       },
