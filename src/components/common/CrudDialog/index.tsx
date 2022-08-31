@@ -17,7 +17,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 // import FieldsLayout from './fields/FieldsLayout'
 const FieldsLayout = dynamic(import("./fields/FieldsLayout"), { ssr: false });
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({ theme }:any) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
