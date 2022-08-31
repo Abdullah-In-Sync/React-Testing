@@ -109,11 +109,11 @@ const CrudDialog = ({
 }: CrudDialogProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
 
-  useEffect(()=>{
-    if(open == false){
+  useEffect(() => {
+    if (open == false) {
       setFieldValues({});
     }
-  },[open])
+  }, [open]);
 
   //   const parseValues=(props)=> {
   //     const values = {};
@@ -162,7 +162,6 @@ const CrudDialog = ({
     //     onSubmit({ ...this.state.fieldValues }, hasError ? { ...this.state.fieldErrors } : null);
     // // }
     onsubmit(fieldValues);
-
   };
   return (
     <div>
