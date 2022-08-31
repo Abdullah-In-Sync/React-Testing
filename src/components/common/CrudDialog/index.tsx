@@ -105,10 +105,9 @@ const CrudDialog = ({
   onExtraButton,
   dynamicForm,
   viewData = false,
-  submitButtonDisabled = false
+  submitButtonDisabled = false,
 }: CrudDialogProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
-
 
   //   const parseValues=(props)=> {
   //     const values = {};

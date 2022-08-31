@@ -277,7 +277,7 @@ const Feedback: NextPage = () => {
     /* istanbul ignore next */
     if (valid) {
       setLoader(true);
-      setIsMutation(true)
+      setIsMutation(true);
       /* istanbul ignore next */
       const data = formValues.map((x) => ({
         ...x,
@@ -292,7 +292,7 @@ const Feedback: NextPage = () => {
           refetch();
           setLoader(false);
           setAddModal(false);
-          setIsMutation(false)
+          setIsMutation(false);
           enqueueSnackbar("Feedback added successfully", {
             variant: "success",
           });
@@ -308,7 +308,7 @@ const Feedback: NextPage = () => {
   /* istanbul ignore next */
   const handleEdit = async (val) => {
     /* istanbul ignore else */
-    setIsMutation(true)
+    setIsMutation(true);
     const data = formValues.map((x) => ({
       question: x.question,
       answer_type: x.answer_type,
@@ -325,7 +325,7 @@ const Feedback: NextPage = () => {
         onCompleted: () => {
           refetch();
           setEditModal(false);
-          setIsMutation(false)
+          setIsMutation(false);
           enqueueSnackbar("Updated data successfully!", { variant: "success" });
         },
       });
@@ -345,7 +345,7 @@ const Feedback: NextPage = () => {
   /* istanbul ignore next */
   const handleDelete = async (id) => {
     /* istanbul ignore else */
-    setIsMutation(true)
+    setIsMutation(true);
     deleteFeedback({
       variables: {
         feedbackId: id,
@@ -353,7 +353,7 @@ const Feedback: NextPage = () => {
       },
       onCompleted: () => {
         setDeletConfirmationModal(false);
-        setIsMutation(false)
+        setIsMutation(false);
         refetch();
         enqueueSnackbar("Delete data successfully!", { variant: "error" });
       },
