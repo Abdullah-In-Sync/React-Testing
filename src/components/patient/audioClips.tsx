@@ -30,7 +30,7 @@ const AudioClips = () => {
       key: "created_date",
       columnName: "Shared On",
       visible: true,
-      render: (val) => moment(val).format("DD MMM YYYY hh:mm:ss A") ?? "---",
+      render: (val) => moment(val).format("DD MMM YYYY") ?? "---",
     },
     {
       key: "ptsharres_session",
