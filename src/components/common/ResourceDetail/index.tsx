@@ -33,7 +33,7 @@ const ResourceDetail = (props) => {
 
 ResourceDetail.defaultProps = {
   title: "",
-  description: ""
+  description: "",
 };
 
 export default ResourceDetail;

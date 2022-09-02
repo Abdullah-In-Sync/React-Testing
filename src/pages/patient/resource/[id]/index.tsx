@@ -86,11 +86,7 @@ const ResourceDetailById: NextPage = () => {
         <ContentHeader title="Resource Detail" />
         <Box>
           {patientResourceData?.getResourceDetailById != null ? (
-            <Grid 
-              container 
-              rowSpacing={2}
-              data-testid="patResourceDetail" 
-              >
+            <Grid container rowSpacing={2} data-testid="patResourceDetail">
               <Grid item xs={6}>
                 <NextLink href={"/patient/resource"} passHref>
                   <Button
@@ -114,11 +110,11 @@ const ResourceDetailById: NextPage = () => {
                 }}
                 style={{ justifyContent: "right" }}
               >
-                <Breadcrumbs 
-                  separator="--›" 
+                <Breadcrumbs
+                  separator="--›"
                   aria-label="breadcrumb"
                   data-testid="breadCrumb"
-                  >
+                >
                   <Typography>
                     {
                       patientResourceData.getResourceDetailById[0]
