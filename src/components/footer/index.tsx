@@ -1,6 +1,5 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 
 const footerStyle = {
@@ -17,22 +16,12 @@ const footerStyle = {
   position: "fixed",
 };
 
-const footerLink = {
-  color: "primary.contrastText",
-  textDecoration: "none",
-  margin: 2,
-};
 const Footer = () => {
   return (
     <Box sx={footerStyle} data-testid="footerLinks">
       <Grid item md={12}>
         <Grid container pt={0.5}>
-          <Grid
-            item
-            xs={12}
-            md={12}
-            style={{ textAlign: "center" }}
-          >
+          <Grid item xs={12} md={12} style={{ textAlign: "center" }}>
             © {new Date().getFullYear()} MyHelp Ltd. All rights reserved.
           </Grid>
         </Grid>

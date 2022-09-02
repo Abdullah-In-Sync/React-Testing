@@ -14,13 +14,8 @@ export const GET_PATIENT_RESOURCE_DATA = gql`
 `;
 
 export const GET_PATIENT_RESOURCE_DETAIL = gql`
-  query getResourceDetailById(
-    $ptsharresId: String!
-    $fileName: String
-  ) {
-    getResourceDetailById(
-      ptsharresId: $ptsharresId, fileName: $fileName
-    ) {
+  query getResourceDetailById($ptsharresId: String!, $fileName: String) {
+    getResourceDetailById(ptsharresId: $ptsharresId, fileName: $fileName) {
       _id
       ptsharres_session
       ptsharres_status
@@ -39,6 +34,14 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
         resource_instruction
         resource_references
         resource_filename
+      }
+      disorder_detail {
+        _id
+        disorder_name
+      }
+      model_detail {
+        _id
+        model_name
       }
     }
   }
