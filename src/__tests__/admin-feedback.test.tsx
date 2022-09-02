@@ -29,7 +29,7 @@ const buildMocks = (): {
       variables: {
         status: "active",
         pageNo: 1,
-        limit: 10,
+        limit: 25,
       },
     },
     result: {

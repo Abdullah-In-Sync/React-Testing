@@ -1,5 +1,3 @@
-import Resource from "../pages/patient/resource";
-
 import {
   screen,
   render,
@@ -8,8 +6,9 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import VideoClips from "../patient/videoClips";
 
-import { GET_PATIENT_RESOURCE_DATA } from "../graphql/query/resource";
+import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 
 // mocks
 const buildMocks = (): {
@@ -93,7 +92,7 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
       <SnackbarProvider>
-        <Resource />
+        <VideoClips />
       </SnackbarProvider>
     </MockedProvider>
   );
@@ -101,13 +100,14 @@ const sut = async () => {
     screen.queryByTestId("activity-indicator")
   );
 };
+
 describe("Patient Inforsheet Tab page", () => {
   // check for Patient Session Resource list
   test("Renders Patient Session Resource Tab list screen", async () => {
     await sut();
     expect(screen.queryByTestId("tableId")).toBeInTheDocument();
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(1)
     );
     expect(
       screen.queryByTestId("tableColumn_created_date")

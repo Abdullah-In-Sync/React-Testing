@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
@@ -10,13 +10,14 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import LoadingButton from "@mui/lab/LoadingButton";
 // import _flatten from "lodash/flatten";
 
 // import { FieldsLayout } from './fields';
 // import FieldsLayout from './fields/FieldsLayout'
 const FieldsLayout = dynamic(import("./fields/FieldsLayout"), { ssr: false });
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({ theme }: any) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
@@ -84,6 +85,7 @@ interface CrudDialogProps {
   onExtraButton?: (params: any) => any;
   dynamicForm?: any;
   viewData?: any;
+  submitButtonDisabled?: boolean;
 }
 
 const CrudDialog = ({
@@ -103,8 +105,16 @@ const CrudDialog = ({
   onExtraButton,
   dynamicForm,
   viewData = false,
+  submitButtonDisabled = false,
 }: CrudDialogProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
+
+  useEffect(() => {
+    if (open == false) {
+      setFieldValues({});
+    }
+  }, [open]);
+
   //   const parseValues=(props)=> {
   //     const values = {};
   //     _flatten(fields).forEach((field) => {
@@ -201,14 +211,15 @@ const CrudDialog = ({
             {viewData ? (
               " "
             ) : (
-              <Button
+              <LoadingButton
                 data-testid="saveButton"
-                variant="contained"
                 sx={{ color: "primary.contrastText" }}
                 type="submit"
+                loading={submitButtonDisabled}
+                variant="contained"
               >
                 {okText}
-              </Button>
+              </LoadingButton>
             )}
 
             <Button

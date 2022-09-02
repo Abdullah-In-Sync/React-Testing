@@ -445,7 +445,13 @@ const Feedback: NextPage = () => {
                                         aria-label="empty textarea"
                                         id={fv.answer_type + "_" + fv._id}
                                         onBlur={(e) => handleInputChange(fk, e)}
-                                        value={
+                                        disabled={
+                                          fv.feedback_ans &&
+                                          fv.feedback_ans.answer
+                                            ? true
+                                            : false
+                                        }
+                                        defaultValue={
                                           fv.feedback_ans &&
                                           fv.feedback_ans.answer
                                             ? fv.feedback_ans.answer
