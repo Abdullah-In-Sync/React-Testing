@@ -1,14 +1,14 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 
 const footerStyle = {
   paddin: 2,
-  fontSize: "0.6em",
+  fontSize: "0.9em",
+  fontWeight: "bold",
   justifyContent: "flex-end",
   zIndex: 1,
-  background: "rgb(58, 58, 60)",
+  background: "#6ec9db",
   color: "primary.contrastText",
   width: "100%",
   right: 0,
@@ -16,34 +16,13 @@ const footerStyle = {
   position: "fixed",
 };
 
-const footerLink = {
-  color: "primary.contrastText",
-  textDecoration: "none",
-  margin: 2,
-};
 const Footer = () => {
   return (
     <Box sx={footerStyle} data-testid="footerLinks">
       <Grid item md={12}>
         <Grid container pt={0.5}>
-          <Grid item xs={12} md={9}>
-            <Link sx={footerLink} href="/about">
-              About
-            </Link>
-            <Link sx={footerLink} href="/term">
-              Terms of Service
-            </Link>
-            <Link sx={footerLink} href="/policy">
-              Privacy Policy
-            </Link>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={3}
-            style={{ textAlign: "right", paddingRight: "40px" }}
-          >
-            © {new Date().getFullYear()} MyHelp
+          <Grid item xs={12} md={12} style={{ textAlign: "center" }}>
+            © {new Date().getFullYear()} MyHelp Ltd. All rights reserved.
           </Grid>
         </Grid>
       </Grid>

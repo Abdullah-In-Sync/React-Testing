@@ -28,7 +28,7 @@ const MenuWrapper = styled(Box)(
     .MuiListSubheader-root {
       text-transform: uppercase;
       font-weight: bold;
-      font-size: ${theme.typography.pxToRem(12)};
+      font-size: ${theme.typography.pxToRem(14)};
       color: ${theme.palette.secondary.main} ;
       padding: ${theme.spacing(0, 2.5)};
       line-height: 1.4;

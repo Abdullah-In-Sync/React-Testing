@@ -8,7 +8,7 @@ const ContentHeader = (props) => {
   return (
     <Box sx={header}>
       <Typography
-        variant="h4"
+        variant="h5"
         sx={{ fontWeight: "bold" }}
         color="secondary.main"
       >

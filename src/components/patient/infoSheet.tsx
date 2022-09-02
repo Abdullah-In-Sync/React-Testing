@@ -54,7 +54,7 @@ const InfoSheet = () => {
         <IconButton
           size="small"
           data-testid={"viewIcon_" + value._id}
-          // onClick={() => handleView(value._id)}
+          href={"/patient/resource/" + value._id}
         >
           <VisibilityIcon />
         </IconButton>
