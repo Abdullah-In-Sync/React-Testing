@@ -28,7 +28,7 @@ export const buildPatientTokenValidationQuery = (
 };
 
 export const buildTherapistTokenValidationQuery = (
-  onCompleted: (therapistId: string) => void
+  onCompleted: (therapistData: any) => void
 ): [LazyQueryExecFunction<any, OperationVariables>, boolean, any] => {
   const [gettokenData, { loading: tokenLoading, data: tokenData }] =
     useLazyQuery(GET_TOKEN_DATA, {
@@ -41,7 +41,7 @@ export const buildTherapistTokenValidationQuery = (
             window.location.href =
               "https://" + window.location.hostname + "/account";
           } else {
-            await onCompleted(data!.getTokenData.therapist_data._id);
+            await onCompleted(data!.getTokenData);
           }
         }
       },
@@ -50,7 +50,7 @@ export const buildTherapistTokenValidationQuery = (
 };
 
 export const buildAdminTokenValidationQuery = (
-  onCompleted: (userId: string) => void
+  onCompleted: (adminData: any) => void
 ): [LazyQueryExecFunction<any, OperationVariables>, boolean, any] => {
   const [gettokenData, { loading: tokenLoading, data: tokenData }] =
     useLazyQuery(GET_TOKEN_DATA, {
@@ -63,7 +63,7 @@ export const buildAdminTokenValidationQuery = (
             window.location.href =
               "https://" + window.location.hostname + "/account";
           } else {
-            await onCompleted(data!.getTokenData._id);
+            await onCompleted(data!.getTokenData);
           }
         }
       },

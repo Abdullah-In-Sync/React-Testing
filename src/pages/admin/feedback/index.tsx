@@ -89,8 +89,8 @@ const Feedback: NextPage = () => {
   const [adminId, setadminId] = useState<string>("");
 
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (adminId) => {
-      setadminId(adminId);
+    (adminData) => {
+      setadminId(adminData._id);
     }
   );
 

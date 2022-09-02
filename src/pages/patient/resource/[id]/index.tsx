@@ -46,7 +46,6 @@ const ResourceDetailById: NextPage = () => {
       /* istanbul ignore else */
       if (data!.getResourceDetailById) {
         setPtId(data!.getResourceDetailById[0]._id);
-        console.debug(data!.getResourceDetailById[0]._id);
       } else if (data!.getResourceDetailById == null) {
         setLoader(false);
       }

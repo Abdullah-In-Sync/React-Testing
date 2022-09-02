@@ -53,7 +53,7 @@ const Feedback: NextPage = () => {
 
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
-      settherapistId(tokenData.patient_data.therapistId);
+      settherapistId(tokenData.patient_data.therapist_id);
     }
   );
 
