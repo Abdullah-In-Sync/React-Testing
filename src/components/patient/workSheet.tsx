@@ -57,22 +57,18 @@ const WorkSheet = () => {
         <>
           <IconButton
             size="small"
-            data-testid={"viewIcon_" + value._id}
-            // onClick={() => handleView(value._id)}
           >
             <CloudUploadIcon />
           </IconButton>
           <IconButton
             size="small"
-            data-testid={"viewIcon_" + value._id}
-            // onClick={() => handleView(value._id)}
           >
             <AttachFileIcon />
           </IconButton>
           <IconButton
+            href={"/patient/resource/"+value._id}
             size="small"
             data-testid={"viewIcon_" + value._id}
-            // onClick={() => handleView(value._id)}
           >
             <VisibilityIcon />
           </IconButton>
