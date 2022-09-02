@@ -55,18 +55,14 @@ const WorkSheet = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton
-            size="small"
-          >
+          <IconButton size="small">
             <CloudUploadIcon />
           </IconButton>
-          <IconButton
-            size="small"
-          >
+          <IconButton size="small">
             <AttachFileIcon />
           </IconButton>
           <IconButton
-            href={"/patient/resource/"+value._id}
+            href={"/patient/resource/" + value._id}
             size="small"
             data-testid={"viewIcon_" + value._id}
           >
