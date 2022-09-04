@@ -4,6 +4,7 @@ import {
   waitForElementToBeRemoved,
   fireEvent,
 } from "@testing-library/react";
+import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/patient/feedback";
 import {
@@ -168,6 +169,9 @@ const sut = async (patient_id: string) => {
   render(
     <MockedProvider mocks={mocks}>
       <Feedback />
+      <SnackbarProvider>
+        <Feedback />
+      </SnackbarProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>
