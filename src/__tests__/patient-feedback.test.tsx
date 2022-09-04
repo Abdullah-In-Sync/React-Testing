@@ -168,7 +168,6 @@ const sut = async (patient_id: string) => {
   sessionStorage.setItem("patient_id", patient_id);
   render(
     <MockedProvider mocks={mocks}>
-      <Feedback />
       <SnackbarProvider>
         <Feedback />
       </SnackbarProvider>
