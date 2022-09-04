@@ -1,15 +1,17 @@
 import { Box, Button, Checkbox, FormControl, FormControlLabel, FormLabel, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import FormGroup from '@mui/material/FormGroup';
-import React, { FormEvent, useEffect, useState } from 'react'
-import SendIcon from '@mui/icons-material/Send';
+import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_AGENDA_BY_DISORDER_AND_MODEL_DATA, GET_CATEGORY_BY_MODELID_DATA, GET_DISORDER_DATA, GET_MODEL_BY_DISORDERID_DATA } from '../../../graphql/query/common';
 import { GET_UPLOAD_RESOURCE_URL } from '../../../graphql/query/resource';
-import axios from 'axios';
 import { useSnackbar } from 'notistack';
 import { ADMIN_CREATE_RESOURCE } from '../../../graphql/mutation/resource';
-import { msToTime } from '../../../lib/helpers/common';
 import Loader from '../../common/Loader';
+import TextFieldComponent from '../../common/TextField/TextFieldComponent';
+import SingleSelectComponent from '../../common/SelectBox/SingleSelect/SingleSelectComponent';
+import UploadButtonComponent from '../../common/UploadButton/UploadButtonComponent';
+import { uploadToS3 } from '../../../lib/helpers/s3';
+import CheckBoxLabelComponent from '../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent';
 
 type resourceFormField = {
     resource_name: string;
@@ -29,11 +31,20 @@ type resourceFormField = {
     resource_avail_all: string;
 }
 
+const defaultFormValue = { resource_name: "", resource_type: "", disorder_id: "", model_id: "", category_id: "", resource_desc: "", resource_instruction: "", resource_references: "", resource_avail_admin: "", resource_avail_all: "", resource_avail_onlyme: "", resource_avail_therapist: "", agenda_id: "", resource_session_no: "", file_name: "" };
+
 export default function addForm() {
     const { enqueueSnackbar } = useSnackbar();
-    const [formFields, setFormFields] = useState<resourceFormField>({ resource_name: "", resource_type: "", disorder_id: "", model_id: "", category_id: "", resource_desc: "", resource_instruction: "", resource_references: "", resource_avail_admin: "", resource_avail_all: "", resource_avail_onlyme: "", resource_avail_therapist: "", agenda_id: "", resource_session_no: "", file_name: "" });
+    const [formFields, setFormFields] = useState<resourceFormField>(defaultFormValue);
     const [loader, setLoader] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const preSignedURL = useRef<string>(null);
+    const resourceTypeOptions = [
+        { 'id': "1", 'value': 'Info Sheets' },
+        { 'id': "2", 'value': 'Work Sheets' },
+        { 'id': "3", 'value': 'Audio File' },
+        { 'id': "4", 'value': 'Video File' }
+    ]
 
     const [
         getDisorderData,
@@ -106,10 +117,24 @@ export default function addForm() {
         preSignedData
     ]);
 
-    const set = (fieldName: string) => {
-        return ({ target: { value } }) => {
+    // const set = (fieldName: string) => {
+    //     return ({ target: { value } }) => {
+    //         setFormFields(oldValues => ({ ...oldValues, [fieldName]: value }));
+    //         if (fieldName == "agenda_id") {
+    //             let index = agendaData.getAgendaByDisorderAndModel.findIndex(p => p._id == value);
+    //             let session = agendaData.getAgendaByDisorderAndModel[index].session;
+    //             setFormFields(oldValues => ({ ...oldValues, resource_session_no: session }));
+    //         }
+    //     }
+    // };
+
+    const set2 = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        let fieldName = e.target.name;
+        let value = e.target.value;
+        if (value) {
             setFormFields(oldValues => ({ ...oldValues, [fieldName]: value }));
             if (fieldName == "agenda_id") {
+                // debugger;
                 let index = agendaData.getAgendaByDisorderAndModel.findIndex(p => p._id == value);
                 let session = agendaData.getAgendaByDisorderAndModel[index].session;
                 setFormFields(oldValues => ({ ...oldValues, resource_session_no: session }));
@@ -117,44 +142,21 @@ export default function addForm() {
         }
     };
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const fileObj = event.target.files && event.target.files[0];
-        if (!fileObj) {
-            return;
-        }
-        setSelectedFile(event.target.files[0]);
+    const handleFileChange = (fileObj: File, fileName: string, url: string) => {
+        setSelectedFile(fileObj);
+        formFields.file_name = fileName;
+        preSignedURL.current = url;
     };
-
-    useEffect(() => {
-        if (selectedFile) {
-            let today = new Date();
-            let date =
-                today.getFullYear() +
-                '' +
-                ((today.getMonth() + 1) < 10) ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1) +
-                '' +
-                today.getDate();
-            let time = msToTime(today.getTime());
-            formFields.file_name = date + '' + time + '__' + selectedFile.name;
-
-            getPreSignedURL({
-                variables: { fileName: formFields.file_name },
-            });
-        }
-    }, [selectedFile]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            if (preSignedData && preSignedData.getUploadResourceUrl && preSignedData.getUploadResourceUrl.resource_upload) {
-                setLoader(true);
-                const formData = new FormData();
-                formData.append('file', selectedFile);
+            if (getPreSignedURL) {
 
-                const response = await axios.put(preSignedData.getUploadResourceUrl.resource_upload, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                });
-                if (response.status == 200) {
+                setLoader(true);
+                const uploadStatus = await uploadToS3(selectedFile, preSignedURL.current);
+
+                if (uploadStatus) {
                     createResource({
                         variables: {
                             disorderId: formFields.disorder_id,
@@ -172,13 +174,14 @@ export default function addForm() {
                             resourceDesc: formFields.resource_desc,
                             resourceInstruction: formFields.resource_instruction,
                             resourceIsformualation: "0",
-                            resourceIssmartdraw: "1",
+                            resourceIssmartdraw: "0",
                             resourceReferences: formFields.resource_references,
                             resourceStatus: 1,
-                            userType: "admin"
+                            userType: "admin",
+                            resource_session_no: formFields.resource_session_no
                         },
                         onCompleted: (data) => {
-                            if(data && data.adminCreateResource && data.adminCreateResource._id) {
+                            if (data && data.adminCreateResource && data.adminCreateResource._id) {
                                 enqueueSnackbar("Resource added successfully", {
                                     variant: "success",
                                 });
@@ -189,13 +192,12 @@ export default function addForm() {
                     enqueueSnackbar("There is an error with file upload!", { variant: "error" });
                 }
                 setLoader(false);
-                console.log(response);
             } else {
+                setLoader(false);
                 enqueueSnackbar("Please select file!", { variant: "error" });
             }
         } catch (e) {
             setLoader(false);
-            console.log(`failed! ${e.message}`);
             enqueueSnackbar("Please fill the all fields", { variant: "error" });
         }
     }
@@ -203,7 +205,7 @@ export default function addForm() {
     return (
         <>
             <Loader visible={loader} />
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} data-testid="resource-add-form">
                 <Box
                     sx={{ flexGrow: 1, border: "1px solid #cecece" }}
                     p={5}
@@ -211,172 +213,148 @@ export default function addForm() {
                 >
                     <Grid container spacing={2} marginBottom={5}>
                         <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                required
-                                id="resource_name"
+                            <TextFieldComponent
+                                required={true}
                                 name="resource_name"
+                                id="resource_name"
                                 label="Name"
                                 value={formFields?.resource_name}
-                                onChange={set('resource_name')}
+                                onChange={set2}
+                                fullWidth={true}
+                                inputProps={{ "data-testid": "resource_name" }}
                                 variant="outlined" />
                         </Grid>
                         <Grid item xs={4}>
-                            <FormControl fullWidth required>
-                                <InputLabel id="resourceType">Resource Type</InputLabel>
-                                <Select
-                                    labelId="resourceType"
-                                    id="resourceTypeSelect"
-                                    name='resource_type'
-                                    value={formFields?.resource_type}
-                                    label="Resource Type"
-                                    onChange={set('resource_type')}
-                                >
-                                    <MenuItem value="">Select</MenuItem>
-                                    <MenuItem value="1">Info Sheets</MenuItem>
-                                    <MenuItem value="2">Work Sheets</MenuItem>
-                                    <MenuItem value="3">Audio File</MenuItem>
-                                    <MenuItem value="4">Video File</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <SingleSelectComponent
+                                fullWidth={true}
+                                required={true}
+                                id="resourceTypeSelect"
+                                labelId='resourceType'
+                                name='resource_type'
+                                value={formFields?.resource_type}
+                                label='Resource Type'
+                                onChange={set2}
+                                inputProps={{ "data-testid": "resource_type" }}
+                                options={resourceTypeOptions}
+                                mappingKeys={["id", "value"]}
+                            />
                         </Grid>
                         <Grid item xs={4}></Grid>
                     </Grid>
 
                     <Grid container spacing={2} marginBottom={5}>
                         <Grid item xs={4}>
-                            <FormControl fullWidth required>
-                                <InputLabel id="resourceDisorder">Disorder</InputLabel>
-                                <Select
-                                    labelId="resourceDisorder"
-                                    id="resourceDisorderSelect"
-                                    name="disorder_id"
-                                    value={formFields?.disorder_id}
-                                    label="Disorder"
-                                    onChange={set('disorder_id')}
-                                >
-                                    <MenuItem value="">Select</MenuItem>
-                                    {disorderData && disorderData.getAllDisorder && disorderData.getAllDisorder.map((v: any) => {
-                                        return (
-                                            <MenuItem key={`disorder${v._id}`} value={v._id}>{v.disorder_name}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                            <SingleSelectComponent
+                                fullWidth={true}
+                                required={true}
+                                id="resourceDisorderSelect"
+                                labelId='resourceDisorder'
+                                name='disorder_id'
+                                value={formFields?.disorder_id}
+                                label='Disorder'
+                                onChange={set2}
+                                inputProps={{ "data-testid": "disorder_id" }}
+                                options={(disorderData && disorderData.getAllDisorder) || []}
+                                mappingKeys={["_id", "disorder_name"]}
+                            />
                         </Grid>
                         <Grid item xs={4}>
-                            <FormControl fullWidth required>
-                                <InputLabel id="modelType">Model</InputLabel>
-                                <Select
-                                    labelId="modelType"
-                                    id="modelTypeSelect"
-                                    name='model_id'
-                                    value={formFields?.model_id}
-                                    label="Model"
-                                    onChange={set('model_id')}
-                                >
-                                    <MenuItem value="">Select</MenuItem>
-                                    {modelData && modelData.getModelByDisorderId && modelData.getModelByDisorderId.map((v: any) => {
-                                        return (
-                                            <MenuItem key={`model${v._id}`} value={v._id}>{v.model_name}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                        <SingleSelectComponent
+                                fullWidth={true}
+                                required={true}
+                                id="modelTypeSelect"
+                                labelId='modelType'
+                                name='model_id'
+                                value={formFields?.model_id}
+                                label='Custom Model'
+                                onChange={set2}
+                                inputProps={{ "data-testid": "model_id" }}
+                                options={(modelData && modelData?.getModelByDisorderId) || []}
+                                mappingKeys={["_id", "model_name"]}
+                            />
                         </Grid>
                         <Grid item xs={4}>
-                            <FormControl fullWidth >
-                                <InputLabel id="category">Category</InputLabel>
-                                <Select
-                                    labelId="category"
-                                    id="categorySelect"
-                                    value={formFields?.category_id}
-                                    name='category_id'
-                                    label="Category"
-                                    onChange={set('category_id')}
-                                >
-                                    <MenuItem value="">Select</MenuItem>
-                                    {categoryData && categoryData.getCategoryByModelId && categoryData.getCategoryByModelId.map((v: any) => {
-                                        return (
-                                            <MenuItem key={`category${v._id}`} value={v._id}>{v.category_name}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                        <SingleSelectComponent
+                                fullWidth={true}
+                                id="categorySelect"
+                                labelId='category'
+                                name='category_id'
+                                value={formFields?.category_id}
+                                label='Category'
+                                onChange={set2}
+                                inputProps={{ "data-testid": "category_id" }}
+                                options={(categoryData && categoryData.getCategoryByModelId) || []}
+                                mappingKeys={["_id", "category_name"]}
+                            />
                         </Grid>
                     </Grid>
 
                     <Grid container spacing={2} marginBottom={5}>
                         <Grid item xs={12}>
-                            <TextField
+                            <TextFieldComponent
+                                name="resource_desc"
                                 id="descrption"
                                 label="Description"
-                                name='resource_desc'
-                                fullWidth
+                                value={formFields?.resource_desc}
                                 multiline
                                 rows={4}
-                                onChange={set('resource_desc')}
-                                defaultValue={formFields?.resource_desc}
-                            />
+                                onChange={set2}
+                                inputProps={{ "data-testid": "resource_desc" }}
+                                fullWidth={true} />
                         </Grid>
                     </Grid>
 
                     <Grid container spacing={2} marginBottom={5}>
                         <Grid item xs={12}>
-                            <TextField
+                            <TextFieldComponent
+                                name="resource_instruction"
                                 id="instructions"
                                 label="Instructions"
-                                name='resource_instruction'
-                                fullWidth
+                                value={formFields?.resource_instruction}
                                 multiline
                                 rows={4}
-                                onChange={set('resource_instruction')}
-                                defaultValue={formFields?.resource_instruction}
-                            />
+                                onChange={set2}
+                                inputProps={{ "data-testid": "resource_instruction" }}
+                                fullWidth={true} />
                         </Grid>
                     </Grid>
 
                     <Grid container spacing={2} marginBottom={5}>
                         <Grid item xs={12}>
-                            <TextField
+                            <TextFieldComponent
+                                name="resource_references"
                                 id="references"
                                 label="References"
-                                name='resource_references'
-                                fullWidth
+                                value={formFields?.resource_references}
                                 multiline
                                 rows={4}
-                                onChange={set('resource_references')}
-                                defaultValue={formFields?.resource_references}
-                            />
+                                onChange={set2}
+                                inputProps={{ "data-testid": "resource_references" }}
+                                fullWidth={true} />
                         </Grid>
                     </Grid>
 
                     <Grid container spacing={2} marginBottom={5}>
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
-                                <InputLabel id="agenda">Suggested Agenda</InputLabel>
-                                <Select
-                                    labelId="agenda"
-                                    id="agendaSelect"
-                                    name='agenda_id'
-                                    value={formFields?.agenda_id}
-                                    label="Suggested Agenda"
-                                    onChange={set('agenda_id')}
-                                >
-                                    <MenuItem value="">Select</MenuItem>
-                                    {agendaData && agendaData.getAgendaByDisorderAndModel && agendaData.getAgendaByDisorderAndModel.map((v: any) => {
-                                        return (
-                                            <MenuItem key={`agenda${v._id}`} value={v._id}>{v.agenda_name}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                        <SingleSelectComponent
+                                fullWidth={true}
+                                id="agendaSelect"
+                                labelId='agenda'
+                                name='agenda_id'
+                                value={formFields?.agenda_id}
+                                label='Suggested Agenda'
+                                onChange={set2}
+                                inputProps={{ "data-testid": "agenda" }}
+                                options={(agendaData && agendaData.getAgendaByDisorderAndModel) || []}
+                                mappingKeys={["_id", "agenda_name"]}
+                            />
                         </Grid>
                         <Grid item xs={3}>
-                            <Button variant="contained" component="label" startIcon={<SendIcon />}>
-                                Upload
-                                <input hidden name='RESOURCE_FILENAME' onChange={handleFileChange} type="file" />
-                            </Button>
+                            <UploadButtonComponent 
+                                variant="contained" 
+                                name="RESOURCE_FILENAME" 
+                                inputProps={{ "data-testid": "resource_file_upload" }}
+                                onChange={handleFileChange} />
                         </Grid>
                     </Grid>
 
@@ -385,33 +363,37 @@ export default function addForm() {
                             <FormControl component="fieldset">
                                 <FormLabel component="legend">Select the Availability of Resource</FormLabel>
                                 <FormGroup aria-label="position" row>
-                                    <FormControlLabel
+                                    <CheckBoxLabelComponent 
                                         value="1"
                                         name='resource_avail_admin'
-                                        control={<Checkbox onChange={set('resource_avail_admin')} />}
+                                        onChange={set2}
                                         label="Admin"
-                                        labelPlacement="start"
+                                        placement='start'
+                                        inputProps={{ "data-testid": "resource_avail_admin" }}
                                     />
-                                    <FormControlLabel
+                                    <CheckBoxLabelComponent 
                                         value="1"
                                         name='resource_avail_therapist'
-                                        control={<Checkbox onChange={set('resource_avail_therapist')} />}
+                                        onChange={set2}
                                         label="All Therapists"
-                                        labelPlacement="start"
+                                        placement='start'
+                                        inputProps={{ "data-testid": "resource_avail_therapist" }}
                                     />
-                                    <FormControlLabel
+                                    <CheckBoxLabelComponent 
                                         value="1"
                                         name='resource_avail_onlyme'
-                                        control={<Checkbox onChange={set('resource_avail_onlyme')} />}
+                                        onChange={set2}
                                         label="Only Me"
-                                        labelPlacement="start"
+                                        placement='start'
+                                        inputProps={{ "data-testid": "resource_avail_onlyme" }}
                                     />
-                                    <FormControlLabel
+                                    <CheckBoxLabelComponent 
                                         value="1"
                                         name='resource_avail_all'
-                                        control={<Checkbox onChange={set('resource_avail_all')} />}
+                                        onChange={set2}
                                         label="Everyone"
-                                        labelPlacement="start"
+                                        placement='start'
+                                        inputProps={{ "data-testid": "resource_avail_all" }}
                                     />
                                 </FormGroup>
                             </FormControl>
