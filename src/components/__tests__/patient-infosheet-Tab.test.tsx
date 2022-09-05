@@ -7,7 +7,7 @@ import {
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import InfoSheet from "../patient/infoSheet";
-
+import { GET_TOKEN_DATA } from "../../graphql/query/common";
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 
 // mocks
@@ -15,7 +15,30 @@ const buildMocks = (): {
   mocks: MockedResponse[];
 } => {
   const _mocks: MockedResponse[] = [];
-
+ // fetch token for user query
+ _mocks.push({
+  request: {
+    query: GET_TOKEN_DATA,
+    variables: {},
+  },
+  result: {
+    data: {
+      getTokenData: {
+        _id: "patient_id",
+        user_type: "patient",
+        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+        perm_ids: "9,10,14,21,191,65,66",
+        user_status: "1",
+        created_date: "2021-12-20 16:20:55",
+        updated_date: "2021-12-20 16:20:55",
+        patient_data: {
+          therapist_id: "therapist_id",
+          _id: "patient_id",
+        },
+      },
+    },
+  },
+});
   // fetch patient Session Resource list query
   _mocks.push({
     request: {

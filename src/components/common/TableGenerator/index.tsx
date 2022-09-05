@@ -195,7 +195,7 @@ const TableGenerator = ({
                 }}
               >
                 {" "}
-                <Loader visible={props.loader} />
+                {/* <Loader visible={props.loader} /> */}
               </div>
               {!props.loader && data.length === 0 ? (
                 <div
