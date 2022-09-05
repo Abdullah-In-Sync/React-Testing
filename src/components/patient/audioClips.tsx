@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import moment from "moment";
 
@@ -11,18 +11,42 @@ const TableGenerator = dynamic(
   import("../../components/common/TableGenerator"),
   { ssr: false }
 );
+import { buildPatientTokenValidationQuery } from "../../lib/helpers/auth";
 
 // GRAPHQL
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 
 const AudioClips = () => {
   // TABLE PROPS
   const [page, setPage] = useState<number>(0);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [patientId, setpatientId] = useState<string>("");
 
   // GRAPHQL
-  const { data: resData, loading } = useQuery(GET_PATIENT_RESOURCE_DATA);
+  const [gettokenData] = buildPatientTokenValidationQuery((tokenData) => {
+    setpatientId(tokenData.patient_data._id);
+  });
 
+  const [getPatientResourceData, { data: resData }] = useLazyQuery(
+    GET_PATIENT_RESOURCE_DATA,
+    {
+      onCompleted: () => {
+        setLoader(false);
+      },
+    }
+  );
+
+  useEffect(() => {
+    setLoader(true);
+    gettokenData({ variables: {} });
+  }, []);
+
+  useEffect(() => {
+    if (patientId) {
+      getPatientResourceData();
+    }
+  }, [patientId]);
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
   const fields = [
@@ -64,7 +88,7 @@ const AudioClips = () => {
 
   return (
     <>
-      <Loader visible={loading} />
+      <Loader visible={loader} />
       <ContentHeader subtitle="Session Resource" />
       <Box>
         <TableGenerator
@@ -78,6 +102,7 @@ const AudioClips = () => {
             setPage(page);
             /* istanbul ignore next */
           }}
+          loader={loader}
           backendPagination={true}
           dataCount={10}
           selectedRecords={[]}
