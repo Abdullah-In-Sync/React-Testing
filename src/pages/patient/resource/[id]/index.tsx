@@ -114,14 +114,14 @@ const ResourceDetailById: NextPage = () => {
                   aria-label="breadcrumb"
                   data-testid="breadCrumb"
                 >
-                  <Typography>
+                  <Typography color="primary.main">
                     {
                       patientResourceData.getResourceDetailById[0]
                         .disorder_detail.disorder_name
                     }
                   </Typography>
                   ,
-                  <Typography>
+                  <Typography color="primary.main">
                     {
                       patientResourceData.getResourceDetailById[0].model_detail
                         .model_name
@@ -179,25 +179,36 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  <IconButton size="small">
-                    <Avatar>
-                      <FileUploadIcon />
-                    </Avatar>
+                  <IconButton
+                    size="medium"
+                    href={"#"}
+                  >
+                  <FileUploadIcon />
                   </IconButton>
-                  <IconButton size="small">
-                    <Avatar>
-                      <AttachmentIcon />
-                    </Avatar>
+
+                  <IconButton
+                    size="medium"
+                    target="_blank"
+                    href={patientResourceData.getResourceDetailById[0]
+                      .view_patient_filename_url}
+                    sx={{
+                      color: "secondary.main",
+                    }}
+                  >
+                  <AttachmentIcon />
                   </IconButton>
-                  <IconButton size="small">
-                    <Avatar>
-                      <VisibilityIcon />
-                    </Avatar>
+
+                  <IconButton
+                    size="medium"
+                    href={"/patient/resource/"}
+                  >
+                  <VisibilityIcon />
                   </IconButton>
-                  <IconButton size="small">
-                    <Avatar>
-                      <FileDownloadIcon />
-                    </Avatar>
+                  <IconButton
+                    size="medium"
+                    href={"/patient/resource/"}
+                  >
+                  <FileDownloadIcon />
                   </IconButton>
                 </Grid>
                 <ResourceDetail
