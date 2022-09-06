@@ -10,7 +10,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import TableFooter from "@mui/material/TableFooter";
 import Paper from "@mui/material/Paper";
-import Loader from "../Loader";
+// import Loader from "../Loader";
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields } = props;
@@ -195,7 +195,7 @@ const TableGenerator = ({
                 }}
               >
                 {" "}
-                <Loader visible={props.loader} />
+                {/* <Loader visible={props.loader} /> */}
               </div>
               {!props.loader && data.length === 0 ? (
                 <div

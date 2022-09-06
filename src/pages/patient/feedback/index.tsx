@@ -16,6 +16,7 @@ import Loader from "../../../components/common/Loader";
 import ContentHeader from "../../../components/common/ContentHeader";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useSnackbar } from "notistack";
 
 import {
   Accordion,
@@ -50,7 +51,8 @@ const Feedback: NextPage = () => {
   const [erroropen, setErrorOpen] = useState<boolean>(false);
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
-
+  const { enqueueSnackbar } = useSnackbar();
+  let btnvalue = 0;
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
       settherapistId(tokenData.patient_data.therapist_id);
@@ -196,7 +198,9 @@ const Feedback: NextPage = () => {
   const handleAdd = (event) => {
     event.preventDefault();
     if (formValues.length == 0) {
-      setErrorOpen(true);
+      enqueueSnackbar("Field can not be left blank", {
+        variant: "error",
+      });
     } else {
       setBtndiabled(true);
       postPatientFeedback({
@@ -206,7 +210,9 @@ const Feedback: NextPage = () => {
           feedbackType: feedbackType,
         },
       });
-      setOpen(true);
+      enqueueSnackbar("Feedback submitted successfully", {
+        variant: "success",
+      });
     }
   };
 
@@ -250,8 +256,6 @@ const Feedback: NextPage = () => {
                 })}
             </Select>
           </FormControl>
-        </Box>
-        <Box>
           <Snackbar
             key="1"
             open={open}
@@ -288,6 +292,8 @@ const Feedback: NextPage = () => {
               Field can not be left blank
             </Alert>
           </Snackbar>
+        </Box>
+        <Box>
           {patientSessionData?.getPatientSessionList != null &&
             patientSessionData?.getPatientSessionList.map((v, k) => {
               const p = k + 1;
@@ -401,7 +407,6 @@ const Feedback: NextPage = () => {
                                     {fv.question}
                                   </Typography>
                                 )}
-
                                 <Typography>
                                   <RadioGroup
                                     row
@@ -440,6 +445,13 @@ const Feedback: NextPage = () => {
                                           />
                                         );
                                       })}
+                                    {
+                                      (btnvalue =
+                                        fv.feedback_ans &&
+                                        fv.feedback_ans.answer
+                                          ? 1
+                                          : 0)
+                                    }
                                     {fv.answer_type == "text" && (
                                       <TextareaAutosize
                                         aria-label="empty textarea"
@@ -480,7 +492,11 @@ const Feedback: NextPage = () => {
                           <Typography sx={{ textAlign: "center" }}>
                             <Button
                               type="submit"
-                              disabled={btndiabled == true ? true : false}
+                              disabled={
+                                btndiabled == true || btnvalue == 1
+                                  ? true
+                                  : false
+                              }
                               variant="contained"
                               data-testid="submitFeedback"
                             >
