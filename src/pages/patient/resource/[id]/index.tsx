@@ -10,7 +10,6 @@ import {
   Grid,
   Box,
   IconButton,
-  Avatar,
   Breadcrumbs,
   Typography,
 } from "@mui/material";
@@ -179,36 +178,51 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
+                  <IconButton size="medium" href={"#"}>
+                    <FileUploadIcon />
+                  </IconButton>
                   <IconButton
                     size="medium"
-                    href={"#"}
+                    target="_blank"
+                    href={
+                      patientResourceData?.getResourceDetailById[0]
+                        .patient_share_filename != null
+                        ? patientResourceData.getResourceDetailById[0]
+                            .patient_share_filename
+                        : "#"
+                    }
+                    sx={{
+                      color: "primary.main",
+                    }}
                   >
-                  <FileUploadIcon />
+                    <AttachmentIcon />
                   </IconButton>
 
                   <IconButton
                     size="medium"
                     target="_blank"
-                    href={patientResourceData.getResourceDetailById[0]
-                      .view_patient_filename_url}
-                    sx={{
-                      color: "secondary.main",
-                    }}
+                    href={
+                      patientResourceData.getResourceDetailById[0]
+                        .resource_data[0].resource_url != null
+                        ? patientResourceData.getResourceDetailById[0]
+                            .resource_data[0].resource_url
+                        : "#"
+                    }
                   >
-                  <AttachmentIcon />
-                  </IconButton>
-
-                  <IconButton
-                    size="medium"
-                    href={"/patient/resource/"}
-                  >
-                  <VisibilityIcon />
+                    <VisibilityIcon />
                   </IconButton>
                   <IconButton
                     size="medium"
-                    href={"/patient/resource/"}
+                    target="_blank"
+                    href={
+                      patientResourceData?.getResourceDetailById[0]
+                        .resource_data[0].download_resource_url != null
+                        ? patientResourceData.getResourceDetailById[0]
+                            .resource_data[0].download_resource_url
+                        : "#"
+                    }
                   >
-                  <FileDownloadIcon />
+                    <FileDownloadIcon />
                   </IconButton>
                 </Grid>
                 <ResourceDetail
