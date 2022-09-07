@@ -123,6 +123,7 @@ const Feedback: NextPage = () => {
       variables: {
         sessionNo: sessionNo,
         feedbackType: feedbackType,
+        pttherapyId: therapy,
       },
     });
   }, [sessionNo, feedbackType]);
@@ -208,6 +209,7 @@ const Feedback: NextPage = () => {
           feedQuesAnsData: JSON.stringify(formValues),
           sessionNo: sessionNo,
           feedbackType: feedbackType,
+          pttherapyId: therapy,
         },
       });
       enqueueSnackbar("Feedback submitted successfully", {

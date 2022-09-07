@@ -46,13 +46,15 @@ export const DELETE_FEEDBACK = gql`
 export const POST_PATIENT_FEEDBACK = gql`
   mutation (
     $feedQuesAnsData: String!
-    $sessionNo: String!
-    $feedbackType: String
+    $sessionNo: Int!
+    $feedbackType: String!
+    $pttherapyId: String!
   ) {
     postPatientFeedback(
       feedQuesAnsData: $feedQuesAnsData
       sessionNo: $sessionNo
       feedbackType: $feedbackType
+      pttherapyId: $pttherapyId
     ) {
       _id
       user_id

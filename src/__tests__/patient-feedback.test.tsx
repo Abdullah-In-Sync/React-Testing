@@ -90,6 +90,7 @@ const getPatientFeedbackList = (
         created_date: "2022-07-09T15:53:28.900Z",
         patient_id: _pt.patient_id,
         question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+        pttherapy_id: "1116ce468e9b4977b8943f2d8e9f2b0b",
         status: "active",
         therapist_id: "686802e5123a482681a680a673ef7f53",
         updated_date: "2022-07-09T15:53:28.900Z",
@@ -113,6 +114,7 @@ const getPatientFeedbackList = (
         created_date: "2022-07-09T15:53:28.900Z",
         patient_id: _pt.patient_id,
         question_id: "9b04def7-c012-44ca-98f2-6060d90b9a26",
+        pttherapy_id: "1116ce468e9b4977b8943f2d8e9f2b0b",
         status: "active",
         therapist_id: "686802e5123a482681a680a673ef7f53",
         updated_date: "2022-07-09T15:53:28.900Z",
@@ -256,6 +258,7 @@ const buildMocks = (): {
               created_date: "2022-07-09T15:53:28.900Z",
               patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
               question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+              pttherapy_id: "1116ce468e9b4977b8943f2d8e9f2b0b",
               status: "active",
               therapist_id: "686802e5123a482681a680a673ef7f53",
               updated_date: "2022-07-09T15:53:28.900Z",
@@ -283,6 +286,7 @@ const buildMocks = (): {
           variables: {
             sessionNo: 1,
             feedbackType: "session",
+            pttherapyId: "1116ce468e9b4977b8943f2d8e9f2b0b",
           },
         },
         result: {
