@@ -72,6 +72,7 @@ export const POST_PATIENT_FEEDBACK = gql`
         answer
         created_date
         patient_id
+        pttherapy_id
         question_id
         status
         therapist_id
