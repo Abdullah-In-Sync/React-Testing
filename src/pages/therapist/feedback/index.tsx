@@ -28,6 +28,7 @@ import PatientViewTherapyTab from "../../../components/therapist/patientViewTher
 import QuestionTypeRadiobox from "../../../components/therapist/feedback/questionTypeRadiobox";
 import QuestionTypeText from "../../../components/therapist/feedback/questionTypeText";
 import { buildTherapistTokenValidationQuery } from "../../../lib/helpers/auth";
+import baseUrl from "../../../lib/baseImgUrl";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
@@ -192,7 +193,7 @@ const Feedback: NextPage = () => {
             <Grid item xs={2} sx={{ textAlign: "center" }}>
               <Image
                 alt="Therapist"
-                src="/v2/images/user.png"
+                src={`${baseUrl}/images/user.png`}
                 width="100"
                 height="100"
                 style={{ borderRadius: "50%" }}
