@@ -19,7 +19,6 @@ import {
   patient_routes,
   therapistRoutes,
 } from "../../utility/navItems";
-import baseUrl from "../../lib/baseImgUrl";
 
 const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -68,7 +67,7 @@ const NavBar = () => {
           >
             <Image
               alt="My Help"
-              src={`${baseUrl}/images/logo.png`}
+              src="/images/logo.png"
               height="40"
               width="150"
             />
