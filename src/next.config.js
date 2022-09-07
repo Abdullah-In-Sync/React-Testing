@@ -14,7 +14,7 @@ const nextConfig = {
   },
   images: {
     loader: "akamai",
-    path: "/",
+    path: "/v2",
   },
 };
 
