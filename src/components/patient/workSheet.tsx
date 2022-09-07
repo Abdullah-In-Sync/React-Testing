@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import moment from "moment";
-import Link from 'next/link';
+import Link from "next/link";
 
 // MUI COMPONENTS
 import { Box, IconButton } from "@mui/material";
@@ -87,13 +87,10 @@ const WorkSheet = () => {
           <IconButton size="small">
             <AttachFileIcon />
           </IconButton>
-          <Link href={"/patient/resource/"+ value._id} passHref>
-            <IconButton
-              size="small"
-              data-testid={"viewIcon_" + value._id}
-            >
-            <VisibilityIcon />
-          </IconButton>
+          <Link href={"/patient/resource/" + value._id} passHref>
+            <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+              <VisibilityIcon />
+            </IconButton>
           </Link>
           <IconButton
             size="small"
