@@ -47,7 +47,7 @@ export const POST_PATIENT_FEEDBACK = gql`
   mutation (
     $feedQuesAnsData: String!
     $sessionNo: Int!
-    $feedbackType: String!
+    $feedbackType: String
     $pttherapyId: String!
   ) {
     postPatientFeedback(
@@ -72,8 +72,8 @@ export const POST_PATIENT_FEEDBACK = gql`
         answer
         created_date
         patient_id
-        pttherapy_id
         question_id
+        pttherapy_id
         status
         therapist_id
         updated_date
