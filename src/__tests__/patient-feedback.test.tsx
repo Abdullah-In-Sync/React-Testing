@@ -245,18 +245,18 @@ const buildMocks = (): {
       request: {
         query: POST_PATIENT_FEEDBACK,
         variables: {
-          feedQuesAnsData:[
+          feedQuesAnsData: [
             {
               therapist_id: "686802e5123a482681a680a673ef7f53",
               answer: "s",
-              session_no:1, 
-              question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25"
-            }
+              session_no: 1,
+              question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+            },
           ],
           sessionNo: 1,
           feedbackType: "session",
-          pttherapyId: "test-1"
-        }
+          pttherapyId: "test-1",
+        },
       },
       result: {
         data: {
