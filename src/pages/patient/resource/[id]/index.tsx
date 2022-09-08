@@ -10,7 +10,6 @@ import {
   Grid,
   Box,
   IconButton,
-  Avatar,
   Breadcrumbs,
   Typography,
 } from "@mui/material";
@@ -114,14 +113,14 @@ const ResourceDetailById: NextPage = () => {
                   aria-label="breadcrumb"
                   data-testid="breadCrumb"
                 >
-                  <Typography>
+                  <Typography color="primary.main">
                     {
                       patientResourceData.getResourceDetailById[0]
                         .disorder_detail.disorder_name
                     }
                   </Typography>
                   ,
-                  <Typography>
+                  <Typography color="primary.main">
                     {
                       patientResourceData.getResourceDetailById[0].model_detail
                         .model_name
@@ -179,25 +178,54 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  <IconButton size="small">
-                    <Avatar>
-                      <FileUploadIcon />
-                    </Avatar>
+                  <IconButton size="medium" href={"#"}>
+                    <FileUploadIcon />
                   </IconButton>
-                  <IconButton size="small">
-                    <Avatar>
-                      <AttachmentIcon />
-                    </Avatar>
+                  <IconButton
+                    size="medium"
+                    target="_blank"
+                    data-testid="shareViewUrl"
+                    href={
+                      patientResourceData.getResourceDetailById[0]
+                        .patient_share_filename != null
+                        ? patientResourceData.getResourceDetailById[0]
+                            .patient_share_filename
+                        : "#"
+                    }
+                    sx={{
+                      color: "primary.main",
+                    }}
+                  >
+                    <AttachmentIcon />
                   </IconButton>
-                  <IconButton size="small">
-                    <Avatar>
-                      <VisibilityIcon />
-                    </Avatar>
+
+                  <IconButton
+                    size="medium"
+                    target="_blank"
+                    data-testid="viewUrl"
+                    href={
+                      patientResourceData.getResourceDetailById[0]
+                        .resource_data[0].resource_url != null
+                        ? patientResourceData.getResourceDetailById[0]
+                            .resource_data[0].resource_url
+                        : "#"
+                    }
+                  >
+                    <VisibilityIcon />
                   </IconButton>
-                  <IconButton size="small">
-                    <Avatar>
-                      <FileDownloadIcon />
-                    </Avatar>
+                  <IconButton
+                    size="medium"
+                    target="_blank"
+                    data-testid="downloadUrl"
+                    href={
+                      patientResourceData.getResourceDetailById[0]
+                        .resource_data[0].download_resource_url != null
+                        ? patientResourceData.getResourceDetailById[0]
+                            .resource_data[0].download_resource_url
+                        : "#"
+                    }
+                  >
+                    <FileDownloadIcon />
                   </IconButton>
                 </Grid>
                 <ResourceDetail
