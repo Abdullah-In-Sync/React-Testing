@@ -217,9 +217,6 @@ const Feedback: NextPage = () => {
           });
         },
       });
-      // enqueueSnackbar("Feedback submitted successfully", {
-      //   variant: "success",
-      // });
     }
   };
 
