@@ -211,10 +211,15 @@ const Feedback: NextPage = () => {
           feedbackType: feedbackType,
           pttherapyId: therapy,
         },
+        onCompleted: () => {
+          enqueueSnackbar("Feedback submitted successfully", {
+            variant: "success",
+          });
+        },
       });
-      enqueueSnackbar("Feedback submitted successfully", {
-        variant: "success",
-      });
+      // enqueueSnackbar("Feedback submitted successfully", {
+      //   variant: "success",
+      // });
     }
   };
 
