@@ -134,7 +134,7 @@ const Feedback: NextPage = () => {
       columnName: "Organization",
       visible: true,
       render: (val) =>
-        val > 50 ? (
+        val.length > 50 ? (
           <Tooltip title={val} arrow>
             <p>{val.substring(0, 50) + "..."}</p>
           </Tooltip>

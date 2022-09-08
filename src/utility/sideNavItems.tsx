@@ -110,7 +110,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 8,
       label: "Library",
-      path: Link + "/superadmin/resource/resourcemodel",
+      path: "admin/library",
       icon: <LibraryBooksIcon />,
     },
     {
