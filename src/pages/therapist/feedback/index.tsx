@@ -193,7 +193,7 @@ const Feedback: NextPage = () => {
             <Grid item xs={2} sx={{ textAlign: "center" }}>
               <Image
                 alt="Therapist"
-                src="/v2/images/user.png"
+                src="/images/user.png"
                 width="100"
                 height="100"
                 style={{ borderRadius: "50%" }}

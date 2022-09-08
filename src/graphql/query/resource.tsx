@@ -35,6 +35,8 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
         resource_instruction
         resource_references
         resource_filename
+        resource_url
+        download_resource_url
       }
       disorder_detail {
         _id

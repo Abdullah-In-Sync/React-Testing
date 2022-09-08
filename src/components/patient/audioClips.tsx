@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import moment from "moment";
+import Link from "next/link";
 
 // MUI COMPONENTS
 import { Box, IconButton } from "@mui/material";
@@ -75,13 +76,11 @@ const AudioClips = () => {
       columnName: "Actions",
       visible: true,
       render: (_, value) => (
-        <IconButton
-          size="small"
-          data-testid={"viewIcon_" + value._id}
-          // onClick={() => handleView(value._id)}
-        >
-          <VisibilityIcon />
-        </IconButton>
+        <Link href={"/patient/resource/" + value._id} passHref>
+          <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+            <VisibilityIcon />
+          </IconButton>
+        </Link>
       ),
     },
   ];
