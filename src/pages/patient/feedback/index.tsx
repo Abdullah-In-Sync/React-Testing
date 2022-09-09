@@ -51,14 +51,13 @@ const Feedback: NextPage = () => {
   const [erroropen, setErrorOpen] = useState<boolean>(false);
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
-  const { enqueueSnackbar } = useSnackbar();
-  let btnvalue = 0;
+  const { enqueueSnackbar } = useSnackbar();  
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
       settherapistId(tokenData.patient_data.therapist_id);
     }
   );
-
+  let btnvalue = 0;
   const [
     getPatientTherapyData,
     { loading: therapyLoading, data: patientTherapryData },
@@ -379,6 +378,8 @@ const Feedback: NextPage = () => {
                       {patientFeedbackData?.getPatientFeedbackList != null &&
                         patientFeedbackData?.getPatientFeedbackList.map(
                           (fv, fk) => {
+                            btnvalue =
+                              fv.feedback_ans && fv.feedback_ans.answer ? 1 : 0;
                             return (
                               <Typography
                                 key={fk + ""}
@@ -449,13 +450,6 @@ const Feedback: NextPage = () => {
                                           />
                                         );
                                       })}
-                                    {
-                                      (btnvalue =
-                                        fv.feedback_ans &&
-                                        fv.feedback_ans.answer
-                                          ? 1
-                                          : 0)
-                                    }
                                     {fv.answer_type == "text" && (
                                       <TextareaAutosize
                                         aria-label="empty textarea"
