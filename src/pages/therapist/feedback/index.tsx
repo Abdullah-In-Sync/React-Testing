@@ -132,6 +132,7 @@ const Feedback: NextPage = () => {
           patientId: patientData.patient_id,
           sessionNo: sessionNo,
           feedbackType: feedbackType,
+          pttherapyId: therapy,
         },
       });
     }
