@@ -51,7 +51,7 @@ const Feedback: NextPage = () => {
   const [erroropen, setErrorOpen] = useState<boolean>(false);
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
   const [therapistId, settherapistId] = useState<string>("");
-  const { enqueueSnackbar } = useSnackbar();  
+  const { enqueueSnackbar } = useSnackbar();
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
       settherapistId(tokenData.patient_data.therapist_id);
