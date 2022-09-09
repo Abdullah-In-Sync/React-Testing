@@ -60,11 +60,13 @@ export const GET_THERAPISTFEEDBACKLIST_DATA = gql`
     $patientId: String!
     $sessionNo: Int!
     $feedbackType: String!
+    $pttherapyId: String!
   ) {
     getTherapistFeedbackList(
       feedbackType: $feedbackType
       patientId: $patientId
       sessionNo: $sessionNo
+      pttherapyId: $pttherapyId
     ) {
       _id
       answer_options
