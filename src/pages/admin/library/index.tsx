@@ -7,7 +7,7 @@ import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
 import { IconButton, Box, Button } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles';
 import CreateIcon from "@mui/icons-material/Create";
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -15,6 +15,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { AddButton } from "../../../components/common/Buttons";
 import CardGenerator from "../../../components/common/CardGenerator";
+import InputBase from '@mui/material/InputBase';
+import Grid from '@mui/material/Grid';
+import AsyncAutoComplete from "../../../components/common/AsyncAutoComplete";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -31,6 +34,52 @@ const IconButtonWrapper = styled(IconButton)(
   margin-right: 5px;
 `
 );
+
+import SearchIcon from '@mui/icons-material/Search';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.primary.main, 0.25),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.secondary.main, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(0.20),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  width: '100%',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '100%',
+      },
+    },
+  },
+}));
+
 
 const Library: NextPage = () => {
 
@@ -109,24 +158,75 @@ const Library: NextPage = () => {
     },
   ];
 
+  const filterList = [
+    { label: "Select Resources", option: [{ value: "all", label: "All" }, { value: "my-resources", label: "My Resources" }, { value: "my-favourites", label: "My Favourites" }] },
+    { label: "Select Disorder", option: [{ value: "all", label: "All" }] },
+    { label: "Select Modalities", option: [{ value: "all", label: "All" }] },
+    { label: "Select Type", option: [{ value: "all", label: "All" }, { value: "info-sheet", label: "Info Sheet" }, { value: "work-sheet", label: "Work Sheet" }, { value: "audio-file", label: "Audio File" }, { value: "video-file", label: "Video File" }] },
+    { label: "Select Category", option: [{ value: "all", label: "All" }] }
 
+  ]
+// setFilterValue([{key:"resource"})
+const filterChangeHandle =(val)=>{
+console.log("Filter",val)
+}
+
+  const FilterBar = ({filterList,loader,filterChange}) => {
+    
+    return (
+      <Grid container spacing={2} mt={1} mb={2}>
+        {filterList?.map((fi, index) => {
+          return (
+            <Grid key={index} item xs={4} sm={4} md={2.4}>
+              <AsyncAutoComplete
+                onChange={(val) =>  filterChange(val) }
+                value={{ value: "all", label: "All" }}
+                loading={loader}
+                options={fi?.option}
+                required ={false}
+                label={fi?.label}
+              />
+            </Grid>
+          )
+        })}
+
+      </Grid>
+    )
+  };
   return (
     <>
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Library" />
-        <Box sx={crudButtons}>
-          <AddButton
-            className="mr-3"
-            label="Add Resource"
-            startIcon={<ListAltIcon />}
-          />
-          <AddButton
-            className="mr-3"
-            label="Create Resource"
-            startIcon={<ListAltIcon />}
-          />
-        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+          </Grid>
+          <Grid item xs={9}>
+            <Box sx={crudButtons}>
+              <AddButton
+                className="mr-3"
+                label="Add Resource"
+                startIcon={<ListAltIcon />}
+              />
+              <AddButton
+                className="mr-3"
+                label="Create Resource"
+                startIcon={<ListAltIcon />}
+              />
+            </Box>
+          </Grid>
+        </Grid>
+
+        <FilterBar filterList={filterList} filterChange={filterChangeHandle} loader={false} />
         <Box>
 
           <CardGenerator data={dataList} fields={fields} />
