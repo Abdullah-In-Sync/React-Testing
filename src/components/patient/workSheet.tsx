@@ -84,7 +84,17 @@ const WorkSheet = () => {
           <IconButton size="small">
             <CloudUploadIcon />
           </IconButton>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            href={
+              value.patient_share_filename != null
+                ? value.patient_share_filename
+                : "#"
+            }
+            sx={{
+              color: "primary.main",
+            }}
+          >
             <AttachFileIcon />
           </IconButton>
           <Link href={"/patient/resource/" + value._id} passHref>
@@ -94,8 +104,12 @@ const WorkSheet = () => {
           </Link>
           <IconButton
             size="small"
-            data-testid={"viewIcon_" + value._id}
-            // onClick={() => handleView(value._id)}
+            data-testid="downloadUrl"
+            href={
+              value.download_resource_url != null
+                ? value.download_resource_url
+                : "#"
+            }
           >
             <CloudDownloadIcon />
           </IconButton>

@@ -183,7 +183,6 @@ const ResourceDetailById: NextPage = () => {
                   </IconButton>
                   <IconButton
                     size="medium"
-                    target="_blank"
                     data-testid="shareViewUrl"
                     href={
                       patientResourceData.getResourceDetailById[0]
@@ -201,7 +200,6 @@ const ResourceDetailById: NextPage = () => {
 
                   <IconButton
                     size="medium"
-                    target="_blank"
                     data-testid="viewUrl"
                     href={
                       patientResourceData.getResourceDetailById[0]
@@ -215,7 +213,6 @@ const ResourceDetailById: NextPage = () => {
                   </IconButton>
                   <IconButton
                     size="medium"
-                    target="_blank"
                     data-testid="downloadUrl"
                     href={
                       patientResourceData.getResourceDetailById[0]
