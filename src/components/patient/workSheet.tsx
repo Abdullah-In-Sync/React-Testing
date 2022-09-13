@@ -87,8 +87,8 @@ const WorkSheet = () => {
           <IconButton
             size="small"
             href={
-              value.patient_share_filename != null
-                ? value.patient_share_filename
+              value.resource_data[0]?.patient_share_filename != null
+                ? value.resource_data[0]?.patient_share_filename
                 : "#"
             }
             sx={{
@@ -106,8 +106,8 @@ const WorkSheet = () => {
             size="small"
             data-testid="downloadUrl"
             href={
-              value.download_resource_url != null
-                ? value.download_resource_url
+              value.resource_data[0]?.download_resource_url != null
+                ? value.resource_data[0]?.download_resource_url
                 : "#"
             }
           >
