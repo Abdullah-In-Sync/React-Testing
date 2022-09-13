@@ -201,6 +201,7 @@ const ResourceDetailById: NextPage = () => {
                   <IconButton
                     size="medium"
                     data-testid="viewUrl"
+                    target="_blank"
                     href={
                       patientResourceData.getResourceDetailById[0]
                         .resource_data[0].resource_url != null
