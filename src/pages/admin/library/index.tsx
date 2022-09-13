@@ -17,7 +17,8 @@ import { AddButton } from "../../../components/common/Buttons";
 import CardGenerator from "../../../components/common/CardGenerator";
 import InputBase from '@mui/material/InputBase';
 import Grid from '@mui/material/Grid';
-import AsyncAutoComplete from "../../../components/common/AsyncAutoComplete";
+import AsyncAutoComplete from "../../../components/common/AsyncAutoComplete/index";
+import CrudForm from "../../../components/common/CrudForm";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -159,40 +160,38 @@ const Library: NextPage = () => {
   ];
 
   const filterList = [
-    { label: "Select Resources", option: [{ value: "all", label: "All" }, { value: "my-resources", label: "My Resources" }, { value: "my-favourites", label: "My Favourites" }] },
-    { label: "Select Disorder", option: [{ value: "all", label: "All" }] },
-    { label: "Select Modalities", option: [{ value: "all", label: "All" }] },
-    { label: "Select Type", option: [{ value: "all", label: "All" }, { value: "info-sheet", label: "Info Sheet" }, { value: "work-sheet", label: "Work Sheet" }, { value: "audio-file", label: "Audio File" }, { value: "video-file", label: "Video File" }] },
-    { label: "Select Category", option: [{ value: "all", label: "All" }] }
-
+    [{
+      key: "resources", visible: true,
+      freeSolo: false,
+      show: true, label: "Select Resources", type: "asynccomplete", options: [{ value: "all", label: "All" }, { value: "my-resources", label: "My Resources" }, { value: "my-favourites", label: "My Favourites" }]
+    },
+    {
+      key: "disorder", label: "Select Disorder", visible: true,
+      freeSolo: false,
+      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }]
+    },
+    {
+      key: "modalities", label: "Select Modalities", visible: true,
+      freeSolo: false,
+      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }]
+    },
+    {
+      key: "type", label: "Select Type", visible: true,
+      freeSolo: false,
+      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }, { value: "info-sheet", label: "Info Sheet" }, { value: "work-sheet", label: "Work Sheet" }, { value: "audio-file", label: "Audio File" }, { value: "video-file", label: "Video File" }]
+    },
+    {
+      key: "category", label: "Select Category", visible: true,
+      freeSolo: false,
+      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }]
+    }
+    ]
   ]
-// setFilterValue([{key:"resource"})
-const filterChangeHandle =(val)=>{
-console.log("Filter",val)
-}
+  // setFilterValue([{key:"resource"})
+  const handleFilterChange = (val) => {
+    console.log("Filter", val)
+  }
 
-  const FilterBar = ({filterList,loader,filterChange}) => {
-    
-    return (
-      <Grid container spacing={2} mt={1} mb={2}>
-        {filterList?.map((fi, index) => {
-          return (
-            <Grid key={index} item xs={4} sm={4} md={2.4}>
-              <AsyncAutoComplete
-                onChange={(val) =>  filterChange(val) }
-                value={{ value: "all", label: "All" }}
-                loading={loader}
-                options={fi?.option}
-                required ={false}
-                label={fi?.label}
-              />
-            </Grid>
-          )
-        })}
-
-      </Grid>
-    )
-  };
   return (
     <>
       <Layout>
@@ -226,7 +225,16 @@ console.log("Filter",val)
           </Grid>
         </Grid>
 
-        <FilterBar filterList={filterList} filterChange={filterChangeHandle} loader={false} />
+        <CrudForm
+          title="Create Questionnaire"
+          okText="Save"
+          fields={filterList}
+          description="Please fill in the details below."
+          onFieldChange={(value) => {
+            handleFilterChange(value)
+          }}
+        />
+        {/* <FilterBar filterList={filterList} filterChange={filterChangeHandle} loader={false} /> */}
         <Box>
 
           <CardGenerator data={dataList} fields={fields} />

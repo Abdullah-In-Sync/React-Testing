@@ -1,8 +1,9 @@
 import Grid from "@mui/material/Grid";
-import { Text, AutoCompleteBox, SelectField } from "./index";
+import { Text, AutoCompleteBox, SelectField,AsyncAutoComplete } from "./index";
 
 const FIELD_COMPONENTS = {
   autocomplete: AutoCompleteBox,
+  asynccomplete:AsyncAutoComplete,
   // multiAutoComplete: MultiAutoComplete,
   text: Text,
   email: Text,
