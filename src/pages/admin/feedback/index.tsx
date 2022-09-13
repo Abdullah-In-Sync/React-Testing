@@ -355,7 +355,7 @@ const Feedback: NextPage = () => {
         setDeletConfirmationModal(false);
         setIsMutation(false);
         refetch();
-        enqueueSnackbar("Delete data successfully!", { variant: "error" });
+        enqueueSnackbar("Data deleted successfully!", { variant: "error" });
       },
     });
   };
