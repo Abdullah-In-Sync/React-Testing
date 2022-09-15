@@ -1,50 +1,5 @@
-
-
-// export default function AsyncAutoComplete({
-//     onChange,
-//     value,
-//     options,
-//     required,
-//     label,
-//     loading,
-// }) {
-//     return (
-//         <Autocomplete
-//             id="filter-issue"
-//             getOptionLabel={(option) => option.label}
-//             size="small"
-//             options={options}
-//             onChange={(__, val) => onChange(val)}
-//             value={value}
-//             disableClearable={true}
-//             loading={loading}
-//             renderInput={(params) => (
-//                 <TextField
-//                     {...params}
-//                     label={label}
-//                     variant="outlined"
-//                     fullWidth
-//                     required={required}
-//                     InputProps={{
-//                         ...params.InputProps,
-//                         endAdornment: (
-//                             <React.Fragment>
-//                                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
-//                                 {params.InputProps.endAdornment}
-//                             </React.Fragment>
-//                         ),
-//                     }}
-//                 />
-//             )}
-//         />
-//     );
-// }
-
-
-////////////////////////////////////////////////
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Autocomplete } from "@mui/material";
-import { CircularProgress } from '@mui/material';
 import _ from "lodash";
 
 const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
@@ -108,20 +63,21 @@ const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
             variant="outlined"
             required={field.required}
             placeholder={field.label}
-            InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                    <React.Fragment>
-                        {false ? <CircularProgress color="inherit" size={20} /> : null}
-                        {params.InputProps.endAdornment}
-                    </React.Fragment>
-                ),
-            }}
+            // InputProps={{
+            //   ...params.InputProps,
+            //   endAdornment: (
+            //     <React.Fragment>
+            //       {false ? (
+            //         <CircularProgress color="inherit" size={20} />
+            //       ) : null}
+            //       {params.InputProps.endAdornment}
+            //     </React.Fragment>
+            //   ),
+            // }}
           />
         )}
       />
     </>
-    
   );
 };
 

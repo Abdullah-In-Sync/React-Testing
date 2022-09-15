@@ -1,35 +1,53 @@
 import { gql } from "@apollo/client";
 
-
 export const GET_CATEGORY = gql`
-  query GetCategoryByModelId($modelId:String) {
-    getCategoryByModelId(modelId:$modelId) {
-        _id
-        category_name 
-      }
+  query GetCategoryByModelId($modelId: String) {
+    getCategoryByModelId(modelId: $modelId) {
+      _id
+      category_name
+    }
   }
 `;
 
 export const GET_DISORDER_MODEL_LIST = gql`
   query GetDisorderModelList {
     getDisorderModel {
+      _id
+      disorder_name
+      disordermodel_data {
         _id
-        disorder_name 
-        disordermodel_data
-        {
-          _id
-          model_name
-          model_status
-        }
+        model_name
+        model_status
       }
+    }
   }
 `;
 
-
-
 export const GET_ADMIN_RESOURCE_DATA = gql`
-  query getAdminResourceList($userType: String!, $resourceStatus: Int!,$modelId:String ,$disorderId:String,$categoryId:String,$resourceType:String,$mode:String,$myResource:Int,$myFav:Int,$searchText:String) {
-    getAdminResourceList(userType: $userType, resourceStatus: $resourceStatus,modelId:$modelId,disorderId:$disorderId,categoryId:$categoryId,resourceType:$resourceType,mode:$mode,myResource:$myResource,myFav:$myFav,searchText:$searchText) {
+  query getAdminResourceList(
+    $userType: String!
+    $resourceStatus: Int!
+    $modelId: String
+    $disorderId: String
+    $categoryId: String
+    $resourceType: String
+    $mode: String
+    $myResource: Int
+    $myFav: Int
+    $searchText: String
+  ) {
+    getAdminResourceList(
+      userType: $userType
+      resourceStatus: $resourceStatus
+      modelId: $modelId
+      disorderId: $disorderId
+      categoryId: $categoryId
+      resourceType: $resourceType
+      mode: $mode
+      myResource: $myResource
+      myFav: $myFav
+      searchText: $searchText
+    ) {
       _id
       fav_res_detail {
         _id
@@ -42,8 +60,8 @@ export const GET_ADMIN_RESOURCE_DATA = gql`
       resource_desc
       resource_name
       user_id
+    }
   }
-}
 `;
 
 export const GET_PATIENT_RESOURCE_DATA = gql`

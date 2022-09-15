@@ -1,24 +1,10 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import LoadingButton from "@mui/lab/LoadingButton";
-// import _flatten from "lodash/flatten";
 
-// import { FieldsLayout } from './fields';
-// import FieldsLayout from './fields/FieldsLayout'
-const FieldsLayout = dynamic(import("../CrudDialog/fields/FieldsLayout"), { ssr: false });
-
-
-
+const FieldsLayout = dynamic(import("../CrudDialog/fields/FieldsLayout"), {
+  ssr: false,
+});
 
 interface CrudFormProps {
   [x: string]: any;
@@ -81,20 +67,19 @@ const CrudForm = ({
   };
   return (
     <div>
-    
-    <form onSubmit={onSubmit} data-testid="feedForm">
-            <Box>
-              <FieldsLayout
-                fields={fields}
-                values={values}
-                fieldValues={fieldValues}
-                // fieldErrors={this.state.fieldErrors}
-                // validate={this.validate.bind(this)}
-                onChange={handleFieldChange}
-                mode={mode}
-              />
-            </Box>
-        </form>
+      <form onSubmit={onSubmit} data-testid="crudForm">
+        <Box>
+          <FieldsLayout
+            fields={fields}
+            values={values}
+            fieldValues={fieldValues}
+            // fieldErrors={this.state.fieldErrors}
+            // validate={this.validate.bind(this)}
+            onChange={handleFieldChange}
+            mode={mode}
+          />
+        </Box>
+      </form>
     </div>
   );
 };
