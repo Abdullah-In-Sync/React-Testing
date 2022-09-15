@@ -5,6 +5,7 @@ const buttonStyle = {
   marginLeft: 1,
   marginBottom: 1,
   color: "custom.light",
+  textTransform: 'none'
 };
 
 

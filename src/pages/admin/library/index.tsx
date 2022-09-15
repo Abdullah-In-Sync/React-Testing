@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
 
+// GRAPHQL
+import { useQuery } from "@apollo/client";
+import {
+  GET_ADMIN_RESOURCE_DATA, GET_DISORDER_MODEL_LIST, GET_CATEGORY
+} from "../../../graphql/query/resource";
 
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
@@ -11,14 +16,15 @@ import { styled, alpha } from '@mui/material/styles';
 import CreateIcon from "@mui/icons-material/Create";
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from '@mui/icons-material/Search';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { AddButton } from "../../../components/common/Buttons";
 import CardGenerator from "../../../components/common/CardGenerator";
 import InputBase from '@mui/material/InputBase';
 import Grid from '@mui/material/Grid';
-import AsyncAutoComplete from "../../../components/common/AsyncAutoComplete/index";
 import CrudForm from "../../../components/common/CrudForm";
+
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -35,8 +41,6 @@ const IconButtonWrapper = styled(IconButton)(
   margin-right: 5px;
 `
 );
-
-import SearchIcon from '@mui/icons-material/Search';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -84,60 +88,67 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Library: NextPage = () => {
 
-  // COMPONENT STATE
-  const [dataList] = useState<any>([{
-    id: 1,
-    text: "description 1",
-    title: "title 1"
-  },
-  {
-    id: 2,
-    text: "description 2",
-    title: "title 2"
-  },
-  {
-    id: 3,
-    text: "description 3",
-    title: "title 3"
-  }, {
-    id: 4,
-    text: "description 4",
-    title: "title 4"
-  }, {
-    id: 5,
-    text: "description 5",
-    title: "title 5"
-  }, {
-    id: 6,
-    text: "description 6",
-    title: "title 6"
-  },]);
 
-  // TABLE PROPS
-  const [loader, setLoader] = useState<boolean>(false);
+  // COMPONENT STATE
+  const [modelData, setModelData] = useState<any>([]);
+  const [filterValue, setFilterValue] = useState<any>({});
+  const [searchText, setSearchText] = useState<string>("");
+
+  // GRAPHQL
+  const {
+    loading,
+    data: dataListData,
+  } = useQuery(GET_ADMIN_RESOURCE_DATA, {
+    variables: {
+      userType: "admin",
+      resourceStatus: 1,
+      categoryId: filterValue?.categoryId ?? "",
+      disorderId: filterValue?.disorderId ?? "",
+      mode: filterValue?.mode ?? "",
+      modelId: filterValue?.modelId ?? "",
+      myFav: filterValue?.mode === "favourite" ? 1 : 0,
+      myResource: filterValue?.mode === "resource" ? 1 : 0,
+      resourceType: filterValue?.resourceType ?? "",
+      searchText: searchText ?? ""
+    }
+  });
+
+  const {
+    data: disorderList,
+  } = useQuery(GET_DISORDER_MODEL_LIST);
+
+
+  const {
+    data: categoryList,
+  } = useQuery(GET_CATEGORY, {
+    variables: {
+      modelId: filterValue?.modelId ?? "",
+    }
+
+  });
+
 
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
 
-
   const fields = [
     {
-      key: "text",
+      key: "resource_desc",
       visible: true,
 
     },
     {
-      key: "resource_details",
+      key: "resource_name",
       visible: true,
       render: (_, value) => (
-        <Button variant="contained" sx={{ width: "100%" }}>{value.title}</Button>
+        <Button variant="contained" sx={{ width: "100%", height: "40px" }}>{value?.resource_name?.substring(0, 40)}</Button>
       ),
     },
     {
       key: "actions",
       visible: true,
-      render: (_, value) => (
+      render: () => (
         <>
           <IconButtonWrapper aria-label="create" size="small">
             <CreateIcon />
@@ -159,43 +170,103 @@ const Library: NextPage = () => {
     },
   ];
 
+
   const filterList = [
     [{
-      key: "resources", visible: true,
+      key: "mode",
+      visible: true,
       freeSolo: false,
-      show: true, label: "Select Resources", type: "asynccomplete", options: [{ value: "all", label: "All" }, { value: "my-resources", label: "My Resources" }, { value: "my-favourites", label: "My Favourites" }]
+      defaultValue: { label: "All", value: "" },
+      show: true,
+      label: "Select Resources",
+      type: "asynccomplete",
+      options: [
+        { value: "", label: "All" },
+        { value: "resource", label: "My Resources" },
+        { value: "favourite", label: "My Favourites" }
+      ]
     },
     {
-      key: "disorder", label: "Select Disorder", visible: true,
+      key: "disorderId",
+      label: "Select Disorder",
+      visible: true,
       freeSolo: false,
-      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }]
+      show: true,
+      type: "asynccomplete",
+      defaultValue: { label: "All", value: "" },
+      options: disorderList?.getDisorderModel?.length
+        ? [{ label: "All", value: "" },
+        ...disorderList?.getDisorderModel?.map((x) => ({
+          label: x.disorder_name,
+          value: x._id,
+        })),
+        ]
+        : [{ label: "All", value: "" }],
     },
     {
-      key: "modalities", label: "Select Modalities", visible: true,
+      key: "modelId",
+      label: "Select Modalities",
+      visible: true,
       freeSolo: false,
-      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }]
+      show: true,
+      type: "asynccomplete",
+      defaultValue: { label: "All", value: "" },
+      options: modelData?.length
+        ? [{ label: "All", value: "" },
+        ...modelData?.map((x) => ({
+          label: x.model_name,
+          value: x._id,
+        })),
+        ]
+        : [{ label: "All", value: "" }]
+
     },
     {
-      key: "type", label: "Select Type", visible: true,
+      key: "resourceType",
+      label: "Select Type",
+      visible: true,
       freeSolo: false,
-      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }, { value: "info-sheet", label: "Info Sheet" }, { value: "work-sheet", label: "Work Sheet" }, { value: "audio-file", label: "Audio File" }, { value: "video-file", label: "Video File" }]
+      defaultValue: { label: "All", value: "" },
+      show: true,
+      type: "asynccomplete",
+      options: [
+        { value: "", label: "All" },
+        { value: 1, label: "Info Sheet" },
+        { value: 2, label: "Work Sheet" },
+        { value: 3, label: "Audio File" },
+        { value: 4, label: "Video File" }
+      ]
     },
     {
-      key: "category", label: "Select Category", visible: true,
+      key: "categoryId",
+      label: "Select Category",
+      visible: true,
       freeSolo: false,
-      show: true, type: "asynccomplete", options: [{ value: "all", label: "All" }]
+      show: true,
+      type: "asynccomplete",
+      defaultValue: { label: "All", value: "" },
+      options: categoryList?.getCategoryByModelId?.length
+        ? [{ label: "All", value: "" },
+        ...categoryList?.getCategoryByModelId?.map((x) => ({
+          label: x.category_name,
+          value: x._id,
+        })),
+        ]
+        : [{ label: "All", value: "" }]
     }
     ]
   ]
-  // setFilterValue([{key:"resource"})
-  const handleFilterChange = (val) => {
-    console.log("Filter", val)
+
+  const handleFilterChange = (value) => {
+    setFilterValue(value)
+    const modelList = disorderList?.getDisorderModel?.find(val => val._id === value?.disorderId);
+    setModelData(modelList?.disordermodel_data)
   }
 
   return (
     <>
       <Layout>
-        <Loader visible={loader} />
+
         <ContentHeader title="Library" />
         <Grid container spacing={2}>
           <Grid item xs={3}>
@@ -206,6 +277,7 @@ const Library: NextPage = () => {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
+                onChange={(e) => setSearchText(e.target.value)}
               />
             </Search>
           </Grid>
@@ -226,19 +298,15 @@ const Library: NextPage = () => {
         </Grid>
 
         <CrudForm
-          title="Create Questionnaire"
-          okText="Save"
           fields={filterList}
-          description="Please fill in the details below."
           onFieldChange={(value) => {
             handleFilterChange(value)
           }}
         />
-        {/* <FilterBar filterList={filterList} filterChange={filterChangeHandle} loader={false} /> */}
+
         <Box>
-
-          <CardGenerator data={dataList} fields={fields} />
-
+          <Loader visible={loading} />
+          <CardGenerator data={dataListData?.getAdminResourceList} fields={fields} />
         </Box>
       </Layout>
     </>
