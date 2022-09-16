@@ -4,6 +4,7 @@ import {
   waitForElementToBeRemoved,
   fireEvent,
 } from "@testing-library/react";
+import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/patient/feedback";
 import {
@@ -36,7 +37,7 @@ const getPatientTherapy = (
     patient_id: _patient_id,
     patientsTherapy: [
       {
-        _id: Guid.create().toString(),
+        _id: "test-1",
         patient_id: _patient_id,
         therapy_detail: {
           therapy_name: "localhost",
@@ -85,10 +86,11 @@ const getPatientFeedbackList = (
       created_date: "2022-07-09T15:39:07.173Z",
       feedback_ans: {
         _id: "29e9e456-20cb-4d0d-81fb-1e718342f74c",
-        answer: "ans",
+        answer: "p",
         created_date: "2022-07-09T15:53:28.900Z",
         patient_id: _pt.patient_id,
         question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+        pttherapy_id: _pt._id,
         status: "active",
         therapist_id: "686802e5123a482681a680a673ef7f53",
         updated_date: "2022-07-09T15:53:28.900Z",
@@ -112,6 +114,7 @@ const getPatientFeedbackList = (
         created_date: "2022-07-09T15:53:28.900Z",
         patient_id: _pt.patient_id,
         question_id: "9b04def7-c012-44ca-98f2-6060d90b9a26",
+        pttherapy_id: _pt._id,
         status: "active",
         therapist_id: "686802e5123a482681a680a673ef7f53",
         updated_date: "2022-07-09T15:53:28.900Z",
@@ -167,7 +170,9 @@ const sut = async (patient_id: string) => {
   sessionStorage.setItem("patient_id", patient_id);
   render(
     <MockedProvider mocks={mocks}>
-      <Feedback />
+      <SnackbarProvider>
+        <Feedback />
+      </SnackbarProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>
@@ -200,7 +205,7 @@ const buildMocks = (): {
           created_date: "2021-12-20 16:20:55",
           updated_date: "2021-12-20 16:20:55",
           patient_data: {
-            therapist_id: "therapist_id",
+            therapist_id: "686802e5123a482681a680a673ef7f53",
           },
         },
       },
@@ -239,6 +244,19 @@ const buildMocks = (): {
     _mocks.push({
       request: {
         query: POST_PATIENT_FEEDBACK,
+        variables: {
+          feedQuesAnsData: [
+            {
+              therapist_id: "686802e5123a482681a680a673ef7f53",
+              answer: "s",
+              session_no: 1,
+              question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+            },
+          ],
+          sessionNo: 1,
+          feedbackType: "session",
+          pttherapyId: "test-1",
+        },
       },
       result: {
         data: {
@@ -249,10 +267,11 @@ const buildMocks = (): {
             created_date: "2022-07-09T15:39:07.173Z",
             feedback_ans: {
               _id: "29e9e456-20cb-4d0d-81fb-1e718342f74c",
-              answer: "ans1",
+              answer: "p",
               created_date: "2022-07-09T15:53:28.900Z",
               patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
               question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+              pttherapy_id: "test-1",
               status: "active",
               therapist_id: "686802e5123a482681a680a673ef7f53",
               updated_date: "2022-07-09T15:53:28.900Z",
@@ -280,6 +299,7 @@ const buildMocks = (): {
           variables: {
             sessionNo: 1,
             feedbackType: "session",
+            pttherapyId: "test-1",
           },
         },
         result: {
@@ -465,11 +485,9 @@ describe("Patient feedback list", () => {
       const p = _k + 1;
       const panelName = "panel" + p;
       fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(screen.getByLabelText("p"));
+      fireEvent.click(screen.getByLabelText("s"));
       fireEvent.submit(screen.queryByTestId("feedbackForm"));
-      expect(
-        screen.getByText("Feedback submitted successfully")
-      ).toBeInTheDocument();
+      expect(screen.queryByTestId("submitFeedback")).toBeDisabled();
     });
   });
 });

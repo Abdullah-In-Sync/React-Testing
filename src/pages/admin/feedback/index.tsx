@@ -50,6 +50,7 @@ const Feedback: NextPage = () => {
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [deletConfirmationModal, setDeletConfirmationModal] =
     useState<boolean>(false);
+  const [isMutating, setIsMutation] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<any>([]);
   const [sessionList, setSessionList] = useState<any>([]);
   const [dataList, setDataList] = useState<any>([]);
@@ -57,7 +58,7 @@ const Feedback: NextPage = () => {
   const [selectedUserData, setSelectedUserData] = useState<any>([]);
 
   // TABLE PROPS
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(25);
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
   const [nextPage] = useState<string>(null);
@@ -88,8 +89,8 @@ const Feedback: NextPage = () => {
   const [adminId, setadminId] = useState<string>("");
 
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (adminId) => {
-      setadminId(adminId);
+    (adminData) => {
+      setadminId(adminData._id);
     }
   );
 
@@ -164,7 +165,7 @@ const Feedback: NextPage = () => {
       key: "created_date",
       columnName: "Created on",
       visible: true,
-      render: (val) => moment(val).format("DD MMM YYYY hh:mm:ss A") ?? "---",
+      render: (val) => moment(val).format("DD MMM YYYY") ?? "---",
     },
     {
       key: "actions",
@@ -276,6 +277,7 @@ const Feedback: NextPage = () => {
     /* istanbul ignore next */
     if (valid) {
       setLoader(true);
+      setIsMutation(true);
       /* istanbul ignore next */
       const data = formValues.map((x) => ({
         ...x,
@@ -290,6 +292,7 @@ const Feedback: NextPage = () => {
           refetch();
           setLoader(false);
           setAddModal(false);
+          setIsMutation(false);
           enqueueSnackbar("Feedback added successfully", {
             variant: "success",
           });
@@ -305,6 +308,7 @@ const Feedback: NextPage = () => {
   /* istanbul ignore next */
   const handleEdit = async (val) => {
     /* istanbul ignore else */
+    setIsMutation(true);
     const data = formValues.map((x) => ({
       question: x.question,
       answer_type: x.answer_type,
@@ -321,6 +325,7 @@ const Feedback: NextPage = () => {
         onCompleted: () => {
           refetch();
           setEditModal(false);
+          setIsMutation(false);
           enqueueSnackbar("Updated data successfully!", { variant: "success" });
         },
       });
@@ -340,6 +345,7 @@ const Feedback: NextPage = () => {
   /* istanbul ignore next */
   const handleDelete = async (id) => {
     /* istanbul ignore else */
+    setIsMutation(true);
     deleteFeedback({
       variables: {
         feedbackId: id,
@@ -347,8 +353,9 @@ const Feedback: NextPage = () => {
       },
       onCompleted: () => {
         setDeletConfirmationModal(false);
+        setIsMutation(false);
         refetch();
-        enqueueSnackbar("Delete data successfully!", { variant: "error" });
+        enqueueSnackbar("Data deleted successfully!", { variant: "error" });
       },
     });
   };
@@ -401,12 +408,13 @@ const Feedback: NextPage = () => {
             }}
             dataCount={dataListData?.getAdminFeedbackList?.totalcount}
             selectedRecords={[]}
-            rowOnePage={10}
+            rowOnePage={rowsPerPage}
           />
           <CrudDialog
             title="Create Questionnaire"
             okText="Save"
             fields={dialogFields}
+            submitButtonDisabled={isMutating}
             description="Please fill in the details below."
             onsubmit={(values) => {
               handleAdd(values);
@@ -429,6 +437,7 @@ const Feedback: NextPage = () => {
             okText="Update"
             fields={dialogFields}
             values={selectedUserData[0]}
+            submitButtonDisabled={isMutating}
             // onFieldChange={(_, images) => {
             //     debugger
             //     //   handlUploadImages(images);
@@ -462,6 +471,7 @@ const Feedback: NextPage = () => {
             title="Delete Question"
             description="Are you sure you want to delete this question? You will not be able to restore this again."
             okText="Delete"
+            submitButtonDisabled={isMutating}
             onsubmit={() => handleDelete(selectedId)}
             open={deletConfirmationModal}
             onClose={() => setDeletConfirmationModal(false)}

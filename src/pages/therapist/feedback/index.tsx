@@ -45,8 +45,8 @@ const Feedback: NextPage = () => {
   const [therapistId, settherapistId] = useState<string>("");
 
   const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
-    (therapistId) => {
-      settherapistId(therapistId);
+    (therapistData) => {
+      settherapistId(therapistData.therapist_data._id);
     }
   );
 
@@ -132,6 +132,7 @@ const Feedback: NextPage = () => {
           patientId: patientData.patient_id,
           sessionNo: sessionNo,
           feedbackType: feedbackType,
+          pttherapyId: therapy,
         },
       });
     }
@@ -192,7 +193,7 @@ const Feedback: NextPage = () => {
             <Grid item xs={2} sx={{ textAlign: "center" }}>
               <Image
                 alt="Therapist"
-                src="/v2/images/user.png"
+                src="/images/user.png"
                 width="100"
                 height="100"
                 style={{ borderRadius: "50%" }}
