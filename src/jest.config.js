@@ -6,7 +6,12 @@ module.exports = {
     "^.+\\.(ts|tsx)?$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
   },
-  transformIgnorePatterns: ["<rootDir>/node_modules/"],
+  transformIgnorePatterns: [
+    "<rootDir>/node_modules/",
+    "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.js$",
+    "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.ts$",
+    "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.tsx$",
+  ],
   globals: {
     "ts-jest": {
       babelConfig: true,
