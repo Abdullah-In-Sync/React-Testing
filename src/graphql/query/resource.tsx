@@ -70,9 +70,13 @@ export const GET_PATIENT_RESOURCE_DATA = gql`
       _id
       ptsharres_session
       created_date
+      patient_share_filename
+      download_patient_filename_url
       resource_data {
         resource_name
         resource_type
+        resource_url
+        download_resource_url
       }
     }
   }
@@ -99,6 +103,8 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
         resource_instruction
         resource_references
         resource_filename
+        resource_url
+        download_resource_url
       }
       disorder_detail {
         _id

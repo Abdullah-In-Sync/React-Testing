@@ -53,12 +53,12 @@ const Feedback: NextPage = () => {
   const [therapistId, settherapistId] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
   let btnvalue = 0;
+  let ansvalue = 0;
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
       settherapistId(tokenData.patient_data.therapist_id);
     }
   );
-
   const [
     getPatientTherapyData,
     { loading: therapyLoading, data: patientTherapryData },
@@ -92,7 +92,6 @@ const Feedback: NextPage = () => {
     getPatientFeedbackListData,
     { loading: feedbackLoading, data: patientFeedbackData },
   ] = useLazyQuery(GET_PATIENTFEEDBACKLIST_DATA);
-
   const setDefaultStateExcludingLoader = () => {
     setFeedbackType(null);
     setSessionNo(null);
@@ -123,6 +122,7 @@ const Feedback: NextPage = () => {
       variables: {
         sessionNo: sessionNo,
         feedbackType: feedbackType,
+        pttherapyId: therapy,
       },
     });
   }, [sessionNo, feedbackType]);
@@ -208,10 +208,14 @@ const Feedback: NextPage = () => {
           feedQuesAnsData: JSON.stringify(formValues),
           sessionNo: sessionNo,
           feedbackType: feedbackType,
+          pttherapyId: therapy,
         },
-      });
-      enqueueSnackbar("Feedback submitted successfully", {
-        variant: "success",
+        onCompleted: () => {
+          enqueueSnackbar("Feedback submitted successfully", {
+            variant: "success",
+          });
+          window.location.reload();
+        },
       });
     }
   };
@@ -310,7 +314,10 @@ const Feedback: NextPage = () => {
                     sx={{ marginTop: "4px", borderRadius: "4px" }}
                     expanded={sessionPanelExpanded === panelName}
                     onChange={handleSessionPanelChange(panelName)}
-                    onClick={() => setSessionNo(p)}
+                    onClick={() => {
+                      setSessionNo(p);
+                      btnvalue = 0;
+                    }}
                     key={v._id}
                     data-testid="SessionPanelItem"
                   >
@@ -375,6 +382,19 @@ const Feedback: NextPage = () => {
                       {patientFeedbackData?.getPatientFeedbackList != null &&
                         patientFeedbackData?.getPatientFeedbackList.map(
                           (fv, fk) => {
+                            if (fk == 0) {
+                              btnvalue = 0;
+                            }
+
+                            if (
+                              fv.feedback_ans &&
+                              fv.feedback_ans != null &&
+                              fv.feedback_ans.answer
+                            ) {
+                              btnvalue = btnvalue + 1;
+                            }
+
+                            ansvalue = fk + 1;
                             return (
                               <Typography
                                 key={fk + ""}
@@ -404,7 +424,7 @@ const Feedback: NextPage = () => {
                                       fontWeight: "700 !important",
                                     }}
                                   >
-                                    {fv.question}
+                                    {fk + 1}. {fv.question}
                                   </Typography>
                                 )}
                                 <Typography>
@@ -445,13 +465,6 @@ const Feedback: NextPage = () => {
                                           />
                                         );
                                       })}
-                                    {
-                                      (btnvalue =
-                                        fv.feedback_ans &&
-                                        fv.feedback_ans.answer
-                                          ? 1
-                                          : 0)
-                                    }
                                     {fv.answer_type == "text" && (
                                       <TextareaAutosize
                                         aria-label="empty textarea"
@@ -493,7 +506,7 @@ const Feedback: NextPage = () => {
                             <Button
                               type="submit"
                               disabled={
-                                btndiabled == true || btnvalue == 1
+                                btndiabled == true || btnvalue == ansvalue
                                   ? true
                                   : false
                               }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import moment from "moment";
+import Link from "next/link";
 
 // MUI COMPONENTS
 import { Box, IconButton } from "@mui/material";
@@ -83,20 +84,32 @@ const WorkSheet = () => {
           <IconButton size="small">
             <CloudUploadIcon />
           </IconButton>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            href={
+              value.resource_data[0]?.patient_share_filename != null
+                ? value.resource_data[0]?.patient_share_filename
+                : "#"
+            }
+            sx={{
+              color: "primary.main",
+            }}
+          >
             <AttachFileIcon />
           </IconButton>
-          <IconButton
-            href={"/patient/resource/" + value._id}
-            size="small"
-            data-testid={"viewIcon_" + value._id}
-          >
-            <VisibilityIcon />
-          </IconButton>
+          <Link href={"/patient/resource/" + value._id} passHref>
+            <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+              <VisibilityIcon />
+            </IconButton>
+          </Link>
           <IconButton
             size="small"
-            data-testid={"viewIcon_" + value._id}
-            // onClick={() => handleView(value._id)}
+            data-testid="downloadUrl"
+            href={
+              value.resource_data[0]?.download_resource_url != null
+                ? value.resource_data[0]?.download_resource_url
+                : "#"
+            }
           >
             <CloudDownloadIcon />
           </IconButton>
