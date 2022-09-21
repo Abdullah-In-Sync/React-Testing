@@ -12,7 +12,8 @@ type propTypes = {
   inputProps?: any;
   extraProps?: any;
   placement?: "start" | "end" | "top" | "bottom";
-  checked: boolean;
+  checked: number | boolean;
+  size?: "small" | "medium";
 };
 
 export default function CheckBoxLabelComponent(props: propTypes) {
@@ -28,6 +29,7 @@ export default function CheckBoxLabelComponent(props: propTypes) {
           required={props.required}
           {...props.extraProps}
           checked={props.checked}
+          size={props.size ?? "medium"}
         />
       }
       label={props.label}

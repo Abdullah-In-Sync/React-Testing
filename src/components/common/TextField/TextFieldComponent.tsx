@@ -18,6 +18,7 @@ type propTypes = {
   inputProps?: any;
   extraProps?: any;
   padding?: string;
+  size?: "small" | "medium";
 };
 
 export default function TextFieldComponent(props: propTypes) {
@@ -36,7 +37,8 @@ export default function TextFieldComponent(props: propTypes) {
       inputProps={props.inputProps}
       {...props.extraProps}
       variant={props.variant}
-      sx={{ background: "#F3F3F3" }}
+      size={props.size ?? "medium"}
+      // sx={{ background: "#dadada52", borderColor: "#6ba08e", color: "#3f4040b0" }}
     />
   );
 }

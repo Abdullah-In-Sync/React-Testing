@@ -15,6 +15,7 @@ type propTypes = {
   extraProps?: any;
   options: Option[];
   mappingKeys: [string, string];
+  size: "small" | "medium";
 };
 
 type Option = {
@@ -31,7 +32,7 @@ const mapping = (options: Option[], keys = []) => {
 
 export default function SingleSelectComponent(props: propTypes) {
   return (
-    <FormControl fullWidth={props.fullWidth} required={props.required}>
+    <FormControl fullWidth={props.fullWidth} required={props.required} size={props.size ?? "medium"}>
       <InputLabel id={props.labelId}>{props.label}</InputLabel>
       <Select
         labelId={props.labelId}
@@ -41,8 +42,8 @@ export default function SingleSelectComponent(props: propTypes) {
         label={props.label}
         onChange={props.onChange}
         inputProps={props.inputProps}
+        className={props.className}
         {...props.extraProps}
-        sx={{ background: "#F3F3F3" }}
       >
         <MenuItem value="">Select</MenuItem>
         {mapping(props.options, props.mappingKeys).map(({ id, value }) => {

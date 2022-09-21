@@ -23,3 +23,6 @@
 .bg-themeblue {
     background-color: #6EC9DB !important;
 }
+.form-control-bg {
+    background: #dadada52;
+}
