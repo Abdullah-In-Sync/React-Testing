@@ -21,7 +21,7 @@ const CardContentWrapper = styled(CardContent)(
 
 export default function CardGenerator({ data, fields }) {
   return (
-    <Grid container spacing={2}  data-testid="cardWrapperContainer">
+    <Grid container spacing={2} data-testid="cardWrapperContainer">
       {data?.map((record, index) => {
         return (
           <Grid item xs={4} key={index} data-testid="card">
