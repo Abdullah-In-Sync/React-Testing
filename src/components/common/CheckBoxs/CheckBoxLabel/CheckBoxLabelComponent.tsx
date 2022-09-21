@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Checkbox, FormControlLabel } from "@mui/material";
 
 type propTypes = {

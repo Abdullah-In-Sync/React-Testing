@@ -1,12 +1,8 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import {
   fireEvent,
-  getByTestId,
-  prettyDOM,
   render,
   screen,
-  waitFor,
-  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import {

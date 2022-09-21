@@ -32,7 +32,11 @@ const mapping = (options: Option[], keys = []) => {
 
 export default function SingleSelectComponent(props: propTypes) {
   return (
-    <FormControl fullWidth={props.fullWidth} required={props.required} size={props.size ?? "medium"}>
+    <FormControl
+      fullWidth={props.fullWidth}
+      required={props.required}
+      size={props.size ?? "medium"}
+    >
       <InputLabel id={props.labelId}>{props.label}</InputLabel>
       <Select
         labelId={props.labelId}

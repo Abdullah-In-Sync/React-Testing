@@ -183,7 +183,7 @@ export default function addForm() {
     } else {
       setFormFields((oldValues) => ({
         ...oldValues,
-        [name]: Math.abs(oldValues[name] - 1)
+        [name]: Math.abs(oldValues[name] - 1),
       }));
     }
   };
@@ -203,9 +203,18 @@ export default function addForm() {
         preSignedData?.getUploadResourceUrl &&
         preSignedData?.getUploadResourceUrl.resource_upload
       ) {
-        handleFileChange(fileObj, fileName, preSignedData.getUploadResourceUrl.resource_upload);
+        handleFileChange(
+          fileObj,
+          fileName,
+          preSignedData.getUploadResourceUrl.resource_upload
+        );
       }
-    } catch (error) {}
+    } catch (error) {
+      enqueueSnackbar("There is an error with file upload!", {
+        variant: "error",
+      });
+      setLoader(false);
+    }
   };
 
   const handleFileChange = (fileObj: File, fileName: string, url: string) => {
@@ -273,11 +282,7 @@ export default function addForm() {
               // resource_session_no: formFields.resource_session_no,
             },
             onCompleted: (data) => {
-              if (
-                data &&
-                data.createResource &&
-                data.createResource._id
-              ) {
+              if (data && data.createResource && data.createResource._id) {
                 enqueueSnackbar("Resource added successfully", {
                   variant: "success",
                 });
@@ -322,8 +327,8 @@ export default function addForm() {
                 fullWidth={true}
                 inputProps={{ "data-testid": "resource_name" }}
                 variant="outlined"
-                className="form-control-bg"  
-                size="small"              
+                className="form-control-bg"
+                size="small"
               />
             </Grid>
             <Grid item xs={4}>
@@ -486,54 +491,62 @@ export default function addForm() {
 
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12}>
-            <Box display="flex">
-              <FormControl sx={{ m: 1, display: "flex", flexDirection: "row", alignItems: "center" }} variant="standard">
-                <FormLabel required={true} sx={ {mr: 1} }>
-                  Select the Availability of Resource:
-                </FormLabel>
-                <FormGroup aria-label="position" row>
-                  <CheckBoxLabelComponent
-                    value="1"
-                    name="resource_avail_admin"
-                    onChange={setCheckBox}
-                    label="Admin"
-                    placement="end"
-                    inputProps={{ "data-testid": "resource_avail_admin" }}
-                    checked={formFields.resource_avail_admin}
-                    size="small"
-                  />
-                  <CheckBoxLabelComponent
-                    value="1"
-                    name="resource_avail_therapist"
-                    onChange={setCheckBox}
-                    label="All Therapists"
-                    placement="end"
-                    inputProps={{ "data-testid": "resource_avail_therapist" }}
-                    checked={formFields.resource_avail_therapist}
-                    size="small"
-                  />
-                  <CheckBoxLabelComponent
-                    value="1"
-                    name="resource_avail_onlyme"
-                    onChange={setCheckBox}
-                    label="Only Me"
-                    placement="end"
-                    inputProps={{ "data-testid": "resource_avail_onlyme" }}
-                    checked={formFields.resource_avail_onlyme}
-                    size="small"
-                  />
-                  <CheckBoxLabelComponent
-                    value="1"
-                    name="resource_avail_all"
-                    onChange={setCheckBox}
-                    label="Everyone"
-                    placement="end"
-                    inputProps={{ "data-testid": "resource_avail_all" }}
-                    checked={formFields.resource_avail_all}
-                    size="small"
-                  />
-                </FormGroup>
-              </FormControl>
+              <Box display="flex">
+                <FormControl
+                  sx={{
+                    m: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                  variant="standard"
+                >
+                  <FormLabel required={true} sx={{ mr: 1 }}>
+                    Select the Availability of Resource:
+                  </FormLabel>
+                  <FormGroup aria-label="position" row>
+                    <CheckBoxLabelComponent
+                      value="1"
+                      name="resource_avail_admin"
+                      onChange={setCheckBox}
+                      label="Admin"
+                      placement="end"
+                      inputProps={{ "data-testid": "resource_avail_admin" }}
+                      checked={formFields.resource_avail_admin}
+                      size="small"
+                    />
+                    <CheckBoxLabelComponent
+                      value="1"
+                      name="resource_avail_therapist"
+                      onChange={setCheckBox}
+                      label="All Therapists"
+                      placement="end"
+                      inputProps={{ "data-testid": "resource_avail_therapist" }}
+                      checked={formFields.resource_avail_therapist}
+                      size="small"
+                    />
+                    <CheckBoxLabelComponent
+                      value="1"
+                      name="resource_avail_onlyme"
+                      onChange={setCheckBox}
+                      label="Only Me"
+                      placement="end"
+                      inputProps={{ "data-testid": "resource_avail_onlyme" }}
+                      checked={formFields.resource_avail_onlyme}
+                      size="small"
+                    />
+                    <CheckBoxLabelComponent
+                      value="1"
+                      name="resource_avail_all"
+                      onChange={setCheckBox}
+                      label="Everyone"
+                      placement="end"
+                      inputProps={{ "data-testid": "resource_avail_all" }}
+                      checked={formFields.resource_avail_all}
+                      size="small"
+                    />
+                  </FormGroup>
+                </FormControl>
               </Box>
             </Grid>
           </Grid>

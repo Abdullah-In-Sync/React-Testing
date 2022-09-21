@@ -45,7 +45,11 @@ export default function UploadButtonComponent(props: propsType) {
 
   return (
     <>
-      <Button variant={props.variant} component="label" startIcon={<SendIcon />}>
+      <Button
+        variant={props.variant}
+        component="label"
+        startIcon={<SendIcon />}
+      >
         Upload
         <input
           hidden
@@ -57,7 +61,9 @@ export default function UploadButtonComponent(props: propsType) {
           type="file"
         />
       </Button>
-      <FormLabel component="legend" sx={{ pl: 2 }} >{ props.fileName }</FormLabel>
+      <FormLabel component="legend" sx={{ pl: 2 }}>
+        {props.fileName}
+      </FormLabel>
     </>
   );
 }
