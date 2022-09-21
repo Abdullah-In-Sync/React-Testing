@@ -39,7 +39,6 @@ export const uploadToS3 = async (
   const response = await axios.put(preSignedURL, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  console.log(response);
   if (response.status == 200) {
     return true;
   }
