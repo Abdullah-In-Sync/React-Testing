@@ -23,8 +23,20 @@ export const GET_DISORDER_MODEL_LIST = gql`
   }
 `;
 
+export const GET_UNAPPROVE_RESOURCE = gql`
+  query GetAdminUnApproveResourceList {
+    getAdminUnApproveResourceList {
+      _id
+      resource_name
+      resource_desc
+      user_id
+      user_type
+    }
+  }
+`;
+
 export const GET_ADMIN_RESOURCE_DATA = gql`
-  query getAdminResourceList(
+  query GetAdminResourceList(
     $userType: String!
     $resourceStatus: Int!
     $modelId: String
@@ -36,7 +48,7 @@ export const GET_ADMIN_RESOURCE_DATA = gql`
     $myFav: Int
     $searchText: String
   ) {
-    getAdminResourceList(
+    getResourceList(
       userType: $userType
       resourceStatus: $resourceStatus
       modelId: $modelId

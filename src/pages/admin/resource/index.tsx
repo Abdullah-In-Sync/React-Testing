@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import {
   GET_ADMIN_RESOURCE_DATA,
   GET_DISORDER_MODEL_LIST,
   GET_CATEGORY,
+  GET_UNAPPROVE_RESOURCE
 } from "../../../graphql/query/resource";
 
 // MUI COMPONENTS
@@ -86,20 +87,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Library: NextPage = () => {
+// TYPE DECLAIRATION 
+
+interface ResourceList {
+  id: number;
+  model: string;
+  year: number;
+  stock: number;
+}
+
+interface ResourceListData {
+  getResourceList: ResourceList[];
+}
+
+interface ResourceListVars {
+  userType: string,
+  resourceStatus: number,
+  categoryId: string,
+  disorderId: string,
+  mode: string,
+  modelId: string,
+  myFav: number,
+  myResource: number,
+  resourceType: string,
+  searchText: string,
+}
+
+const Resource: NextPage = () => {
   // COMPONENT STATE
   const [modelData, setModelData] = useState<any>([]);
   const [filterValue, setFilterValue] = useState<any>({});
   const [searchText, setSearchText] = useState<string>("");
+  const [dataList, setDataList] = useState<any>([]);
 
   // GRAPHQL
-  const { loading, data: dataListData } = useQuery(GET_ADMIN_RESOURCE_DATA, {
+  const { loading, data: dataListData } = useQuery<ResourceListData, ResourceListVars>(GET_ADMIN_RESOURCE_DATA, {
     variables: {
       userType: "admin",
       resourceStatus: 1,
       categoryId: filterValue?.categoryId ?? "",
       disorderId: filterValue?.disorderId ?? "",
-      mode: filterValue?.mode ?? "",
+      mode: "",
       modelId: filterValue?.modelId ?? "",
       myFav: filterValue?.mode === "favourite" ? 1 : 0,
       myResource: filterValue?.mode === "resource" ? 1 : 0,
@@ -109,12 +137,32 @@ const Library: NextPage = () => {
   });
 
   const { data: disorderList } = useQuery(GET_DISORDER_MODEL_LIST);
+  const [getUnApproveResource, { loading: unapproveLoading, data: unApproveResourceList }] = useLazyQuery(GET_UNAPPROVE_RESOURCE, {
+    fetchPolicy: 'no-cache',
+  });
 
   const { data: categoryList } = useQuery(GET_CATEGORY, {
     variables: {
       modelId: filterValue?.modelId ?? "",
     },
   });
+
+  useEffect(() => {
+    // do some checking here to ensure data exist
+    /* istanbul ignore next */
+    if (dataListData) {
+      /* istanbul ignore next */
+      setDataList(dataListData?.getResourceList);
+    }
+  }, [dataListData]);
+
+
+  useEffect(() => {
+    if (unApproveResourceList) {
+      /* istanbul ignore next */
+      setDataList(unApproveResourceList?.getAdminUnApproveResourceList);
+    }
+  }, [unApproveResourceList]);
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -172,6 +220,7 @@ const Library: NextPage = () => {
           { value: "", label: "All" },
           { value: "resource", label: "My Resources" },
           { value: "favourite", label: "My Favourites" },
+          { value: "approve_resource", label: "Approve Resources" }
         ],
       },
       {
@@ -181,15 +230,16 @@ const Library: NextPage = () => {
         freeSolo: false,
         show: true,
         type: "asynccomplete",
+        disabled: filterValue?.mode === "approve_resource" ? true : false,
         defaultValue: { label: "All", value: "" },
         options: disorderList?.getDisorderModel?.length
           ? [
-              { label: "All", value: "" },
-              ...disorderList.getDisorderModel.map((x) => ({
-                label: x.disorder_name,
-                value: x._id,
-              })),
-            ]
+            { label: "All", value: "" },
+            ...disorderList.getDisorderModel.map((x) => ({
+              label: x.disorder_name,
+              value: x._id,
+            })),
+          ]
           : [{ label: "All", value: "" }],
       },
       {
@@ -199,15 +249,16 @@ const Library: NextPage = () => {
         freeSolo: false,
         show: true,
         type: "asynccomplete",
+        disabled: filterValue?.mode === "approve_resource" ? true : false,
         defaultValue: { label: "All", value: "" },
         options: modelData?.length
           ? [
-              { label: "All", value: "" },
-              ...modelData.map((x) => ({
-                label: x.model_name,
-                value: x._id,
-              })),
-            ]
+            { label: "All", value: "" },
+            ...modelData.map((x) => ({
+              label: x.model_name,
+              value: x._id,
+            })),
+          ]
           : [{ label: "All", value: "" }],
       },
       {
@@ -218,6 +269,7 @@ const Library: NextPage = () => {
         defaultValue: { label: "All", value: "" },
         show: true,
         type: "asynccomplete",
+        disabled: filterValue?.mode === "approve_resource" ? true : false,
         options: [
           { value: "", label: "All" },
           { value: 1, label: "Info Sheet" },
@@ -233,15 +285,16 @@ const Library: NextPage = () => {
         freeSolo: false,
         show: true,
         type: "asynccomplete",
+        disabled: filterValue?.mode === "approve_resource" ? true : false,
         defaultValue: { label: "All", value: "" },
         options: categoryList?.getCategoryByModelId?.length
           ? [
-              { label: "All", value: "" },
-              ...categoryList.getCategoryByModelId.map((x) => ({
-                label: x.category_name,
-                value: x._id,
-              })),
-            ]
+            { label: "All", value: "" },
+            ...categoryList.getCategoryByModelId.map((x) => ({
+              label: x.category_name,
+              value: x._id,
+            })),
+          ]
           : [{ label: "All", value: "" }],
       },
     ],
@@ -249,16 +302,22 @@ const Library: NextPage = () => {
 
   const handleFilterChange = (value) => {
     setFilterValue(value);
+
     const modelList = disorderList?.getDisorderModel?.find(
       (val) => val._id === value?.disorderId
     );
     setModelData(modelList?.disordermodel_data);
+
+    if (value?.mode === "approve_resource") {
+      getUnApproveResource()
+    }
+
   };
 
   return (
     <>
       <Layout>
-        <ContentHeader title="Library" />
+        <ContentHeader title="Resource" />
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Search>
@@ -293,12 +352,13 @@ const Library: NextPage = () => {
           onFieldChange={(value) => {
             handleFilterChange(value);
           }}
+          values={filterValue}
         />
 
         <Box>
-          <Loader visible={loading} />
+          <Loader visible={loading || unapproveLoading} />
           <CardGenerator
-            data={dataListData?.getAdminResourceList}
+            data={dataList}
             fields={fields}
           />
         </Box>
@@ -307,4 +367,4 @@ const Library: NextPage = () => {
   );
 };
 
-export default Library;
+export default Resource;
