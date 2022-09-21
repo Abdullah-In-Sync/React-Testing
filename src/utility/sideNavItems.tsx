@@ -109,8 +109,8 @@ export const superadmin_routes: RoutesType[] = [
     },
     {
       key: 8,
-      label: "Library",
-      path: "admin/library",
+      label: "Resource",
+      path: "admin/resource",
       icon: <LibraryBooksIcon />,
     },
     {
