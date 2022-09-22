@@ -46,20 +46,23 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
       {...other}
     >
       {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: "primary.contrastText",
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
+      {
+        /* istanbul ignore next */
+        onClose ? (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: "primary.contrastText",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null
+      }
     </DialogTitle>
   );
 };
@@ -87,7 +90,7 @@ interface CrudDialogProps {
   viewData?: any;
   submitButtonDisabled?: boolean;
 }
-
+/* istanbul ignore next */
 const CrudDialog = ({
   open = false,
   fields = [],
@@ -107,6 +110,7 @@ const CrudDialog = ({
   viewData = false,
   submitButtonDisabled = false,
 }: CrudDialogProps) => {
+  /* istanbul ignore next */
   const [fieldValues, setFieldValues] = useState<any>({});
 
   useEffect(() => {

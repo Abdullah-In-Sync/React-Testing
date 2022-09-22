@@ -316,12 +316,13 @@ const Resource: NextPage = () => {
   const handleFilterChange = (value) => {
     /* istanbul ignore next */
     setFilterValue(value);
-
+    /* istanbul ignore next */
     const modelList = disorderList?.getDisorderModel?.find(
       (val) => val._id === value?.disorderId
     );
+    /* istanbul ignore next */
     setModelData(modelList?.disordermodel_data);
-
+    /* istanbul ignore next */
     if (value?.mode === "approve_resource") {
       getUnApproveResource();
     }
@@ -366,6 +367,7 @@ const Resource: NextPage = () => {
         <CrudForm
           fields={filterList}
           onFieldChange={(value) => {
+            /* istanbul ignore next */
             handleFilterChange(value);
           }}
           values={filterValue}

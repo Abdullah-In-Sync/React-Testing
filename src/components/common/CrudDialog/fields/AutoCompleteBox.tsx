@@ -6,6 +6,7 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
   let _value = props.fieldValues[field?.key] || values[field?.key] || "";
 
   if (typeof _value === "object") {
+    /* istanbul ignore next */
     _value = (_value || {}).id || "";
   }
   const _valueObj = field.options.find((x) => x.value == _value) || {};
@@ -16,6 +17,7 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (!field.show) {
       onChange(field, null);
     }
@@ -43,12 +45,16 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
         disabled={field.disabled}
         getOptionLabel={(option) => option.label}
         onChange={(_, val) => {
+          /* istanbul ignore next */
           setValue(val);
+          /* istanbul ignore next */
           onChange(field, (val || {}).value);
         }}
         onInputChange={(_, val) => {
+          /* istanbul ignore next */
           setInputValue(val);
           if (field.freeSolo === true) {
+            /* istanbul ignore next */
             onChange(field, val);
           }
         }}

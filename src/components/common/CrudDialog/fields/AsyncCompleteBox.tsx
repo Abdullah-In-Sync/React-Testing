@@ -48,6 +48,7 @@ const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
           (option) => option.label
         }
         onChange={(_, val) => {
+          /* istanbul ignore next */
           setValue(val);
           onChange(field, (val || {}).value);
         }}
@@ -55,6 +56,7 @@ const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
           /* istanbul ignore next */
           setInputValue(val);
           if (field.freeSolo === true) {
+            /* istanbul ignore next */
             onChange(field, val);
           }
         }}
