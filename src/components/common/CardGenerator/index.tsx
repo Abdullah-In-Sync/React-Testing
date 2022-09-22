@@ -22,42 +22,48 @@ const CardContentWrapper = styled(CardContent)(
 export default function CardGenerator({ data, fields }) {
   return (
     <Grid container spacing={2} data-testid="cardWrapperContainer">
-      {data?.map((record, index) => {
-        return (
-          <Grid item xs={4} key={index} data-testid="card">
-            <CardWrapper>
-              <CardHeader
-                action={
-                  <>
-                    {fields?.map(
+      {
+        /* istanbul ignore next */
+        data?.map((record, index) => {
+          return (
+            <Grid item xs={4} key={index} data-testid="card">
+              <CardWrapper>
+                <CardHeader
+                  action={
+                    <>
+                      {fields?.map(
+                        (field) =>
+                          field.render &&
+                          typeof field.render === "function" &&
+                          field.key === "actions" &&
+                          field.render(record[field.key], record)
+                      )}
+                    </>
+                  }
+                />
+                <CardContentWrapper>
+                  {
+                    /* istanbul ignore next */
+                    fields?.map(
                       (field) =>
                         field.render &&
                         typeof field.render === "function" &&
-                        field.key === "actions" &&
+                        field.key === "resource_name" &&
                         field.render(record[field.key], record)
-                    )}
-                  </>
-                }
-              />
-              <CardContentWrapper>
-                {fields?.map(
-                  (field) =>
-                    field.render &&
-                    typeof field.render === "function" &&
-                    field.key === "resource_name" &&
-                    field.render(record[field.key], record)
-                )}
+                    )
+                  }
 
-                {fields?.map((field) => (
-                  <Typography mt={1} variant="body2" color="text.secondary">
-                    {field.key === "resource_desc" && record[field.key]}
-                  </Typography>
-                ))}
-              </CardContentWrapper>
-            </CardWrapper>
-          </Grid>
-        );
-      })}
+                  {fields?.map((field) => (
+                    <Typography mt={1} variant="body2" color="text.secondary">
+                      {field.key === "resource_desc" && record[field.key]}
+                    </Typography>
+                  ))}
+                </CardContentWrapper>
+              </CardWrapper>
+            </Grid>
+          );
+        })
+      }
     </Grid>
   );
 }

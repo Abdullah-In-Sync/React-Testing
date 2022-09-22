@@ -62,6 +62,7 @@ const CrudForm = ({
   };
 
   const onSubmit = (e) => {
+    /* istanbul ignore next */
     e.preventDefault();
     onsubmit(fieldValues);
   };

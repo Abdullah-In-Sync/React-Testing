@@ -6,6 +6,7 @@ const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
   let _value = props.fieldValues[field?.key] || values[field?.key] || "";
 
   if (typeof _value === "object") {
+    /* istanbul ignore next */
     _value = (_value || {}).id || "";
   }
   const _valueObj = field.options.find((x) => x.value == _value) || {};
@@ -16,6 +17,7 @@ const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (!field.show) {
       onChange(field, null);
     }
@@ -41,12 +43,16 @@ const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
         defaultValue={_.isEmpty(value) ? field.defaultValue : value}
         inputValue={inputValue}
         disabled={field.disabled}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={
+          /* istanbul ignore next */
+          (option) => option.label
+        }
         onChange={(_, val) => {
           setValue(val);
           onChange(field, (val || {}).value);
         }}
         onInputChange={(_, val) => {
+          /* istanbul ignore next */
           setInputValue(val);
           if (field.freeSolo === true) {
             onChange(field, val);
