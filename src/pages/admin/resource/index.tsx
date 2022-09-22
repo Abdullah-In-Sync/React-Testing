@@ -118,7 +118,7 @@ interface ResourceListVars {
   myResource: number;
   resourceType: string;
   searchText: string;
-  orgId:string;
+  orgId: string;
 }
 
 const Resource: NextPage = () => {
@@ -142,7 +142,7 @@ const Resource: NextPage = () => {
       myResource: filterValue?.mode === "resource" ? 1 : 0,
       resourceType: filterValue?.resourceType ?? "",
       searchText: searchText ?? "",
-      orgId:""
+      orgId: "",
     },
   });
 

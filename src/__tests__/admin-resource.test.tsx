@@ -50,7 +50,7 @@ const buildMocks = (): {
         myResource: 0,
         resourceType: "",
         searchText: "",
-        orgId:""
+        orgId: "",
       },
     },
     result: {
