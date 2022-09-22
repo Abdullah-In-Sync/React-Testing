@@ -111,15 +111,14 @@ interface ResourceListData {
 
 interface ResourceListVars {
   userType: string;
-  resourceStatus: number;
   categoryId: string;
   disorderId: string;
-  mode: string;
   modelId: string;
   myFav: number;
   myResource: number;
   resourceType: string;
   searchText: string;
+  orgId:string;
 }
 
 const Resource: NextPage = () => {
@@ -136,15 +135,14 @@ const Resource: NextPage = () => {
   >(GET_ADMIN_RESOURCE_DATA, {
     variables: {
       userType: "admin",
-      resourceStatus: 1,
       categoryId: filterValue?.categoryId ?? "",
       disorderId: filterValue?.disorderId ?? "",
-      mode: "",
       modelId: filterValue?.modelId ?? "",
       myFav: filterValue?.mode === "favourite" ? 1 : 0,
       myResource: filterValue?.mode === "resource" ? 1 : 0,
       resourceType: filterValue?.resourceType ?? "",
       searchText: searchText ?? "",
+      orgId:""
     },
   });
 

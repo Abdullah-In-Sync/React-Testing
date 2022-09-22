@@ -43,15 +43,14 @@ const buildMocks = (): {
       query: GET_ADMIN_RESOURCE_DATA,
       variables: {
         userType: "admin",
-        resourceStatus: 1,
         categoryId: "",
         disorderId: "",
-        mode: "",
         modelId: "",
         myFav: 0,
         myResource: 0,
         resourceType: "",
         searchText: "",
+        orgId:""
       },
     },
     result: {

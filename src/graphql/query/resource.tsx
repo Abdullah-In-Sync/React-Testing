@@ -38,27 +38,25 @@ export const GET_UNAPPROVE_RESOURCE = gql`
 export const GET_ADMIN_RESOURCE_DATA = gql`
   query GetAdminResourceList(
     $userType: String!
-    $resourceStatus: Int!
     $modelId: String
     $disorderId: String
     $categoryId: String
     $resourceType: String
-    $mode: String
     $myResource: Int
     $myFav: Int
     $searchText: String
+    $orgId: String
   ) {
     getResourceList(
       userType: $userType
-      resourceStatus: $resourceStatus
       modelId: $modelId
       disorderId: $disorderId
       categoryId: $categoryId
       resourceType: $resourceType
-      mode: $mode
       myResource: $myResource
       myFav: $myFav
       searchText: $searchText
+      orgId: $orgId
     ) {
       _id
       fav_res_detail {
