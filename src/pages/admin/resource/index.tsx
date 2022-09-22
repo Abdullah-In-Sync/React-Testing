@@ -218,6 +218,7 @@ const Resource: NextPage = () => {
     },
   ];
 
+  /* istanbul ignore next */
   const filterList = [
     [
       {
@@ -313,6 +314,7 @@ const Resource: NextPage = () => {
   ];
 
   const handleFilterChange = (value) => {
+    /* istanbul ignore next */
     setFilterValue(value);
 
     const modelList = disorderList?.getDisorderModel?.find(
@@ -338,7 +340,10 @@ const Resource: NextPage = () => {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={
+                  /* istanbul ignore next */
+                  (e) => setSearchText(e.target.value)
+                }
               />
             </Search>
           </Grid>
