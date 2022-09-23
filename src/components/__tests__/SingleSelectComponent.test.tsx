@@ -1,6 +1,4 @@
-import { MockedResponse } from "@apollo/react-testing";
 import { render, screen } from "@testing-library/react";
-import { GET_DISORDER_DATA, GET_TOKEN_DATA } from "../../graphql/query/common";
 import SingleSelectComponent from "../common/SelectBox/SingleSelect/SingleSelectComponent";
 
 const resourceTypeOptions = [

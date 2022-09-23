@@ -1,9 +1,5 @@
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import {
-  fireEvent,
-  render,
-  screen,
-} from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
@@ -160,32 +156,6 @@ const sut = async () => {
     </MockedProvider>
   );
 };
-
-const mocksDisorder = [
-  {
-    request: {
-      query: GET_DISORDER_DATA,
-    },
-    result: {
-      data: {
-        disorderData: {
-          getAllDisorder: [
-            {
-              _id: "disorder_id_1",
-              user_type: "admin",
-              disorder_name: "disorder 1",
-            },
-            {
-              _id: "disorder_id_2",
-              user_type: "admin",
-              disorder_name: "disorder 2",
-            },
-          ],
-        },
-      },
-    },
-  },
-];
 
 describe("Admin Resource Add Form", () => {
   it("should render complete add resource form", async () => {

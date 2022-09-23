@@ -7,10 +7,11 @@ import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
 
 export default function index() {
   const [adminId, setadminId] = useState<any>();
-  const [gettokenData, tokenLoading] =
-    buildAdminTokenValidationQuery((adminData) => {
+  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
+    (adminData) => {
       setadminId(adminData._id);
-    });
+    }
+  );
 
   useEffect(() => {
     gettokenData();

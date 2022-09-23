@@ -2,7 +2,6 @@ import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import Router from "next/router";
 import { superadmin_routes } from "../../../utility/navItems";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
@@ -20,6 +19,7 @@ import UploadButtonComponent from "../../common/UploadButton/UploadButtonCompone
 import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
 import SureModal from "./SureModal";
+import { useRouter } from "next/router";
 
 type resourceFormField = {
   resource_name: string;
@@ -70,6 +70,7 @@ export default function addForm() {
     { id: "3", value: "Audio File" },
     { id: "4", value: "Video File" },
   ];
+  const router = useRouter();
 
   const [getDisorderData, { loading: disorderLoading, data: disorderData }] =
     useLazyQuery(GET_DISORDER_DATA);
@@ -272,7 +273,7 @@ export default function addForm() {
                 enqueueSnackbar("Resource added successfully", {
                   variant: "success",
                 });
-                Router.push(superadmin_routes[2].path);
+                router.push(superadmin_routes[2].path);
               }
             },
           });
