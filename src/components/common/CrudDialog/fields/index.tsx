@@ -7,4 +7,5 @@ export { default as SelectField } from "./SelectField";
 // export { default as CheckboxField } from './Checkbox';
 // export { default as File } from './File';
 export { default as FieldsLayout } from "./FieldsLayout";
+export { default as AsyncAutoComplete } from "./AsyncCompleteBox";
 // export { default as FilterSelect } from './MultiSelect';

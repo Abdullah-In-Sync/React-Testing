@@ -15,6 +15,7 @@ import Paper from "@mui/material/Paper";
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields } = props;
   const createSortHandler = (property) => (event) => {
+    /* istanbul ignore next */
     onRequestSort(event, property);
   };
 
@@ -124,8 +125,10 @@ const TableGenerator = ({
   const [rowsPerPage, setRowsPerPage] = useState(rowOnePage);
 
   const handleRequestSort = (event, property) => {
+    /* istanbul ignore next */
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
+    /* istanbul ignore next */
     setOrderBy(property);
     handleSortChange(`${isAsc ? "" : "-"}${property}`);
   };
@@ -138,6 +141,7 @@ const TableGenerator = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
   ) => {
+    /* istanbul ignore next */
     setPage(newPage);
     onPageChange(newPage);
   };
@@ -145,13 +149,16 @@ const TableGenerator = ({
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    /* istanbul ignore next */
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     onRowPerPageChange(event.target.value);
   };
 
   const handleSelectAll = (selected) => {
+    /* istanbul ignore next */
     if (selected) {
+      /* istanbul ignore next */
       onChangeSelected(data);
     } else {
       onChangeSelected([]);

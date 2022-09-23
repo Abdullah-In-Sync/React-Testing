@@ -2,8 +2,10 @@ import Button from "@mui/material/Button";
 
 const buttonStyle = {
   minWidth: 100,
-  backgrounColor: "primary.dark",
+  marginLeft: 1,
+  marginBottom: 1,
   color: "custom.light",
+  textTransform: "none",
 };
 
 export const AddButton = ({
@@ -18,6 +20,7 @@ export const AddButton = ({
       data-testid="createQuestion"
       size={size || "medium"}
       sx={buttonStyle}
+      color="secondary"
       variant="contained"
       {...props}
     >
