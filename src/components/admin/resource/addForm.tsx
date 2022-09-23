@@ -31,7 +31,6 @@ type resourceFormField = {
   resource_instruction: string;
   resource_references: string;
   agenda_id: string;
-  // resource_session_no: string;
   file_name: string;
   resource_avail_admin: number;
   resource_avail_therapist: number;
@@ -53,7 +52,6 @@ const defaultFormValue = {
   resource_avail_onlyme: 0,
   resource_avail_therapist: 0,
   agenda_id: "",
-  // resource_session_no: "",
   file_name: "",
 };
 
@@ -155,17 +153,6 @@ export default function addForm() {
     const value = e.target.value;
 
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
-    // if (fieldName === "agenda_id") {
-    //   debugger;
-    //   const index = agendaData.getAgendaByDisorderAndModel.findIndex(
-    //     (p) => p._id == value
-    //   );
-    //   const session = agendaData.getAgendaByDisorderAndModel[index].session;
-    //   setFormFields((oldValues) => ({
-    //     ...oldValues,
-    //     resource_session_no: session,
-    //   }));
-    // }
   };
 
   const setCheckBox = (
@@ -279,7 +266,6 @@ export default function addForm() {
               resourceReferences: formFields.resource_references,
               resourceStatus: 1,
               userType: "admin",
-              // resource_session_no: formFields.resource_session_no,
             },
             onCompleted: (data) => {
               if (data && data.createResource && data.createResource._id) {

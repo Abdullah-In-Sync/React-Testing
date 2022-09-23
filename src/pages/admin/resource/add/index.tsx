@@ -6,8 +6,8 @@ import Layout from "../../../../components/layout";
 import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
 
 export default function index() {
-  const [adminId, setadminId] = useState<string>("");
-  const [gettokenData, tokenLoading, tokenData] =
+  const [adminId, setadminId] = useState<any>();
+  const [gettokenData] =
     buildAdminTokenValidationQuery((userId) => {
       setadminId(userId);
     });

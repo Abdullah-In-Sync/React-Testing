@@ -35,6 +35,7 @@ const sut = async () => {
     <MockedProvider mocks={mocks}>
       <UploadButtonComponent
         name="upload_file"
+        variant="contained"
         onChange="javascript:void(0)"
         inputProps={{ "data-testid": "resource_file_upload" }}
       />

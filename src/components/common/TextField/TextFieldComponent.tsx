@@ -38,7 +38,6 @@ export default function TextFieldComponent(props: propTypes) {
       {...props.extraProps}
       variant={props.variant}
       size={props.size ?? "medium"}
-      // sx={{ background: "#dadada52", borderColor: "#6ba08e", color: "#3f4040b0" }}
     />
   );
 }

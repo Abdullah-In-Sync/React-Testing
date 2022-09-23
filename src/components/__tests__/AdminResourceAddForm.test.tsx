@@ -10,6 +10,7 @@ import {
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
+  GET_TOKEN_DATA,
 } from "../../graphql/query/common";
 import AddForm from "../admin/resource/addForm";
 
@@ -26,6 +27,26 @@ const buildMocks = (): {
 } => {
   const _mocks: MockedResponse[] = [];
   const _mockDataMap: Record<string, any> = {};
+
+  _mocks.push({
+    request: {
+      query: GET_TOKEN_DATA,
+      variables: {},
+    },
+    result: {
+      data: [
+        {
+          _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
+          user_type: "admin",
+          parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+          perm_ids: "9,10,14,21,191,65,66",
+          user_status: 1,
+          created_date: "2021-12-20 16:20:55",
+          updated_date: "2021-12-20 16:20:55",
+        },
+      ],
+    },
+  });
 
   // disorder
   _mocks.push({
@@ -145,9 +166,42 @@ const sut = async () => {
       </SnackbarProvider>
     </MockedProvider>
   );
-  // await waitForElementToBeRemoved(() =>
-  //     screen.queryByTestId("activity-indicator")
-  // );
+};
+
+const mocksDisorder = [
+  {
+    request: {
+      query: GET_DISORDER_DATA,
+    },
+    result: {
+      data: {
+        disorderData: {
+          getAllDisorder: [
+            {
+              _id: "disorder_id_1",
+              user_type: "admin",
+              disorder_name: "disorder 1",
+            },
+            {
+              _id: "disorder_id_2",
+              user_type: "admin",
+              disorder_name: "disorder 2",
+            },
+          ],
+        },
+      },
+    },
+  },
+];
+
+const sutDisorder = async () => {
+  render(
+    <MockedProvider mocks={mocksDisorder} addTypename={false}>
+      <SnackbarProvider>
+        <AddForm />
+      </SnackbarProvider>
+    </MockedProvider>
+  );
 };
 
 describe("Admin Resource Add Form", () => {
@@ -173,7 +227,7 @@ describe("Admin Resource Add Form", () => {
 
     expect(screen.getByTestId("agenda")).toBeInTheDocument();
 
-    // expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
+    expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
 
     expect(screen.getByTestId("resource_avail_admin")).toBeInTheDocument();
 
@@ -192,22 +246,5 @@ describe("Admin Resource Add Form", () => {
     expect(screen.queryByTestId("resource_type").getAttribute("value")).toBe(
       "2"
     );
-  });
-
-  it("should render disorder", async () => {
-    await sut();
-    // fireEvent.change(screen.queryByTestId("disorder_id"), {
-    //     target: { value: "disorder_id_1" },
-    // });
-    // await waitFor(() =>
-    // expect(screen.queryByTestId("disorder_id")).toHaveValue("")
-    // )
-
-    // await waitFor(() => {
-    //     fireEvent.change(screen.queryByTestId("disorder_id"), {
-    //         target: { value: "disorder_id_1" },
-    //     });
-    //     expect(screen.queryByTestId("disorder_id").getAttribute('value')).toBe("disorder_id_1")
-    // })
   });
 });
