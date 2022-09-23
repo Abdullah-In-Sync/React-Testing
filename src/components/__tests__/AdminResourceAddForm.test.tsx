@@ -14,13 +14,6 @@ import {
 } from "../../graphql/query/common";
 import AddForm from "../admin/resource/addForm";
 
-const resourceTypeOptions = [
-  { id: "1", value: "Info Sheets" },
-  { id: "2", value: "Work Sheets" },
-  { id: "3", value: "Audio File" },
-  { id: "4", value: "Video File" },
-];
-
 const buildMocks = (): {
   mocks: MockedResponse[];
   mockDataMap: Record<string, any>;
@@ -193,16 +186,6 @@ const mocksDisorder = [
     },
   },
 ];
-
-const sutDisorder = async () => {
-  render(
-    <MockedProvider mocks={mocksDisorder} addTypename={false}>
-      <SnackbarProvider>
-        <AddForm />
-      </SnackbarProvider>
-    </MockedProvider>
-  );
-};
 
 describe("Admin Resource Add Form", () => {
   it("should render complete add resource form", async () => {

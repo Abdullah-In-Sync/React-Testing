@@ -7,14 +7,20 @@ import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
 
 export default function index() {
   const [adminId, setadminId] = useState<any>();
-  const [gettokenData] =
-    buildAdminTokenValidationQuery((userId) => {
-      setadminId(userId);
+  const [gettokenData, tokenLoading] =
+    buildAdminTokenValidationQuery((adminData) => {
+      setadminId(adminData._id);
     });
 
   useEffect(() => {
     gettokenData();
   }, []);
+
+  /* istanbul ignore next */
+  if (gettokenData && !tokenLoading && adminId) {
+    // can use it for later
+    console.log(adminId);
+  }
 
   return (
     <>
