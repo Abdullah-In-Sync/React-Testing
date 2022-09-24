@@ -72,24 +72,52 @@ export default function addForm() {
   ];
   const router = useRouter();
 
-  const [getDisorderData, { loading: disorderLoading, data: disorderData }] =
-    useLazyQuery(GET_DISORDER_DATA);
+  const [getDisorderData, { data: disorderData }] = useLazyQuery(
+    GET_DISORDER_DATA,
+    {
+      /* istanbul ignore next */
+      onCompleted: () => {
+        setLoader(false);
+      },
+    }
+  );
 
-  const [getModelByDisorderId, { loading: modelLoading, data: modelData }] =
-    useLazyQuery(GET_MODEL_BY_DISORDERID_DATA);
+  const [getModelByDisorderId, { data: modelData }] = useLazyQuery(
+    GET_MODEL_BY_DISORDERID_DATA,
+    {
+      /* istanbul ignore next */
+      onCompleted: () => {
+        setLoader(false);
+      },
+    }
+  );
 
-  const [
-    getCategoryByModelId,
-    { loading: categoryLoading, data: categoryData },
-  ] = useLazyQuery(GET_CATEGORY_BY_MODELID_DATA);
+  const [getCategoryByModelId, { data: categoryData }] = useLazyQuery(
+    GET_CATEGORY_BY_MODELID_DATA,
+    {
+      /* istanbul ignore next */
+      onCompleted: () => {
+        setLoader(false);
+      },
+    }
+  );
 
-  const [
-    getAgendaByDisorderModelId,
-    { loading: agendaLoading, data: agendaData },
-  ] = useLazyQuery(GET_AGENDA_BY_DISORDER_AND_MODEL_DATA);
+  const [getAgendaByDisorderModelId, { data: agendaData }] = useLazyQuery(
+    GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
+    {
+      /* istanbul ignore next */
+      onCompleted: () => {
+        setLoader(false);
+      },
+    }
+  );
 
-  const [getPreSignedURL, { loading: preSignedLoading, data: preSignedData }] =
-    useLazyQuery(GET_UPLOAD_RESOURCE_URL);
+  const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL, {
+    /* istanbul ignore next */
+    onCompleted: () => {
+      setLoader(false);
+    },
+  });
 
   const [createResource] = useMutation(ADMIN_CREATE_RESOURCE);
 
@@ -134,18 +162,18 @@ export default function addForm() {
     }
   }, [formFields.model_id]);
 
-  useEffect(() => {
-    /* istanbul ignore else */
-    if (
-      !disorderLoading &&
-      !modelLoading &&
-      !categoryLoading &&
-      !agendaLoading &&
-      !preSignedLoading
-    ) {
-      setLoader(false);
-    }
-  }, [disorderData, modelData, categoryData, agendaData, preSignedData]);
+  // useEffect(() => {
+  //   /* istanbul ignore else */
+  //   if (
+  //     !disorderLoading &&
+  //     !modelLoading &&
+  //     !categoryLoading &&
+  //     !agendaLoading &&
+  //     !preSignedLoading
+  //   ) {
+  //     setLoader(false);
+  //   }
+  // }, [disorderData, modelData, categoryData, agendaData, preSignedData]);
 
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -183,7 +211,8 @@ export default function addForm() {
     }
     const { fileName } = getUpdatedFileName(event.target.files[0]);
     try {
-      const { data: preSignedData }: any = await getPreSignedURL({
+      setLoader(true);
+      const { data: preSignedData } = await getPreSignedURL({
         variables: { fileName: fileName },
       });
       if (
@@ -569,7 +598,11 @@ export default function addForm() {
           </SureModal>
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12} textAlign="center">
-              <Button variant="contained" type="submit">
+              <Button
+                data-testid="addResourceSubmitButton"
+                variant="contained"
+                type="submit"
+              >
                 Save
               </Button>
             </Grid>

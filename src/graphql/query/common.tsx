@@ -168,12 +168,7 @@ export const GET_DISORDER_DATA = gql`
   query MyQuery {
     getAllDisorder {
       _id
-      created_date
       disorder_name
-      disorder_status
-      therapy_id
-      updated_date
-      user_id
       user_type
     }
   }
@@ -183,13 +178,7 @@ export const GET_MODEL_BY_DISORDERID_DATA = gql`
   query MyQuery($disorderId: String!) {
     getModelByDisorderId(disorderId: $disorderId) {
       _id
-      created_date
-      disorder_id
       model_name
-      model_status
-      updated_date
-      user_id
-      user_type
     }
   }
 `;

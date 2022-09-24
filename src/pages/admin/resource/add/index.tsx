@@ -9,6 +9,7 @@ export default function index() {
   const [adminId, setadminId] = useState<any>();
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (adminData) => {
+      console.debug(adminData._id);
       setadminId(adminData._id);
     }
   );
@@ -20,7 +21,7 @@ export default function index() {
   /* istanbul ignore next */
   if (gettokenData && !tokenLoading && adminId) {
     // can use it for later
-    console.log(adminId);
+    console.debug(adminId);
   }
 
   return (

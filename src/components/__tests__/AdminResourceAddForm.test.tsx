@@ -1,159 +1,90 @@
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { MockedProvider } from "@apollo/client/testing";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import {
-  GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
-  GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-  GET_TOKEN_DATA,
 } from "../../graphql/query/common";
 import AddForm from "../admin/resource/addForm";
+import userevent from "@testing-library/user-event";
+import { GET_UPLOAD_RESOURCE_URL } from "../../graphql/query/resource";
 
-const buildMocks = (): {
-  mocks: MockedResponse[];
-  mockDataMap: Record<string, any>;
-} => {
-  const _mocks: MockedResponse[] = [];
-  const _mockDataMap: Record<string, any> = {};
 
-  _mocks.push({
-    request: {
-      query: GET_TOKEN_DATA,
-      variables: {},
-    },
-    result: {
-      data: [
+const mocksData = [];
+// disorder
+mocksData.push({
+  request: {
+    query: GET_DISORDER_DATA,
+    variables: {},
+  },
+  result: {
+    data: {
+      getAllDisorder: [
         {
-          _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
+          _id: "disorder_id_1",
           user_type: "admin",
-          parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
-          perm_ids: "9,10,14,21,191,65,66",
-          user_status: 1,
-          created_date: "2021-12-20 16:20:55",
-          updated_date: "2021-12-20 16:20:55",
+          disorder_name: "disorder 1",
         },
       ],
     },
-  });
-
-  // disorder
-  _mocks.push({
-    request: {
-      query: GET_DISORDER_DATA,
+  },
+});
+// model
+mocksData.push({
+  request: {
+    query: GET_MODEL_BY_DISORDERID_DATA,
+    variables: {
+      disorderId: "disorder_id_1",
     },
-    result: {
-      data: {
-        disorderData: {
-          getAllDisorder: [
-            {
-              _id: "disorder_id_1",
-              user_type: "admin",
-              disorder_name: "disorder 1",
-            },
-            {
-              _id: "disorder_id_2",
-              user_type: "admin",
-              disorder_name: "disorder 2",
-            },
-          ],
+  },
+  result: {
+    data: {
+      getModelByDisorderId: [
+        {
+          _id: "model_id_1",
+          model_name: "model_id_1",
         },
-      },
-    },
-  });
-
-  // model
-  _mocks.push({
-    request: {
-      query: GET_MODEL_BY_DISORDERID_DATA,
-      variables: {
-        disorderId: "disorder_id_1",
-      },
-    },
-    result: {
-      data: {
-        modelData: {
-          getModelByDisorderId: [
-            {
-              _id: "model_id_1",
-              model_name: "model 1",
-            },
-            {
-              _id: "model_id_2",
-              model_name: "model 2",
-            },
-          ],
+        {
+          _id: "model_id_2",
+          model_name: "model_id_2",
         },
+      ],
+    },
+  },
+});
+// upload file, presigned URL
+mocksData.push({
+  request: {
+    query: GET_UPLOAD_RESOURCE_URL,
+    variables: {
+      fileName: "hello.png",
+    },
+  },
+  result: {
+    data: {
+      getUploadResourceUrl: {
+        resource_upload: "https://aws.s3.fileupload",
       },
     },
-  });
+  },
+});
 
-  // category
-  _mocks.push({
-    request: {
-      query: GET_CATEGORY_BY_MODELID_DATA,
-      variables: {
-        modelId: "model_id_1",
-      },
-    },
-    result: {
-      data: {
-        categoryData: {
-          getCategoryByModelId: [
-            {
-              _id: "category_id_1",
-              category_name: "category 1",
-            },
-            {
-              _id: "category_id_2",
-              category_name: "category 2",
-            },
-          ],
-        },
-      },
-    },
-  });
-
-  // agenda
-  _mocks.push({
-    request: {
-      query: GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
-      variables: {
-        disorderId: "disorder_id_1",
-        modelId: "model_id_1",
-      },
-    },
-    result: {
-      data: {
-        agendaData: {
-          getAgendaByDisorderModelId: [
-            {
-              _id: "agenda_id_1",
-              agenda_name: "agenda 1",
-              session: "1",
-            },
-            {
-              _id: "agenda_id_2",
-              agenda_name: "agenda 2",
-              session: "1",
-            },
-          ],
-        },
-      },
-    },
-  });
-
-  return { mocks: _mocks, mockDataMap: _mockDataMap };
-};
-
-const { mocks } = buildMocks();
 const sut = async () => {
   render(
-    <MockedProvider mocks={mocks}>
+    <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
         <AddForm />
       </SnackbarProvider>
     </MockedProvider>
+  );
+  await waitForElementToBeRemoved(() =>
+    screen.queryByTestId("activity-indicator")
   );
 };
 
@@ -189,6 +120,8 @@ describe("Admin Resource Add Form", () => {
     expect(screen.getByTestId("resource_avail_onlyme")).toBeInTheDocument();
 
     expect(screen.getByTestId("resource_avail_all")).toBeInTheDocument();
+
+    expect(screen.getByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
 
   it("should render resource-type options by default", async () => {
@@ -199,5 +132,54 @@ describe("Admin Resource Add Form", () => {
     expect(screen.queryByTestId("resource_type").getAttribute("value")).toBe(
       "2"
     );
+  });
+
+  it("should click disorder dropdown", async () => {
+    await sut();
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
+      "disorder_id_1"
+    );
+  });
+
+  it("upload file", async () => {
+    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    await sut();
+
+    const inputFile: HTMLInputElement = screen.getByTestId(
+      "resource_file_upload"
+    );
+    userevent.upload(inputFile, file);
+    await waitFor(() => expect(inputFile).toBeTruthy());
+  });
+
+  it("submit form", async () => {
+    await sut();
+    const file = new File(["hello"], "hello.png", { type: "image/png" });
+
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "resource_name" },
+    });
+    fireEvent.change(screen.queryByTestId("resource_type"), {
+      target: { value: "2" },
+    });
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
+
+    const inputFile: HTMLInputElement = screen.getByTestId(
+      "resource_file_upload"
+    );
+    userevent.upload(inputFile, file);
+
+    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+
+    fireEvent.submit(screen.queryByTestId("addResourceSubmitButton"));
+    expect(screen.queryByTestId("sureModal")).toBeVisible();
   });
 });
