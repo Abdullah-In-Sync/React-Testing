@@ -15,7 +15,6 @@ import AddForm from "../admin/resource/addForm";
 import userevent from "@testing-library/user-event";
 import { GET_UPLOAD_RESOURCE_URL } from "../../graphql/query/resource";
 
-
 const mocksData = [];
 // disorder
 mocksData.push({

@@ -9,7 +9,6 @@ export default function index() {
   const [adminId, setadminId] = useState<any>();
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (adminData) => {
-      console.debug(adminData._id);
       setadminId(adminData._id);
     }
   );

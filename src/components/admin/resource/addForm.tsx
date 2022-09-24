@@ -77,6 +77,7 @@ export default function addForm() {
     {
       /* istanbul ignore next */
       onCompleted: () => {
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
@@ -87,6 +88,7 @@ export default function addForm() {
     {
       /* istanbul ignore next */
       onCompleted: () => {
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
@@ -97,6 +99,7 @@ export default function addForm() {
     {
       /* istanbul ignore next */
       onCompleted: () => {
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
@@ -107,6 +110,7 @@ export default function addForm() {
     {
       /* istanbul ignore next */
       onCompleted: () => {
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
@@ -115,6 +119,7 @@ export default function addForm() {
   const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL, {
     /* istanbul ignore next */
     onCompleted: () => {
+      /* istanbul ignore next */
       setLoader(false);
     },
   });
@@ -127,6 +132,7 @@ export default function addForm() {
   }, []);
 
   useEffect(() => {
+    /* istanbul ignore else */
     if (formFields.disorder_id) {
       setLoader(true);
       setFormFields((oldValues) => ({
@@ -142,6 +148,7 @@ export default function addForm() {
   }, [formFields.disorder_id]);
 
   useEffect(() => {
+    /* istanbul ignore else */
     if (formFields.model_id) {
       setLoader(true);
       setFormFields((oldValues) => ({
@@ -161,19 +168,6 @@ export default function addForm() {
       });
     }
   }, [formFields.model_id]);
-
-  // useEffect(() => {
-  //   /* istanbul ignore else */
-  //   if (
-  //     !disorderLoading &&
-  //     !modelLoading &&
-  //     !categoryLoading &&
-  //     !agendaLoading &&
-  //     !preSignedLoading
-  //   ) {
-  //     setLoader(false);
-  //   }
-  // }, [disorderData, modelData, categoryData, agendaData, preSignedData]);
 
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -206,6 +200,7 @@ export default function addForm() {
 
   const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileObj = event.target.files && event.target.files[0];
+    /* istanbul ignore else */
     if (!fileObj) {
       return;
     }
@@ -215,6 +210,7 @@ export default function addForm() {
       const { data: preSignedData } = await getPreSignedURL({
         variables: { fileName: fileName },
       });
+      /* istanbul ignore else */
       if (
         preSignedData &&
         preSignedData?.getUploadResourceUrl &&
@@ -242,14 +238,14 @@ export default function addForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    /* istanbul ignore else */
     if (!selectedFile?.name) {
       enqueueSnackbar("Please select a file", {
         variant: "error",
       });
       return;
     }
-
+    /* istanbul ignore else */
     if (
       !formFields.resource_avail_admin &&
       !formFields.resource_avail_onlyme &&
@@ -262,6 +258,7 @@ export default function addForm() {
       return;
     }
     setModalOpen(true);
+    /* istanbul ignore else */
     if (!confirmSubmission) return;
   };
 

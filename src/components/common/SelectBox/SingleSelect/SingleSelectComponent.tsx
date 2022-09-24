@@ -24,6 +24,7 @@ type Option = {
 };
 
 const mapping = (options: Option[], keys = []) => {
+  /* istanbul ignore next */
   return options.reduce((mappingOptions: Option[], option) => {
     mappingOptions.push({ id: option[keys[0]], value: option[keys[1]] });
     return mappingOptions;
