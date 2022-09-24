@@ -35,11 +35,13 @@ const Text = (props) => {
           ...(field.inputProps || {}),
         }}
         style={field.big && { minWidth: 325 }}
-        onChange={(e) =>
-          props.onChange(
-            field,
-            field.type === "number" ? Number(e.target.value) : e.target.value
-          )
+        onChange={
+          /* istanbul ignore next */
+          (e) =>
+            props.onChange(
+              field,
+              field.type === "number" ? Number(e.target.value) : e.target.value
+            )
         }
         value={props.fieldValues[field.key] || field.value || ""}
         defaultValue={values[field.key] || field.value}

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Autocomplete } from "@mui/material";
 import _ from "lodash";
 
-const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
+const AsyncAutoComplete = ({ field, values = {}, onChange, ...props }) => {
   let _value = props.fieldValues[field?.key] || values[field?.key] || "";
 
   if (typeof _value === "object") {
@@ -43,11 +43,13 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
         defaultValue={_.isEmpty(value) ? field.defaultValue : value}
         inputValue={inputValue}
         disabled={field.disabled}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={
+          /* istanbul ignore next */
+          (option) => option.label
+        }
         onChange={(_, val) => {
           /* istanbul ignore next */
           setValue(val);
-          /* istanbul ignore next */
           onChange(field, (val || {}).value);
         }}
         onInputChange={(_, val) => {
@@ -58,6 +60,8 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
             onChange(field, val);
           }
         }}
+        disableClearable={true}
+        loading={false}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -67,6 +71,17 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
             variant="outlined"
             required={field.required}
             placeholder={field.label}
+            // InputProps={{
+            //   ...params.InputProps,
+            //   endAdornment: (
+            //     <React.Fragment>
+            //       {false ? (
+            //         <CircularProgress color="inherit" size={20} />
+            //       ) : null}
+            //       {params.InputProps.endAdornment}
+            //     </React.Fragment>
+            //   ),
+            // }}
           />
         )}
       />
@@ -74,4 +89,4 @@ const AutoCompleteBox = ({ field, values = {}, onChange, ...props }) => {
   );
 };
 
-export default AutoCompleteBox;
+export default AsyncAutoComplete;
