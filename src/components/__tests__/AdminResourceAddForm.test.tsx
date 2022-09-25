@@ -179,13 +179,10 @@ describe("Admin Resource Add Form", () => {
     fireEvent.click(screen.queryByTestId("resource_avail_all"));
 
     fireEvent.submit(screen.queryByTestId("addResourceSubmitButton"));
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId("sureModal")).toBeVisible();
-      // fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
-    })
-
-    
+    });
   });
 
   it("checkbox check admin add resources", async () => {
@@ -194,14 +191,15 @@ describe("Admin Resource Add Form", () => {
     fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
     fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
 
-    const checkboxAdmin = screen.getByLabelText('Admin') as HTMLInputElement
-    expect(checkboxAdmin).toBeChecked()
+    const checkboxAdmin = screen.getByLabelText("Admin") as HTMLInputElement;
+    expect(checkboxAdmin).toBeChecked();
 
-    const checkboxTherapist = screen.getByLabelText('All Therapists') as HTMLInputElement
-    expect(checkboxTherapist).toBeChecked()
+    const checkboxTherapist = screen.getByLabelText(
+      "All Therapists"
+    ) as HTMLInputElement;
+    expect(checkboxTherapist).toBeChecked();
 
-    const checkboxOnlyMe = screen.getByLabelText('Only Me') as HTMLInputElement
-    expect(checkboxOnlyMe).toBeChecked()
+    const checkboxOnlyMe = screen.getByLabelText("Only Me") as HTMLInputElement;
+    expect(checkboxOnlyMe).toBeChecked();
   });
-
 });
