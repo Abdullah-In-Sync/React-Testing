@@ -188,37 +188,6 @@ describe("Admin Resource Add Form", () => {
     
   });
 
-  // it("submit form cancel button dismiss popup", async () => {
-  //   await sut();
-  //   const file = new File(["hello"], "hello.png", { type: "image/png" });
-
-  //   fireEvent.change(screen.queryByTestId("resource_name"), {
-  //     target: { value: "resource_name" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("resource_type"), {
-  //     target: { value: "2" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("disorder_id"), {
-  //     target: { value: "disorder_id_1" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("model_id"), {
-  //     target: { value: "model_id_1" },
-  //   });
-
-  //   const inputFile: HTMLInputElement = screen.getByTestId(
-  //     "resource_file_upload"
-  //   );
-  //   userevent.upload(inputFile, file);
-
-  //   fireEvent.click(screen.queryByTestId("resource_avail_all"));
-
-  //   fireEvent.submit(screen.queryByTestId("addResourceSubmitButton"));
-  //   expect(screen.queryByTestId("sureModal")).toBeVisible();
-
-  //   fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
-  //   expect(screen.queryByTestId("sureModal")).not.toBeVisible();
-  // });
-
   it("checkbox check admin add resources", async () => {
     await sut();
     fireEvent.click(screen.queryByTestId("resource_avail_admin"));
