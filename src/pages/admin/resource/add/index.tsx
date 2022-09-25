@@ -19,14 +19,14 @@ export default function index() {
 
   /* istanbul ignore next */
   if (gettokenData && !tokenLoading && adminId) {
-    // can use it for later
+    /* istanbul ignore next */
     console.debug(adminId);
   }
 
   return (
     <>
       <Layout>
-        <ContentHeader title="Add Resource" data-testid="headerTitle" />
+        <ContentHeader title="Add Resource" />
         <AddForm />
         <SureModal />
       </Layout>

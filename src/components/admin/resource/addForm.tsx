@@ -573,6 +573,7 @@ export default function addForm() {
                 variant="contained"
                 color="inherit"
                 size="small"
+                data-testid="addResourceModalCancelButton"
                 onClick={() => {
                   setModalOpen(false);
                 }}
@@ -584,6 +585,7 @@ export default function addForm() {
                 variant="contained"
                 sx={{ marginLeft: "5px" }}
                 size="small"
+                data-testid="addResourceModalConfirmButton"
                 onClick={() => {
                   setModalOpen(false);
                   uploadFile();
