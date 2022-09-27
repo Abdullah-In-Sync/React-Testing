@@ -26,6 +26,7 @@ export default function BasicModal(props) {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        data-testid={props.testid}
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">

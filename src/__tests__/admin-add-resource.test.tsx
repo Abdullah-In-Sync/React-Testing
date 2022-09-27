@@ -205,6 +205,23 @@ describe("Admin add resource page", () => {
     );
   });
 
+  it("should click model dropdown", async () => {
+    await sut();
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
+    expect(screen.queryByTestId("model_id").getAttribute("value")).toBe(
+      "model_id_1"
+    );
+  });
+
   it("upload file", async () => {
     const file = new File(["hello"], "hello.png", { type: "image/png" });
     await sut();
@@ -229,23 +246,32 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
 
     const inputFile: HTMLInputElement = screen.getByTestId(
       "resource_file_upload"
     );
     userevent.upload(inputFile, file);
+    await waitFor(() => expect(inputFile).toBeTruthy());
 
     fireEvent.click(screen.queryByTestId("resource_avail_all"));
 
-    await waitFor(() => {
-      fireEvent.submit(screen.queryByTestId("addResourceSubmitButton"));
+    fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+    // fireEvent.submit(screen.queryByTestId("resource-add-form"));
 
-      // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
-    });
-    expect(screen.getByTestId("sureModal")).toBeVisible();
+    // await waitFor(() => {
+    // expect(screen.getByTestId("sureModal")).toBeVisible();
+
+    // //   // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
+    // });
 
     // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
     // fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));

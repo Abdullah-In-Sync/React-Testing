@@ -7,8 +7,12 @@ import { Box } from "@mui/system";
 const SureModal = (props) => {
   const { modalOpen, setModalOpen } = props;
   return (
-    <div data-testid="sureModal">
-      <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}>
+    <div>
+      <Modal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        testid="sureModal"
+      >
         <Grid container>
           <Grid item md={12}>
             <Box
