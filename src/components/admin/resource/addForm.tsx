@@ -1,8 +1,7 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { superadmin_routes } from "../../../utility/navItems";
+import { useLazyQuery } from "@apollo/client";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
@@ -11,32 +10,13 @@ import {
 } from "../../../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../../../graphql/query/resource";
 import { useSnackbar } from "notistack";
-import { ADMIN_CREATE_RESOURCE } from "../../../graphql/mutation/resource";
-import Loader from "../../common/Loader";
 import TextFieldComponent from "../../common/TextField/TextFieldComponent";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import UploadButtonComponent from "../../common/UploadButton/UploadButtonComponent";
 import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
 import SureModal from "./SureModal";
-import { useRouter } from "next/router";
-
-type resourceFormField = {
-  resource_name: string;
-  resource_type: string;
-  disorder_id: string;
-  model_id: string;
-  category_id: string;
-  resource_desc: string;
-  resource_instruction: string;
-  resource_references: string;
-  agenda_id: string;
-  file_name: string;
-  resource_avail_admin: number;
-  resource_avail_therapist: number;
-  resource_avail_onlyme: number;
-  resource_avail_all: number;
-};
+import { addResourceFormField } from "../../../utility/types/resource_types";
 
 const defaultFormValue = {
   resource_name: "",
@@ -55,11 +35,18 @@ const defaultFormValue = {
   file_name: "",
 };
 
-export default function addForm() {
+type propTypes = {
+  resourceType: "add" | "create";
+  userType: "admin" | "therapist";
+  onSubmit?: any;
+  setLoader: any;
+};
+
+export default function addForm(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
   const [formFields, setFormFields] =
-    useState<resourceFormField>(defaultFormValue);
-  const [loader, setLoader] = useState<boolean>(false);
+    useState<addResourceFormField>(defaultFormValue);
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
@@ -70,7 +57,6 @@ export default function addForm() {
     { id: "3", value: "Audio File" },
     { id: "4", value: "Video File" },
   ];
-  const router = useRouter();
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -78,7 +64,7 @@ export default function addForm() {
       /* istanbul ignore next */
       onCompleted: () => {
         /* istanbul ignore next */
-        setLoader(false);
+        props.setLoader(false);
       },
     }
   );
@@ -89,7 +75,7 @@ export default function addForm() {
       /* istanbul ignore next */
       onCompleted: () => {
         /* istanbul ignore next */
-        setLoader(false);
+        props.setLoader(false);
       },
     }
   );
@@ -100,7 +86,7 @@ export default function addForm() {
       /* istanbul ignore next */
       onCompleted: () => {
         /* istanbul ignore next */
-        setLoader(false);
+        props.setLoader(false);
       },
     }
   );
@@ -111,7 +97,7 @@ export default function addForm() {
       /* istanbul ignore next */
       onCompleted: () => {
         /* istanbul ignore next */
-        setLoader(false);
+        props.setLoader(false);
       },
     }
   );
@@ -120,21 +106,19 @@ export default function addForm() {
     /* istanbul ignore next */
     onCompleted: () => {
       /* istanbul ignore next */
-      setLoader(false);
+      props.setLoader(false);
     },
   });
 
-  const [createResource] = useMutation(ADMIN_CREATE_RESOURCE);
-
   useEffect(() => {
-    setLoader(true);
+    props.setLoader(true);
     getDisorderData();
   }, []);
 
   useEffect(() => {
     /* istanbul ignore else */
     if (formFields.disorder_id) {
-      setLoader(true);
+      props.setLoader(true);
       setFormFields((oldValues) => ({
         ...oldValues,
         model_id: "",
@@ -150,7 +134,7 @@ export default function addForm() {
   useEffect(() => {
     /* istanbul ignore else */
     if (formFields.model_id) {
-      setLoader(true);
+      props.setLoader(true);
       setFormFields((oldValues) => ({
         ...oldValues,
         category_id: "",
@@ -206,7 +190,7 @@ export default function addForm() {
     }
     const { fileName } = getUpdatedFileName(event.target.files[0]);
     try {
-      setLoader(true);
+      props.setLoader(true);
       const { data: preSignedData } = await getPreSignedURL({
         variables: { fileName: fileName },
       });
@@ -226,7 +210,7 @@ export default function addForm() {
       enqueueSnackbar("There is an error with file upload!", {
         variant: "error",
       });
-      setLoader(false);
+      props.setLoader(false);
     }
   };
 
@@ -265,63 +249,32 @@ export default function addForm() {
   const uploadFile = async () => {
     try {
       if (getPreSignedURL) {
-        setLoader(true);
+        props.setLoader(true);
         const uploadStatus = await uploadToS3(
           selectedFile,
           preSignedURL.current
         );
 
         if (uploadStatus) {
-          createResource({
-            variables: {
-              disorderId: formFields.disorder_id,
-              modelId: formFields.model_id,
-              resourceAvailAdmin: formFields.resource_avail_admin,
-              resourceAvailAll: formFields.resource_avail_all,
-              resourceAvailOnlyme: formFields.resource_avail_onlyme,
-              resourceAvailTherapist: formFields.resource_avail_therapist,
-              resourceFilename: formFields.file_name,
-              resourceName: formFields.resource_name,
-              resourceType: formFields.resource_type,
-              agendaId: formFields.agenda_id,
-              categoryId: formFields.category_id,
-              orgId: "",
-              resourceDesc: formFields.resource_desc,
-              resourceInstruction: formFields.resource_instruction,
-              resourceIsformualation: "0",
-              resourceIssmartdraw: "0",
-              resourceReferences: formFields.resource_references,
-              resourceStatus: 1,
-              userType: "admin",
-            },
-            onCompleted: (data) => {
-              if (data && data.createResource && data.createResource._id) {
-                enqueueSnackbar("Resource added successfully", {
-                  variant: "success",
-                });
-                router.push(superadmin_routes[2].path);
-              }
-            },
-          });
+          props.onSubmit(formFields);
         } else {
           enqueueSnackbar("There is an error with file upload!", {
             variant: "error",
           });
         }
-        setLoader(false);
+        props.setLoader(false);
       } else {
-        setLoader(false);
+        props.setLoader(false);
         enqueueSnackbar("Please select file!", { variant: "error" });
       }
     } catch (e) {
-      setLoader(false);
+      props.setLoader(false);
       enqueueSnackbar("Please fill the all fields", { variant: "error" });
     }
   };
 
   return (
     <>
-      <Loader visible={loader} />
       <form onSubmit={handleSubmit} data-testid="resource-add-form">
         <Box
           sx={{ flexGrow: 1, border: "1px solid #cecece" }}

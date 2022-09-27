@@ -188,13 +188,6 @@ export const GET_CATEGORY_BY_MODELID_DATA = gql`
     getCategoryByModelId(modelId: $modelId) {
       _id
       category_name
-      category_status
-      created_date
-      disorder_id
-      model_id
-      updated_date
-      user_id
-      user_type
     }
   }
 `;
@@ -204,14 +197,6 @@ export const GET_AGENDA_BY_DISORDER_AND_MODEL_DATA = gql`
     getAgendaByDisorderAndModel(disorderId: $disorderId, modelId: $modelId) {
       _id
       agenda_name
-      agenda_status
-      created_date
-      disorder_id
-      model_id
-      session
-      therapy_id
-      user_id
-      user_type
     }
   }
 `;

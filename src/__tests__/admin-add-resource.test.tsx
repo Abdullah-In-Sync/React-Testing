@@ -1,20 +1,24 @@
-import { MockedProvider } from "@apollo/client/testing";
 import {
-  fireEvent,
-  render,
   screen,
-  waitFor,
+  render,
   waitForElementToBeRemoved,
+  fireEvent,
+  waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
+import { MockedProvider } from "@apollo/client/testing";
+import AddResource from "../pages/admin/resource/add";
 import {
+  GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
+  GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-} from "../../graphql/query/common";
-import AddForm from "../admin/resource/addForm";
+  GET_TOKEN_DATA,
+} from "../graphql/query/common";
+import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
 import userevent from "@testing-library/user-event";
-import { GET_UPLOAD_RESOURCE_URL } from "../../graphql/query/resource";
 
+// mocks
 const mocksData = [];
 // disorder
 mocksData.push({
@@ -57,6 +61,45 @@ mocksData.push({
     },
   },
 });
+// category
+mocksData.push({
+  request: {
+    query: GET_CATEGORY_BY_MODELID_DATA,
+    variables: {
+      modelId: "model_id_1",
+    },
+  },
+  result: {
+    data: {
+      getCategoryByModelId: [
+        {
+          _id: "category_id_1",
+          category_name: "category_id_1",
+        },
+      ],
+    },
+  },
+});
+// agenda
+mocksData.push({
+  request: {
+    query: GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
+    variables: {
+      disorderId: "disorder_id_1",
+      modelId: "model_id_1",
+    },
+  },
+  result: {
+    data: {
+      getAgendaByDisorderAndModel: [
+        {
+          _id: "agenda_id_1",
+          agenda_name: "agenda_id_1",
+        },
+      ],
+    },
+  },
+});
 // upload file, presigned URL
 mocksData.push({
   request: {
@@ -73,12 +116,31 @@ mocksData.push({
     },
   },
 });
+mocksData.push({
+  request: {
+    query: GET_TOKEN_DATA,
+    variables: {},
+  },
+  result: {
+    data: [
+      {
+        _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
+        user_type: "admin",
+        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+        perm_ids: "9,10,14,21,191,65,66",
+        user_status: 1,
+        created_date: "2021-12-20 16:20:55",
+        updated_date: "2021-12-20 16:20:55",
+      },
+    ],
+  },
+});
 
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
-        <AddForm />
+        <AddResource />
       </SnackbarProvider>
     </MockedProvider>
   );
@@ -87,7 +149,7 @@ const sut = async () => {
   );
 };
 
-describe("Admin Resource Add Form", () => {
+describe("Admin add resource page", () => {
   it("should render complete add resource form", async () => {
     await sut();
     expect(screen.getByTestId("resource-add-form")).toBeInTheDocument();
@@ -178,11 +240,16 @@ describe("Admin Resource Add Form", () => {
 
     fireEvent.click(screen.queryByTestId("resource_avail_all"));
 
-    fireEvent.submit(screen.queryByTestId("addResourceSubmitButton"));
-
     await waitFor(() => {
-      expect(screen.queryByTestId("sureModal")).toBeVisible();
+      fireEvent.submit(screen.queryByTestId("addResourceSubmitButton"));
+
+      // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
     });
+    expect(screen.getByTestId("sureModal")).toBeVisible();
+
+    // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
+    // fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+    // expect(screen.getByTestId("sureModal")).not.toBeVisible();
   });
 
   it("checkbox check admin add resources", async () => {
