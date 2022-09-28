@@ -42,7 +42,7 @@ type propTypes = {
   setLoader: any;
 };
 
-export default function addForm(props: propTypes) {
+export default function AddForm(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
   const [formFields, setFormFields] =
     useState<addResourceFormField>(defaultFormValue);
