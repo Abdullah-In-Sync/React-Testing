@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import AddForm from "../../../../components/admin/resource/addForm";
+import AddForm from "../../../../components/admin/resource/AddForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
