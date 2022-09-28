@@ -12,7 +12,7 @@ import { superadmin_routes } from "../../../../utility/navItems";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 
-export default function index() {
+export default function Index() {
   const { enqueueSnackbar } = useSnackbar();
   const [adminId, setadminId] = useState<any>();
   const [loader, setLoader] = useState<boolean>(false);
