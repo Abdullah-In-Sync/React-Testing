@@ -3,7 +3,10 @@ import {
   OperationVariables,
   useLazyQuery,
 } from "@apollo/client";
-import { GET_TOKEN_DATA, GET_ADMIN_TOKEN_DATA } from "../../graphql/query/common";
+import {
+  GET_TOKEN_DATA,
+  GET_ADMIN_TOKEN_DATA,
+} from "../../graphql/query/common";
 
 export const buildPatientTokenValidationQuery = (
   onCompleted: (patientData: any) => void

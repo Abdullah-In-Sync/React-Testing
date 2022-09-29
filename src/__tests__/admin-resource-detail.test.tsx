@@ -50,23 +50,21 @@ const buildMocks = (): {
         data: {
           getResourceById: [
             {
-                _id: "750a6993f61d4e58917e31e1244711f5",
-                resource_name: "test name",
-                resource_desc: "test desc",
-                resource_instruction: "test instruct",
-                resource_references: "test reference",
-                resource_url: "http://google.com",
-                download_resource_url: "http://google.com",
-                disorder_detail: 
-                {
-                    _id: "467925dfc1d34c9e9eecd3cd915588d9",
-                    disorder_name: "test disorder",
-                },
-                model_detail: 
-                {
-                      _id: "4e110b3e7faa47c9be82540fe8e78fb0",
-                      model_name: "test mddel",
-                },
+              _id: "750a6993f61d4e58917e31e1244711f5",
+              resource_name: "test name",
+              resource_desc: "test desc",
+              resource_instruction: "test instruct",
+              resource_references: "test reference",
+              resource_url: "http://google.com",
+              download_resource_url: "http://google.com",
+              disorder_detail: {
+                _id: "467925dfc1d34c9e9eecd3cd915588d9",
+                disorder_name: "test disorder",
+              },
+              model_detail: {
+                _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+                model_name: "test mddel",
+              },
             },
           ],
         },
@@ -92,23 +90,21 @@ const buildMocks = (): {
         data: {
           getResourceById: [
             {
-                _id: "750a6993f61d4e58917e31e1244711f4",
-                resource_name: "test name",
-                resource_desc: "test desc",
-                resource_instruction: "test instruct",
-                resource_references: "test reference",
-                resource_url: null,
-                download_resource_url: null,
-                disorder_detail: 
-                {
-                    _id: "467925dfc1d34c9e9eecd3cd915588d9",
-                    disorder_name: "test disorder",
-                },
-                model_detail: 
-                {
-                      _id: "4e110b3e7faa47c9be82540fe8e78fb0",
-                      model_name: "test mddel",
-                },
+              _id: "750a6993f61d4e58917e31e1244711f4",
+              resource_name: "test name",
+              resource_desc: "test desc",
+              resource_instruction: "test instruct",
+              resource_references: "test reference",
+              resource_url: null,
+              download_resource_url: null,
+              disorder_detail: {
+                _id: "467925dfc1d34c9e9eecd3cd915588d9",
+                disorder_name: "test disorder",
+              },
+              model_detail: {
+                _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+                model_name: "test mddel",
+              },
             },
           ],
         },

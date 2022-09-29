@@ -189,10 +189,10 @@ const Resource: NextPage = () => {
       key: "resource_name",
       visible: true,
       render: (_, value) => (
-        <NextLink href={"/admin/resource/"+value?._id} passHref>
-        <Button variant="contained" sx={{ width: "100%", height: "40px" }}>
-          {value?.resource_name?.substring(0, 40)}
-        </Button>
+        <NextLink href={"/admin/resource/" + value?._id} passHref>
+          <Button variant="contained" sx={{ width: "100%", height: "40px" }}>
+            {value?.resource_name?.substring(0, 40)}
+          </Button>
         </NextLink>
       ),
     },

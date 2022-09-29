@@ -16,8 +16,6 @@ import {
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import AttachmentIcon from "@mui/icons-material/Attachment";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
 import { useLazyQuery } from "@apollo/client";
@@ -37,19 +35,17 @@ const ResourceById: NextPage = () => {
     }
   );
 
-  const [
-    getResourceData,
-    { loading: resourceLoading, data: resourceData },
-  ] = useLazyQuery(GET_RESOURCE_DETAIL, {
-    onCompleted: (data) => {
-      /* istanbul ignore else */
-      if (data!.getResourceById) {
-        setResId(data!.getResourceById[0]._id);
-      } else if (data!.getResourceById == null) {
-        setLoader(false);
-      }
-    },
-  });
+  const [getResourceData, { loading: resourceLoading, data: resourceData }] =
+    useLazyQuery(GET_RESOURCE_DETAIL, {
+      onCompleted: (data) => {
+        /* istanbul ignore else */
+        if (data!.getResourceById) {
+          setResId(data!.getResourceById[0]._id);
+        } else if (data!.getResourceById == null) {
+          setLoader(false);
+        }
+      },
+    });
 
   useEffect(() => {
     setLoader(true);
@@ -67,12 +63,7 @@ const ResourceById: NextPage = () => {
 
   useEffect(() => {
     /* istanbul ignore else */
-    if (
-      !tokenLoading &&
-      !resourceLoading &&
-      gettokenData &&
-      resourceData
-    ) {
+    if (!tokenLoading && !resourceLoading && gettokenData && resourceData) {
       setLoader(false);
     }
   }, [resId]);
@@ -115,23 +106,17 @@ const ResourceById: NextPage = () => {
                 >
                   <Typography color="primary.main">
                     {
-                      resourceData.getResourceById[0]
-                        .disorder_detail.disorder_name
+                      resourceData.getResourceById[0].disorder_detail
+                        .disorder_name
                     }
                   </Typography>
                   ,
                   <Typography color="primary.main">
-                    {
-                      resourceData.getResourceById[0].model_detail
-                        .model_name
-                    }
+                    {resourceData.getResourceById[0].model_detail.model_name}
                   </Typography>
                   ,
                   <Typography key="3" color="text.primary">
-                    {
-                      resourceData.getResourceById[0]
-                        .resource_name
-                    }
+                    {resourceData.getResourceById[0].resource_name}
                   </Typography>
                 </Breadcrumbs>
               </Grid>
@@ -153,10 +138,7 @@ const ResourceById: NextPage = () => {
                 }}
                 md={12}
               >
-                {
-                  resourceData.getResourceById[0]
-                    .resource_name
-                }
+                {resourceData.getResourceById[0].resource_name}
               </Grid>
               <Grid
                 p={1}
@@ -178,16 +160,13 @@ const ResourceById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-
                   <IconButton
                     size="medium"
                     data-testid="viewUrl"
                     target="_blank"
                     href={
-                      resourceData.getResourceById[0]
-                        .resource_url != null
-                        ? resourceData.getResourceById[0]
-                            .resource_url
+                      resourceData.getResourceById[0].resource_url != null
+                        ? resourceData.getResourceById[0].resource_url
                         : "#"
                     }
                   >
@@ -197,10 +176,9 @@ const ResourceById: NextPage = () => {
                     size="medium"
                     data-testid="downloadUrl"
                     href={
-                      resourceData.getResourceById[0]
-                        .download_resource_url != null
-                        ? resourceData.getResourceById[0]
-                            .download_resource_url
+                      resourceData.getResourceById[0].download_resource_url !=
+                      null
+                        ? resourceData.getResourceById[0].download_resource_url
                         : "#"
                     }
                   >
@@ -209,23 +187,18 @@ const ResourceById: NextPage = () => {
                 </Grid>
                 <ResourceDetail
                   title="Description"
-                  description={
-                    resourceData.getResourceById[0]
-                      .resource_desc
-                  }
+                  description={resourceData.getResourceById[0].resource_desc}
                 />
                 <ResourceDetail
                   title="Instructions"
                   description={
-                    resourceData.getResourceById[0]
-                      .resource_instruction
+                    resourceData.getResourceById[0].resource_instruction
                   }
                 />
                 <ResourceDetail
                   title="References"
                   description={
-                    resourceData.getResourceById[0]
-                      .resource_references
+                    resourceData.getResourceById[0].resource_references
                   }
                 />
 
