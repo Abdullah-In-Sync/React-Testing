@@ -27,6 +27,7 @@ import CardGenerator from "../../../components/common/CardGenerator";
 import InputBase from "@mui/material/InputBase";
 import Grid from "@mui/material/Grid";
 import CrudForm from "../../../components/common/CrudForm";
+import NextLink from "next/link";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -188,9 +189,11 @@ const Resource: NextPage = () => {
       key: "resource_name",
       visible: true,
       render: (_, value) => (
+        <NextLink href={"/admin/resource/"+value?._id} passHref>
         <Button variant="contained" sx={{ width: "100%", height: "40px" }}>
           {value?.resource_name?.substring(0, 40)}
         </Button>
+        </NextLink>
       ),
     },
     {

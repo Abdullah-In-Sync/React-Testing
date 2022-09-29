@@ -163,3 +163,17 @@ export const GET_TOKEN_DATA = gql`
     }
   }
 `;
+
+export const GET_ADMIN_TOKEN_DATA = gql`
+  query MyQuery {
+    getTokenData {
+      _id
+      user_type
+      parent_id
+      perm_ids
+      user_status
+      created_date
+      updated_date
+    }
+  }
+`;
