@@ -4,6 +4,7 @@ import {
   waitForElementToBeRemoved,
   fireEvent,
   act,
+  waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
@@ -16,6 +17,7 @@ import {
   GET_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
+import { getUpdatedFileName } from "../lib/helpers/s3";
 
 // mocks
 const mocksData = [];
@@ -100,11 +102,13 @@ mocksData.push({
   },
 });
 // upload file, presigned URL
+const file = new File(["hello"], "hello.png", { type: "image/png" });
+const { fileName } = getUpdatedFileName(file);
 mocksData.push({
   request: {
     query: GET_UPLOAD_RESOURCE_URL,
     variables: {
-      fileName: "hello.png",
+      fileName: fileName,
     },
   },
   result: {
@@ -225,10 +229,6 @@ describe("Admin add resource page", () => {
     const file = new File(["hello"], "hello.png", { type: "image/png" });
     await sut();
 
-    // const inputFile: HTMLInputElement = screen.getByTestId(
-    //   "resource_file_upload"
-    // );
-    // userevent.upload(inputFile, file);
     const hiddenFileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
@@ -238,13 +238,10 @@ describe("Admin add resource page", () => {
     });
 
     expect(hiddenFileInput.files.length).toBe(1);
-    // fireEvent.change(inputFile, { target: { files: [file] } });
-    // await waitFor(() => expect(inputFile).toBeTruthy());
   });
 
   it("submit form", async () => {
     await sut();
-    const file = new File(["hello"], "hello.png", { type: "image/png" });
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
       target: { value: "avbv" },
@@ -271,28 +268,28 @@ describe("Admin add resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
+    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+
     const hiddenFileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
     expect(hiddenFileInput.files.length).toBe(0);
-    await act(async () => {
+    await waitFor(async () => {
       fireEvent.change(hiddenFileInput, { target: { files: [file] } });
     });
+
     expect(hiddenFileInput.files.length).toBe(1);
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
-
-    // fireEvent.submit(screen.queryByTestId("resource-add-form"));
-
-    await act(async () => {
+    await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("resource-add-form"));
-      // fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    // await waitFor(() => {
-    // expect(screen.getByTestId("sureModal")).toBeVisible();
-    //   expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
-    // });
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+    });
 
     // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
     // fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));

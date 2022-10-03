@@ -13,4 +13,6 @@ export type addResourceFormField = {
   resource_avail_therapist: number;
   resource_avail_onlyme: number;
   resource_avail_all: number;
+  uploadFile: File;
+  uploadFileURL: string;
 };

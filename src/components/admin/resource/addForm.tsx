@@ -33,6 +33,8 @@ const defaultFormValue = {
   resource_avail_therapist: 0,
   agenda_id: "",
   file_name: "",
+  uploadFile: null,
+  uploadFileURL: "",
 };
 
 type propTypes = {
@@ -104,9 +106,22 @@ export default function AddForm(props: propTypes) {
 
   const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL, {
     /* istanbul ignore next */
-    onCompleted: () => {
+    onCompleted: (data) => {
       /* istanbul ignore next */
       props.setLoader(false);
+      if (
+        data &&
+        data?.getUploadResourceUrl &&
+        data?.getUploadResourceUrl.resource_upload
+      ) {
+        // debugger;
+        // setFormFields((oldValues) => ({ ...oldValues, ["uploadFileURL"]: data.getUploadResourceUrl.resource_upload }));
+        // formFields.uploadFileURL = data.getUploadResourceUrl.resource_upload;
+        handleFileChange(
+          formFields.uploadFile,
+          data.getUploadResourceUrl.resource_upload
+        );
+      }
     },
   });
 
@@ -188,48 +203,39 @@ export default function AddForm(props: propTypes) {
     if (!fileObj) {
       return;
     }
+    // debugger;
     const { fileName } = getUpdatedFileName(event.target.files[0]);
-    try {
-      props.setLoader(true);
-      const { data: preSignedData } = await getPreSignedURL({
-        variables: { fileName: fileName },
-      });
-      /* istanbul ignore else */
-      if (
-        preSignedData &&
-        preSignedData?.getUploadResourceUrl &&
-        preSignedData?.getUploadResourceUrl.resource_upload
-      ) {
-        handleFileChange(
-          fileObj,
-          fileName,
-          preSignedData.getUploadResourceUrl.resource_upload
-        );
-      }
-    } catch (error) {
-      enqueueSnackbar("There is an error with file upload!", {
-        variant: "error",
-      });
-      props.setLoader(false);
-    }
+    // try {
+    props.setLoader(true);
+    formFields.uploadFile = fileObj;
+    formFields.file_name = fileName;
+    setSelectedFile(fileObj);
+    setFormFields((oldValues) => ({ ...oldValues, ["uploadFile"]: fileObj }));
+    setFormFields((oldValues) => ({ ...oldValues, ["file_name"]: fileName }));
+
+    getPreSignedURL({
+      variables: { fileName: fileName },
+    });
+    props.setLoader(false);
   };
 
-  const handleFileChange = (fileObj: File, fileName: string, url: string) => {
+  const handleFileChange = (fileObj: File, url: string) => {
+    /* istanbul ignore next */
     setSelectedFile(fileObj);
-    formFields.file_name = fileName;
     preSignedURL.current = url;
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     if (!selectedFile?.name) {
       enqueueSnackbar("Please select a file", {
         variant: "error",
       });
       return;
     }
-    /* istanbul ignore else */
+
+    /* istanbul ignore next */
     if (
       !formFields.resource_avail_admin &&
       !formFields.resource_avail_onlyme &&
@@ -248,8 +254,9 @@ export default function AddForm(props: propTypes) {
 
   const uploadFile = async () => {
     try {
-      if (getPreSignedURL) {
-        props.setLoader(true);
+      props.setLoader(true);
+      if (preSignedURL.current) {
+        /* istanbul ignore next */
         const uploadStatus = await uploadToS3(
           selectedFile,
           preSignedURL.current
