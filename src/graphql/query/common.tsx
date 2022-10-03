@@ -164,6 +164,43 @@ export const GET_TOKEN_DATA = gql`
   }
 `;
 
+export const GET_DISORDER_DATA = gql`
+  query MyQuery {
+    getAllDisorder {
+      _id
+      disorder_name
+      user_type
+    }
+  }
+`;
+
+export const GET_MODEL_BY_DISORDERID_DATA = gql`
+  query MyQuery($disorderId: String!) {
+    getModelByDisorderId(disorderId: $disorderId) {
+      _id
+      model_name
+    }
+  }
+`;
+
+export const GET_CATEGORY_BY_MODELID_DATA = gql`
+  query MyQuery($modelId: String!) {
+    getCategoryByModelId(modelId: $modelId) {
+      _id
+      category_name
+    }
+  }
+`;
+
+export const GET_AGENDA_BY_DISORDER_AND_MODEL_DATA = gql`
+  query MyQuery($disorderId: String!, $modelId: String!) {
+    getAgendaByDisorderAndModel(disorderId: $disorderId, modelId: $modelId) {
+      _id
+      agenda_name
+    }
+  }
+`;
+
 export const GET_ADMIN_TOKEN_DATA = gql`
   query MyQuery {
     getTokenData {
