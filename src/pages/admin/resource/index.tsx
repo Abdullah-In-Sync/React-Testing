@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
+import { useSnackbar } from "notistack";
 
 // GRAPHQL
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import {
   GET_ADMIN_RESOURCE_DATA,
   GET_DISORDER_MODEL_LIST,
   GET_CATEGORY,
   GET_UNAPPROVE_RESOURCE,
 } from "../../../graphql/query/resource";
-
+import { DELETE_RESOURCE } from "../../../graphql/mutation/resource";
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
@@ -27,6 +28,7 @@ import CardGenerator from "../../../components/common/CardGenerator";
 import InputBase from "@mui/material/InputBase";
 import Grid from "@mui/material/Grid";
 import CrudForm from "../../../components/common/CrudForm";
+import CrudDialog from "../../../components/common/CrudDialog";
 import NextLink from "next/link";
 
 // COMPONENT STYLES
@@ -128,6 +130,11 @@ const Resource: NextPage = () => {
   const [filterValue, setFilterValue] = useState<any>({});
   const [searchText, setSearchText] = useState<string>("");
   const [dataList, setDataList] = useState<any>([]);
+  const [isMutating, setIsMutation] = useState<boolean>(false);
+  const [resourceId, setResourceId] = useState<any>("");
+  const { enqueueSnackbar } = useSnackbar();
+  const [deletConfirmationModal, setDeletConfirmationModal] =
+    useState<boolean>(false);
 
   // GRAPHQL
   const { loading, data: dataListData } = useQuery<
@@ -177,6 +184,7 @@ const Resource: NextPage = () => {
     }
   }, [unApproveResourceList]);
 
+  const [deleteResource] = useMutation(DELETE_RESOURCE);
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
 
@@ -199,7 +207,7 @@ const Resource: NextPage = () => {
     {
       key: "actions",
       visible: true,
-      render: () => (
+      render: (_, value) => (
         <>
           <IconButtonWrapper aria-label="create" size="small">
             <CreateIcon />
@@ -209,7 +217,15 @@ const Resource: NextPage = () => {
             <FavoriteBorderIcon />
           </IconButtonWrapper>
 
-          <IconButtonWrapper aria-label="delete" size="small">
+          <IconButtonWrapper
+            onClick={() => {
+              setDeletConfirmationModal(true);
+              setResourceId(value?._id);
+            }}
+            data-testid={"deleteIcon_" + value?._id}
+            aria-label="delete"
+            size="small"
+          >
             <DeleteIcon />
           </IconButtonWrapper>
 
@@ -316,6 +332,22 @@ const Resource: NextPage = () => {
     ],
   ];
 
+  /* istanbul ignore next */
+  const handleDelete = async (id) => {
+    /* istanbul ignore else */
+    setIsMutation(true);
+    deleteResource({
+      variables: {
+        resourceId: id,
+      },
+      onCompleted: () => {
+        setIsMutation(false);
+        setDeletConfirmationModal(false);
+        enqueueSnackbar("Data deleted successfully!", { variant: "error" });
+      },
+    });
+  };
+
   const handleFilterChange = (value) => {
     /* istanbul ignore next */
     setFilterValue(value);
@@ -379,6 +411,15 @@ const Resource: NextPage = () => {
         <Box>
           <Loader visible={loading || unapproveLoading} />
           <CardGenerator data={dataList} fields={fields} />
+          <CrudDialog
+            title="Delete Resource"
+            description="Are you sure you want to delete this resource? You will not be able to restore this again."
+            okText="Delete"
+            submitButtonDisabled={isMutating}
+            onsubmit={() => handleDelete(resourceId)}
+            open={deletConfirmationModal}
+            onClose={() => setDeletConfirmationModal(false)}
+          />
         </Box>
       </Layout>
     </>

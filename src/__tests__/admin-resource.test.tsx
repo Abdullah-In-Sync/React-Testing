@@ -4,13 +4,14 @@ import {
   screen,
   render,
   waitForElementToBeRemoved,
+  fireEvent,
   waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { GET_ADMIN_RESOURCE_DATA } from "../graphql/query/resource";
-
+import { DELETE_RESOURCE } from "../graphql/mutation/resource";
 // mocks
 const buildMocks = (): {
   mocks: MockedResponse[];
@@ -82,6 +83,23 @@ const buildMocks = (): {
     },
   });
 
+  // Delete Resource By Id
+  _mocks.push({
+    request: {
+      query: DELETE_RESOURCE,
+      variables: {
+        resourceId: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
+      },
+    },
+    result: {
+      data: {
+        deleteResource: {
+          deleted: true,
+        },
+      },
+    },
+  });
+
   return { mocks: _mocks };
 };
 
@@ -103,6 +121,53 @@ describe("Admin Resource page", () => {
   test("Renders Admin card wrapper container", async () => {
     await sut();
     expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      ).toBeInTheDocument()
+    );
     await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(3));
+  });
+
+  test("Click Delete icon should open Delete resource popup", async () => {
+    await sut();
+    await waitFor(() =>
+      fireEvent.click(
+        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      )
+    );
+    expect(screen.getByText("Delete Resource")).toBeInTheDocument();
+  });
+
+  test("Click Delete button should delete data and load list", async () => {
+    await sut();
+    await waitFor(() =>
+      fireEvent.click(
+        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      )
+    );
+  });
+
+  test("Click delete feedback button with saveButton", async () => {
+    await sut();
+    await waitFor(() =>
+      fireEvent.click(
+        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      )
+    );
+    expect(screen.getByText("Delete Resource")).toBeInTheDocument();
+    fireEvent.submit(screen.queryByTestId("saveButton"));
+  });
+
+  test("Click delete feedback button with cancelButton", async () => {
+    await sut();
+    await waitFor(() =>
+      fireEvent.click(
+        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      )
+    );
+    expect(screen.getByText("Delete Resource")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("cancelButton"));
+    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
   });
 });
