@@ -5,7 +5,11 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
 import { GET_ADMIN_RESOURCE_DATA } from "../graphql/query/resource";
-import { ADD_FAVOURITE, DELETE_RESOURCE, REMOVE_FAVOURITE } from "../graphql/mutation/resource";
+import {
+  ADD_FAVOURITE,
+  DELETE_RESOURCE,
+  REMOVE_FAVOURITE,
+} from "../graphql/mutation/resource";
 // mocks
 const buildMocks = (): {
   mocks: MockedResponse[];

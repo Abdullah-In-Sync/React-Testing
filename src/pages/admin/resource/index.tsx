@@ -14,7 +14,7 @@ import {
 import {
   ADD_FAVOURITE,
   DELETE_RESOURCE,
-  REMOVE_FAVOURITE
+  REMOVE_FAVOURITE,
 } from "../../../graphql/mutation/resource";
 
 // MUI COMPONENTS
