@@ -5,8 +5,11 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
 import { GET_ADMIN_RESOURCE_DATA } from "../graphql/query/resource";
-import { ADD_FAVOURITE, DELETE_RESOURCE } from "../graphql/mutation/resource";
-
+import {
+  ADD_FAVOURITE,
+  DELETE_RESOURCE,
+  REMOVE_FAVOURITE,
+} from "../graphql/mutation/resource";
 // mocks
 const buildMocks = (): {
   mocks: MockedResponse[];
@@ -93,7 +96,7 @@ const buildMocks = (): {
     request: {
       query: ADD_FAVOURITE,
       variables: {
-        resourceId: "fffe8041-fc77-40fa-a83e-cf76197d1499",
+        resourceId: "abfd4ef5-66f2-463c-be2e-86fe8fa449b2",
       },
     },
     result: {
@@ -116,6 +119,22 @@ const buildMocks = (): {
     result: {
       data: {
         deleteResource: {
+          deleted: true,
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: REMOVE_FAVOURITE,
+      variables: {
+        resfavId: "test",
+      },
+    },
+    result: {
+      data: {
+        deleteFavouriteResource: {
           deleted: true,
         },
       },
@@ -163,6 +182,23 @@ describe("Admin Resource page", () => {
     await sut();
     await waitFor(() =>
       expect(
+        screen.queryByTestId("fav_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(
+      screen.queryByTestId("fav_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+    );
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("fav_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+      ).toHaveStyle(`color: red`)
+    );
+  });
+
+  test("should remove from favourites", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(
         screen.queryByTestId("fav_fffe8041-fc77-40fa-a83e-cf76197d1499")
       ).toBeInTheDocument()
     );
@@ -175,7 +211,7 @@ describe("Admin Resource page", () => {
     await waitFor(() =>
       expect(
         screen.queryByTestId("fav_fffe8041-fc77-40fa-a83e-cf76197d1499")
-      ).toHaveStyle(`color: red`)
+      ).toHaveStyle(`color: rgba(0, 0, 0, 0.54)`)
     );
   });
 });
