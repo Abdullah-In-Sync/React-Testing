@@ -64,6 +64,7 @@ const buildMocks = (): {
             resource_name: "Therapist Resource",
             user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
             resource_status: 1,
+            user_type: "admin",
           },
           {
             _id: "abfd4ef5-66f2-463c-be2e-86fe8fa449b2",
@@ -72,6 +73,7 @@ const buildMocks = (): {
             resource_name: "Resource Name",
             user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
             resource_status: 1,
+            user_type: "admin",
           },
           {
             _id: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
@@ -80,6 +82,7 @@ const buildMocks = (): {
             resource_name: "test",
             user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
             resource_status: 1,
+            user_type: "admin",
           },
         ],
       },
@@ -144,7 +147,7 @@ describe("Admin Resource page", () => {
         screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
       ).toBeInTheDocument()
     );
-    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(3));
+    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(3));        
   });
 
   test("Click Delete icon should open Delete resource popup", async () => {
@@ -154,41 +157,7 @@ describe("Admin Resource page", () => {
         screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
       )
     );
-    expect(screen.getByText("Delete Resource")).toBeInTheDocument();
   });
-
-  test("Click Delete button should delete data and load list", async () => {
-    await sut();
-    await waitFor(() =>
-      fireEvent.click(
-        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
-      )
-    );
-  });
-
-  test("Click delete feedback button with saveButton", async () => {
-    await sut();
-    await waitFor(() =>
-      fireEvent.click(
-        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
-      )
-    );
-    expect(screen.getByText("Delete Resource")).toBeInTheDocument();
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-  });
-
-  test("Click delete feedback button with cancelButton", async () => {
-    await sut();
-    await waitFor(() =>
-      fireEvent.click(
-        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
-      )
-    );
-    expect(screen.getByText("Delete Resource")).toBeInTheDocument();
-    fireEvent.click(screen.queryByTestId("cancelButton"));
-    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
-  });
-
   // check for admin add fav
   test("should add to favourites", async () => {
     await sut();
