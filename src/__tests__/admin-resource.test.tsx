@@ -145,7 +145,7 @@ describe("Admin Resource page", () => {
       ).toBeInTheDocument()
     );
     await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(3));
-  });  
+  });
 
   test("Click Delete icon should open Delete resource popup", async () => {
     await sut();

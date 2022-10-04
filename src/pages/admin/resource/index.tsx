@@ -191,7 +191,7 @@ const Resource: NextPage = () => {
   }, [unApproveResourceList]);
 
   const [deleteResource] = useMutation(DELETE_RESOURCE);
-  
+
   /* istanbul ignore next */
   const addFavour = async (id: string) => {
     addFavourite({
