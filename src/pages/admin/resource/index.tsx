@@ -10,7 +10,10 @@ import {
   GET_CATEGORY,
   GET_UNAPPROVE_RESOURCE,
 } from "../../../graphql/query/resource";
-import { ADD_FAVOURITE } from "../../../graphql/mutation/resource";
+import {
+  ADD_FAVOURITE,
+  REMOVE_FAVOURITE,
+} from "../../../graphql/mutation/resource";
 
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
@@ -131,12 +134,14 @@ const Resource: NextPage = () => {
   const [dataList, setDataList] = useState<any>([]);
 
   const [addFavourite] = useMutation(ADD_FAVOURITE);
+  const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
 
   // GRAPHQL
-  const { loading, data: dataListData } = useQuery<
-    ResourceListData,
-    ResourceListVars
-  >(GET_ADMIN_RESOURCE_DATA, {
+  const {
+    loading,
+    data: dataListData,
+    refetch,
+  } = useQuery<ResourceListData, ResourceListVars>(GET_ADMIN_RESOURCE_DATA, {
     variables: {
       userType: "admin",
       categoryId: filterValue?.categoryId ?? "",
@@ -180,15 +185,30 @@ const Resource: NextPage = () => {
     }
   }, [unApproveResourceList]);
 
-  const addFavour = async (id: string) => {
-    addFavourite({
-      variables: {
-        resourceId: id,
-      },
-      onCompleted: () => {
-        document.getElementById("fav_" + id).style.color = "red";
-      },
-    });
+  const addFavour = async (id: string, isFav: string) => {
+    if (!isFav) {
+      addFavourite({
+        variables: {
+          resourceId: id,
+        },
+        onCompleted: () => {
+          refetch();
+          document.getElementById("fav_" + id).style.color = "red";
+        },
+      });
+    } else {
+      // remove from favourite
+      removeFavourite({
+        variables: {
+          resfavId: isFav,
+        },
+        onCompleted: () => {
+          refetch();
+          document.getElementById("fav_" + id).style.color =
+            "rgba(0, 0, 0, 0.54)";
+        },
+      });
+    }
   };
 
   //**  TABLE DATA COLUMNS **//
@@ -223,7 +243,14 @@ const Resource: NextPage = () => {
             <FavoriteBorderIcon
               data-testid={"fav_" + value?._id}
               id={"fav_" + value?._id}
-              onClick={() => addFavour(value?._id)}
+              onClick={() =>
+                addFavour(
+                  value?._id,
+                  value?.fav_res_detail.length > 0
+                    ? value?.fav_res_detail[0]._id
+                    : ""
+                )
+              }
               sx={{
                 color: value?.fav_res_detail.length > 0 ? "red" : "",
               }}
@@ -375,6 +402,7 @@ const Resource: NextPage = () => {
           <Grid item xs={9}>
             <Box sx={crudButtons}>
               <AddButton
+                href="/v2/admin/resource/add"
                 className="mr-3"
                 label="Add Resource"
                 startIcon={<ListAltIcon />}

@@ -55,3 +55,11 @@ export const ADD_FAVOURITE = gql`
     }
   }
 `;
+
+export const REMOVE_FAVOURITE = gql`
+  mutation ($resfavId: String!) {
+    deleteFavouriteResource(resfavId: $resfavId) {
+      deleted
+    }
+  }
+`;
