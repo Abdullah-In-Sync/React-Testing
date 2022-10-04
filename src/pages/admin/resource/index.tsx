@@ -3,13 +3,14 @@ import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
-import { useQuery, useLazyQuery } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import {
   GET_ADMIN_RESOURCE_DATA,
   GET_DISORDER_MODEL_LIST,
   GET_CATEGORY,
   GET_UNAPPROVE_RESOURCE,
 } from "../../../graphql/query/resource";
+import { ADD_FAVOURITE } from "../../../graphql/mutation/resource";
 
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
@@ -129,6 +130,8 @@ const Resource: NextPage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [dataList, setDataList] = useState<any>([]);
 
+  const [addFavourite] = useMutation(ADD_FAVOURITE);
+
   // GRAPHQL
   const { loading, data: dataListData } = useQuery<
     ResourceListData,
@@ -177,6 +180,17 @@ const Resource: NextPage = () => {
     }
   }, [unApproveResourceList]);
 
+  const addFavour = async (id: string) => {
+    addFavourite({
+      variables: {
+        resourceId: id,
+      },
+      onCompleted: () => {
+        document.getElementById("fav_" + id).style.color = "red";
+      },
+    });
+  };
+
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
 
@@ -199,14 +213,21 @@ const Resource: NextPage = () => {
     {
       key: "actions",
       visible: true,
-      render: () => (
+      render: (_, value) => (
         <>
           <IconButtonWrapper aria-label="create" size="small">
             <CreateIcon />
           </IconButtonWrapper>
 
           <IconButtonWrapper aria-label="favorite" size="small">
-            <FavoriteBorderIcon />
+            <FavoriteBorderIcon
+              data-testid={"fav_" + value?._id}
+              id={"fav_" + value?._id}
+              onClick={() => addFavour(value?._id)}
+              sx={{
+                color: value?.fav_res_detail.length > 0 ? "red" : "",
+              }}
+            />
           </IconButtonWrapper>
 
           <IconButtonWrapper aria-label="delete" size="small">
