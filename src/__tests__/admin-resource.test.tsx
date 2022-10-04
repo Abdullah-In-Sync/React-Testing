@@ -166,7 +166,7 @@ describe("Admin Resource page", () => {
         screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
       ).toBeInTheDocument()
     );
-    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(3));        
+    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(3));
   });
 
   test("Click Delete icon should open Delete resource popup", async () => {
