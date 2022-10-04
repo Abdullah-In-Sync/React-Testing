@@ -4,14 +4,18 @@ import Loader from "../../../components/common/Loader";
 import { useSnackbar } from "notistack";
 
 // GRAPHQL
-import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import {
   GET_ADMIN_RESOURCE_DATA,
   GET_DISORDER_MODEL_LIST,
   GET_CATEGORY,
   GET_UNAPPROVE_RESOURCE,
 } from "../../../graphql/query/resource";
-import { DELETE_RESOURCE } from "../../../graphql/mutation/resource";
+import {
+  ADD_FAVOURITE,
+  DELETE_RESOURCE,
+} from "../../../graphql/mutation/resource";
+
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
@@ -136,6 +140,8 @@ const Resource: NextPage = () => {
   const [deletConfirmationModal, setDeletConfirmationModal] =
     useState<boolean>(false);
 
+  const [addFavourite] = useMutation(ADD_FAVOURITE);
+
   // GRAPHQL
   const { loading, data: dataListData } = useQuery<
     ResourceListData,
@@ -185,6 +191,19 @@ const Resource: NextPage = () => {
   }, [unApproveResourceList]);
 
   const [deleteResource] = useMutation(DELETE_RESOURCE);
+  
+  /* istanbul ignore next */
+  const addFavour = async (id: string) => {
+    addFavourite({
+      variables: {
+        resourceId: id,
+      },
+      onCompleted: () => {
+        document.getElementById("fav_" + id).style.color = "red";
+      },
+    });
+  };
+
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
 
@@ -214,7 +233,14 @@ const Resource: NextPage = () => {
           </IconButtonWrapper>
 
           <IconButtonWrapper aria-label="favorite" size="small">
-            <FavoriteBorderIcon />
+            <FavoriteBorderIcon
+              data-testid={"fav_" + value?._id}
+              id={"fav_" + value?._id}
+              onClick={() => addFavour(value?._id)}
+              sx={{
+                color: value?.fav_res_detail.length > 0 ? "red" : "",
+              }}
+            />
           </IconButtonWrapper>
 
           <IconButtonWrapper

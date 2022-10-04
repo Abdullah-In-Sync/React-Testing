@@ -8,7 +8,7 @@ import {
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/admin/feedback";
-import { GET_TOKEN_DATA } from "../graphql/query/common";
+import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
 import { GET_FEEDBACK_DATA, GET_ORG_DATA } from "../graphql/query";
 import {
   ADD_FEEDBACK,
@@ -189,7 +189,7 @@ const buildMocks = (): {
 
   _mocks.push({
     request: {
-      query: GET_TOKEN_DATA,
+      query: GET_ADMIN_TOKEN_DATA,
       variables: {},
     },
     result: {

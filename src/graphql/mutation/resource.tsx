@@ -47,6 +47,15 @@ export const ADMIN_CREATE_RESOURCE = gql`
     }
   }
 `;
+
+export const ADD_FAVOURITE = gql`
+  mutation MyMutation($resourceId: String!) {
+    addFavouriteResource(resourceId: $resourceId) {
+      resourceId
+    }
+  }
+`;
+
 export const DELETE_RESOURCE = gql`
   mutation ($resourceId: String!) {
     deleteResource(resourceId: $resourceId) {
