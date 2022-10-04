@@ -56,6 +56,14 @@ export const ADD_FAVOURITE = gql`
   }
 `;
 
+export const DELETE_RESOURCE = gql`
+  mutation ($resourceId: String!) {
+    deleteResource(resourceId: $resourceId) {
+      deleted
+    }
+  }
+`;
+
 export const REMOVE_FAVOURITE = gql`
   mutation ($resfavId: String!) {
     deleteFavouriteResource(resfavId: $resfavId) {
