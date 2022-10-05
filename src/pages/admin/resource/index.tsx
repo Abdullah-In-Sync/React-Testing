@@ -33,7 +33,8 @@ import CardGenerator from "../../../components/common/CardGenerator";
 import InputBase from "@mui/material/InputBase";
 import Grid from "@mui/material/Grid";
 import CrudForm from "../../../components/common/CrudForm";
-import CrudDialog from "../../../components/common/CrudDialog";
+import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal";
+
 import NextLink from "next/link";
 
 // COMPONENT STYLES
@@ -135,13 +136,11 @@ const Resource: NextPage = () => {
   const [filterValue, setFilterValue] = useState<any>({});
   const [searchText, setSearchText] = useState<string>("");
   const [dataList, setDataList] = useState<any>([]);
-  const [isMutating, setIsMutation] = useState<boolean>(false);
-  const [resourceId, setResourceId] = useState<any>("");
   const { enqueueSnackbar } = useSnackbar();
-  const [deletConfirmationModal, setDeletConfirmationModal] =
-    useState<boolean>(false);
-
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [addFavourite] = useMutation(ADD_FAVOURITE);
+  const [resourceId, setResourceId] = useState<any>("");
+  const [isMutating, setIsMutation] = useState<boolean>(false);
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
 
@@ -267,18 +266,19 @@ const Resource: NextPage = () => {
             />
           </IconButtonWrapper>
 
-          <IconButtonWrapper
-            onClick={() => {
-              setDeletConfirmationModal(true);
-              setResourceId(value?._id);
-            }}
-            data-testid={"deleteIcon_" + value?._id}
-            aria-label="delete"
-            size="small"
-          >
-            <DeleteIcon />
-          </IconButtonWrapper>
-
+          {value?.user_type == "admin" && (
+            <IconButtonWrapper
+              onClick={() => {
+                setModalOpen(true);
+                setResourceId(value?._id);
+              }}
+              data-testid={"deleteIcon_" + value?._id}
+              aria-label="delete"
+              size="small"
+            >
+              <DeleteIcon />
+            </IconButtonWrapper>
+          )}
           <IconButtonWrapper aria-label="download" size="small">
             <CloudDownloadIcon />
           </IconButtonWrapper>
@@ -392,8 +392,8 @@ const Resource: NextPage = () => {
       },
       onCompleted: () => {
         setIsMutation(false);
-        setDeletConfirmationModal(false);
         enqueueSnackbar("Data deleted successfully!", { variant: "error" });
+        window.location.reload();
       },
     });
   };
@@ -462,16 +462,36 @@ const Resource: NextPage = () => {
         <Box>
           <Loader visible={loading || unapproveLoading} />
           <CardGenerator data={dataList} fields={fields} />
-          <CrudDialog
-            title="Delete Resource"
-            description="Are you sure you want to delete this resource? You will not be able to restore this again."
-            okText="Delete"
-            submitButtonDisabled={isMutating}
-            onsubmit={() => handleDelete(resourceId)}
-            open={deletConfirmationModal}
-            onClose={() => setDeletConfirmationModal(false)}
-          />
         </Box>
+        <DeleteSureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
+          <Box marginTop="20px" display="flex" justifyContent="end">
+            <Button
+              variant="contained"
+              color="inherit"
+              size="small"
+              data-testid="deleteResourceModalCancelButton"
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              sx={{ marginLeft: "5px" }}
+              size="small"
+              data-testid="deleteResourceModalConfirmButton"
+              disabled={isMutating}
+              onClick={() => {
+                setModalOpen(false);
+                handleDelete(resourceId);
+              }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </DeleteSureModal>
       </Layout>
     </>
   );

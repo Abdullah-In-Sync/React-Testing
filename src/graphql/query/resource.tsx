@@ -78,6 +78,7 @@ export const GET_ADMIN_RESOURCE_DATA = gql`
       resource_desc
       resource_name
       user_id
+      user_type
     }
   }
 `;
