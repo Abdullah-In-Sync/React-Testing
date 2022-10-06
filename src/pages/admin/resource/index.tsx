@@ -261,7 +261,10 @@ const Resource: NextPage = () => {
                 )
               }
               sx={{
-                color: value?.fav_res_detail && value?.fav_res_detail.length > 0 ? "red" : "",
+                color:
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
+                    ? "red"
+                    : "",
               }}
             />
           </IconButtonWrapper>
