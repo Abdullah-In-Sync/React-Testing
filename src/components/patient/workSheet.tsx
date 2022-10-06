@@ -15,42 +15,41 @@ const TableGenerator = dynamic(
   import("../../components/common/TableGenerator"),
   { ssr: false }
 );
-import { buildPatientTokenValidationQuery } from "../../lib/helpers/auth";
 
 // GRAPHQL
-import { useLazyQuery } from "@apollo/client";
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
+import FileUpload from "../common/Dialog/index";
+import { useQuery } from "@apollo/client";
 
 const WorkSheet = () => {
   // TABLE PROPS
+
   const [page, setPage] = useState<number>(0);
-  const [loader, setLoader] = useState<boolean>(false);
-  const [patientId, setpatientId] = useState<string>("");
+
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
+  const [fileUpload, setFileUpload] = useState<boolean | null>(null);
 
   // GRAPHQL
-  const [gettokenData] = buildPatientTokenValidationQuery((tokenData) => {
-    setpatientId(tokenData.patient_data._id);
-  });
 
-  const [getPatientResourceData, { data: resData }] = useLazyQuery(
-    GET_PATIENT_RESOURCE_DATA,
-    {
-      onCompleted: () => {
-        setLoader(false);
-      },
-    }
-  );
+  const closeFileUploadDialog = () => {
+    setIsDialogOpen(false);
+    setFileUpload(false);
+  };
 
   useEffect(() => {
-    setLoader(true);
-    gettokenData({ variables: {} });
-  }, []);
-
-  useEffect(() => {
-    if (patientId) {
-      getPatientResourceData();
+    // no condition in case of open
+    if (isDialogOpen === false) {
+      setFileUpload(false);
+      setIsDialogOpen(true);
     }
-  }, [patientId]);
+  }, [fileUpload === true, isDialogOpen === false]);
+
+  const openFileUploadDialog = () => {
+    setFileUpload(true);
+  };
+
+  const { data: resData, loading } = useQuery(GET_PATIENT_RESOURCE_DATA);
+  console.log("Value", resData);
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -81,18 +80,29 @@ const WorkSheet = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton size="small">
+          <IconButton size="small" onClick={openFileUploadDialog}>
+            <FileUpload
+              data-testid="fileUpload"
+              key={value}
+              closeFileUploadDialog={closeFileUploadDialog}
+              open={fileUpload}
+              ptshareId={
+                resData?.getPatientResourceList?.find(
+                  (val) => val?.resource_data[0]?.resource_type === "2"
+                )._id
+              }
+            />
             <CloudUploadIcon />
           </IconButton>
           <IconButton
             size="small"
             href={
-              value.resource_data[0]?.patient_share_filename != null
-                ? value.resource_data[0]?.patient_share_filename
+              value?.patient_share_filename != null
+                ? value?.patient_share_filename
                 : "#"
             }
             sx={{
-              color: "primary.main",
+              color: value?.patient_share_filename != null ? "red" : "",
             }}
           >
             <AttachFileIcon />
@@ -120,7 +130,7 @@ const WorkSheet = () => {
 
   return (
     <>
-      <Loader visible={loader} />
+      <Loader visible={loading} />
       <ContentHeader subtitle="Session Resource" />
       <Box>
         <TableGenerator
@@ -134,7 +144,7 @@ const WorkSheet = () => {
             setPage(page);
             /* istanbul ignore next */
           }}
-          loader={loader}
+          loader={Loader}
           backendPagination={true}
           dataCount={10}
           selectedRecords={[]}
