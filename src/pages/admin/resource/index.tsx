@@ -255,13 +255,13 @@ const Resource: NextPage = () => {
               onClick={() =>
                 addFavour(
                   value?._id,
-                  value?.fav_res_detail.length > 0
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
                     ? value?.fav_res_detail[0]._id
                     : ""
                 )
               }
               sx={{
-                color: value?.fav_res_detail.length > 0 ? "red" : "",
+                color: value?.fav_res_detail && value?.fav_res_detail.length > 0 ? "red" : "",
               }}
             />
           </IconButtonWrapper>
