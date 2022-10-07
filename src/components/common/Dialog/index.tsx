@@ -3,20 +3,16 @@ import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import { GET_UPLOAD_RESOURCE_URL } from "./../../../graphql/query/resource";
 import { UPDATE_RESOURCE } from "../../../graphql/mutation/resource";
 import { useLazyQuery, useMutation } from "@apollo/client";
-// import { ConfirmationDialog } from "../ConfirmationDailog/index";
 import { FileUploadDialog } from "../FileUploadDailog/index";
 import SureModal from "../../admin/resource/SureModal";
-import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
-  const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
-  const [isShowConfirm, setIsShowConfirm] = React.useState<boolean>(false);
-  const [updatedFileName, setUpdatedFileName] = React.useState<{
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [isShowConfirm, setIsShowConfirm] = useState<boolean>(false);
+  const [updatedFileName, setUpdatedFileName] = useState<{
     fileName: any;
   }>({ fileName: null });
-
-  const [isConfirmButtonClicked, setIsConfirmButtonClicked] =
-    React.useState<boolean>(false);
 
   const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL);
 
@@ -33,7 +29,6 @@ export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsConfirmButtonClicked(true);
 
     const res = await getPreSignedURL({
       variables: updatedFileName,
@@ -54,12 +49,10 @@ export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
               },
             },
           });
-          console.log("res2: ", res2);
           if (res2) {
             setIsShowConfirm(false);
             closeFileUploadDialog();
             setIsSubmit(false);
-            setIsConfirmButtonClicked(false);
           }
         }
       }
