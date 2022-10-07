@@ -1,10 +1,12 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import { GET_UPLOAD_RESOURCE_URL } from "./../../../graphql/query/resource";
 import { UPDATE_RESOURCE } from "../../../graphql/mutation/resource";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { ConfirmationDialog } from "../ConfirmationDailog/index";
+// import { ConfirmationDialog } from "../ConfirmationDailog/index";
 import { FileUploadDialog } from "../FileUploadDailog/index";
+import SureModal from "../../admin/resource/SureModal";
+import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
 
 export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
   const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
@@ -24,9 +26,6 @@ export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
     e.preventDefault();
     setIsShowConfirm(true);
   };
-  const closeConfirmationDialog = () => {
-    setIsShowConfirm(false);
-  };
 
   const updateFileName = (e) => {
     setUpdatedFileName(getUpdatedFileName(e.target.files[0]));
@@ -39,15 +38,11 @@ export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
     const res = await getPreSignedURL({
       variables: updatedFileName,
     });
-    console.log("RES before if: ", res);
     if (res) {
-      console.log("RES after if: ", res);
-      console.log("updatedFileName: ", updatedFileName);
       const resp = await uploadToS3(
         updatedFileName?.fileName,
         res?.data.getUploadResourceUrl.resource_upload
       );
-      console.log("resp:  ", resp);
 
       if (resp) {
         if (Object.keys(updatedFileName).length > 0) {
@@ -74,13 +69,36 @@ export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
   return (
     <div data-testid="openFileUpload">
       {isShowConfirm && (
-        <ConfirmationDialog
-          open={isShowConfirm}
-          closeConfirmationDialog={closeConfirmationDialog}
-          isConfirmButtonClicked={isConfirmButtonClicked}
-          onConfirmation={handleSubmit}
-          title="Are you sure you want to add doc"
-        />
+        <>
+          <SureModal modalOpen={isShowConfirm} setModalOpen={setIsShowConfirm}>
+            <Box marginTop="20px" display="flex" justifyContent="end">
+              <Button
+                variant="contained"
+                color="inherit"
+                size="small"
+                data-testid="addResourceModalCancelButton"
+                onClick={() => {
+                  setIsShowConfirm(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="error"
+                variant="contained"
+                sx={{ marginLeft: "5px" }}
+                size="small"
+                data-testid="addResourceModalConfirmButton"
+                onClick={(e) => {
+                  setIsShowConfirm(false);
+                  handleSubmit(e);
+                }}
+              >
+                Confirm
+              </Button>
+            </Box>
+          </SureModal>
+        </>
       )}
 
       {open === true && (

@@ -49,7 +49,6 @@ const WorkSheet = () => {
   };
 
   const { data: resData, loading } = useQuery(GET_PATIENT_RESOURCE_DATA);
-  console.log("Value", resData);
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -102,7 +101,8 @@ const WorkSheet = () => {
                 : "#"
             }
             sx={{
-              color: value?.patient_share_filename != null ? "red" : "",
+              color:
+                value?.patient_share_filename != null ? "primary.main" : "",
             }}
           >
             <AttachFileIcon />
