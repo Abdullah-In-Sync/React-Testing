@@ -1,5 +1,13 @@
 import { gql } from "@apollo/client";
 
+export const UPDATE_RESOURCE = gql`
+  mutation ($ptsharresId: ID!, $update: UpdatePatientResourceInput) {
+    updatePatientResourceById(ptsharresId: $ptsharresId, update: $update) {
+      patient_share_filename
+    }
+  }
+`;
+
 export const ADMIN_CREATE_RESOURCE = gql`
   mutation MyMutation(
     $disorderId: String!
