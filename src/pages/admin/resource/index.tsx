@@ -255,13 +255,16 @@ const Resource: NextPage = () => {
               onClick={() =>
                 addFavour(
                   value?._id,
-                  value?.fav_res_detail.length > 0
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
                     ? value?.fav_res_detail[0]._id
                     : ""
                 )
               }
               sx={{
-                color: value?.fav_res_detail.length > 0 ? "red" : "",
+                color:
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
+                    ? "red"
+                    : "",
               }}
             />
           </IconButtonWrapper>
@@ -294,7 +297,7 @@ const Resource: NextPage = () => {
         key: "mode",
         visible: true,
         freeSolo: false,
-        defaultValue: { label: "All", value: "" },
+        defaultValue: { label: "Select Resources", value: "" },
         show: true,
         label: "Select Resources",
         type: "asynccomplete",
@@ -313,10 +316,10 @@ const Resource: NextPage = () => {
         show: true,
         type: "asynccomplete",
         disabled: filterValue?.mode === "approve_resource" ? true : false,
-        defaultValue: { label: "All", value: "" },
+        defaultValue: { label: "Select Disorder", value: "" },
         options: disorderList?.getDisorderModel?.length
           ? [
-              { label: "All", value: "" },
+              { label: "Select Disorder", value: "" },
               ...disorderList.getDisorderModel.map((x) => ({
                 label: x.disorder_name,
                 value: x._id,
@@ -332,7 +335,7 @@ const Resource: NextPage = () => {
         show: true,
         type: "asynccomplete",
         disabled: filterValue?.mode === "approve_resource" ? true : false,
-        defaultValue: { label: "All", value: "" },
+        defaultValue: { label: "Select Modalities", value: "" },
         options: modelData?.length
           ? [
               { label: "All", value: "" },
@@ -348,7 +351,7 @@ const Resource: NextPage = () => {
         label: "Select Type",
         visible: true,
         freeSolo: false,
-        defaultValue: { label: "All", value: "" },
+        defaultValue: { label: "Select Type", value: "" },
         show: true,
         type: "asynccomplete",
         disabled: filterValue?.mode === "approve_resource" ? true : false,
@@ -368,7 +371,7 @@ const Resource: NextPage = () => {
         show: true,
         type: "asynccomplete",
         disabled: filterValue?.mode === "approve_resource" ? true : false,
-        defaultValue: { label: "All", value: "" },
+        defaultValue: { label: "Select Category", value: "" },
         options: categoryList?.getCategoryByModelId?.length
           ? [
               { label: "All", value: "" },
