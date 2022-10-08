@@ -305,7 +305,6 @@ const Resource: NextPage = () => {
           { value: "", label: "All" },
           { value: "resource", label: "My Resources" },
           { value: "favourite", label: "My Favourites" },
-          { value: "approve_resource", label: "Approve Resource" },
         ],
       },
       {
