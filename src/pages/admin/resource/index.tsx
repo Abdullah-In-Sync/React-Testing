@@ -305,7 +305,6 @@ const Resource: NextPage = () => {
           { value: "", label: "All" },
           { value: "resource", label: "My Resources" },
           { value: "favourite", label: "My Favourites" },
-          { value: "approve_resource", label: "Approve Resources" },
         ],
       },
       {
@@ -438,6 +437,17 @@ const Resource: NextPage = () => {
           </Grid>
           <Grid item xs={9}>
             <Box sx={crudButtons}>
+              <Button
+                className={`text-white`}
+                variant="contained"
+                sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
+                onClick={() => {
+                  handleFilterChange({ mode: "approve_resource" });
+                }}
+              >
+                Approved Resource
+              </Button>
+
               <AddButton
                 href="/v2/admin/resource/add"
                 className="mr-3"
