@@ -108,7 +108,6 @@ const WorkSheet = () => {
             <AttachFileIcon />
           </IconButton>
           <Link
-            // href={"/patient/resource/" + value._id}
             href={{
               pathname: "/patient/resource/" + value._id,
               query: {

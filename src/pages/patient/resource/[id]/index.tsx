@@ -35,7 +35,6 @@ const ResourceDetailById: NextPage = () => {
   const [patientId, setpatientId] = useState<string>("");
   const [fileUpload, setFileUpload] = useState<boolean | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
-  const [myRoute, setMyRoute] = useState("");
 
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
@@ -101,7 +100,6 @@ const ResourceDetailById: NextPage = () => {
   }, [ptId]);
 
   const { data: resData } = useQuery(GET_PATIENT_RESOURCE_DATA);
-  console.log("router values", router);
   return (
     <>
       <Layout>
@@ -112,7 +110,6 @@ const ResourceDetailById: NextPage = () => {
             <Grid container rowSpacing={2} data-testid="patResourceDetail">
               <Grid item xs={6}>
                 <NextLink
-                  // href={"/patient/resource"}
                   passHref
                   href={{
                     pathname: "/patient/resource",

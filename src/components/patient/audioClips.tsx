@@ -77,7 +77,6 @@ const AudioClips = () => {
       visible: true,
       render: (_, value) => (
         <Link
-          // href={"/patient/resource/" + value._id}
           href={{
             pathname: "/patient/resource/" + value._id,
             query: {
