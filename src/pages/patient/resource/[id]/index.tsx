@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
@@ -23,6 +24,8 @@ import NextLink from "next/link";
 import { useLazyQuery } from "@apollo/client";
 import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { GET_PATIENT_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
+import { GET_PATIENT_RESOURCE_DATA } from "../../../../graphql/query/resource";
+import FileUpload from "../../../../components/common/Dialog/index";
 
 const ResourceDetailById: NextPage = () => {
   const router = useRouter();
@@ -30,6 +33,9 @@ const ResourceDetailById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [ptId, setPtId] = useState<string>("");
   const [patientId, setpatientId] = useState<string>("");
+  const [fileUpload, setFileUpload] = useState<boolean | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
+  const [myRoute, setMyRoute] = useState("");
 
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
@@ -50,6 +56,23 @@ const ResourceDetailById: NextPage = () => {
       }
     },
   });
+
+  const openFileUploadDialog = () => {
+    setFileUpload(true);
+  };
+
+  const closeFileUploadDialog = () => {
+    setIsDialogOpen(false);
+    setFileUpload(false);
+  };
+
+  useEffect(() => {
+    // no condition in case of open
+    if (isDialogOpen === false) {
+      setFileUpload(false);
+      setIsDialogOpen(true);
+    }
+  }, [fileUpload === true, isDialogOpen === false]);
 
   useEffect(() => {
     setLoader(true);
@@ -77,6 +100,8 @@ const ResourceDetailById: NextPage = () => {
     }
   }, [ptId]);
 
+  const { data: resData } = useQuery(GET_PATIENT_RESOURCE_DATA);
+  console.log("router values", router);
   return (
     <>
       <Layout>
@@ -86,7 +111,16 @@ const ResourceDetailById: NextPage = () => {
           {patientResourceData?.getResourceDetailById != null ? (
             <Grid container rowSpacing={2} data-testid="patResourceDetail">
               <Grid item xs={6}>
-                <NextLink href={"/patient/resource"} passHref>
+                <NextLink
+                  // href={"/patient/resource"}
+                  passHref
+                  href={{
+                    pathname: "/patient/resource",
+                    query: {
+                      tabName: router.query.tabName,
+                    },
+                  }}
+                >
                   <Button
                     data-testid="backButton"
                     mat-button
@@ -178,7 +212,21 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  <IconButton size="medium" href={"#"}>
+                  <IconButton
+                    size="medium"
+                    href={"#"}
+                    onClick={openFileUploadDialog}
+                  >
+                    <FileUpload
+                      data-testid="fileUpload"
+                      closeFileUploadDialog={closeFileUploadDialog}
+                      open={fileUpload}
+                      ptshareId={
+                        resData?.getPatientResourceList?.find(
+                          (val) => val?.resource_data[0]?.resource_type === "2"
+                        )._id
+                      }
+                    />
                     <FileUploadIcon />
                   </IconButton>
                   <IconButton

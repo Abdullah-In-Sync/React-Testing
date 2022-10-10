@@ -12,6 +12,7 @@ const Scrollbar: FC<ScrollbarProps> = ({ children, ...rest }) => {
 
   return (
     <Scrollbars
+      key={Math.random()}
       data-testid="scrollBar"
       autoHide
       universal

@@ -77,7 +77,16 @@ const InfoSheet = () => {
       columnName: "Actions",
       visible: true,
       render: (_, value) => (
-        <Link href={"/patient/resource/" + value._id} passHref>
+        <Link
+          // href={"/patient/resource/" + value._id}
+          href={{
+            pathname: "/patient/resource/" + value._id,
+            query: {
+              tabName: "info-sheet",
+            },
+          }}
+          passHref
+        >
           <IconButton size="small" data-testid={"viewIcon_" + value._id}>
             <VisibilityIcon />
           </IconButton>

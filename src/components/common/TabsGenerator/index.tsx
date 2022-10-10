@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
+import { useRouter } from "next/router";
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
   return (
@@ -18,11 +19,20 @@ const TabPanel = (props) => {
 };
 
 const TabsGenerator = ({ tabsList, activeTabs }) => {
+  const router = useRouter();
+  console.log("router", router);
   const [activeTab, setActiveTab] = useState(activeTabs);
 
   const handleTabChange = (_, newValue) => {
+    console.log("new value:", newValue);
     setActiveTab(newValue);
   };
+
+  useEffect(() => {
+    if (router.query.tabName) {
+      setActiveTab(router.query.tabName);
+    }
+  }, []);
 
   return (
     <div style={{ overflowX: "hidden", minHeight: 500 }}>
