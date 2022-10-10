@@ -37,7 +37,7 @@ const Resource: NextPage = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Library" />
+        <ContentHeader title="Resources" />
         <TabsGenerator tabsList={tabs} activeTabs="info-sheet" />
       </Layout>
     </>
