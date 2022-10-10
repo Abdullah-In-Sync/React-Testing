@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
@@ -21,10 +21,11 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
-import { useLazyQuery } from "@apollo/client";
 import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
-import { GET_PATIENT_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
-import { GET_PATIENT_RESOURCE_DATA } from "../../../../graphql/query/resource";
+import {
+  GET_PATIENT_RESOURCE_DETAIL,
+  GET_PATIENT_RESOURCE_DATA,
+} from "../../../../graphql/query/resource";
 import FileUpload from "../../../../components/common/Dialog/index";
 
 const ResourceDetailById: NextPage = () => {
