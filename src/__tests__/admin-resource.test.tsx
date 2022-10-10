@@ -174,6 +174,9 @@ describe("Admin Resource page", () => {
     fireEvent.click(
       screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
     );
+    expect(
+      screen.queryByText("Are you sure want to delete this resource?")
+    ).toBeInTheDocument();
   });
   // check for admin add fav
   test("should add to favourites", async () => {

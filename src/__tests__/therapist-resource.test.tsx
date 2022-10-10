@@ -178,11 +178,12 @@ describe("Therapist Resource page", () => {
         screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
       ).toBeInTheDocument()
     );
-    // await waitFor(() =>
-    //   fireEvent.click(
-    //     screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
-    //   )
-    // );
+    fireEvent.click(
+      screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+    );
+    expect(
+      screen.queryByText("Are you sure want to delete this resource?")
+    ).toBeInTheDocument();
   });
   // check for therapist add fav
   test("should add to favourites", async () => {
