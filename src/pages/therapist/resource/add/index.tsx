@@ -8,7 +8,6 @@ import Layout from "../../../../components/layout";
 import { ADMIN_CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
 import { IS_THERAPIST } from "../../../../lib/constants";
 import { buildTherapistTokenValidationQuery } from "../../../../lib/helpers/auth";
-import { superadmin_routes } from "../../../../utility/navItems";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 
@@ -20,15 +19,21 @@ export default function Index() {
 
   const router = useRouter();
 
-  const [therapistData, setTherapistData] = useState<{_id: string; org_id: string}>({
+  const [therapistData, setTherapistData] = useState<{
+    _id: string;
+    org_id: string;
+  }>({
     _id: "",
     org_id: "",
   });
 
   const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
     (therapistData) => {
-        setTherapistData({_id: therapistData.therapist_data._id, org_id: therapistData.therapist_data.org_id})
-        setLoader(false);
+      setTherapistData({
+        _id: therapistData.therapist_data._id,
+        org_id: therapistData.therapist_data.org_id,
+      });
+      setLoader(false);
     }
   );
 
@@ -66,7 +71,7 @@ export default function Index() {
             enqueueSnackbar("Resource added successfully", {
               variant: "success",
             });
-            router.push(superadmin_routes[2].path);
+            router.push("/therapist/resource");
           }
         },
       });
