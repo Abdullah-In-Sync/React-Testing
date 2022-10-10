@@ -35,10 +35,10 @@ const buildMocks = (): {
           user_status: "1",
           created_date: "2021-12-20 16:20:55",
           updated_date: "2021-12-20 16:20:55",
-          therapist_data:{
+          therapist_data: {
             _id: "therapist_id",
-            org_id: "myhelp"
-          }
+            org_id: "myhelp",
+          },
         },
       },
     },
@@ -144,7 +144,9 @@ describe("Render therapist resource detail page", () => {
     }));
     await sut();
     await waitFor(() =>
-      expect(screen.queryByTestId("therapistResourceDetail")).toBeInTheDocument()
+      expect(
+        screen.queryByTestId("therapistResourceDetail")
+      ).toBeInTheDocument()
     );
     expect(screen.queryByText("Description")).toBeInTheDocument();
     expect(screen.queryByText("Instructions")).toBeInTheDocument();
@@ -188,7 +190,9 @@ describe("Render therapist resource detail page", () => {
     }));
     await sut();
     await waitFor(() =>
-      expect(screen.queryByTestId("therapistResourceDetail")).toBeInTheDocument()
+      expect(
+        screen.queryByTestId("therapistResourceDetail")
+      ).toBeInTheDocument()
     );
     expect(screen.queryByText("Description")).toBeInTheDocument();
     fireEvent.click(screen.queryByTestId("viewUrl"));
