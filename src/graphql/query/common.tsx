@@ -214,3 +214,36 @@ export const GET_ADMIN_TOKEN_DATA = gql`
     }
   }
 `;
+
+export const GET_THERAPIST_TOKEN_DATA = gql`
+  query MyQuery {
+    getTokenData {
+      _id
+      user_type
+      parent_id
+      perm_ids
+      user_status
+      created_date
+      updated_date
+      therapist_data {
+        _id
+        accredited_body
+        created_date
+        hos_id
+        hospital_admin_id
+        org_id
+        therapist_add
+        therapist_inscover
+        therapist_name
+        therapist_no
+        therapist_profaccredition
+        therapist_poa_attachment
+        therapist_specialization
+        therapist_status
+        therapist_totexp
+        therapit_proofacredition
+        user_id
+      }
+    }
+  }
+`;
