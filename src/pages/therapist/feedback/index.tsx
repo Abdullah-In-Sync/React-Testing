@@ -46,6 +46,7 @@ const Feedback: NextPage = () => {
 
   const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
     (therapistData) => {
+      /* istanbul ignore next */
       settherapistId(therapistData.therapist_data._id);
     }
   );
