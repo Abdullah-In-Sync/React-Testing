@@ -13,12 +13,7 @@ export const superadmin_routes = [
     key: 2,
     label: "Log Out",
     path: Link + "/account/logout",
-  },
-  {
-    key: 3,
-    label: "All resources",
-    path: Link + "/superadmin/resource/resourcemodel",
-  },
+  }
 ];
 
 //** THERAPIST ROUTES **//

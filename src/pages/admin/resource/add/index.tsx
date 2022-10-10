@@ -67,7 +67,7 @@ export default function Index() {
             enqueueSnackbar("Resource added successfully", {
               variant: "success",
             });
-            router.push(superadmin_routes[2].path);
+            router.push('/admin/resource');
           }
         },
       });
