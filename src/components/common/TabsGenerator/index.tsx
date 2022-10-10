@@ -29,7 +29,7 @@ const TabsGenerator = ({ tabsList, activeTabs }) => {
   };
 
   useEffect(() => {
-    if (router.query.tabName) {
+    if (router?.query.tabName) {
       setActiveTab(router.query.tabName);
     }
   }, []);
