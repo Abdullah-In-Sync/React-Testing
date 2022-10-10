@@ -43,8 +43,8 @@ export const GET_UNAPPROVE_RESOURCE = gql`
   }
 `;
 
-export const GET_ADMIN_RESOURCE_DATA = gql`
-  query GetAdminResourceList(
+export const GET_RESOURCE_DATA = gql`
+  query GetResourceList(
     $userType: String!
     $modelId: String
     $disorderId: String
@@ -77,7 +77,10 @@ export const GET_ADMIN_RESOURCE_DATA = gql`
       }
       resource_desc
       resource_name
+      download_resource_url
+      resource_url
       user_id
+      user_type
     }
   }
 `;

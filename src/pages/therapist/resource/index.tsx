@@ -4,12 +4,11 @@ import Loader from "../../../components/common/Loader";
 import { useSnackbar } from "notistack";
 
 // GRAPHQL
-import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   GET_RESOURCE_DATA,
   GET_DISORDER_MODEL_LIST,
   GET_CATEGORY,
-  GET_UNAPPROVE_RESOURCE,
 } from "../../../graphql/query/resource";
 import {
   ADD_FAVOURITE,
@@ -36,7 +35,7 @@ import CrudForm from "../../../components/common/CrudForm";
 import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal";
 
 import NextLink from "next/link";
-import { GET_ADMIN_TOKEN_DATA } from "../../../graphql/query/common";
+import { GET_THERAPIST_TOKEN_DATA } from "../../../graphql/query/common";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -144,19 +143,21 @@ const Resource: NextPage = () => {
   const [isMutating, setIsMutation] = useState<boolean>(false);
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
-  const [adminId, setadminId] = useState<string>("");
+  const [userId, setuserId] = useState<string>("");
+  const [orgId, setorgId] = useState<string>("");
 
-  useQuery(GET_ADMIN_TOKEN_DATA, {
+  useQuery(GET_THERAPIST_TOKEN_DATA, {
     onCompleted: async (data) => {
       /* istanbul ignore next */
       if (data.getTokenData) {
         const user_type: string = data!.getTokenData.user_type;
         /* istanbul ignore next */
-        if (user_type != "admin") {
+        if (user_type != "therapist") {
           window.location.href =
             "https://" + window.location.hostname + "/account";
         } else {
-          setadminId(data!.getTokenData._id);
+          setorgId(data!.getTokenData.therapist_data.org_id);
+          setuserId(data!.getTokenData._id);
         }
       }
     },
@@ -169,7 +170,7 @@ const Resource: NextPage = () => {
     refetch,
   } = useQuery<ResourceListData, ResourceListVars>(GET_RESOURCE_DATA, {
     variables: {
-      userType: "admin",
+      userType: "therapist",
       categoryId: filterValue?.categoryId ?? "",
       disorderId: filterValue?.disorderId ?? "",
       modelId: filterValue?.modelId ?? "",
@@ -177,18 +178,11 @@ const Resource: NextPage = () => {
       myResource: filterValue?.mode === "resource" ? 1 : 0,
       resourceType: filterValue?.resourceType ?? "",
       searchText: searchText ?? "",
-      orgId: "",
+      orgId: orgId,
     },
   });
 
   const { data: disorderList } = useQuery(GET_DISORDER_MODEL_LIST);
-
-  const [
-    getUnApproveResource,
-    { loading: unapproveLoading, data: unApproveResourceList },
-  ] = useLazyQuery(GET_UNAPPROVE_RESOURCE, {
-    fetchPolicy: "no-cache",
-  });
 
   const { data: categoryList } = useQuery(GET_CATEGORY, {
     variables: {
@@ -204,13 +198,6 @@ const Resource: NextPage = () => {
       setDataList(dataListData?.getResourceList);
     }
   }, [dataListData]);
-
-  useEffect(() => {
-    if (unApproveResourceList) {
-      /* istanbul ignore next */
-      setDataList(unApproveResourceList?.getAdminUnApproveResourceList);
-    }
-  }, [unApproveResourceList]);
 
   /* istanbul ignore next */
   const addFavour = async (id: string, isFav: string) => {
@@ -251,7 +238,7 @@ const Resource: NextPage = () => {
       key: "resource_name",
       visible: true,
       render: (_, value) => (
-        <NextLink href={"/admin/resource/" + value?._id} passHref>
+        <NextLink href={"/therapist/resource/" + value?._id} passHref>
           <Button
             variant="contained"
             sx={{ width: "100%", height: "40px", textTransform: "none" }}
@@ -291,7 +278,7 @@ const Resource: NextPage = () => {
             />
           </IconButtonWrapper>
 
-          {value?.user_id == adminId && (
+          {value?.user_id == userId && (
             <IconButtonWrapper
               onClick={() => {
                 setModalOpen(true);
@@ -345,7 +332,7 @@ const Resource: NextPage = () => {
         freeSolo: false,
         show: true,
         type: "asynccomplete",
-        disabled: filterValue?.mode === "approve_resource" ? true : false,
+        disabled: false,
         defaultValue: { label: "Select Disorder", value: "" },
         options: disorderList?.getDisorderModel?.length
           ? [
@@ -364,7 +351,7 @@ const Resource: NextPage = () => {
         freeSolo: false,
         show: true,
         type: "asynccomplete",
-        disabled: filterValue?.mode === "approve_resource" ? true : false,
+        disabled: false,
         defaultValue: { label: "Select Modalities", value: "" },
         options: modelData?.length
           ? [
@@ -384,7 +371,7 @@ const Resource: NextPage = () => {
         defaultValue: { label: "Select Type", value: "" },
         show: true,
         type: "asynccomplete",
-        disabled: filterValue?.mode === "approve_resource" ? true : false,
+        disabled: false,
         options: [
           { value: "", label: "All" },
           { value: 1, label: "Info Sheet" },
@@ -400,7 +387,7 @@ const Resource: NextPage = () => {
         freeSolo: false,
         show: true,
         type: "asynccomplete",
-        disabled: filterValue?.mode === "approve_resource" ? true : false,
+        disabled: false,
         defaultValue: { label: "Select Category", value: "" },
         options: categoryList?.getCategoryByModelId?.length
           ? [
@@ -440,10 +427,6 @@ const Resource: NextPage = () => {
     );
     /* istanbul ignore next */
     setModelData(modelList?.disordermodel_data);
-    /* istanbul ignore next */
-    if (value?.mode === "approve_resource") {
-      getUnApproveResource();
-    }
   };
 
   return (
@@ -468,19 +451,8 @@ const Resource: NextPage = () => {
           </Grid>
           <Grid item xs={9}>
             <Box sx={crudButtons}>
-              <Button
-                className={`text-white`}
-                variant="contained"
-                sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
-                onClick={() => {
-                  handleFilterChange({ mode: "approve_resource" });
-                }}
-              >
-                Approve Resource
-              </Button>
-
               <AddButton
-                href="/v2/admin/resource/add"
+                href="/v2/therapist/resource/add"
                 className="mr-3"
                 label="Add Resource"
                 startIcon={<ListAltIcon />}
@@ -504,7 +476,7 @@ const Resource: NextPage = () => {
         />
 
         <Box>
-          <Loader visible={loading || unapproveLoading} />
+          <Loader visible={loading} />
           <CardGenerator data={dataList} fields={fields} />
         </Box>
         <DeleteSureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
