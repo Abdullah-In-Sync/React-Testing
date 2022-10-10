@@ -233,7 +233,7 @@ export const therapistRoutes: RoutesType[] = [
   {
     key: 4,
     label: "Library",
-    path: Link + "/therapist/resource/resourcemodel",
+    path: Link + "therapist/resource",
     icon: <LibraryBooksIcon />,
   },
   {
