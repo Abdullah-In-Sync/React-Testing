@@ -337,16 +337,18 @@ const Feedback: NextPage = () => {
                         (fv, fk) => {
                           return (
                             <>
-                              {fv?.answer_type != "undefined" && fv?.answer_type == "list" && (
-                                <QuestionTypeRadiobox
-                                  disable={true}
-                                  fv={fv}
-                                  fk={fk}
-                                />
-                              )}
-                              {fv?.answer_type != "undefined" && fv?.answer_type == "text" && (
-                                <QuestionTypeText disable={true} fv={fv} />
-                              )}
+                              {fv?.answer_type != "undefined" &&
+                                fv?.answer_type == "list" && (
+                                  <QuestionTypeRadiobox
+                                    disable={true}
+                                    fv={fv}
+                                    fk={fk}
+                                  />
+                                )}
+                              {fv?.answer_type != "undefined" &&
+                                fv?.answer_type == "text" && (
+                                  <QuestionTypeText disable={true} fv={fv} />
+                                )}
                             </>
                           );
                         }

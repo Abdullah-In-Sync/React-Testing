@@ -13,7 +13,7 @@ export const superadmin_routes = [
     key: 2,
     label: "Log Out",
     path: Link + "/account/logout",
-  }
+  },
 ];
 
 //** THERAPIST ROUTES **//
