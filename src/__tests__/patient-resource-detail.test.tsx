@@ -192,6 +192,24 @@ describe("Render patient resource detail page", () => {
     );
   });
 
+  test("Click on back button land on most previous page Back button ", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
+    );
+    expect(screen.queryByText("Description")).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(screen.queryByTestId("backButton")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("backButton"));
+    });
+    await waitFor(async () => {
+      expect(screen.queryByTestId("VisibilityIcon")).toBeInTheDocument();
+    });
+  });
+
   test("Renders Patient resource detail screen with no data found", async () => {
     useRouter.mockImplementation(() => ({
       query: {
@@ -224,5 +242,20 @@ describe("Render patient resource detail page", () => {
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
     fireEvent.click(screen.queryByTestId("shareViewUrl"));
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
+  });
+
+  test("To check the file upload function without choosing file", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId("fileUpload")).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("fileUpload"));
+
+    expect(screen.getByText("Upload Doc File")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("saveButton"));
   });
 });

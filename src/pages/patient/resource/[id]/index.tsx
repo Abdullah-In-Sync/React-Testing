@@ -68,6 +68,7 @@ const ResourceDetailById: NextPage = () => {
 
   useEffect(() => {
     // no condition in case of open
+    /* istanbul ignore next */
     if (isDialogOpen === false) {
       setFileUpload(false);
       setIsDialogOpen(true);
@@ -109,7 +110,7 @@ const ResourceDetailById: NextPage = () => {
         <Box>
           {patientResourceData?.getResourceDetailById != null ? (
             <Grid container rowSpacing={2} data-testid="patResourceDetail">
-              <Grid item xs={6}>
+              <Grid item xs={6} data-testid="backButton">
                 <NextLink
                   passHref
                   href={{
@@ -120,7 +121,6 @@ const ResourceDetailById: NextPage = () => {
                   }}
                 >
                   <Button
-                    data-testid="backButton"
                     mat-button
                     className={`text-white bg-themeblue`}
                     variant="contained"
@@ -213,10 +213,10 @@ const ResourceDetailById: NextPage = () => {
                   <IconButton
                     size="medium"
                     href={"#"}
+                    data-testid="fileUpload"
                     onClick={openFileUploadDialog}
                   >
                     <FileUpload
-                      data-testid="fileUpload"
                       closeFileUploadDialog={closeFileUploadDialog}
                       open={fileUpload}
                       ptshareId={

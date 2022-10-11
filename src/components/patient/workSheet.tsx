@@ -38,6 +38,7 @@ const WorkSheet = () => {
 
   useEffect(() => {
     // no condition in case of open
+    /* istanbul ignore next */
     if (isDialogOpen === false) {
       setFileUpload(false);
       setIsDialogOpen(true);
