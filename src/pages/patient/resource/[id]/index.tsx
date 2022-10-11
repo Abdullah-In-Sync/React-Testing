@@ -22,11 +22,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
 import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
-import {
-  GET_PATIENT_RESOURCE_DETAIL,
-  GET_PATIENT_RESOURCE_DATA,
-} from "../../../../graphql/query/resource";
-import FileUpload from "../../../../components/common/Dialog/index";
+import { GET_PATIENT_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
 
 const ResourceDetailById: NextPage = () => {
   const router = useRouter();
@@ -34,8 +30,6 @@ const ResourceDetailById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [ptId, setPtId] = useState<string>("");
   const [patientId, setpatientId] = useState<string>("");
-  const [fileUpload, setFileUpload] = useState<boolean | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
 
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
@@ -56,24 +50,6 @@ const ResourceDetailById: NextPage = () => {
       }
     },
   });
-
-  const openFileUploadDialog = () => {
-    setFileUpload(true);
-  };
-
-  const closeFileUploadDialog = () => {
-    setIsDialogOpen(false);
-    setFileUpload(false);
-  };
-
-  useEffect(() => {
-    // no condition in case of open
-    /* istanbul ignore next */
-    if (isDialogOpen === false) {
-      setFileUpload(false);
-      setIsDialogOpen(true);
-    }
-  }, [fileUpload === true, isDialogOpen === false]);
 
   useEffect(() => {
     setLoader(true);
@@ -100,8 +76,6 @@ const ResourceDetailById: NextPage = () => {
       setLoader(false);
     }
   }, [ptId]);
-
-  const { data: resData } = useQuery(GET_PATIENT_RESOURCE_DATA);
   return (
     <>
       <Layout>
@@ -210,21 +184,7 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  <IconButton
-                    size="medium"
-                    href={"#"}
-                    data-testid="fileUpload"
-                    onClick={openFileUploadDialog}
-                  >
-                    <FileUpload
-                      closeFileUploadDialog={closeFileUploadDialog}
-                      open={fileUpload}
-                      ptshareId={
-                        resData?.getPatientResourceList?.find(
-                          (val) => val?.resource_data[0]?.resource_type === "2"
-                        )._id
-                      }
-                    />
+                  <IconButton size="medium" href={"#"}>
                     <FileUploadIcon />
                   </IconButton>
                   <IconButton

@@ -243,19 +243,4 @@ describe("Render patient resource detail page", () => {
     fireEvent.click(screen.queryByTestId("shareViewUrl"));
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
   });
-
-  test("To check the file upload function without choosing file", async () => {
-    await sut();
-    await waitFor(() =>
-      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
-    );
-    await waitFor(() =>
-      expect(screen.queryByTestId("fileUpload")).toBeInTheDocument()
-    );
-    fireEvent.click(screen.queryByTestId("fileUpload"));
-
-    expect(screen.getByText("Upload Doc File")).toBeInTheDocument();
-
-    fireEvent.click(screen.queryByTestId("saveButton"));
-  });
 });
