@@ -8,7 +8,6 @@ import Layout from "../../../../components/layout";
 import { ADMIN_CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
 import { IS_ADMIN } from "../../../../lib/constants";
 import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
-import { superadmin_routes } from "../../../../utility/navItems";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 
@@ -67,7 +66,7 @@ export default function Index() {
             enqueueSnackbar("Resource added successfully", {
               variant: "success",
             });
-            router.push(superadmin_routes[2].path);
+            router.push("/admin/resource");
           }
         },
       });
