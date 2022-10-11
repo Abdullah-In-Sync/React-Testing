@@ -9,18 +9,20 @@ const buttonStyle = {
 };
 
 export const AddButton = ({
+  color,
   size,
   ...props
 }: {
   [x: string]: any;
   size?: any;
+  color?: any;
 }) => {
   return (
     <Button
       data-testid="createQuestion"
       size={size || "medium"}
       sx={buttonStyle}
-      color="secondary"
+      color={color || "secondary"}
       variant="contained"
       {...props}
     >

@@ -38,6 +38,7 @@ const WorkSheet = () => {
 
   useEffect(() => {
     // no condition in case of open
+    /* istanbul ignore next */
     if (isDialogOpen === false) {
       setFileUpload(false);
       setIsDialogOpen(true);
@@ -107,7 +108,15 @@ const WorkSheet = () => {
           >
             <AttachFileIcon />
           </IconButton>
-          <Link href={"/patient/resource/" + value._id} passHref>
+          <Link
+            href={{
+              pathname: "/patient/resource/" + value._id,
+              query: {
+                tabName: "work-sheet",
+              },
+            }}
+            passHref
+          >
             <IconButton size="small" data-testid={"viewIcon_" + value._id}>
               <VisibilityIcon />
             </IconButton>
