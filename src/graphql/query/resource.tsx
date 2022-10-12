@@ -49,7 +49,7 @@ export const GET_ADMIN_RESOURCE_DATA = gql`
     $modelId: String
     $disorderId: String
     $categoryId: String
-    $resourceType: String
+    $resourceType: Int
     $myResource: Int
     $myFav: Int
     $searchText: String
