@@ -192,6 +192,24 @@ describe("Render patient resource detail page", () => {
     );
   });
 
+  test("Click on back button land on most previous page Back button ", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
+    );
+    expect(screen.queryByText("Description")).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(screen.queryByTestId("backButton")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("backButton"));
+    });
+    await waitFor(async () => {
+      expect(screen.queryByTestId("VisibilityIcon")).toBeInTheDocument();
+    });
+  });
+
   test("Renders Patient resource detail screen with no data found", async () => {
     useRouter.mockImplementation(() => ({
       query: {

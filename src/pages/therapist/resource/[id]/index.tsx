@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
@@ -17,39 +16,36 @@ import {
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import AttachmentIcon from "@mui/icons-material/Attachment";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
-import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
-import { GET_PATIENT_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
+import { useLazyQuery } from "@apollo/client";
+import { buildTherapistTokenValidationQuery } from "../../../../lib/helpers/auth";
+import { GET_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
 
-const ResourceDetailById: NextPage = () => {
+const ResourceById: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [loader, setLoader] = useState<boolean>(false);
-  const [ptId, setPtId] = useState<string>("");
-  const [patientId, setpatientId] = useState<string>("");
+  const [resId, setResId] = useState<string>("");
+  const [AdminId, setadminId] = useState<string>("");
 
-  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
+  const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
     (tokenData) => {
-      setpatientId(tokenData.patient_data._id);
+      setadminId(tokenData._id);
     }
   );
 
-  const [
-    getPatientResourceData,
-    { loading: resourceLoading, data: patientResourceData },
-  ] = useLazyQuery(GET_PATIENT_RESOURCE_DETAIL, {
-    onCompleted: (data) => {
-      /* istanbul ignore else */
-      if (data!.getResourceDetailById) {
-        setPtId(data!.getResourceDetailById[0]._id);
-      } else if (data!.getResourceDetailById == null) {
-        setLoader(false);
-      }
-    },
-  });
+  const [getResourceData, { loading: resourceLoading, data: resourceData }] =
+    useLazyQuery(GET_RESOURCE_DETAIL, {
+      onCompleted: (data) => {
+        /* istanbul ignore else */
+        if (data!.getResourceById) {
+          setResId(data!.getResourceById[0]._id);
+        } else if (data!.getResourceById == null) {
+          setLoader(false);
+        }
+      },
+    });
 
   useEffect(() => {
     setLoader(true);
@@ -57,44 +53,37 @@ const ResourceDetailById: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    if (patientId) {
+    if (AdminId) {
       setLoader(true);
-      getPatientResourceData({
-        variables: { ptsharresId: id },
+      getResourceData({
+        variables: { resourceId: id },
       });
     }
-  }, [patientId]);
+  }, [AdminId]);
 
   useEffect(() => {
     /* istanbul ignore else */
-    if (
-      !tokenLoading &&
-      !resourceLoading &&
-      gettokenData &&
-      patientResourceData
-    ) {
+    if (!tokenLoading && !resourceLoading && gettokenData && resourceData) {
       setLoader(false);
     }
-  }, [ptId]);
+  }, [resId]);
+
   return (
     <>
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Resource Detail" />
         <Box>
-          {patientResourceData?.getResourceDetailById != null ? (
-            <Grid container rowSpacing={2} data-testid="patResourceDetail">
-              <Grid item xs={6} data-testid="backButton">
-                <NextLink
-                  passHref
-                  href={{
-                    pathname: "/patient/resource",
-                    query: {
-                      tabName: router.query.tabName,
-                    },
-                  }}
-                >
+          {resourceData?.getResourceById != null ? (
+            <Grid
+              container
+              rowSpacing={2}
+              data-testid="therapistResourceDetail"
+            >
+              <Grid item xs={6}>
+                <NextLink href={"/therapist/resource"} passHref>
                   <Button
+                    data-testid="backButton"
                     mat-button
                     className={`text-white bg-themeblue`}
                     variant="contained"
@@ -121,23 +110,17 @@ const ResourceDetailById: NextPage = () => {
                 >
                   <Typography color="primary.main">
                     {
-                      patientResourceData.getResourceDetailById[0]
-                        .disorder_detail.disorder_name
+                      resourceData.getResourceById[0].disorder_detail
+                        .disorder_name
                     }
                   </Typography>
                   ,
                   <Typography color="primary.main">
-                    {
-                      patientResourceData.getResourceDetailById[0].model_detail
-                        .model_name
-                    }
+                    {resourceData.getResourceById[0].model_detail.model_name}
                   </Typography>
                   ,
                   <Typography key="3" color="text.primary">
-                    {
-                      patientResourceData.getResourceDetailById[0]
-                        .resource_data[0].resource_name
-                    }
+                    {resourceData.getResourceById[0].resource_name}
                   </Typography>
                 </Breadcrumbs>
               </Grid>
@@ -159,10 +142,7 @@ const ResourceDetailById: NextPage = () => {
                 }}
                 md={12}
               >
-                {
-                  patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_name
-                }
+                {resourceData.getResourceById[0].resource_name}
               </Grid>
               <Grid
                 p={1}
@@ -184,35 +164,13 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  <IconButton size="medium" href={"#"}>
-                    <FileUploadIcon />
-                  </IconButton>
-                  <IconButton
-                    size="medium"
-                    data-testid="shareViewUrl"
-                    href={
-                      patientResourceData.getResourceDetailById[0]
-                        .patient_share_filename != null
-                        ? patientResourceData.getResourceDetailById[0]
-                            .patient_share_filename
-                        : "#"
-                    }
-                    sx={{
-                      color: "primary.main",
-                    }}
-                  >
-                    <AttachmentIcon />
-                  </IconButton>
-
                   <IconButton
                     size="medium"
                     data-testid="viewUrl"
                     target="_blank"
                     href={
-                      patientResourceData.getResourceDetailById[0]
-                        .resource_data[0].resource_url != null
-                        ? patientResourceData.getResourceDetailById[0]
-                            .resource_data[0].resource_url
+                      resourceData.getResourceById[0].resource_url != null
+                        ? resourceData.getResourceById[0].resource_url
                         : "#"
                     }
                   >
@@ -222,10 +180,9 @@ const ResourceDetailById: NextPage = () => {
                     size="medium"
                     data-testid="downloadUrl"
                     href={
-                      patientResourceData.getResourceDetailById[0]
-                        .resource_data[0].download_resource_url != null
-                        ? patientResourceData.getResourceDetailById[0]
-                            .resource_data[0].download_resource_url
+                      resourceData.getResourceById[0].download_resource_url !=
+                      null
+                        ? resourceData.getResourceById[0].download_resource_url
                         : "#"
                     }
                   >
@@ -234,23 +191,18 @@ const ResourceDetailById: NextPage = () => {
                 </Grid>
                 <ResourceDetail
                   title="Description"
-                  description={
-                    patientResourceData.getResourceDetailById[0]
-                      .resource_data[0].resource_desc
-                  }
+                  description={resourceData.getResourceById[0].resource_desc}
                 />
                 <ResourceDetail
                   title="Instructions"
                   description={
-                    patientResourceData.getResourceDetailById[0]
-                      .resource_data[0].resource_instruction
+                    resourceData.getResourceById[0].resource_instruction
                   }
                 />
                 <ResourceDetail
                   title="References"
                   description={
-                    patientResourceData.getResourceDetailById[0]
-                      .resource_data[0].resource_references
+                    resourceData.getResourceById[0].resource_references
                   }
                 />
 
@@ -273,4 +225,4 @@ const ResourceDetailById: NextPage = () => {
     </>
   );
 };
-export default ResourceDetailById;
+export default ResourceById;
