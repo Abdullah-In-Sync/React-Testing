@@ -18,7 +18,7 @@ export const ADMIN_CREATE_RESOURCE = gql`
     $resourceAvailTherapist: String!
     $resourceFilename: String!
     $resourceName: String!
-    $resourceType: String!
+    $resourceType: Int!
     $agendaId: String
     $categoryId: String
     $orgId: String
