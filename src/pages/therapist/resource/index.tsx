@@ -125,7 +125,7 @@ interface ResourceListVars {
   modelId: string;
   myFav: number;
   myResource: number;
-  resourceType: string;
+  resourceType: number;
   searchText: string;
   orgId: string;
 }
@@ -176,7 +176,7 @@ const Resource: NextPage = () => {
       modelId: filterValue?.modelId ?? "",
       myFav: filterValue?.mode === "favourite" ? 1 : 0,
       myResource: filterValue?.mode === "resource" ? 1 : 0,
-      resourceType: filterValue?.resourceType ?? "",
+      resourceType: filterValue?.resourceType ?? 0,
       searchText: searchText ?? "",
       orgId: orgId,
     },
