@@ -386,7 +386,7 @@ const Resource: NextPage = () => {
         type: "asynccomplete",
         disabled: filterValue?.mode === "approve_resource" ? true : false,
         options: [
-          { value: "", label: "All" },
+          { value: 0, label: "All" },
           { value: 1, label: "Info Sheet" },
           { value: 2, label: "Work Sheet" },
           { value: 3, label: "Audio File" },
