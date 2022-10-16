@@ -188,16 +188,6 @@ describe("Admin add resource page", () => {
     expect(screen.getByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
 
-  it("should render resource-type options by default", async () => {
-    await sut();
-    fireEvent.change(screen.queryByTestId("resource_type"), {
-      target: { value: "2" },
-    });
-    expect(screen.queryByTestId("resource_type").getAttribute("value")).toBe(
-      "2"
-    );
-  });
-
   it("should click disorder dropdown", async () => {
     await sut();
     fireEvent.change(screen.queryByTestId("disorder_id"), {
