@@ -20,12 +20,12 @@ export default function UploadButtonComponent(props: propsType) {
         variant={props.variant}
         component="label"
         startIcon={<SendIcon />}
-        {...props.inputProps}
       >
         Upload
         <input
           hidden
           name={props.name}
+          {...props.inputProps}
           accept={props.accept}
           multiple={props.multiple}
           onChange={props.onChange}

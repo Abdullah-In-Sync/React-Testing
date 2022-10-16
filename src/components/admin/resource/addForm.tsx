@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
@@ -20,7 +20,7 @@ import { addResourceFormField } from "../../../utility/types/resource_types";
 
 const defaultFormValue = {
   resource_name: "",
-  resource_type: "",
+  resource_type: 0,
   disorder_id: "",
   model_id: "",
   category_id: "",
@@ -52,12 +52,11 @@ export default function AddForm(props: propTypes) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
-  const preSignedURL = useRef<string>(null);
   const resourceTypeOptions = [
-    { id: "1", value: "Info Sheets" },
-    { id: "2", value: "Work Sheets" },
-    { id: "3", value: "Audio File" },
-    { id: "4", value: "Video File" },
+    { id: 1, value: "Info Sheets" },
+    { id: 2, value: "Work Sheets" },
+    { id: 3, value: "Audio File" },
+    { id: 4, value: "Video File" },
   ];
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
@@ -103,27 +102,6 @@ export default function AddForm(props: propTypes) {
       },
     }
   );
-
-  const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL, {
-    /* istanbul ignore next */
-    onCompleted: (data) => {
-      /* istanbul ignore next */
-      props.setLoader(false);
-      if (
-        data &&
-        data?.getUploadResourceUrl &&
-        data?.getUploadResourceUrl.resource_upload
-      ) {
-        // debugger;
-        // setFormFields((oldValues) => ({ ...oldValues, ["uploadFileURL"]: data.getUploadResourceUrl.resource_upload }));
-        // formFields.uploadFileURL = data.getUploadResourceUrl.resource_upload;
-        handleFileChange(
-          formFields.uploadFile,
-          data.getUploadResourceUrl.resource_upload
-        );
-      }
-    },
-  });
 
   useEffect(() => {
     props.setLoader(true);
@@ -197,32 +175,25 @@ export default function AddForm(props: propTypes) {
     }
   };
 
+  const { data: uploadResourceURL } = useQuery(GET_UPLOAD_RESOURCE_URL, {
+    variables: {
+      fileName: formFields.file_name,
+    },
+  });
+
   const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileObj = event.target.files && event.target.files[0];
+    const { fileName } = getUpdatedFileName(event.target.files[0]);
+    props.setLoader(true);
     /* istanbul ignore else */
-    if (!fileObj) {
+    if (!fileName) {
+      /* istanbul ignore next */
       return;
     }
-    // debugger;
-    const { fileName } = getUpdatedFileName(event.target.files[0]);
-    // try {
-    props.setLoader(true);
-    formFields.uploadFile = fileObj;
-    formFields.file_name = fileName;
     setSelectedFile(fileObj);
-    setFormFields((oldValues) => ({ ...oldValues, ["uploadFile"]: fileObj }));
+    // setFormFields((oldValues) => ({ ...oldValues, ["uploadFile"]: fileObj }));
     setFormFields((oldValues) => ({ ...oldValues, ["file_name"]: fileName }));
-
-    getPreSignedURL({
-      variables: { fileName: fileName },
-    });
     props.setLoader(false);
-  };
-
-  const handleFileChange = (fileObj: File, url: string) => {
-    /* istanbul ignore next */
-    setSelectedFile(fileObj);
-    preSignedURL.current = url;
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -234,7 +205,6 @@ export default function AddForm(props: propTypes) {
       });
       return;
     }
-
     /* istanbul ignore next */
     if (
       !formFields.resource_avail_admin &&
@@ -255,11 +225,15 @@ export default function AddForm(props: propTypes) {
   const uploadFile = async () => {
     try {
       props.setLoader(true);
-      if (preSignedURL.current) {
+      if (
+        uploadResourceURL &&
+        uploadResourceURL?.getUploadResourceUrl &&
+        uploadResourceURL?.getUploadResourceUrl.resource_upload
+      ) {
         /* istanbul ignore next */
         const uploadStatus = await uploadToS3(
           selectedFile,
-          preSignedURL.current
+          uploadResourceURL.getUploadResourceUrl.resource_upload
         );
 
         if (uploadStatus) {

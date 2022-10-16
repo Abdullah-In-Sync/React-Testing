@@ -3,7 +3,6 @@ import {
   render,
   waitForElementToBeRemoved,
   fireEvent,
-  act,
   waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
@@ -14,10 +13,11 @@ import {
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-  GET_TOKEN_DATA,
+  GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
-import { getUpdatedFileName } from "../lib/helpers/s3";
+import { ADMIN_CREATE_RESOURCE } from "../graphql/mutation/resource";
+import { IS_THERAPIST } from "../lib/constants";
 
 // mocks
 const mocksData = [];
@@ -36,6 +36,19 @@ mocksData.push({
           disorder_name: "disorder 1",
         },
       ],
+    },
+  },
+});
+mocksData.push({
+  request: {
+    query: GET_UPLOAD_RESOURCE_URL,
+    variables: { fileName: "hello.png" },
+  },
+  result: {
+    data: {
+      getUploadResourceUrl: {
+        resource_upload: "dummy_upload_url",
+      },
     },
   },
 });
@@ -103,43 +116,62 @@ mocksData.push({
 });
 // upload file, presigned URL
 const file = new File(["hello"], "hello.png", { type: "image/png" });
-const { fileName } = getUpdatedFileName(file);
+// token data
 mocksData.push({
   request: {
-    query: GET_UPLOAD_RESOURCE_URL,
-    variables: {
-      fileName: fileName,
-    },
+    query: GET_THERAPIST_TOKEN_DATA,
+    variables: {},
   },
   result: {
     data: {
-      getUploadResourceUrl: {
-        resource_upload: "https://aws.s3.fileupload",
+      getTokenData: {
+        _id: "some-therapist-id",
+        user_type: "therapist",
+        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+        perm_ids: "9,10,14,21,191,65,66",
+        user_status: "1",
+        created_date: "2021-12-20 16:20:55",
+        updated_date: "2021-12-20 16:20:55",
+        therapist_data: {
+          _id: "therapist_id",
+          org_id: "myhelp",
+        },
       },
     },
   },
 });
+// add resource
 mocksData.push({
   request: {
-    query: GET_TOKEN_DATA,
-    variables: {},
+    query: ADMIN_CREATE_RESOURCE,
+    variables: {
+      disorderId: "disorder_id_1",
+      modelId: "model_id_1",
+      resourceAvailAdmin: 1,
+      resourceAvailAll: 1,
+      resourceAvailOnlyme: 1,
+      resourceAvailTherapist: 1,
+      resourceFilename: "sample.pdf",
+      resourceName: "test",
+      resourceType: "1",
+      agendaId: "agenda_id_1",
+      categoryId: "category_id_1",
+      orgId: "10101",
+      resourceDesc: "",
+      resourceInstruction: "",
+      resourceIsformualation: "0",
+      resourceIssmartdraw: "0",
+      resourceReferences: "",
+      resourceStatus: 1,
+      userType: IS_THERAPIST,
+    },
   },
   result: {
-    data: [
-      {
-        _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
-        user_type: "therapist",
-        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
-        perm_ids: "9,10,14,21,191,65,66",
-        user_status: 1,
-        created_date: "2021-12-20 16:20:55",
-        updated_date: "2021-12-20 16:20:55",
-        therapist_data: {
-          org_id: "c557283d1b5e4d7abf19625bf268cdf8",
-          _id: "ab0eaac49a364ca385e85ff4306bc6a0",
-        },
+    data: {
+      createResource: {
+        _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
       },
-    ],
+    },
   },
 });
 
@@ -192,16 +224,6 @@ describe("Admin add resource page", () => {
     expect(screen.getByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
 
-  it("should render resource-type options by default", async () => {
-    await sut();
-    fireEvent.change(screen.queryByTestId("resource_type"), {
-      target: { value: "2" },
-    });
-    expect(screen.queryByTestId("resource_type").getAttribute("value")).toBe(
-      "2"
-    );
-  });
-
   it("should click disorder dropdown", async () => {
     await sut();
     fireEvent.change(screen.queryByTestId("disorder_id"), {
@@ -230,15 +252,18 @@ describe("Admin add resource page", () => {
   });
 
   it("upload file", async () => {
-    const file = new File(["hello"], "hello.png", { type: "image/png" });
     await sut();
 
+    expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
     const hiddenFileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
     expect(hiddenFileInput.files.length).toBe(0);
-    await act(async () => {
-      fireEvent.change(hiddenFileInput, { target: { files: [file] } });
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
     });
 
     expect(hiddenFileInput.files.length).toBe(1);
@@ -274,15 +299,11 @@ describe("Admin add resource page", () => {
 
     fireEvent.click(screen.queryByTestId("resource_avail_all"));
 
-    const hiddenFileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    expect(hiddenFileInput.files.length).toBe(0);
     await waitFor(async () => {
-      fireEvent.change(hiddenFileInput, { target: { files: [file] } });
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
     });
-
-    expect(hiddenFileInput.files.length).toBe(1);
 
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("resource-add-form"));
@@ -295,7 +316,7 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
     });
 
-    // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
+    // expect(screen.queryByTestId("addResourceModalConfirmButton")).toBeVisible();
     // fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
     // expect(screen.getByTestId("sureModal")).not.toBeVisible();
   });
