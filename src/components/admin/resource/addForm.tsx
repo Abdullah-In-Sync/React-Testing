@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useLazyQuery, useQuery } from "@apollo/client";
