@@ -174,16 +174,13 @@ function SidebarMenu() {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {getRouteByUser(userType).map((val) => {
+              {getRouteByUser(userType).map((val, index) => {
                 if (Array.isArray(val)) {
                   return (
                     <>
-                      <ListItem
-                        component="div"
-                        key={val[0]?.label}
-                        sx={listItem}
-                      >
+                      <ListItem component="div" key={index} sx={listItem}>
                         <Button
+                          key={index}
                           data-testid={"menu_" + val[0]?.key}
                           disableRipple
                           component="a"
@@ -201,20 +198,17 @@ function SidebarMenu() {
                         </Button>
                       </ListItem>
 
-                      {val?.slice(1)?.map((item) => (
+                      {val?.slice(1)?.map((item, index) => (
                         <Collapse
-                          key={val[0]?.key}
+                          key={index}
                           in={expanded[val[0]?.key] || false}
                           timeout="auto"
                           unmountOnExit
                         >
-                          <ListItem
-                            component="div"
-                            key={item.label}
-                            sx={listItem}
-                          >
-                            <NextLink href={item.path} passHref>
+                          <ListItem component="div" key={index} sx={listItem}>
+                            <NextLink key={index} href={item.path} passHref>
                               <Button
+                                key={index}
                                 data-testid={"menu_" + item.label}
                                 className={
                                   currentRoute === `${item.path}`
@@ -237,9 +231,10 @@ function SidebarMenu() {
                 } else {
                   return (
                     <>
-                      <ListItem component="div" key={val.label} sx={listItem}>
-                        <NextLink href={val.path} passHref>
+                      <ListItem component="div" key={index} sx={listItem}>
+                        <NextLink key={index} href={val.path} passHref>
                           <Button
+                            key={index}
                             className={
                               currentRoute === `${val.path}` ? "active" : ""
                             }

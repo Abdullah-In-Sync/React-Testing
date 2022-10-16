@@ -48,7 +48,7 @@ const buildMocks = (): {
         modelId: "",
         myFav: 0,
         myResource: 0,
-        resourceType: "",
+        resourceType: 0,
         searchText: "",
         orgId: "",
       },

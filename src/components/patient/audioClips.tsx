@@ -76,7 +76,15 @@ const AudioClips = () => {
       columnName: "Actions",
       visible: true,
       render: (_, value) => (
-        <Link href={"/patient/resource/" + value._id} passHref>
+        <Link
+          href={{
+            pathname: "/patient/resource/" + value._id,
+            query: {
+              tabName: "audio-clips",
+            },
+          }}
+          passHref
+        >
           <IconButton size="small" data-testid={"viewIcon_" + value._id}>
             <VisibilityIcon />
           </IconButton>

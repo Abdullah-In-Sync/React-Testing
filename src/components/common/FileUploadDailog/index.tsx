@@ -65,9 +65,14 @@ export const FileUploadDialog = ({
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
           <AddButton
+            color="primary"
             data-testid="saveButton"
             type="submit"
-            sx={{ paddingX: "2px", textTransform: "capitalize" }}
+            sx={{
+              paddingX: "2px",
+              textTransform: "capitalize",
+              color: "white",
+            }}
             disabled={isSubmit}
             label="Save"
           />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
@@ -20,7 +21,6 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
-import { useLazyQuery } from "@apollo/client";
 import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { GET_PATIENT_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
 
@@ -76,7 +76,6 @@ const ResourceDetailById: NextPage = () => {
       setLoader(false);
     }
   }, [ptId]);
-
   return (
     <>
       <Layout>
@@ -85,10 +84,17 @@ const ResourceDetailById: NextPage = () => {
         <Box>
           {patientResourceData?.getResourceDetailById != null ? (
             <Grid container rowSpacing={2} data-testid="patResourceDetail">
-              <Grid item xs={6}>
-                <NextLink href={"/patient/resource"} passHref>
+              <Grid item xs={6} data-testid="backButton">
+                <NextLink
+                  passHref
+                  href={{
+                    pathname: "/patient/resource",
+                    query: {
+                      tabName: router.query.tabName,
+                    },
+                  }}
+                >
                   <Button
-                    data-testid="backButton"
                     mat-button
                     className={`text-white bg-themeblue`}
                     variant="contained"
