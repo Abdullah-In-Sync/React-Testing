@@ -16,7 +16,7 @@ import {
   GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
-import { ADMIN_CREATE_RESOURCE } from "../graphql/mutation/resource";
+import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { IS_THERAPIST } from "../lib/constants";
 import * as s3 from "../lib/helpers/s3";
 
@@ -149,7 +149,7 @@ mocksData.push({
 // add resource
 mocksData.push({
   request: {
-    query: ADMIN_CREATE_RESOURCE,
+    query: CREATE_RESOURCE,
     variables: {
       disorderId: "disorder_id_1",
       modelId: "model_id_1",

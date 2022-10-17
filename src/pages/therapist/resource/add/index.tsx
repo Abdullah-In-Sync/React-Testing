@@ -5,7 +5,7 @@ import AddForm from "../../../../components/admin/resource/addForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
-import { ADMIN_CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
+import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
 import { IS_THERAPIST } from "../../../../lib/constants";
 import { buildTherapistTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
@@ -15,7 +15,7 @@ export default function Index() {
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
 
-  const [createResource] = useMutation(ADMIN_CREATE_RESOURCE);
+  const [createResource] = useMutation(CREATE_RESOURCE);
 
   const router = useRouter();
 
