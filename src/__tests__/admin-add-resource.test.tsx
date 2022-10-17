@@ -3,7 +3,6 @@ import {
   render,
   waitForElementToBeRemoved,
   fireEvent,
-  act,
   waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
@@ -14,10 +13,20 @@ import {
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-  GET_TOKEN_DATA,
+  GET_ADMIN_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
-import { getUpdatedFileName } from "../lib/helpers/s3";
+
+import * as s3 from "../lib/helpers/s3";
+
+import { useRouter } from "next/router";
+jest.mock("next/router", () => ({
+  __esModule: true,
+  useRouter: jest.fn(),
+}));
+
+import { CREATE_RESOURCE } from "../graphql/mutation/resource";
+import { IS_ADMIN } from "../lib/constants";
 
 // mocks
 const mocksData = [];
@@ -36,6 +45,19 @@ mocksData.push({
           disorder_name: "disorder 1",
         },
       ],
+    },
+  },
+});
+mocksData.push({
+  request: {
+    query: GET_UPLOAD_RESOURCE_URL,
+    variables: { fileName: "invalid.pdf" },
+  },
+  result: {
+    data: {
+      getUploadResourceUrl: {
+        resource_upload: "dummy_upload_url",
+      },
     },
   },
 });
@@ -103,39 +125,58 @@ mocksData.push({
 });
 // upload file, presigned URL
 const file = new File(["hello"], "hello.png", { type: "image/png" });
-const { fileName } = getUpdatedFileName(file);
+// token data
 mocksData.push({
   request: {
-    query: GET_UPLOAD_RESOURCE_URL,
-    variables: {
-      fileName: fileName,
-    },
+    query: GET_ADMIN_TOKEN_DATA,
+    variables: {},
   },
   result: {
     data: {
-      getUploadResourceUrl: {
-        resource_upload: "https://aws.s3.fileupload",
+      getTokenData: {
+        _id: "some-admin-id",
+        user_type: "admin",
+        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+        perm_ids: "9,10,14,21,191,65,66",
+        user_status: "1",
+        created_date: "2021-12-20 16:20:55",
+        updated_date: "2021-12-20 16:20:55",
       },
     },
   },
 });
+// add resource
 mocksData.push({
   request: {
-    query: GET_TOKEN_DATA,
-    variables: {},
+    query: CREATE_RESOURCE,
+    variables: {
+      disorderId: "disorder_id_1",
+      modelId: "model_id_1",
+      resourceAvailAdmin: 1,
+      resourceAvailAll: 1,
+      resourceAvailOnlyme: 1,
+      resourceAvailTherapist: 1,
+      resourceFilename: "invalid.pdf",
+      resourceName: "test",
+      resourceType: 0,
+      agendaId: "agenda_id_1",
+      categoryId: "category_id_1",
+      orgId: "",
+      resourceDesc: "",
+      resourceInstruction: "",
+      resourceIsformualation: "0",
+      resourceIssmartdraw: "0",
+      resourceReferences: "",
+      resourceStatus: 1,
+      userType: IS_ADMIN,
+    },
   },
   result: {
-    data: [
-      {
-        _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
-        user_type: "admin",
-        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
-        perm_ids: "9,10,14,21,191,65,66",
-        user_status: 1,
-        created_date: "2021-12-20 16:20:55",
-        updated_date: "2021-12-20 16:20:55",
+    data: {
+      createResource: {
+        _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
       },
-    ],
+    },
   },
 });
 
@@ -216,21 +257,24 @@ describe("Admin add resource page", () => {
   });
 
   it("upload file", async () => {
-    const file = new File(["hello"], "hello.png", { type: "image/png" });
     await sut();
 
+    expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
     const hiddenFileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
     expect(hiddenFileInput.files.length).toBe(0);
-    await act(async () => {
-      fireEvent.change(hiddenFileInput, { target: { files: [file] } });
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
     });
 
     expect(hiddenFileInput.files.length).toBe(1);
   });
 
-  it("submit form", async () => {
+  it("submit form with out upload file should return error", async () => {
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
@@ -260,30 +304,178 @@ describe("Admin add resource page", () => {
 
     fireEvent.click(screen.queryByTestId("resource_avail_all"));
 
-    const hiddenFileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    expect(hiddenFileInput.files.length).toBe(0);
     await waitFor(async () => {
-      fireEvent.change(hiddenFileInput, { target: { files: [file] } });
+      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(hiddenFileInput.files.length).toBe(1);
+    expect(screen.queryByText("Please select a file")).toBeInTheDocument();
+  });
+
+  it("submit form with out selecting avail resource should return error", async () => {
+    await sut();
+
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "test" },
+    });
+    fireEvent.change(screen.queryByTestId("resource_type"), {
+      target: { value: "2" },
+    });
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("category_id"), {
+      target: { value: "category_id_1" },
+    });
+    fireEvent.change(screen.queryByTestId("agenda"), {
+      target: { value: "agenda_id_1" },
+    });
 
     await waitFor(async () => {
-      fireEvent.submit(screen.queryByTestId("resource-add-form"));
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+    });
+
+    expect(
+      screen.queryByText("Please select availability of resource")
+    ).toBeInTheDocument();
+  });
+
+  it("submit form with valid data", async () => {
+    const mockRouter = {
+      push: jest.fn(),
+    };
+
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    await sut();
+
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "test" },
+    });
+    fireEvent.change(screen.queryByTestId("resource_type"), {
+      target: { value: "2" },
+    });
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("category_id"), {
+      target: { value: "category_id_1" },
+    });
+    fireEvent.change(screen.queryByTestId("agenda"), {
+      target: { value: "agenda_id_1" },
+    });
+
+    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
     expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
-
     await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+      expect(
+        screen.getByTestId("addResourceModalConfirmButton")
+      ).toBeInTheDocument();
     });
 
-    // expect(screen.getByTestId("addResourceModalConfirmButton")).toBeVisible();
-    // fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
-    // expect(screen.getByTestId("sureModal")).not.toBeVisible();
+    fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Resource added successfully")
+      ).toBeInTheDocument();
+    });
+    expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
+  });
+
+  it("close the pop up by pressing cancel on confirm button", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    await sut();
+
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "test" },
+    });
+    fireEvent.change(screen.queryByTestId("resource_type"), {
+      target: { value: "2" },
+    });
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("category_id"), {
+      target: { value: "category_id_1" },
+    });
+    fireEvent.change(screen.queryByTestId("agenda"), {
+      target: { value: "agenda_id_1" },
+    });
+
+    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+    });
+
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId("addResourceModalConfirmButton")
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
+    expect(screen.queryByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
 
   it("checkbox check admin add resources", async () => {
