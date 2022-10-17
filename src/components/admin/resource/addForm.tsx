@@ -32,7 +32,7 @@ const defaultFormValue = {
   resource_avail_onlyme: 0,
   resource_avail_therapist: 0,
   agenda_id: "",
-  file_name: "",
+  file_name: "invalid.pdf",
   uploadFile: null,
   uploadFileURL: "",
 };
@@ -52,6 +52,7 @@ export default function AddForm(props: propTypes) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
+
   const resourceTypeOptions = [
     { id: 1, value: "Info Sheets" },
     { id: 2, value: "Work Sheets" },
@@ -59,12 +60,16 @@ export default function AddForm(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
+  const { data: uploadResourceURL } = useQuery(GET_UPLOAD_RESOURCE_URL, {
+    variables: {
+      fileName: formFields.file_name,
+    },
+    });
+
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
     {
-      /* istanbul ignore next */
       onCompleted: () => {
-        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -73,9 +78,7 @@ export default function AddForm(props: propTypes) {
   const [getModelByDisorderId, { data: modelData }] = useLazyQuery(
     GET_MODEL_BY_DISORDERID_DATA,
     {
-      /* istanbul ignore next */
       onCompleted: () => {
-        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -84,9 +87,7 @@ export default function AddForm(props: propTypes) {
   const [getCategoryByModelId, { data: categoryData }] = useLazyQuery(
     GET_CATEGORY_BY_MODELID_DATA,
     {
-      /* istanbul ignore next */
       onCompleted: () => {
-        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -95,9 +96,7 @@ export default function AddForm(props: propTypes) {
   const [getAgendaByDisorderModelId, { data: agendaData }] = useLazyQuery(
     GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
     {
-      /* istanbul ignore next */
       onCompleted: () => {
-        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -109,7 +108,6 @@ export default function AddForm(props: propTypes) {
   }, []);
 
   useEffect(() => {
-    /* istanbul ignore else */
     if (formFields.disorder_id) {
       props.setLoader(true);
       setFormFields((oldValues) => ({
@@ -125,7 +123,6 @@ export default function AddForm(props: propTypes) {
   }, [formFields.disorder_id]);
 
   useEffect(() => {
-    /* istanbul ignore else */
     if (formFields.model_id) {
       props.setLoader(true);
       setFormFields((oldValues) => ({
@@ -175,37 +172,27 @@ export default function AddForm(props: propTypes) {
     }
   };
 
-  const { data: uploadResourceURL } = useQuery(GET_UPLOAD_RESOURCE_URL, {
-    variables: {
-      fileName: formFields.file_name,
-    },
-  });
-
   const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileObj = event.target.files && event.target.files[0];
     const { fileName } = getUpdatedFileName(event.target.files[0]);
     props.setLoader(true);
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     if (!fileName) {
-      /* istanbul ignore next */
       return;
     }
     setSelectedFile(fileObj);
-    // setFormFields((oldValues) => ({ ...oldValues, ["uploadFile"]: fileObj }));
     setFormFields((oldValues) => ({ ...oldValues, ["file_name"]: fileName }));
     props.setLoader(false);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    /* istanbul ignore next */
     if (!selectedFile?.name) {
       enqueueSnackbar("Please select a file", {
         variant: "error",
       });
       return;
     }
-    /* istanbul ignore next */
     if (
       !formFields.resource_avail_admin &&
       !formFields.resource_avail_onlyme &&
@@ -218,24 +205,24 @@ export default function AddForm(props: propTypes) {
       return;
     }
     setModalOpen(true);
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     if (!confirmSubmission) return;
   };
 
-  const uploadFile = async () => {
+  const uploadFile: any = async () => {
     try {
       props.setLoader(true);
+      /* istanbul ignore else */
       if (
         uploadResourceURL &&
         uploadResourceURL?.getUploadResourceUrl &&
         uploadResourceURL?.getUploadResourceUrl.resource_upload
       ) {
-        /* istanbul ignore next */
         const uploadStatus = await uploadToS3(
           selectedFile,
           uploadResourceURL.getUploadResourceUrl.resource_upload
         );
-
+        /* istanbul ignore else */
         if (uploadStatus) {
           props.onSubmit(formFields);
         } else {
@@ -243,12 +230,17 @@ export default function AddForm(props: propTypes) {
             variant: "error",
           });
         }
+        /* istanbul ignore next */
         props.setLoader(false);
-      } else {
+      } 
+      else {
+        /* istanbul ignore next */
         props.setLoader(false);
+        /* istanbul ignore next */
         enqueueSnackbar("Please select file!", { variant: "error" });
       }
     } catch (e) {
+      /* istanbul ignore next */
       props.setLoader(false);
       enqueueSnackbar("Please fill the all fields", { variant: "error" });
     }

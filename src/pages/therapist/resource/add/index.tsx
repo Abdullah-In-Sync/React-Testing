@@ -77,7 +77,9 @@ export default function Index() {
       });
       setLoader(false);
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Please fill the all fields", { variant: "error" });
     }
   };

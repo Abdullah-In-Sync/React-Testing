@@ -234,7 +234,7 @@ describe("Admin add resource page", () => {
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
-      target: { value: "avbv" },
+      target: { value: "test" },
     });
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
