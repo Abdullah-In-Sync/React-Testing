@@ -20,11 +20,11 @@ import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { IS_THERAPIST } from "../lib/constants";
 import * as s3 from "../lib/helpers/s3";
 
-import { useRouter } from 'next/router'
-jest.mock('next/router', () => ({
+import { useRouter } from "next/router";
+jest.mock("next/router", () => ({
   __esModule: true,
-  useRouter: jest.fn()
-}))
+  useRouter: jest.fn(),
+}));
 // mocks
 const mocksData = [];
 // disorder
@@ -195,7 +195,6 @@ const sut = async () => {
 };
 
 describe("Admin add resource page", () => {
-
   it("should render complete add resource form", async () => {
     await sut();
     expect(screen.getByTestId("resource-add-form")).toBeInTheDocument();
@@ -277,7 +276,6 @@ describe("Admin add resource page", () => {
   });
 
   it("submit form with out upload file should return error", async () => {
-    
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
@@ -312,11 +310,9 @@ describe("Admin add resource page", () => {
     });
 
     expect(screen.queryByText("Please select a file")).toBeInTheDocument();
-
   });
 
   it("submit form with out selecting avail resource should return error", async () => {
-    
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
@@ -354,25 +350,23 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(screen.queryByText("Please select availability of resource")).toBeInTheDocument();
-
+    expect(
+      screen.queryByText("Please select availability of resource")
+    ).toBeInTheDocument();
   });
 
   it("submit form with valid data", async () => {
     const mockRouter = {
-      push: jest.fn() 
+      push: jest.fn(),
     };
 
-    (useRouter as jest.Mock).mockReturnValue(mockRouter)
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
 
-    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue(
-      {
-        fileName : "invalid.pdf"
-      }
-    );
-    jest.spyOn(s3, "uploadToS3").mockReturnValue(
-      Promise.resolve(true));
-    
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
@@ -414,29 +408,27 @@ describe("Admin add resource page", () => {
 
     expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     await waitFor(async () => {
-      expect(screen.getByTestId("addResourceModalConfirmButton")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("addResourceModalConfirmButton")
+      ).toBeInTheDocument();
     });
-    
+
     fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
 
     await waitFor(async () => {
-    expect(screen.getByText("Resource added successfully")).toBeInTheDocument();
+      expect(
+        screen.getByText("Resource added successfully")
+      ).toBeInTheDocument();
     });
-    expect(mockRouter.push).toHaveBeenCalledWith('/therapist/resource')
-
+    expect(mockRouter.push).toHaveBeenCalledWith("/therapist/resource");
   });
 
   it("close the pop up by pressing cancel on confirm button", async () => {
-    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue(
-      {
-        fileName : "invalid.pdf"
-      }
-    );
-    jest.spyOn(s3, "uploadToS3").mockReturnValue(
-      Promise.resolve(true));
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
 
-    const setModalOpen = jest.fn()
-    
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
@@ -478,15 +470,14 @@ describe("Admin add resource page", () => {
 
     expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     await waitFor(async () => {
-      expect(screen.getByTestId("addResourceModalConfirmButton")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("addResourceModalConfirmButton")
+      ).toBeInTheDocument();
     });
-    
+
     fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
     expect(screen.queryByTestId("addResourceSubmitButton")).toBeInTheDocument();
-
   });
-
-  
 
   it("checkbox check admin add resources", async () => {
     await sut();

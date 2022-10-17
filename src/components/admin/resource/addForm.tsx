@@ -64,7 +64,7 @@ export default function AddForm(props: propTypes) {
     variables: {
       fileName: formFields.file_name,
     },
-    });
+  });
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -232,8 +232,7 @@ export default function AddForm(props: propTypes) {
         }
         /* istanbul ignore next */
         props.setLoader(false);
-      } 
-      else {
+      } else {
         /* istanbul ignore next */
         props.setLoader(false);
         /* istanbul ignore next */
