@@ -9,6 +9,7 @@ import {
   ADD_FAVOURITE,
   DELETE_RESOURCE,
   REMOVE_FAVOURITE,
+  APPROVE_RESOURCE,
 } from "../graphql/mutation/resource";
 // mocks
 const buildMocks = (): {
@@ -135,6 +136,23 @@ const buildMocks = (): {
     result: {
       data: {
         deleteFavouriteResource: {
+          deleted: true,
+        },
+      },
+    },
+  });
+
+  // Approve Resource
+  _mocks.push({
+    request: {
+      query: APPROVE_RESOURCE,
+      variables: {
+        resourceId: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
+      },
+    },
+    result: {
+      data: {
+        deleteResource: {
           deleted: true,
         },
       },

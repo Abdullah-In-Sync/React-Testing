@@ -79,3 +79,12 @@ export const REMOVE_FAVOURITE = gql`
     }
   }
 `;
+
+export const APPROVE_RESOURCE = gql`
+  mutation ($resourceId: String!) {
+    adminApproveResourceById(resourceId: $resourceId) {
+      _id
+      resource_status
+    }
+  }
+`;

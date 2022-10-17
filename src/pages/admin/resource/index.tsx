@@ -15,6 +15,7 @@ import {
   ADD_FAVOURITE,
   DELETE_RESOURCE,
   REMOVE_FAVOURITE,
+  APPROVE_RESOURCE,
 } from "../../../graphql/mutation/resource";
 
 // MUI COMPONENTS
@@ -34,6 +35,8 @@ import InputBase from "@mui/material/InputBase";
 import Grid from "@mui/material/Grid";
 import CrudForm from "../../../components/common/CrudForm";
 import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal";
+import ApproveSureModal from "../../../components/admin/resource/ApproveSureModal";
+import DoneIcon from "@mui/icons-material/Done";
 
 import NextLink from "next/link";
 import { GET_ADMIN_TOKEN_DATA } from "../../../graphql/query/common";
@@ -144,7 +147,9 @@ const Resource: NextPage = () => {
   const [isMutating, setIsMutation] = useState<boolean>(false);
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
+  const [approveResource] = useMutation(APPROVE_RESOURCE);
   const [adminId, setadminId] = useState<string>("");
+  const [approveModal, setApproveModal] = useState<boolean>(false);
 
   useQuery(GET_ADMIN_TOKEN_DATA, {
     onCompleted: async (data) => {
@@ -266,30 +271,33 @@ const Resource: NextPage = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButtonWrapper aria-label="create" size="small">
-            <CreateIcon />
-          </IconButtonWrapper>
-
-          <IconButtonWrapper aria-label="favorite" size="small">
-            <FavoriteBorderIcon
-              data-testid={"fav_" + value?._id}
-              id={"fav_" + value?._id}
-              onClick={() =>
-                addFavour(
-                  value?._id,
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
-                    ? value?.fav_res_detail[0]._id
-                    : ""
-                )
-              }
-              sx={{
-                color:
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
-                    ? "red"
-                    : "",
-              }}
-            />
-          </IconButtonWrapper>
+          {value?.user_id == adminId && (
+            <IconButtonWrapper aria-label="create" size="small">
+              <CreateIcon />
+            </IconButtonWrapper>
+          )}
+          {filterValue?.mode != "approve_resource" && (
+            <IconButtonWrapper aria-label="favorite" size="small">
+              <FavoriteBorderIcon
+                data-testid={"fav_" + value?._id}
+                id={"fav_" + value?._id}
+                onClick={() =>
+                  addFavour(
+                    value?._id,
+                    value?.fav_res_detail && value?.fav_res_detail.length > 0
+                      ? value?.fav_res_detail[0]._id
+                      : ""
+                  )
+                }
+                sx={{
+                  color:
+                    value?.fav_res_detail && value?.fav_res_detail.length > 0
+                      ? "red"
+                      : "",
+                }}
+              />
+            </IconButtonWrapper>
+          )}
 
           {value?.user_id == adminId && (
             <IconButtonWrapper
@@ -304,18 +312,47 @@ const Resource: NextPage = () => {
               <DeleteIcon />
             </IconButtonWrapper>
           )}
-          <NextLink
-            href={
-              value?.download_resource_url != null
-                ? value?.download_resource_url
-                : "#"
-            }
-            passHref
-          >
-            <IconButtonWrapper aria-label="download" size="small">
-              <CloudDownloadIcon />
+          {filterValue?.mode === "approve_resource" && (
+            <IconButtonWrapper
+              onClick={() => {
+                setApproveModal(true);
+                setResourceId(value?._id);
+              }}
+              data-testid={"doneIcon_" + value?._id}
+              aria-label="Done"
+              size="small"
+            >
+              <DoneIcon />
             </IconButtonWrapper>
-          </NextLink>
+          )}
+
+          {filterValue?.mode === "approve_resource" && (
+            <IconButtonWrapper
+              onClick={() => {
+                setModalOpen(true);
+                setResourceId(value?._id);
+              }}
+              data-testid={"deleteIcon_" + value?._id}
+              aria-label="delete"
+              size="small"
+            >
+              <DeleteIcon />
+            </IconButtonWrapper>
+          )}
+          {filterValue?.mode != "approve_resource" && (
+            <NextLink
+              href={
+                value?.download_resource_url != null
+                  ? value?.download_resource_url
+                  : "#"
+              }
+              passHref
+            >
+              <IconButtonWrapper aria-label="download" size="small">
+                <CloudDownloadIcon />
+              </IconButtonWrapper>
+            </NextLink>
+          )}
         </>
       ),
     },
@@ -431,6 +468,24 @@ const Resource: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
+  const handleApprove = async (id) => {
+    /* istanbul ignore else */
+    setIsMutation(true);
+    approveResource({
+      variables: {
+        resourceId: id,
+      },
+      onCompleted: () => {
+        setIsMutation(false);
+        enqueueSnackbar("Resource Approved successfully!", {
+          variant: "error",
+        });
+        refetch();
+      },
+    });
+  };
+
   const handleFilterChange = (value) => {
     /* istanbul ignore next */
     setFilterValue(value);
@@ -507,6 +562,38 @@ const Resource: NextPage = () => {
           <Loader visible={loading || unapproveLoading} />
           <CardGenerator data={dataList} fields={fields} />
         </Box>
+        <ApproveSureModal
+          modalOpen={approveModal}
+          setModalOpen={setApproveModal}
+        >
+          <Box marginTop="20px" display="flex" justifyContent="end">
+            <Button
+              variant="contained"
+              color="inherit"
+              size="small"
+              data-testid="approveResourceModalCancelButton"
+              onClick={() => {
+                setApproveModal(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              sx={{ marginLeft: "5px" }}
+              size="small"
+              data-testid="approveResourceModalConfirmButton"
+              disabled={isMutating}
+              onClick={() => {
+                setApproveModal(false);
+                handleApprove(resourceId);
+              }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </ApproveSureModal>
         <DeleteSureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
           <Box marginTop="20px" display="flex" justifyContent="end">
             <Button
