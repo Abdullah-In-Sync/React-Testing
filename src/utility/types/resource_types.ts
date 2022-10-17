@@ -1,6 +1,6 @@
 export type addResourceFormField = {
   resource_name: string;
-  resource_type: string;
+  resource_type: number;
   disorder_id: string;
   model_id: string;
   category_id: string;

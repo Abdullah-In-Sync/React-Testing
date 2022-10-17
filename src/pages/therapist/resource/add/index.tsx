@@ -6,36 +6,41 @@ import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
 import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
-import { IS_ADMIN } from "../../../../lib/constants";
-import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
+import { IS_THERAPIST } from "../../../../lib/constants";
+import { buildTherapistTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 
 export default function Index() {
   const { enqueueSnackbar } = useSnackbar();
-  const [adminId, setadminId] = useState<any>();
   const [loader, setLoader] = useState<boolean>(false);
 
   const [createResource] = useMutation(CREATE_RESOURCE);
 
   const router = useRouter();
 
-  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (adminData) => {
-      /* istanbul ignore next */
-      setadminId(adminData._id);
+  const [therapistData, setTherapistData] = useState<{
+    _id: string;
+    org_id: string;
+  }>({
+    _id: "",
+    org_id: "",
+  });
+
+  const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
+    (therapistData) => {
+      setTherapistData({
+        _id: therapistData.therapist_data._id,
+        org_id: therapistData.therapist_data.org_id,
+      });
+      setLoader(false);
     }
   );
 
   useEffect(() => {
+    setLoader(true);
     gettokenData();
   }, []);
-
-  /* istanbul ignore next */
-  if (gettokenData && !tokenLoading && adminId) {
-    /* istanbul ignore next */
-    console.debug(adminId);
-  }
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
     try {
@@ -52,28 +57,29 @@ export default function Index() {
           resourceType: formFields.resource_type,
           agendaId: formFields.agenda_id,
           categoryId: formFields.category_id,
-          orgId: "",
+          orgId: therapistData.org_id,
           resourceDesc: formFields.resource_desc,
           resourceInstruction: formFields.resource_instruction,
           resourceIsformualation: "0",
           resourceIssmartdraw: "0",
           resourceReferences: formFields.resource_references,
           resourceStatus: 1,
-          userType: IS_ADMIN,
+          userType: IS_THERAPIST,
         },
         onCompleted: (data) => {
           if (data && data.createResource && data.createResource._id) {
             enqueueSnackbar("Resource added successfully", {
               variant: "success",
             });
-            router.push("/admin/resource");
+            router.push("/therapist/resource");
           }
         },
       });
-
       setLoader(false);
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Please fill the all fields", { variant: "error" });
     }
   };
@@ -81,11 +87,11 @@ export default function Index() {
   return (
     <>
       <Layout>
-        <Loader visible={loader} />
+        <Loader visible={loader || tokenLoading} />
         <ContentHeader title="Add Resource" />
         <AddForm
           resourceType="add"
-          userType="admin"
+          userType="therapist"
           onSubmit={submitFormHandler}
           setLoader={setLoader}
         />
