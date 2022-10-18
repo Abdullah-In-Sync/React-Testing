@@ -20,7 +20,7 @@ export type addResourceFormField = {
 export type editResourceFormField = {
   _id: string;
   resource_name: string;
-  resource_type: string;
+  resource_type: number;
   disorder_id: string;
   model_id: string;
   category_id: string;

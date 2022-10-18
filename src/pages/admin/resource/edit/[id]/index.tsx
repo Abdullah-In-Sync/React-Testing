@@ -18,6 +18,7 @@ export default function Index() {
   const [updateResource] = useMutation(UPDATE_RESOURCE_BY_ID);
 
   const router = useRouter();
+  const id = router?.query.id as string;
 
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (adminData) => {
@@ -42,9 +43,30 @@ export default function Index() {
 
   const editFormHandler = async (formFields: editResourceFormField) => {
     try {
+      console.debug("data params: ", {
+        resourceId: formFields._id,
+        update: {
+          resource_name: formFields.resource_name,
+          resource_type: formFields.resource_type,
+          resource_issmartdraw: "0",
+          resource_isformualation: "0",
+          disorder_id: formFields.disorder_id,
+          model_id: formFields.model_id,
+          category_id: formFields.category_id,
+          resource_desc: formFields.resource_desc,
+          resource_instruction: formFields.resource_instruction,
+          resource_references: formFields.resource_references,
+          agenda_id: formFields.agenda_id,
+          resource_avail_admin: formFields.resource_avail_admin,
+          resource_avail_therapist: formFields.resource_avail_therapist,
+          resource_avail_onlyme: formFields.resource_avail_onlyme,
+          resource_avail_all: formFields.resource_avail_all,
+          resource_filename: formFields.file_name,
+        },
+      });
       updateResource({
         variables: {
-          resourceId: formFields._id,
+          resourceId: id,
           update: {
             resource_name: formFields.resource_name,
             resource_type: formFields.resource_type,
@@ -65,7 +87,7 @@ export default function Index() {
           },
         },
         onCompleted: (data) => {
-          console.log("datafinal: ", data);
+          console.debug("datafinal: ", data);
           if (data && data.updateResourceById) {
             enqueueSnackbar("Resource edit successfully", {
               variant: "success",

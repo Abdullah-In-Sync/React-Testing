@@ -29,7 +29,7 @@ import Loader from "../Loader";
 const defaultFormValue = {
   _id: "",
   resource_name: "",
-  resource_type: "",
+  resource_type: 2,
   disorder_id: "",
   model_id: "",
   category_id: "",
@@ -74,13 +74,14 @@ export default function EditForm(props: propTypes) {
   const [AdminId, setadminId] = useState<string>("");
 
   const resourceTypeOptions = [
-    { id: "1", value: "Info Sheets" },
-    { id: "2", value: "Work Sheets" },
-    { id: "3", value: "Audio File" },
-    { id: "4", value: "Video File" },
+    { id: 1, value: "Info Sheets" },
+    { id: 2, value: "Work Sheets" },
+    { id: 3, value: "Audio File" },
+    { id: 4, value: "Video File" },
   ];
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (tokenData) => {
+      console.debug(tokenData._id);
       /* istanbul ignore next */
       setadminId(tokenData._id);
     }
@@ -151,6 +152,7 @@ export default function EditForm(props: propTypes) {
   const [getResourceData, { loading: resourceLoading, data: resourceData }] =
     useLazyQuery(GET_RESOURCE_DETAIL, {
       onCompleted: (data) => {
+        console.debug("Koca: resourceData ", data);
         /* istanbul ignore next */
         if (data!.getResourceById) {
           setResId(data!.getResourceById[0]?._id);
@@ -159,7 +161,7 @@ export default function EditForm(props: propTypes) {
         }
       },
     });
-  console.log("Koca: resourceData ", resourceData);
+  
 
   useEffect(() => {
     /* istanbul ignore next */
@@ -328,6 +330,7 @@ export default function EditForm(props: propTypes) {
 
   const uploadFile = async () => {
     /* istanbul ignore next */
+    console.debug("why i am here");
     try {
       props.setLoader(true);
       /* istanbul ignore next */
@@ -346,6 +349,7 @@ export default function EditForm(props: propTypes) {
         }
         props.setLoader(false);
       } else {
+        console.debug("form submitted");
         props.onSubmit(formFields);
         props.setLoader(false);
       }
@@ -519,7 +523,7 @@ export default function EditForm(props: propTypes) {
                   value={formFields?.agenda_id}
                   label="Suggested Agenda"
                   onChange={set2}
-                  inputProps={{ "data-testid": "agenda" }}
+                  inputProps={{ "data-testid": "agenda_id" }}
                   options={
                     (agendaData && agendaData.getAgendaByDisorderAndModel) || []
                   }
@@ -532,6 +536,7 @@ export default function EditForm(props: propTypes) {
                 <Grid item xs={7}>
                   Upload Resource :{" "}
                   <Link
+                    data-testid = "edit-upload-file"
                     href={resourceData?.getResourceById[0].resource_url}
                     underline="none"
                   >

@@ -13,7 +13,7 @@ import {
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-  GET_TOKEN_DATA,
+  GET_ADMIN_TOKEN_DATA,
 } from "../graphql/query/common";
 import {
   GET_RESOURCE_DETAIL,
@@ -26,6 +26,9 @@ import { UPDATE_RESOURCE_BY_ID } from "../graphql/mutation/resource";
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 const mocksData = [];
+
+const file = new File(["hello"], "hello.png", { type: "image/png" });
+
 // disorder
 mocksData.push({
   request: {
@@ -62,14 +65,22 @@ mocksData.push({
           resource_references: "test reference",
           resource_url: "http://google.com",
           download_resource_url: "http://google.com",
+          resource_type: 2,
+          category_id: "category-id",
+          agenda_id: "agenda-id",
           disorder_detail: {
-            _id: "467925dfc1d34c9e9eecd3cd915588d9",
+            _id: "disorder-id",
             disorder_name: "test disorder",
           },
           model_detail: {
             _id: "4e110b3e7faa47c9be82540fe8e78fb0",
             model_name: "test mddel",
           },
+          resource_avail_onlyme: "0",
+          resource_avail_admin: "1",
+          resource_avail_therapist: "1",
+          resource_avail_all: "0",
+          resource_filename: "sample.pdf"
         },
       ],
     },
@@ -82,10 +93,10 @@ mocksData.push({
   request: {
     query: UPDATE_RESOURCE_BY_ID,
     variables: {
-      resourceId: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+      resourceId: "750a6993f61d4e58917e31e1244711f5",
       update: {
         resource_name: "avbv",
-        resource_type: "2",
+        resource_type: 2,
         resource_issmartdraw: "0",
         resource_isformualation: "0",
         disorder_id: "disorder_id_1",
@@ -99,7 +110,7 @@ mocksData.push({
         resource_avail_therapist: 1,
         resource_avail_onlyme: 1,
         resource_avail_all: 1,
-        resource_filename: "invalid.pdf",
+        resource_filename: "",
       },
     },
   },
@@ -110,7 +121,7 @@ mocksData.push({
           user_id: "user_id",
           user_type: "use type",
           resource_name: "user name",
-          resource_type: "res_name",
+          resource_type: 2,
           resource_issmartdraw: "is_draw",
           resource_isformualation: "is for",
           disorder_id: " disorder_id",
@@ -200,13 +211,11 @@ mocksData.push({
   },
 });
 // upload file, presigned URL
-const file = new File(["hello"], "hello.png", { type: "image/png" });
-const { fileName } = getUpdatedFileName(file);
 mocksData.push({
   request: {
     query: GET_UPLOAD_RESOURCE_URL,
     variables: {
-      fileName: fileName,
+      fileName: "invalid.pdf",
     },
   },
   result: {
@@ -219,21 +228,21 @@ mocksData.push({
 });
 mocksData.push({
   request: {
-    query: GET_TOKEN_DATA,
+    query: GET_ADMIN_TOKEN_DATA,
     variables: {},
   },
   result: {
-    data: [
-      {
-        _id: "7fcfbac1-82db-4366-aa76-bf8d649b2a24",
+    data: {
+      getTokenData: {
+        _id: "some-admin-id",
         user_type: "admin",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
-        user_status: 1,
+        user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
       },
-    ],
+    },
   },
 });
 
@@ -262,46 +271,45 @@ describe("Admin edit resource page", () => {
       },
     }));
     await sut();
-    expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
 
-    expect(screen.getByTestId("resource_name")).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(screen.getByTestId('resource_name')).toHaveValue("test name");
 
-    expect(screen.getByTestId("resource_type")).toBeInTheDocument();
+      expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
 
-    expect(screen.getByTestId("disorder_id")).toBeInTheDocument();
+      expect(screen.getByTestId('resource_type')).toHaveValue(2);
 
-    expect(screen.getByTestId("model_id")).toBeInTheDocument();
+      expect(screen.getByTestId("disorder_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("model_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("category_id")).toBeInTheDocument(); // todo
 
-    expect(screen.getByTestId("category_id")).toBeInTheDocument();
+      expect(screen.getByTestId('resource_desc')).toHaveValue("test desc");
 
-    expect(screen.getByTestId("resource_desc")).toBeInTheDocument();
+      expect(screen.getByTestId('resource_instruction')).toHaveValue("test instruct");
 
-    expect(screen.getByTestId("resource_instruction")).toBeInTheDocument();
+      expect(screen.getByTestId('resource_references')).toHaveValue("test reference");
 
-    expect(screen.getByTestId("resource_references")).toBeInTheDocument();
+      expect(screen.getByTestId('agenda_id')).toHaveValue("agenda-id");
 
-    expect(screen.getByTestId("agenda")).toBeInTheDocument();
+      expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
 
-    expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
+      expect(screen.getByTestId('resource_avail_admin')).toBeChecked();
+      expect(screen.getByTestId('resource_avail_therapist')).toBeChecked();
+      expect(screen.getByTestId('resource_avail_therapist')).toBeInTheDocument; //todo
+      expect(screen.getByTestId('resource_avail_all')).toBeInTheDocument; // todo
+      expect(screen.getByTestId('edit-upload-file').textContent).toEqual("sample.pdf");
 
-    expect(screen.getByTestId("resource_avail_admin")).toBeInTheDocument();
-
-    expect(screen.getByTestId("resource_avail_therapist")).toBeInTheDocument();
-
-    expect(screen.getByTestId("resource_avail_onlyme")).toBeInTheDocument();
-
-    expect(screen.getByTestId("resource_avail_all")).toBeInTheDocument();
-
-    expect(screen.getByTestId("editResourceSubmitButton")).toBeInTheDocument();
+      expect(screen.getByTestId("editResourceSubmitButton")).toBeInTheDocument();
+    });  
   });
 
   it("should render resource-type options by default", async () => {
     await sut();
     fireEvent.change(screen.queryByTestId("resource_type"), {
-      target: { value: "2" },
+      target: { value: 2 },
     });
     expect(screen.queryByTestId("resource_type").getAttribute("value")).toBe(
-      "2"
+      2
     );
   });
 
@@ -365,10 +373,10 @@ describe("Admin edit resource page", () => {
     expect(checkboxOnlyMe).toBeChecked();
   });
 
-  it("submit edit form", async () => {
+  it.only("submit edit form with out uploading file", async () => {
     useRouter.mockImplementation(() => ({
       query: {
-        id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+        id: "750a6993f61d4e58917e31e1244711f5",
       },
     }));
 
@@ -378,7 +386,7 @@ describe("Admin edit resource page", () => {
       target: { value: "avbv" },
     });
     fireEvent.change(screen.queryByTestId("resource_type"), {
-      target: { value: "2" },
+      target: { value: 2 },
     });
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
@@ -395,21 +403,12 @@ describe("Admin edit resource page", () => {
     fireEvent.change(screen.queryByTestId("category_id"), {
       target: { value: "category_id_1" },
     });
-    fireEvent.change(screen.queryByTestId("agenda"), {
+    fireEvent.change(screen.queryByTestId("agenda_id"), {
       target: { value: "agenda_id_1" },
     });
 
     fireEvent.click(screen.queryByTestId("resource_avail_all"));
 
-    const hiddenFileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    expect(hiddenFileInput.files.length).toBe(0);
-    await waitFor(async () => {
-      fireEvent.change(hiddenFileInput, { target: { files: [file] } });
-    });
-
-    expect(hiddenFileInput.files.length).toBe(1);
 
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("resource-edit-form"));
@@ -421,5 +420,14 @@ describe("Admin edit resource page", () => {
     await waitFor(async () => {
       fireEvent.click(screen.queryByTestId("editResourceModalConfirmButton"));
     });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Resource edit successfully")
+      ).toBeInTheDocument();
+    });
+
+    //expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
+
   });
 });
