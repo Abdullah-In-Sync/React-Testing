@@ -272,7 +272,7 @@ describe("Admin Resource page", () => {
     );
   });
 
-  test.only("should display the unapprove resource list", async () => {
+  test("should display the unapprove resource list", async () => {
     await sut();
     await waitFor(() =>
       expect(screen.queryByTestId("approveresourcelist")).toBeInTheDocument()
