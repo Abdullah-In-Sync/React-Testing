@@ -272,29 +272,33 @@ describe("Admin Resource page", () => {
     );
   });
 
-  test("should display the unapprove resource list", async () => {
+  test.only("should display the unapprove resource list", async () => {
     await sut();
     await waitFor(() =>
       expect(screen.queryByTestId("approveresourcelist")).toBeInTheDocument()
     );
-    //fireEvent.click(screen.queryByTestId("approveresourcelist"));    
-    fireEvent.click(screen.queryByTestId("approveresourcelist"), {
-      target: { mode:"approve_resource" },
-    });
-  });
-
-  test("Click Approve icon should open approve resource popup", async () => {
-    await sut();
+    fireEvent.click(screen.queryByTestId("approveresourcelist"));
     await waitFor(() =>
       expect(
         screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
       ).toBeInTheDocument()
     );
-    // fireEvent.click(
-    //   screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
-    // );
-    // expect(
-    //   screen.queryByText("Are you sure want to approve this resource?")
-    // ).toBeInTheDocument();
+      fireEvent.click(
+      screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+    );
+    expect(
+      screen.queryByText("Are you sure want to approve this resource?")
+    ).toBeInTheDocument();
   });
+
+  // test("Click Approve icon should open approve resource popup", async () => {
+  //   await sut();
+
+  //   // fireEvent.click(
+  //   //   screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+  //   // );
+  //   // expect(
+  //   //   screen.queryByText("Are you sure want to approve this resource?")
+  //   // ).toBeInTheDocument();
+  // });
 });
