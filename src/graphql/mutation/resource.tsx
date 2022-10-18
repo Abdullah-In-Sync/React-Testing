@@ -8,7 +8,7 @@ export const UPDATE_RESOURCE = gql`
   }
 `;
 
-export const ADMIN_CREATE_RESOURCE = gql`
+export const CREATE_RESOURCE = gql`
   mutation MyMutation(
     $disorderId: String!
     $modelId: String!

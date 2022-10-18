@@ -7,16 +7,17 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import AddResource from "../pages/admin/resource/add";
+import AddResource from "../pages/therapist/resource/add";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-  GET_ADMIN_TOKEN_DATA,
+  GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
-
+import { CREATE_RESOURCE } from "../graphql/mutation/resource";
+import { IS_THERAPIST } from "../lib/constants";
 import * as s3 from "../lib/helpers/s3";
 
 import { useRouter } from "next/router";
@@ -24,10 +25,6 @@ jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
 }));
-
-import { CREATE_RESOURCE } from "../graphql/mutation/resource";
-import { IS_ADMIN } from "../lib/constants";
-
 // mocks
 const mocksData = [];
 // disorder
@@ -128,19 +125,23 @@ const file = new File(["hello"], "hello.png", { type: "image/png" });
 // token data
 mocksData.push({
   request: {
-    query: GET_ADMIN_TOKEN_DATA,
+    query: GET_THERAPIST_TOKEN_DATA,
     variables: {},
   },
   result: {
     data: {
       getTokenData: {
-        _id: "some-admin-id",
-        user_type: "admin",
+        _id: "some-therapist-id",
+        user_type: "therapist",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
         user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
+        therapist_data: {
+          _id: "therapist_id",
+          org_id: "myhelp",
+        },
       },
     },
   },
@@ -161,14 +162,14 @@ mocksData.push({
       resourceType: 0,
       agendaId: "agenda_id_1",
       categoryId: "category_id_1",
-      orgId: "",
+      orgId: "myhelp",
       resourceDesc: "",
       resourceInstruction: "",
       resourceIsformualation: "0",
       resourceIssmartdraw: "0",
       resourceReferences: "",
       resourceStatus: 1,
-      userType: IS_ADMIN,
+      userType: IS_THERAPIST,
     },
   },
   result: {
@@ -419,7 +420,7 @@ describe("Admin add resource page", () => {
         screen.getByText("Resource added successfully")
       ).toBeInTheDocument();
     });
-    expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
+    expect(mockRouter.push).toHaveBeenCalledWith("/therapist/resource");
   });
 
   it("close the pop up by pressing cancel on confirm button", async () => {
