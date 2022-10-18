@@ -44,8 +44,8 @@ const defaultFormValue = {
   file_name: "",
   uploadFile: null,
   uploadFileURL: "",
-  disorder_detail: {},
-  model_detail: {},
+  disorder_detail: "",
+  model_detail: "",
   resource_url: null,
   download_resource_url: "",
 };
@@ -60,7 +60,6 @@ type propTypes = {
 export default function EditForm(props: propTypes) {
   const router = useRouter();
   const id = router?.query.id as string;
-  console.debug("id", id);
   const { enqueueSnackbar } = useSnackbar();
   const [formFields, setFormFields] =
     useState<editResourceFormField>(defaultFormValue);
@@ -80,7 +79,6 @@ export default function EditForm(props: propTypes) {
     { id: "3", value: "Audio File" },
     { id: "4", value: "Video File" },
   ];
-
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (tokenData) => {
       /* istanbul ignore next */
@@ -312,14 +310,6 @@ export default function EditForm(props: propTypes) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     /* istanbul ignore next */
-    // if (!selectedFile?.name) {
-    //   enqueueSnackbar("Please select a file", {
-    //     variant: "error",
-    //   });
-    //   return;
-    // }
-
-    /* istanbul ignore next */
     if (
       !formFields?.resource_avail_admin &&
       !formFields?.resource_avail_onlyme &&
@@ -337,11 +327,9 @@ export default function EditForm(props: propTypes) {
   };
 
   const uploadFile = async () => {
-    console.debug("i am in function");
     /* istanbul ignore next */
     try {
       props.setLoader(true);
-      console.debug("preSignedURL.current", preSignedURL.current);
       /* istanbul ignore next */
       if (preSignedURL.current) {
         const uploadStatus = await uploadToS3(
@@ -365,6 +353,7 @@ export default function EditForm(props: propTypes) {
       props.setLoader(false);
     }
   };
+
   console.log("LIST THE FORM: ", formFields);
   console.log("Koca: resId ", resId);
 

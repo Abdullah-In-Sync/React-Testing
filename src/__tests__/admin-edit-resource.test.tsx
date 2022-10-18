@@ -3,7 +3,6 @@ import {
   render,
   waitForElementToBeRemoved,
   fireEvent,
-  act,
   waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
@@ -21,17 +20,9 @@ import {
   GET_UPLOAD_RESOURCE_URL,
 } from "../graphql/query/resource";
 import { getUpdatedFileName } from "../lib/helpers/s3";
-import * as s3 from "../lib/helpers/s3";
-
-// import { useRouter } from "next/router";
 import { UPDATE_RESOURCE_BY_ID } from "../graphql/mutation/resource";
 
-jest.mock("next/router", () => ({
-  __esModule: true,
-  useRouter: jest.fn(),
-}));
 // mocks
-
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 const mocksData = [];
@@ -85,44 +76,7 @@ mocksData.push({
   },
 });
 
-//my code
-// mocksData.push({
-//   request: {
-//     query: UPDATE_RESOURCE_BY_ID,
-//     variables: {
-//       resourceId: "resource_id",
-//       update: {
-//         resource_name: "resource name",
-//         resource_type: "resource type",
-//         resource_issmartdraw: "0",
-//         resource_isformualation: "0",
-//         disorder_id: "disorder_id",
-//         model_id: "model_id",
-//         category_id: "category_id",
-//         resource_desc: "resource desc",
-//         resource_instruction: "resource instruction",
-//         resource_references: "resource references",
-//         agenda_id: "agenda_id",
-//         resource_avail_admin: "resource avail admin",
-//         resource_avail_therapist: "resource avail therapist",
-//         resource_avail_onlyme: "resource avail onlyme",
-//         resource_avail_all: "resource avail all",
-//         resource_filename: "file name",
-//       },
-//     },
-//   },
-//   result: {
-//     data: {
-//       getUpdatedResourceById: [
-//         {
-//           _id: "update_id_1",
-//           user_type: "admin",
-//           resource_name: "resource 1",
-//         },
-//       ],
-//     },
-//   },
-// });
+//UPDATE RESOURCE BY ID
 
 mocksData.push({
   request: {
@@ -301,7 +255,7 @@ describe("Admin edit resource page", () => {
     useRouter.mockClear();
   });
 
-  it.only("should render complete edit resource form", async () => {
+  it("should render complete edit resource form", async () => {
     useRouter.mockImplementation(() => ({
       query: {
         id: "750a6993f61d4e58917e31e1244711f5",
@@ -310,7 +264,7 @@ describe("Admin edit resource page", () => {
     await sut();
     expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
 
-    expect(screen.getByText("resource_name")).toBeInTheDocument();
+    expect(screen.getByTestId("resource_name")).toBeInTheDocument();
 
     expect(screen.getByTestId("resource_type")).toBeInTheDocument();
 
@@ -340,64 +294,6 @@ describe("Admin edit resource page", () => {
 
     expect(screen.getByTestId("editResourceSubmitButton")).toBeInTheDocument();
   });
-
-  // it("close the pop up by pressing cancel on confirm button", async () => {
-  //   jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
-  //     fileName: "invalid.pdf",
-  //   });
-  //   jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
-
-  //   await sut();
-
-  //   fireEvent.change(screen.queryByTestId("resource_name"), {
-  //     target: { value: "test" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("resource_type"), {
-  //     target: { value: "2" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("disorder_id"), {
-  //     target: { value: "disorder_id_1" },
-  //   });
-
-  //   screen.queryByTestId("activity-indicator");
-
-  //   fireEvent.change(screen.queryByTestId("model_id"), {
-  //     target: { value: "model_id_1" },
-  //   });
-
-  //   screen.queryByTestId("activity-indicator");
-
-  //   fireEvent.change(screen.queryByTestId("category_id"), {
-  //     target: { value: "category_id_1" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("agenda"), {
-  //     target: { value: "agenda_id_1" },
-  //   });
-
-  //   fireEvent.click(screen.queryByTestId("resource_avail_all"));
-
-  //   await waitFor(async () => {
-  //     fireEvent.change(screen.getByTestId("resource_file_upload"), {
-  //       target: { files: [file] },
-  //     });
-  //   });
-
-  //   await waitFor(async () => {
-  //     fireEvent.click(screen.queryByTestId("editResourceSubmitButton"));
-  //   });
-
-  //   // expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-  //   await waitFor(async () => {
-  //     expect(
-  //       screen.getByTestId("editResourceModalConfirmButton")
-  //     ).toBeInTheDocument();
-  //   });
-
-  //   fireEvent.click(screen.queryByTestId("editResourceModalCancelButton"));
-  //   expect(
-  //     screen.queryByTestId("editResourceSubmitButton")
-  //   ).toBeInTheDocument();
-  // });
 
   it("should render resource-type options by default", async () => {
     await sut();
@@ -476,12 +372,6 @@ describe("Admin edit resource page", () => {
       },
     }));
 
-    // const mockRouter = {
-    //   push: jest.fn(),
-    // };
-
-    // (useRouter as jest.Mock).mockReturnValue(mockRouter);
-
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {
@@ -531,11 +421,5 @@ describe("Admin edit resource page", () => {
     await waitFor(async () => {
       fireEvent.click(screen.queryByTestId("editResourceModalConfirmButton"));
     });
-
-    // await expect(
-    //   screen.getByText("Resource edit successfully")
-    // ).toBeInTheDocument();
-
-    // expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource/");
   });
 });

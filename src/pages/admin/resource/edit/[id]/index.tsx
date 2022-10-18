@@ -38,32 +38,9 @@ export default function Index() {
   /* istanbul ignore next */
   if (gettokenData && !tokenLoading && adminId) {
     /* istanbul ignore next */
-    console.debug(adminId);
   }
 
   const editFormHandler = async (formFields: editResourceFormField) => {
-    console.debug("formfield", {
-      resourceId: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
-      update: {
-        resource_name: formFields.resource_name,
-        resource_type: formFields.resource_type,
-        resource_issmartdraw: "0",
-        resource_isformualation: "0",
-        disorder_id: formFields.disorder_id,
-        model_id: formFields.model_id,
-        category_id: formFields.category_id,
-        resource_desc: formFields.resource_desc,
-        resource_instruction: formFields.resource_instruction,
-        resource_references: formFields.resource_references,
-        agenda_id: formFields.agenda_id,
-        resource_avail_admin: formFields.resource_avail_admin,
-        resource_avail_therapist: formFields.resource_avail_therapist,
-        resource_avail_onlyme: formFields.resource_avail_onlyme,
-        resource_avail_all: formFields.resource_avail_all,
-        resource_filename: "invalid.pdf",
-      },
-    });
-    console.log("formfield", formFields);
     try {
       updateResource({
         variables: {
@@ -88,9 +65,7 @@ export default function Index() {
           },
         },
         onCompleted: (data) => {
-          // console.log("datafinal: ", data);
-          console.debug("api response", data);
-
+          console.log("datafinal: ", data);
           if (data && data.updateResourceById) {
             enqueueSnackbar("Resource edit successfully", {
               variant: "success",

@@ -37,6 +37,6 @@ export type editResourceFormField = {
   uploadFileURL?: string;
   resource_url?: null;
   download_resource_url?: string;
-  disorder_detail: Object;
-  model_detail: Object;
+  disorder_detail: string;
+  model_detail: string;
 };
