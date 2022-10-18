@@ -283,7 +283,7 @@ describe("Admin Resource page", () => {
         screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
       ).toBeInTheDocument()
     );
-      fireEvent.click(
+    fireEvent.click(
       screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
     );
     expect(
