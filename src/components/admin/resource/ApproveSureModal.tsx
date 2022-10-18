@@ -11,7 +11,7 @@ const ApproveSureModal = (props) => {
       <Modal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
-        testid="ApprovesureModal"
+        testid="ApproveSureModal"
       >
         <Grid container>
           <Grid item md={12}>
@@ -39,7 +39,7 @@ const ApproveSureModal = (props) => {
                   fontSize: "27px",
                 }}
               >
-                Are you sure want to Approve this resource?
+                Are you sure want to approve this resource?
               </Typography>
             </Box>
             {props.children}

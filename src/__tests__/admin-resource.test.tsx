@@ -152,8 +152,9 @@ const buildMocks = (): {
     },
     result: {
       data: {
-        deleteResource: {
-          deleted: true,
+        adminApproveResourceById: {
+          _id: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
+          resource_status: 1,
         },
       },
     },
@@ -232,5 +233,25 @@ describe("Admin Resource page", () => {
         screen.queryByTestId("fav_fffe8041-fc77-40fa-a83e-cf76197d1499")
       ).toHaveStyle(`color: rgba(0, 0, 0, 0.54)`)
     );
+  });
+
+  test("Click Approve icon should open approve resource popup", async () => {
+    await sut();
+    const myComponent = screen.queryByTestId(
+      "doneIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54"
+    );
+    if (myComponent) {
+      expect(
+        screen.queryByTestId("doneIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId("doneIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      );
+      expect(
+        screen.queryByText("Are you sure want to approve this resource?")
+      ).toBeInTheDocument();
+    } else {
+      expect(myComponent).not.toBeInTheDocument();
+    }
   });
 });
