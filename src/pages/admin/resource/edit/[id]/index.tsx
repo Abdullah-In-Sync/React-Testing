@@ -92,7 +92,7 @@ export default function Index() {
             enqueueSnackbar("Resource edit successfully", {
               variant: "success",
             });
-            router.push("/admin/resource");
+            // router.push("/admin/resource");
           }
         },
       });
