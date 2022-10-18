@@ -528,6 +528,7 @@ const Resource: NextPage = () => {
                 className={`text-white`}
                 variant="contained"
                 sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
+                data-testid="approveresourcelist"
                 onClick={() => {
                   handleFilterChange({ mode: "approve_resource" });
                 }}

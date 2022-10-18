@@ -4,7 +4,10 @@ import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
-import { GET_RESOURCE_DATA } from "../graphql/query/resource";
+import {
+  GET_RESOURCE_DATA,
+  GET_UNAPPROVE_RESOURCE,
+} from "../graphql/query/resource";
 import {
   ADD_FAVOURITE,
   DELETE_RESOURCE,
@@ -142,6 +145,40 @@ const buildMocks = (): {
     },
   });
 
+  //Get UnApprove Resource list
+  _mocks.push({
+    request: {
+      query: GET_UNAPPROVE_RESOURCE,
+      variables: {},
+    },
+    result: {
+      data: {
+        getAdminUnApproveResourceList: [
+          {
+            _id: "9be5d270b71041caac142fb4b2bbc0ec",
+            resource_name: "TR1",
+            agenda_id: "f55968a9f41d407e9a465a5ee17de5f8",
+            category_id: "0",
+            created_date: "2022-10-15T12:48:01.000Z",
+            resource_status: 2,
+            disorder_id: "f21fb142812544309fb64ee47054333f",
+            model_id: "c5813b8f9d82402eac48e49ba4f066bf",
+          },
+          {
+            _id: "85f84e4bc20649f789c6ecffddaf1c77",
+            resource_name: "TR2",
+            agenda_id: "737d98b95a2a4bf68b010ddf7c21f6bf",
+            category_id: "add7bfe989374f5593ab2167aa4e0669",
+            created_date: "2022-10-15T12:47:03.000Z",
+            resource_status: 2,
+            disorder_id: "83b2cc7813764aa9a095e79386805467",
+            model_id: "60d4284b33f24874a21f20144cd682fc",
+          },
+        ],
+      },
+    },
+  });
+
   // Approve Resource
   _mocks.push({
     request: {
@@ -235,23 +272,29 @@ describe("Admin Resource page", () => {
     );
   });
 
+  test("should display the unapprove resource list", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("approveresourcelist")).toBeInTheDocument()
+    );
+    //fireEvent.click(screen.queryByTestId("approveresourcelist"));    
+    fireEvent.click(screen.queryByTestId("approveresourcelist"), {
+      target: { mode:"approve_resource" },
+    });
+  });
+
   test("Click Approve icon should open approve resource popup", async () => {
     await sut();
-    const myComponent = screen.queryByTestId(
-      "doneIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54"
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+      ).toBeInTheDocument()
     );
-    if (myComponent) {
-      expect(
-        screen.queryByTestId("doneIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
-      ).toBeInTheDocument();
-      fireEvent.click(
-        screen.queryByTestId("doneIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
-      );
-      expect(
-        screen.queryByText("Are you sure want to approve this resource?")
-      ).toBeInTheDocument();
-    } else {
-      expect(myComponent).not.toBeInTheDocument();
-    }
+    // fireEvent.click(
+    //   screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+    // );
+    // expect(
+    //   screen.queryByText("Are you sure want to approve this resource?")
+    // ).toBeInTheDocument();
   });
 });
