@@ -334,7 +334,7 @@ export const patient_routes: RoutesType[] = [
   ],
   {
     key: 12,
-    label: "Resource",
+    label: "Resources",
     path: "/patient/resource",
     icon: <CrisisAlertIcon />,
   },
