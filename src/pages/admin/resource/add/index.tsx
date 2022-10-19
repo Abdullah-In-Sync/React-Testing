@@ -34,7 +34,6 @@ export default function Index() {
   /* istanbul ignore next */
   if (gettokenData && !tokenLoading && adminId) {
     /* istanbul ignore next */
-    console.debug(adminId);
   }
 
   const submitFormHandler = async (formFields: addResourceFormField) => {

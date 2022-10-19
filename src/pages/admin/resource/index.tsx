@@ -265,7 +265,9 @@ const Resource: NextPage = () => {
       render: (_, value) => (
         <>
           <IconButtonWrapper aria-label="create" size="small">
-            <CreateIcon />
+            <NextLink href={"/admin/resource/edit/" + value._id} passHref>
+              <CreateIcon />
+            </NextLink>
           </IconButtonWrapper>
 
           <IconButtonWrapper aria-label="favorite" size="small">
