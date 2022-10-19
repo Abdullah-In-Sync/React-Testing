@@ -219,7 +219,7 @@ describe("Therapist Resource page", () => {
     await waitFor(() =>
       expect(
         screen.queryByTestId("fav_fffe8041-fc77-40fa-a83e-cf76197d1499")
-      ).toHaveStyle(`color: rgba(0, 0, 0, 0.54)`)
+      ).toHaveAttribute("aria-hidden", "true")
     );
   });
 });
