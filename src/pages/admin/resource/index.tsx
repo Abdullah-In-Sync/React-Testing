@@ -237,8 +237,6 @@ const Resource: NextPage = () => {
         },
         onCompleted: () => {
           refetch();
-          document.getElementById("fav_" + id).style.color =
-            "rgba(0, 0, 0, 0.54)";
         },
       });
     }
@@ -273,7 +271,9 @@ const Resource: NextPage = () => {
         <>
           {value?.user_id == adminId && (
             <IconButtonWrapper aria-label="create" size="small">
-              <CreateIcon />
+              <NextLink href={"/admin/resource/edit/" + value._id} passHref>
+                <CreateIcon />
+              </NextLink>
             </IconButtonWrapper>
           )}
           {filterValue?.mode != "approve_resource" && (
