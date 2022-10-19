@@ -417,7 +417,6 @@ const Resource: NextPage = () => {
   };
 
   const handleFilterChange = (value) => {
-    alert(value);
     /* istanbul ignore next */
     setFilterValue(value);
     /* istanbul ignore next */
