@@ -481,8 +481,7 @@ const Resource: NextPage = () => {
         enqueueSnackbar("Resource Approved successfully!", {
           variant: "error",
         });
-        setFilterValue({ mode: "" });
-        refetch();
+        handleFilterChange({ mode: "approve_resource" });
       },
     });
   };

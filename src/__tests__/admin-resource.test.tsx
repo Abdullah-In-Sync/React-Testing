@@ -184,13 +184,13 @@ const buildMocks = (): {
     request: {
       query: APPROVE_RESOURCE,
       variables: {
-        resourceId: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
+        resourceId: "9be5d270b71041caac142fb4b2bbc0ec",
       },
     },
     result: {
       data: {
         adminApproveResourceById: {
-          _id: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
+          _id: "9be5d270b71041caac142fb4b2bbc0ec",
           resource_status: 1,
         },
       },
@@ -294,5 +294,13 @@ describe("Admin Resource page", () => {
     expect(
       screen.queryByText("Are you sure want to approve this resource?")
     ).toBeInTheDocument();
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("approveResourceModalConfirmButton")
+      ).toBeInTheDocument()
+    );
+
+    fireEvent.click(screen.queryByTestId("approveResourceModalConfirmButton"));
   });
 });
