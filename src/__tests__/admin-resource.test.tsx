@@ -302,5 +302,10 @@ describe("Admin Resource page", () => {
     );
 
     fireEvent.click(screen.queryByTestId("approveResourceModalConfirmButton"));
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+      ).toHaveAttribute("aria-hidden", "true")
+    );
   });
 });
