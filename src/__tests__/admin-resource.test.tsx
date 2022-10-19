@@ -300,8 +300,9 @@ describe("Admin Resource page", () => {
         screen.queryByTestId("approveResourceModalConfirmButton")
       ).toBeInTheDocument()
     );
-
-    fireEvent.click(screen.queryByTestId("approveResourceModalConfirmButton"));
+    await waitFor(() =>
+      fireEvent.click(screen.queryByTestId("approveResourceModalConfirmButton"))
+    );
     await waitFor(() =>
       expect(
         screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")

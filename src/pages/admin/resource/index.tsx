@@ -319,8 +319,10 @@ const Resource: NextPage = () => {
                 setResourceId(value?._id);
               }}
               data-testid={"doneIcon_" + value?._id}
+              id={"doneIcon_" + value?._id}
               aria-label="Done"
               size="small"
+              aria-hidden="true"
             >
               <DoneIcon />
             </IconButtonWrapper>
