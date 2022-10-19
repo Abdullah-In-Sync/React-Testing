@@ -419,6 +419,7 @@ const Resource: NextPage = () => {
   const handleFilterChange = (value) => {
     /* istanbul ignore next */
     setFilterValue(value);
+    /* istanbul ignore next */
     if (value.mode == "") {
       window.location.reload();
     }
