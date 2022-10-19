@@ -283,7 +283,6 @@ export default function EditForm(props: propTypes) {
     if (!fileObj) {
       return;
     }
-    // debugger;
     const { fileName } = getUpdatedFileName(event.target.files[0]);
     // try {
     props.setLoader(true);
