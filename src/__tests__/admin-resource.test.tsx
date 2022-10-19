@@ -290,15 +290,4 @@ describe("Admin Resource page", () => {
       screen.queryByText("Are you sure want to approve this resource?")
     ).toBeInTheDocument();
   });
-
-  // test("Click Approve icon should open approve resource popup", async () => {
-  //   await sut();
-
-  //   // fireEvent.click(
-  //   //   screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
-  //   // );
-  //   // expect(
-  //   //   screen.queryByText("Are you sure want to approve this resource?")
-  //   // ).toBeInTheDocument();
-  // });
 });
