@@ -143,7 +143,14 @@ export const GET_RESOURCE_DETAIL = gql`
   query getResourceById($resourceId: String!) {
     getResourceById(resourceId: $resourceId) {
       _id
+      agenda_id
+      resource_avail_admin
+      resource_avail_onlyme
+      resource_avail_therapist
+      resource_avail_all
+      category_id
       resource_name
+      resource_type
       resource_desc
       resource_instruction
       resource_references

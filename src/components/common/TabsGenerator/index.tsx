@@ -20,11 +20,10 @@ const TabPanel = (props) => {
 
 const TabsGenerator = ({ tabsList, activeTabs }) => {
   const router = useRouter();
-  console.log("router", router);
+
   const [activeTab, setActiveTab] = useState(activeTabs);
 
   const handleTabChange = (_, newValue) => {
-    console.log("new value:", newValue);
     setActiveTab(newValue);
   };
 

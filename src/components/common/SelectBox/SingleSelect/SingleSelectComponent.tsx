@@ -1,6 +1,7 @@
 import React from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
+/* istanbul ignore next */
 type propTypes = {
   required?: boolean;
   fullWidth?: boolean;
@@ -18,6 +19,7 @@ type propTypes = {
   size: "small" | "medium";
 };
 
+/* istanbul ignore next */
 type Option = {
   id: any;
   value: string;
