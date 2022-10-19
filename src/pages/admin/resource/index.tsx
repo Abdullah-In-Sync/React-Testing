@@ -492,6 +492,10 @@ const Resource: NextPage = () => {
     /* istanbul ignore next */
     setFilterValue(value);
     /* istanbul ignore next */
+    if (value.mode == "") {
+      window.location.reload();
+    }
+    /* istanbul ignore next */
     const modelList = disorderList?.getDisorderModel?.find(
       (val) => val._id === value?.disorderId
     );

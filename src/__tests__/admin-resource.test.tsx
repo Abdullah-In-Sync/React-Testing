@@ -309,4 +309,40 @@ describe("Admin Resource page", () => {
       ).toHaveAttribute("aria-hidden", "true")
     );
   });
+
+  test("should display the unapprove resource list", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("approveresourcelist")).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("approveresourcelist"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument()
+    );
+    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(2));
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(
+      screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
+    );
+    expect(
+      screen.queryByText("Are you sure want to approve this resource?")
+    ).toBeInTheDocument();
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("approveResourceModalConfirmButton")
+      ).toBeInTheDocument()
+    );
+    await waitFor(() =>
+      fireEvent.click(screen.queryByTestId("approveResourceModalCancelButton"))
+    );
+    await waitFor(() =>
+      expect(screen.queryByText("Approve Resource")).toBeInTheDocument()
+    );
+  });
 });
