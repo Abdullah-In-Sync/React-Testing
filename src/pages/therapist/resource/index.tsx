@@ -219,8 +219,6 @@ const Resource: NextPage = () => {
         },
         onCompleted: () => {
           refetch();
-          document.getElementById("fav_" + id).style.color =
-            "rgba(0, 0, 0, 0.54)";
         },
       });
     }
@@ -419,6 +417,7 @@ const Resource: NextPage = () => {
   };
 
   const handleFilterChange = (value) => {
+    alert(value);
     /* istanbul ignore next */
     setFilterValue(value);
     /* istanbul ignore next */

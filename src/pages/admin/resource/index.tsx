@@ -232,8 +232,6 @@ const Resource: NextPage = () => {
         },
         onCompleted: () => {
           refetch();
-          document.getElementById("fav_" + id).style.color =
-            "rgba(0, 0, 0, 0.54)";
         },
       });
     }
