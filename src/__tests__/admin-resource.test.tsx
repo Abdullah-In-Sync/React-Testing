@@ -342,7 +342,7 @@ describe("Admin Resource page", () => {
       fireEvent.click(screen.queryByTestId("approveResourceModalCancelButton"))
     );
     await waitFor(() =>
-    expect(screen.queryByText("Approve Resource")).toBeInTheDocument()
+      expect(screen.queryByText("Approve Resource")).toBeInTheDocument()
     );
   });
 });
