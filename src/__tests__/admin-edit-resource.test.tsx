@@ -19,12 +19,16 @@ import {
   GET_RESOURCE_DETAIL,
   GET_UPLOAD_RESOURCE_URL,
 } from "../graphql/query/resource";
-import { getUpdatedFileName } from "../lib/helpers/s3";
 import { UPDATE_RESOURCE_BY_ID } from "../graphql/mutation/resource";
 import * as s3 from "../lib/helpers/s3";
 
-// mocks
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
+import { useRouter } from "next/router";
+
+const pushMock = jest.fn();
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
 
 const mocksData = [];
 
@@ -153,7 +157,7 @@ mocksData.push({
   request: {
     query: UPDATE_RESOURCE_BY_ID,
     variables: {
-      resourceId: "750a6993f61d4e58917e31e1244711",
+      resourceId: "750a6993f61d4e58917e31e1244711f5",
       update: {
         resource_name: "avbv",
         resource_type: 2,
@@ -321,10 +325,6 @@ const sut = async () => {
 };
 
 describe("Admin edit resource page", () => {
-  beforeEach(() => {
-    useRouter.mockClear();
-  });
-
   it("should render complete edit resource form input field", async () => {
     await sut();
     expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
@@ -379,7 +379,7 @@ describe("Admin edit resource page", () => {
   });
 
   it("should render complete edit resource form", async () => {
-    useRouter.mockImplementation(() => ({
+    (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "750a6993f61d4e58917e31e1244711f5",
       },
@@ -413,8 +413,6 @@ describe("Admin edit resource page", () => {
 
       expect(screen.getByTestId("resource_avail_admin")).toBeChecked();
       expect(screen.getByTestId("resource_avail_therapist")).toBeChecked();
-      expect(screen.getByTestId("resource_avail_therapist")).toBeInTheDocument; //todo
-      expect(screen.getByTestId("resource_avail_all")).toBeInTheDocument; // todo
       expect(screen.getByTestId("edit-upload-file").textContent).toEqual(
         "sample.pdf"
       );
@@ -425,13 +423,25 @@ describe("Admin edit resource page", () => {
     });
   });
 
-  it("submit edit form without uploading file", async () => {
-    useRouter.mockImplementation(() => ({
-      query: {
-        id: "750a6993f61d4e58917e31e1244711f5",
-      },
-    }));
+  it("checkbox check admin edit resources", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("resource_avail_admin"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
+    fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
 
+    const checkboxAdmin = screen.getByLabelText("Admin") as HTMLInputElement;
+    expect(checkboxAdmin).toBeChecked();
+
+    const checkboxTherapist = screen.getByLabelText(
+      "All Therapists"
+    ) as HTMLInputElement;
+    expect(checkboxTherapist).toBeChecked();
+
+    const checkboxOnlyMe = screen.getByLabelText("Only Me") as HTMLInputElement;
+    expect(checkboxOnlyMe).toBeChecked();
+  });
+
+  it("click cancle button to cancle upload process", async () => {
     await sut();
     fireEvent.change(screen.queryByTestId("resource_name"), {
       target: { value: "avbv" },
@@ -465,33 +475,21 @@ describe("Admin edit resource page", () => {
     });
 
     expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    expect(screen.getByTestId("editResourceModalConfirmButton")).toBeVisible();
+    expect(screen.getByTestId("editResourceModalCancelButton")).toBeVisible();
 
     await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("editResourceModalConfirmButton"));
+      fireEvent.click(screen.queryByTestId("editResourceModalCancelButton"));
     });
-
-    await waitFor(async () => {
-      expect(
-        screen.getByText("Resource edit successfully")
-      ).toBeInTheDocument();
-    });
-
-    //expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
   });
 
-  it.only("submit edit form with the with file", async () => {
-    const mockRouter = {
-      push: jest.fn(),
-    };
-
-    (useRouter as jest.Mock).mockReturnValue(mockRouter);
-
-    useRouter.mockImplementation(() => ({
+  it("submit edit form with file", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
       query: {
-        id: "750a6993f61d4e58917e31e1244711",
+        id: "750a6993f61d4e58917e31e1244711f5",
       },
-    }));
+      push: pushMock,
+    });
+
     jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
       fileName: "test.pdf",
     });
@@ -548,24 +546,62 @@ describe("Admin edit resource page", () => {
       ).toBeInTheDocument();
     });
 
-    // expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
+    expect(pushMock).toHaveBeenCalledWith("/admin/resource");
   });
 
-  it("checkbox check admin edit resources", async () => {
+  it("submit edit form without uploading file", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f5",
+      },
+      push: pushMock,
+    });
+
     await sut();
-    fireEvent.click(screen.queryByTestId("resource_avail_admin"));
-    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
-    fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "avbv" },
+    });
+    fireEvent.change(screen.queryByTestId("resource_type"), {
+      target: { value: 2 },
+    });
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
 
-    const checkboxAdmin = screen.getByLabelText("Admin") as HTMLInputElement;
-    expect(checkboxAdmin).toBeChecked();
+    screen.queryByTestId("activity-indicator");
 
-    const checkboxTherapist = screen.getByLabelText(
-      "All Therapists"
-    ) as HTMLInputElement;
-    expect(checkboxTherapist).toBeChecked();
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
 
-    const checkboxOnlyMe = screen.getByLabelText("Only Me") as HTMLInputElement;
-    expect(checkboxOnlyMe).toBeChecked();
+    screen.queryByTestId("activity-indicator");
+
+    fireEvent.change(screen.queryByTestId("category_id"), {
+      target: { value: "category_id_1" },
+    });
+    fireEvent.change(screen.queryByTestId("agenda_id"), {
+      target: { value: "agenda_id_1" },
+    });
+
+    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+
+    await waitFor(async () => {
+      fireEvent.submit(screen.queryByTestId("resource-edit-form"));
+    });
+
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    expect(screen.getByTestId("editResourceModalConfirmButton")).toBeVisible();
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("editResourceModalConfirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Resource edit successfully")
+      ).toBeInTheDocument();
+    });
+
+    expect(pushMock).toHaveBeenCalledWith("/admin/resource");
   });
 });
