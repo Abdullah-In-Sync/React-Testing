@@ -419,6 +419,9 @@ const Resource: NextPage = () => {
   const handleFilterChange = (value) => {
     /* istanbul ignore next */
     setFilterValue(value);
+    if (value.mode == "") {
+      window.location.reload();
+    }
     /* istanbul ignore next */
     const modelList = disorderList?.getDisorderModel?.find(
       (val) => val._id === value?.disorderId
