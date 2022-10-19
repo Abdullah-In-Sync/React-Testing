@@ -6,7 +6,6 @@ import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
 import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
-import { IS_THERAPIST } from "../../../../lib/constants";
 import { buildTherapistTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";

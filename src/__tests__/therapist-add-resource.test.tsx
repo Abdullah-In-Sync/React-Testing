@@ -17,7 +17,6 @@ import {
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
 import { CREATE_RESOURCE } from "../graphql/mutation/resource";
-import { IS_THERAPIST } from "../lib/constants";
 import * as s3 from "../lib/helpers/s3";
 
 import { useRouter } from "next/router";
