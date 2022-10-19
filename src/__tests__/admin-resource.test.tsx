@@ -279,6 +279,11 @@ describe("Admin Resource page", () => {
     );
     fireEvent.click(screen.queryByTestId("approveresourcelist"));
     await waitFor(() =>
+      expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument()
+    );
+    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(2));
+
+    await waitFor(() =>
       expect(
         screen.queryByTestId("doneIcon_9be5d270b71041caac142fb4b2bbc0ec")
       ).toBeInTheDocument()
