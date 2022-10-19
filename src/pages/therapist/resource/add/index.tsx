@@ -63,8 +63,6 @@ export default function Index() {
           resourceIsformualation: "0",
           resourceIssmartdraw: "0",
           resourceReferences: formFields.resource_references,
-          resourceStatus: 1,
-          userType: IS_THERAPIST,
         },
         onCompleted: (data) => {
           if (data && data.createResource && data.createResource._id) {

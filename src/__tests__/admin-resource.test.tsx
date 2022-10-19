@@ -46,7 +46,6 @@ const buildMocks = (): {
     request: {
       query: GET_RESOURCE_DATA,
       variables: {
-        userType: "admin",
         categoryId: "",
         disorderId: "",
         modelId: "",

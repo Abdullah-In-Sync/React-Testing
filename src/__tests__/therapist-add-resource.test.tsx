@@ -168,8 +168,6 @@ mocksData.push({
       resourceIsformualation: "0",
       resourceIssmartdraw: "0",
       resourceReferences: "",
-      resourceStatus: 1,
-      userType: IS_THERAPIST,
     },
   },
   result: {

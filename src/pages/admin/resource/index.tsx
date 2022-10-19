@@ -123,7 +123,6 @@ interface ResourceListData {
 }
 
 interface ResourceListVars {
-  userType: string;
   categoryId: string;
   disorderId: string;
   modelId: string;
@@ -174,7 +173,6 @@ const Resource: NextPage = () => {
     refetch,
   } = useQuery<ResourceListData, ResourceListVars>(GET_RESOURCE_DATA, {
     variables: {
-      userType: "admin",
       categoryId: filterValue?.categoryId ?? "",
       disorderId: filterValue?.disorderId ?? "",
       modelId: filterValue?.modelId ?? "",
