@@ -26,7 +26,6 @@ jest.mock("next/router", () => ({
 }));
 
 import { CREATE_RESOURCE } from "../graphql/mutation/resource";
-import { IS_ADMIN } from "../lib/constants";
 
 // mocks
 const mocksData = [];
@@ -167,8 +166,6 @@ mocksData.push({
       resourceIsformualation: "0",
       resourceIssmartdraw: "0",
       resourceReferences: "",
-      resourceStatus: 1,
-      userType: IS_ADMIN,
     },
   },
   result: {
