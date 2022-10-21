@@ -90,7 +90,6 @@ export default function Index() {
         <ContentHeader title="Edit Resource" />
         <EditForm
           resourceType="edit"
-          userType="admin"
           onSubmit={editFormHandler}
           setLoader={setLoader}
         />
