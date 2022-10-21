@@ -81,7 +81,6 @@ export default function Index() {
         <ContentHeader title="Add Resource" />
         <AddForm
           resourceType="add"
-          userType="admin"
           onSubmit={submitFormHandler}
           setLoader={setLoader}
         />

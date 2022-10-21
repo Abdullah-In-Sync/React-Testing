@@ -55,7 +55,6 @@ export const GET_RESOURCE_DATA = gql`
     $orgId: String
   ) {
     getResourceList(
-      userType: $userType
       modelId: $modelId
       disorderId: $disorderId
       categoryId: $categoryId
