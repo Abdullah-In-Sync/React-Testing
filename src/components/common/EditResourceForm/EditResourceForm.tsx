@@ -52,7 +52,6 @@ const defaultFormValue = {
 
 type propTypes = {
   resourceType: "edit" | "update";
-  userType: "admin" | "therapist";
   onSubmit?: any;
   setLoader: any;
 };
