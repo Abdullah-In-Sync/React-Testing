@@ -27,8 +27,6 @@ export const CREATE_RESOURCE = gql`
     $resourceIsformualation: String
     $resourceIssmartdraw: String
     $resourceReferences: String
-    $resourceStatus: Int
-    $userType: String
   ) {
     createResource(
       disorderId: $disorderId
@@ -48,8 +46,6 @@ export const CREATE_RESOURCE = gql`
       resourceIsformualation: $resourceIsformualation
       resourceIssmartdraw: $resourceIssmartdraw
       resourceReferences: $resourceReferences
-      resourceStatus: $resourceStatus
-      userType: $userType
     ) {
       _id
     }
