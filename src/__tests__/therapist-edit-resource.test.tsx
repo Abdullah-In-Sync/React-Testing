@@ -13,7 +13,6 @@ import {
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
-  GET_ADMIN_TOKEN_DATA,
   GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
 import {
