@@ -1,4 +1,5 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
+import useLayoutEffect from "../hooks/use-isomorphic-layout-effect";
 import { useRouter } from "next/router";
 
 import {
@@ -29,10 +30,6 @@ import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
 import { editResourceFormField } from "../../../utility/types/resource_types";
 import SureModal from "../../admin/resource/SureModal";
-import {
-  buildAdminTokenValidationQuery,
-  buildTherapistTokenValidationQuery,
-} from "../../../lib/helpers/auth";
 import Link from "@mui/material/Link";
 import Loader from "../Loader";
 
@@ -80,8 +77,6 @@ export default function EditForm(props: propTypes) {
   const preSignedURL = useRef<string>(null);
   const [resId, setResId] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
-  const [AdminId, setadminId] = useState<string>("");
-  const [therapistId, setTherapistId] = useState<string>("");
 
   const resourceTypeOptions = [
     { id: 1, value: "Info Sheets" },
@@ -89,22 +84,6 @@ export default function EditForm(props: propTypes) {
     { id: 3, value: "Audio File" },
     { id: 4, value: "Video File" },
   ];
-  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (tokenData) => {
-      /* istanbul ignore next */
-      if (tokenData) {
-        setadminId(tokenData._id);
-      }
-    }
-  );
-
-  const [getTherapistTokenData, therapistTokenLoading] =
-    buildTherapistTokenValidationQuery((therapistTokenData) => {
-      /* istanbul ignore next */
-      if (therapistTokenData) {
-        setTherapistId(therapistTokenData._id);
-      }
-    });
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -169,26 +148,29 @@ export default function EditForm(props: propTypes) {
   });
 
   //FOR PREFILLED INPUT
-  const [getResourceData, { loading: resourceLoading, data: resourceData }] =
-    useLazyQuery(GET_RESOURCE_DETAIL, {
-      onCompleted: (data) => {
-        /* istanbul ignore next */
-        if (data!.getResourceById) {
-          setResId(data!.getResourceById[0]?._id);
-        } else if (data!.getResourceById == null) {
-          setLoader(false);
-        }
-      },
-    });
+  const [
+    getResourceData,
+    { loading: resourceLoading, data: resourceData, refetch },
+  ] = useLazyQuery(GET_RESOURCE_DETAIL, {
+    onCompleted: (data) => {
+      /* istanbul ignore next */
+      if (data!.getResourceById) {
+        setResId(data!.getResourceById[0]?._id);
+      } else if (data!.getResourceById == null) {
+        setLoader(false);
+      }
+    },
+  });
+
+  useLayoutEffect(() => {
+    return () => {
+      refetch();
+    };
+  }, []);
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (
-      !tokenLoading &&
-      !therapistTokenLoading &&
-      !resourceLoading &&
-      resourceData
-    ) {
+    if (!resourceLoading && resourceData) {
       setLoader(false);
     }
   }, [resId]);
@@ -196,8 +178,6 @@ export default function EditForm(props: propTypes) {
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
-    if (AdminId) gettokenData({ variables: {} });
-    if (therapistId) getTherapistTokenData({ variables: {} });
     getDisorderData();
     props.setLoader(false);
   }, []);
@@ -222,15 +202,16 @@ export default function EditForm(props: propTypes) {
 
   useEffect(() => {
     /* istanbul ignore next */
-    const disorderId = resourceData?.getResourceById[0]?.disorder_detail._id;
+    const disorderId =
+      formFields.disorder_id === undefined
+        ? resourceData?.getResourceById[0]?.disorder_detail._id
+        : formFields.disorder_id;
     /* istanbul ignore next */
     if (disorderId) {
       setFormFields((oldValues) => ({
         ...oldValues,
-        disorder_id:
-          formFields.disorder_id === undefined
-            ? disorderId
-            : formFields.disorder_id,
+        disorder_id: disorderId,
+        category_id: "",
       }));
       getModelByDisorderId({
         variables: { disorderId },
@@ -240,14 +221,19 @@ export default function EditForm(props: propTypes) {
 
   useEffect(() => {
     /* istanbul ignore next */
-    const disorderId = resourceData?.getResourceById[0]?.disorder_detail._id;
-    const modelId = resourceData?.getResourceById[0]?.model_detail._id;
+    const disorderId =
+      formFields.disorder_id === undefined
+        ? resourceData?.getResourceById[0]?.disorder_detail._id
+        : formFields.disorder_id;
+    const modelId =
+      formFields.model_id === undefined
+        ? resourceData?.getResourceById[0]?.model_detail._id
+        : formFields.model_id;
     /* istanbul ignore next */
-    if (formFields?.disorder_id && modelId) {
+    if (disorderId && modelId) {
       setFormFields((oldValues) => ({
         ...oldValues,
-        model_id:
-          formFields.model_id === undefined ? modelId : formFields.model_id,
+        model_id: modelId,
       }));
       getCategoryByModelId({
         variables: { modelId },
@@ -263,15 +249,19 @@ export default function EditForm(props: propTypes) {
 
   useEffect(() => {
     /* istanbul ignore next */
-    const categoryId = resourceData?.getResourceById[0]?.category_id._id;
+    const categoryId =
+      formFields.category_id === undefined
+        ? resourceData?.getResourceById[0]?.category_id._id
+        : formFields.category_id;
+    const modelId =
+      formFields.model_id === undefined
+        ? resourceData?.getResourceById[0]?.model_detail._id
+        : formFields.model_id;
     /* istanbul ignore next */
-    if (formFields?.model_id && categoryId) {
+    if (modelId && categoryId) {
       setFormFields((oldValues) => ({
         ...oldValues,
-        category_id:
-          formFields.category_id === undefined
-            ? categoryId
-            : formFields.category_id,
+        category_id: categoryId,
       }));
     }
   }, [formFields?.model_id, formFields?.category_id]);

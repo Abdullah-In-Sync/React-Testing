@@ -596,17 +596,6 @@ describe("Admin edit resource page", () => {
     expect(pushMock).toHaveBeenCalledWith("/therapist/resource");
   });
 
-  // it("checkbox check therapist edit resources", async () => {
-  //   await sut();
-  //   fireEvent.click(screen.queryByTestId("resource_avail_admin"));
-  //   fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
-  //   fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
-
-  //   expect(screen.getByLabelText("Admin") as HTMLInputElement);
-  //   expect(screen.getByLabelText("All Therapists") as HTMLInputElement);
-  //   expect(screen.getByLabelText("Only Me") as HTMLInputElement);
-  // });
-
   it("checkbox check therapist edit resources", async () => {
     await sut();
     fireEvent.click(screen.queryByTestId("resource_avail_admin"));

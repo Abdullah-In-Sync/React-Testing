@@ -20,7 +20,7 @@ export default function Index() {
   const router = useRouter();
   const id = router?.query.id as string;
 
-  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
+  const [getTokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (adminData) => {
       /* istanbul ignore next */
       setadminId(adminData._id);
@@ -28,16 +28,12 @@ export default function Index() {
   );
 
   useEffect(() => {
-    gettokenData();
-  }, []);
-
-  useEffect(() => {
     setLoader(true);
-    gettokenData();
+    getTokenData();
   }, []);
 
   /* istanbul ignore next */
-  if (gettokenData && !tokenLoading && adminId) {
+  if (getTokenData && !tokenLoading && adminId) {
     /* istanbul ignore next */
   }
 

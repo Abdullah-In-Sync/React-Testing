@@ -28,10 +28,6 @@ export default function Index() {
   );
 
   useEffect(() => {
-    gettokenData();
-  }, []);
-
-  useEffect(() => {
     setLoader(true);
     gettokenData();
   }, []);

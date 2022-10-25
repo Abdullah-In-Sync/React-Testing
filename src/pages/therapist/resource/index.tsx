@@ -223,7 +223,6 @@ const Resource: NextPage = () => {
       });
     }
   };
-  console.log("Koca: userId ", userId);
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -460,7 +459,7 @@ const Resource: NextPage = () => {
               <AddButton
                 href="/v2/therapist/resource/add"
                 className="mr-3"
-                label="Add "
+                label="Add Resource"
                 startIcon={<ListAltIcon />}
               />
               <AddButton
