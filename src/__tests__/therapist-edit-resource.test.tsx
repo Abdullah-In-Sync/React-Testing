@@ -7,13 +7,14 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import EditResource from "../pages/admin/resource/edit/[id]/index";
+import EditResource from "../pages/therapist/resource/edit/[id]/index";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
   GET_ADMIN_TOKEN_DATA,
+  GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
 import {
   GET_RESOURCE_DETAIL,
@@ -45,7 +46,7 @@ mocksData.push({
       getAllDisorder: [
         {
           _id: "disorder_id_1",
-          user_type: "admin",
+          user_type: "therapist",
           disorder_name: "disorder 1",
         },
       ],
@@ -293,19 +294,23 @@ mocksData.push({
 });
 mocksData.push({
   request: {
-    query: GET_ADMIN_TOKEN_DATA,
+    query: GET_THERAPIST_TOKEN_DATA,
     variables: {},
   },
   result: {
     data: {
       getTokenData: {
-        _id: "some-admin-id",
-        user_type: "admin",
+        _id: "some-therapist-id",
+        user_type: "therapist",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
         user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
+        therapist_data: {
+          _id: "therapist_id",
+          org_id: "myhelp",
+        },
       },
     },
   },
@@ -532,7 +537,7 @@ describe("Admin edit resource page", () => {
       ).toBeInTheDocument();
     });
 
-    expect(pushMock).toHaveBeenCalledWith("/admin/resource");
+    expect(pushMock).toHaveBeenCalledWith("/therapist/resource");
   });
 
   it("submit edit form without uploading file", async () => {
@@ -589,10 +594,21 @@ describe("Admin edit resource page", () => {
       ).toBeInTheDocument();
     });
 
-    expect(pushMock).toHaveBeenCalledWith("/admin/resource");
+    expect(pushMock).toHaveBeenCalledWith("/therapist/resource");
   });
 
-  it("checkbox check admin edit resources", async () => {
+  // it("checkbox check therapist edit resources", async () => {
+  //   await sut();
+  //   fireEvent.click(screen.queryByTestId("resource_avail_admin"));
+  //   fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
+  //   fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
+
+  //   expect(screen.getByLabelText("Admin") as HTMLInputElement);
+  //   expect(screen.getByLabelText("All Therapists") as HTMLInputElement);
+  //   expect(screen.getByLabelText("Only Me") as HTMLInputElement);
+  // });
+
+  it("checkbox check therapist edit resources", async () => {
     await sut();
     fireEvent.click(screen.queryByTestId("resource_avail_admin"));
     fireEvent.click(screen.queryByTestId("resource_avail_therapist"));

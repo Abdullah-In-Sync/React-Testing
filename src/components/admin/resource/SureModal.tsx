@@ -32,15 +32,6 @@ const SureModal = (props) => {
                   marginBottom: "10px",
                 }}
               />
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                  textAlign: "center",
-                  fontSize: "27px",
-                }}
-              >
-                Are you sure want to add this resource?
-              </Typography>
             </Box>
             {props.children}
           </Grid>

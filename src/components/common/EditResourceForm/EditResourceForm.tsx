@@ -1,7 +1,14 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
-import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Grid,
+  Typography,
+} from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useLazyQuery } from "@apollo/client";
 import {
@@ -22,7 +29,10 @@ import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
 import { editResourceFormField } from "../../../utility/types/resource_types";
 import SureModal from "../../admin/resource/SureModal";
-import { buildAdminTokenValidationQuery } from "../../../lib/helpers/auth";
+import {
+  buildAdminTokenValidationQuery,
+  buildTherapistTokenValidationQuery,
+} from "../../../lib/helpers/auth";
 import Link from "@mui/material/Link";
 import Loader from "../Loader";
 
@@ -71,6 +81,7 @@ export default function EditForm(props: propTypes) {
   const [resId, setResId] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
   const [AdminId, setadminId] = useState<string>("");
+  const [therapistId, setTherapistId] = useState<string>("");
 
   const resourceTypeOptions = [
     { id: 1, value: "Info Sheets" },
@@ -81,9 +92,20 @@ export default function EditForm(props: propTypes) {
   const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
     (tokenData) => {
       /* istanbul ignore next */
-      setadminId(tokenData._id);
+      if (tokenData) {
+        setadminId(tokenData._id);
+      }
     }
   );
+
+  const [getTherapistTokenData, therapistTokenLoading] =
+    buildTherapistTokenValidationQuery((therapistTokenData) => {
+      /* istanbul ignore next */
+      if (therapistTokenData) {
+        setTherapistId(therapistTokenData._id);
+      }
+    });
+
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
     {
@@ -161,7 +183,12 @@ export default function EditForm(props: propTypes) {
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (!tokenLoading && !resourceLoading && gettokenData && resourceData) {
+    if (
+      !tokenLoading &&
+      !therapistTokenLoading &&
+      !resourceLoading &&
+      resourceData
+    ) {
       setLoader(false);
     }
   }, [resId]);
@@ -169,19 +196,21 @@ export default function EditForm(props: propTypes) {
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
-    gettokenData({ variables: {} });
+    if (AdminId) gettokenData({ variables: {} });
+    if (therapistId) getTherapistTokenData({ variables: {} });
     getDisorderData();
+    props.setLoader(false);
   }, []);
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (AdminId) {
-      setLoader(true);
-      getResourceData({
-        variables: { resourceId: id },
-      });
-    }
-  }, [AdminId]);
+    setLoader(true);
+    getResourceData({
+      variables: { resourceId: id },
+    });
+    setLoader(false);
+  }, []);
+
   // add resource data to the state
   useEffect(() => {
     const data = resourceData?.getResourceById[0];
@@ -529,6 +558,7 @@ export default function EditForm(props: propTypes) {
                     data-testid="edit-upload-file"
                     href={resourceData?.getResourceById[0].resource_url}
                     underline="none"
+                    target="_blank"
                   >
                     {resourceData?.getResourceById[0]?.resource_filename}
                   </Link>
@@ -619,6 +649,15 @@ export default function EditForm(props: propTypes) {
               setModalOpen={setModalOpen}
               setConfirmSubmission={setConfirmSubmission}
             >
+              <Typography
+                sx={{
+                  fontWeight: "600",
+                  textAlign: "center",
+                  fontSize: "27px",
+                }}
+              >
+                Are you sure want to edit this resource?
+              </Typography>
               <Box marginTop="20px" display="flex" justifyContent="end">
                 <Button
                   variant="contained"
