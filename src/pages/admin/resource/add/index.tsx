@@ -50,7 +50,6 @@ export default function Index() {
           resourceType: formFields.resource_type,
           agendaId: formFields.agenda_id,
           categoryId: formFields.category_id,
-          orgId: "",
           resourceDesc: formFields.resource_desc,
           resourceInstruction: formFields.resource_instruction,
           resourceIsformualation: "0",
