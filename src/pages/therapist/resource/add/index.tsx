@@ -18,20 +18,9 @@ export default function Index() {
 
   const router = useRouter();
 
-  const [therapistData, setTherapistData] = useState<{
-    _id: string;
-    org_id: string;
-  }>({
-    _id: "",
-    org_id: "",
-  });
-
   const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
     (therapistData) => {
-      setTherapistData({
-        _id: therapistData.therapist_data._id,
-        org_id: therapistData.therapist_data.org_id,
-      });
+      console.debug(therapistData);
       setLoader(false);
     }
   );
@@ -56,7 +45,6 @@ export default function Index() {
           resourceType: formFields.resource_type,
           agendaId: formFields.agenda_id,
           categoryId: formFields.category_id,
-          orgId: therapistData.org_id,
           resourceDesc: formFields.resource_desc,
           resourceInstruction: formFields.resource_instruction,
           resourceIsformualation: "0",

@@ -21,7 +21,6 @@ export const CREATE_RESOURCE = gql`
     $resourceType: Int!
     $agendaId: String
     $categoryId: String
-    $orgId: String
     $resourceDesc: String
     $resourceInstruction: String
     $resourceIsformualation: String
@@ -40,7 +39,6 @@ export const CREATE_RESOURCE = gql`
       resourceType: $resourceType
       agendaId: $agendaId
       categoryId: $categoryId
-      orgId: $orgId
       resourceDesc: $resourceDesc
       resourceInstruction: $resourceInstruction
       resourceIsformualation: $resourceIsformualation
@@ -113,6 +111,14 @@ export const APPROVE_RESOURCE = gql`
     adminApproveResourceById(resourceId: $resourceId) {
       _id
       resource_status
+    }
+  }
+`;
+
+export const SHARE_RESOURCE = gql`
+  mutation ($resourceId: String!, $patientId: String!) {
+    therapistShareResource(resourceId: $resourceId, patientId: $patientId) {
+      result
     }
   }
 `;

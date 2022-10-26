@@ -202,7 +202,8 @@ const Resource: NextPage = () => {
   useEffect(() => {
     // do some checking here to ensure data exist
     /* istanbul ignore next */
-    if (dataListData) {
+    refetch();
+    if (!loading && dataListData) {
       /* istanbul ignore next */
       setDataList(dataListData?.getResourceList);
     }
@@ -508,7 +509,7 @@ const Resource: NextPage = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Resource" />
+        <ContentHeader title="Library" />
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Search>

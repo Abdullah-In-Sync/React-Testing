@@ -166,3 +166,13 @@ export const GET_RESOURCE_DETAIL = gql`
     }
   }
 `;
+
+export const GET_PATIENT_LIST = gql`
+  query therapistPatientList {
+    therapistPatientList {
+      _id
+      patient_firstname
+      patient_lastname
+    }
+  }
+`;

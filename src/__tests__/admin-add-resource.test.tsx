@@ -160,7 +160,6 @@ mocksData.push({
       resourceType: 0,
       agendaId: "agenda_id_1",
       categoryId: "category_id_1",
-      orgId: "",
       resourceDesc: "",
       resourceInstruction: "",
       resourceIsformualation: "0",

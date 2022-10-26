@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import Modal from "../../common/Modal";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
@@ -32,15 +32,6 @@ const SureModal = (props) => {
                   marginBottom: "10px",
                 }}
               />
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                  textAlign: "center",
-                  fontSize: "27px",
-                }}
-              >
-                Are you sure want to add this resource?
-              </Typography>
             </Box>
             {props.children}
           </Grid>
