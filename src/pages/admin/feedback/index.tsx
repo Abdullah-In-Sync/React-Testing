@@ -259,8 +259,6 @@ const Feedback: NextPage = () => {
 
   /* istanbul ignore next */
   const handleAdd = (val) => {
-    console.log(formValues);
-    //return false;
     let valid = false;
     /* istanbul ignore else */
     if (formValues.length === 0) {
@@ -271,15 +269,16 @@ const Feedback: NextPage = () => {
         if (!x.question || !x.answer_type) {
           enqueueSnackbar("Please fill the all fields", { variant: "error" });
           return (valid = false);
-        }else if (x.answer_type=="list" && x.answer_options!="" && x.answer_options.length==0) {
+        } else if (x.answer_type == "list" && x.answer_options.length == 0) {
           console.log("ANSWER TYPE");
-          enqueueSnackbar("Please enter a minimum of 2 values for the list", { variant: "error" });
+          enqueueSnackbar("Please enter a minimum of 2 values for the list", {
+            variant: "error",
+          });
           return (valid = false);
         } else {
           return (valid = true);
         }
       });
-      return false;
     }
     /* istanbul ignore next */
     if (valid) {
