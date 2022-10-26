@@ -5,7 +5,7 @@ import { UPDATE_RESOURCE } from "../../../graphql/mutation/resource";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { FileUploadDialog } from "../FileUploadDailog/index";
 import SureModal from "../../admin/resource/SureModal";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -64,6 +64,15 @@ export default function FileUpload({ open, closeFileUploadDialog, ptshareId }) {
       {isShowConfirm && (
         <>
           <SureModal modalOpen={isShowConfirm} setModalOpen={setIsShowConfirm}>
+            <Typography
+              sx={{
+                fontWeight: "600",
+                textAlign: "center",
+                fontSize: "27px",
+              }}
+            >
+              Are you sure want to add this resource?
+            </Typography>
             <Box marginTop="20px" display="flex" justifyContent="end">
               <Button
                 variant="contained"

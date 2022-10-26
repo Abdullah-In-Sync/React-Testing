@@ -150,8 +150,9 @@ const Resource: NextPage = () => {
       /* istanbul ignore next */
       if (data.getTokenData) {
         const user_type: string = data!.getTokenData.user_type;
+
         /* istanbul ignore next */
-        if (user_type != "therapist") {
+        if (user_type !== "therapist") {
           window.location.href =
             "https://" + window.location.hostname + "/account";
         } else {
@@ -191,7 +192,8 @@ const Resource: NextPage = () => {
   useEffect(() => {
     // do some checking here to ensure data exist
     /* istanbul ignore next */
-    if (dataListData) {
+    refetch();
+    if (!loading && dataListData) {
       /* istanbul ignore next */
       setDataList(dataListData?.getResourceList);
     }
@@ -249,10 +251,13 @@ const Resource: NextPage = () => {
       visible: true,
       render: (_, value) => (
         <>
+          {/* {value?.user_id == userId && ( */}
           <IconButtonWrapper aria-label="create" size="small">
-            <CreateIcon />
+            <NextLink href={"/therapist/resource/edit/" + value._id} passHref>
+              <CreateIcon />
+            </NextLink>
           </IconButtonWrapper>
-
+          {/* )} */}
           <IconButtonWrapper aria-label="favorite" size="small">
             <FavoriteBorderIcon
               data-testid={"fav_" + value?._id}

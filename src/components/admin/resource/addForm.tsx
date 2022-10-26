@@ -1,5 +1,12 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { Box, Button, FormControl, FormLabel, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Grid,
+  Typography,
+} from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import {
@@ -492,6 +499,15 @@ export default function AddForm(props: propTypes) {
             setModalOpen={setModalOpen}
             setConfirmSubmission={setConfirmSubmission}
           >
+            <Typography
+              sx={{
+                fontWeight: "600",
+                textAlign: "center",
+                fontSize: "27px",
+              }}
+            >
+              Are you sure want to add this resource?
+            </Typography>
             <Box marginTop="20px" display="flex" justifyContent="end">
               <Button
                 variant="contained"
