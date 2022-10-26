@@ -116,3 +116,11 @@ export const APPROVE_RESOURCE = gql`
     }
   }
 `;
+
+export const SHARE_RESOURCE = gql`
+  mutation ($resourceId: String!, $patientId: String!) {
+    therapistShareResource(resourceId: $resourceId, patientId: $patientId) {
+      result
+    }
+  }
+`;
