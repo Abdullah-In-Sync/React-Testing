@@ -4,11 +4,12 @@ import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_THERAPIST_TOKEN_DATA } from "../graphql/query/common";
-import { GET_RESOURCE_DATA } from "../graphql/query/resource";
+import { GET_RESOURCE_DATA, GET_PATIENT_LIST } from "../graphql/query/resource";
 import {
   ADD_FAVOURITE,
   DELETE_RESOURCE,
   REMOVE_FAVOURITE,
+  SHARE_RESOURCE,
 } from "../graphql/mutation/resource";
 // mocks
 const buildMocks = (): {
@@ -114,6 +115,29 @@ const buildMocks = (): {
     },
   });
 
+  _mocks.push({
+    request: {
+      query: GET_PATIENT_LIST,
+      variables: {},
+    },
+    result: {
+      data: {
+        therapistPatientList: [
+          {
+            _id: "patient-1",
+            first_name: "test 1",
+            last_name: "last 2",
+          },
+          {
+            _id: "patient-2",
+            first_name: "test 2",
+            last_name: "last 2",
+          },
+        ],
+      },
+    },
+  });
+
   // Delete Resource By Id
   _mocks.push({
     request: {
@@ -142,6 +166,23 @@ const buildMocks = (): {
       data: {
         deleteFavouriteResource: {
           deleted: true,
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: SHARE_RESOURCE,
+      variables: {
+        resourceId: "abfd4ef5-66f2-463c-be2e-86fe8fa449b2",
+        patientId: "patient-1",
+      },
+    },
+    result: {
+      data: {
+        therapistShareResource: {
+          result: true,
         },
       },
     },
@@ -181,9 +222,36 @@ describe("Therapist Resource page", () => {
       screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
     );
     expect(
-      screen.queryByText("Are you sure want to delete this resource?")
+      screen.queryByTestId("deleteResourceModalConfirmButton")
     ).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("deleteResourceModalConfirmButton"));
+
+    await waitFor(() =>
+      expect(
+        screen.queryByText("Resource has been deleted successfully!")
+      ).toBeInTheDocument()
+    );
   });
+
+  test("Click Close icon should close Delete resource popup", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(
+      screen.queryByTestId("deleteIcon_ba3dd2f3-1fc2-45bb-bf4b-60889c530d54")
+    );
+    expect(
+      screen.queryByTestId("deleteResourceModalCancelButton")
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("deleteResourceModalCancelButton"));
+    expect(screen.queryByTestId("DeletesureModal")).not.toBeInTheDocument();
+  });
+
   // check for therapist add fav
   test("should add to favourites", async () => {
     await sut();
@@ -219,6 +287,56 @@ describe("Therapist Resource page", () => {
       expect(
         screen.queryByTestId("fav_fffe8041-fc77-40fa-a83e-cf76197d1499")
       ).toHaveAttribute("aria-hidden", "true")
+    );
+  });
+
+  // share resource
+  test("should share resource to patient", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("shareIcon_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(
+      screen.queryByTestId("shareIcon_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId("shareButton")).toBeInTheDocument()
+    );
+
+    fireEvent.change(screen.queryByTestId("selectPatient"), {
+      target: { value: ["patient-1"] },
+    });
+
+    fireEvent.click(screen.queryByTestId("shareButton"));
+    await waitFor(() =>
+      expect(
+        screen.queryByText("Resource has been shared successfully!")
+      ).toBeInTheDocument()
+    );
+  });
+
+  test("should close share resource popup", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("shareIcon_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(
+      screen.queryByTestId("shareIcon_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId("closeIcon")).toBeInTheDocument()
+    );
+
+    fireEvent.click(screen.queryByTestId("closeIcon"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("closeIcon")).toHaveAttribute(
+        "aria-hidden",
+        "true"
+      )
     );
   });
 });
