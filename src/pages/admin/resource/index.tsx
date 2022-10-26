@@ -509,7 +509,7 @@ const Resource: NextPage = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Resource" />
+        <ContentHeader title="Library" />
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Search>

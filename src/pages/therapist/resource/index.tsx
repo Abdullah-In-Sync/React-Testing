@@ -9,13 +9,13 @@ import {
   GET_RESOURCE_DATA,
   GET_DISORDER_MODEL_LIST,
   GET_CATEGORY,
-  GET_PATIENT_LIST
+  GET_PATIENT_LIST,
 } from "../../../graphql/query/resource";
 import {
   ADD_FAVOURITE,
   DELETE_RESOURCE,
   REMOVE_FAVOURITE,
-  SHARE_RESOURCE
+  SHARE_RESOURCE,
 } from "../../../graphql/mutation/resource";
 
 // MUI COMPONENTS
@@ -29,14 +29,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import RedoIcon from '@mui/icons-material/Redo';
+import RedoIcon from "@mui/icons-material/Redo";
 import { AddButton } from "../../../components/common/Buttons";
 import CardGenerator from "../../../components/common/CardGenerator";
 import InputBase from "@mui/material/InputBase";
 import Grid from "@mui/material/Grid";
 import CrudForm from "../../../components/common/CrudForm";
 import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal";
-import { SelectPatientDialog } from "../../../components/common/SelectPatientDialog";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -44,10 +43,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import { Transition } from "../../../components/common/Transition";
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
-
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 import NextLink from "next/link";
 import { GET_THERAPIST_TOKEN_DATA } from "../../../graphql/query/common";
@@ -71,9 +69,6 @@ const MenuProps = {
     },
   },
 };
-
-
-
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -172,24 +167,20 @@ const Resource: NextPage = () => {
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [shareResource] = useMutation(SHARE_RESOURCE);
-  
+
   const [userId, setuserId] = useState<string>("");
   const [orgId, setorgId] = useState<string>("");
   const [shareResId, setshareResId] = useState<string>("");
-  const [isPatientDialogOpen, setIsPatientDialogOpen] = useState<boolean>(false);
+  const [isPatientDialogOpen, setIsPatientDialogOpen] =
+    useState<boolean>(false);
   const theme = useTheme();
   const [patientId, setPatientId] = useState<string[]>([]);
-  const [patientName, setPatientName] = useState<string[]>([]);
   const [isSubmitDisabled, setisSubmitDisabled] = useState<boolean>(true);
 
   const closeSelectDialog = () => {
     setIsPatientDialogOpen(false);
     setPatientId([]);
     setshareResId("");
-  };
-
-  const openSelectDialog = () => {
-    setIsPatientDialogOpen(true);
   };
 
   useQuery(GET_THERAPIST_TOKEN_DATA, {
@@ -354,12 +345,16 @@ const Resource: NextPage = () => {
             </IconButtonWrapper>
           </NextLink>
 
-          <IconButtonWrapper aria-label="share" size="small" 
-          onClick={() => {
-            setIsPatientDialogOpen(true);
-            setshareResId(value?._id);
-          }}> 
-              <RedoIcon />
+          <IconButtonWrapper
+            aria-label="share"
+            size="small"
+            data-testid={"shareIcon_" + value?._id}
+            onClick={() => {
+              setIsPatientDialogOpen(true);
+              setshareResId(value?._id);
+            }}
+          >
+            <RedoIcon />
           </IconButtonWrapper>
         </>
       ),
@@ -470,7 +465,9 @@ const Resource: NextPage = () => {
       },
       onCompleted: () => {
         setIsMutation(false);
-        enqueueSnackbar("Data deleted successfully!", { variant: "error" });
+        enqueueSnackbar("Resource has been deleted successfully!", {
+          variant: "error",
+        });
         refetch();
       },
     });
@@ -491,35 +488,30 @@ const Resource: NextPage = () => {
     setModelData(modelList?.disordermodel_data);
   };
 
-   
-  const handleChange = (event: SelectChangeEvent<typeof patientName>) => {
+  const handleChange = (event: SelectChangeEvent<typeof patientId>) => {
     const {
       target: { value },
     } = event;
     setisSubmitDisabled(false);
-    setPatientName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-    setPatientId(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    /* istanbul ignore next */
+    setPatientId(typeof value === "string" ? value.split(",") : value);
   };
 
-   /* istanbul ignore next */
-   const handleShare = async () => {
+  /* istanbul ignore next */
+  const handleShare = async () => {
     /* istanbul ignore else */
     shareResource({
       variables: {
-        resourceId : shareResId,
-        patientId : patientId.join().toString()
+        resourceId: shareResId,
+        patientId: patientId.join().toString(),
       },
       onCompleted: (data) => {
-        if (data && data.therapistShareResource && data.therapistShareResource.result) {
+        if (data && data.therapistShareResource.result) {
           setPatientId([]);
           setshareResId("");
-          enqueueSnackbar("Resource has been shared successfully!", { variant: "success" });
+          enqueueSnackbar("Resource has been shared successfully!", {
+            variant: "success",
+          });
         }
         setIsPatientDialogOpen(false);
       },
@@ -529,7 +521,7 @@ const Resource: NextPage = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Resource" />
+        <ContentHeader title="Library" />
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <Search>
@@ -605,88 +597,91 @@ const Resource: NextPage = () => {
             </Button>
           </Box>
         </DeleteSureModal>
-      <Dialog
-        data-testid="openFileUploadDialog"
-        open={isPatientDialogOpen}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={closeSelectDialog}
-        aria-describedby="alert-dialog-slide-description"
-        sx={{
-          "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-              width: "100%",
-              maxWidth: "500px",  // Set your width here
-            },
-          },
-        }}
-      >
-        <DialogTitle
+        <Dialog
+          data-testid="sharePatientDialogue"
+          open={isPatientDialogOpen}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={closeSelectDialog}
+          aria-describedby="alert-dialog-slide-description"
           sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: "#fff",
-            display: "flex",
-            justifyContent: "space-between",
+            "& .MuiDialog-container": {
+              "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "500px", // Set your width here
+              },
+            },
           }}
         >
-          <div style={{ color: "transparent" }}>A</div>
-          <div>{"Select Patient"}</div>
-          <IconButton sx={{ justifySelf: "flex-end" }}>
-            <CloseIcon data-testid="closeIcon" onClick={closeSelectDialog} />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            sx={{ padding: "30px 30px 5px 0" }}
-            id="alert-dialog-slide-description"
-          >
-          <Select
-          multiple
-          id="selectPatient"
-          displayEmpty
-          value={patientId}
-          
-          onChange={handleChange}
-          input={<OutlinedInput />}
-          renderValue={(selected) => {
-            if (selected.length === 0) {
-              return <em>Select Patient to share</em>;
-            }
-
-            return selected.join(', ');
-          }}
-          MenuProps={MenuProps}
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          {patientList?.therapistPatientList.map((val) => (
-            <MenuItem
-              key={val._id}
-              value={val.patient_firstname + " " + val.patient_lastname}
-            >
-              {val.patient_firstname + " " + val.patient_lastname}
-            </MenuItem>
-          ))}
-        </Select>
-           
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-          <AddButton
-            color="primary"
-            data-testid="saveButton"
+          <DialogTitle
             sx={{
-              paddingX: "2px",
-              textTransform: "capitalize",
-              color: "white",
+              backgroundColor: theme.palette.primary.main,
+              color: "#fff",
+              display: "flex",
+              justifyContent: "space-between",
             }}
-            disabled={isSubmitDisabled}
-            label="Share"
-            onClick={() => {
-              handleShare();
-            }}
-          />
-        </DialogActions>
-    </Dialog>
+          >
+            <div style={{ color: "transparent" }}>A</div>
+            <div>{"Select Patient"}</div>
+            <IconButton sx={{ justifySelf: "flex-end" }}>
+              <CloseIcon data-testid="closeIcon" onClick={closeSelectDialog} />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText
+              sx={{ padding: "30px 30px 5px 0" }}
+              id="alert-dialog-slide-description"
+            >
+              <Select
+                multiple
+                id="selectPatient"
+                displayEmpty
+                value={patientId}
+                onChange={handleChange}
+                input={<OutlinedInput />}
+                renderValue={(selected) => {
+                  if (selected.length === 0) {
+                    return <em>Select Patient to share</em>;
+                  }
+                  return patientList?.therapistPatientList
+                    .filter((name) => selected.includes(name._id))
+                    .map(
+                      (record) =>
+                        record.patient_firstname + " " + record.patient_lastname
+                    )
+                    .join(", ");
+                }}
+                MenuProps={MenuProps}
+                inputProps={{
+                  "aria-label": "Without label",
+                  "data-testid": "selectPatient",
+                }}
+              >
+                {patientList?.therapistPatientList.map((val) => (
+                  <MenuItem key={val._id} value={val._id}>
+                    {val.patient_firstname + " " + val.patient_lastname}
+                  </MenuItem>
+                ))}
+              </Select>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
+            <AddButton
+              color="primary"
+              data-testid="shareButton"
+              sx={{
+                paddingX: "2px",
+                textTransform: "capitalize",
+                color: "white",
+              }}
+              disabled={isSubmitDisabled}
+              label="Share"
+              onClick={() => {
+                handleShare();
+              }}
+            />
+          </DialogActions>
+        </Dialog>
       </Layout>
     </>
   );
