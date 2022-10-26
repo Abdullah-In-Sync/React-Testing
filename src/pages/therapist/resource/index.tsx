@@ -184,6 +184,8 @@ const Resource: NextPage = () => {
 
   const closeSelectDialog = () => {
     setIsPatientDialogOpen(false);
+    setPatientId([]);
+    setshareResId("");
   };
 
   const openSelectDialog = () => {
