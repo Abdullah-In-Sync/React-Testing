@@ -5,14 +5,14 @@ import ContentHeader from "../../../../../components/common/ContentHeader";
 import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import { UPDATE_RESOURCE_BY_ID } from "../../../../../graphql/mutation/resource";
-import { buildAdminTokenValidationQuery } from "../../../../../lib/helpers/auth";
+import { buildTherapistTokenValidationQuery } from "../../../../../lib/helpers/auth";
 import { editResourceFormField } from "../../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import EditForm from "../../../../../components/common/EditResourceForm/EditResourceForm";
 
 export default function Index() {
   const { enqueueSnackbar } = useSnackbar();
-  const [adminId, setadminId] = useState<any>();
+  const [therapistId, setTherapistId] = useState<any>();
   const [loader, setLoader] = useState<boolean>(false);
 
   const [updateResource] = useMutation(UPDATE_RESOURCE_BY_ID);
@@ -20,20 +20,20 @@ export default function Index() {
   const router = useRouter();
   const id = router?.query.id as string;
 
-  const [getTokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (adminData) => {
+  const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
+    (therapistData) => {
       /* istanbul ignore next */
-      setadminId(adminData._id);
+      setTherapistId(therapistData._id);
     }
   );
 
   useEffect(() => {
     setLoader(true);
-    getTokenData();
+    gettokenData();
   }, []);
 
   /* istanbul ignore next */
-  if (getTokenData && !tokenLoading && adminId) {
+  if (gettokenData && !tokenLoading && therapistId) {
     /* istanbul ignore next */
   }
 
@@ -67,7 +67,7 @@ export default function Index() {
             enqueueSnackbar("Resource edit successfully", {
               variant: "success",
             });
-            router.push("/admin/resource");
+            router.push("/therapist/resource");
           }
         },
       });

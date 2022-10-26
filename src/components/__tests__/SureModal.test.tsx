@@ -5,8 +5,5 @@ describe("when rendered with a `testid` prop", () => {
   it("should display modal", () => {
     render(<SureModal modalOpen={true} />);
     expect(screen.getByTestId("sureModal")).toBeInTheDocument();
-    expect(
-      screen.getByText("Are you sure want to add this resource?")
-    ).toBeInTheDocument();
   });
 });
