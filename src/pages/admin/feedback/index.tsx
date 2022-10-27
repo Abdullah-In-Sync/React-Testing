@@ -270,7 +270,6 @@ const Feedback: NextPage = () => {
           enqueueSnackbar("Please fill the all fields", { variant: "error" });
           return (valid = false);
         } else if (x.answer_type == "list" && x.answer_options.length == 0) {
-          console.log("ANSWER TYPE");
           enqueueSnackbar("Please enter a minimum of 2 values for the list", {
             variant: "error",
           });
