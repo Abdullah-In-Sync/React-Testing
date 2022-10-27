@@ -118,6 +118,7 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
       resource_id
       resource_data {
         resource_name
+        resource_type
         resource_desc
         resource_instruction
         resource_references

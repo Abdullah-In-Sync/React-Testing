@@ -61,6 +61,7 @@ const buildMocks = (): {
               resource_data: [
                 {
                   resource_name: "test name",
+                  resource_type: 2,
                   resource_desc: "test desc",
                   resource_instruction: "test instruct",
                   resource_references: "test reference",
@@ -113,6 +114,7 @@ const buildMocks = (): {
                 {
                   resource_name: "test name",
                   resource_desc: "test desc",
+                  resource_type: 2,
                   resource_instruction: "test instruct",
                   resource_references: "test reference",
                   resource_url: null,
