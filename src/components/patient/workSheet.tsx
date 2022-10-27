@@ -88,7 +88,7 @@ const WorkSheet = () => {
               open={fileUpload}
               ptshareId={
                 resData?.getPatientResourceList?.find(
-                  (val) => val?.resource_data[0]?.resource_type === "2"
+                  (val) => val?.resource_data[0]?.resource_type === 2
                 )._id
               }
             />
@@ -145,7 +145,7 @@ const WorkSheet = () => {
         <TableGenerator
           fields={fields}
           data={resData?.getPatientResourceList?.filter(
-            (val) => val?.resource_data[0]?.resource_type === "2"
+            (val) => val?.resource_data[0]?.resource_type === 2
           )}
           currentPage={page}
           onPageChange={(page) => {
