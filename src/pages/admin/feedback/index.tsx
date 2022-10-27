@@ -269,7 +269,7 @@ const Feedback: NextPage = () => {
         if (!x.question || !x.answer_type) {
           enqueueSnackbar("Please fill the all fields", { variant: "error" });
           return (valid = false);
-        } else if (x.answer_type == "list" && x.answer_options.length == 0) {
+        } else if (x.answer_type == "list" && x.answer_options.length < 2) {
           enqueueSnackbar("Please enter a minimum of 2 values for the list", {
             variant: "error",
           });
