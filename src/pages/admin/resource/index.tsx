@@ -480,7 +480,7 @@ const Resource: NextPage = () => {
       onCompleted: () => {
         setIsMutation(false);
         enqueueSnackbar("Resource Approved successfully!", {
-          variant: "error",
+          variant: "success",
         });
         handleFilterChange({ mode: "approve_resource" });
       },
