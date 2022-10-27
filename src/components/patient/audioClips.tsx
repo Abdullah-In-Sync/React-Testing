@@ -101,7 +101,7 @@ const AudioClips = () => {
         <TableGenerator
           fields={fields}
           data={resData?.getPatientResourceList?.filter(
-            (val) => val?.resource_data[0]?.resource_type === "3"
+            (val) => val?.resource_data[0]?.resource_type === 3
           )}
           currentPage={page}
           onPageChange={(page) => {

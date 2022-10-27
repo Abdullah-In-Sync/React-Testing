@@ -195,15 +195,6 @@ const TableGenerator = ({
           />
           <TableBody>
             <>
-              <div
-                style={{
-                  textAlign: "center",
-                  marginTop: props.loader ? "70px" : 0,
-                }}
-              >
-                {" "}
-                {/* <Loader visible={props.loader} /> */}
-              </div>
               {!props.loader && data.length === 0 ? (
                 <div
                   style={{
