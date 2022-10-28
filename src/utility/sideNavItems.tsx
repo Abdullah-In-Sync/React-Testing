@@ -266,13 +266,13 @@ export const therapistRoutes: RoutesType[] = [
     path: Link + "/therapist/packages",
     icon: <InventoryIcon />,
   },
+  { key: 11, label: "Feedback", path: "/feedback", icon: <FeedbackIcon /> },
   {
     key: 10,
     label: "Settings",
     path: Link + "/therapist/settings",
     icon: <SettingsIcon />,
   },
-  { key: 11, label: "Feedback", path: "/feedback", icon: <FeedbackIcon /> },
 ];
 
 //** PATINET ROUTES **//
