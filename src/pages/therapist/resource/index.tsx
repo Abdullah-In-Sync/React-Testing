@@ -24,7 +24,6 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import { IconButton, Box, Button, useTheme } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -550,10 +549,7 @@ const Resource: NextPage = () => {
                 className="mr-3"
                 label="Add Resource"
               />
-              <AddButton
-                className="mr-3"
-                label="Create Resource"
-              />
+              <AddButton className="mr-3" label="Create Resource" />
             </Box>
           </Grid>
         </Grid>
