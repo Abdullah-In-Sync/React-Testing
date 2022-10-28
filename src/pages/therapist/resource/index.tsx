@@ -68,6 +68,11 @@ const MenuProps = {
       width: 250,
     },
   },
+  sx: {
+    "&& .Mui-selected": {
+      backgroundColor: "#6EC9DB",
+    },
+  },
 };
 
 const IconButtonWrapper = styled(IconButton)(
@@ -598,20 +603,18 @@ const Resource: NextPage = () => {
           </Box>
         </DeleteSureModal>
         <Dialog
+          PaperProps={{
+            sx: {
+              width: "100%",
+              maxHeight: 300,
+            },
+          }}
           data-testid="sharePatientDialogue"
           open={isPatientDialogOpen}
           TransitionComponent={Transition}
           keepMounted
           onClose={closeSelectDialog}
           aria-describedby="alert-dialog-slide-description"
-          sx={{
-            "& .MuiDialog-container": {
-              "& .MuiPaper-root": {
-                width: "100%",
-                maxWidth: "500px", // Set your width here
-              },
-            },
-          }}
         >
           <DialogTitle
             sx={{
@@ -633,6 +636,7 @@ const Resource: NextPage = () => {
               id="alert-dialog-slide-description"
             >
               <Select
+                style={{ height: 50, width: 550 }}
                 multiple
                 id="selectPatient"
                 displayEmpty
@@ -667,7 +671,7 @@ const Resource: NextPage = () => {
           </DialogContent>
           <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
             <AddButton
-              color="primary"
+              color="secondary"
               data-testid="shareButton"
               sx={{
                 paddingX: "2px",
