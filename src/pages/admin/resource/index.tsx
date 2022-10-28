@@ -544,12 +544,10 @@ const Resource: NextPage = () => {
                 href="/v2/admin/resource/add"
                 className="mr-3"
                 label="Add Resource"
-                startIcon={<ListAltIcon />}
               />
               <AddButton
                 className="mr-3"
                 label="Create Resource"
-                startIcon={<ListAltIcon />}
               />
             </Box>
           </Grid>
