@@ -544,10 +544,10 @@ const Resource: NextPage = () => {
                 className="mr-3"
                 label="Add Resource"
               />
-              <AddButton 
-              href="/superadmin/resource/add?create=1"
-              className="mr-3" 
-              label="Create Resource" 
+              <AddButton
+                href="/superadmin/resource/add?create=1"
+                className="mr-3"
+                label="Create Resource"
               />
             </Box>
           </Grid>
