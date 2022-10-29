@@ -184,9 +184,12 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  <IconButton size="medium" href={"#"}>
-                    <FileUploadIcon />
-                  </IconButton>
+                  {patientResourceData.getResourceDetailById[0].resource_data[0]
+                    .resource_type == 2 && (
+                    <IconButton size="medium" href={"#"}>
+                      <FileUploadIcon />
+                    </IconButton>
+                  )}
                   <IconButton
                     size="medium"
                     data-testid="shareViewUrl"

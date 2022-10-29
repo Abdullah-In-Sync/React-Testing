@@ -55,7 +55,7 @@ const buildMocks = (): {
             resource_data: [
               {
                 resource_name: "Video clip",
-                resource_type: "4",
+                resource_type: 4,
               },
             ],
           },
@@ -66,7 +66,7 @@ const buildMocks = (): {
             resource_data: [
               {
                 resource_name: "Video File Test3",
-                resource_type: "2",
+                resource_type: 2,
               },
             ],
           },
@@ -77,7 +77,7 @@ const buildMocks = (): {
             resource_data: [
               {
                 resource_name: "Test Indi 29.4",
-                resource_type: "1",
+                resource_type: 1,
               },
             ],
           },
@@ -88,7 +88,7 @@ const buildMocks = (): {
             resource_data: [
               {
                 resource_name: "s3 pdf",
-                resource_type: "1",
+                resource_type: 1,
               },
             ],
           },
@@ -99,7 +99,7 @@ const buildMocks = (): {
             resource_data: [
               {
                 resource_name: "s3 audio resource",
-                resource_type: "3",
+                resource_type: 3,
               },
             ],
           },

@@ -102,7 +102,7 @@ const InfoSheet = () => {
         <TableGenerator
           fields={fields}
           data={resData?.getPatientResourceList?.filter(
-            (val) => val?.resource_data[0]?.resource_type === "1"
+            (val) => val?.resource_data[0]?.resource_type === 1
           )}
           currentPage={page}
           onPageChange={(page) => {

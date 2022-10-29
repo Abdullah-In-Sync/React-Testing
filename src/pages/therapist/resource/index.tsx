@@ -24,7 +24,6 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import { IconButton, Box, Button, useTheme } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -66,6 +65,11 @@ const MenuProps = {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
       width: 250,
+    },
+  },
+  sx: {
+    "&& .Mui-selected": {
+      backgroundColor: "#6EC9DB",
     },
   },
 };
@@ -544,13 +548,8 @@ const Resource: NextPage = () => {
                 href="/v2/therapist/resource/add"
                 className="mr-3"
                 label="Add Resource"
-                startIcon={<ListAltIcon />}
               />
-              <AddButton
-                className="mr-3"
-                label="Create Resource"
-                startIcon={<ListAltIcon />}
-              />
+              <AddButton className="mr-3" label="Create Resource" />
             </Box>
           </Grid>
         </Grid>
@@ -598,20 +597,18 @@ const Resource: NextPage = () => {
           </Box>
         </DeleteSureModal>
         <Dialog
+          PaperProps={{
+            sx: {
+              width: "100%",
+              maxHeight: 300,
+            },
+          }}
           data-testid="sharePatientDialogue"
           open={isPatientDialogOpen}
           TransitionComponent={Transition}
           keepMounted
           onClose={closeSelectDialog}
           aria-describedby="alert-dialog-slide-description"
-          sx={{
-            "& .MuiDialog-container": {
-              "& .MuiPaper-root": {
-                width: "100%",
-                maxWidth: "500px", // Set your width here
-              },
-            },
-          }}
         >
           <DialogTitle
             sx={{
@@ -633,6 +630,7 @@ const Resource: NextPage = () => {
               id="alert-dialog-slide-description"
             >
               <Select
+                style={{ height: 50, width: 550 }}
                 multiple
                 id="selectPatient"
                 displayEmpty
@@ -667,7 +665,7 @@ const Resource: NextPage = () => {
           </DialogContent>
           <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
             <AddButton
-              color="primary"
+              color="secondary"
               data-testid="shareButton"
               sx={{
                 paddingX: "2px",
