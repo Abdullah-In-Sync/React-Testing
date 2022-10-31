@@ -23,7 +23,6 @@ import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact
 import DescriptionIcon from "@mui/icons-material/Description";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SettingsIcon from "@mui/icons-material/Settings";
-import FeedbackIcon from "@mui/icons-material/Feedback";
 import StarsIcon from "@mui/icons-material/Stars";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
