@@ -272,6 +272,7 @@ const Feedback: NextPage = () => {
               return (
                 <Accordion
                   sx={{ marginTop: "4px", borderRadius: "4px" }}
+                  style={{ borderRadius: "14px" }}
                   expanded={sessionPanelExpanded === panelName}
                   onChange={handleSessionPanelChange(panelName)}
                   onClick={() => setSessionNo(p)}
