@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
+import Cookies from "js-cookie";
 
 import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -147,7 +148,7 @@ function SidebarMenu() {
   const [expanded, setExpanded] = useState({});
   const [userType, setUserType] = useState("");
 
-  useEffect(() => setUserType(sessionStorage.getItem("user_type")), []);
+  useEffect(() => setUserType(Cookies.get("user_type")), []);
 
   const userRoute = {
     patient: patient_routes,
