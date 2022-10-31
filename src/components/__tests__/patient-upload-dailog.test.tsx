@@ -1,5 +1,8 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { FileUploadDialog } from "../common/FileUploadDailog/index";
+import * as s3 from "../../lib/helpers/s3";
+
+const file = new File(["hello"], "hello.png", { type: "image/png" });
 
 describe("when rendered with a `testid` prop", () => {
   it("should open file upload dialog with testId", () => {
@@ -22,6 +25,57 @@ describe("when rendered with a `testid` prop", () => {
     expect(screen.getByTestId("fileInputForm")).toBeInTheDocument();
     expect(screen.getByTestId("fileInput")).toBeInTheDocument();
     expect(screen.getByTestId("saveButton")).toBeInTheDocument();
+  });
+  it("upload file ", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "test.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    const openConfirmationDialog = jest.fn();
+    const onChange = jest.fn();
+    const onClose = jest.fn();
+
+    render(
+      <FileUploadDialog
+        open={true}
+        openConfirmationDialog={openConfirmationDialog}
+        onChange={onChange}
+        onClose={onClose}
+        isSubmit={false}
+        heading="Upload Doc File"
+      />
+    );
+    expect(screen.getByTestId("openFileUploadDialog")).toBeInTheDocument();
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("fileInput"), {
+        target: { files: [file] },
+      });
+    });
+
+    fireEvent.submit(screen.getByTestId("fileInputForm"));
+    expect(openConfirmationDialog).toHaveBeenCalledTimes(1);
+  });
+
+  it("When click on save without selecting the file ", async () => {
+    const openConfirmationDialog = jest.fn();
+    const onChange = jest.fn();
+    const onClose = jest.fn();
+
+    render(
+      <FileUploadDialog
+        open={true}
+        openConfirmationDialog={openConfirmationDialog}
+        onChange={onChange}
+        onClose={onClose}
+        isSubmit={false}
+        heading="Upload Doc File"
+      />
+    );
+    expect(screen.getByTestId("openFileUploadDialog")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("saveButton"));
+    await expect(window.alert("Please select a file."));
   });
 
   it("when click on close icon it should close the dialog", () => {
