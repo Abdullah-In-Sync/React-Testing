@@ -232,7 +232,7 @@ export const therapistRoutes: RoutesType[] = [
   {
     key: 4,
     label: "Library",
-    path: Link + "therapist/resource",
+    path: Link + "/therapist/resource",
     icon: <LibraryBooksIcon />,
   },
   {
@@ -273,7 +273,7 @@ export const therapistRoutes: RoutesType[] = [
   },
 ];
 
-//** PATINET ROUTES **//
+//** PATIENT ROUTES **//
 export const patient_routes: RoutesType[] = [
   {
     key: 1,
