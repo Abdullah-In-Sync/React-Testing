@@ -57,7 +57,6 @@ export const FileUploadDialog = ({
               data-testid="fileInput"
               id="fileId"
               type="file"
-              required
               accept=".pdf"
               onChange={onChange}
             />

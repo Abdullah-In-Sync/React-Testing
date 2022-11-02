@@ -67,7 +67,7 @@ const ResourceDetailById: NextPage = () => {
     setFileUpload(false);
   };
 
-  const { data: resData, loading } = useQuery(GET_PATIENT_RESOURCE_DATA);
+  const { data: resData } = useQuery(GET_PATIENT_RESOURCE_DATA);
 
   useEffect(() => {
     // no condition in case of open
@@ -105,7 +105,6 @@ const ResourceDetailById: NextPage = () => {
   }, [ptId]);
   return (
     <>
-      <Loader visible={loading} />
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Resource Detail" />
@@ -214,9 +213,12 @@ const ResourceDetailById: NextPage = () => {
                 >
                   {patientResourceData.getResourceDetailById[0].resource_data[0]
                     .resource_type == 2 && (
-                    <IconButton size="small" onClick={openFileUploadDialog}>
+                    <IconButton
+                      size="small"
+                      onClick={openFileUploadDialog}
+                      data-testid="fileUpload"
+                    >
                       <FileUpload
-                        data-testid="fileUpload"
                         closeFileUploadDialog={closeFileUploadDialog}
                         open={fileUpload}
                         ptshareId={
