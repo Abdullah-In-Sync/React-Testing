@@ -60,6 +60,7 @@ export default function Index() {
           if (data && data.createResource && data.createResource._id) {
             enqueueSnackbar("Resource added successfully", {
               variant: "success",
+              autoHideDuration: 2000,
             });
             router.push("/admin/resource");
           }
@@ -69,7 +70,10 @@ export default function Index() {
       setLoader(false);
     } catch (e) {
       setLoader(false);
-      enqueueSnackbar("Please fill the all fields", { variant: "error" });
+      enqueueSnackbar("Please fill the all fields", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
     }
   };
 
