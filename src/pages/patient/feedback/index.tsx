@@ -324,6 +324,7 @@ const Feedback: NextPage = () => {
                   >
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon className="text-white" />}
+                      style={{ minHeight: "0px", height: "45px" }}
                       aria-controls={panelName + "bh-content"}
                       id={panelName + "bh-header"}
                       data-testid={panelName + "bh-header"}
@@ -484,11 +485,11 @@ const Feedback: NextPage = () => {
                                             : ""
                                         }
                                         style={{
-                                          width: 855.5,
+                                          width: 982.5,
                                           height: 216,
                                           left: 454.32,
                                           top: 1044,
-                                          backgroundColor: "#C4C4C4",
+                                          backgroundColor: "#dadada52",
                                           borderRadius: "12px",
                                           border: "none",
                                         }}
