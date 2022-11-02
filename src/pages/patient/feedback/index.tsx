@@ -402,6 +402,7 @@ const Feedback: NextPage = () => {
                                 key={fk + ""}
                                 gutterBottom
                                 component="div"
+                                style={{ marginBottom: "10px" }}
                               >
                                 {fv.answer_type == "list" && (
                                   <Typography
