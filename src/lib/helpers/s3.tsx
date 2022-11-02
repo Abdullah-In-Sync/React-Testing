@@ -21,7 +21,7 @@ export const uploadToS3 = async (
   formData.append("file", selectedFile);
 
   const response = await axios.put(preSignedURL, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: { "Content-Type": selectedFile.type },
   });
   if (response.status == 200) {
     return true;
