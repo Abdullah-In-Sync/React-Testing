@@ -12,11 +12,12 @@ type propTypes = {
   inputProps?: any;
   extraProps?: any;
   placement?: "start" | "end" | "top" | "bottom";
-  checked: number | boolean;
+  checked: any;
   size?: "small" | "medium";
 };
 
 export default function CheckBoxLabelComponent(props: propTypes) {
+  const checkedTypeConversion = parseInt(props.checked);
   return (
     <FormControlLabel
       value={props.value}
@@ -28,7 +29,7 @@ export default function CheckBoxLabelComponent(props: propTypes) {
           inputProps={props.inputProps}
           required={props.required}
           {...props.extraProps}
-          checked={props.checked}
+          checked={checkedTypeConversion}
           size={props.size ?? "medium"}
         />
       }
