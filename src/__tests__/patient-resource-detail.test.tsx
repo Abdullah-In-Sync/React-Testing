@@ -10,8 +10,10 @@ import {
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { GET_PATIENT_RESOURCE_DETAIL } from "../graphql/query/resource";
+import * as s3 from "../lib/helpers/s3";
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
+const file = new File(["hello"], "hello.png", { type: "image/png" });
 
 // mocks
 const buildMocks = (): {
@@ -244,5 +246,97 @@ describe("Render patient resource detail page", () => {
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
     fireEvent.click(screen.queryByTestId("shareViewUrl"));
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
+  });
+
+  test("Without uploading the file", async () => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f4",
+      },
+    }));
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("fileUpload"));
+    await expect(screen.getByText("Upload Doc File")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("saveButton"));
+    await expect(window.alert("Please select a file."));
+  });
+
+  test("With uploading the file", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "test.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    useRouter.mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f4",
+      },
+    }));
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("fileUpload"));
+    await expect(screen.getByText("Upload Doc File")).toBeInTheDocument();
+
+    const hiddenFileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    fireEvent.change(screen.getByTestId("fileInput"), {
+      target: { files: [file] },
+    });
+
+    expect(hiddenFileInput.files.length).toBe(1);
+
+    fireEvent.click(screen.queryByTestId("saveButton"));
+
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+
+    expect(screen.queryByTestId("FileUploadIcon")).toBeInTheDocument();
+  });
+
+  test("With uploading the file click on cancle button", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "test.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    useRouter.mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f4",
+      },
+    }));
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("patResourceDetail")).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("fileUpload"));
+    await expect(screen.getByText("Upload Doc File")).toBeInTheDocument();
+
+    const hiddenFileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    fireEvent.change(screen.getByTestId("fileInput"), {
+      target: { files: [file] },
+    });
+
+    expect(hiddenFileInput.files.length).toBe(1);
+
+    fireEvent.click(screen.queryByTestId("saveButton"));
+
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
+
+    await expect(screen.getByText("Upload Doc File")).toBeInTheDocument();
+
+    expect(screen.getByText("Save")).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../../../components/layout";
@@ -22,7 +22,11 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
 import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
-import { GET_PATIENT_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
+import {
+  GET_PATIENT_RESOURCE_DATA,
+  GET_PATIENT_RESOURCE_DETAIL,
+} from "../../../../graphql/query/resource";
+import FileUpload from "../../../../components/common/Dialog";
 
 const ResourceDetailById: NextPage = () => {
   const router = useRouter();
@@ -30,6 +34,9 @@ const ResourceDetailById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [ptId, setPtId] = useState<string>("");
   const [patientId, setpatientId] = useState<string>("");
+
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
+  const [fileUpload, setFileUpload] = useState<boolean | null>(null);
 
   const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
     (tokenData) => {
@@ -50,6 +57,26 @@ const ResourceDetailById: NextPage = () => {
       }
     },
   });
+
+  const openFileUploadDialog = () => {
+    setFileUpload(true);
+  };
+
+  const closeFileUploadDialog = () => {
+    setIsDialogOpen(false);
+    setFileUpload(false);
+  };
+
+  const { data: resData } = useQuery(GET_PATIENT_RESOURCE_DATA);
+
+  useEffect(() => {
+    // no condition in case of open
+    /* istanbul ignore next */
+    if (isDialogOpen === false) {
+      setFileUpload(false);
+      setIsDialogOpen(true);
+    }
+  }, [fileUpload === true, isDialogOpen === false]);
 
   useEffect(() => {
     setLoader(true);
@@ -186,7 +213,20 @@ const ResourceDetailById: NextPage = () => {
                 >
                   {patientResourceData.getResourceDetailById[0].resource_data[0]
                     .resource_type == 2 && (
-                    <IconButton size="medium" href={"#"}>
+                    <IconButton
+                      size="small"
+                      onClick={openFileUploadDialog}
+                      data-testid="fileUpload"
+                    >
+                      <FileUpload
+                        closeFileUploadDialog={closeFileUploadDialog}
+                        open={fileUpload}
+                        ptshareId={
+                          resData?.getPatientResourceList?.find(
+                            (val) => val?.resource_data[0]?.resource_type === 2
+                          )._id
+                        }
+                      />
                       <FileUploadIcon />
                     </IconButton>
                   )}
@@ -201,7 +241,11 @@ const ResourceDetailById: NextPage = () => {
                         : "#"
                     }
                     sx={{
-                      color: "primary.main",
+                      color:
+                        patientResourceData.getResourceDetailById[0]
+                          ?.patient_share_filename != null
+                          ? "primary.main"
+                          : "",
                     }}
                   >
                     <AttachmentIcon />

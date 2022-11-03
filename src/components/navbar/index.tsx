@@ -51,7 +51,7 @@ const NavBar = () => {
       color="inherit"
       sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
     >
-      <Container maxWidth="xl">
+      <Container sx={{ maxWidth: "100%" }} maxWidth={false}>
         <Toolbar disableGutters>
           <Box
             sx={{

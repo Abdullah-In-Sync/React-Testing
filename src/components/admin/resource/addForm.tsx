@@ -196,6 +196,7 @@ export default function AddForm(props: propTypes) {
     if (!selectedFile?.name) {
       enqueueSnackbar("Please select a file", {
         variant: "error",
+        autoHideDuration: 2000,
       });
       return;
     }
@@ -207,6 +208,7 @@ export default function AddForm(props: propTypes) {
     ) {
       enqueueSnackbar("Please select availability of resource", {
         variant: "error",
+        autoHideDuration: 2000,
       });
       return;
     }
@@ -234,6 +236,7 @@ export default function AddForm(props: propTypes) {
         } else {
           enqueueSnackbar("There is an error with file upload!", {
             variant: "error",
+            autoHideDuration: 2000,
           });
         }
         /* istanbul ignore next */
@@ -242,12 +245,18 @@ export default function AddForm(props: propTypes) {
         /* istanbul ignore next */
         props.setLoader(false);
         /* istanbul ignore next */
-        enqueueSnackbar("Please select file!", { variant: "error" });
+        enqueueSnackbar("Please select file!", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
       }
     } catch (e) {
       /* istanbul ignore next */
       props.setLoader(false);
-      enqueueSnackbar("Please fill the all fields", { variant: "error" });
+      enqueueSnackbar("Please fill the all fields", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
     }
   };
 
