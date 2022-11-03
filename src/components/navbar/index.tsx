@@ -13,6 +13,7 @@ import Image from "next/image";
 import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import Cookies from "js-cookie";
 
 import {
   superadmin_routes,
@@ -24,7 +25,7 @@ const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [userType, setUserType] = useState<string>("admin");
 
-  useEffect(() => setUserType(sessionStorage.getItem("user_type")), []);
+  useEffect(() => setUserType(Cookies.get("user_type")), []);
 
   const userRoute = {
     patient: patient_routes,
