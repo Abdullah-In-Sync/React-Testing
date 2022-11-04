@@ -25,7 +25,7 @@ import { GET_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
 const ResourceById: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
-  const [loader, setLoader] = useState<boolean>(true);
+  const [loader, setLoader] = useState<boolean>(false);
   const [resId, setResId] = useState<string>("");
   const [AdminId, setadminId] = useState<string>("");
 
@@ -217,7 +217,7 @@ const ResourceById: NextPage = () => {
               component="div"
               data-testid="no-data-found-patient-resource-detail"
             >
-              {loader === true ? "" : "No Data Found"}
+              {loader === false ? "No Data Found" : ""}
             </Typography>
           )}
         </Box>
