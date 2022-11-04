@@ -213,7 +213,7 @@ const ResourceById: NextPage = () => {
               component="div"
               data-testid="no-data-found-patient-resource-detail"
             >
-              {loader === true ? "" : "No Data Found"}
+              {loader === false ? "No Data Found" : ""}
             </Typography>
           )}
         </Box>
