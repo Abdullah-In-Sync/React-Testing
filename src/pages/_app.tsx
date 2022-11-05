@@ -26,7 +26,7 @@ interface MyAppProps extends AppProps {
 
 const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
- 
+
   const router = useRouter();
   const path = (/#!(\/.*)$/.exec(router.asPath) || [])[1];
   if (path) {
