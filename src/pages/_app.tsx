@@ -17,6 +17,8 @@ import { SidebarProvider } from "../contexts/SidebarContext";
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import "../styles/main.css";
+import { useRouter } from "next/router";
+
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
@@ -24,6 +26,12 @@ interface MyAppProps extends AppProps {
 
 const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+ 
+  const router = useRouter();
+  const path = (/#!(\/.*)$/.exec(router.asPath) || [])[1];
+  if (path) {
+    router.replace(path);
+  }
 
   return (
     <ApolloProvider client={client}>
