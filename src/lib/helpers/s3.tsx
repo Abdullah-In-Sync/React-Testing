@@ -17,9 +17,6 @@ export const uploadToS3 = async (
   selectedFile: File,
   preSignedURL: string
 ): Promise<boolean> => {
-  // const formData = new FormData();
-  // formData.append("file", selectedFile);
-
   const response = await axios.put(preSignedURL, selectedFile, {
     headers: { "Content-Type": selectedFile.type },
   });
