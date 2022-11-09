@@ -40,3 +40,25 @@ export type editResourceFormField = {
   disorder_detail: string;
   model_detail: string;
 };
+
+export type patientProfileFormFeild = {
+  _id: string;
+  patient_contract: number;
+  patient_employment: string;
+  patient_firstname: string;
+  patient_gender: string;
+  patient_gpaddress: string;
+  patient_gpaddressline2: string;
+  patient_gpcity: string;
+  patient_gpcontactno: string;
+  patient_gpemailaddress: string;
+  patient_gpname: string;
+  patient_gppostalcode: string;
+  patient_gpsurgeryname: string;
+  patient_lang: string;
+  patient_lastname: string;
+  patient_marrital: string;
+  patient_no: string;
+  patient_sexuality: string;
+  __typename: string;
+};
