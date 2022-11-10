@@ -17,6 +17,7 @@ type propTypes = {
   options: Option[];
   mappingKeys: [string, string];
   size: "small" | "medium";
+  disabled?: boolean;
 };
 
 /* istanbul ignore next */
@@ -34,6 +35,7 @@ const mapping = (options: Option[], keys = []) => {
 };
 
 export default function SingleSelectComponent(props: propTypes) {
+  console.log("Koca: props ", props);
   return (
     <FormControl
       fullWidth={props.fullWidth}
@@ -50,6 +52,7 @@ export default function SingleSelectComponent(props: propTypes) {
         onChange={props.onChange}
         inputProps={props.inputProps}
         className={props.className}
+        disabled={props.disabled}
         {...props.extraProps}
       >
         <MenuItem value="">Select</MenuItem>
