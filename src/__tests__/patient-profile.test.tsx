@@ -92,17 +92,16 @@ mocksData.push({
         patient_lastname: "Last Name",
         patient_marrital: "Married",
         patient_gender: "Male",
-        patient_firstname: "Frist Name",
+        patient_firstname: "first_name",
         patient_lang: "English",
         patient_employment: "PartTime",
-        //gp
         patient_gpemailaddress: "gp@gmail.com",
         patient_gppostalcode: "123456",
         patient_gpsurgeryname: "Surgery",
         patient_gpname: "Gp_Name",
         patient_gpcontactno: "9998887776",
         patient_gpcity: "Gp_City",
-        patient_gpaddressline2: "Gp_Address_line_2",
+        patient_gpaddressline2: "GP patient address line 2",
         patient_gpaddress: "Gp_Address",
       },
     },
@@ -110,22 +109,30 @@ mocksData.push({
   result: {
     data: {
       updateProfileById: {
-        patient_sexuality: "patient_sexuality",
-        patient_lastname: "Patient Last Name",
-        patient_marrital: "Patient Marital",
-        patient_gender: "Patient Gender",
-        patient_firstname: "Patient Frist Name",
-        patient_lang: "Patient Language",
-        patient_employment: "Patient Employment",
-        //gp
-        patient_gpemailaddress: "Patient Email",
-        patient_gppostalcode: "GP pincode",
-        patient_gpsurgeryname: "GP Surgery",
-        patient_gpname: "Patient Gp_Name",
-        patient_gpcontactno: "GP contact number",
-        patient_gpcity: "Patient city",
-        patient_gpaddressline2: "GP patient address line 2",
-        patient_gpaddress: "Patient Gp_Address",
+        _id: "abe59fa2fafb4476b8799413354c30fb",
+        user_id: "9729bf52-46bf-4989-beb3-46712ea0545a",
+        patient_status: 1,
+        patient_sexuality: "Asexual",
+        patient_no: "PN00110",
+        patient_marrital: "Single",
+        patient_lastname: "Update12",
+        patient_lang: "Update12",
+        patient_gpsurgeryname: "Update12",
+        patient_gppostalcode: "111113",
+        patient_gpname: "Update12",
+        patient_gpemailaddress: "update@gmail.conm12",
+        patient_gpcontactno: "Update12",
+        patient_gpcity: "update12",
+        patient_gpaddressline2: "Update 212",
+        patient_gpaddress: "Upadate 112",
+        patient_gender: "Female",
+        patient_firstname: "Update",
+        patient_employment: "Student",
+        patient_contract: 1,
+        patient_consent: 1,
+        patient_availability:
+          '[{"Day":1,"from":"09:00","to":"17:00","avail":"0"},{"Day":2,"from":"09:00","to":"17:00","avail":"0"},{"Day":3,"from":"09:00","to":"17:00","avail":"0"},{"Day":4,"from":"09:00","to":"17:00","avail":"0"},{"Day":5,"from":"09:00","to":"17:00","avail":"0"},{"Day":6,"from":"09:00","to":"17:00","avail":"0"},{"Day":7,"from":"09:00","to":"17:00","avail":"0"}]',
+        __typename: "Patient",
       },
     },
   },
@@ -144,6 +151,72 @@ const sut = async () => {
 };
 
 describe("Patient profile page", () => {
+  it("update profile data", async () => {
+    await sut();
+    expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("edit-icon-button"));
+
+    fireEvent.change(screen.queryByTestId("patient_firstname"), {
+      target: { value: "first_name" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_lastname"), {
+      target: { value: "Last Name" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gender"), {
+      target: { value: "Male" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_sexuality"), {
+      target: { value: "Asexual" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_marrital"), {
+      target: { value: "Married" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_lang"), {
+      target: { value: "English" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_employment"), {
+      target: { value: "PartTime" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpname"), {
+      target: { value: "Gp_Name" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpsurgeryname"), {
+      target: { value: "Surgery" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpcontactno"), {
+      target: { value: "9998887776" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpemailaddress"), {
+      target: { value: "gp@gmail.com" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpaddress"), {
+      target: { value: "Gp_Address" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_gpaddressline2"), {
+      target: { value: "GP patient address line 2" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_gpcity"), {
+      target: { value: "Gp_City" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_gppostalcode"), {
+      target: { value: "123456" },
+    });
+    await waitFor(async () => {
+      fireEvent.submit(screen.queryByTestId("patient-profile-form"));
+    });
+    await waitFor(async () => {
+      expect(screen.getByText("Profile edit successfully")).toBeInTheDocument();
+    });
+  });
   it("should render complete patient form", async () => {
     await sut();
     expect(screen.getByTestId("patient-profile-form")).toBeInTheDocument();
@@ -214,71 +287,6 @@ describe("Patient profile page", () => {
     expect(screen.getByTestId("patient_gpaddress")).toBeInTheDocument();
   });
 
-  it("update profile data", async () => {
-    await sut();
-    expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
-    fireEvent.click(screen.queryByTestId("edit-icon-button"));
-
-    fireEvent.change(screen.queryByTestId("patient_firstname"), {
-      target: { value: "Frist Name" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_lastname"), {
-      target: { value: "Last Name" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_gender"), {
-      target: { value: "Male" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_sexuality"), {
-      target: { value: "Asexual" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_marrital"), {
-      target: { value: "Married" },
-    });
-    fireEvent.change(screen.queryByTestId("patient_lang"), {
-      target: { value: "English" },
-    });
-    fireEvent.change(screen.queryByTestId("patient_employment"), {
-      target: { value: "PartTime" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_gpname"), {
-      target: { value: "Gp_Name" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_gpsurgeryname"), {
-      target: { value: "Surgery" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_gpcontactno"), {
-      target: { value: "9998887776" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_gpemailaddress"), {
-      target: { value: "gp@gmail.com" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_gpaddress"), {
-      target: { value: "Gp_Address" },
-    });
-    fireEvent.change(screen.queryByTestId("patient_gpaddressline2"), {
-      target: { value: "GP patient address line 2" },
-    });
-    fireEvent.change(screen.queryByTestId("patient_gpcity"), {
-      target: { value: "Gp_City" },
-    });
-    fireEvent.change(screen.queryByTestId("patient_gppostalcode"), {
-      target: { value: "123456" },
-    });
-    await waitFor(async () => {
-      fireEvent.submit(screen.queryByTestId("patient-profile-form"));
-    });
-
-    await expect(screen.getByText("Edit Personal Info")).toBeInTheDocument();
-  });
   it("should all prefilled value", async () => {
     await sut();
 
@@ -367,6 +375,7 @@ describe("Patient profile page", () => {
       await waitFor(async () => {
         fireEvent.click(screen.queryByTestId("editCancleSubmitButton"));
       });
+      expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
     });
   });
 });
