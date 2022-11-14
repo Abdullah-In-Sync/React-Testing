@@ -1,10 +1,11 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import PatientById from "../pages/patient/view/[id]";
 
 import { GET_PROFILE_DATA } from "../graphql/query/patient";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
+import { UPDATE_PROFILE_DATA } from "../graphql/mutation/patient";
 
 const mocksData = [];
 
@@ -59,6 +60,72 @@ mocksData.push({
         patient_gpcity: "City",
         patient_gpaddressline2: "Address line 2",
         patient_gpaddress: "gp address",
+        addressline2: "address line 2",
+        birthdate: "1-2-03",
+        email: "email@gmail.com",
+        home_no: "C-151",
+        kin_addressline1: "Kin Address 1",
+        kin_addressline2: "Kin Address 2",
+        kin_city: "Kin_city",
+        kin_contact_no: "1234567891",
+        kin_email_address: "kin@gmail.com",
+        kin_postal: "111111",
+        kin_name: "Kin Name",
+        kin_relationship: "father",
+        nhsno: "HNS no 1",
+        patient_consent: "",
+        patient_availability: "",
+        org_id: "",
+        city: "city",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_PROFILE_DATA,
+    variables: {
+      groupName: "patient",
+      update: {
+        patient_sexuality: "Asexual",
+        patient_lastname: "Last Name",
+        patient_marrital: "Married",
+        patient_gender: "Male",
+        patient_firstname: "Frist Name",
+        patient_lang: "English",
+        patient_employment: "PartTime",
+        //gp
+        patient_gpemailaddress: "gp@gmail.com",
+        patient_gppostalcode: "123456",
+        patient_gpsurgeryname: "Surgery",
+        patient_gpname: "Gp_Name",
+        patient_gpcontactno: "9998887776",
+        patient_gpcity: "Gp_City",
+        patient_gpaddressline2: "Gp_Address_line_2",
+        patient_gpaddress: "Gp_Address",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateProfileById: {
+        patient_sexuality: "patient_sexuality",
+        patient_lastname: "Patient Last Name",
+        patient_marrital: "Patient Marital",
+        patient_gender: "Patient Gender",
+        patient_firstname: "Patient Frist Name",
+        patient_lang: "Patient Language",
+        patient_employment: "Patient Employment",
+        //gp
+        patient_gpemailaddress: "Patient Email",
+        patient_gppostalcode: "GP pincode",
+        patient_gpsurgeryname: "GP Surgery",
+        patient_gpname: "Patient Gp_Name",
+        patient_gpcontactno: "GP contact number",
+        patient_gpcity: "Patient city",
+        patient_gpaddressline2: "GP patient address line 2",
+        patient_gpaddress: "Patient Gp_Address",
       },
     },
   },
@@ -83,8 +150,6 @@ describe("Patient profile page", () => {
 
     expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
     expect(screen.getByTestId("patient_lastname")).toBeInTheDocument();
-
-    expect(screen.getByTestId("date_of_birth")).toBeInTheDocument();
 
     expect(screen.getByTestId("patient_gender")).toBeInTheDocument();
 
@@ -132,7 +197,7 @@ describe("Patient profile page", () => {
 
     expect(screen.getByTestId("next_name")).toBeInTheDocument();
 
-    expect(screen.getByTestId("relationship")).toBeInTheDocument();
+    expect(screen.getByTestId("kin_relationship")).toBeInTheDocument();
 
     expect(screen.getByTestId("next_contact_no")).toBeInTheDocument();
 
@@ -148,49 +213,160 @@ describe("Patient profile page", () => {
 
     expect(screen.getByTestId("patient_gpaddress")).toBeInTheDocument();
   });
-});
-it("should all prefilled value", async () => {
-  await sut();
 
-  await waitFor(async () => {
-    await expect(screen.getByTestId("patient_firstname")).toHaveValue(
-      "test name"
-    );
-    await expect(screen.getByTestId("patient_lastname")).toHaveValue(
-      "test name last"
-    );
+  it("update profile data", async () => {
+    await sut();
+    expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("edit-icon-button"));
 
-    await expect(screen.getByTestId("patient_gender")).toHaveValue("Male");
-    await expect(screen.getByTestId("patient_sexuality")).toHaveValue(
-      "Asexual"
-    );
-    await expect(screen.getByTestId("patient_marrital")).toHaveValue("Single");
+    fireEvent.change(screen.queryByTestId("patient_firstname"), {
+      target: { value: "Frist Name" },
+    });
 
-    await expect(screen.getByTestId("patient_lang")).toHaveValue("English");
+    fireEvent.change(screen.queryByTestId("patient_lastname"), {
+      target: { value: "Last Name" },
+    });
 
-    await expect(screen.getByTestId("patient_gpname")).toHaveValue(
-      "gp test name"
-    );
-    await expect(screen.getByTestId("patient_gpsurgeryname")).toHaveValue(
-      "Surgery"
-    );
+    fireEvent.change(screen.queryByTestId("patient_gender"), {
+      target: { value: "Male" },
+    });
 
-    await expect(screen.getByTestId("patient_gpcontactno")).toHaveValue(
-      "7878787878"
-    );
+    fireEvent.change(screen.queryByTestId("patient_sexuality"), {
+      target: { value: "Asexual" },
+    });
 
-    await expect(screen.getByTestId("patient_gpemailaddress")).toHaveValue(
-      "test@gmail.com"
-    );
-    await expect(screen.getByTestId("patient_gpaddress")).toHaveValue(
-      "gp address"
-    );
-    await expect(screen.getByTestId("patient_gpaddressline2")).toHaveValue(
-      "Address line 2"
-    );
-    await expect(screen.getByTestId("patient_gpcity")).toHaveValue("City");
-    await expect(screen.getByTestId("patient_gppostalcode")).toHaveValue(
-      "123123"
-    );
+    fireEvent.change(screen.queryByTestId("patient_marrital"), {
+      target: { value: "Married" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_lang"), {
+      target: { value: "English" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_employment"), {
+      target: { value: "PartTime" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpname"), {
+      target: { value: "Gp_Name" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpsurgeryname"), {
+      target: { value: "Surgery" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpcontactno"), {
+      target: { value: "9998887776" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpemailaddress"), {
+      target: { value: "gp@gmail.com" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_gpaddress"), {
+      target: { value: "Gp_Address" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_gpaddressline2"), {
+      target: { value: "GP patient address line 2" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_gpcity"), {
+      target: { value: "Gp_City" },
+    });
+    fireEvent.change(screen.queryByTestId("patient_gppostalcode"), {
+      target: { value: "123456" },
+    });
+    await waitFor(async () => {
+      fireEvent.submit(screen.queryByTestId("patient-profile-form"));
+    });
+
+    await expect(screen.getByText("Edit Personal Info")).toBeInTheDocument();
+  });
+  it("should all prefilled value", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      await expect(screen.getByTestId("patient_firstname")).toHaveValue(
+        "test name"
+      );
+      await expect(screen.getByTestId("patient_lastname")).toHaveValue(
+        "test name last"
+      );
+
+      await expect(screen.getByTestId("patient_gender")).toHaveValue("Male");
+      await expect(screen.getByTestId("patient_sexuality")).toHaveValue(
+        "Asexual"
+      );
+      await expect(screen.getByTestId("patient_marrital")).toHaveValue(
+        "Single"
+      );
+
+      await expect(screen.getByTestId("patient_lang")).toHaveValue("English");
+
+      await expect(screen.getByTestId("patient_gpname")).toHaveValue(
+        "gp test name"
+      );
+      await expect(screen.getByTestId("patient_gpsurgeryname")).toHaveValue(
+        "Surgery"
+      );
+
+      await expect(screen.getByTestId("patient_gpcontactno")).toHaveValue(
+        "7878787878"
+      );
+
+      await expect(screen.getByTestId("patient_gpemailaddress")).toHaveValue(
+        "test@gmail.com"
+      );
+      await expect(screen.getByTestId("patient_gpaddress")).toHaveValue(
+        "gp address"
+      );
+      await expect(screen.getByTestId("patient_gpaddressline2")).toHaveValue(
+        "Address line 2"
+      );
+      await expect(screen.getByTestId("patient_gpcity")).toHaveValue("City");
+      await expect(screen.getByTestId("patient_gppostalcode")).toHaveValue(
+        "123123"
+      );
+      await expect(screen.getByTestId("address_line_2")).toHaveValue(
+        "address line 2"
+      );
+
+      await expect(screen.getByTestId("email_address")).toHaveValue(
+        "email@gmail.com"
+      );
+      await expect(screen.getByTestId("home_no")).toHaveValue("C-151");
+      await expect(screen.getByTestId("next_address_line_1")).toHaveValue(
+        "Kin Address 1"
+      );
+      await expect(screen.getByTestId("next_address_line_2")).toHaveValue(
+        "Kin Address 2"
+      );
+      await expect(screen.getByTestId("next_city")).toHaveValue("Kin_city");
+      await expect(screen.getByTestId("next_contact_no")).toHaveValue(
+        "1234567891"
+      );
+      await expect(screen.getByTestId("next_email_address")).toHaveValue(
+        "kin@gmail.com"
+      );
+      await expect(screen.getByTestId("next_postal_code")).toHaveValue(
+        "111111"
+      );
+      await expect(screen.getByTestId("next_name")).toHaveValue("Kin Name");
+      await expect(screen.getByTestId("kin_relationship")).toHaveValue(
+        "father"
+      );
+      await expect(screen.getByTestId("nhs_no")).toHaveValue("HNS no 1");
+      await expect(screen.getByTestId("city")).toHaveValue("city");
+    });
+  });
+  it("Cancle edit button", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("edit-icon-button"));
+      expect(screen.getByTestId("editCancleSubmitButton")).toBeInTheDocument();
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("editCancleSubmitButton"));
+      });
+    });
   });
 });

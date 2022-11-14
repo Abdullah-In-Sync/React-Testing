@@ -36,6 +36,26 @@ export const GET_PROFILE_DATA = gql`
       patient_gpcity
       patient_gpaddressline2
       patient_gpaddress
+      addressline2
+      birthdate
+      city
+      created_date
+      email
+      home_no
+      hos_id
+      kin_addressline1
+      kin_addressline2
+      kin_city
+      kin_contact_no
+      kin_email_address
+      kin_postal
+      kin_name
+      kin_relationship
+      nhsno
+      patient_contract
+      patient_consent
+      patient_availability
+      org_id
     }
   }
 `;

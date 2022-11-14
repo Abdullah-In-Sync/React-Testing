@@ -35,7 +35,6 @@ const mapping = (options: Option[], keys = []) => {
 };
 
 export default function SingleSelectComponent(props: propTypes) {
-  console.log("Koca: props ", props);
   return (
     <FormControl
       fullWidth={props.fullWidth}
