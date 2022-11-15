@@ -19,6 +19,7 @@ type propTypes = {
   extraProps?: any;
   padding?: string;
   size?: "small" | "medium";
+  disabled?: boolean;
 };
 
 export default function TextFieldComponent(props: propTypes) {
@@ -38,6 +39,7 @@ export default function TextFieldComponent(props: propTypes) {
       {...props.extraProps}
       variant={props.variant}
       size={props.size ?? "medium"}
+      disabled={props.disabled}
     />
   );
 }

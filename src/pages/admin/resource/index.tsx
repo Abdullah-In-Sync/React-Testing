@@ -188,12 +188,15 @@ const Resource: NextPage = () => {
   useEffect(() => {
     // do some checking here to ensure data exist
     /* istanbul ignore next */
-    refetch();
     if (!loading && dataListData) {
       /* istanbul ignore next */
       setDataList(dataListData?.getResourceList);
     }
   }, [dataListData]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     if (unApproveResourceList) {
