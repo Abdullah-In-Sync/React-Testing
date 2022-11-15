@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AddForm from "../../../../components/admin/resource/addForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
@@ -9,7 +9,6 @@ import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import withAuthentication from "../../../../hoc/auth";
-import { useAppContext } from "../../../../contexts/AuthContext";
 
 const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -18,10 +17,6 @@ const Index = () => {
   const [createResource] = useMutation(CREATE_RESOURCE);
 
   const router = useRouter();
-
-  const {
-    user: { _id: adminId },
-  } = useAppContext();
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
     try {
