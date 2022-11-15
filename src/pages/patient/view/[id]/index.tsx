@@ -122,7 +122,7 @@ const PatientById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
-  const [userType, setUserType] = useState<any>();
+  const [userType, setUserType] = useState<any>("patient");
   const [editable, setEditable] = useState<boolean>(true);
 
   //Queries GraphQl
@@ -169,7 +169,6 @@ const PatientById: NextPage = () => {
   const editFormHandler = (e, formFields: patientEditProfileFormFeild) => {
     e.preventDefault();
     setLoader(true);
-
     try {
       updatePatient({
         variables: {
