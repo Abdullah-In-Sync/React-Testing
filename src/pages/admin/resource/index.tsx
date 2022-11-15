@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
 import { useSnackbar } from "notistack";
@@ -38,7 +38,8 @@ import ApproveSureModal from "../../../components/admin/resource/ApproveSureModa
 import DoneIcon from "@mui/icons-material/Done";
 
 import NextLink from "next/link";
-import { GET_ADMIN_TOKEN_DATA } from "../../../graphql/query/common";
+import withAuthentication from "../../../hoc/auth";
+import { useAppContext } from "../../../contexts/AuthContext";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -146,24 +147,10 @@ const Resource: NextPage = () => {
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [approveResource] = useMutation(APPROVE_RESOURCE);
-  const [adminId, setadminId] = useState<string>("");
+  const {
+    user: { _id: adminId },
+  } = useAppContext();
   const [approveModal, setApproveModal] = useState<boolean>(false);
-
-  useQuery(GET_ADMIN_TOKEN_DATA, {
-    onCompleted: async (data) => {
-      /* istanbul ignore next */
-      if (data.getTokenData) {
-        const user_type: string = data!.getTokenData.user_type;
-        /* istanbul ignore next */
-        if (user_type != "admin") {
-          window.location.href =
-            "https://" + window.location.hostname + "/account";
-        } else {
-          setadminId(data!.getTokenData._id);
-        }
-      }
-    },
-  });
 
   // GRAPHQL
   const {
@@ -632,4 +619,4 @@ const Resource: NextPage = () => {
   );
 };
 
-export default Resource;
+export default withAuthentication(Resource);
