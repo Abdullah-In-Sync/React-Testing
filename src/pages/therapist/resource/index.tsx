@@ -48,6 +48,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 
 import NextLink from "next/link";
 import { GET_THERAPIST_TOKEN_DATA } from "../../../graphql/query/common";
+import withAuthentication from "../../../hoc/auth";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -693,4 +694,4 @@ const Resource: NextPage = () => {
   );
 };
 
-export default Resource;
+export default withAuthentication(Resource, ["therapist"]);

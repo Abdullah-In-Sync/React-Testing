@@ -488,4 +488,4 @@ const Feedback: NextPage = () => {
   );
 };
 
-export default withAuthentication(Feedback);
+export default withAuthentication(Feedback, ["admin"]);
