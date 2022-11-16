@@ -85,4 +85,4 @@ const Index = () => {
   );
 };
 
-export default withAuthentication(Index);
+export default withAuthentication(Index, ["admin"]);
