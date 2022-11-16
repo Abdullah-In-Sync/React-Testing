@@ -338,7 +338,7 @@ describe("Admin edit resource page", () => {
       isAuthenticated: true,
       user: {
         _id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-        user_type: "admin",
+        user_type: "therapist",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
         user_status: "1",

@@ -6,11 +6,11 @@ import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
 import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
-import { buildTherapistTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
+import withAuthentication from "../../../../hoc/auth";
 
-export default function Index() {
+const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -18,16 +18,8 @@ export default function Index() {
 
   const router = useRouter();
 
-  const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
-    (therapistData) => {
-      console.debug(therapistData);
-      setLoader(false);
-    }
-  );
-
   useEffect(() => {
     setLoader(true);
-    gettokenData();
   }, []);
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
@@ -76,7 +68,7 @@ export default function Index() {
   return (
     <>
       <Layout>
-        <Loader visible={loader || tokenLoading} />
+        <Loader visible={loader} />
         <ContentHeader title="Add Resource" />
         <AddForm
           resourceType="add"
@@ -86,4 +78,6 @@ export default function Index() {
       </Layout>
     </>
   );
-}
+};
+
+export default withAuthentication(Index, ["therapist"]);
