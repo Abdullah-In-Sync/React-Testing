@@ -9,13 +9,18 @@ export default function withAuthentication<T>(
   allowOnly?: UserRole[]
 ) {
   return (props: T) => {
-    const {
-      isAuthenticated,
-      user: { user_type },
-    } = useAppContext();
+    const { isAuthenticated, user } = useAppContext();
+
     useEffect(() => {
-      if (!isAuthenticated && (!allowOnly || allowOnly.includes(user_type)))
+      if (!isAuthenticated) {
         window.location.href = env.v1.rootUrl;
+      } else if (
+        user?.user_type != "admin" &&
+        allowOnly &&
+        !allowOnly.includes(user?.user_type)
+      ) {
+        window.location.href = `${env.v1.rootUrl}/${user?.user_type}/dashboard`;
+      }
     });
 
     return <>{isAuthenticated ? <Component {...props} /> : null}</>;
