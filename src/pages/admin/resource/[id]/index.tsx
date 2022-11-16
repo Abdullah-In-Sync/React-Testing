@@ -19,21 +19,14 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import NextLink from "next/link";
 
 import { useLazyQuery } from "@apollo/client";
-import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { GET_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
+import withAuthentication from "../../../../hoc/auth";
 
 const ResourceById: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [loader, setLoader] = useState<boolean>(false);
   const [resId, setResId] = useState<string>("");
-  const [AdminId, setadminId] = useState<string>("");
-
-  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (tokenData) => {
-      setadminId(tokenData._id);
-    }
-  );
 
   const [getResourceData, { loading: resourceLoading, data: resourceData }] =
     useLazyQuery(GET_RESOURCE_DETAIL, {
@@ -49,21 +42,14 @@ const ResourceById: NextPage = () => {
 
   useEffect(() => {
     setLoader(true);
-    gettokenData({ variables: {} });
+    getResourceData({
+      variables: { resourceId: id },
+    });
   }, []);
 
   useEffect(() => {
-    if (AdminId) {
-      setLoader(true);
-      getResourceData({
-        variables: { resourceId: id },
-      });
-    }
-  }, [AdminId]);
-
-  useEffect(() => {
     /* istanbul ignore else */
-    if (!tokenLoading && !resourceLoading && gettokenData && resourceData) {
+    if (!resourceLoading && resourceData) {
       setLoader(false);
     }
   }, [resId]);
@@ -221,4 +207,4 @@ const ResourceById: NextPage = () => {
     </>
   );
 };
-export default ResourceById;
+export default withAuthentication(ResourceById);
