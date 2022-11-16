@@ -5,14 +5,13 @@ import ContentHeader from "../../../../../components/common/ContentHeader";
 import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import { UPDATE_RESOURCE_BY_ID } from "../../../../../graphql/mutation/resource";
-import { buildTherapistTokenValidationQuery } from "../../../../../lib/helpers/auth";
 import { editResourceFormField } from "../../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import EditForm from "../../../../../components/common/EditResourceForm/EditResourceForm";
+import withAuthentication from "../../../../../hoc/auth";
 
-export default function Index() {
+const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [therapistId, setTherapistId] = useState<any>();
   const [loader, setLoader] = useState<boolean>(false);
 
   const [updateResource] = useMutation(UPDATE_RESOURCE_BY_ID);
@@ -20,22 +19,9 @@ export default function Index() {
   const router = useRouter();
   const id = router?.query.id as string;
 
-  const [gettokenData, tokenLoading] = buildTherapistTokenValidationQuery(
-    (therapistData) => {
-      /* istanbul ignore next */
-      setTherapistId(therapistData._id);
-    }
-  );
-
   useEffect(() => {
     setLoader(true);
-    gettokenData();
   }, []);
-
-  /* istanbul ignore next */
-  if (gettokenData && !tokenLoading && therapistId) {
-    /* istanbul ignore next */
-  }
 
   const editFormHandler = async (formFields: editResourceFormField) => {
     try {
@@ -92,4 +78,6 @@ export default function Index() {
       </Layout>
     </>
   );
-}
+};
+
+export default withAuthentication(Index, ["therapist"]);
