@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useAppContext } from "../contexts/AuthContext";
 import { env } from "../lib/env";
 
@@ -21,8 +21,22 @@ export default function withAuthentication<T>(
       ) {
         window.location.href = `${env.v1.rootUrl}/${user?.user_type}/dashboard`;
       }
-    });
+    }, []);
 
-    return <>{isAuthenticated ? <Component {...props} /> : null}</>;
+    const checkUserAuthorized = useMemo(() => {
+      return !(
+        user?.user_type != "admin" &&
+        allowOnly &&
+        !allowOnly.includes(user?.user_type)
+      );
+    }, [user, allowOnly]);
+
+    return (
+      <>
+        {isAuthenticated && checkUserAuthorized === true ? (
+          <Component {...props} />
+        ) : null}
+      </>
+    );
   };
 }
