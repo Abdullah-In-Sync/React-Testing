@@ -21,7 +21,7 @@ const VideoClips = () => {
   // TABLE PROPS
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
- 
+
   const [getPatientResourceData, { data: resData }] = useLazyQuery(
     GET_PATIENT_RESOURCE_DATA,
     {
