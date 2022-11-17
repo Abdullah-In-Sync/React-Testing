@@ -17,7 +17,6 @@ import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
 import { Guid } from "guid-typescript";
 import { useAppContext } from "../contexts/AuthContext";
 
-
 jest.mock("../contexts/AuthContext");
 
 interface MockOptions {
