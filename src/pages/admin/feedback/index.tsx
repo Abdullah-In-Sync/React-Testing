@@ -33,6 +33,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { AddButton } from "../../../components/common/Buttons";
 import CrudDialog from "../../../components/common/CrudDialog";
 import { buildAdminTokenValidationQuery } from "../../../lib/helpers/auth";
+import withAuthentication from "../../../hoc/auth";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -487,4 +488,4 @@ const Feedback: NextPage = () => {
   );
 };
 
-export default Feedback;
+export default withAuthentication(Feedback);

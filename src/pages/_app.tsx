@@ -17,6 +17,7 @@ import { SidebarProvider } from "../contexts/SidebarContext";
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import "../styles/main.css";
+import { AuthProvider } from "../contexts/AuthContext";
 
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
@@ -28,23 +29,25 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
 
   return (
     <ApolloProvider client={client}>
-      <SnackbarProvider
-        maxSnack={3}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        autoHideDuration={6000}
-      >
-        <SidebarProvider>
-          <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </CacheProvider>
-        </SidebarProvider>
-      </SnackbarProvider>
+      <AuthProvider>
+        <SnackbarProvider
+          maxSnack={3}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          autoHideDuration={6000}
+        >
+          <SidebarProvider>
+            <CacheProvider value={emotionCache}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Component {...pageProps} />
+              </ThemeProvider>
+            </CacheProvider>
+          </SidebarProvider>
+        </SnackbarProvider>
+      </AuthProvider>
     </ApolloProvider>
   );
 };

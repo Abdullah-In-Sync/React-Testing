@@ -1,39 +1,22 @@
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AddForm from "../../../../components/admin/resource/addForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
 import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
-import { buildAdminTokenValidationQuery } from "../../../../lib/helpers/auth";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
+import withAuthentication from "../../../../hoc/auth";
 
-export default function Index() {
+const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [adminId, setadminId] = useState<any>();
   const [loader, setLoader] = useState<boolean>(false);
 
   const [createResource] = useMutation(CREATE_RESOURCE);
 
   const router = useRouter();
-
-  const [gettokenData, tokenLoading] = buildAdminTokenValidationQuery(
-    (adminData) => {
-      /* istanbul ignore next */
-      setadminId(adminData._id);
-    }
-  );
-
-  useEffect(() => {
-    gettokenData();
-  }, []);
-
-  /* istanbul ignore next */
-  if (gettokenData && !tokenLoading && adminId) {
-    /* istanbul ignore next */
-  }
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
     try {
@@ -90,4 +73,6 @@ export default function Index() {
       </Layout>
     </>
   );
-}
+};
+
+export default withAuthentication(Index);

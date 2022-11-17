@@ -33,17 +33,11 @@ import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
 
 import { env } from "../lib/env";
 
+import useStorage from "../components/common/hooks/useStorage";
 const Link = env.v1.rootUrl;
 
-// used for patient platform
-let patientId = "";
-if (typeof window !== "undefined") {
-  patientId =
-    sessionStorage.getItem("patient_id") == undefined ||
-    sessionStorage.getItem("patient_id") == null
-      ? ""
-      : sessionStorage.getItem("patient_id");
-}
+const { getItem } = useStorage();
+const patientId = getItem("patient_id");
 
 type RoutesType =
   | {
@@ -284,7 +278,7 @@ export const patient_routes: RoutesType[] = [
   {
     key: 2,
     label: "My Profile",
-    path: Link + "/patient/view/" + patientId,
+    path: "/patient/view/" + patientId,
     icon: <PersonIcon />,
   },
   {

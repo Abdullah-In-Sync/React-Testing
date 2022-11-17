@@ -17,6 +17,7 @@ type propTypes = {
   options: Option[];
   mappingKeys: [string, string];
   size: "small" | "medium";
+  disabled?: boolean;
 };
 
 /* istanbul ignore next */
@@ -50,6 +51,7 @@ export default function SingleSelectComponent(props: propTypes) {
         onChange={props.onChange}
         inputProps={props.inputProps}
         className={props.className}
+        disabled={props.disabled}
         {...props.extraProps}
       >
         <MenuItem value="">Select</MenuItem>
