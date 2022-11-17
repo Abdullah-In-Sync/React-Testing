@@ -109,7 +109,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 8,
       label: "Resource",
-      path: "admin/resource",
+      path: "/v2/admin/resource",
       icon: <LibraryBooksIcon />,
     },
     {
@@ -159,7 +159,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 16,
       label: "Feedback",
-      path: "admin/feedback",
+      path: "/v2/admin/feedback",
       icon: <ThumbUpAltIcon />,
     },
     {
