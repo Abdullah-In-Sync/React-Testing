@@ -24,11 +24,7 @@ export default function withAuthentication<T>(
     }, []);
 
     const checkUserAuthorized = useMemo(() => {
-      return !(
-        user?.user_type != "admin" &&
-        allowOnly &&
-        !allowOnly.includes(user?.user_type)
-      );
+      return !(allowOnly && !allowOnly.includes(user?.user_type));
     }, [user, allowOnly]);
 
     return (
