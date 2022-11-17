@@ -21,28 +21,21 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import NextLink from "next/link";
 
-import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
 import {
   GET_PATIENT_RESOURCE_DATA,
   GET_PATIENT_RESOURCE_DETAIL,
 } from "../../../../graphql/query/resource";
 import FileUpload from "../../../../components/common/Dialog";
+import withAuthentication from "../../../../hoc/auth";
 
 const ResourceDetailById: NextPage = () => {
   const router = useRouter();
   const id = router.query.id as string;
   const [loader, setLoader] = useState<boolean>(false);
   const [ptId, setPtId] = useState<string>("");
-  const [patientId, setpatientId] = useState<string>("");
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true);
   const [fileUpload, setFileUpload] = useState<boolean | null>(null);
-
-  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
-    (tokenData) => {
-      setpatientId(tokenData.patient_data._id);
-    }
-  );
 
   const [
     getPatientResourceData,
@@ -80,29 +73,18 @@ const ResourceDetailById: NextPage = () => {
 
   useEffect(() => {
     setLoader(true);
-    gettokenData({ variables: {} });
+    getPatientResourceData({
+      variables: { ptsharresId: id },
+    });
   }, []);
 
   useEffect(() => {
-    if (patientId) {
-      setLoader(true);
-      getPatientResourceData({
-        variables: { ptsharresId: id },
-      });
-    }
-  }, [patientId]);
-
-  useEffect(() => {
     /* istanbul ignore else */
-    if (
-      !tokenLoading &&
-      !resourceLoading &&
-      gettokenData &&
-      patientResourceData
-    ) {
+    if (!resourceLoading && patientResourceData) {
       setLoader(false);
     }
   }, [ptId]);
+
   return (
     <>
       <Layout>
@@ -320,4 +302,4 @@ const ResourceDetailById: NextPage = () => {
     </>
   );
 };
-export default ResourceDetailById;
+export default withAuthentication(ResourceDetailById, ["patient"]);

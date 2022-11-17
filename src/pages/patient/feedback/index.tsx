@@ -37,6 +37,7 @@ import {
   Snackbar,
 } from "@mui/material";
 import { buildPatientTokenValidationQuery } from "../../../lib/helpers/auth";
+import withAuthentication from "../../../hoc/auth";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
@@ -542,4 +543,4 @@ const Feedback: NextPage = () => {
   );
 };
 
-export default Feedback;
+export default withAuthentication(Feedback, ["patient"]);
