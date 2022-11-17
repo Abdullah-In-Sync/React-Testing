@@ -12,7 +12,6 @@ const TableGenerator = dynamic(
   import("../../components/common/TableGenerator"),
   { ssr: false }
 );
-import { buildPatientTokenValidationQuery } from "../../lib/helpers/auth";
 
 // GRAPHQL
 import { useLazyQuery } from "@apollo/client";
@@ -22,13 +21,7 @@ const VideoClips = () => {
   // TABLE PROPS
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
-  const [patientId, setpatientId] = useState<string>("");
-
-  // GRAPHQL
-  const [gettokenData] = buildPatientTokenValidationQuery((tokenData) => {
-    setpatientId(tokenData.patient_data._id);
-  });
-
+ 
   const [getPatientResourceData, { data: resData }] = useLazyQuery(
     GET_PATIENT_RESOURCE_DATA,
     {
@@ -40,14 +33,8 @@ const VideoClips = () => {
 
   useEffect(() => {
     setLoader(true);
-    gettokenData({ variables: {} });
+    getPatientResourceData();
   }, []);
-
-  useEffect(() => {
-    if (patientId) {
-      getPatientResourceData();
-    }
-  }, [patientId]);
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */

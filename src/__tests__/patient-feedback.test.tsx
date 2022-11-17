@@ -349,6 +349,9 @@ describe("Patient feedback list", () => {
         user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
+        patient_data: {
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+        },
       },
     });
   });
