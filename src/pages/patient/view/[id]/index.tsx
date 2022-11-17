@@ -11,7 +11,6 @@ import CreateIcon from "@mui/icons-material/Create";
 import NextLink from "next/link";
 
 import { GET_PROFILE_DATA } from "../../../../graphql/query/patient";
-import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
 import {
   patientEditProfileFormFeild,
   patientProfileFormFeild,
@@ -23,6 +22,9 @@ import Agreement from "../../agreement";
 
 import TabsGenerator from "../../../../components/common/TabsGenerator";
 import ProfileForm from "../../../../components/common/ProfileForm/profileForm";
+import Stack from "@mui/material/Stack";
+import withAuthentication from "../../../../hoc/auth";
+import { useAppContext } from "../../../../contexts/AuthContext";
 
 const defaultFormValue = {
   _id: "",
@@ -85,18 +87,13 @@ const PatientById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
-  const [userType, setUserType] = useState<any>("patient");
+
   const [editable, setEditable] = useState<boolean>(false);
+  const {
+    user: { user_type: userType },
+  } = useAppContext();
 
   //Queries GraphQl
-
-  //TOKEN DATA
-  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
-    (tokenData) => {
-      setUserType(tokenData.user_type);
-    }
-  );
-
   const [getPatientData, { loading: profileLoading, data: profileData }] =
     useLazyQuery(GET_PROFILE_DATA, {
       onCompleted: (data) => {
@@ -112,7 +109,6 @@ const PatientById: NextPage = () => {
   //USE EFFECT
   useEffect(() => {
     setLoader(true);
-    gettokenData({ variables: {} });
   }, []);
 
   useEffect(() => {
@@ -123,7 +119,7 @@ const PatientById: NextPage = () => {
 
   useEffect(() => {
     /* istanbul ignore else */
-    if (!tokenLoading && !profileLoading) {
+    if (!profileLoading) {
       setLoader(false);
     }
   }, [profileData]);
@@ -304,4 +300,4 @@ const PatientById: NextPage = () => {
     </>
   );
 };
-export default PatientById;
+export default withAuthentication(PatientById, ["patient"]);
