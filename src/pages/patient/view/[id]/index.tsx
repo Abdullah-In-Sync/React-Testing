@@ -2,20 +2,14 @@ import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Loader from "../../../../components/common/Loader";
 import Typography from "@mui/material/Typography";
-
-// GRAPHQL
 import { useLazyQuery, useMutation } from "@apollo/client";
-
-// MUI COMPONENTS
 import Layout from "../../../../components/layout";
-import { IconButton, Box, Button } from "@mui/material";
+import { IconButton, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
-import Grid from "@mui/material/Grid";
 
 import NextLink from "next/link";
-import TextFieldComponent from "../../../../components/common/TextField/TextFieldComponent";
-import SingleSelectComponent from "../../../../components/common/SelectBox/SingleSelect/SingleSelectComponent";
+
 import { GET_PROFILE_DATA } from "../../../../graphql/query/patient";
 import { buildPatientTokenValidationQuery } from "../../../../lib/helpers/auth";
 import {
@@ -24,17 +18,15 @@ import {
 } from "../../../../utility/types/resource_types";
 import { UPDATE_PROFILE_DATA } from "../../../../graphql/mutation/patient";
 import { useSnackbar } from "notistack";
-import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import Agreement from "../../agreement";
 
-import Stack from "@mui/material/Stack";
+import TabsGenerator from "../../../../components/common/TabsGenerator";
+import ProfileForm from "../../../../components/common/ProfileForm/profileForm";
 
 const defaultFormValue = {
   _id: "",
-  patient_contract: 1,
+  patient_contract: 0,
   patient_employment: "",
   patient_firstname: "",
   patient_gender: "",
@@ -67,55 +59,26 @@ const defaultFormValue = {
   kin_name: "",
   kin_relationship: "",
   nhsno: "",
-  patient_consent: "",
+  patient_consent: 0,
   patient_availability: "",
   org_id: "",
   city: "",
+  religion: "",
+  patient_status: "",
+
+  phone_number: "",
+  postal_code: "",
 };
 
 //STYLE
 const IconButtonWrapper = styled(IconButton)(
   () => `
+  background-color: #ffff;
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
   margin-right: 5px;
 `
 );
 
-const genderOptions = [
-  { id: "Male", value: "Male" },
-  { id: "Female", value: "Female" },
-];
-
-const sexualityOptions = [
-  { id: "Asexual", value: "Asexual" },
-  { id: "Bisexual", value: "Bisexual" },
-  { id: "Hetrosexual", value: "Hetrosexual" },
-  { id: "Homosexual", value: "Homosexual" },
-];
-
-const maritalStausOption = [
-  { id: "Married", value: "Married" },
-  { id: "Single", value: "Single" },
-  { id: "Other", value: "Other" },
-];
-
-const relationshipStausOption = [
-  { id: "sibling", value: "sibling" },
-  { id: "father", value: "father" },
-  { id: "mother", value: "mother" },
-  { id: "spous", value: "spous" },
-  { id: "son", value: "son" },
-  { id: "daughter", value: "daughter" },
-  { id: "other Relative", value: "other Relative" },
-  { id: "friend", value: "friend" },
-  { id: "other", value: "other" },
-];
-
-const employmentOption = [
-  { id: "FullTime", value: "FullTime" },
-  { id: "PartTime", value: "PartTime" },
-  { id: "Student", value: "Student" },
-];
 const PatientById: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -123,7 +86,7 @@ const PatientById: NextPage = () => {
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
   const [userType, setUserType] = useState<any>("patient");
-  const [editable, setEditable] = useState<boolean>(true);
+  const [editable, setEditable] = useState<boolean>(false);
 
   //Queries GraphQl
 
@@ -143,6 +106,7 @@ const PatientById: NextPage = () => {
       },
     });
 
+  // console.debug("Main page profileData", profileData);
   const [updatePatient] = useMutation(UPDATE_PROFILE_DATA);
 
   //USE EFFECT
@@ -169,10 +133,30 @@ const PatientById: NextPage = () => {
   const editFormHandler = (e, formFields: patientEditProfileFormFeild) => {
     e.preventDefault();
     setLoader(true);
+
     try {
       updatePatient({
         variables: {
-          groupName: userType,
+          groupName: "patient",
+          firstName: formFields.patient_firstname,
+          dob: formFields?.birthdate,
+          city: formFields?.city,
+          addressLine2: formFields?.addressline2,
+          addressLine1: "address line 1",
+          homeNo: formFields?.home_no,
+          kinAddressLine1: formFields?.kin_addressline1,
+          kinAddressLine2: formFields?.kin_addressline2,
+          kinCity: formFields?.kin_city,
+          kinContactNo: formFields?.kin_contact_no,
+          kinEmailAddress: formFields?.kin_email_address,
+          kinName: formFields?.kin_name,
+          kinPostal: formFields?.kin_postal,
+          kinRelationship: formFields?.kin_relationship,
+          lastName: formFields.patient_lastname,
+          nhsNo: formFields?.nhsno,
+          postalCode: "123123",
+          religion: formFields?.religion,
+
           update: {
             patient_sexuality: formFields?.patient_sexuality,
             patient_lastname: formFields.patient_lastname,
@@ -193,16 +177,20 @@ const PatientById: NextPage = () => {
           },
         },
         onCompleted: (data) => {
+          console.debug("data", data);
           console.log("data: ", data);
           if (data && data.updateProfileById) {
             enqueueSnackbar("Profile edit successfully", {
               variant: "success",
             });
-            setEditable(true);
+            setEditable(false);
           }
         },
         onError: (error) => {
           console.log("data error: ", error);
+          console.debug("data error: ", error);
+
+          enqueueSnackbar("Something is wrong", { variant: "error" });
         },
       });
 
@@ -213,20 +201,32 @@ const PatientById: NextPage = () => {
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    const fieldName = e.target.name;
-    const value = e.target.value;
-
-    setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
-  };
+  const tabs = [
+    {
+      label: "PERSONAL INFO",
+      value: "prsonal-info",
+      component: (
+        <ProfileForm
+          onSubmit={editFormHandler}
+          setLoader={setLoader}
+          disabled={!editable}
+          userType={userType}
+          setEditable={setEditable}
+        />
+      ),
+    },
+    {
+      label: "AGREEMENT",
+      value: "agreement",
+      component: <Agreement />,
+    },
+  ];
 
   return (
     <>
       <Layout>
         <Loader visible={loader} />
-        {!editable ? (
+        {editable ? (
           <Box
             sx={{
               backgroundColor: "#2593A9",
@@ -255,844 +255,50 @@ const PatientById: NextPage = () => {
             <div
               style={{
                 padding: "14px 0 0 60px",
+                display: "flex",
+                placeItems: "center",
               }}
             >
-              <Typography sx={{ color: "white" }}>
-                {formFields?.patient_firstname}
-              </Typography>
-              <Typography sx={{ color: "white" }}>01-01-1970</Typography>
+              <div
+                style={{
+                  marginRight: "auto",
+                }}
+              >
+                <Typography sx={{ color: "white" }}>
+                  {formFields?.patient_firstname}
+                </Typography>
+                <Typography sx={{ color: "white" }}>01-01-1970</Typography>
+              </div>
+
+              <div
+                style={{
+                  marginRight: "10px",
+                }}
+              >
+                <IconButtonWrapper
+                  style={{ marginLeft: "auto" }}
+                  aria-label="create"
+                  size="small"
+                  onClick={() => {
+                    setEditable(true);
+                  }}
+                  data-testid="edit-icon-button"
+                >
+                  <NextLink href={""}>
+                    <CreateIcon />
+                  </NextLink>
+                </IconButtonWrapper>
+              </div>
             </div>
           </Box>
         )}
 
         <div>
-          {!editable ? (
-            ""
-          ) : (
-            <div
-              style={{
-                borderTop: "2px solid #fff ",
-                borderBottom: "2px solid #6BA08E",
-                margin: "20px 14px 30px 18px",
-                display: "flex",
-              }}
-            >
-              <Button
-                sx={{
-                  backgroundColor: "#6BA08E",
-                  borderRadius: "5px 5px 0 0 ",
-                }}
-                variant="contained"
-              >
-                Personal Info
-              </Button>
-              <Button
-                sx={{
-                  backgroundColor: "#6BA08E",
-                  borderRadius: "5px 5px 0 0 ",
-                }}
-                variant="contained"
-              >
-                Agreement
-              </Button>
-              <IconButtonWrapper
-                style={{ marginLeft: "auto" }}
-                aria-label="create"
-                size="small"
-                onClick={() => {
-                  setEditable(!editable);
-                }}
-                data-testid="edit-icon-button"
-              >
-                <NextLink href={""}>
-                  <CreateIcon />
-                </NextLink>
-              </IconButtonWrapper>
-            </div>
-          )}
-
-          <form
-            onSubmit={(e) => editFormHandler(e, formFields)}
-            data-testid="patient-profile-form"
-          >
-            <div>
-              <div style={{ paddingTop: "20px" }}>
-                <div
-                  style={{
-                    padding: "30px",
-                    border: "2px ",
-                    borderStyle: "solid",
-                    borderColor: "#2593A9",
-                    borderRadius: "5px ",
-                    overflow: "visible",
-                    zIndex: 0,
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      marginTop: -45,
-                      left: 50,
-                      backgroundColor: "white",
-                      zIndex: 1,
-                      height: 20,
-                      // width: 150,
-                      color: "#2593A9",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Personal Details
-                  </div>
-
-                  <Box
-                    sx={{ flexGrow: 1, border: "1px solid #cecece" }}
-                    p={5}
-                    borderRadius="7px"
-                  >
-                    <Grid container spacing={2} marginBottom={5}>
-                      <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="patient_firstname"
-                          id="patientFirstname"
-                          label="First Name"
-                          value={formFields?.patient_firstname}
-                          onChange={handleChange}
-                          fullWidth={true}
-                          inputProps={{ "data-testid": "patient_firstname" }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={editable}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="patient_lastname"
-                          id="last_name"
-                          label="Last Name"
-                          value={formFields?.patient_lastname}
-                          onChange={handleChange}
-                          fullWidth={true}
-                          inputProps={{ "data-testid": "patient_lastname" }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={editable}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <Stack spacing={1}>
-                            <DesktopDatePicker
-                              label="Date of birth"
-                              inputFormat="MM/DD/YYYY"
-                              value={formFields?.birthdate}
-                              onChange={handleChange}
-                              disabled={editable}
-                              renderInput={(params) => (
-                                <TextField {...params} />
-                              )}
-                              data-testid="date_of_birth"
-                            />
-                          </Stack>
-                        </LocalizationProvider>
-                      </Grid>
-                    </Grid>
-
-                    <Grid container spacing={2} marginBottom={5}>
-                      <Grid item xs={4}>
-                        <SingleSelectComponent
-                          fullWidth={true}
-                          required={true}
-                          id="patientGenderSelect"
-                          labelId="patientGender"
-                          name="patient_gender"
-                          value={formFields?.patient_gender}
-                          label="Gender"
-                          onChange={handleChange}
-                          inputProps={{ "data-testid": "patient_gender" }}
-                          options={genderOptions}
-                          mappingKeys={["id", "value"]}
-                          size="small"
-                          className="form-control-bg"
-                          disabled={editable}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <SingleSelectComponent
-                          fullWidth={true}
-                          required={true}
-                          id="patientSexuality"
-                          labelId="patientSexuality"
-                          name="patient_sexuality"
-                          value={formFields?.patient_sexuality}
-                          label="Sexuality"
-                          onChange={handleChange}
-                          inputProps={{ "data-testid": "patient_sexuality" }}
-                          options={sexualityOptions}
-                          mappingKeys={["id", "value"]}
-                          size="small"
-                          className="form-control-bg"
-                          disabled={editable}
-                        />
-                      </Grid>
-
-                      <Grid item xs={4}>
-                        <SingleSelectComponent
-                          fullWidth={true}
-                          required={true}
-                          id="patientMaritalStatus"
-                          labelId="patientMaritalStatus"
-                          name="patient_marrital"
-                          value={formFields?.patient_marrital}
-                          label="Marital Status"
-                          onChange={handleChange}
-                          inputProps={{ "data-testid": "patient_marrital" }}
-                          options={maritalStausOption}
-                          mappingKeys={["id", "value"]}
-                          size="small"
-                          className="form-control-bg"
-                          disabled={editable}
-                        />
-                      </Grid>
-                    </Grid>
-
-                    <Grid container spacing={2} marginBottom={5}>
-                      <Grid item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="nhs_no"
-                          id="nhs_no"
-                          label="NHS No."
-                          value={formFields?.nhsno}
-                          onChange={handleChange}
-                          fullWidth={true}
-                          inputProps={{ "data-testid": "nhs_no" }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={editable}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="patient_lang"
-                          id="language"
-                          label="Language"
-                          value={formFields?.patient_lang}
-                          onChange={handleChange}
-                          fullWidth={true}
-                          inputProps={{ "data-testid": "patient_lang" }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={editable}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="region"
-                          id="region"
-                          label="Region"
-                          value={"value"}
-                          onChange={handleChange}
-                          fullWidth={true}
-                          inputProps={{ "data-testid": "region" }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={editable}
-                        />
-                      </Grid>
-                    </Grid>
-
-                    <Grid container spacing={2} marginBottom={5}>
-                      <Grid item xs={4}>
-                        <SingleSelectComponent
-                          fullWidth={true}
-                          required={true}
-                          id="employment"
-                          labelId="employment"
-                          name="patient_employment"
-                          value={formFields?.patient_employment}
-                          label="Employment"
-                          onChange={handleChange}
-                          inputProps={{ "data-testid": "patient_employment" }}
-                          options={employmentOption}
-                          mappingKeys={["id", "value"]}
-                          size="small"
-                          className="form-control-bg"
-                          disabled={editable}
-                        />
-                      </Grid>
-                      <Grid item xs={4}></Grid>
-                      <Grid item xs={4}></Grid>
-                    </Grid>
-                  </Box>
-                </div>
-                <div style={{ paddingTop: "30px", paddingBottom: "30px" }}>
-                  <div
-                    style={{
-                      padding: "30px",
-                      border: "2px ",
-                      borderStyle: "solid",
-                      borderColor: "#2593A9",
-                      borderRadius: "5px ",
-                      overflow: "visible",
-                      zIndex: 0,
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        marginTop: -45,
-                        left: 50,
-                        backgroundColor: "white",
-                        zIndex: 1,
-                        height: 20,
-                        // width: 150,
-                        color: "#2593A9",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Address and Contact Details
-                    </div>
-
-                    <Box
-                      sx={{ flexGrow: 1, border: "1px solid #cecece" }}
-                      p={5}
-                      borderRadius="7px"
-                    >
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="contact_number"
-                            id="contact_number"
-                            label="Contact no"
-                            value={"value"}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "contact_number" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="email_address"
-                            id="email_address"
-                            label="Email Address"
-                            value={formFields?.email}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "email_address" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="home_no"
-                            id="home_no"
-                            label="Home No./Name"
-                            value={formFields?.home_no}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "home_no" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="address_line_1"
-                            id="address_line_1"
-                            label="Address Line 1"
-                            value={"value"}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "address_line_1" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="address_line_2"
-                            id="address_line_2"
-                            label="Address Line 2"
-                            value={formFields?.addressline2}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "address_line_2" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="city"
-                            id="city"
-                            label="City"
-                            value={formFields?.city}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "city" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="postal_code"
-                            id="postal_code"
-                            label="Postal Code"
-                            value={"value"}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "postal_code" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}></Grid>
-                        <Grid item xs={4}></Grid>
-                      </Grid>
-                    </Box>
-                  </div>
-                </div>
-                <div style={{ paddingBottom: "30px" }}>
-                  <div
-                    style={{
-                      padding: "30px",
-                      border: "2px ",
-                      borderStyle: "solid",
-                      borderColor: "#2593A9",
-                      borderRadius: "5px ",
-                      overflow: "visible",
-                      zIndex: 0,
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        marginTop: -45,
-                        left: 50,
-                        backgroundColor: "white",
-                        zIndex: 1,
-                        height: 20,
-                        // width: 150,
-                        color: "#2593A9",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      GP Details
-                    </div>
-
-                    <Box
-                      sx={{ flexGrow: 1, border: "1px solid #cecece" }}
-                      p={5}
-                      borderRadius="7px"
-                    >
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpname"
-                            id="gp_name"
-                            label="Gp Name"
-                            value={formFields?.patient_gpname}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "patient_gpname" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpsurgeryname"
-                            id="surgery_name"
-                            label="Surgery Name"
-                            value={formFields?.patient_gpsurgeryname}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "patient_gpsurgeryname",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpcontactno"
-                            id="constact_number"
-                            label="Contact Number"
-                            value={formFields?.patient_gpcontactno}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "patient_gpcontactno",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpemailaddress"
-                            id="gp_email_address"
-                            label="Email Address"
-                            value={formFields?.patient_gpemailaddress}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "patient_gpemailaddress",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpaddress"
-                            id="gp_address_line_1"
-                            label="Address Line 1"
-                            value={formFields?.patient_gpaddress}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "patient_gpaddress" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpaddressline2"
-                            id="gp_address_line_2"
-                            label="Address Line 2"
-                            value={formFields?.patient_gpaddressline2}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "patient_gpaddressline2",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gpcity"
-                            id="gp_city"
-                            label="City"
-                            value={formFields?.patient_gpcity}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "patient_gpcity" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="patient_gppostalcode"
-                            id="gp_postal_code"
-                            label="Postal Code"
-                            value={formFields?.patient_gppostalcode}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "patient_gppostalcode",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-
-                        <Grid item xs={4}></Grid>
-                      </Grid>
-                    </Box>
-                  </div>
-                </div>
-
-                <div style={{ paddingBottom: "30px" }}>
-                  <div
-                    style={{
-                      padding: "30px",
-                      border: "2px ",
-                      borderStyle: "solid",
-                      borderColor: "#2593A9",
-                      borderRadius: "5px ",
-                      overflow: "visible",
-                      zIndex: 0,
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: "absolute",
-                        marginTop: -45,
-                        left: 50,
-                        backgroundColor: "white",
-                        zIndex: 1,
-                        height: 20,
-                        // width: 150,
-                        color: "#2593A9",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Next of kin details
-                    </div>
-
-                    <Box
-                      sx={{ flexGrow: 1, border: "1px solid #cecece" }}
-                      p={5}
-                      borderRadius="7px"
-                    >
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_name"
-                            id="next_name"
-                            label="Name"
-                            value={formFields?.kin_name}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "next_name" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <SingleSelectComponent
-                            fullWidth={true}
-                            required={true}
-                            id="relationship"
-                            labelId="relationship"
-                            name="relationship"
-                            value={formFields?.kin_relationship}
-                            label="Relationship"
-                            onChange={handleChange}
-                            inputProps={{ "data-testid": "kin_relationship" }}
-                            options={relationshipStausOption}
-                            mappingKeys={["id", "value"]}
-                            size="small"
-                            className="form-control-bg"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_contact_no"
-                            id="next_contact_no"
-                            label="Contact No"
-                            value={formFields?.kin_contact_no}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "next_contact_no" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid style={{ alignSelf: "stretch" }} item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_email_address"
-                            id="next_email_address"
-                            label="Email Address"
-                            value={formFields?.kin_email_address}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "next_email_address" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_address_line_1"
-                            id="next_address_line_1"
-                            label="Address Line 1"
-                            value={formFields?.kin_addressline1}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "next_address_line_1",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_address_line_2"
-                            id="next_address_line_2"
-                            label="Address Line 2"
-                            value={formFields?.kin_addressline2}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "next_address_line_2",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid container spacing={2} marginBottom={5}>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_city"
-                            id="next_city"
-                            label="City"
-                            value={formFields?.kin_city}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "next_city" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}>
-                          <TextFieldComponent
-                            required={true}
-                            name="next_postal_code"
-                            id="next_postal_code"
-                            label="Postal Code"
-                            value={formFields?.kin_postal}
-                            onChange={handleChange}
-                            fullWidth={true}
-                            inputProps={{ "data-testid": "next_postal_code" }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                            disabled={editable}
-                          />
-                        </Grid>
-                        <Grid item xs={4}></Grid>
-                      </Grid>
-                    </Box>
-                  </div>
-                </div>
-                {!editable ? (
-                  <Grid container spacing={2} marginBottom={5}>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="editProfileSubmitButton"
-                        variant="contained"
-                        type="submit"
-                        style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                      >
-                        Save
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="editCancleSubmitButton"
-                        variant="contained"
-                        type="submit"
-                        onClick={() => {
-                          setEditable(!editable);
-                          setFormFields(profileData?.getProfileById);
-                        }}
-                        style={{
-                          paddingLeft: "40px",
-                          paddingRight: "40px",
-                          backgroundColor: "#6BA08E",
-                        }}
-                      >
-                        Cancle
-                      </Button>
-                    </Grid>
-                  </Grid>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-          </form>
+          <TabsGenerator
+            editable={editable}
+            tabsList={tabs}
+            activeTabs="prsonal-info"
+          />
         </div>
       </Layout>
     </>
