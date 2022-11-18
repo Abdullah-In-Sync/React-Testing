@@ -36,14 +36,14 @@ import {
   TextareaAutosize,
   Snackbar,
 } from "@mui/material";
-import { buildPatientTokenValidationQuery } from "../../../lib/helpers/auth";
 import withAuthentication from "../../../hoc/auth";
+import { useAppContext } from "../../../contexts/AuthContext";
 
 const Feedback: NextPage = () => {
   const [therapy, setTherapy] = useState<string>("");
-  const [feedbackType, setFeedbackType] = useState<string>("session");
+  const [feedbackType, setFeedbackType] = useState<string>(null);
   const [formValues, setFormValues] = useState([]);
-  const [sessionNo, setSessionNo] = useState(1);
+  const [sessionNo, setSessionNo] = useState(null);
   const [loader, setLoader] = useState<boolean>(false);
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
     string | false
@@ -51,15 +51,12 @@ const Feedback: NextPage = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [erroropen, setErrorOpen] = useState<boolean>(false);
   const [btndiabled, setBtndiabled] = useState<boolean>(false);
-  const [therapistId, settherapistId] = useState<string>("");
+  const { user: { patient_data: { therapist_id: therapistId } } = {} } =
+    useAppContext();
   const { enqueueSnackbar } = useSnackbar();
   let btnvalue = 0;
   let ansvalue = 0;
-  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
-    (tokenData) => {
-      settherapistId(tokenData.patient_data.therapist_id);
-    }
-  );
+
   const [
     getPatientTherapyData,
     { loading: therapyLoading, data: patientTherapryData },
@@ -87,6 +84,9 @@ const Feedback: NextPage = () => {
         setSessionNo(1);
       }
     },
+    onError: (error) => {
+      console.debug(error, "error");
+    },
   });
 
   const [
@@ -99,14 +99,14 @@ const Feedback: NextPage = () => {
     setSessionPanelExpanded(false);
   };
 
-  useEffect(() => {
-    setLoader(true);
-    setDefaultStateExcludingLoader();
-    gettokenData({ variables: {} });
-  }, []);
+  // useEffect(() => {
+  //   setLoader(true);
+  //   setDefaultStateExcludingLoader();
+  // }, []);
 
   useEffect(() => {
     setLoader(true);
+    console.debug("getPatientTherapyData: effecr");
     getPatientTherapyData({ variables: {} });
   }, [therapistId]);
 
@@ -115,6 +115,7 @@ const Feedback: NextPage = () => {
     getPatientSessionData({
       variables: { pttherapyId: therapy },
     });
+    console.log("therapy-changed", therapy);
   }, [therapy]);
 
   useEffect(() => {
@@ -128,10 +129,11 @@ const Feedback: NextPage = () => {
     });
   }, [sessionNo, feedbackType]);
 
+  console.debug(patientSessionData, "patientSessionData");
+
   useEffect(() => {
     /* istanbul ignore else */
     if (
-      !tokenLoading &&
       !therapyLoading &&
       !feedbackLoading &&
       !sessionLoading &&
@@ -160,6 +162,7 @@ const Feedback: NextPage = () => {
     setLoader(true);
     setDefaultStateExcludingLoader();
     setTherapy(event.target.value);
+    console.debug("therepy changed to", event.target.value);
   };
 
   const handleSessionPanelChange =
@@ -303,6 +306,7 @@ const Feedback: NextPage = () => {
             patientSessionData?.getPatientSessionList.map((v, k) => {
               const p = k + 1;
               const panelName = "panel" + p;
+              console.debug(panelName);
               return (
                 <form
                   key={p}

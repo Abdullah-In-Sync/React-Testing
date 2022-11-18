@@ -387,19 +387,6 @@ describe("Patient feedback list", () => {
     );
   });
 
-  test("can select a different therapy", async () => {
-    const patient_id = mockDataMap["first_patient_id"];
-    await sut(patient_id);
-    const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
-    fireEvent.change(screen.queryByTestId("selectTherapy"), {
-      target: { value: patientTherapyId },
-    });
-
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
-      filteredPatientSessionList(patientTherapyId).length
-    );
-  });
-
   test("can expand and collapse when clicked", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
