@@ -207,4 +207,4 @@ const ResourceById: NextPage = () => {
     </>
   );
 };
-export default withAuthentication(ResourceById);
+export default withAuthentication(ResourceById, ["admin"]);

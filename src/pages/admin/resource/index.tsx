@@ -622,4 +622,4 @@ const Resource: NextPage = () => {
   );
 };
 
-export default withAuthentication(Resource);
+export default withAuthentication(Resource, ["admin"]);

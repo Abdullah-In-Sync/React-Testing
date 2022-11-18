@@ -15,6 +15,9 @@ import {
 import { POST_PATIENT_FEEDBACK } from "../graphql/mutation";
 import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
 import { Guid } from "guid-typescript";
+import { useAppContext } from "../contexts/AuthContext";
+
+jest.mock("../contexts/AuthContext");
 
 interface MockOptions {
   getPatientFeedbackList: boolean;
@@ -335,6 +338,24 @@ const { mocks, mockDataMap } = buildMocks();
 
 // tests
 describe("Patient feedback list", () => {
+  beforeEach(() => {
+    (useAppContext as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: {
+        _id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+        user_type: "patient",
+        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+        perm_ids: "9,10,14,21,191,65,66",
+        user_status: "1",
+        created_date: "2021-12-20 16:20:55",
+        updated_date: "2021-12-20 16:20:55",
+        patient_data: {
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+        },
+      },
+    });
+  });
+
   test("is collaped by default", async () => {
     const patient_id = mockDataMap["first_patient_id"];
 
@@ -363,19 +384,6 @@ describe("Patient feedback list", () => {
     const _pt = filteredPatientTherapy(patient_id, 0);
     expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
       filteredPatientSessionList(_pt._id).length
-    );
-  });
-
-  test("can select a different therapy", async () => {
-    const patient_id = mockDataMap["first_patient_id"];
-    await sut(patient_id);
-    const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
-    fireEvent.change(screen.queryByTestId("selectTherapy"), {
-      target: { value: patientTherapyId },
-    });
-
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
-      filteredPatientSessionList(patientTherapyId).length
     );
   });
 

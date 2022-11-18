@@ -9,6 +9,7 @@ import AudioClips from "../../../components/patient/audioClips";
 import VideoClips from "../../../components/patient/videoClips";
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
+import withAuthentication from "../../../hoc/auth";
 
 const tabs = [
   {
@@ -44,4 +45,4 @@ const Resource: NextPage = () => {
   );
 };
 
-export default Resource;
+export default withAuthentication(Resource, ["patient"]);

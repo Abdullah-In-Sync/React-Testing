@@ -47,7 +47,8 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 import NextLink from "next/link";
-import { GET_THERAPIST_TOKEN_DATA } from "../../../graphql/query/common";
+import withAuthentication from "../../../hoc/auth";
+import { useAppContext } from "../../../contexts/AuthContext";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -171,10 +172,11 @@ const Resource: NextPage = () => {
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [shareResource] = useMutation(SHARE_RESOURCE);
+  const {
+    user: { _id: userId, therapist_data: { org_id: orgId = "" } = {} },
+  } = useAppContext();
 
-  const [userId, setuserId] = useState<string>("");
-  const [orgId, setorgId] = useState<string>("");
-  const [shareResId, setshareResId] = useState<string>("");
+  const [shareResId, setShareResId] = useState<string>("");
   const [isPatientDialogOpen, setIsPatientDialogOpen] =
     useState<boolean>(false);
   const theme = useTheme();
@@ -184,26 +186,8 @@ const Resource: NextPage = () => {
   const closeSelectDialog = () => {
     setIsPatientDialogOpen(false);
     setPatientId([]);
-    setshareResId("");
+    setShareResId("");
   };
-
-  useQuery(GET_THERAPIST_TOKEN_DATA, {
-    onCompleted: async (data) => {
-      /* istanbul ignore next */
-      if (data.getTokenData) {
-        const user_type: string = data!.getTokenData.user_type;
-
-        /* istanbul ignore next */
-        if (user_type !== "therapist") {
-          window.location.href =
-            "https://" + window.location.hostname + "/account";
-        } else {
-          setorgId(data!.getTokenData.therapist_data.org_id);
-          setuserId(data!.getTokenData._id);
-        }
-      }
-    },
-  });
 
   // GRAPHQL
   const {
@@ -359,7 +343,7 @@ const Resource: NextPage = () => {
             data-testid={"shareIcon_" + value?._id}
             onClick={() => {
               setIsPatientDialogOpen(true);
-              setshareResId(value?._id);
+              setShareResId(value?._id);
             }}
           >
             <RedoIcon />
@@ -516,7 +500,7 @@ const Resource: NextPage = () => {
       onCompleted: (data) => {
         if (data && data.therapistShareResource.result) {
           setPatientId([]);
-          setshareResId("");
+          setShareResId("");
           enqueueSnackbar("Resource has been shared successfully!", {
             variant: "success",
           });
@@ -693,4 +677,4 @@ const Resource: NextPage = () => {
   );
 };
 
-export default Resource;
+export default withAuthentication(Resource, ["therapist"]);
