@@ -107,9 +107,15 @@ export default function ProfileForm(props: propTypes) {
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
 
-  // date picker
-  const [value, setValue] = useState<Dayjs | null>(dayjs("02-11-2022"));
-  console.log("VALUE DATE: ", value);
+  const changeDate = (date: string) => {
+    console.log("inside: date ", date);
+
+    setFormFields((prev) => ({
+      ...prev,
+      birthdate: dayjs(date).format("DD-MM-YYYY"),
+    }));
+  };
+
   //Queries GraphQl
 
   const [getPatientData, { loading: profileLoading, data: profileData }] =
@@ -225,42 +231,20 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <Stack spacing={1}>
-                        {/* <DesktopDatePicker
-                          className="small"
-                          label="Date of birth"
-                          inputFormat="MM/DD/YYYY"
-                          value={formFields?.birthdate}
-                          onChange={handleChange}
-                          disabled={props.disabled}
-                          renderInput={(params) => <TextField {...params} />}
-                          data-testid="date_of_birth"
-                        /> */}
-
-                        {/* <DatePicker
-                          disableFuture
-                          label="Date of birth"
-                          openTo="year"
-                          disabled={props.disabled}
-                          views={["year", "month", "day"]}
-                          value={dayjs(formFields?.birthdate)}
-                          onChange={(newValue) => {
-                            console.log("newValue: ", newValue);
-                            setValue(dayjs(newValue));
-                          }}
-                          renderInput={(params) => <TextField {...params} />}
-                        /> */}
-
                         <DatePicker
+                          InputProps={{
+                            sx: {
+                              height: "40px",
+                            },
+                          }}
                           disableFuture
+                          inputFormat="DD-MM-YYYY"
                           disabled={props.disabled}
                           label="Date of Birth"
                           openTo="year"
                           views={["year", "month", "day"]}
-                          // value={value}
-                          value={value}
-                          onChange={(newValue) => {
-                            setValue(newValue);
-                          }}
+                          value={formFields?.birthdate}
+                          onChange={changeDate}
                           renderInput={(params) => <TextField {...params} />}
                         />
                       </Stack>

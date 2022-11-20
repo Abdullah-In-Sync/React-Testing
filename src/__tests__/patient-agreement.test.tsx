@@ -109,7 +109,7 @@ mocksData.push({
       nhsNo: "",
       postalCode: "",
       religion: "",
-      update: { patient_consent: 1, patient_contract: 0 },
+      update: { patient_consent: 1, patient_contract: 1 },
     },
   },
   result: {
@@ -153,18 +153,31 @@ const sut = async () => {
       </SnackbarProvider>
     </MockedProvider>
   );
-  //   await waitForElementToBeRemoved(() =>
+
   screen.queryByTestId("activity-indicator");
-  //   );
 };
 
 describe("Agreement Page", () => {
+  it("Click on submit button without checkbox", async () => {
+    await sut();
+    expect(screen.getByTestId("agreement-form")).toBeInTheDocument();
+
+    await waitFor(async () => {
+      fireEvent.submit(screen.queryByTestId("agreementSubmitButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Please select the checkbox.")
+      ).toBeInTheDocument();
+    });
+  });
+
   it("Click and submit agreement page", async () => {
     await sut();
     expect(screen.getByTestId("agreement-form")).toBeInTheDocument();
 
     fireEvent.click(screen.queryByTestId("patient_consent"));
-    fireEvent.click(screen.queryByTestId("patient_contract"));
 
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("agreementSubmitButton"));

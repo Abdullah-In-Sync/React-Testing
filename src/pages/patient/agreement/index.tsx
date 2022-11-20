@@ -7,6 +7,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/router";
 
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
@@ -67,6 +68,7 @@ const defaultFormValue = {
 };
 
 export default function Agreement() {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
   const [userType, setUserType] = useState<any>("patient");
@@ -103,8 +105,10 @@ export default function Agreement() {
   const editFormHandler = (e, formFields: patientEditProfileFormFeild) => {
     e.preventDefault();
     setLoader(true);
-
-    if (!formFields?.patient_contract && !formFields?.patient_consent) {
+    if (
+      formFields?.patient_contract === 0 ||
+      formFields?.patient_consent === 0
+    ) {
       enqueueSnackbar("Please select the checkbox.", {
         variant: "error",
         autoHideDuration: 2000,
@@ -145,6 +149,7 @@ export default function Agreement() {
             enqueueSnackbar("Agreement successfull", {
               variant: "success",
             });
+            router.reload();
           }
         },
         onError: (error) => {
@@ -588,39 +593,39 @@ export default function Agreement() {
                   </Grid>
                 </Grid>
               </div>
-              {profileData?.getProfileById.patient_consent ||
+              {/* {profileData?.getProfileById.patient_consent ||
               profileData?.getProfileById.patient_contract === 1 ? (
                 ""
-              ) : (
-                <div style={{ paddingTop: "25px" }}>
-                  <Grid container spacing={2} marginBottom={5}>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="agreementSubmitButton"
-                        variant="contained"
-                        type="submit"
-                        style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                      >
-                        Save
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="editCancleSubmitButton"
-                        variant="contained"
-                        type="submit"
-                        style={{
-                          paddingLeft: "40px",
-                          paddingRight: "40px",
-                          backgroundColor: "#6BA08E",
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </Grid>
+              ) : ( */}
+              <div style={{ paddingTop: "25px" }}>
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={6} textAlign="center">
+                    <Button
+                      data-testid="agreementSubmitButton"
+                      variant="contained"
+                      type="submit"
+                      style={{ paddingLeft: "50px", paddingRight: "50px" }}
+                    >
+                      Save
+                    </Button>
                   </Grid>
-                </div>
-              )}
+                  <Grid item xs={6} textAlign="center">
+                    <Button
+                      data-testid="editCancleSubmitButton"
+                      variant="contained"
+                      style={{
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                        backgroundColor: "#6BA08E",
+                      }}
+                      onClick={() => router.reload()}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
+              {/* // )} */}
             </div>
           </div>
         </div>
