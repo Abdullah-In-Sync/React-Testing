@@ -101,7 +101,6 @@ const PatientById: NextPage = () => {
       },
     });
 
-  // console.debug("Main page profileData", profileData);
   const [updatePatient] = useMutation(UPDATE_PROFILE_DATA);
 
   //USE EFFECT

@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import Cookies from "js-cookie";
 
 import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -15,8 +14,10 @@ import {
 } from "../../../utility/sideNavItems";
 import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
 import { useLazyQuery } from "@apollo/client";
-import { buildPatientTokenValidationQuery } from "../../../lib/helpers/auth";
+
 import Loader from "../../common/Loader";
+import { useAppContext } from "../../../contexts/AuthContext";
+import withAuthentication from "../../../hoc/auth";
 
 const listItem = {
   paddingTop: "0px",
@@ -146,23 +147,18 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
-function SidebarMenu() {
+const SidebarMenu = () => {
   const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [userType, setUserType] = useState("");
+  // const [userType, setUserType] = useState("");
   const [loader, setLoader] = useState<boolean>(false);
   const [test, setTest] = useState(0);
 
-  useEffect(() => setUserType(Cookies.get("user_type")), []);
-
-  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
-    (tokenData) => {
-      setUserType(tokenData.user_type);
-    }
-  );
-
+  const {
+    user: { user_type: userType },
+  } = useAppContext();
   const [
     getPatientData,
     { loading: profileLoading, data: profileData, refetch },
@@ -201,7 +197,7 @@ function SidebarMenu() {
 
   useEffect(() => {
     setLoader(true);
-    gettokenData({ variables: {} });
+    getPatientData({ variables: { groupName: "patient" } });
   }, []);
 
   useEffect(() => {
@@ -209,14 +205,8 @@ function SidebarMenu() {
   }, []);
 
   useEffect(() => {
-    setLoader(true);
-    getPatientData({ variables: { groupName: "patient" } });
-    setLoader(false);
-  }, [userType]);
-
-  useEffect(() => {
     /* istanbul ignore else */
-    if (!tokenLoading && !profileLoading) {
+    if (!profileLoading) {
       setLoader(false);
     }
   }, []);
@@ -312,6 +302,7 @@ function SidebarMenu() {
       </MenuWrapper>
     </>
   );
-}
+};
 
-export default SidebarMenu;
+// export default SidebarMenu;
+export default withAuthentication(SidebarMenu, ["patient"]);
