@@ -14,11 +14,7 @@ export default function withAuthentication<T>(
     useEffect(() => {
       if (!isAuthenticated) {
         window.location.href = env.v1.rootUrl;
-      } else if (
-        user?.user_type != "admin" &&
-        allowOnly &&
-        !allowOnly.includes(user?.user_type)
-      ) {
+      } else if (allowOnly && !allowOnly.includes(user?.user_type)) {
         window.location.href = `${env.v1.rootUrl}/${user?.user_type}/dashboard`;
       }
     }, []);
