@@ -11,7 +11,7 @@ import { patientProfileFormFeild } from "../../../utility/types/resource_types";
 import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 const defaultFormValue = {
   _id: "",
@@ -108,8 +108,6 @@ export default function ProfileForm(props: propTypes) {
     useState<patientProfileFormFeild>(defaultFormValue);
 
   const changeDate = (date: string) => {
-    console.log("inside: date ", date);
-
     setFormFields((prev) => ({
       ...prev,
       birthdate: dayjs(date).format("DD-MM-YYYY"),
@@ -126,9 +124,6 @@ export default function ProfileForm(props: propTypes) {
         }
       },
     });
-  console.log("Koca: profileData ", profileData);
-
-  console.log("props.userType", props.userType);
 
   useEffect(() => {
     props.setLoader(true);
@@ -153,8 +148,7 @@ export default function ProfileForm(props: propTypes) {
 
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
   };
-  console.log("formFields?.birthdate: ", formFields?.birthdate);
-  console.log("dayjs(formFields?.birthdate): ", dayjs(formFields?.birthdate));
+
   return (
     <>
       <form

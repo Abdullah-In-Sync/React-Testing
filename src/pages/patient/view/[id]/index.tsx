@@ -8,8 +8,6 @@ import { IconButton, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
 
-import NextLink from "next/link";
-
 import { GET_PROFILE_DATA } from "../../../../graphql/query/patient";
 import {
   patientEditProfileFormFeild,
@@ -22,7 +20,7 @@ import Agreement from "../../agreement";
 
 import TabsGenerator from "../../../../components/common/TabsGenerator";
 import ProfileForm from "../../../../components/common/ProfileForm/profileForm";
-import Stack from "@mui/material/Stack";
+
 import withAuthentication from "../../../../hoc/auth";
 import { useAppContext } from "../../../../contexts/AuthContext";
 
@@ -161,7 +159,7 @@ const PatientById: NextPage = () => {
             patient_firstname: formFields.patient_firstname,
             patient_lang: formFields?.patient_lang,
             patient_employment: formFields?.patient_employment,
-            //gp
+
             patient_gpemailaddress: formFields?.patient_gpemailaddress,
             patient_gppostalcode: formFields?.patient_gppostalcode,
             patient_gpsurgeryname: formFields?.patient_gpsurgeryname,
@@ -173,7 +171,6 @@ const PatientById: NextPage = () => {
           },
         },
         onCompleted: (data) => {
-          console.debug("data", data);
           console.log("data: ", data);
           if (data && data.updateProfileById) {
             enqueueSnackbar("Profile edit successfully", {
@@ -184,7 +181,6 @@ const PatientById: NextPage = () => {
         },
         onError: (error) => {
           console.log("data error: ", error);
-          console.debug("data error: ", error);
 
           enqueueSnackbar("Something is wrong", { variant: "error" });
         },
@@ -280,9 +276,7 @@ const PatientById: NextPage = () => {
                   }}
                   data-testid="edit-icon-button"
                 >
-                  <NextLink href={""}>
-                    <CreateIcon />
-                  </NextLink>
+                  <CreateIcon />
                 </IconButtonWrapper>
               </div>
             </div>

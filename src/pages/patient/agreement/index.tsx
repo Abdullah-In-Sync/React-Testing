@@ -13,9 +13,11 @@ import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import CheckBoxLabelComponent from "../../../components/common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
 import Loader from "../../../components/common/Loader";
+import { useAppContext } from "../../../contexts/AuthContext";
 import { UPDATE_PROFILE_DATA } from "../../../graphql/mutation/patient";
 import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
-import { buildPatientTokenValidationQuery } from "../../../lib/helpers/auth";
+import withAuthentication from "../../../hoc/auth";
+
 import {
   patientEditProfileFormFeild,
   patientProfileFormFeild,
@@ -67,19 +69,16 @@ const defaultFormValue = {
   postal_code: "",
 };
 
-export default function Agreement() {
+const Agreement = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
-  const [userType, setUserType] = useState<any>("patient");
+
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
-
-  const [gettokenData, tokenLoading] = buildPatientTokenValidationQuery(
-    (tokenData) => {
-      setUserType(tokenData.user_type);
-    }
-  );
+  const {
+    user: { user_type: userType },
+  } = useAppContext();
 
   const [getPatientData, { loading: profileLoading, data: profileData }] =
     useLazyQuery(GET_PROFILE_DATA, {
@@ -166,7 +165,6 @@ export default function Agreement() {
 
   useEffect(() => {
     setLoader(true);
-    gettokenData({ variables: {} });
   }, []);
 
   useEffect(() => {
@@ -177,7 +175,7 @@ export default function Agreement() {
 
   useEffect(() => {
     /* istanbul ignore else */
-    if (!tokenLoading && !profileLoading) {
+    if (!profileLoading) {
       setLoader(false);
     }
   }, [profileData]);
@@ -593,43 +591,45 @@ export default function Agreement() {
                   </Grid>
                 </Grid>
               </div>
-              {/* {profileData?.getProfileById.patient_consent ||
+              {profileData?.getProfileById.patient_consent ||
               profileData?.getProfileById.patient_contract === 1 ? (
                 ""
-              ) : ( */}
-              <div style={{ paddingTop: "25px" }}>
-                <Grid container spacing={2} marginBottom={5}>
-                  <Grid item xs={6} textAlign="center">
-                    <Button
-                      data-testid="agreementSubmitButton"
-                      variant="contained"
-                      type="submit"
-                      style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                    >
-                      Save
-                    </Button>
+              ) : (
+                <div style={{ paddingTop: "25px" }}>
+                  <Grid container spacing={2} marginBottom={5}>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="agreementSubmitButton"
+                        variant="contained"
+                        type="submit"
+                        style={{ paddingLeft: "50px", paddingRight: "50px" }}
+                      >
+                        Save
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="editCancleSubmitButton"
+                        variant="contained"
+                        style={{
+                          paddingLeft: "40px",
+                          paddingRight: "40px",
+                          backgroundColor: "#6BA08E",
+                        }}
+                        onClick={() => router.reload()}
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6} textAlign="center">
-                    <Button
-                      data-testid="editCancleSubmitButton"
-                      variant="contained"
-                      style={{
-                        paddingLeft: "40px",
-                        paddingRight: "40px",
-                        backgroundColor: "#6BA08E",
-                      }}
-                      onClick={() => router.reload()}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Grid>
-              </div>
-              {/* // )} */}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </form>
     </>
   );
-}
+};
+
+export default withAuthentication(Agreement, ["patient"]);
