@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import Cookies from "js-cookie";
 
 import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -11,7 +10,14 @@ import {
   superadmin_routes,
   patient_routes,
   therapistRoutes,
+  default_patient_routes,
 } from "../../../utility/sideNavItems";
+import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
+import { useLazyQuery } from "@apollo/client";
+
+import Loader from "../../common/Loader";
+import { useAppContext } from "../../../contexts/AuthContext";
+import withAuthentication from "../../../hoc/auth";
 
 const listItem = {
   paddingTop: "0px",
@@ -141,17 +147,37 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
-function SidebarMenu() {
+const SidebarMenu = () => {
   const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [userType, setUserType] = useState("");
+  // const [userType, setUserType] = useState("");
+  const [loader, setLoader] = useState<boolean>(false);
+  const [test, setTest] = useState(0);
 
-  useEffect(() => setUserType(Cookies.get("user_type")), []);
+  const {
+    user: { user_type: userType },
+  } = useAppContext();
+  const [
+    getPatientData,
+    { loading: profileLoading, data: profileData, refetch },
+  ] = useLazyQuery(GET_PROFILE_DATA, {
+    onCompleted: (data) => {
+      console.debug("get profile data", data);
+    },
+  });
+
+  useEffect(() => {
+    console.log("Koca: 1profileData ", profileData);
+    setTest(
+      profileData?.getProfileById.patient_consent &&
+        profileData?.getProfileById.patient_contract
+    );
+  }, [profileData]);
 
   const userRoute = {
-    patient: patient_routes,
+    patient: test ? patient_routes : default_patient_routes,
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };
@@ -169,8 +195,26 @@ function SidebarMenu() {
     });
   };
 
+  useEffect(() => {
+    setLoader(true);
+    getPatientData({ variables: { groupName: "patient" } });
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    /* istanbul ignore else */
+    if (!profileLoading) {
+      setLoader(false);
+    }
+  }, []);
+
   return (
     <>
+      <Loader visible={loader} />
+
       <MenuWrapper data-testid="sideBar">
         <List component="div">
           <SubMenuWrapper>
@@ -258,6 +302,7 @@ function SidebarMenu() {
       </MenuWrapper>
     </>
   );
-}
+};
 
-export default SidebarMenu;
+// export default SidebarMenu;
+export default withAuthentication(SidebarMenu, ["patient"]);

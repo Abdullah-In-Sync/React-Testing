@@ -40,6 +40,11 @@ export type editResourceFormField = {
   disorder_detail: string;
   model_detail: string;
 };
+export type patientAgreementFormFeild = {
+  _id: string;
+  patient_contract: number;
+  patient_consent: number;
+};
 
 export type patientProfileFormFeild = {
   _id: string;
@@ -76,15 +81,21 @@ export type patientProfileFormFeild = {
   kin_name: string;
   kin_relationship: string;
   nhsno: string;
-  patient_consent: string;
+  patient_consent: number;
   patient_availability: string;
   org_id: string;
   city: string;
+  religion: string;
+  patient_status: string;
+
+  phone_number: string;
+  postal_code: string;
 };
 
 export type patientEditProfileFormFeild = {
   _id: string;
   birthdate: string;
+  patient_consent: number;
   patient_contract: number;
   patient_employment: string;
   patient_firstname: string;
@@ -103,4 +114,24 @@ export type patientEditProfileFormFeild = {
   patient_no: string;
   patient_sexuality: string;
   __typename: string;
+  //
+
+  patient_status: string;
+  patient_availability: string;
+  email: string;
+  phone_number: string;
+  postal_code: string;
+  kin_contact_no: string;
+  kin_city: string;
+  kin_postal: string;
+  addressline2: string;
+  kin_addressline2: string;
+  kin_addressline1: string;
+  kin_relationship: string;
+  nhsno: string;
+  home_no: string;
+  kin_email_address: string;
+  kin_name: string;
+  city: string;
+  religion: string;
 };
