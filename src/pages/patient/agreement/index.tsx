@@ -445,8 +445,15 @@ const Agreement = () => {
                 in force from time to time when processing personal data
                 relating to You.
               </p>
+            </div>
 
-              <h4>5. Supervision</h4>
+            <h4>5. Supervision</h4>
+            <div
+              style={{
+                fontFamily: "Montserrat",
+                fontSize: "12px",
+              }}
+            >
               <p>
                 5.1 The Therapist is required to carry out continuing
                 professional development and engage in regular on-going clinical
@@ -454,10 +461,16 @@ const Agreement = () => {
                 information with their supervisor. This is to help ensure that
                 the Therapy Services You receive are ethical and professional.
               </p>
-              <h4>
-                6.Limitation of Liability: Your Attention is drawn to this
-                clause
-              </h4>
+            </div>
+            <h4>
+              6.Limitation of Liability: Your Attention is drawn to this clause
+            </h4>
+            <div
+              style={{
+                fontFamily: "Montserrat",
+                fontSize: "12px",
+              }}
+            >
               <p>
                 6.1 The Therapist shall maintain appropriate insurance for the
                 duration of this agreement with a reputable insurer to insure
@@ -465,7 +478,6 @@ const Agreement = () => {
                 Services.
               </p>
             </div>
-
             <h4>7. Ending this Agreement</h4>
             <div
               style={{
