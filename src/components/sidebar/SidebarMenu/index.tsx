@@ -17,7 +17,6 @@ import { useLazyQuery } from "@apollo/client";
 
 import Loader from "../../common/Loader";
 import { useAppContext } from "../../../contexts/AuthContext";
-import withAuthentication from "../../../hoc/auth";
 
 const listItem = {
   paddingTop: "0px",
@@ -152,26 +151,23 @@ const SidebarMenu = () => {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  // const [userType, setUserType] = useState("");
   const [loader, setLoader] = useState<boolean>(false);
   const [test, setTest] = useState(0);
 
   const {
     user: { user_type: userType },
   } = useAppContext();
-  const [
-    getPatientData,
-    { loading: profileLoading, data: profileData, refetch },
-  ] = useLazyQuery(GET_PROFILE_DATA, {
-    onCompleted: (data) => {
-      console.debug("get profile data", data);
-    },
-  });
+
+  const [getPatientData, { loading: profileLoading, data: profileData }] =
+    useLazyQuery(GET_PROFILE_DATA, {
+      onCompleted: (data) => {
+        console.debug("get profile data", data);
+      },
+    });
 
   useEffect(() => {
-    console.log("Koca: 1profileData ", profileData);
     setTest(
-      profileData?.getProfileById.patient_consent &&
+      profileData?.getProfileById?.patient_consent &&
         profileData?.getProfileById.patient_contract
     );
   }, [profileData]);
@@ -198,10 +194,6 @@ const SidebarMenu = () => {
   useEffect(() => {
     setLoader(true);
     getPatientData({ variables: { groupName: "patient" } });
-  }, []);
-
-  useEffect(() => {
-    refetch();
   }, []);
 
   useEffect(() => {
@@ -304,5 +296,4 @@ const SidebarMenu = () => {
   );
 };
 
-// export default SidebarMenu;
-export default withAuthentication(SidebarMenu, ["patient"]);
+export default SidebarMenu;

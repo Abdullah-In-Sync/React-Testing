@@ -16,7 +16,6 @@ import Loader from "../../../components/common/Loader";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { UPDATE_PROFILE_DATA } from "../../../graphql/mutation/patient";
 import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
-import withAuthentication from "../../../hoc/auth";
 
 import {
   patientEditProfileFormFeild,
@@ -644,4 +643,5 @@ const Agreement = () => {
   );
 };
 
-export default withAuthentication(Agreement, ["patient"]);
+// export default withAuthentication(Agreement, ["patient"]);
+export default Agreement;
