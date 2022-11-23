@@ -1,4 +1,4 @@
-import { screen, render, fireEvent, waitFor } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 
@@ -6,10 +6,9 @@ jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
 }));
-import Agreement from "../pages/patient/agreement";
-import { GET_ADMIN_TOKEN_DATA, GET_TOKEN_DATA } from "../graphql/query/common";
-import { GET_PROFILE_DATA } from "../graphql/query/patient";
-import { UPDATE_PROFILE_DATA } from "../graphql/mutation/patient";
+
+import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
+
 import { useAppContext } from "../contexts/AuthContext";
 import TemplateList from "../pages/admin/resource/templateList";
 import { GET_TEMPLATE_LIST } from "../graphql/query/resource";
