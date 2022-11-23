@@ -15,7 +15,9 @@ export default function withAuthentication<T>(
       if (!isAuthenticated) {
         window.location.href = env.v1.rootUrl;
       } else if (allowOnly && !allowOnly.includes(user?.user_type)) {
-        window.location.href = `${env.v1.rootUrl}/${user?.user_type}/dashboard`;
+        window.location.href = `${env.v1.rootUrl}/${
+          user?.user_type == "admin" ? "superadmin" : user?.user_type
+        }/dashboard`;
       }
     }, []);
 
