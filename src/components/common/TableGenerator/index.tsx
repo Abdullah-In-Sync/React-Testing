@@ -120,8 +120,6 @@ const TableGenerator = ({
   showPagination = true,
   ...props
 }) => {
-  console.log("DATA: ", data);
-  console.log("Fields: ", fields);
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState(initialSort);
   const [page, setPage] = useState(0);
