@@ -45,12 +45,14 @@ type RoutesType =
       label: string;
       path: string;
       icon: JSX.Element;
+      showNow?: number;
     }
   | {
       key: number;
       label: string;
       path: string;
       icon: JSX.Element;
+      showNow?: number;
     }[];
 
 //** SUPER ADMIN ROUTES **//
@@ -274,6 +276,7 @@ export const patient_routes: RoutesType[] = [
     label: "Home",
     path: Link + "/patient/dashboard",
     icon: <HomeIcon />,
+    showNow: 1,
   },
   {
     key: 2,
@@ -361,5 +364,21 @@ export const patient_routes: RoutesType[] = [
     label: "Feedback",
     path: "/patient/feedback",
     icon: <StyleIcon />,
+  },
+];
+
+export const default_patient_routes: RoutesType[] = [
+  {
+    key: 1,
+    label: "Home",
+    path: Link + "/patient/dashboard",
+    icon: <HomeIcon />,
+    showNow: 1,
+  },
+  {
+    key: 2,
+    label: "My Profile",
+    path: "/patient/view/" + patientId,
+    icon: <PersonIcon />,
   },
 ];
