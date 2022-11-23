@@ -39,14 +39,14 @@ const TemplateList = () => {
       key: "name",
       columnName: "Template Name",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) => val,
     },
 
     {
       key: "category",
       columnName: "Category",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) => val,
     },
 
     {

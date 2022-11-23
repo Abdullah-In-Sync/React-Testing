@@ -68,6 +68,7 @@ mocksData.push(
   {
     request: {
       query: GET_TEMPLATE_LIST,
+      variables: {},
     },
     result: {
       data: null,
