@@ -101,6 +101,18 @@ export const GET_PATIENT_RESOURCE_DATA = gql`
   }
 `;
 
+export const GET_TEMPLATE_LIST = gql`
+  query ListTemplates {
+    listTemplates {
+      _id
+      name
+      updated_date
+      created_date
+      category
+    }
+  }
+`;
+
 export const GET_PATIENT_RESOURCE_DETAIL = gql`
   query getResourceDetailById($ptsharresId: String!) {
     getResourceDetailById(ptsharresId: $ptsharresId) {

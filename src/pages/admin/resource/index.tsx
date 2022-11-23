@@ -530,6 +530,11 @@ const Resource: NextPage = () => {
               </Button>
 
               <AddButton
+                href={"/v2/admin/resource/templateList"}
+                className="mr-3"
+                label="Template"
+              />
+              <AddButton
                 href="/v2/admin/resource/add"
                 className="mr-3"
                 label="Add Resource"

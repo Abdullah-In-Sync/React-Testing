@@ -194,7 +194,7 @@ const PatientById: NextPage = () => {
 
   const tabs = [
     {
-      label: "PERSONAL INFO",
+      label: "Personal Info",
       value: "prsonal-info",
       component: (
         <ProfileForm
@@ -207,7 +207,7 @@ const PatientById: NextPage = () => {
       ),
     },
     {
-      label: "AGREEMENT",
+      label: "Agreement",
       value: "agreement",
       component: <Agreement />,
     },
