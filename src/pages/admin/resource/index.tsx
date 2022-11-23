@@ -534,7 +534,7 @@ const Resource: NextPage = () => {
                   className={`text-white`}
                   variant="contained"
                   sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
-                  data-testid="approveresourcelist"
+                  data-testid="templateList"
                   href={"/v2/admin/resource/templateList"}
                 >
                   Template
