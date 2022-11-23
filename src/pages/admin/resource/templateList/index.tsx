@@ -2,7 +2,6 @@ import { Box, Button, Grid, IconButton, Link } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { AddButton } from "../../../../components/common/Buttons";
 import Layout from "../../../../components/layout";
-import { styled } from "@mui/material/styles";
 import TableGenerator from "../../../../components/common/TableGenerator";
 import { useLazyQuery } from "@apollo/client";
 import { GET_TEMPLATE_LIST } from "../../../../graphql/query/resource";
@@ -19,15 +18,6 @@ const crudButtons = {
   flexDirection: "row",
 };
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
 const TemplateList = () => {
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
@@ -37,8 +27,6 @@ const TemplateList = () => {
       setLoader(false);
     },
   });
-
-  console.log("Koca: resData ", resData);
 
   const fields = [
     {
@@ -97,11 +85,15 @@ const TemplateList = () => {
 
         <Grid item xs={9}>
           <Box sx={crudButtons}>
-            <AddButton
+            <Button
+              className={`text-white`}
+              variant="contained"
+              sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
+              data-testid="approveresourcelist"
               href="/v2/admin/resource/add"
-              className="mr-3"
-              label="Add Resource"
-            />
+            >
+              Add Resource
+            </Button>
             <AddButton
               href="/superadmin/resource/add?create=1"
               className="mr-3"

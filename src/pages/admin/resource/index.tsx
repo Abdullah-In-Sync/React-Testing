@@ -529,11 +529,17 @@ const Resource: NextPage = () => {
                 Approve Resource
               </Button>
 
-              <AddButton
-                href={"/v2/admin/resource/templateList"}
-                className="mr-3"
-                label="Template"
-              />
+              <div style={{ paddingLeft: "8px" }}>
+                <Button
+                  className={`text-white`}
+                  variant="contained"
+                  sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
+                  data-testid="approveresourcelist"
+                  href={"/v2/admin/resource/templateList"}
+                >
+                  Template
+                </Button>
+              </div>
               <AddButton
                 href="/v2/admin/resource/add"
                 className="mr-3"

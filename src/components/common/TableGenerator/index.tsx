@@ -253,7 +253,7 @@ const TableGenerator = ({
               )}
             </>
           </TableBody>
-          {props.showPagination && (
+          {showPagination && (
             <TableFooter>
               <TableRow>
                 <TablePagination
