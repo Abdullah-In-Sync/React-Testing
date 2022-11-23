@@ -415,7 +415,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="can not chanege"
                         id="contact_number"
                         label="Contact no"
@@ -431,7 +431,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="can not chanege"
                         id="email_address"
                         label="Email Address"
@@ -447,7 +447,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="home_no"
                         id="home_no"
                         label="Home No./Name"
@@ -466,7 +466,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="address_line_1"
                         id="address_line_1"
                         label="Address Line 1"
@@ -482,7 +482,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="addressline2"
                         id="address_line_2"
                         label="Address Line 2"
@@ -498,7 +498,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="city"
                         id="city"
                         label="City"
@@ -517,7 +517,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="postal_code"
                         id="postal_code"
                         label="Postal Code"
@@ -573,7 +573,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpname"
                         id="gp_name"
                         label="Gp Name"
@@ -589,7 +589,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpsurgeryname"
                         id="surgery_name"
                         label="Surgery Name"
@@ -607,7 +607,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpcontactno"
                         id="constact_number"
                         label="Contact Number"
@@ -628,7 +628,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpemailaddress"
                         id="gp_email_address"
                         label="Email Address"
@@ -646,7 +646,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpaddress"
                         id="gp_address_line_1"
                         label="Address Line 1"
@@ -662,7 +662,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpaddressline2"
                         id="gp_address_line_2"
                         label="Address Line 2"
@@ -683,7 +683,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gpcity"
                         id="gp_city"
                         label="City"
@@ -699,7 +699,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="patient_gppostalcode"
                         id="gp_postal_code"
                         label="Postal Code"
@@ -747,7 +747,7 @@ export default function ProfileForm(props: propTypes) {
                     fontWeight: "bold",
                   }}
                 >
-                  Next of kin details
+                  Next of Kin Details
                 </div>
 
                 <Box
@@ -758,7 +758,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_name"
                         id="kin_name"
                         label="Name"
@@ -775,7 +775,7 @@ export default function ProfileForm(props: propTypes) {
                     <Grid item xs={4}>
                       <SingleSelectComponent
                         fullWidth={true}
-                        required={true}
+                        required={false}
                         id="kin_relationship"
                         labelId="relationship"
                         name="kin_relationship"
@@ -792,7 +792,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_contact_no"
                         id="next_contact_no"
                         label="Contact No"
@@ -811,7 +811,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_email_address"
                         id="kinEmaiLaddress"
                         label="Email Address"
@@ -827,7 +827,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_addressline1"
                         id="next_address_line_1"
                         label="Address Line 1"
@@ -845,7 +845,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_addressline2"
                         id="next_address_line_2"
                         label="Address Line 2"
@@ -866,7 +866,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid container spacing={2} marginBottom={5}>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_city"
                         id="next_city"
                         label="City"
@@ -882,7 +882,7 @@ export default function ProfileForm(props: propTypes) {
                     </Grid>
                     <Grid item xs={4}>
                       <TextFieldComponent
-                        required={true}
+                        required={false}
                         name="kin_postal"
                         id="next_postal_code"
                         label="Postal Code"
