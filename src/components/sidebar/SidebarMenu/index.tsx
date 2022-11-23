@@ -151,8 +151,6 @@ const SidebarMenu = () => {
 
   const { user } = useAppContext();
 
-  console.log("Koca: userType ", user);
-
   useEffect(() => {
     setTest(
       user.user_type == "patient" &&
