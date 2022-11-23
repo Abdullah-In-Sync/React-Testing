@@ -12,10 +12,6 @@ import {
   therapistRoutes,
   default_patient_routes,
 } from "../../../utility/sideNavItems";
-import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
-import { useLazyQuery } from "@apollo/client";
-
-import Loader from "../../common/Loader";
 import { useAppContext } from "../../../contexts/AuthContext";
 
 const listItem = {
@@ -151,26 +147,17 @@ const SidebarMenu = () => {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [loader, setLoader] = useState<boolean>(false);
   const [test, setTest] = useState(0);
 
-  const {
-    user: { user_type: userType },
-  } = useAppContext();
-
-  const [getPatientData, { loading: profileLoading, data: profileData }] =
-    useLazyQuery(GET_PROFILE_DATA, {
-      onCompleted: (data) => {
-        console.debug("get profile data", data);
-      },
-    });
+  const { user } = useAppContext();
 
   useEffect(() => {
     setTest(
-      profileData?.getProfileById?.patient_consent &&
-        profileData?.getProfileById.patient_contract
+      user.user_type == "patient" &&
+        user?.patient_data?.patient_consent &&
+        user?.patient_data?.patient_contract
     );
-  }, [profileData]);
+  }, [user]);
 
   const userRoute = {
     patient: test ? patient_routes : default_patient_routes,
@@ -191,27 +178,13 @@ const SidebarMenu = () => {
     });
   };
 
-  useEffect(() => {
-    setLoader(true);
-    getPatientData({ variables: { groupName: "patient" } });
-  }, []);
-
-  useEffect(() => {
-    /* istanbul ignore else */
-    if (!profileLoading) {
-      setLoader(false);
-    }
-  }, []);
-
   return (
     <>
-      <Loader visible={loader} />
-
       <MenuWrapper data-testid="sideBar">
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {getRouteByUser(userType).map((val, index) => {
+              {getRouteByUser(user.user_type).map((val, index) => {
                 if (Array.isArray(val)) {
                   return (
                     <>
