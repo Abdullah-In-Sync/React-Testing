@@ -215,7 +215,15 @@ const Agreement = () => {
           }}
         >
           <div>
-            <h3 style={{ color: "#6EC9DB" }}>SUMMARY OF THE AGREEMENT </h3>
+            <h3
+              style={{
+                color: "#6EC9DB",
+                fontFamily: "Montserrat",
+                fontSize: "22px",
+              }}
+            >
+              SUMMARY OF THE AGREEMENT{" "}
+            </h3>
             <div
               style={{
                 fontFamily: "Montserrat",
@@ -240,7 +248,13 @@ const Agreement = () => {
               <h5>&#x2022; Ending this Agreement; and</h5>
               <h5>&#x2022; General terms (ie feedback and concern</h5>
             </div>
-            <h3 style={{ color: "#6EC9DB" }}>
+            <h3
+              style={{
+                color: "#6EC9DB",
+                fontFamily: "Montserrat",
+                fontSize: "22px",
+              }}
+            >
               IMPORTANT – PLEASE READ CAREFULLY
             </h3>
             <div
@@ -259,7 +273,15 @@ const Agreement = () => {
                 therapy or have any concerns about your well-being and safety.
               </p>
             </div>
-            <h3 style={{ color: "#6EC9DB" }}>TERMS AND CONDITIONS</h3>
+            <h3
+              style={{
+                color: "#6EC9DB",
+                fontFamily: "Montserrat",
+                fontSize: "22px",
+              }}
+            >
+              TERMS AND CONDITIONS
+            </h3>
             <h4>1. DEFINITION</h4>
             <div
               style={{
