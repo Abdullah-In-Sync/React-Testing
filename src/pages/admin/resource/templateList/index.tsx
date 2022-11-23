@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton } from "@mui/material";
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import { AddButton } from "../../../../components/common/Buttons";
 import Layout from "../../../../components/layout";
@@ -33,20 +33,20 @@ const TemplateList = () => {
       key: "index",
       columnName: "Serial No",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) => val,
     },
     {
       key: "name",
       columnName: "Template Name",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) => val,
     },
 
     {
       key: "category",
       columnName: "Category",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) => val,
     },
 
     {
@@ -81,15 +81,14 @@ const TemplateList = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Template" />
-
+        <ContentHeader title="Templates" data-testid="templates" />
         <Grid item xs={9}>
           <Box sx={crudButtons}>
             <Button
               className={`text-white`}
               variant="contained"
               sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
-              data-testid="approveresourcelist"
+              data-testid="addResource"
               href="/v2/admin/resource/add"
             >
               Add Resource
@@ -98,27 +97,38 @@ const TemplateList = () => {
               href="/superadmin/resource/add?create=1"
               className="mr-3"
               label="Create Resource"
+              data-testid="createResource"
             />
           </Box>
         </Grid>
-        <Box>
-          <TableGenerator
-            fields={fields}
-            data={dataSource}
-            currentPage={page}
-            onPageChange={(page) => {
-              /* istanbul ignore next */
-              setPage(page);
-              /* istanbul ignore next */
-            }}
-            loader={loader}
-            backendPagination={true}
-            dataCount={10}
-            selectedRecords={[]}
-            rowOnePage={10}
-            showPagination={false}
-          />
-        </Box>
+        {resData?.listTemplates ? (
+          <Box>
+            <TableGenerator
+              fields={fields}
+              data={dataSource}
+              currentPage={page}
+              onPageChange={(page) => {
+                /* istanbul ignore next */
+                setPage(page);
+                /* istanbul ignore next */
+              }}
+              loader={loader}
+              backendPagination={true}
+              dataCount={10}
+              selectedRecords={[]}
+              rowOnePage={10}
+              showPagination={false}
+            />
+          </Box>
+        ) : (
+          <Typography
+            gutterBottom
+            component="div"
+            data-testid="no-data-found-patient-resource-detail"
+          >
+            No Data Found
+          </Typography>
+        )}
       </Layout>
     </>
   );

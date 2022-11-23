@@ -537,7 +537,7 @@ const Resource: NextPage = () => {
                   data-testid="templateList"
                   href={"/v2/admin/resource/templateList"}
                 >
-                  Template
+                  Templates
                 </Button>
               </div>
               <AddButton
