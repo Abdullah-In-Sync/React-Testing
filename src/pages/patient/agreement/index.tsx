@@ -103,16 +103,16 @@ const Agreement = () => {
   const editFormHandler = (e, formFields: patientEditProfileFormFeild) => {
     e.preventDefault();
     setLoader(true);
-    if (
-      formFields?.patient_contract === 0 ||
-      formFields?.patient_consent === 0
-    ) {
-      enqueueSnackbar("Please select the checkbox.", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-      return;
-    }
+    // if (
+    //   formFields?.patient_contract === 0 ||
+    //   formFields?.patient_consent === 0
+    // ) {
+    //   enqueueSnackbar("Please select the checkbox.", {
+    //     variant: "error",
+    //     autoHideDuration: 2000,
+    //   });
+    //   return;
+    // }
 
     try {
       updatePatient({
@@ -624,39 +624,39 @@ const Agreement = () => {
                   </Grid>
                 </Grid>
               </div>
-              {profileData?.getProfileById.patient_consent ||
+              {/* {profileData?.getProfileById.patient_consent ||
               profileData?.getProfileById.patient_contract === 1 ? (
                 ""
-              ) : (
-                <div style={{ paddingTop: "25px" }}>
-                  <Grid container spacing={2} marginBottom={5}>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="agreementSubmitButton"
-                        variant="contained"
-                        type="submit"
-                        style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                      >
-                        Save
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="editCancleSubmitButton"
-                        variant="contained"
-                        style={{
-                          paddingLeft: "40px",
-                          paddingRight: "40px",
-                          backgroundColor: "#6BA08E",
-                        }}
-                        onClick={() => router.reload()}
-                      >
-                        Cancel
-                      </Button>
-                    </Grid>
+              ) : ( */}
+              <div style={{ paddingTop: "25px" }}>
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={6} textAlign="center">
+                    <Button
+                      data-testid="agreementSubmitButton"
+                      variant="contained"
+                      type="submit"
+                      style={{ paddingLeft: "50px", paddingRight: "50px" }}
+                    >
+                      Save
+                    </Button>
                   </Grid>
-                </div>
-              )}
+                  <Grid item xs={6} textAlign="center">
+                    <Button
+                      data-testid="editCancleSubmitButton"
+                      variant="contained"
+                      style={{
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                        backgroundColor: "#6BA08E",
+                      }}
+                      onClick={() => router.reload()}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
+              {/* // )} */}
             </div>
           </div>
         </div>
