@@ -283,13 +283,13 @@ const Resource: NextPage = () => {
       visible: true,
       render: (_, value) => (
         <>
-          {/* {value?.user_id == userId && ( */}
-          <IconButtonWrapper aria-label="create" size="small">
-            <NextLink href={"/therapist/resource/edit/" + value._id} passHref>
-              <CreateIcon />
-            </NextLink>
-          </IconButtonWrapper>
-          {/* )} */}
+          {value?.user_id == userId && (
+            <IconButtonWrapper aria-label="create" size="small">
+              <NextLink href={"/therapist/resource/edit/" + value._id} passHref>
+                <CreateIcon />
+              </NextLink>
+            </IconButtonWrapper>
+          )}
           <IconButtonWrapper aria-label="favorite" size="small">
             <FavoriteBorderIcon
               data-testid={"fav_" + value?._id}
