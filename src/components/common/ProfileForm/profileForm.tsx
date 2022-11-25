@@ -34,6 +34,7 @@ const defaultFormValue = {
   patient_sexuality: "",
   __typename: "",
   addressline2: "",
+  addressline1: "",
   birthdate: "",
   created_date: "",
   email: "",
@@ -110,7 +111,7 @@ export default function ProfileForm(props: propTypes) {
   const changeDate = (date: string) => {
     setFormFields((prev) => ({
       ...prev,
-      birthdate: dayjs(date).format("DD-MM-YYYY"),
+      birthdate: dayjs(date).format("MM-DD-YYYY"),
     }));
   };
 
@@ -467,10 +468,10 @@ export default function ProfileForm(props: propTypes) {
                     <Grid style={{ alignSelf: "stretch" }} item xs={4}>
                       <TextFieldComponent
                         required={false}
-                        name="address_line_1"
-                        id="address_line_1"
+                        name="addressline1"
+                        id="addressline1"
                         label="Address Line 1"
-                        value={"value"}
+                        value={formFields?.addressline1}
                         onChange={handleChange}
                         fullWidth={true}
                         inputProps={{ "data-testid": "address_line_1" }}
@@ -521,7 +522,7 @@ export default function ProfileForm(props: propTypes) {
                         name="postal_code"
                         id="postal_code"
                         label="Postal Code"
-                        value={"value"}
+                        value={formFields?.postal_code}
                         onChange={handleChange}
                         fullWidth={true}
                         inputProps={{ "data-testid": "postal_code" }}
@@ -902,8 +903,18 @@ export default function ProfileForm(props: propTypes) {
               </div>
             </div>
             {!props.disabled ? (
-              <Grid container spacing={2} marginBottom={5}>
-                <Grid item xs={6} textAlign="center">
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  p: 1,
+                  m: 1,
+                  bgcolor: "background.paper",
+                  borderRadius: 1,
+                  paddingBottom: "50px",
+                }}
+              >
+                <Grid item xs={6} style={{ paddingRight: "50px" }}>
                   <Button
                     data-testid="editProfileSubmitButton"
                     variant="contained"
@@ -931,7 +942,7 @@ export default function ProfileForm(props: propTypes) {
                     Cancel
                   </Button>
                 </Grid>
-              </Grid>
+              </Box>
             ) : (
               ""
             )}
