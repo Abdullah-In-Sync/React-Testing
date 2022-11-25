@@ -94,7 +94,7 @@ mocksData.push({
       dob: "",
       city: "",
       addressLine2: "",
-      addressLine1: "address line 1",
+      addressLine1: "",
       homeNo: "",
       kinAddressLine1: "",
       kinAddressLine2: "",
@@ -106,7 +106,7 @@ mocksData.push({
       kinRelationship: "",
       lastName: "Last Name",
       nhsNo: "",
-      postalCode: "123123",
+      postalCode: "",
       religion: "",
       update: {
         patient_sexuality: "Asexual",

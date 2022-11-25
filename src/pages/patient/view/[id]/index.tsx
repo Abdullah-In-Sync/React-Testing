@@ -7,7 +7,7 @@ import Layout from "../../../../components/layout";
 import { IconButton, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
-
+import { useRouter } from "next/router";
 import { GET_PROFILE_DATA } from "../../../../graphql/query/patient";
 import {
   patientEditProfileFormFeild,
@@ -23,6 +23,7 @@ import ProfileForm from "../../../../components/common/ProfileForm/profileForm";
 
 import withAuthentication from "../../../../hoc/auth";
 import { useAppContext } from "../../../../contexts/AuthContext";
+import dayjs from "dayjs";
 
 const defaultFormValue = {
   _id: "",
@@ -65,7 +66,7 @@ const defaultFormValue = {
   city: "",
   religion: "",
   patient_status: "",
-
+  addressline1: "",
   phone_number: "",
   postal_code: "",
 };
@@ -81,7 +82,7 @@ const IconButtonWrapper = styled(IconButton)(
 
 const PatientById: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
-
+  const router = useRouter();
   const [loader, setLoader] = useState<boolean>(false);
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
@@ -92,20 +93,26 @@ const PatientById: NextPage = () => {
   } = useAppContext();
 
   //Queries GraphQl
-  const [getPatientData, { loading: profileLoading, data: profileData }] =
-    useLazyQuery(GET_PROFILE_DATA, {
-      onCompleted: (data) => {
-        if (data!.getProfileById) {
-          setFormFields(data.getProfileById);
-        }
-      },
-    });
+  const [
+    getPatientData,
+    { loading: profileLoading, data: profileData, refetch },
+  ] = useLazyQuery(GET_PROFILE_DATA, {
+    onCompleted: (data) => {
+      if (data!.getProfileById) {
+        setFormFields(data.getProfileById);
+      }
+    },
+  });
 
   const [updatePatient] = useMutation(UPDATE_PROFILE_DATA);
 
   //USE EFFECT
   useEffect(() => {
     setLoader(true);
+  }, []);
+
+  useEffect(() => {
+    refetch();
   }, []);
 
   useEffect(() => {
@@ -135,7 +142,7 @@ const PatientById: NextPage = () => {
           dob: formFields?.birthdate,
           city: formFields?.city,
           addressLine2: formFields?.addressline2,
-          addressLine1: "address line 1",
+          addressLine1: formFields?.addressline1,
           homeNo: formFields?.home_no,
           kinAddressLine1: formFields?.kin_addressline1,
           kinAddressLine2: formFields?.kin_addressline2,
@@ -147,7 +154,7 @@ const PatientById: NextPage = () => {
           kinRelationship: formFields?.kin_relationship,
           lastName: formFields.patient_lastname,
           nhsNo: formFields?.nhsno,
-          postalCode: "123123",
+          postalCode: formFields?.postal_code,
           religion: formFields?.religion,
 
           update: {
@@ -176,11 +183,11 @@ const PatientById: NextPage = () => {
               variant: "success",
             });
             setEditable(false);
+            router.reload();
           }
         },
         onError: (error) => {
           console.log("data error: ", error);
-
           enqueueSnackbar("Something is wrong", { variant: "error" });
         },
       });
@@ -255,10 +262,26 @@ const PatientById: NextPage = () => {
                   marginRight: "auto",
                 }}
               >
-                <Typography sx={{ color: "white" }}>
-                  {formFields?.patient_firstname}
+                <Typography
+                  sx={{
+                    color: "white",
+                    fontFamily: "Montserrat",
+                    fontWeight: "700",
+                  }}
+                >
+                  {formFields?.patient_firstname +
+                    " " +
+                    formFields?.patient_lastname}
                 </Typography>
-                <Typography sx={{ color: "white" }}>01-01-1970</Typography>
+                <Typography
+                  sx={{
+                    color: "white",
+                    fontFamily: "Montserrat",
+                    fontWeight: "700",
+                  }}
+                >
+                  {dayjs(formFields?.birthdate).format("DD-MM-YYYY")}
+                </Typography>
               </div>
 
               <div

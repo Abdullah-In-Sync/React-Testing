@@ -43,6 +43,7 @@ const defaultFormValue = {
   patient_sexuality: "",
   __typename: "",
   addressline2: "",
+  addressline1: "",
   birthdate: "",
   created_date: "",
   email: "",
@@ -186,10 +187,13 @@ const Agreement = () => {
       <form
         onSubmit={(e) => editFormHandler(e, formFields)}
         data-testid="agreement-form"
+        style={{
+          paddingBottom: "30px",
+        }}
       >
         <Box
           sx={{
-            backgroundColor: "#2593A9",
+            backgroundColor: "#6BA08E",
             borderRadius: "10px 10px 0 0",
             paddingBottom: "13px",
           }}
@@ -199,7 +203,14 @@ const Agreement = () => {
               padding: "14px 0 0 60px",
             }}
           >
-            <Typography sx={{ color: "white", fontWeight: "bold" }}>
+            <Typography
+              sx={{
+                color: "white",
+                fontWeight: "600",
+                textAlign: "center",
+                fontFamily: "Montserrat",
+              }}
+            >
               Agreement
             </Typography>
           </div>
@@ -209,7 +220,7 @@ const Agreement = () => {
             padding: "30px",
             border: "2px ",
             borderStyle: "solid",
-            borderColor: "#2593A9",
+            borderColor: "#6BA08E",
             overflow: "visible",
             zIndex: 0,
           }}
@@ -219,7 +230,8 @@ const Agreement = () => {
               style={{
                 color: "#6EC9DB",
                 fontFamily: "Montserrat",
-                fontSize: "22px",
+                fontSize: "14px",
+                fontWeight: "700",
               }}
             >
               SUMMARY OF THE AGREEMENT{" "}
@@ -227,7 +239,7 @@ const Agreement = () => {
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -239,20 +251,21 @@ const Agreement = () => {
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
-              <h5>&#x2022; What the Therapist will do for You;</h5>
-              <h5>&#x2022; What is expected from You;</h5>
-              <h5>&#x2022; Confidentiality and Data Protection;</h5>
-              <h5>&#x2022; Ending this Agreement; and</h5>
-              <h5>&#x2022; General terms (ie feedback and concern</h5>
+              <p>&#x2022; What the Therapist will do for You;</p>
+              <p>&#x2022; What is expected from You;</p>
+              <p>&#x2022; Confidentiality and Data Protection;</p>
+              <p>&#x2022; Ending this Agreement; and</p>
+              <p>&#x2022; General terms (ie feedback and concern</p>
             </div>
             <h3
               style={{
                 color: "#6EC9DB",
                 fontFamily: "Montserrat",
-                fontSize: "22px",
+                fontSize: "14px",
+                fontWeight: "700",
               }}
             >
               IMPORTANT – PLEASE READ CAREFULLY
@@ -260,7 +273,7 @@ const Agreement = () => {
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -277,7 +290,8 @@ const Agreement = () => {
               style={{
                 color: "#6EC9DB",
                 fontFamily: "Montserrat",
-                fontSize: "22px",
+                fontSize: "14px",
+                fontWeight: "700",
               }}
             >
               TERMS AND CONDITIONS
@@ -286,7 +300,7 @@ const Agreement = () => {
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -322,12 +336,18 @@ const Agreement = () => {
                 <b>UKCP:</b> UK Council for Psychotherapy.
               </p>
             </div>
-
-            <h4>2. What the Therapist will do </h4>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
+              2. What the Therapist will do{" "}
+            </h4>
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>2.1 The Therapist will use reasonable endeavours to:</p>
@@ -357,11 +377,18 @@ const Agreement = () => {
                 with.
               </p>
             </div>
-            <h4>3. What the Therapist expects from you</h4>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
+              3. What the Therapist expects from you
+            </h4>
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>3.1 You shall:</p>
@@ -403,12 +430,18 @@ const Agreement = () => {
                 Session.
               </p>
             </div>
-
-            <h4>4. Confidentiality and data protection</h4>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
+              4. Confidentiality and data protection
+            </h4>
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -467,12 +500,18 @@ const Agreement = () => {
                 relating to You.
               </p>
             </div>
-
-            <h4>5. Supervision</h4>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
+              5. Supervision
+            </h4>
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -483,13 +522,18 @@ const Agreement = () => {
                 the Therapy Services You receive are ethical and professional.
               </p>
             </div>
-            <h4>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
               6.Limitation of Liability: Your Attention is drawn to this clause
             </h4>
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -499,11 +543,18 @@ const Agreement = () => {
                 Services.
               </p>
             </div>
-            <h4>7. Ending this Agreement</h4>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
+              7. Ending this Agreement
+            </h4>
             <div
               style={{
                 fontFamily: "Montserrat",
-                fontSize: "12px",
+                fontSize: "14px",
               }}
             >
               <p>
@@ -545,9 +596,15 @@ const Agreement = () => {
                 following the termination of this agreement.
               </p>
             </div>
-
-            <h4>8. Feedback and Concerns</h4>
-            <div style={{ fontFamily: "Montserrat" }}>
+            <h4
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: 700,
+              }}
+            >
+              8. Feedback and Concerns
+            </h4>
+            <div style={{ fontFamily: "Montserrat", fontSize: "14px" }}>
               <p>
                 8.1 The Therapist will ask You for your feedback at the end of
                 each session or will ask you to complete the feedback form on
@@ -561,7 +618,7 @@ const Agreement = () => {
                 and shall endeavour to work with You to
               </p>
             </div>
-            <p style={{ fontFamily: "Montserrat", fontSize: "12px" }}>
+            <p style={{ fontFamily: "Montserrat", fontSize: "14px" }}>
               <b>
                 To confirm accept of the terms relating to using the plateform,
                 please select the below checkbox.
@@ -628,34 +685,42 @@ const Agreement = () => {
               profileData?.getProfileById.patient_contract === 1 ? (
                 ""
               ) : (
-                <div style={{ paddingTop: "25px" }}>
-                  <Grid container spacing={2} marginBottom={5}>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="agreementSubmitButton"
-                        variant="contained"
-                        type="submit"
-                        style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                      >
-                        Save
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="editCancleSubmitButton"
-                        variant="contained"
-                        style={{
-                          paddingLeft: "40px",
-                          paddingRight: "40px",
-                          backgroundColor: "#6BA08E",
-                        }}
-                        onClick={() => router.reload()}
-                      >
-                        Cancel
-                      </Button>
-                    </Grid>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    p: 1,
+                    m: 1,
+                    bgcolor: "background.paper",
+                    borderRadius: 1,
+                    // paddingTop: "50px",
+                  }}
+                >
+                  <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                    <Button
+                      data-testid="agreementSubmitButton"
+                      variant="contained"
+                      type="submit"
+                      style={{ paddingLeft: "50px", paddingRight: "50px" }}
+                    >
+                      Save
+                    </Button>
                   </Grid>
-                </div>
+                  <Grid item xs={6} textAlign="center">
+                    <Button
+                      data-testid="editCancleSubmitButton"
+                      variant="contained"
+                      style={{
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                        backgroundColor: "#6BA08E",
+                      }}
+                      onClick={() => router.reload()}
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                </Box>
               )}
             </div>
           </div>
@@ -665,5 +730,4 @@ const Agreement = () => {
   );
 };
 
-// export default withAuthentication(Agreement, ["patient"]);
 export default Agreement;

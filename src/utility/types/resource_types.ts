@@ -67,6 +67,7 @@ export type patientProfileFormFeild = {
   patient_sexuality: string;
   __typename: string;
   addressline2: string;
+  addressline1: string;
   birthdate: string;
   created_date: string;
   email: string;
@@ -87,7 +88,6 @@ export type patientProfileFormFeild = {
   city: string;
   religion: string;
   patient_status: string;
-
   phone_number: string;
   postal_code: string;
 };
@@ -125,6 +125,7 @@ export type patientEditProfileFormFeild = {
   kin_city: string;
   kin_postal: string;
   addressline2: string;
+  addressline1: string;
   kin_addressline2: string;
   kin_addressline1: string;
   kin_relationship: string;

@@ -77,6 +77,7 @@ export const UPDATE_PROFILE_DATA = gql`
       kin_contact_no
       kin_city
       kin_postal
+      addressline1
       addressline2
       kin_addressline2
       kin_addressline1
