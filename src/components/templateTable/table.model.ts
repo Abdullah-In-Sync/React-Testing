@@ -10,6 +10,7 @@ export interface TableCell {
   description?: string;
   answerType?: string;
   answerValues?: string | Array<any>;
+  patientAns?: string | Array<any>;
   title?: string;
 }
 
@@ -28,16 +29,6 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Activities",
-        },
-        {
-          type: "header",
-          title: "Rating",
-          description: "Add rating based on activities",
-        },
-        {
-          type: "header",
-          title: "Rating",
-          description: "Add rating based on activities",
         },
         {
           type: "header",
