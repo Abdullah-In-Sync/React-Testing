@@ -40,6 +40,13 @@ export type editResourceFormField = {
   disorder_detail: string;
   model_detail: string;
 };
+
+export type editTemplatesFormField = {
+  _id: string;
+  category: string;
+  name: string;
+};
+
 export type patientAgreementFormFeild = {
   _id: string;
   patient_contract: number;

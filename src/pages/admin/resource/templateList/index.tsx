@@ -6,6 +6,7 @@ import TableGenerator from "../../../../components/common/TableGenerator";
 import { useLazyQuery } from "@apollo/client";
 import { GET_TEMPLATE_LIST } from "../../../../graphql/query/resource";
 import ContentHeader from "../../../../components/common/ContentHeader";
+import NextLink from "next/link";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CreateIcon from "@mui/icons-material/Create";
@@ -22,11 +23,14 @@ const TemplateList = () => {
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
 
-  const [getTemplateData, { data: resData }] = useLazyQuery(GET_TEMPLATE_LIST, {
-    onCompleted: () => {
-      setLoader(false);
-    },
-  });
+  const [getTemplateData, { data: resData, refetch }] = useLazyQuery(
+    GET_TEMPLATE_LIST,
+    {
+      onCompleted: () => {
+        setLoader(false);
+      },
+    }
+  );
 
   const fields = [
     {
@@ -60,7 +64,12 @@ const TemplateList = () => {
           </IconButton>
 
           <IconButton size="small" data-testid="edit-icon-button">
-            <CreateIcon />
+            <NextLink
+              href={"/admin/resource/editTemplate/" + value._id}
+              passHref
+            >
+              <CreateIcon />
+            </NextLink>
           </IconButton>
         </>
       ),
@@ -77,6 +86,11 @@ const TemplateList = () => {
   useEffect(() => {
     setLoader(true);
     getTemplateData();
+  }, []);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    refetch();
   }, []);
   return (
     <>
