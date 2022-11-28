@@ -265,8 +265,6 @@ const PatientById: NextPage = () => {
                 <Typography
                   sx={{
                     color: "white",
-                    fontFamily: "Montserrat",
-                    fontWeight: "700",
                   }}
                 >
                   {formFields?.patient_firstname +
@@ -276,8 +274,6 @@ const PatientById: NextPage = () => {
                 <Typography
                   sx={{
                     color: "white",
-                    fontFamily: "Montserrat",
-                    fontWeight: "700",
                   }}
                 >
                   {dayjs(formFields?.birthdate).format("DD-MM-YYYY")}

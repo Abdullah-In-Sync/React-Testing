@@ -241,6 +241,7 @@ export default function ProfileForm(props: propTypes) {
                           value={formFields?.birthdate}
                           onChange={changeDate}
                           renderInput={(params) => <TextField {...params} />}
+                          className="form-control-bg"
                         />
                       </Stack>
                     </LocalizationProvider>
