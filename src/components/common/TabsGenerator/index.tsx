@@ -22,7 +22,7 @@ type propTypes = {
   tabsList: any;
   activeTabs: any;
   editable?: boolean;
-  onTabChange?: Function;
+  onTabChange?: any;
 };
 
 const TabsGenerator = (props: propTypes) => {
