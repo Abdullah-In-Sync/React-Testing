@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import * as React from "react";
 import Layout from "../../../components/layout";
 import TemplateTable from "../../../components/templateTable";
+import { TemplateFormData } from "../../../components/templateTable/table.model";
 import withAuthentication from "../../../hoc/auth";
 
 const TemplateList: NextPage = () => {
