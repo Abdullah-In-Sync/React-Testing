@@ -2,13 +2,14 @@ import { createContext } from "react";
 import { ViewModel } from "../../hoc/withModal";
 import * as Yup from "yup";
 
-type TableCellType = "header" | "answer";
+type TableCellType = "header" | "answer" | "";
+type TableCellAnswerType = "list" | "boolean" | "text";
 
 export interface TableCell {
   type: TableCellType;
   question?: string;
   description?: string;
-  answerType?: string;
+  answerType?: TableCellAnswerType;
   answerValues?: string | Array<any>;
   patientAns?: string | Array<any>;
   title?: string;
@@ -45,7 +46,18 @@ const staticTemplate: TemplateFormData = {
         },
         {
           type: "answer",
-          answerType: "boolean",
+          answerType: "list",
+          answerValues: ["banana", "mengo", "papita"],
+        },
+      ],
+    },
+    {
+      cells: [
+        {
+          type: "",
+        },
+        {
+          type: "",
         },
       ],
     },
@@ -69,7 +81,10 @@ function useTemplateTable(): TemplateTableViewModelState {
           is: "answer",
           then: Yup.string().required(),
         }),
-        answerValues: Yup.array().optional(),
+        answerValues: Yup.string().when("answerType", {
+          is: "list",
+          then: Yup.array().required(),
+        }),
         title: Yup.string().optional(),
       })
     )
