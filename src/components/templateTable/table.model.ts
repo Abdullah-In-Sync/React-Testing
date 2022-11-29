@@ -71,24 +71,31 @@ class TemplateTableViewModel implements ViewModel<TemplateTableViewModelState> {
  * Business logic of the screen: EventsScreen
  */
 function useTemplateTable(): TemplateTableViewModelState {
-  const validationSchema = Yup.array(
-    Yup.array(
+  const validationSchema = Yup.object().shape({
+    rows: Yup.array().of(
       Yup.object().shape({
-        type: Yup.string().required(),
-        question: Yup.string().optional(),
-        description: Yup.string().optional(),
-        answerType: Yup.string().when("type", {
-          is: "answer",
-          then: Yup.string().required(),
-        }),
-        answerValues: Yup.string().when("answerType", {
-          is: "list",
-          then: Yup.array().required(),
-        }),
-        title: Yup.string().optional(),
+        cells: Yup.array().of(
+          Yup.object().shape({
+            type: Yup.string().optional(),
+            question: Yup.string().optional(),
+            description: Yup.string().optional(),
+            answerType: Yup.string().when("type", {
+              is: "answer",
+              then: Yup.string().required("Please select the answer type"),
+            }),
+            answerValues: Yup.array().when("answerType", {
+              is: "list",
+              then: Yup.array().required("Answer Values is required"),
+            }),
+            title: Yup.string().when("type", {
+              is: "header",
+              then: Yup.string().required("Title is required"),
+            }),
+          })
+        ),
       })
-    )
-  );
+    ),
+  });
 
   const state: TemplateTableViewModelState = {
     validationSchema,

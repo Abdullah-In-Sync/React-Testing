@@ -21,8 +21,9 @@ import TemplateTableViewModel, {
 
 interface TemplateTableProps {
   mode: "view" | "edit";
+  initialData?: TemplateFormData;
 }
-const TemplateTable: React.FC<TemplateTableProps> = ({ mode }) => {
+const TemplateTable: React.FC<TemplateTableProps> = ({ mode, initialData }) => {
   const { template, validationSchema } = useContext(TemplateTableContext);
 
   const onSubmit = (
@@ -176,13 +177,16 @@ const CellHeader: FC<CellHeaderProps> = ({
   cellData,
   formikHelper,
 }) => {
-  console.log(cellData);
+  console.log(
+    cellData,
+    formikHelper.getFieldMeta(`${formCellKey}.title`).touched,
+    formikHelper.getFieldMeta(`${formCellKey}.title`).error
+  );
   return (
     <Grid container direction={"column"} padding={"13px 29px 13px 20px"}>
       <TextFieldComponent
         id={`${formCellKey}.title`}
         label="Please write question here"
-        required={true}
         value={cellData?.title}
         name={`${formCellKey}.title`}
         onChange={formikHelper?.handleChange}
@@ -190,8 +194,14 @@ const CellHeader: FC<CellHeaderProps> = ({
         variant="outlined"
         className="form-control-bg"
         size="small"
-        // error={formikHelper.touched.email && Boolean(formik.errors.email)}
-        // helperText={formik.touched.email && formik.errors.email}
+        extraProps={{
+          error:
+            formikHelper.getFieldMeta(`${formCellKey}.title`).touched &&
+            Boolean(formikHelper.getFieldMeta(`${formCellKey}.title`).error),
+          helperText:
+            formikHelper.getFieldMeta(`${formCellKey}.title`).touched &&
+            formikHelper.getFieldMeta(`${formCellKey}.title`).error,
+        }}
       />
       <Box sx={{ mt: "7px" }} />
       <TextFieldComponent
@@ -204,6 +214,16 @@ const CellHeader: FC<CellHeaderProps> = ({
         variant="outlined"
         className="form-control-bg"
         size="small"
+        extraProps={{
+          error:
+            formikHelper.getFieldMeta(`${formCellKey}.description`).touched &&
+            Boolean(
+              formikHelper.getFieldMeta(`${formCellKey}.description`).error
+            ),
+          helperText:
+            formikHelper.getFieldMeta(`${formCellKey}.description`).touched &&
+            formikHelper.getFieldMeta(`${formCellKey}.description`).error,
+        }}
         // error={formikHelper.touched.email && Boolean(formik.errors.email)}
         // helperText={formik.touched.email && formik.errors.email}
       />
@@ -251,29 +271,37 @@ const AnswerType: FC<AnswerTypeProps> = ({
     <Grid container direction={"column"} padding={"13px 29px 13px 20px"}>
       <SingleSelectComponent
         fullWidth={true}
-        required={true}
         id={`${formCellKey}.answerType`}
         labelId="Answer Type"
         name={`${formCellKey}.answerType`}
         value={cellData?.answerType}
         label="Select Answer Type"
         onChange={onChangeAnswerType}
-        inputProps={{ "data-testid": "resource_type" }}
+        inputProps={{ "data-testid": `${formCellKey}.answerType` }}
         options={answerType}
         mappingKeys={["id", "value"]}
         size="small"
         className="form-control-bg"
+        extraProps={{
+          error:
+            formikHelper.getFieldMeta(`${formCellKey}.answerType`).touched &&
+            Boolean(
+              formikHelper.getFieldMeta(`${formCellKey}.answerType`).error
+            ),
+          helperText:
+            formikHelper.getFieldMeta(`${formCellKey}.answerType`).touched &&
+            formikHelper.getFieldMeta(`${formCellKey}.answerType`).error,
+        }}
       />
       {cellData.answerType == "list" && (
         <>
           <Box sx={{ mt: "7px" }} />
           <Autocomplete
-            data-testid="answerOptions"
+            data-testid={`${formCellKey}.answerValues`}
             multiple
             id="tags-filled"
             options={[]}
             defaultValue={(cellData?.answerValues as Array<any>) || []}
-            // defaultValue={_.isEmpty(element.answer_options) ? []: [element.answer_options]  }
             onChange={(_, val) => {
               formikHelper.setFieldValue(`${formCellKey}.answerValues`, val);
             }}
@@ -299,6 +327,20 @@ const AnswerType: FC<AnswerTypeProps> = ({
                 name={`${formCellKey}.answerValues`}
                 size="small"
                 className="form-control-bg"
+                {...{
+                  error:
+                    formikHelper.getFieldMeta(`${formCellKey}.answerValues`)
+                      .touched &&
+                    Boolean(
+                      formikHelper.getFieldMeta(`${formCellKey}.answerValues`)
+                        .error
+                    ),
+                  helperText:
+                    formikHelper.getFieldMeta(`${formCellKey}.answerValues`)
+                      .touched &&
+                    formikHelper.getFieldMeta(`${formCellKey}.answerValues`)
+                      .error,
+                }}
               />
             )}
           />
