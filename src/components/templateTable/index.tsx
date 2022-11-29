@@ -6,7 +6,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { Field, FieldArray, Form, Formik, FormikProps } from "formik";
+import { FieldArray, Form, Formik, FormikProps } from "formik";
 import { FC, useContext, useMemo } from "react";
 import withViewModel from "../../hoc/withModal";
 import { ActionMenu } from "../common/Menu";
@@ -28,7 +28,6 @@ interface TemplateTableProps {
   ) => void;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
-  mode,
   initialData,
   onSubmit,
 }) => {
@@ -46,7 +45,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
             <Grid container>
               <FieldArray
                 name="rows"
-                render={(arrayHelper) =>
+                render={() =>
                   formikHelper?.values?.rows.map((row, rowIndex) => (
                     <TemplateTableRow
                       key={rowIndex}
@@ -85,7 +84,7 @@ const TemplateTableRow: FC<TemplateTableRowProps> = ({
     <Grid container data-testid="row">
       <FieldArray
         name="cells"
-        render={(arrayHelper) =>
+        render={() =>
           rowData?.cells?.map((cell, index) => (
             <TemplateTableCell
               key={index}
