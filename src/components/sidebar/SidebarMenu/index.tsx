@@ -153,7 +153,7 @@ const SidebarMenu = () => {
 
   useEffect(() => {
     setTest(
-      user.user_type == "patient" &&
+      user?.user_type == "patient" &&
         user?.patient_data?.patient_consent &&
         user?.patient_data?.patient_contract
     );
@@ -184,7 +184,7 @@ const SidebarMenu = () => {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {getRouteByUser(user.user_type).map((val, index) => {
+              {getRouteByUser(user?.user_type).map((val, index) => {
                 if (Array.isArray(val)) {
                   return (
                     <>

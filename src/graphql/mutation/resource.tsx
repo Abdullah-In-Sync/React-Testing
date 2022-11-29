@@ -82,6 +82,15 @@ export const UPDATE_RESOURCE_BY_ID = gql`
   }
 `;
 
+export const UPDATE_TEMPLATE_BY_ID = gql`
+  mutation ($templateId: ID!, $update: UpdateTemplateInput) {
+    updateTemplateById(templateId: $templateId, update: $update) {
+      name
+      category
+    }
+  }
+`;
+
 export const ADD_FAVOURITE = gql`
   mutation MyMutation($resourceId: String!) {
     addFavouriteResource(resourceId: $resourceId) {
