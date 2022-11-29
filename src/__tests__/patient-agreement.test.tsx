@@ -193,6 +193,7 @@ describe("Agreement Page", () => {
     expect(screen.getByTestId("agreement-form")).toBeInTheDocument();
 
     fireEvent.click(screen.queryByTestId("patient_consent"));
+    expect(screen.getByTestId("editCancleAgreementButton")).toBeInTheDocument();
 
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("agreementSubmitButton"));

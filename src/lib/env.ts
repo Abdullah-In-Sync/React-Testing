@@ -7,4 +7,9 @@ export const env = {
   v1: {
     rootUrl: process.env.NEXT_PUBLIC_V1_ROOT_URL,
   },
+  corpWebsite: {
+    terms: "https://myhelp.co.uk/terms-of-use.html",
+    cookies: "https://myhelp.co.uk/cookies-policy.html",
+    privacy: "https://myhelp.co.uk/privacy-policy.html",
+  },
 };

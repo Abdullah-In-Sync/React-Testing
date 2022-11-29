@@ -88,6 +88,7 @@ const PatientById: NextPage = () => {
     useState<patientProfileFormFeild>(defaultFormValue);
 
   const [editable, setEditable] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState('"personal-info"');
   const {
     user: { user_type: userType },
   } = useAppContext();
@@ -199,10 +200,12 @@ const PatientById: NextPage = () => {
     }
   };
 
+  const onTabChange = (currentTab) => setActiveTab(currentTab);
+
   const tabs = [
     {
       label: "Personal Info",
-      value: "prsonal-info",
+      value: "personal-info",
       component: (
         <ProfileForm
           onSubmit={editFormHandler}
@@ -280,23 +283,25 @@ const PatientById: NextPage = () => {
                 </Typography>
               </div>
 
-              <div
-                style={{
-                  marginRight: "10px",
-                }}
-              >
-                <IconButtonWrapper
-                  style={{ marginLeft: "auto" }}
-                  aria-label="create"
-                  size="small"
-                  onClick={() => {
-                    setEditable(true);
+              {activeTab === "personal-info" && (
+                <div
+                  style={{
+                    marginRight: "10px",
                   }}
-                  data-testid="edit-icon-button"
                 >
-                  <CreateIcon />
-                </IconButtonWrapper>
-              </div>
+                  <IconButtonWrapper
+                    style={{ marginLeft: "auto" }}
+                    aria-label="create"
+                    size="small"
+                    onClick={() => {
+                      setEditable(true);
+                    }}
+                    data-testid="edit-icon-button"
+                  >
+                    <CreateIcon />
+                  </IconButtonWrapper>
+                </div>
+              )}
             </div>
           </Box>
         )}
@@ -305,7 +310,8 @@ const PatientById: NextPage = () => {
           <TabsGenerator
             editable={editable}
             tabsList={tabs}
-            activeTabs="prsonal-info"
+            activeTabs="personal-info"
+            onTabChange={onTabChange}
           />
         </div>
       </Layout>
