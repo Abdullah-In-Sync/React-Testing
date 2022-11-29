@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+export const Link = "https://" + Cookies.get("rootUrl");
 export const msToTime = (duration: number) => {
   const milliseconds: string | number = Math.floor((duration % 1000) / 100);
   let seconds: string | number = Math.floor((duration / 1000) % 60),

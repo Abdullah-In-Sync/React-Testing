@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useAppContext } from "../contexts/AuthContext";
-import { env } from "../lib/env";
-
+import { Link } from "../lib/helpers/common";
 type UserRole = "admin" | "therapist" | "patient";
 
 export default function withAuthentication<T>(
@@ -13,9 +12,9 @@ export default function withAuthentication<T>(
 
     useEffect(() => {
       if (!isAuthenticated) {
-        window.location.href = env.v1.rootUrl;
+        window.location.href = Link;
       } else if (allowOnly && !allowOnly.includes(user?.user_type)) {
-        window.location.href = `${env.v1.rootUrl}/${
+        window.location.href = `${Link}/${
           user?.user_type == "admin" ? "superadmin" : user?.user_type
         }/dashboard`;
       }
