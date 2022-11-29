@@ -55,11 +55,7 @@ export default function CardGenerator({ data, fields }) {
 
                   {fields?.map((field) => (
                     <Typography
-                      style={{
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                      }}
+                      className={`text-ellipsis`}
                       mt={1}
                       variant="body2"
                       color="text.secondary"
