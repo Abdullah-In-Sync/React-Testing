@@ -22,20 +22,21 @@ import TemplateTableViewModel, {
 interface TemplateTableProps {
   mode: "view" | "edit";
   initialData?: TemplateFormData;
-}
-const TemplateTable: React.FC<TemplateTableProps> = ({ mode, initialData }) => {
-  const { template, validationSchema } = useContext(TemplateTableContext);
-
-  const onSubmit = (
+  onSubmit?: (
     formData: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
-  ) => {
-    console.log("submited", formData, formikHelper);
-  };
+  ) => void;
+}
+const TemplateTable: React.FC<TemplateTableProps> = ({
+  mode,
+  initialData,
+  onSubmit,
+}) => {
+  const { validationSchema } = useContext(TemplateTableContext);
 
   return (
     <Formik<TemplateFormData>
-      initialValues={template}
+      initialValues={initialData}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
@@ -57,7 +58,9 @@ const TemplateTable: React.FC<TemplateTableProps> = ({ mode, initialData }) => {
                 }
               />
             </Grid>
-            <Button type="submit">Submit</Button>
+            <Button data-testid="submit" type="submit">
+              Submit
+            </Button>
           </Form>
         );
       }}
@@ -79,7 +82,7 @@ const TemplateTableRow: FC<TemplateTableRowProps> = ({
   formikHelper,
 }) => {
   return (
-    <Grid container>
+    <Grid container data-testid="row">
       <FieldArray
         name="cells"
         render={(arrayHelper) =>
@@ -114,10 +117,10 @@ const TemplateTableCell: FC<TemplateTableCellProps> = ({
   const formCellKey = useMemo(() => {
     return `rows[${rowIndex}].cells[${cellIndex}]`;
   }, [rowIndex, cellIndex]);
-  console.log(cellIndex, "cell index");
   return (
     <Grid
       item
+      data-testid="cell"
       flex={1}
       style={{
         ...(cellIndex == 0 ? { borderLeft: "1px solid #000000" } : {}),
@@ -177,11 +180,6 @@ const CellHeader: FC<CellHeaderProps> = ({
   cellData,
   formikHelper,
 }) => {
-  console.log(
-    cellData,
-    formikHelper.getFieldMeta(`${formCellKey}.title`).touched,
-    formikHelper.getFieldMeta(`${formCellKey}.title`).error
-  );
   return (
     <Grid container direction={"column"} padding={"13px 29px 13px 20px"}>
       <TextFieldComponent
