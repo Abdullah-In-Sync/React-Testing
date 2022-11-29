@@ -40,6 +40,7 @@ export default function SingleSelectComponent(props: propTypes) {
       fullWidth={props.fullWidth}
       required={props.required}
       size={props.size ?? "medium"}
+      className="myhelp-select-control"
     >
       <InputLabel id={props.labelId}>{props.label}</InputLabel>
       <Select

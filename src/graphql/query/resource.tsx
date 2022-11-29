@@ -180,6 +180,19 @@ export const GET_RESOURCE_DETAIL = gql`
   }
 `;
 
+export const GET_TEMPLATE_DETAIL = gql`
+  query getTemplateById($templateId: String!) {
+    getTemplateById(templateId: $templateId) {
+      _id
+      category
+      component_name
+      created_date
+      name
+      updated_date
+    }
+  }
+`;
+
 export const GET_PATIENT_LIST = gql`
   query therapistPatientList {
     therapistPatientList {
