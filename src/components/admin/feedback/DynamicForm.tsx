@@ -138,7 +138,6 @@ const DynamicForm = ({
                   value={element.answer_type || ""}
                   label="Choose answer type"
                   onChange={(e) => handleChange(index, e)}
-                  multiple={true}
                 >
                   {/* <MenuItem value="Checkbox">Checkbox</MenuItem> */}
                   <MenuItem value="text">Text</MenuItem>

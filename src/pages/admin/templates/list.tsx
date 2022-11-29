@@ -56,4 +56,4 @@ const TemplateList: NextPage = () => {
   );
 };
 
-export default withAuthentication(TemplateList, ["admin"]);
+export default TemplateList;
