@@ -5,7 +5,7 @@ type propTypes = {
   required?: boolean;
   className?: string;
   id?: string;
-  label: string;
+  label: any;
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;

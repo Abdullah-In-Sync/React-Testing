@@ -22,11 +22,12 @@ type propTypes = {
   tabsList: any;
   activeTabs: any;
   editable?: boolean;
+  onTabChange?: any;
 };
 
 const TabsGenerator = (props: propTypes) => {
   const router = useRouter();
-  const { tabsList, activeTabs, editable } = props;
+  const { tabsList, activeTabs, editable, onTabChange } = props;
   const [activeTab, setActiveTab] = useState(activeTabs);
 
   const handleTabChange = (_, newValue) => {
@@ -38,6 +39,10 @@ const TabsGenerator = (props: propTypes) => {
       setActiveTab(router.query.tabName);
     }
   }, []);
+
+  useEffect(() => {
+    onTabChange?.(activeTab);
+  }, [activeTab]);
 
   return (
     <div style={{ overflowX: "hidden", minHeight: 500 }}>
