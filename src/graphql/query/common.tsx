@@ -98,6 +98,7 @@ export const GET_TOKEN_DATA = gql`
       }
       organization_settings {
         _id
+        contract
         logo
         name
         panel_color
