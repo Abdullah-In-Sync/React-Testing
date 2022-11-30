@@ -31,10 +31,8 @@ import ChatIcon from "@mui/icons-material/Chat";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
 
-import { env } from "../lib/env";
-
 import useStorage from "../components/common/hooks/useStorage";
-const Link = env.v1.rootUrl;
+import { Link } from "../lib/helpers/common";
 
 const { getItem } = useStorage();
 const patientId = getItem("patient_id");

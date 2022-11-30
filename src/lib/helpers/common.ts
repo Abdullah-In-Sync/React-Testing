@@ -1,3 +1,8 @@
+import Cookies from "js-cookie";
+import { env } from "./../env";
+export const Link = Cookies.get("rootUrl")
+  ? Cookies.get("rootUrl")
+  : env.v1.rootUrl;
 export const msToTime = (duration: number) => {
   const milliseconds: string | number = Math.floor((duration % 1000) / 100);
   let seconds: string | number = Math.floor((duration / 1000) % 60),
