@@ -42,6 +42,7 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
       flex={1}
       className={classis.actionColumn}
       style={{ minWidth: "33.33%" }}
+      data-testid={`action-menu-column-${index}`}
     >
       <Grid
         item
@@ -118,6 +119,7 @@ export const RawActionTitle: FC<RowActionTitleProps> = ({
       display={"flex"}
       alignItems={"center"}
       flexDirection="column"
+      data-testid={`action-menu-row-${index}`}
     >
       <Grid item justifySelf={"end"}>
         <ActionMenu

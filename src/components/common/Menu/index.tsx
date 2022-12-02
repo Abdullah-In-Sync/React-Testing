@@ -40,6 +40,7 @@ export const ActionMenu: FC<ActionMenuProps> = ({
         aria-controls={open ? "long-menu" : undefined}
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
+        data-testid={`action-menu-icon`}
         onClick={handleClick}
       >
         {icon || <MoreVertIcon />}
@@ -62,6 +63,7 @@ export const ActionMenu: FC<ActionMenuProps> = ({
         {options.map((option) => (
           <MenuItem
             key={option.key}
+            data-testid={`${option.key}`}
             onClick={
               onChange
                 ? () => {

@@ -25,7 +25,7 @@ export const TemplateTableCell: FC<TemplateTableCellProps> = ({
   return (
     <Grid
       item
-      data-testid="cell"
+      data-testid={`cell-${cellIndex}`}
       flex={1}
       style={{
         ...(cellIndex == 0 ? { borderLeft: "1px solid #000000" } : {}),

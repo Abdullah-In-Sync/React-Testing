@@ -17,7 +17,7 @@ export const TemplateTableRow: FC<TemplateTableRowProps> = ({
   formikHelper,
 }) => {
   return (
-    <Grid container data-testid="row" wrap="nowrap">
+    <Grid container data-testid={`row-${rowIndex}`} wrap="nowrap">
       <FieldArray
         name="cells"
         render={() => (
