@@ -31,10 +31,8 @@ import ChatIcon from "@mui/icons-material/Chat";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
 
-import { env } from "../lib/env";
-
 import useStorage from "../components/common/hooks/useStorage";
-const Link = env.v1.rootUrl;
+import { Link } from "../lib/helpers/common";
 
 const { getItem } = useStorage();
 const patientId = getItem("patient_id");
@@ -45,12 +43,14 @@ type RoutesType =
       label: string;
       path: string;
       icon: JSX.Element;
+      showNow?: number;
     }
   | {
       key: number;
       label: string;
       path: string;
       icon: JSX.Element;
+      showNow?: number;
     }[];
 
 //** SUPER ADMIN ROUTES **//
@@ -102,8 +102,8 @@ export const superadmin_routes: RoutesType[] = [
     },
     {
       key: 8,
-      label: "Resource",
-      path: "/v2/admin/resource",
+      label: "Library",
+      path: Link + "/v2/admin/resource",
       icon: <LibraryBooksIcon />,
     },
     {
@@ -153,7 +153,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 16,
       label: "Feedback",
-      path: "/v2/admin/feedback",
+      path: Link + "/v2/admin/feedback",
       icon: <ThumbUpAltIcon />,
     },
     {
@@ -274,6 +274,7 @@ export const patient_routes: RoutesType[] = [
     label: "Home",
     path: Link + "/patient/dashboard",
     icon: <HomeIcon />,
+    showNow: 1,
   },
   {
     key: 2,
@@ -361,5 +362,21 @@ export const patient_routes: RoutesType[] = [
     label: "Feedback",
     path: "/patient/feedback",
     icon: <StyleIcon />,
+  },
+];
+
+export const default_patient_routes: RoutesType[] = [
+  {
+    key: 1,
+    label: "Home",
+    path: Link + "/patient/dashboard",
+    icon: <HomeIcon />,
+    showNow: 1,
+  },
+  {
+    key: 2,
+    label: "My Profile",
+    path: "/patient/view/" + patientId,
+    icon: <PersonIcon />,
   },
 ];

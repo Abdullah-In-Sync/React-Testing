@@ -37,6 +37,7 @@ export const GET_PROFILE_DATA = gql`
       patient_gpaddressline2
       patient_gpaddress
       addressline2
+      addressline1
       birthdate
       city
       created_date
@@ -56,6 +57,9 @@ export const GET_PROFILE_DATA = gql`
       patient_consent
       patient_availability
       org_id
+      religion
+      phone_number
+      postal_code
     }
   }
 `;

@@ -117,6 +117,7 @@ const TableGenerator = ({
   onRowPerPageChange,
   rowOnePage = 10,
   size,
+  showPagination = true,
   ...props
 }) => {
   const [order, setOrder] = useState("desc");
@@ -250,22 +251,24 @@ const TableGenerator = ({
               )}
             </>
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                colSpan={fields.length}
-                count={dataCount !== undefined ? dataCount : data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { "aria-label": "rows per page" },
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </TableRow>
-          </TableFooter>
+          {showPagination && (
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                  colSpan={fields.length}
+                  count={dataCount !== undefined ? dataCount : data.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { "aria-label": "rows per page" },
+                  }}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
+          )}
         </Table>
       </Paper>
     </Box>

@@ -529,6 +529,17 @@ const Resource: NextPage = () => {
                 Approve Resource
               </Button>
 
+              <div style={{ paddingLeft: "8px" }}>
+                <Button
+                  className={`text-white`}
+                  variant="contained"
+                  sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
+                  data-testid="templateList"
+                  href={"/v2/admin/resource/templateList"}
+                >
+                  Templates
+                </Button>
+              </div>
               <AddButton
                 href="/v2/admin/resource/add"
                 className="mr-3"

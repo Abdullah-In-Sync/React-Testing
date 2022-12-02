@@ -54,7 +54,12 @@ export default function CardGenerator({ data, fields }) {
                   }
 
                   {fields?.map((field) => (
-                    <Typography mt={1} variant="body2" color="text.secondary">
+                    <Typography
+                      className={`text-ellipsis`}
+                      mt={1}
+                      variant="body2"
+                      color="text.secondary"
+                    >
                       {field.key === "resource_desc" && record[field.key]}
                     </Typography>
                   ))}

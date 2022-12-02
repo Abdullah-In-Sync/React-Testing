@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
-import Cookies from "js-cookie";
 
 import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
@@ -11,7 +10,9 @@ import {
   superadmin_routes,
   patient_routes,
   therapistRoutes,
+  default_patient_routes,
 } from "../../../utility/sideNavItems";
+import { useAppContext } from "../../../contexts/AuthContext";
 
 const listItem = {
   paddingTop: "0px",
@@ -141,17 +142,25 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
-function SidebarMenu() {
+const SidebarMenu = () => {
   const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [userType, setUserType] = useState("");
+  const [test, setTest] = useState(0);
 
-  useEffect(() => setUserType(Cookies.get("user_type")), []);
+  const { user } = useAppContext();
+
+  useEffect(() => {
+    setTest(
+      user?.user_type == "patient" &&
+        user?.patient_data?.patient_consent &&
+        user?.patient_data?.patient_contract
+    );
+  }, [user]);
 
   const userRoute = {
-    patient: patient_routes,
+    patient: test ? patient_routes : default_patient_routes,
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };
@@ -175,7 +184,7 @@ function SidebarMenu() {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {getRouteByUser(userType).map((val, index) => {
+              {getRouteByUser(user?.user_type).map((val, index) => {
                 if (Array.isArray(val)) {
                   return (
                     <>
@@ -258,6 +267,6 @@ function SidebarMenu() {
       </MenuWrapper>
     </>
   );
-}
+};
 
 export default SidebarMenu;

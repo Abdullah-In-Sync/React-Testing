@@ -1,6 +1,4 @@
-import { env } from "../lib/env";
-
-const Link = env.v1.rootUrl;
+import { Link } from "../lib/helpers/common";
 
 //** SUPER ADMIN ROUTES **//
 export const superadmin_routes = [

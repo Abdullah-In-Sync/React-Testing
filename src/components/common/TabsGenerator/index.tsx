@@ -18,9 +18,16 @@ const TabPanel = (props) => {
   );
 };
 
-const TabsGenerator = ({ tabsList, activeTabs }) => {
-  const router = useRouter();
+type propTypes = {
+  tabsList: any;
+  activeTabs: any;
+  editable?: boolean;
+  onTabChange?: any;
+};
 
+const TabsGenerator = (props: propTypes) => {
+  const router = useRouter();
+  const { tabsList, activeTabs, editable, onTabChange } = props;
   const [activeTab, setActiveTab] = useState(activeTabs);
 
   const handleTabChange = (_, newValue) => {
@@ -33,39 +40,45 @@ const TabsGenerator = ({ tabsList, activeTabs }) => {
     }
   }, []);
 
+  useEffect(() => {
+    onTabChange?.(activeTab);
+  }, [activeTab]);
+
   return (
     <div style={{ overflowX: "hidden", minHeight: 500 }}>
-      <Tabs
-        data-testid="tabId"
-        value={activeTab}
-        indicatorColor="primary"
-        textColor="primary"
-        color="secondary"
-        // className={classes.root}
-        onChange={handleTabChange}
-        style={{
-          marginBottom: "1rem",
-          backgroundColor: "#f0f0f0",
-          height: "30px",
-          boxShadow: "1px 0px 6px 0px #9e9e9e",
-        }}
-        TabIndicatorProps={{
-          style: {
-            height: 5,
-            backgroundColor: `palette.primary.main`,
-          },
-        }}
-        aria-label="dashboard"
-      >
-        {tabsList.map(({ label, value }) => (
-          <Tab
-            style={{ outline: "none", textTransform: "none" }}
-            key={value}
-            value={value}
-            label={label}
-          />
-        ))}
-      </Tabs>
+      {!editable && (
+        <Tabs
+          data-testid="tabId"
+          value={activeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          color="secondary"
+          // className={classes.root}
+          onChange={handleTabChange}
+          style={{
+            marginBottom: "1rem",
+            backgroundColor: "#f0f0f0",
+            height: "30px",
+            boxShadow: "1px 0px 6px 0px #9e9e9e",
+          }}
+          TabIndicatorProps={{
+            style: {
+              height: 5,
+              backgroundColor: `palette.primary.main`,
+            },
+          }}
+          aria-label="dashboard"
+        >
+          {tabsList.map(({ label, value }) => (
+            <Tab
+              style={{ outline: "none", textTransform: "none" }}
+              key={value}
+              value={value}
+              label={label}
+            />
+          ))}
+        </Tabs>
+      )}
 
       {/** Render tab screens here */}
 

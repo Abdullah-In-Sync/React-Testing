@@ -101,6 +101,18 @@ export const GET_PATIENT_RESOURCE_DATA = gql`
   }
 `;
 
+export const GET_TEMPLATE_LIST = gql`
+  query ListTemplates {
+    listTemplates {
+      _id
+      name
+      updated_date
+      created_date
+      category
+    }
+  }
+`;
+
 export const GET_PATIENT_RESOURCE_DETAIL = gql`
   query getResourceDetailById($ptsharresId: String!) {
     getResourceDetailById(ptsharresId: $ptsharresId) {
@@ -164,6 +176,19 @@ export const GET_RESOURCE_DETAIL = gql`
         _id
         model_name
       }
+    }
+  }
+`;
+
+export const GET_TEMPLATE_DETAIL = gql`
+  query getTemplateById($templateId: String!) {
+    getTemplateById(templateId: $templateId) {
+      _id
+      category
+      component_name
+      created_date
+      name
+      updated_date
     }
   }
 `;
