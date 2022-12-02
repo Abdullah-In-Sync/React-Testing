@@ -3,13 +3,21 @@ import * as React from "react";
 import Layout from "../../../components/layout";
 import TemplateTable from "../../../components/templateTable";
 import { TemplateFormData } from "../../../components/templateTable/table.model";
-import withAuthentication from "../../../hoc/auth";
 
 const TemplateList: NextPage = () => {
   const staticTemplate: TemplateFormData = {
     rows: [
       {
         cells: [
+          {
+            type: "header",
+            title: "Activities",
+          },
+          {
+            type: "header",
+            title: "Rating",
+            description: "Add rating based on activities",
+          },
           {
             type: "header",
             title: "Activities",
@@ -32,10 +40,25 @@ const TemplateList: NextPage = () => {
             answerType: "list",
             answerValues: ["banana", "mengo", "papita"],
           },
+          {
+            type: "header",
+            title: "Activities",
+          },
+          {
+            type: "header",
+            title: "Rating",
+            description: "Add rating based on activities",
+          },
         ],
       },
       {
         cells: [
+          {
+            type: "",
+          },
+          {
+            type: "",
+          },
           {
             type: "",
           },

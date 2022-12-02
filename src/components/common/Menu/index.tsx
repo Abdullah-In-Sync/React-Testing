@@ -14,9 +14,14 @@ export interface MenuItem {
 export interface ActionMenuProps {
   options: Array<MenuItem>;
   onChange?: (menu) => void;
+  icon?: any;
 }
 
-export const ActionMenu: FC<ActionMenuProps> = ({ options, onChange }) => {
+export const ActionMenu: FC<ActionMenuProps> = ({
+  options,
+  onChange,
+  icon,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -37,7 +42,7 @@ export const ActionMenu: FC<ActionMenuProps> = ({ options, onChange }) => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <MoreVertIcon />
+        {icon || <MoreVertIcon />}
       </IconButton>
       <Menu
         id="long-menu"
