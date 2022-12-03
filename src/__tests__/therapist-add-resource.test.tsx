@@ -168,6 +168,8 @@ mocksData.push({
       resourceIsformualation: "0",
       resourceIssmartdraw: "0",
       resourceReferences: "",
+      templateData: "",
+      templateId: "",
     },
   },
   result: {

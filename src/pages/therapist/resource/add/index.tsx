@@ -40,6 +40,8 @@ const Index = () => {
           resourceIsformualation: "0",
           resourceIssmartdraw: "0",
           resourceReferences: formFields.resource_references,
+          templateData: "",
+          templateId: "",
         },
         onCompleted: (data) => {
           if (data && data.createResource && data.createResource._id) {
