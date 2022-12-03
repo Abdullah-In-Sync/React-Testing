@@ -24,8 +24,6 @@ const Index = () => {
         variables: {
           disorderId: formFields.disorder_id,
           modelId: formFields.model_id,
-          resourceAvailAdmin: formFields.resource_avail_admin,
-          resourceAvailAll: formFields.resource_avail_all,
           resourceAvailOnlyme: formFields.resource_avail_onlyme,
           resourceAvailTherapist: formFields.resource_avail_therapist,
           resourceFilename: formFields.file_name,

@@ -9,10 +9,8 @@ export type addResourceFormField = {
   resource_references: string;
   agenda_id: string;
   file_name: string;
-  resource_avail_admin: number;
   resource_avail_therapist: number;
   resource_avail_onlyme: number;
-  resource_avail_all: number;
   uploadFile: File;
   uploadFileURL: string;
 };
@@ -29,10 +27,8 @@ export type editResourceFormField = {
   resource_references: string;
   agenda_id: string;
   file_name: string;
-  resource_avail_admin: number;
   resource_avail_therapist: number;
   resource_avail_onlyme: number;
-  resource_avail_all: number;
   uploadFile?: File;
   uploadFileURL?: string;
   resource_url?: null;

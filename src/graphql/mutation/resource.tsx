@@ -12,8 +12,6 @@ export const CREATE_RESOURCE = gql`
   mutation MyMutation(
     $disorderId: String!
     $modelId: String!
-    $resourceAvailAdmin: String!
-    $resourceAvailAll: String!
     $resourceAvailOnlyme: String!
     $resourceAvailTherapist: String!
     $resourceFilename: String!
@@ -30,8 +28,6 @@ export const CREATE_RESOURCE = gql`
     createResource(
       disorderId: $disorderId
       modelId: $modelId
-      resourceAvailAdmin: $resourceAvailAdmin
-      resourceAvailAll: $resourceAvailAll
       resourceAvailOnlyme: $resourceAvailOnlyme
       resourceAvailTherapist: $resourceAvailTherapist
       resourceFilename: $resourceFilename
@@ -69,10 +65,8 @@ export const UPDATE_RESOURCE_BY_ID = gql`
       resource_session_no
       agenda_id
       resource_url
-      resource_avail_admin
       resource_avail_therapist
       resource_avail_onlyme
-      resource_avail_all
       resource_filename
       resource_status
       created_date
