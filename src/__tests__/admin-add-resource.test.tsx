@@ -154,9 +154,7 @@ mocksData.push({
     variables: {
       disorderId: "disorder_id_1",
       modelId: "model_id_1",
-      resourceAvailAdmin: 1,
-      resourceAvailAll: 1,
-      resourceAvailOnlyme: 1,
+      resourceAvailOnlyme: 0,
       resourceAvailTherapist: 1,
       resourceFilename: "invalid.pdf",
       resourceName: "test",
@@ -168,6 +166,8 @@ mocksData.push({
       resourceIsformualation: "0",
       resourceIssmartdraw: "0",
       resourceReferences: "",
+      templateData: "",
+      templateId: "",
     },
   },
   result: {
@@ -233,13 +233,9 @@ describe("Admin add resource page", () => {
 
     expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
 
-    expect(screen.getByTestId("resource_avail_admin")).toBeInTheDocument();
-
     expect(screen.getByTestId("resource_avail_therapist")).toBeInTheDocument();
 
     expect(screen.getByTestId("resource_avail_onlyme")).toBeInTheDocument();
-
-    expect(screen.getByTestId("resource_avail_all")).toBeInTheDocument();
 
     expect(screen.getByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
@@ -317,7 +313,7 @@ describe("Admin add resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
@@ -408,7 +404,7 @@ describe("Admin add resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
       fireEvent.change(screen.getByTestId("resource_file_upload"), {
@@ -470,7 +466,7 @@ describe("Admin add resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
       fireEvent.change(screen.getByTestId("resource_file_upload"), {
@@ -495,12 +491,8 @@ describe("Admin add resource page", () => {
 
   it("checkbox check admin add resources", async () => {
     await sut();
-    fireEvent.click(screen.queryByTestId("resource_avail_admin"));
     fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
     fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
-
-    const checkboxAdmin = screen.getByLabelText("Admin") as HTMLInputElement;
-    expect(checkboxAdmin).toBeChecked();
 
     const checkboxTherapist = screen.getByLabelText(
       "All Therapists"

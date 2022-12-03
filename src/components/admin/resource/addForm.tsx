@@ -34,8 +34,6 @@ const defaultFormValue = {
   resource_desc: "",
   resource_instruction: "",
   resource_references: "",
-  resource_avail_admin: 0,
-  resource_avail_all: 0,
   resource_avail_onlyme: 0,
   resource_avail_therapist: 0,
   agenda_id: "",
@@ -162,20 +160,10 @@ export default function AddForm(props: propTypes) {
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const name = e.target.name;
-    if (name === "resource_avail_all") {
-      setFormFields((oldValues) => ({
-        ...oldValues,
-        ["resource_avail_admin"]: Math.abs(oldValues[name] - 1),
-        ["resource_avail_onlyme"]: Math.abs(oldValues[name] - 1),
-        ["resource_avail_therapist"]: Math.abs(oldValues[name] - 1),
-        ["resource_avail_all"]: Math.abs(oldValues[name] - 1),
-      }));
-    } else {
-      setFormFields((oldValues) => ({
-        ...oldValues,
-        [name]: Math.abs(oldValues[name] - 1),
-      }));
-    }
+    setFormFields((oldValues) => ({
+      ...oldValues,
+      [name]: Math.abs(oldValues[name] - 1),
+    }));
   };
 
   const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,10 +189,8 @@ export default function AddForm(props: propTypes) {
       return;
     }
     if (
-      !formFields.resource_avail_admin &&
       !formFields.resource_avail_onlyme &&
-      !formFields.resource_avail_therapist &&
-      !formFields.resource_avail_all
+      !formFields.resource_avail_therapist
     ) {
       enqueueSnackbar("Please select availability of resource", {
         variant: "error",
@@ -460,16 +446,6 @@ export default function AddForm(props: propTypes) {
                   <FormGroup aria-label="position" row>
                     <CheckBoxLabelComponent
                       value="1"
-                      name="resource_avail_admin"
-                      onChange={setCheckBox}
-                      label="Admin"
-                      placement="end"
-                      inputProps={{ "data-testid": "resource_avail_admin" }}
-                      checked={formFields.resource_avail_admin}
-                      size="small"
-                    />
-                    <CheckBoxLabelComponent
-                      value="1"
                       name="resource_avail_therapist"
                       onChange={setCheckBox}
                       label="All Therapists"
@@ -486,16 +462,6 @@ export default function AddForm(props: propTypes) {
                       placement="end"
                       inputProps={{ "data-testid": "resource_avail_onlyme" }}
                       checked={formFields.resource_avail_onlyme}
-                      size="small"
-                    />
-                    <CheckBoxLabelComponent
-                      value="1"
-                      name="resource_avail_all"
-                      onChange={setCheckBox}
-                      label="Everyone"
-                      placement="end"
-                      inputProps={{ "data-testid": "resource_avail_all" }}
-                      checked={formFields.resource_avail_all}
                       size="small"
                     />
                   </FormGroup>
