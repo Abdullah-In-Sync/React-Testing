@@ -1,7 +1,7 @@
 import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import EditTemplate from "../pages/admin/resource/editTemplate/[id]/index";
+import EditTemplate from "../pages/admin/resource/template/edit/[id]/index";
 import { GET_TEMPLATE_DETAIL } from "../graphql/query/resource";
 import { UPDATE_TEMPLATE_BY_ID } from "../graphql/mutation/resource";
 import { useRouter } from "next/router";
@@ -124,7 +124,7 @@ describe("Admin edit template page", () => {
       ).toBeInTheDocument();
     });
 
-    expect(pushMock).toHaveBeenCalledWith("/admin/resource/templateList");
+    expect(pushMock).toHaveBeenCalledWith("/admin/resource/template/list");
   });
 
   it("submit edit template with null data", async () => {
