@@ -8,7 +8,7 @@ type propTypes = {
   multiline?: boolean;
   rows?: number;
   id: string;
-  label: string;
+  label?: string;
   name: string;
   value: string;
   onChange?: (

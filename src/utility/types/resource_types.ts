@@ -43,6 +43,20 @@ export type editTemplatesFormField = {
   name: string;
 };
 
+export type editSafetyPlanFormField = {
+  _id: string;
+  safety_ans: string;
+  safety_ques: string;
+  patient_id: string;
+  safety_additional_details: string;
+  safety_ans_status: string;
+  safety_ques_id: string;
+  safety_ques_type: string;
+  safety_ques_typeoption: string;
+  therapist_id: string;
+  updated_date: string;
+};
+
 export type patientAgreementFormFeild = {
   _id: string;
   patient_contract: number;

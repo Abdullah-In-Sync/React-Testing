@@ -66,7 +66,7 @@ const Index = () => {
     <>
       <Layout>
         <Loader visible={loader} />
-        <ContentHeader title="Edit Resource" />
+        <ContentHeader title="Edit Template" />
         <EditTemplate onSubmit={editTemplate} setLoader={setLoader} />
       </Layout>
     </>
