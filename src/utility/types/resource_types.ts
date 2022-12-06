@@ -67,6 +67,7 @@ export type patientProfileFormFeild = {
   patient_lastname: string;
   patient_marrital: string;
   patient_no: string;
+  patient_agree: number;
   patient_sexuality: string;
   __typename: string;
   addressline2: string;
