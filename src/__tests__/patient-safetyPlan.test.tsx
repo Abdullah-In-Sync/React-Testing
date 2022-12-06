@@ -1,11 +1,11 @@
 import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import SafetyPlan from "../pages/patient/safetyPlan/[id]/index";
 import { GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID } from "../graphql/query/resource";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { UPDATE_SAFETY_PLAN_QUESTION_DATA } from "../graphql/mutation/patient";
+import SafetyPlan from "../pages/patient/safetyPlan";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -86,20 +86,27 @@ describe("Admin edit template page", () => {
     });
   });
 
-  test("Update safety plan data", async () => {
+  it("Update safety plan data", async () => {
     await sut();
     await waitFor(async () => {
-      expect(screen.getByTestId("safetyPlan-form")).toBeInTheDocument();
       fireEvent.change(screen.queryByTestId("safety_ans"), {
         target: { value: "avbv" },
       });
 
       await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("safetyPlanSubmitButton"));
+        fireEvent.submit(screen.queryByTestId("safetyPlan-form"));
+      });
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+      expect(screen.getByTestId("editSafetyPlanConfirmButton")).toBeVisible();
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("editSafetyPlanConfirmButton"));
       });
 
       await waitFor(async () => {
-        expect(screen.getByText("Updated successfull.")).toBeInTheDocument();
+        expect(
+          screen.getByText("Details Saved Successfully")
+        ).toBeInTheDocument();
       });
     });
   });

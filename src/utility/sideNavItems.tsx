@@ -292,7 +292,7 @@ export const patient_routes: RoutesType[] = [
   {
     key: 5,
     label: "Safety Plan",
-    path: "/patient/safetyPlan/" + patientId,
+    path: "/patient/safetyPlan/",
     icon: <BadgeIcon />,
   },
   [

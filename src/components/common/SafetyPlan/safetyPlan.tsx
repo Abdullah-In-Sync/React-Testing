@@ -1,9 +1,10 @@
-import { Box, Button, Grid } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID } from "../../../graphql/query/resource";
 import { editSafetyPlanFormField } from "../../../utility/types/resource_types";
 import TextFieldComponent from "../TextField/TextFieldComponent";
+import SureModal from "../../admin/resource/SureModal";
 
 const defaultFormValue = {
   _id: "",
@@ -25,6 +26,9 @@ type propTypes = {
 };
 
 const SafetyPlan = (props: propTypes) => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
+
   const [formFields, setFormFields] =
     useState<editSafetyPlanFormField>(defaultFormValue);
 
@@ -38,6 +42,12 @@ const SafetyPlan = (props: propTypes) => {
       setFormFields(data?.getPatientSafetyPlanList);
     },
   });
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setModalOpen(true);
+    /* istanbul ignore next */
+    if (!confirmSubmission) return;
+  };
 
   const set2 = (
     index,
@@ -71,7 +81,11 @@ const SafetyPlan = (props: propTypes) => {
 
   return (
     <>
-      <form data-testid="safetyPlan-form" style={{ paddingBottom: "30px" }}>
+      <form
+        data-testid="safetyPlan-form"
+        style={{ paddingBottom: "30px" }}
+        onSubmit={handleSubmit}
+      >
         <Box>
           <p style={{ fontWeight: "700", fontFamily: "Montserrat" }}>
             If you sometimes struggle with suicidal thoughts, complete the form
@@ -128,7 +142,6 @@ const SafetyPlan = (props: propTypes) => {
                           <TextFieldComponent
                             name="safety_ans"
                             id="safety_ans"
-                            // label={index + 1 + ". " + data?.safety_ques}
                             value={formFields[index]?.safety_ans}
                             multiline
                             rows={4}
@@ -142,6 +155,49 @@ const SafetyPlan = (props: propTypes) => {
                     </Box>
                   )
                 )}
+
+                <SureModal
+                  modalOpen={modalOpen}
+                  setModalOpen={setModalOpen}
+                  setConfirmSubmission={setConfirmSubmission}
+                >
+                  <Typography
+                    sx={{
+                      fontWeight: "600",
+                      textAlign: "center",
+                      fontSize: "27px",
+                    }}
+                  >
+                    Are you sure you want to save these details
+                  </Typography>
+                  <Box marginTop="20px" display="flex" justifyContent="end">
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      size="small"
+                      data-testid="editSafetyPlanCancelButton"
+                      onClick={() => {
+                        setModalOpen(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      color="error"
+                      variant="contained"
+                      sx={{ marginLeft: "5px" }}
+                      size="small"
+                      data-testid="editSafetyPlanConfirmButton"
+                      onClick={() => {
+                        setModalOpen(false);
+                        props.onSubmit(formFields);
+                        props.setLoader(false);
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </Box>
+                </SureModal>
                 <Box
                   sx={{
                     display: "flex",
@@ -154,16 +210,28 @@ const SafetyPlan = (props: propTypes) => {
                   }}
                 >
                   <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                    <Button
+                    {/* <Button
                       data-testid="safetyPlanSubmitButton"
                       variant="contained"
-                      type="button"
+                      type="submit"
                       style={{
                         paddingLeft: "50px",
                         paddingRight: "50px",
                         backgroundColor: "#6BA08E",
                       }}
-                      onClick={() => props.onSubmit(formFields)}
+                      // onClick={() => props.onSubmit(formFields)}
+                    >
+                      Save
+                    </Button> */}
+                    <Button
+                      style={{
+                        paddingLeft: "50px",
+                        paddingRight: "50px",
+                        backgroundColor: "#6BA08E",
+                      }}
+                      data-testid="safetyPlanSubmitButton"
+                      variant="contained"
+                      type="submit"
                     >
                       Save
                     </Button>
