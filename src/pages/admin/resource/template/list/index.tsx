@@ -1,11 +1,11 @@
 import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import { AddButton } from "../../../../components/common/Buttons";
-import Layout from "../../../../components/layout";
-import TableGenerator from "../../../../components/common/TableGenerator";
+import { AddButton } from "../../../../../components/common/Buttons";
+import Layout from "../../../../../components/layout";
+import TableGenerator from "../../../../../components/common/TableGenerator";
 import { useLazyQuery } from "@apollo/client";
-import { GET_TEMPLATE_LIST } from "../../../../graphql/query/resource";
-import ContentHeader from "../../../../components/common/ContentHeader";
+import { GET_TEMPLATE_LIST } from "../../../../../graphql/query/resource";
+import ContentHeader from "../../../../../components/common/ContentHeader";
 import NextLink from "next/link";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -65,7 +65,7 @@ const TemplateList = () => {
 
           <IconButton size="small" data-testid="edit-icon-button">
             <NextLink
-              href={"/admin/resource/editTemplate/" + value._id}
+              href={"/admin/resource/template/edit/" + value._id}
               passHref
             >
               <CreateIcon />

@@ -535,7 +535,7 @@ const Resource: NextPage = () => {
                   variant="contained"
                   sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
                   data-testid="templateList"
-                  href={"/v2/admin/resource/templateList"}
+                  href={"/v2/admin/resource/template/list"}
                 >
                   Templates
                 </Button>
