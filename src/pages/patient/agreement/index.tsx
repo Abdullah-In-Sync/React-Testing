@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import CheckBoxLabelComponent from "../../../components/common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
@@ -19,12 +18,10 @@ import { UPDATE_PROFILE_DATA } from "../../../graphql/mutation/patient";
 import { GET_TOKEN_DATA } from "../../../graphql/query/common";
 import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
 import { env } from "../../../lib/env";
-
 import {
   patientEditProfileFormFeild,
   patientProfileFormFeild,
 } from "../../../utility/types/resource_types";
-
 const defaultFormValue = {
   _id: "",
   patient_contract: 1,
@@ -67,16 +64,15 @@ const defaultFormValue = {
   city: "",
   religion: "",
   patient_status: "",
-
   phone_number: "",
   postal_code: "",
+  patient_agree: 0,
 };
 
 const Agreement = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
-
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
   const {
@@ -89,11 +85,18 @@ const Agreement = () => {
     useLazyQuery(GET_PROFILE_DATA, {
       onCompleted: (data) => {
         if (data!.getProfileById) {
-          setFormFields(data.getProfileById);
+          setFormFields((oldValues) => {
+            return {
+              ...{
+                ...oldValues,
+                ...{ patient_agree: data?.getProfileById?.patient_consent },
+              },
+              ...data.getProfileById,
+            };
+          });
         }
       },
     });
-
   const [getTokenData, { loading: templateLoading, data: templateData }] =
     useLazyQuery(GET_TOKEN_DATA, {
       onCompleted: () => {
@@ -101,19 +104,18 @@ const Agreement = () => {
         setLoader(false);
       },
     });
-
   const [updatePatient] = useMutation(UPDATE_PROFILE_DATA);
-
   const setCheckBox = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const name = e.target.name;
-    setFormFields((oldValues) => ({
-      ...oldValues,
-      [name]: Math.abs(oldValues[name] - 1),
-    }));
+    setFormFields((oldValues) => {
+      return {
+        ...oldValues,
+        [name]: Math.abs(oldValues[name] - 1),
+      };
+    });
   };
-
   const editFormHandler = (e, formFields: patientEditProfileFormFeild) => {
     e.preventDefault();
     setLoader(true);
@@ -127,7 +129,6 @@ const Agreement = () => {
       });
       return;
     }
-
     try {
       updatePatient({
         variables: {
@@ -168,12 +169,10 @@ const Agreement = () => {
           console.log("data error: ", error);
         },
       });
-
       setLoader(false);
     } catch (e) {
       /* istanbul ignore next */
       setLoader(false);
-      // enqueueSnackbar("Something is wrong", { variant: "error" });
     }
   };
   useEffect(() => {
@@ -182,17 +181,14 @@ const Agreement = () => {
     getTokenData();
     setLoader(false);
   }, []);
-
   useEffect(() => {
     setLoader(true);
   }, []);
-
   useEffect(() => {
     setLoader(true);
     getPatientData({ variables: { groupName: userType } });
     setLoader(false);
   }, [userType]);
-
   useEffect(() => {
     /* istanbul ignore else */
     if (!profileLoading && !templateLoading) {
@@ -203,7 +199,6 @@ const Agreement = () => {
   return (
     <>
       <Loader visible={loader} />
-
       <form
         onSubmit={(e) => editFormHandler(e, formFields)}
         data-testid="agreement-form"
@@ -268,14 +263,13 @@ const Agreement = () => {
                         <FormGroup aria-label="position">
                           <CheckBoxLabelComponent
                             value="1"
-                            name="patient_consent"
+                            name="patient_agree"
                             onChange={setCheckBox}
                             label="I accept the Terms with this agreement."
-                            // placement="end"
                             inputProps={{
-                              "data-testid": "patient_consent",
+                              "data-testid": "patient_agree",
                             }}
-                            checked={formFields?.patient_consent}
+                            checked={formFields.patient_agree}
                             size="small"
                           />
                           <CheckBoxLabelComponent
@@ -298,7 +292,7 @@ const Agreement = () => {
                             }
                             placement="end"
                             inputProps={{
-                              "data-testid": "for_future",
+                              "data-testid": "patient_consent",
                             }}
                             checked={formFields?.patient_consent}
                             size="small"
@@ -390,5 +384,4 @@ const Agreement = () => {
     </>
   );
 };
-
 export default Agreement;
