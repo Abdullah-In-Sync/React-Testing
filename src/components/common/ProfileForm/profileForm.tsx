@@ -15,7 +15,7 @@ import dayjs from "dayjs";
 
 const defaultFormValue = {
   _id: "",
-  patient_contract: 0,
+  patient_contract: 1,
   patient_employment: "",
   patient_firstname: "",
   patient_gender: "",
@@ -57,6 +57,7 @@ const defaultFormValue = {
   patient_status: "",
   phone_number: "",
   postal_code: "",
+  patient_agree: 0,
 };
 
 type propTypes = {
