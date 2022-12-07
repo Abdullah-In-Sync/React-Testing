@@ -33,8 +33,8 @@ const View: NextPage = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Template Preveiw" />
-        {currentTemplateData && <ViewTemplate currentTemplateData={currentTemplateData} /> }
+        <ContentHeader title="Template Preview" />
+        <ViewTemplate currentTemplateData={currentTemplateData} />
       </Layout>
     </>
   );

@@ -13,6 +13,7 @@ interface ViewProps {
 }
 
 const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
+  if (!currentTemplateData) return null;
   const staticTemplate: TemplateFormData = {
     rows: [
       {
