@@ -8,8 +8,6 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
-// jest.mock("../contexts/AuthContext");
-
 const mocksData = [];
 
 mocksData.push({
