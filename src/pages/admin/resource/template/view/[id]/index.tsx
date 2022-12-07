@@ -3,27 +3,20 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ViewTemplate from "../../../../../../components/admin/resource/templates/view";
-import { ViewTemplateData } from "../../../../../../components/admin/resource/templates/view/view.model";
+import { ViewTemplateData } from "../../../../../../components/admin/resource/templates/view/viewInterface";
 import ContentHeader from "../../../../../../components/common/ContentHeader";
 import Layout from "../../../../../../components/layout";
 import { GET_TEMPLATE_DETAIL } from "../../../../../../graphql/query/resource";
 
-const defaultFormValue = {
-  _id: "",
-  category: "",
-  name: "Test",
-  component_name: "TemplateTable",
-};
-
 const View: NextPage = () => {
   const [currentTemplateData, setCurrentTemplateData] =
-    useState<ViewTemplateData>(defaultFormValue);
+    useState<ViewTemplateData>();
 
   const router = useRouter();
   /* istanbul ignore next */
   const id = router?.query.id as string;
 
-  const [getResourceData] = useLazyQuery(GET_TEMPLATE_DETAIL, {
+  const [getTemplateViewData] = useLazyQuery(GET_TEMPLATE_DETAIL, {
     /* istanbul ignore next */
     onCompleted: (data) => {
       /* istanbul ignore next */
@@ -32,7 +25,7 @@ const View: NextPage = () => {
   });
 
   useEffect(() => {
-    getResourceData({
+    getTemplateViewData({
       variables: { templateId: id },
     });
   }, []);
@@ -41,7 +34,7 @@ const View: NextPage = () => {
     <>
       <Layout>
         <ContentHeader title="Template Preveiw" />
-        <ViewTemplate currentTemplateData={currentTemplateData} />
+        {currentTemplateData && <ViewTemplate currentTemplateData={currentTemplateData} /> }
       </Layout>
     </>
   );

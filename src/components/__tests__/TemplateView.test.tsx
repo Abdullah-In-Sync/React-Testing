@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import TemplateView from "../admin/resource/templates/view";
-import { ViewTemplateData } from "../admin/resource/templates/view/view.model";
+import { ViewTemplateData } from "../admin/resource/templates/view/viewInterface";
 
 const currentTemplateData: ViewTemplateData = {
   _id: "",

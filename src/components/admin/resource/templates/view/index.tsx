@@ -5,14 +5,11 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import styles from "./view.module.css";
 import CardWithHeader from "../../../../../components/common/Cards/CardWithHeader";
 import { TemplateFormData } from "../../../../../components/templateTable/table.model";
-import * as ViewTemplateData from "./view.model";
-const Components = ViewTemplateData.COMPONENTS;
-// const Components = {};
-// Components["TemplateTable"] =
-//   require("../../../../../components/templateTable").default;
+import * as ViewTemplateInterface from "./viewInterface";
+const Components = ViewTemplateInterface.COMPONENTS;
 
 interface ViewProps {
-  currentTemplateData?: ViewTemplateData.ViewTemplateData;
+  currentTemplateData?: ViewTemplateInterface.ViewTemplateData;
 }
 
 const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
@@ -29,7 +26,7 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
     ],
   };
 
-  const TemplateDynamic = Components[currentTemplateData?.component_name];
+  const TemplateDynamic = Components[currentTemplateData.component_name];
 
   return (
     <>
@@ -57,11 +54,11 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
           <Typography color="primary.main">Table Template</Typography>,
           <Typography color="primary.main">Grid</Typography>,
           <Typography color="text.primary">
-            {currentTemplateData?.name}
+            {currentTemplateData.name}
           </Typography>
         </Breadcrumbs>
       </Grid>
-      <CardWithHeader label={currentTemplateData?.name}>
+      <CardWithHeader label={currentTemplateData.name}>
         <fieldset className={styles.disbledFieldSet} disabled>
           <TemplateDynamic mode="view" initialData={staticTemplate} />
         </fieldset>
