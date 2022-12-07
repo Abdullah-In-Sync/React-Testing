@@ -1,0 +1,7 @@
+.disbledFieldSet {
+    border: unset !important;
+    pointer-events: none;
+}
+.disbled-field-set input :focus-visible {
+    outline: unset !important;
+}

@@ -7,6 +7,7 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_TEMPLATE_LIST } from "../../../../../graphql/query/resource";
 import ContentHeader from "../../../../../components/common/ContentHeader";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CreateIcon from "@mui/icons-material/Create";
@@ -20,6 +21,7 @@ const crudButtons = {
 };
 
 const TemplateList = () => {
+  const router = useRouter();
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -59,7 +61,13 @@ const TemplateList = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+          <IconButton
+            size="small"
+            data-testid={"viewIcon_" + value._id}
+            onClick={() =>
+              router.push(`/admin/resource/template/view/${value._id}`)
+            }
+          >
             <VisibilityIcon />
           </IconButton>
 

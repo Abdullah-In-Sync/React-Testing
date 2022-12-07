@@ -210,19 +210,6 @@ const SafetyPlan = (props: propTypes) => {
                   }}
                 >
                   <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                    {/* <Button
-                      data-testid="safetyPlanSubmitButton"
-                      variant="contained"
-                      type="submit"
-                      style={{
-                        paddingLeft: "50px",
-                        paddingRight: "50px",
-                        backgroundColor: "#6BA08E",
-                      }}
-                      // onClick={() => props.onSubmit(formFields)}
-                    >
-                      Save
-                    </Button> */}
                     <Button
                       style={{
                         paddingLeft: "50px",
