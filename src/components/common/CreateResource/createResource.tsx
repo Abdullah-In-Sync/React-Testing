@@ -1,16 +1,5 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, FormControl, FormLabel, Grid, Typography } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
@@ -19,50 +8,20 @@ import {
   GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
 } from "../../../graphql/query/common";
-import { GET_TEMPLATE_LIST } from "../../../graphql/query/resource";
 import { useSnackbar } from "notistack";
 import TextFieldComponent from "../../common/TextField/TextFieldComponent";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
-import { editResourceFormField } from "../../../utility/types/resource_types";
 import { AddButton } from "../Buttons";
-import CustomModal from "../CustomModal/customModel";
-import {
-  SelectTemplateModal,
-  TemplateListFormData,
-} from "./selectTemplateModal";
+import { SelectTemplateModal } from "./selectTemplateModal";
 import {
   TableDimensionFormData,
   TableDimensionModal,
 } from "./tableDimensionModal";
 import { TemplateFormData } from "../../templateTable/table.model";
 import TemplateTable from "../../templateTable";
-import ContentHeader from "../ContentHeader";
 import { FormikProps } from "formik";
 import { CREATE_RESOURCE } from "../../../graphql/mutation/resource";
-import { GET_ORG_DATA } from "../../../graphql/query";
-
-const defaultFormValue = {
-  _id: "",
-  resourceName: "",
-  resourceType: 2,
-  disorderId: "",
-  modelId: "",
-  categoryId: "",
-  resourceDesc: "",
-  resourceInstruction: "",
-  resourceReferences: "",
-  resourceAvailOnlyme: 0,
-  resourceAvailTherapist: 0,
-  agendaId: "",
-  resourceFilename: "",
-  uploadFile: null,
-  uploadFileURL: "",
-  disorder_detail: "",
-  model_detail: "",
-  resource_url: null,
-  download_resource_url: "",
-};
 
 type propTypes = {
   onSubmit?: any;
@@ -90,24 +49,25 @@ interface CreateResourceInput {
 }
 
 export default function CreateResource(props: propTypes) {
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [formFields, setFormFields] = useState<CreateResourceInput>({
-    resourceName: "",
-    resourceType: 2,
-    disorderId: "",
-    modelId: "",
-    categoryId: "",
-    orgId: "",
+    disorderId: "59c60ab89afb4923b09e242fc3f99f97",
+    modelId: "ade64d00d726478aaee1e59b09c129ba",
+    resourceAvailOnlyme: "0",
+    resourceAvailTherapist: "1",
+    resourceFilename: "test.pdf",
+    resourceName: "ravi res",
+    resourceType: 1,
+    agendaId: "",
+    categoryId: "00781dc9159d4885b88356f51b20e731",
+    orgId: "2301536c4d674b3598814174d8f19593",
+    resourceIssmartdraw: "1",
+    templateData: "test",
+    templateId: "testss",
     resourceDesc: "",
     resourceInstruction: "",
+    resourceIsformualation: "",
     resourceReferences: "",
-    resourceAvailOnlyme: "0",
-    resourceAvailTherapist: "0",
-    agendaId: "",
-    resourceFilename: "",
-    templateData: "",
-    templateId: "",
   });
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   //useState for prefilled input data
@@ -127,10 +87,7 @@ export default function CreateResource(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
-  const [createResource, { loading, data: createResourceResult }] =
-    useMutation(CREATE_RESOURCE);
-
-  const { data: orgData } = useQuery(GET_ORG_DATA);
+  const [createResource] = useMutation(CREATE_RESOURCE);
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -301,7 +258,7 @@ export default function CreateResource(props: propTypes) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} data-testid="resource-edit-form">
+      <form onSubmit={handleSubmit} data-testid="resource-crate-form">
         <Box
           sx={{ flexGrow: 1, border: "1px solid #cecece" }}
           p={5}
@@ -519,7 +476,7 @@ export default function CreateResource(props: propTypes) {
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12} textAlign="center">
               <AddButton
-                data-testid="editResourceSubmitButton"
+                data-testid="selectTemplateButton"
                 variant="contained"
                 type="submit"
                 label="SELECT TEMPLATE*"

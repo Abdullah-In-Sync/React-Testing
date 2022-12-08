@@ -9,7 +9,7 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import { Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik } from "formik";
 import { FC, useEffect } from "react";
 import { GET_TEMPLATE_LIST } from "../../../graphql/query/resource";
 import CustomModal from "../CustomModal/customModel";
@@ -98,6 +98,7 @@ export const SelectTemplateModal: FC<SelectTemplateModalProps> = ({
                     <FormControl component="fieldset">
                       <RadioGroup
                         name="templateType"
+                        data-testid="componentsRadio"
                         value={values.templateType.toString()}
                         onChange={(event) => {
                           setFieldValue(
@@ -108,6 +109,7 @@ export const SelectTemplateModal: FC<SelectTemplateModalProps> = ({
                       >
                         {resData?.listTemplates?.map((temp) => (
                           <FormControlLabel
+                            data-testid={temp?.component_name}
                             value={temp?.component_name}
                             control={<Radio />}
                             label={temp?.name}
@@ -119,7 +121,7 @@ export const SelectTemplateModal: FC<SelectTemplateModalProps> = ({
                 </Box>
                 <div style={{ paddingTop: "20px", textAlign: "center" }}>
                   <Button
-                    data-testid="addResourceSubmitButton"
+                    data-testid="TemplateProceed"
                     variant="contained"
                     type="submit"
                     style={{ paddingLeft: "50px", paddingRight: "50px" }}

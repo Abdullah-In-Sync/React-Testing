@@ -43,6 +43,8 @@ export const TableDimensionModal: FC<TableDimensionModalProps> = ({
     const fieldName = e.target.name;
     const value = e.target.value;
 
+    console.debug(fieldName, value, "on change");
+
     setFieldValue(fieldName, value);
   };
 
@@ -140,7 +142,7 @@ export const TableDimensionModal: FC<TableDimensionModalProps> = ({
                 >
                   <Grid item xs={6} style={{ paddingRight: "50px" }}>
                     <Button
-                      data-testid="editTemplateSubmitButton"
+                      data-testid="selectDimensionButton"
                       variant="contained"
                       type="submit"
                       style={{ paddingLeft: "50px", paddingRight: "50px" }}
