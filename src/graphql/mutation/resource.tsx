@@ -14,8 +14,6 @@ export const CREATE_RESOURCE = gql`
     $categoryId: String
     $disorderId: String!
     $modelId: String!
-    $resourceAvailAdmin: String!
-    $resourceAvailAll: String!
     $resourceAvailOnlyme: String!
     $resourceAvailTherapist: String!
     $resourceFilename: String!
@@ -28,12 +26,12 @@ export const CREATE_RESOURCE = gql`
     $resourceIsformualation: String
     $resourceIssmartdraw: String
     $resourceReferences: String
+    $templateData: String
+    $templateId: String
   ) {
     createResource(
       disorderId: $disorderId
       modelId: $modelId
-      resourceAvailAdmin: $resourceAvailAdmin
-      resourceAvailAll: $resourceAvailAll
       resourceAvailOnlyme: $resourceAvailOnlyme
       resourceAvailTherapist: $resourceAvailTherapist
       resourceFilename: $resourceFilename
@@ -46,6 +44,8 @@ export const CREATE_RESOURCE = gql`
       resourceIsformualation: $resourceIsformualation
       resourceIssmartdraw: $resourceIssmartdraw
       resourceReferences: $resourceReferences
+      templateData: $templateData
+      templateId: $templateId
     ) {
       _id
     }

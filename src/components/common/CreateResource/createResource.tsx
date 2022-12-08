@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
@@ -38,23 +38,24 @@ import {
 import { TemplateFormData } from "../../templateTable/table.model";
 import TemplateTable from "../../templateTable";
 import ContentHeader from "../ContentHeader";
+import { FormikProps } from "formik";
+import { CREATE_RESOURCE } from "../../../graphql/mutation/resource";
+import { GET_ORG_DATA } from "../../../graphql/query";
 
 const defaultFormValue = {
   _id: "",
-  resource_name: "",
-  resource_type: 2,
-  disorder_id: "",
-  model_id: "",
-  category_id: "",
-  resource_desc: "",
-  resource_instruction: "",
-  resource_references: "",
-  resource_avail_admin: 0,
-  resource_avail_all: 0,
-  resource_avail_onlyme: 0,
-  resource_avail_therapist: 0,
-  agenda_id: "",
-  file_name: "",
+  resourceName: "",
+  resourceType: 2,
+  disorderId: "",
+  modelId: "",
+  categoryId: "",
+  resourceDesc: "",
+  resourceInstruction: "",
+  resourceReferences: "",
+  resourceAvailOnlyme: 0,
+  resourceAvailTherapist: 0,
+  agendaId: "",
+  resourceFilename: "",
   uploadFile: null,
   uploadFileURL: "",
   disorder_detail: "",
@@ -68,11 +69,46 @@ type propTypes = {
   setLoader: any;
 };
 
+interface CreateResourceInput {
+  categoryId?: string;
+  agendaId?: string;
+  disorderId: string;
+  modelId?: string;
+  orgId?: string;
+  resourceAvailOnlyme: string;
+  resourceAvailTherapist: string;
+  resourceDesc?: string;
+  resourceFilename: string;
+  resourceInstruction?: string;
+  resourceIsformualation?: string;
+  resourceIssmartdraw?: string;
+  resourceName: string;
+  resourceReferences?: string;
+  resourceType: number;
+  templateData?: string;
+  templateId?: string;
+}
+
 export default function CreateResource(props: propTypes) {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [formFields, setFormFields] =
-    useState<editResourceFormField>(defaultFormValue);
+  const [formFields, setFormFields] = useState<CreateResourceInput>({
+    resourceName: "",
+    resourceType: 2,
+    disorderId: "",
+    modelId: "",
+    categoryId: "",
+    orgId: "",
+    resourceDesc: "",
+    resourceInstruction: "",
+    resourceReferences: "",
+    resourceAvailOnlyme: "0",
+    resourceAvailTherapist: "0",
+    agendaId: "",
+    resourceFilename: "",
+    templateData: "",
+    templateId: "",
+  });
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   //useState for prefilled input data
   const [templateModal, setTemplateModal] = useState<boolean>(false);
@@ -90,6 +126,11 @@ export default function CreateResource(props: propTypes) {
     { id: 3, value: "Audio File" },
     { id: 4, value: "Video File" },
   ];
+
+  const [createResource, { loading, data: createResourceResult }] =
+    useMutation(CREATE_RESOURCE);
+
+  const { data: orgData } = useQuery(GET_ORG_DATA);
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -133,40 +174,40 @@ export default function CreateResource(props: propTypes) {
   }, []);
 
   useEffect(() => {
-    if (formFields.disorder_id) {
+    if (formFields.disorderId) {
       props.setLoader(true);
       setFormFields((oldValues) => ({
         ...oldValues,
-        model_id: "",
-        category_id: "",
-        agenda_id: "",
+        modelId: "",
+        categoryId: "",
+        agendaId: "",
       }));
       getModelByDisorderId({
-        variables: { disorderId: formFields.disorder_id },
+        variables: { disorderId: formFields.disorderId },
       });
     }
-  }, [formFields.disorder_id]);
+  }, [formFields.disorderId]);
 
   useEffect(() => {
-    if (formFields.model_id) {
+    if (formFields.modelId) {
       props.setLoader(true);
       setFormFields((oldValues) => ({
         ...oldValues,
-        category_id: "",
-        agenda_id: "",
+        categoryId: "",
+        agendaId: "",
       }));
       getCategoryByModelId({
-        variables: { modelId: formFields.model_id },
+        variables: { modelId: formFields.modelId },
       });
 
       getAgendaByDisorderModelId({
         variables: {
-          disorderId: formFields.disorder_id,
-          modelId: formFields.model_id,
+          disorderId: formFields.disorderId,
+          modelId: formFields.modelId,
         },
       });
     }
-  }, [formFields.model_id]);
+  }, [formFields.modelId]);
 
   useEffect(() => {
     props.setLoader(true);
@@ -185,30 +226,19 @@ export default function CreateResource(props: propTypes) {
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const name = e.target.name;
-    if (name === "resource_avail_all") {
-      setFormFields((oldValues) => ({
-        ...oldValues,
-        ["resource_avail_admin"]: Math.abs(oldValues[name] - 1),
-        ["resource_avail_onlyme"]: Math.abs(oldValues[name] - 1),
-        ["resource_avail_therapist"]: Math.abs(oldValues[name] - 1),
-        ["resource_avail_all"]: Math.abs(oldValues[name] - 1),
-      }));
-    } else {
-      setFormFields((oldValues) => ({
-        ...oldValues,
-        [name]: Math.abs(oldValues[name] - 1),
-      }));
-    }
+
+    setFormFields((oldValues) => ({
+      ...oldValues,
+      [name]: Math.abs(oldValues[name] - 1),
+    }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     /* istanbul ignore next */
     if (
-      !formFields?.resource_avail_admin &&
-      !formFields?.resource_avail_onlyme &&
-      !formFields?.resource_avail_therapist &&
-      !formFields?.resource_avail_all
+      !formFields?.resourceAvailOnlyme &&
+      !formFields?.resourceAvailTherapist
     ) {
       enqueueSnackbar("Please select availability of resource", {
         variant: "error",
@@ -229,6 +259,13 @@ export default function CreateResource(props: propTypes) {
     }
   };
 
+  const saveResource = (data) => {
+    console.log(data, "data");
+    createResource({
+      variables: data,
+    });
+  };
+
   const onGenerateTable = (values: TableDimensionFormData) => {
     const initialData: TemplateFormData = { rows: [] };
 
@@ -240,8 +277,6 @@ export default function CreateResource(props: propTypes) {
       });
     }
 
-    console.log(initialData, "initialData");
-
     setSelectedComponentType({
       ...selectedComponentType,
       type: "TemplateTable",
@@ -249,6 +284,19 @@ export default function CreateResource(props: propTypes) {
     });
 
     setDimensionModal(false);
+  };
+
+  const onTemplateSave = (
+    value: TemplateFormData,
+    formikHelper: FormikProps<TemplateFormData>
+  ) => {
+    console.log(value, formikHelper, formFields, "on submit");
+    saveResource({
+      ...formFields,
+      templateData: JSON.stringify(value),
+      templateId: selectedComponentType?.info?._id,
+    });
+    formikHelper.setSubmitting(false);
   };
 
   return (
@@ -263,13 +311,13 @@ export default function CreateResource(props: propTypes) {
             <Grid item xs={4}>
               <TextFieldComponent
                 required={true}
-                name="resource_name"
-                id="resource_name"
+                name="resourceName"
+                id="resourceName"
                 label="Name"
-                value={formFields?.resource_name}
+                value={formFields?.resourceName}
                 onChange={set2}
                 fullWidth={true}
-                inputProps={{ "data-testid": "resource_name" }}
+                inputProps={{ "data-testid": "resourceName" }}
                 variant="outlined"
                 className="form-control-bg"
                 size="small"
@@ -281,11 +329,11 @@ export default function CreateResource(props: propTypes) {
                 required={true}
                 id="resourceTypeSelect"
                 labelId="resourceType"
-                name="resource_type"
-                value={formFields?.resource_type}
+                name="resourceType"
+                value={formFields?.resourceType}
                 label="Select Resource Type"
                 onChange={set2}
-                inputProps={{ "data-testid": "resource_type" }}
+                inputProps={{ "data-testid": "resourceType" }}
                 options={resourceTypeOptions}
                 mappingKeys={["id", "value"]}
                 size="small"
@@ -302,11 +350,11 @@ export default function CreateResource(props: propTypes) {
                 required={true}
                 id="resourceDisorderSelect"
                 labelId="resourceDisorder"
-                name="disorder_id"
-                value={formFields?.disorder_id}
+                name="disorderId"
+                value={formFields?.disorderId}
                 label="Select Disorder"
                 onChange={set2}
-                inputProps={{ "data-testid": "disorder_id" }}
+                inputProps={{ "data-testid": "disorderId" }}
                 options={(disorderData && disorderData.getAllDisorder) || []}
                 mappingKeys={["_id", "disorder_name"]}
                 size="small"
@@ -319,11 +367,11 @@ export default function CreateResource(props: propTypes) {
                 required={true}
                 id="modelTypeSelect"
                 labelId="modelType"
-                name="model_id"
-                value={formFields?.model_id}
+                name="modelId"
+                value={formFields?.modelId}
                 label="Select Model"
                 onChange={set2}
-                inputProps={{ "data-testid": "model_id" }}
+                inputProps={{ "data-testid": "modelId" }}
                 options={(modelData && modelData?.getModelByDisorderId) || []}
                 mappingKeys={["_id", "model_name"]}
                 size="small"
@@ -335,11 +383,11 @@ export default function CreateResource(props: propTypes) {
                 fullWidth={true}
                 id="categorySelect"
                 labelId="category"
-                name="category_id"
-                value={formFields?.category_id}
+                name="categoryId"
+                value={formFields?.categoryId}
                 label="Select Category (Optional)"
                 onChange={set2}
-                inputProps={{ "data-testid": "category_id" }}
+                inputProps={{ "data-testid": "categoryId" }}
                 options={
                   (categoryData && categoryData.getCategoryByModelId) || []
                 }
@@ -353,14 +401,14 @@ export default function CreateResource(props: propTypes) {
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12}>
               <TextFieldComponent
-                name="resource_desc"
+                name="resourceDesc"
                 id="descrption"
                 label="Description"
-                value={formFields?.resource_desc}
+                value={formFields?.resourceDesc}
                 multiline
                 rows={4}
                 onChange={set2}
-                inputProps={{ "data-testid": "resource_desc" }}
+                inputProps={{ "data-testid": "resourceDesc" }}
                 fullWidth={true}
                 className="form-control-bg"
               />
@@ -370,14 +418,14 @@ export default function CreateResource(props: propTypes) {
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12}>
               <TextFieldComponent
-                name="resource_instruction"
+                name="resourceInstruction"
                 id="instructions"
                 label="Instructions"
-                value={formFields?.resource_instruction}
+                value={formFields?.resourceInstruction}
                 multiline
                 rows={4}
                 onChange={set2}
-                inputProps={{ "data-testid": "resource_instruction" }}
+                inputProps={{ "data-testid": "resourceInstruction" }}
                 fullWidth={true}
                 className="form-control-bg"
               />
@@ -387,14 +435,14 @@ export default function CreateResource(props: propTypes) {
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12}>
               <TextFieldComponent
-                name="resource_references"
+                name="resourceReferences"
                 id="references"
                 label="References"
-                value={formFields?.resource_references}
+                value={formFields?.resourceReferences}
                 multiline
                 rows={4}
                 onChange={set2}
-                inputProps={{ "data-testid": "resource_references" }}
+                inputProps={{ "data-testid": "resourceReferences" }}
                 fullWidth={true}
                 className="form-control-bg"
               />
@@ -407,11 +455,11 @@ export default function CreateResource(props: propTypes) {
                 fullWidth={true}
                 id="agendaSelect"
                 labelId="agenda"
-                name="agenda_id"
-                value={formFields?.agenda_id}
+                name="agendaId"
+                value={formFields?.agendaId}
                 label="Suggested Agenda"
                 onChange={set2}
-                inputProps={{ "data-testid": "agenda_id" }}
+                inputProps={{ "data-testid": "agendaId" }}
                 options={
                   (agendaData && agendaData.getAgendaByDisorderAndModel) || []
                 }
@@ -440,46 +488,26 @@ export default function CreateResource(props: propTypes) {
                   <FormGroup aria-label="position" row>
                     <CheckBoxLabelComponent
                       value="1"
-                      name="resource_avail_admin"
-                      onChange={setCheckBox}
-                      label="Admin"
-                      placement="end"
-                      inputProps={{ "data-testid": "resource_avail_admin" }}
-                      checked={formFields?.resource_avail_admin}
-                      size="small"
-                    />
-                    <CheckBoxLabelComponent
-                      value="1"
-                      name="resource_avail_therapist"
+                      name="resourceAvailTherapist"
                       onChange={setCheckBox}
                       label="All Therapists"
                       placement="end"
                       inputProps={{
-                        "data-testid": "resource_avail_therapist",
+                        "data-testid": "resourceAvailTherapist",
                       }}
-                      checked={formFields?.resource_avail_therapist}
+                      checked={formFields?.resourceAvailTherapist}
                       size="small"
                     />
                     <CheckBoxLabelComponent
                       value="1"
-                      name="resource_avail_onlyme"
+                      name="resourceAvailOnlyme"
                       onChange={setCheckBox}
                       label="Only Me"
                       placement="end"
                       inputProps={{
-                        "data-testid": "resource_avail_onlyme",
+                        "data-testid": "resourceAvailOnlyme",
                       }}
-                      checked={formFields?.resource_avail_onlyme}
-                      size="small"
-                    />
-                    <CheckBoxLabelComponent
-                      value="1"
-                      name="resource_avail_all"
-                      onChange={setCheckBox}
-                      label="Everyone"
-                      placement="end"
-                      inputProps={{ "data-testid": "resource_avail_all" }}
-                      checked={formFields?.resource_avail_all}
+                      checked={formFields?.resourceAvailOnlyme}
                       size="small"
                     />
                   </FormGroup>
@@ -539,6 +567,7 @@ export default function CreateResource(props: propTypes) {
         <TemplateTable
           initialData={selectedComponentType.initialData}
           mode="edit"
+          onSubmit={onTemplateSave}
         />
       )}
     </>

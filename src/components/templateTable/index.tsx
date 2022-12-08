@@ -91,9 +91,10 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                   variant="contained"
                   type="submit"
                   style={{
-                    padding: "11px 79px 11px 79px",
+                    padding: "5px 79px 5px 79px",
                     fontSize: "20px",
                   }}
+                  disabled={!formikHelper.isValid || formikHelper?.isSubmitting}
                 >
                   Submit
                 </Button>
@@ -103,9 +104,10 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                   variant="contained"
                   style={{
                     margin: "0px 27px 0px 27px",
-                    padding: "11px 79px 11px 79px",
+                    padding: "5px 79px 5px 79px",
                     fontSize: "20px",
                   }}
+                  disabled={formikHelper?.isSubmitting}
                   onClick={() => onCancel?.(formikHelper.values, formikHelper)}
                 >
                   Cancel
@@ -115,9 +117,10 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                   color="primary"
                   variant="contained"
                   style={{
-                    padding: "11px 79px 11px 79px",
+                    padding: "5px 79px 5px 79px",
                     fontSize: "20px",
                   }}
+                  disabled={formikHelper?.isSubmitting}
                   onClick={() => onPreview?.(formikHelper.values, formikHelper)}
                 >
                   Preview
