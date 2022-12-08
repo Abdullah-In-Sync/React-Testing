@@ -9,6 +9,6 @@ interface TemplatesComponentsData {
   [key: string]: any;
 }
 
-export const COMPONENTS: TemplatesComponentsData = {
+export const components: TemplatesComponentsData = {
   TemplateTable: require("../../../../../components/templateTable").default,
 };

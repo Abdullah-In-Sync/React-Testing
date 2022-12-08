@@ -1,19 +1,23 @@
-import { Breadcrumbs, Grid, Typography } from "@mui/material";
+import ArrowBackAlt from "@mui/icons-material/ArrowBack";
+import { Button, Grid } from "@mui/material";
+import { useRouter } from "next/router";
 import React from "react";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
-import styles from "./view.module.css";
 import CardWithHeader from "../../../../../components/common/Cards/CardWithHeader";
 import { TemplateFormData } from "../../../../../components/templateTable/table.model";
+import { CustomBreadcrumbs } from "../../../../common/Breadcrumbs";
+import styles from "./view.module.css";
 import * as ViewTemplateInterface from "./viewInterface";
-const Components = ViewTemplateInterface.COMPONENTS;
 
 interface ViewProps {
   currentTemplateData?: ViewTemplateInterface.ViewTemplateData;
 }
 
+const pathLabels: Array<string> = ["Table Template", "Grid"];
+
 const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
   if (!currentTemplateData) return null;
+  const router = useRouter();
   const staticTemplate: TemplateFormData = {
     rows: [
       {
@@ -27,7 +31,13 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
     ],
   };
 
-  const TemplateDynamic = Components[currentTemplateData.component_name];
+  const TemplateDynamic =
+    ViewTemplateInterface.components[currentTemplateData.component_name];
+
+  const handleBackClick = () => {
+    /* istanbul ignore next */
+    router.push("/admin/resource/template/list");
+  };
 
   return (
     <>
@@ -38,26 +48,22 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
         sx={{
           color: "primary.main",
         }}
-        style={{ justifyContent: "right" }}
+        style={{
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <Breadcrumbs
-          separator={
-            <NavigateNextIcon
-              fontSize="small"
-              sx={{
-                color: "primary.main",
-              }}
-            />
-          }
-          aria-label="breadcrumb"
-          data-testid="breadCrumb"
+        <Button
+          data-testid="backButton"
+          variant="contained"
+          onClick={handleBackClick}
+          startIcon={<ArrowBackAlt />}
         >
-          <Typography color="primary.main">Table Template</Typography>,
-          <Typography color="primary.main">Grid</Typography>,
-          <Typography color="text.primary">
-            {currentTemplateData.name}
-          </Typography>
-        </Breadcrumbs>
+          Back
+        </Button>
+        <CustomBreadcrumbs
+          labels={[...pathLabels, ...[currentTemplateData.name]]}
+        />
       </Grid>
       <CardWithHeader label={currentTemplateData.name}>
         <fieldset className={styles.disbledFieldSet} disabled>
