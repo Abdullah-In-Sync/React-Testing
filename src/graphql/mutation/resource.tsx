@@ -10,6 +10,8 @@ export const UPDATE_RESOURCE = gql`
 
 export const CREATE_RESOURCE = gql`
   mutation MyMutation(
+    $agendaId: String
+    $categoryId: String
     $disorderId: String!
     $modelId: String!
     $resourceAvailAdmin: String!
