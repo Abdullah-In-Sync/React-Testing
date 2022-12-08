@@ -12,7 +12,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
   GET_MODEL_BY_DISORDERID_DATA,
 } from "../../../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../../../graphql/query/resource";
@@ -24,11 +24,14 @@ import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
 import SureModal from "./SureModal";
 import { addResourceFormField } from "../../../utility/types/resource_types";
+import { GET_ORG_DATA } from "../../../graphql/query";
+import { useAppContext } from "../../../contexts/AuthContext";
 
 const defaultFormValue = {
   resource_name: "",
   resource_type: 0,
   disorder_id: "",
+  org_id: "",
   model_id: "",
   category_id: "",
   resource_desc: "",
@@ -52,7 +55,9 @@ export default function AddForm(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
   const [formFields, setFormFields] =
     useState<addResourceFormField>(defaultFormValue);
-
+  const {
+    user: { user_type: userType },
+  } = useAppContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
@@ -69,11 +74,18 @@ export default function AddForm(props: propTypes) {
       fileName: formFields.file_name,
     },
   });
+  const [getOrgData, { data: orgData }] = useLazyQuery(GET_ORG_DATA, {
+    onCompleted: () => {
+      /* istanbul ignore next */
+      props.setLoader(false);
+    },
+  });
 
-  const [getDisorderData, { data: disorderData }] = useLazyQuery(
-    GET_DISORDER_DATA,
+  const [getDisorderByOrgId, { data: disorderData }] = useLazyQuery(
+    GET_DISORDER_DATA_BY_ORG_ID,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -83,6 +95,7 @@ export default function AddForm(props: propTypes) {
     GET_MODEL_BY_DISORDERID_DATA,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -92,6 +105,7 @@ export default function AddForm(props: propTypes) {
     GET_CATEGORY_BY_MODELID_DATA,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -101,15 +115,33 @@ export default function AddForm(props: propTypes) {
     GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
   );
 
   useEffect(() => {
+    /* istanbul ignore next */
     props.setLoader(true);
-    getDisorderData();
+    getOrgData();
   }, []);
+
+  useEffect(() => {
+    if (formFields.org_id) {
+      props.setLoader(true);
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        disorder_id: "",
+        model_id: "",
+        category_id: "",
+        agenda_id: "",
+      }));
+      getDisorderByOrgId({
+        variables: { orgId: formFields.org_id },
+      });
+    }
+  }, [formFields.org_id]);
 
   useEffect(() => {
     if (formFields.disorder_id) {
@@ -167,6 +199,7 @@ export default function AddForm(props: propTypes) {
   };
 
   const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    /* istanbul ignore next */
     const fileObj = event.target.files && event.target.files[0];
     const { fileName } = getUpdatedFileName(event.target.files[0]);
     props.setLoader(true);
@@ -174,13 +207,16 @@ export default function AddForm(props: propTypes) {
     if (!fileName) {
       return;
     }
+    /* istanbul ignore next */
     setSelectedFile(fileObj);
     setFormFields((oldValues) => ({ ...oldValues, ["file_name"]: fileName }));
     props.setLoader(false);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    /* istanbul ignore next */
     e.preventDefault();
+    /* istanbul ignore next */
     if (!selectedFile?.name) {
       enqueueSnackbar("Please select a file", {
         variant: "error",
@@ -188,16 +224,19 @@ export default function AddForm(props: propTypes) {
       });
       return;
     }
+    /* istanbul ignore next */
     if (
       !formFields.resource_avail_onlyme &&
       !formFields.resource_avail_therapist
     ) {
+      /* istanbul ignore next */
       enqueueSnackbar("Please select availability of resource", {
         variant: "error",
         autoHideDuration: 2000,
       });
       return;
     }
+    /* istanbul ignore next */
     setModalOpen(true);
     /* istanbul ignore next */
     if (!confirmSubmission) return;
@@ -205,6 +244,7 @@ export default function AddForm(props: propTypes) {
 
   const uploadFile: any = async () => {
     try {
+      /* istanbul ignore next */
       props.setLoader(true);
       /* istanbul ignore else */
       if (
@@ -287,7 +327,27 @@ export default function AddForm(props: propTypes) {
                 className="form-control-bg"
               />
             </Grid>
-            <Grid item xs={4}></Grid>
+            {userType == "admin" ? (
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="resourceOrgSelect"
+                  labelId="resourceOrg"
+                  name="org_id"
+                  value={formFields?.org_id}
+                  label="Select Organization"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "org_id" }}
+                  options={(orgData && orgData?.getOrganizationData) || []}
+                  mappingKeys={["_id", "name"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
+            ) : (
+              <Grid item xs={4}></Grid>
+            )}
           </Grid>
 
           <Grid container spacing={2} marginBottom={5}>
@@ -302,7 +362,9 @@ export default function AddForm(props: propTypes) {
                 label="Select Disorder"
                 onChange={set2}
                 inputProps={{ "data-testid": "disorder_id" }}
-                options={(disorderData && disorderData.getAllDisorder) || []}
+                options={
+                  (disorderData && disorderData.getDisorderByOrgId) || []
+                }
                 mappingKeys={["_id", "disorder_name"]}
                 size="small"
                 className="form-control-bg"

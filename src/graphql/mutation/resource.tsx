@@ -26,6 +26,7 @@ export const CREATE_RESOURCE = gql`
     $resourceReferences: String
     $templateData: String
     $templateId: String
+    $orgId: String
   ) {
     createResource(
       disorderId: $disorderId
@@ -44,6 +45,7 @@ export const CREATE_RESOURCE = gql`
       resourceReferences: $resourceReferences
       templateData: $templateData
       templateId: $templateId
+      orgId: $orgId
     ) {
       _id
     }

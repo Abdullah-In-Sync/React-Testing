@@ -14,7 +14,7 @@ type propTypes = {
   onChange?: (event: React.ChangeEvent<HTMLElement>) => void;
   inputProps?: any;
   extraProps?: any;
-  options: Option[];
+  options?: Option[];
   mappingKeys: [string, string];
   size: "small" | "medium";
   disabled?: boolean;
@@ -28,7 +28,7 @@ type Option = {
 
 /* istanbul ignore next */
 const mapping = (options: Option[], keys = []) => {
-  return options.reduce((mappingOptions: Option[], option) => {
+  return options?.reduce((mappingOptions: Option[], option) => {
     mappingOptions.push({ id: option[keys[0]], value: option[keys[1]] });
     return mappingOptions;
   }, []);
@@ -56,7 +56,7 @@ export default function SingleSelectComponent(props: propTypes) {
         {...props.extraProps}
       >
         <MenuItem value="">Select</MenuItem>
-        {mapping(props.options, props.mappingKeys).map(({ id, value }) => {
+        {mapping(props.options, props.mappingKeys)?.map(({ id, value }) => {
           return (
             <MenuItem key={`${id}-${value}`} value={id}>
               {value}
