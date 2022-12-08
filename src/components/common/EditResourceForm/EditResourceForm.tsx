@@ -60,6 +60,7 @@ const defaultFormValue = {
 
 /* istanbul ignore next */
 type propTypes = {
+  resourceType: "edit" | "update";
   onSubmit?: any;
   setLoader: any;
 };
@@ -169,12 +170,14 @@ export default function EditForm(props: propTypes) {
       }
     },
   });
-  console.log("Koca: resourceData ", resourceData);
 
   useEffect(() => {
     props.setLoader(true);
-    getOrgData();
+    if (userType == "admin") {
+      getOrgData();
+    }
   }, []);
+
   useLayoutEffect(() => {
     return () => {
       refetch();

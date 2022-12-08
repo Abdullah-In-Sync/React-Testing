@@ -124,7 +124,9 @@ export default function AddForm(props: propTypes) {
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
-    getOrgData();
+    if (userType == "admin") {
+      getOrgData();
+    }
   }, []);
 
   useEffect(() => {

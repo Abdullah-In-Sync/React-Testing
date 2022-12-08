@@ -69,7 +69,11 @@ const Index = () => {
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Edit Resource" />
-        <EditForm onSubmit={editFormHandler} setLoader={setLoader} />
+        <EditForm
+          resourceType="edit"
+          onSubmit={editFormHandler}
+          setLoader={setLoader}
+        />
       </Layout>
     </>
   );
