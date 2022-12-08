@@ -75,23 +75,6 @@ mocksData.push({
     },
   },
 });
-// mocksData.push({
-//   request: {
-//     query: GET_DISORDER_DATA,
-//     variables: {},
-//   },
-//   result: {
-//     data: {
-//       getAllDisorder: [
-//         {
-//           _id: "disorder_id_1",
-//           user_type: "admin",
-//           disorder_name: "disorder 1",
-//         },
-//       ],
-//     },
-//   },
-// });
 
 //RESOURCE DETAIL
 mocksData.push({
