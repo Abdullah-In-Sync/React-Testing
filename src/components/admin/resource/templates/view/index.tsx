@@ -8,12 +8,13 @@ import { TemplateFormData } from "../../../../../components/templateTable/table.
 import { CustomBreadcrumbs } from "../../../../common/Breadcrumbs";
 import styles from "./view.module.css";
 import * as ViewTemplateInterface from "./viewInterface";
+import { templateComponents } from "./viewData";
 
 interface ViewProps {
   currentTemplateData?: ViewTemplateInterface.ViewTemplateData;
 }
 
-const pathLabels: Array<string> = ["Table Template", "Grid"];
+const breadcrumbsPathLabels: Array<string> = ["Table Template", "Grid"];
 
 const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
   if (!currentTemplateData) return null;
@@ -32,7 +33,7 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
   };
 
   const TemplateDynamic =
-    ViewTemplateInterface.components[currentTemplateData.component_name];
+    templateComponents[currentTemplateData.component_name];
 
   const handleBackClick = () => {
     /* istanbul ignore next */
@@ -48,10 +49,7 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
         sx={{
           color: "primary.main",
         }}
-        style={{
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
+        className={styles.backButtonBreadcrumbsWrapper}
       >
         <Button
           data-testid="backButton"
@@ -62,7 +60,7 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
           Back
         </Button>
         <CustomBreadcrumbs
-          labels={[...pathLabels, ...[currentTemplateData.name]]}
+          labels={[...breadcrumbsPathLabels, ...[currentTemplateData.name]]}
         />
       </Grid>
       <CardWithHeader label={currentTemplateData.name}>

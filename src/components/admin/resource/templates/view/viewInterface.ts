@@ -5,10 +5,6 @@ export interface ViewTemplateData {
   component_name: string;
 }
 
-interface TemplatesComponentsData {
+export interface TemplateComponentsData {
   [key: string]: any;
 }
-
-export const components: TemplatesComponentsData = {
-  TemplateTable: require("../../../../../components/templateTable").default,
-};

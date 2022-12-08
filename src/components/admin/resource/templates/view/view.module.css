@@ -5,3 +5,8 @@
 .disbled-field-set input :focus-visible {
     outline: unset !important;
 }
+.backButtonBreadcrumbsWrapper{
+    justify-content: space-between;
+    align-items:  center;
+    padding: 10px 0px;
+}
