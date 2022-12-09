@@ -10,6 +10,8 @@ export const UPDATE_RESOURCE = gql`
 
 export const CREATE_RESOURCE = gql`
   mutation MyMutation(
+    $agendaId: String
+    $categoryId: String
     $disorderId: String!
     $modelId: String!
     $resourceAvailOnlyme: String!
@@ -17,8 +19,6 @@ export const CREATE_RESOURCE = gql`
     $resourceFilename: String!
     $resourceName: String!
     $resourceType: Int!
-    $agendaId: String
-    $categoryId: String
     $resourceDesc: String
     $resourceInstruction: String
     $resourceIsformualation: String
@@ -26,6 +26,7 @@ export const CREATE_RESOURCE = gql`
     $resourceReferences: String
     $templateData: String
     $templateId: String
+    $orgId: String
   ) {
     createResource(
       disorderId: $disorderId
@@ -44,6 +45,7 @@ export const CREATE_RESOURCE = gql`
       resourceReferences: $resourceReferences
       templateData: $templateData
       templateId: $templateId
+      orgId: $orgId
     ) {
       _id
     }
