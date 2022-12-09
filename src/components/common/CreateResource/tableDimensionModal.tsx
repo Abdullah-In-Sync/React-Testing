@@ -158,7 +158,7 @@ export const TableDimensionModal: FC<TableDimensionModalProps> = ({
                         paddingRight: "50px",
                         backgroundColor: "#6BA08E",
                       }}
-                      onClick={onModalClose}
+                      onClick={() => onModalClose(false)}
                     >
                       Cancel
                     </Button>

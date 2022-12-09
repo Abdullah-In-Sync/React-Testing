@@ -20,6 +20,7 @@ import {
 } from "../graphql/query/resource";
 
 import { useRouter } from "next/router";
+const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -103,6 +104,38 @@ mocksData.push({
           category_name: "category_id_1",
         },
       ],
+    },
+  },
+});
+//create resource
+mocksData.push({
+  request: {
+    query: CREATE_RESOURCE,
+    variables: {
+      disorderId: "disorder_id_1",
+      modelId: "model_id_1",
+      resourceAvailOnlyme: 1,
+      resourceAvailTherapist: "1",
+      resourceFilename: "test.pdf",
+      resourceName: "test",
+      resourceType: 1,
+      agendaId: "",
+      categoryId: "category_id_1",
+      orgId: "2301536c4d674b3598814174d8f19593",
+      resourceIssmartdraw: "1",
+      templateData: '{"rows":[{"cells":[{"type":""}]}]}',
+      templateId: "63774edbc553fac5d6a9bd74",
+      resourceDesc: "",
+      resourceInstruction: "",
+      resourceIsformualation: "",
+      resourceReferences: "",
+    },
+  },
+  result: {
+    data: {
+      createResource: {
+        _id: "agenda_id_1",
+      },
     },
   },
 });
@@ -215,7 +248,9 @@ const sut = async () => {
 
 describe("Admin add resource page", () => {
   beforeEach(() => {
-    (useRouter as jest.Mock).mockClear();
+    (useRouter as jest.Mock).mockReturnValue({
+      push: pushMock,
+    });
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
@@ -287,12 +322,6 @@ describe("Admin add resource page", () => {
   });
 
   it("submit form with valid data", async () => {
-    const mockRouter = {
-      push: jest.fn(),
-    };
-
-    (useRouter as jest.Mock).mockReturnValue(mockRouter);
-
     await sut();
 
     fireEvent.change(screen.queryByTestId("resourceName"), {
@@ -345,5 +374,17 @@ describe("Admin add resource page", () => {
       expect(screen.getByTestId("row-0")).toBeInTheDocument();
       expect(screen.getByTestId("cell-0")).toBeInTheDocument();
     });
+
+    fireEvent.click(screen.queryByTestId("tableTemplateSubmit"));
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("SuccessModal")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
+    });
+
+    expect(pushMock).toHaveBeenCalledWith("/admin/resource/");
   });
 });

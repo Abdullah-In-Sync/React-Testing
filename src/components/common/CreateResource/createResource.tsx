@@ -22,6 +22,8 @@ import { TemplateFormData } from "../../templateTable/table.model";
 import TemplateTable from "../../templateTable";
 import { FormikProps } from "formik";
 import { CREATE_RESOURCE } from "../../../graphql/mutation/resource";
+import { SuccessModal } from "../SuccessModal";
+import { useRouter } from "next/router";
 
 type propTypes = {
   onSubmit?: any;
@@ -50,20 +52,21 @@ interface CreateResourceInput {
 
 export default function CreateResource(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
   const [formFields, setFormFields] = useState<CreateResourceInput>({
-    disorderId: "59c60ab89afb4923b09e242fc3f99f97",
-    modelId: "ade64d00d726478aaee1e59b09c129ba",
+    disorderId: "",
+    modelId: "",
     resourceAvailOnlyme: "0",
     resourceAvailTherapist: "1",
     resourceFilename: "test.pdf",
-    resourceName: "ravi res",
+    resourceName: "",
     resourceType: 1,
     agendaId: "",
-    categoryId: "00781dc9159d4885b88356f51b20e731",
+    categoryId: "",
     orgId: "2301536c4d674b3598814174d8f19593",
     resourceIssmartdraw: "1",
-    templateData: "test",
-    templateId: "testss",
+    templateData: "",
+    templateId: "",
     resourceDesc: "",
     resourceInstruction: "",
     resourceIsformualation: "",
@@ -73,6 +76,7 @@ export default function CreateResource(props: propTypes) {
   //useState for prefilled input data
   const [templateModal, setTemplateModal] = useState<boolean>(false);
   const [dimensionModal, setDimensionModal] = useState<boolean>(false);
+  const [successModal, setSuccessModal] = useState<boolean>(false);
 
   const [selectedComponentType, setSelectedComponentType] = useState({
     type: null,
@@ -87,7 +91,14 @@ export default function CreateResource(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
-  const [createResource] = useMutation(CREATE_RESOURCE);
+  const [createResource, { data: createResourceRes }] = useMutation(
+    CREATE_RESOURCE,
+    {
+      onCompleted: () => {
+        props.setLoader(false);
+      },
+    }
+  );
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -124,6 +135,12 @@ export default function CreateResource(props: propTypes) {
       },
     }
   );
+
+  useEffect(() => {
+    if (createResourceRes?.createResource != null) {
+      setSuccessModal(true);
+    }
+  }, [createResourceRes]);
 
   useEffect(() => {
     props.setLoader(true);
@@ -217,7 +234,7 @@ export default function CreateResource(props: propTypes) {
   };
 
   const saveResource = (data) => {
-    console.log(data, "data");
+    props.setLoader(true);
     createResource({
       variables: data,
     });
@@ -525,6 +542,14 @@ export default function CreateResource(props: propTypes) {
           initialData={selectedComponentType.initialData}
           mode="edit"
           onSubmit={onTemplateSave}
+        />
+      )}
+      {successModal && (
+        <SuccessModal
+          isOpen={successModal}
+          onOk={() => {
+            router.push("/admin/resource/");
+          }}
         />
       )}
     </>
