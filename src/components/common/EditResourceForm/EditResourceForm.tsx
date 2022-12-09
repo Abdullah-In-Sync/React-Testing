@@ -67,13 +67,16 @@ type propTypes = {
 
 export default function EditForm(props: propTypes) {
   const {
-    user: { user_type: userType },
+    user: { user_type: userType, therapist_data: { org_id: orgId = "" } = {} },
   } = useAppContext();
   const router = useRouter();
   const id = router?.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const [formFields, setFormFields] =
-    useState<editResourceFormField>(defaultFormValue);
+
+  const [formFields, setFormFields] = useState<editResourceFormField>({
+    ...defaultFormValue,
+    org_id: orgId,
+  });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);

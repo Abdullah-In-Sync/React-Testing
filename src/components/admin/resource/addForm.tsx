@@ -52,12 +52,14 @@ type propTypes = {
 };
 
 export default function AddForm(props: propTypes) {
-  const { enqueueSnackbar } = useSnackbar();
-  const [formFields, setFormFields] =
-    useState<addResourceFormField>(defaultFormValue);
   const {
-    user: { user_type: userType },
+    user: { user_type: userType, therapist_data: { org_id: orgId = "" } = {} },
   } = useAppContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const [formFields, setFormFields] = useState<addResourceFormField>({
+    ...defaultFormValue,
+    org_id: orgId,
+  });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
