@@ -123,6 +123,7 @@ const SafetyPlan = (props: propTypes) => {
                         // placeItems: "center",
                       }}
                       p={5}
+                      key={`safetyPlanBox_${index}`}
                       marginBottom={"25px"}
                       borderRadius={"7px"}
                     >

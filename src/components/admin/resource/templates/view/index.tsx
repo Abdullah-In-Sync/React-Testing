@@ -17,8 +17,9 @@ interface ViewProps {
 const breadcrumbsPathLabels: Array<string> = ["Table Template", "Grid"];
 
 const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
-  if (!currentTemplateData) return null;
   const router = useRouter();
+  if (!currentTemplateData) return null;
+  
   const staticTemplate: TemplateFormData = {
     rows: [
       {

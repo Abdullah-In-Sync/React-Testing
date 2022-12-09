@@ -10,7 +10,7 @@ type Props = React.PropsWithChildren<{
 export const CustomBreadcrumbs = ({ labels = [] }: Props) => {
   const path = () => {
     return labels.map((label, i) => (
-      <Typography
+      <Typography key={`breadcrumb_${i}`}
         color={labels.length - 1 === i ? "text.primary" : "primary.main"}
       >
         {label}
