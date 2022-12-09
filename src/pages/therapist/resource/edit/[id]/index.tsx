@@ -43,6 +43,7 @@ const Index = () => {
             resource_avail_therapist: formFields.resource_avail_therapist,
             resource_avail_onlyme: formFields.resource_avail_onlyme,
             resource_filename: formFields.file_name,
+            org_id: formFields.org_id,
           },
         },
         onCompleted: (data) => {

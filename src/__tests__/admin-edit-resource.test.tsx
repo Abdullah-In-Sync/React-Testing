@@ -11,9 +11,9 @@ import EditResource from "../pages/admin/resource/edit/[id]/index";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
   GET_ADMIN_TOKEN_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
 } from "../graphql/query/common";
 import {
   GET_RESOURCE_DETAIL,
@@ -24,6 +24,7 @@ import * as s3 from "../lib/helpers/s3";
 
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
+import { GET_ORG_DATA } from "../graphql/query";
 
 const pushMock = jest.fn();
 
@@ -38,14 +39,33 @@ const mocksData = [];
 const file = new File(["hello"], "hello.png", { type: "image/png" });
 
 // disorder
+
 mocksData.push({
   request: {
-    query: GET_DISORDER_DATA,
-    variables: {},
+    query: GET_ORG_DATA,
   },
   result: {
     data: {
-      getAllDisorder: [
+      getOrganizationData: [
+        {
+          _id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+          name: "dev-myhelp",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_DATA_BY_ORG_ID,
+    variables: {
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByOrgId: [
         {
           _id: "disorder_id_1",
           user_type: "admin",
@@ -105,7 +125,7 @@ mocksData.push({
         resource_type: 2,
         resource_issmartdraw: "0",
         resource_isformualation: "0",
-        disorder_id: "disorder_id_1",
+        disorder_id: "",
         model_id: "",
         category_id: "",
         resource_desc: "",
@@ -115,6 +135,7 @@ mocksData.push({
         resource_avail_therapist: 1,
         resource_avail_onlyme: 0,
         resource_filename: "",
+        org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
       },
     },
   },
@@ -160,7 +181,8 @@ mocksData.push({
         resource_type: 2,
         resource_issmartdraw: "0",
         resource_isformualation: "0",
-        disorder_id: "disorder_id_1",
+        // disorder_id: "disorder_id_1",
+        disorder_id: "",
         model_id: "",
         category_id: "",
         resource_desc: "",
@@ -170,6 +192,7 @@ mocksData.push({
         resource_avail_therapist: 1,
         resource_avail_onlyme: 0,
         resource_filename: "test.pdf",
+        org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
       },
     },
   },
@@ -372,6 +395,7 @@ describe("Admin edit resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
+
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -488,6 +512,9 @@ describe("Admin edit resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: 2 },
     });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -550,6 +577,9 @@ describe("Admin edit resource page", () => {
     });
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: 2 },
+    });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
     });
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },

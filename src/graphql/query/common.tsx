@@ -175,6 +175,18 @@ export const GET_DISORDER_DATA = gql`
   }
 `;
 
+export const GET_DISORDER_DATA_BY_ORG_ID = gql`
+  query MyQuery($orgId: String!) {
+    getDisorderByOrgId(orgId: $orgId) {
+      _id
+      disorder_name
+      disorder_status
+      user_id
+      user_type
+    }
+  }
+`;
+
 export const GET_MODEL_BY_DISORDERID_DATA = gql`
   query MyQuery($disorderId: String!) {
     getModelByDisorderId(disorderId: $disorderId) {

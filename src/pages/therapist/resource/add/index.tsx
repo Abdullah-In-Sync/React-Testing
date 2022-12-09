@@ -23,6 +23,7 @@ const Index = () => {
   }, []);
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
+    /* istanbul ignore next */
     try {
       createResource({
         variables: {
@@ -42,6 +43,7 @@ const Index = () => {
           resourceReferences: formFields.resource_references,
           templateData: "",
           templateId: "",
+          orgId: formFields.org_id,
         },
         onCompleted: (data) => {
           if (data && data.createResource && data.createResource._id) {
