@@ -106,6 +106,7 @@ export const GET_TEMPLATE_LIST = gql`
     listTemplates {
       _id
       name
+      component_name
       updated_date
       created_date
       category

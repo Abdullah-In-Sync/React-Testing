@@ -16,10 +16,20 @@ interface TemplateTableProps {
     formData: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
   ) => void;
+  onCancel?: (
+    formData: TemplateFormData,
+    formikHelper: FormikProps<TemplateFormData>
+  ) => void;
+  onPreview?: (
+    formData: TemplateFormData,
+    formikHelper: FormikProps<TemplateFormData>
+  ) => void;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
   initialData,
   onSubmit,
+  onCancel,
+  onPreview,
 }) => {
   const { validationSchema } = useContext(TemplateTableContext);
 
@@ -74,9 +84,49 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 )}
               />
             </Grid>
-            <Button data-testid="submit" type="submit">
-              Submit
-            </Button>
+            <Grid container justifyContent={"center"}>
+              <Grid item padding={"63px 0px 94px 0px"}>
+                <Button
+                  data-testid="submit"
+                  variant="contained"
+                  type="submit"
+                  style={{
+                    padding: "5px 79px 5px 79px",
+                    fontSize: "20px",
+                  }}
+                  disabled={!formikHelper.isValid || formikHelper?.isSubmitting}
+                >
+                  Submit
+                </Button>
+                <Button
+                  data-testid="cancel"
+                  color="secondary"
+                  variant="contained"
+                  style={{
+                    margin: "0px 27px 0px 27px",
+                    padding: "5px 79px 5px 79px",
+                    fontSize: "20px",
+                  }}
+                  disabled={formikHelper?.isSubmitting}
+                  onClick={() => onCancel?.(formikHelper.values, formikHelper)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  data-testid="preview"
+                  color="primary"
+                  variant="contained"
+                  style={{
+                    padding: "5px 79px 5px 79px",
+                    fontSize: "20px",
+                  }}
+                  disabled={formikHelper?.isSubmitting}
+                  onClick={() => onPreview?.(formikHelper.values, formikHelper)}
+                >
+                  Preview
+                </Button>
+              </Grid>
+            </Grid>
           </Form>
         );
       }}

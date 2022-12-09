@@ -8,7 +8,7 @@ type propTypes = {
   className?: string;
   id: string;
   labelId: string;
-  label: string;
+  label?: string;
   name: string;
   value: any;
   onChange?: (event: React.ChangeEvent<HTMLElement>) => void;
@@ -18,10 +18,11 @@ type propTypes = {
   mappingKeys: [string, string];
   size: "small" | "medium";
   disabled?: boolean;
+  showDefaultSelectOption?: boolean;
 };
 
 /* istanbul ignore next */
-type Option = {
+export type Option = {
   id: any;
   value: string;
 };
@@ -55,7 +56,9 @@ export default function SingleSelectComponent(props: propTypes) {
         disabled={props.disabled}
         {...props.extraProps}
       >
-        <MenuItem value="">Select</MenuItem>
+        {props.showDefaultSelectOption !== false && (
+          <MenuItem value="">Select</MenuItem>
+        )}
         {mapping(props.options, props.mappingKeys).map(({ id, value }) => {
           return (
             <MenuItem key={`${id}-${value}`} value={id}>
