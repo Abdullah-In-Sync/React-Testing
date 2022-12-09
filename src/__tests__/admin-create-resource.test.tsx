@@ -286,7 +286,7 @@ describe("Admin add resource page", () => {
     );
   });
 
-  it.only("submit form with valid data", async () => {
+  it("submit form with valid data", async () => {
     const mockRouter = {
       push: jest.fn(),
     };
@@ -345,12 +345,5 @@ describe("Admin add resource page", () => {
       expect(screen.getByTestId("row-0")).toBeInTheDocument();
       expect(screen.getByTestId("cell-0")).toBeInTheDocument();
     });
-
-    // await waitFor(async () => {
-    //   expect(
-    //     screen.getByText("Resource added successfully")
-    //   ).toBeInTheDocument();
-    // });
-    // expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
   });
 });
