@@ -43,8 +43,6 @@ export const TableDimensionModal: FC<TableDimensionModalProps> = ({
     const fieldName = e.target.name;
     const value = e.target.value;
 
-    console.debug(fieldName, value, "on change");
-
     setFieldValue(fieldName, value);
   };
 
