@@ -19,7 +19,7 @@ const breadcrumbsPathLabels: Array<string> = ["Table Template", "Grid"];
 const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
   const router = useRouter();
   if (!currentTemplateData) return null;
-  
+
   const staticTemplate: TemplateFormData = {
     rows: [
       {
