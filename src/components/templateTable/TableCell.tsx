@@ -169,7 +169,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
     formikHelper.setFieldValue(formCellKey, {
       ...cellData,
       answerType: value,
-      answerValues: null,
+      answerValues: [],
     });
   };
 

@@ -87,19 +87,19 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
             <Grid container justifyContent={"center"}>
               <Grid item padding={"63px 0px 94px 0px"}>
                 <Button
-                  data-testid="submit"
+                  data-testid="tableTemplateSubmit"
                   variant="contained"
                   type="submit"
                   style={{
                     padding: "5px 79px 5px 79px",
                     fontSize: "20px",
                   }}
-                  disabled={!formikHelper.isValid || formikHelper?.isSubmitting}
+                  disabled={!formikHelper.isValid}
                 >
                   Submit
                 </Button>
                 <Button
-                  data-testid="cancel"
+                  data-testid="tableTemplateCancel"
                   color="secondary"
                   variant="contained"
                   style={{
@@ -113,7 +113,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                   Cancel
                 </Button>
                 <Button
-                  data-testid="preview"
+                  data-testid="tableTemplatePreview"
                   color="primary"
                   variant="contained"
                   style={{
