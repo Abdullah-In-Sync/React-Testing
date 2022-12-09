@@ -42,6 +42,12 @@ export type editTemplatesFormField = {
   category: string;
   name: string;
 };
+export type viewTemplatesFormField = {
+  _id: string;
+  category: string;
+  name: string;
+  component_name: string;
+};
 
 export type editSafetyPlanFormField = {
   _id: string;
