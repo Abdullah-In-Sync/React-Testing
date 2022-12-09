@@ -71,10 +71,8 @@ export const UPDATE_RESOURCE_BY_ID = gql`
       resource_session_no
       agenda_id
       resource_url
-      resource_avail_admin
       resource_avail_therapist
       resource_avail_onlyme
-      resource_avail_all
       resource_filename
       resource_status
       created_date

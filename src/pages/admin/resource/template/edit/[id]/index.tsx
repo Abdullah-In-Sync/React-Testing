@@ -1,16 +1,16 @@
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import ContentHeader from "../../../../../components/common/ContentHeader";
-import Layout from "../../../../../components/layout";
-import { UPDATE_TEMPLATE_BY_ID } from "../../../../../graphql/mutation/resource";
-import { editTemplatesFormField } from "../../../../../utility/types/resource_types";
+import ContentHeader from "../../../../../../components/common/ContentHeader";
+import Layout from "../../../../../../components/layout";
+import { UPDATE_TEMPLATE_BY_ID } from "../../../../../../graphql/mutation/resource";
+import { editTemplatesFormField } from "../../../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 
-import Loader from "../../../../../components/common/Loader";
+import Loader from "../../../../../../components/common/Loader";
 
-import EditTemplate from "../../../../../components/common/EditTemplateForm/editTemplateForm";
-import withAuthentication from "../../../../../hoc/auth";
+import EditTemplate from "../../../../../../components/common/EditTemplateForm/editTemplateForm";
+import withAuthentication from "../../../../../../hoc/auth";
 
 const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -44,7 +44,7 @@ const Index = () => {
             enqueueSnackbar("Template edit successfully", {
               variant: "success",
             });
-            router.push("/admin/resource/templateList");
+            router.push("/admin/resource/template/list");
           }
         },
         onError: (error) => {
@@ -66,7 +66,7 @@ const Index = () => {
     <>
       <Layout>
         <Loader visible={loader} />
-        <ContentHeader title="Edit Resource" />
+        <ContentHeader title="Edit Template" />
         <EditTemplate onSubmit={editTemplate} setLoader={setLoader} />
       </Layout>
     </>

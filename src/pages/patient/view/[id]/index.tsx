@@ -27,7 +27,7 @@ import dayjs from "dayjs";
 
 const defaultFormValue = {
   _id: "",
-  patient_contract: 0,
+  patient_contract: 1,
   patient_employment: "",
   patient_firstname: "",
   patient_gender: "",
@@ -46,6 +46,7 @@ const defaultFormValue = {
   patient_sexuality: "",
   __typename: "",
   addressline2: "",
+  addressline1: "",
   birthdate: "",
   created_date: "",
   email: "",
@@ -66,9 +67,9 @@ const defaultFormValue = {
   city: "",
   religion: "",
   patient_status: "",
-  addressline1: "",
   phone_number: "",
   postal_code: "",
+  patient_agree: 0,
 };
 
 //STYLE

@@ -10,7 +10,7 @@ jest.mock("next/router", () => ({
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
 
 import { useAppContext } from "../contexts/AuthContext";
-import TemplateList from "../pages/admin/resource/templateList";
+import TemplateList from "../pages/admin/resource/template/list";
 import { GET_TEMPLATE_LIST } from "../graphql/query/resource";
 
 jest.mock("../contexts/AuthContext");

@@ -91,3 +91,22 @@ export const UPDATE_PROFILE_DATA = gql`
     }
   }
 `;
+
+export const UPDATE_SAFETY_PLAN_QUESTION_DATA = gql`
+  mutation ($quesData: String!) {
+    updateSafetyPlanByPatient(quesData: $quesData) {
+      _id
+      safety_ques_id
+      patient_id
+      therapist_id
+      safety_ques
+      safety_additional_details
+      safety_ques_type
+      safety_ques_typeoption
+      safety_ans_status
+      safety_ans
+      created_date
+      updated_date
+    }
+  }
+`;

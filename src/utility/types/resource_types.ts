@@ -9,10 +9,8 @@ export type addResourceFormField = {
   resource_references: string;
   agenda_id: string;
   file_name: string;
-  resource_avail_admin: number;
   resource_avail_therapist: number;
   resource_avail_onlyme: number;
-  resource_avail_all: number;
   uploadFile: File;
   uploadFileURL: string;
 };
@@ -29,10 +27,8 @@ export type editResourceFormField = {
   resource_references: string;
   agenda_id: string;
   file_name: string;
-  resource_avail_admin?: number;
   resource_avail_therapist: number;
   resource_avail_onlyme: number;
-  resource_avail_all?: number;
   uploadFile?: File;
   uploadFileURL?: string;
   resource_url?: null;
@@ -45,6 +41,20 @@ export type editTemplatesFormField = {
   _id: string;
   category: string;
   name: string;
+};
+
+export type editSafetyPlanFormField = {
+  _id: string;
+  safety_ans: string;
+  safety_ques: string;
+  patient_id: string;
+  safety_additional_details: string;
+  safety_ans_status: string;
+  safety_ques_id: string;
+  safety_ques_type: string;
+  safety_ques_typeoption: string;
+  therapist_id: string;
+  updated_date: string;
 };
 
 export type patientAgreementFormFeild = {
@@ -71,6 +81,7 @@ export type patientProfileFormFeild = {
   patient_lastname: string;
   patient_marrital: string;
   patient_no: string;
+  patient_agree: number;
   patient_sexuality: string;
   __typename: string;
   addressline2: string;

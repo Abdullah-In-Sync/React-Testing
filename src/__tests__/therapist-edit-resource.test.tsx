@@ -85,9 +85,7 @@ mocksData.push({
             model_name: "test mddel",
           },
           resource_avail_onlyme: "0",
-          resource_avail_admin: "1",
           resource_avail_therapist: "1",
-          resource_avail_all: "0",
           resource_filename: "sample.pdf",
         },
       ],
@@ -114,10 +112,8 @@ mocksData.push({
         resource_instruction: "",
         resource_references: "",
         agenda_id: "",
-        resource_avail_admin: 1,
         resource_avail_therapist: 1,
-        resource_avail_onlyme: 1,
-        resource_avail_all: 1,
+        resource_avail_onlyme: 0,
         resource_filename: "",
       },
     },
@@ -142,10 +138,8 @@ mocksData.push({
           resource_session_no: "resource session",
           agenda_id: "agenda_id",
           resource_url: "resource_url",
-          resource_avail_admin: "admin",
           resource_avail_therapist: "therapist",
           resource_avail_onlyme: "only me",
-          resource_avail_all: "all",
           resource_filename: "file name",
           resource_status: "status",
           created_date: "2-1-22",
@@ -173,10 +167,8 @@ mocksData.push({
         resource_instruction: "",
         resource_references: "",
         agenda_id: "",
-        resource_avail_admin: 1,
         resource_avail_therapist: 1,
-        resource_avail_onlyme: 1,
-        resource_avail_all: 1,
+        resource_avail_onlyme: 0,
         resource_filename: "test.pdf",
       },
     },
@@ -201,10 +193,8 @@ mocksData.push({
           resource_session_no: "resource session",
           agenda_id: "agenda_id",
           resource_url: "resource_url",
-          resource_avail_admin: "admin",
           resource_avail_therapist: "therapist",
           resource_avail_onlyme: "only me",
-          resource_avail_all: "all",
           resource_filename: "file name",
           resource_status: "status",
           created_date: "2-1-22",
@@ -370,13 +360,9 @@ describe("Admin edit resource page", () => {
 
     expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
 
-    expect(screen.getByTestId("resource_avail_admin")).toBeInTheDocument();
-
     expect(screen.getByTestId("resource_avail_therapist")).toBeInTheDocument();
 
     expect(screen.getByTestId("resource_avail_onlyme")).toBeInTheDocument();
-
-    expect(screen.getByTestId("resource_avail_all")).toBeInTheDocument();
 
     expect(screen.getByTestId("editResourceSubmitButton")).toBeInTheDocument();
   });
@@ -434,7 +420,6 @@ describe("Admin edit resource page", () => {
 
       expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
 
-      expect(screen.getByTestId("resource_avail_admin")).toBeChecked();
       expect(screen.getByTestId("resource_avail_therapist")).toBeChecked();
       expect(screen.getByTestId("edit-upload-file").textContent).toEqual(
         "sample.pdf"
@@ -473,7 +458,7 @@ describe("Admin edit resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("resource-edit-form"));
@@ -526,7 +511,7 @@ describe("Admin edit resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
       fireEvent.change(screen.getByTestId("resource_file_upload"), {
@@ -589,7 +574,7 @@ describe("Admin edit resource page", () => {
       target: { value: "agenda_id_1" },
     });
 
-    fireEvent.click(screen.queryByTestId("resource_avail_all"));
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("resource-edit-form"));
@@ -613,12 +598,9 @@ describe("Admin edit resource page", () => {
 
   it("checkbox check therapist edit resources", async () => {
     await sut();
-    fireEvent.click(screen.queryByTestId("resource_avail_admin"));
+
     fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
     fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
-
-    const checkboxAdmin = screen.getByLabelText("Admin") as HTMLInputElement;
-    expect(checkboxAdmin).toBeChecked();
 
     const checkboxTherapist = screen.getByLabelText(
       "All Therapists"

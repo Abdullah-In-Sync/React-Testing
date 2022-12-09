@@ -140,7 +140,7 @@ const WorkSheet = () => {
   return (
     <>
       <Loader visible={loading} />
-      <ContentHeader subtitle="Session Resource" />
+      <ContentHeader />
       <Box>
         <TableGenerator
           fields={fields}

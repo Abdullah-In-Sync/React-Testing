@@ -114,6 +114,25 @@ export const GET_TEMPLATE_LIST = gql`
   }
 `;
 
+export const GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID = gql`
+  query getPatientSafetyPlanList {
+    getPatientSafetyPlanList {
+      created_date
+      _id
+      patient_id
+      safety_additional_details
+      safety_ans_status
+      safety_ans
+      safety_ques
+      safety_ques_id
+      safety_ques_type
+      safety_ques_typeoption
+      therapist_id
+      updated_date
+    }
+  }
+`;
+
 export const GET_PATIENT_RESOURCE_DETAIL = gql`
   query getResourceDetailById($ptsharresId: String!) {
     getResourceDetailById(ptsharresId: $ptsharresId) {
@@ -156,10 +175,8 @@ export const GET_RESOURCE_DETAIL = gql`
     getResourceById(resourceId: $resourceId) {
       _id
       agenda_id
-      resource_avail_admin
       resource_avail_onlyme
       resource_avail_therapist
-      resource_avail_all
       category_id
       resource_name
       resource_type
