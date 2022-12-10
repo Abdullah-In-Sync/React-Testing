@@ -80,7 +80,7 @@ export const SelectTemplateModal: FC<SelectTemplateModalProps> = ({
             })}
             onSubmit={onFormSubmit}
           >
-            {({ values, setFieldValue, isValid }) => (
+            {({ values, setFieldValue }) => (
               <Form>
                 <Box
                   sx={{
@@ -99,7 +99,7 @@ export const SelectTemplateModal: FC<SelectTemplateModalProps> = ({
                       <RadioGroup
                         name="templateType"
                         data-testid="componentsRadio"
-                        value={values.templateType.toString()}
+                        value={values?.templateType?.toString()}
                         onChange={(event) => {
                           setFieldValue(
                             "templateType",
@@ -125,7 +125,7 @@ export const SelectTemplateModal: FC<SelectTemplateModalProps> = ({
                     variant="contained"
                     type="submit"
                     style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                    disabled={loading || !isValid}
+                    disabled={loading || values?.templateType == ""}
                   >
                     Proceed
                   </Button>

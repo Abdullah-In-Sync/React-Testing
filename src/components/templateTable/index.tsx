@@ -94,7 +94,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                     padding: "5px 79px 5px 79px",
                     fontSize: "20px",
                   }}
-                  disabled={!formikHelper.isValid || formikHelper?.isSubmitting}
+                  disabled={!formikHelper.isValid}
                 >
                   Submit
                 </Button>
