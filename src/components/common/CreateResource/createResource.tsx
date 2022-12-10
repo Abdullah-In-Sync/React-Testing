@@ -22,6 +22,8 @@ import { TemplateFormData } from "../../templateTable/table.model";
 import TemplateTable from "../../templateTable";
 import { FormikProps } from "formik";
 import { CREATE_RESOURCE } from "../../../graphql/mutation/resource";
+import { SuccessModal } from "../SuccessModal";
+import { useRouter } from "next/router";
 
 type propTypes = {
   onSubmit?: any;
@@ -50,6 +52,7 @@ interface CreateResourceInput {
 
 export default function CreateResource(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
   const [formFields, setFormFields] = useState<CreateResourceInput>({
     disorderId: "",
     modelId: "",
@@ -73,6 +76,7 @@ export default function CreateResource(props: propTypes) {
   //useState for prefilled input data
   const [templateModal, setTemplateModal] = useState<boolean>(false);
   const [dimensionModal, setDimensionModal] = useState<boolean>(false);
+  const [successModal, setSuccessModal] = useState<boolean>(false);
 
   const [selectedComponentType, setSelectedComponentType] = useState({
     type: null,
@@ -87,7 +91,14 @@ export default function CreateResource(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
-  const [createResource] = useMutation(CREATE_RESOURCE);
+  const [createResource, { data: createResourceRes }] = useMutation(
+    CREATE_RESOURCE,
+    {
+      onCompleted: () => {
+        props.setLoader(false);
+      },
+    }
+  );
 
   const [getDisorderData, { data: disorderData }] = useLazyQuery(
     GET_DISORDER_DATA,
@@ -124,6 +135,12 @@ export default function CreateResource(props: propTypes) {
       },
     }
   );
+
+  useEffect(() => {
+    if (createResourceRes?.createResource != null) {
+      setSuccessModal(true);
+    }
+  }, [createResourceRes]);
 
   useEffect(() => {
     props.setLoader(true);
@@ -217,7 +234,7 @@ export default function CreateResource(props: propTypes) {
   };
 
   const saveResource = (data) => {
-    console.log(data, "data");
+    props.setLoader(true);
     createResource({
       variables: data,
     });
@@ -525,6 +542,14 @@ export default function CreateResource(props: propTypes) {
           initialData={selectedComponentType.initialData}
           mode="edit"
           onSubmit={onTemplateSave}
+        />
+      )}
+      {successModal && (
+        <SuccessModal
+          isOpen={successModal}
+          onOk={() => {
+            router.push("/admin/resource/");
+          }}
         />
       )}
     </>
