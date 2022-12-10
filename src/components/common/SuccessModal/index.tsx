@@ -18,6 +18,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({ isOpen, onOk }) => {
             justifyContent={"center"}
             alignItems={"center"}
             marginBottom={"40px"}
+            data-testid="SuccessModal"
           >
             <Image
               alt="My Help"
@@ -54,7 +55,12 @@ export const SuccessModal: FC<SuccessModalProps> = ({ isOpen, onOk }) => {
             </Typography>
           </div>
           <div style={{ textAlign: "center", paddingBottom: "10px" }}>
-            <Button variant="contained" style={{ width: 100 }} onClick={onOk}>
+            <Button
+              data-testid="SuccessOkBtn"
+              variant="contained"
+              style={{ width: 100 }}
+              onClick={onOk}
+            >
               Ok
             </Button>
           </div>
