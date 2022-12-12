@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Box, Button, FormControl, Grid, Typography } from "@mui/material";
 import { Form, Formik, FormikHelpers } from "formik";
 import { FC, useMemo } from "react";

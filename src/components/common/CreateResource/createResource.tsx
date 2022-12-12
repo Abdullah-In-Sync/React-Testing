@@ -572,14 +572,17 @@ export default function CreateResource(props: propTypes) {
           </Grid>
         </Box>
       </form>
-      {templateModal && (
-        <SelectTemplateModal
-          isOpen={templateModal}
-          setConfirmSubmission={setConfirmSubmission}
-          onSubmit={onTemplateSelect}
-          onModalClose={setTemplateModal}
-        />
-      )}
+      {
+        /* istanbul ignore else */
+        templateModal && (
+          <SelectTemplateModal
+            isOpen={templateModal}
+            setConfirmSubmission={setConfirmSubmission}
+            onSubmit={onTemplateSelect}
+            onModalClose={setTemplateModal}
+          />
+        )
+      }
       {dimensionModal && (
         /* istanbul ignore next */
         <TableDimensionModal

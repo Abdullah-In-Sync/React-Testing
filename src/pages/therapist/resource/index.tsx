@@ -172,6 +172,7 @@ const Resource: NextPage = () => {
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [shareResource] = useMutation(SHARE_RESOURCE);
+  /* istanbul ignore next */
   const {
     user: { _id: userId, therapist_data: { org_id: orgId = "" } = {} },
   } = useAppContext();
@@ -195,7 +196,9 @@ const Resource: NextPage = () => {
     data: dataListData,
     refetch,
   } = useQuery<ResourceListData, ResourceListVars>(GET_RESOURCE_DATA, {
+    /* istanbul ignore next */
     variables: {
+      /* istanbul ignore next */
       categoryId: filterValue?.categoryId ?? "",
       disorderId: filterValue?.disorderId ?? "",
       modelId: filterValue?.modelId ?? "",
@@ -210,8 +213,11 @@ const Resource: NextPage = () => {
   const { data: disorderList } = useQuery(GET_DISORDER_MODEL_LIST);
 
   const { data: categoryList } = useQuery(GET_CATEGORY, {
+    /* istanbul ignore next */
     variables: {
-      modelId: filterValue?.modelId ?? "",
+      modelId:
+        /* istanbul ignore next */
+        filterValue?.modelId ?? "",
     },
   });
 
@@ -633,6 +639,7 @@ const Resource: NextPage = () => {
                   if (selected.length === 0) {
                     return <em>Select Patient to share</em>;
                   }
+                  /* istanbul ignore next */
                   return patientList?.therapistPatientList
                     .filter((name) => selected.includes(name._id))
                     .map(
@@ -667,6 +674,7 @@ const Resource: NextPage = () => {
               disabled={isSubmitDisabled}
               label="Share"
               onClick={() => {
+                /* istanbul ignore next */
                 handleShare();
               }}
             />

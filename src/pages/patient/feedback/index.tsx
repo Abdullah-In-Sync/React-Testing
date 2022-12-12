@@ -85,7 +85,7 @@ const Feedback: NextPage = () => {
       }
     },
     onError: (error) => {
-      console.debug(error, "error");
+      console.log(error, "error");
     },
   });
 
@@ -93,20 +93,16 @@ const Feedback: NextPage = () => {
     getPatientFeedbackListData,
     { loading: feedbackLoading, data: patientFeedbackData },
   ] = useLazyQuery(GET_PATIENTFEEDBACKLIST_DATA);
+  /* istanbul ignore else */
   const setDefaultStateExcludingLoader = () => {
+    /* istanbul ignore else */
     setFeedbackType(null);
     setSessionNo(null);
     setSessionPanelExpanded(false);
   };
 
-  // useEffect(() => {
-  //   setLoader(true);
-  //   setDefaultStateExcludingLoader();
-  // }, []);
-
   useEffect(() => {
     setLoader(true);
-    console.debug("getPatientTherapyData: effecr");
     getPatientTherapyData({ variables: {} });
   }, [therapistId]);
 
@@ -128,8 +124,6 @@ const Feedback: NextPage = () => {
       },
     });
   }, [sessionNo, feedbackType]);
-
-  console.debug(patientSessionData, "patientSessionData");
 
   useEffect(() => {
     /* istanbul ignore else */
@@ -162,7 +156,6 @@ const Feedback: NextPage = () => {
     setLoader(true);
     setDefaultStateExcludingLoader();
     setTherapy(event.target.value);
-    console.debug("therepy changed to", event.target.value);
   };
 
   const handleSessionPanelChange =
@@ -306,7 +299,6 @@ const Feedback: NextPage = () => {
             patientSessionData?.getPatientSessionList.map((v, k) => {
               const p = k + 1;
               const panelName = "panel" + p;
-              console.debug(panelName);
               return (
                 <form
                   key={p}
