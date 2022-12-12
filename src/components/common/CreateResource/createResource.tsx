@@ -5,7 +5,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
   GET_MODEL_BY_DISORDERID_DATA,
 } from "../../../graphql/query/common";
 import { useSnackbar } from "notistack";
@@ -24,6 +24,9 @@ import { FormikProps } from "formik";
 import { CREATE_RESOURCE } from "../../../graphql/mutation/resource";
 import { SuccessModal } from "../SuccessModal";
 import { useRouter } from "next/router";
+import { useAppContext } from "../../../contexts/AuthContext";
+import { GET_ORG_DATA } from "../../../graphql/query";
+import { IS_ADMIN } from "../../../lib/constants";
 
 type propTypes = {
   onSubmit?: any;
@@ -51,6 +54,9 @@ interface CreateResourceInput {
 }
 
 export default function CreateResource(props: propTypes) {
+  const {
+    user: { user_type: userType },
+  } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const [formFields, setFormFields] = useState<CreateResourceInput>({
@@ -63,7 +69,7 @@ export default function CreateResource(props: propTypes) {
     resourceType: 1,
     agendaId: "",
     categoryId: "",
-    orgId: "2301536c4d674b3598814174d8f19593",
+    orgId: "",
     resourceIssmartdraw: "1",
     templateData: "",
     templateId: "",
@@ -91,17 +97,25 @@ export default function CreateResource(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
-  const [createResource, { data: createResourceRes }] = useMutation(
-    CREATE_RESOURCE,
+  const [getOrgData, { data: orgData }] = useLazyQuery(GET_ORG_DATA, {
+    onCompleted: () => {
+      /* istanbul ignore next */
+      props.setLoader(false);
+    },
+  });
+
+  const [getDisorderByOrgId, { data: disorderData }] = useLazyQuery(
+    GET_DISORDER_DATA_BY_ORG_ID,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
   );
 
-  const [getDisorderData, { data: disorderData }] = useLazyQuery(
-    GET_DISORDER_DATA,
+  const [createResource, { data: createResourceRes }] = useMutation(
+    CREATE_RESOURCE,
     {
       onCompleted: () => {
         props.setLoader(false);
@@ -137,15 +151,34 @@ export default function CreateResource(props: propTypes) {
   );
 
   useEffect(() => {
+    /* istanbul ignore next */
+    props.setLoader(true);
+    if (userType == IS_ADMIN) {
+      getOrgData();
+    }
+  }, []);
+
+  useEffect(() => {
     if (createResourceRes?.createResource != null) {
       setSuccessModal(true);
     }
   }, [createResourceRes]);
 
   useEffect(() => {
-    props.setLoader(true);
-    getDisorderData();
-  }, []);
+    if (formFields.orgId) {
+      props.setLoader(true);
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        disorder_id: "",
+        model_id: "",
+        category_id: "",
+        agenda_id: "",
+      }));
+      getDisorderByOrgId({
+        variables: { orgId: formFields.orgId },
+      });
+    }
+  }, [formFields.orgId]);
 
   useEffect(() => {
     if (formFields.disorderId) {
@@ -314,7 +347,27 @@ export default function CreateResource(props: propTypes) {
                 className="form-control-bg"
               />
             </Grid>
-            <Grid item xs={4}></Grid>
+            {userType == IS_ADMIN ? (
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="resourceOrgSelect"
+                  labelId="resourceOrg"
+                  name="orgId"
+                  value={formFields?.orgId}
+                  label="Select Organization"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "org_id" }}
+                  options={(orgData && orgData?.getOrganizationData) || []}
+                  mappingKeys={["_id", "name"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
+            ) : (
+              <Grid item xs={4}></Grid>
+            )}
           </Grid>
 
           <Grid container spacing={2} marginBottom={5}>
@@ -329,7 +382,9 @@ export default function CreateResource(props: propTypes) {
                 label="Select Disorder"
                 onChange={set2}
                 inputProps={{ "data-testid": "disorderId" }}
-                options={(disorderData && disorderData.getAllDisorder) || []}
+                options={
+                  (disorderData && disorderData.getDisorderByOrgId) || []
+                }
                 mappingKeys={["_id", "disorder_name"]}
                 size="small"
                 className="form-control-bg"
