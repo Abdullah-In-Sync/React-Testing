@@ -64,7 +64,7 @@ export default function CreateResource(props: propTypes) {
     modelId: "",
     resourceAvailOnlyme: "0",
     resourceAvailTherapist: "1",
-    resourceFilename: "test.pdf",
+    resourceFilename: "",
     resourceName: "",
     resourceType: 1,
     agendaId: "",
