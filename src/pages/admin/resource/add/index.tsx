@@ -19,7 +19,6 @@ const Index = () => {
   const router = useRouter();
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
-    /* istanbul ignore next */
     try {
       createResource({
         variables: {
