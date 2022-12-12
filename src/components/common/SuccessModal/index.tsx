@@ -6,9 +6,16 @@ import CustomModal from "../CustomModal/customModel";
 export interface SuccessModalProps {
   isOpen: boolean;
   onOk: () => void;
+  title?: string;
+  description?: string;
 }
 
-export const SuccessModal: FC<SuccessModalProps> = ({ isOpen, onOk }) => {
+export const SuccessModal: FC<SuccessModalProps> = ({
+  isOpen,
+  onOk,
+  title,
+  description,
+}) => {
   return (
     isOpen && (
       <CustomModal modalOpen={true}>
@@ -27,33 +34,37 @@ export const SuccessModal: FC<SuccessModalProps> = ({ isOpen, onOk }) => {
               width="67"
             />
           </Grid>
-          <div>
-            <Typography
-              sx={{
-                color: "#000",
-                fontWeight: "600",
-                textAlign: "center",
-                paddingBottom: "5px",
-                font: "500",
-                fontSize: "16px",
-              }}
-            >
-              Success
-            </Typography>
-          </div>
-          <div>
-            <Typography
-              sx={{
-                color: "#000",
-                textAlign: "center",
-                fontWeight: "400",
-                paddingBottom: "20px",
-                fontSize: "16px",
-              }}
-            >
-              Your worksheet has been created successfully.
-            </Typography>
-          </div>
+          {title && (
+            <div>
+              <Typography
+                sx={{
+                  color: "#000",
+                  fontWeight: "600",
+                  textAlign: "center",
+                  paddingBottom: "5px",
+                  font: "500",
+                  fontSize: "16px",
+                }}
+              >
+                {title}
+              </Typography>
+            </div>
+          )}
+          {description && (
+            <div>
+              <Typography
+                sx={{
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "400",
+                  paddingBottom: "20px",
+                  fontSize: "16px",
+                }}
+              >
+                {description}
+              </Typography>
+            </div>
+          )}
           <div style={{ textAlign: "center", paddingBottom: "10px" }}>
             <Button
               data-testid="SuccessOkBtn"

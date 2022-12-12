@@ -273,6 +273,15 @@ export default function CreateResource(props: propTypes) {
     formikHelper.setSubmitting(false);
   };
 
+  const onTemplateCancel = () => {
+    setSelectedComponentType({
+      ...selectedComponentType,
+      type: "",
+      initialData: {},
+      info: null,
+    });
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-crate-form">
@@ -542,11 +551,14 @@ export default function CreateResource(props: propTypes) {
           initialData={selectedComponentType.initialData}
           mode="edit"
           onSubmit={onTemplateSave}
+          onCancel={onTemplateCancel}
         />
       )}
       {successModal && (
         <SuccessModal
           isOpen={successModal}
+          description="Your resource has been created successfully."
+          title="Success"
           onOk={() => {
             router.push("/admin/resource/");
           }}
