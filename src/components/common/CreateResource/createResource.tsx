@@ -117,7 +117,9 @@ export default function CreateResource(props: propTypes) {
   const [createResource, { data: createResourceRes }] = useMutation(
     CREATE_RESOURCE,
     {
+      /* istanbul ignore next */
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -135,7 +137,9 @@ export default function CreateResource(props: propTypes) {
   const [getCategoryByModelId, { data: categoryData }] = useLazyQuery(
     GET_CATEGORY_BY_MODELID_DATA,
     {
+      /* istanbul ignore next */
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -145,6 +149,7 @@ export default function CreateResource(props: propTypes) {
     GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -153,12 +158,14 @@ export default function CreateResource(props: propTypes) {
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
+    /* istanbul ignore next */
     if (userType == IS_ADMIN) {
       getOrgData();
     }
   }, []);
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (createResourceRes?.createResource != null) {
       setSuccessModal(true);
     }
@@ -241,6 +248,7 @@ export default function CreateResource(props: propTypes) {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    /* istanbul ignore next */
     e.preventDefault();
     /* istanbul ignore next */
     if (
@@ -252,20 +260,23 @@ export default function CreateResource(props: propTypes) {
       });
       return;
     }
+    /* istanbul ignore next */
     setTemplateModal(true);
     /* istanbul ignore next */
     if (!confirmSubmission) return;
   };
 
   const onTemplateSelect = (values: any) => {
+    /* istanbul ignore next */
     console.log(values, "values");
+    /* istanbul ignore next */
     if (values.component_name == "TemplateTable") {
       setTemplateModal(false);
       setDimensionModal(true);
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
   };
-
+  /* istanbul ignore next */
   const saveResource = (data) => {
     props.setLoader(true);
     createResource({
@@ -273,6 +284,7 @@ export default function CreateResource(props: propTypes) {
     });
   };
 
+  /* istanbul ignore next */
   const onGenerateTable = (values: TableDimensionFormData) => {
     const initialData: TemplateFormData = { rows: [] };
 
@@ -297,12 +309,15 @@ export default function CreateResource(props: propTypes) {
     value: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
   ) => {
+    /* istanbul ignore next */
     console.log(value, formikHelper, formFields, "on submit");
+    /* istanbul ignore next */
     saveResource({
       ...formFields,
       templateData: JSON.stringify(value),
       templateId: selectedComponentType?.info?._id,
     });
+    /* istanbul ignore next */
     formikHelper.setSubmitting(false);
   };
 
@@ -566,6 +581,7 @@ export default function CreateResource(props: propTypes) {
         />
       )}
       {dimensionModal && (
+        /* istanbul ignore next */
         <TableDimensionModal
           isOpen={dimensionModal}
           setConfirmSubmission={setConfirmSubmission}
