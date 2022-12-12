@@ -23,7 +23,6 @@ const Index = () => {
   }, []);
 
   const submitFormHandler = async (formFields: addResourceFormField) => {
-    /* istanbul ignore next */
     try {
       createResource({
         variables: {

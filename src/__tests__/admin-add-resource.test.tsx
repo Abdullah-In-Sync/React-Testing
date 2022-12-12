@@ -188,6 +188,7 @@ mocksData.push({
       resourceReferences: "",
       templateData: "",
       templateId: "",
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
     },
   },
   result: {
@@ -425,14 +426,22 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("org_id"), {
       target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
     });
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
-
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
-
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("category_id"), {
       target: { value: "category_id_1" },
     });
@@ -452,29 +461,21 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    await (async () => {
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    });
-
-    await (async () => {
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    await waitFor(async () => {
       expect(
         screen.getByTestId("addResourceModalConfirmButton")
       ).toBeInTheDocument();
     });
 
-    await (async () => {
-      fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
-    });
+    fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
 
-    await (async () => {
+    await waitFor(async () => {
       expect(
         screen.getByText("Resource added successfully")
       ).toBeInTheDocument();
     });
-
-    await (async () => {
-      expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
-    });
+    expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
   });
 
   it("close the pop up by pressing cancel on confirm button", async () => {
