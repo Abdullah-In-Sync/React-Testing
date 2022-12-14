@@ -238,11 +238,9 @@ export default function EditForm(props: propTypes) {
       setLoader(false);
       if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
         setSelectedComponentType({
-          info: {
-            name: resourceData?.getResourceById[0]?.component_name,
-            _id: resourceData?.getResourceById[0]?.template_id,
-          },
-          type: "TemplateTable",
+          info: resourceData?.getResourceById[0]?.template_detail,
+          type: resourceData?.getResourceById[0]?.template_detail
+            ?.component_name,
           initialData: JSON.parse(
             resourceData?.getResourceById[0]?.template_data
           ),

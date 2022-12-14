@@ -197,6 +197,10 @@ export const GET_RESOURCE_DETAIL = gql`
         _id
         model_name
       }
+      template_detail {
+        component_name
+        name
+      }
     }
   }
 `;
