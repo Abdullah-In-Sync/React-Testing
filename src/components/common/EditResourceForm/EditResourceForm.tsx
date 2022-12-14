@@ -86,7 +86,6 @@ export default function EditForm(props: propTypes) {
   const [loader, setLoader] = useState<boolean>(false);
   const [templateModal, setTemplateModal] = useState<boolean>(false);
   const [dimensionModal, setDimensionModal] = useState<boolean>(false);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
   const [selectedComponentType, setSelectedComponentType] = useState({
     type: null,
     initialData: undefined,
@@ -772,15 +771,6 @@ export default function EditForm(props: propTypes) {
             onModalClose={setDimensionModal}
           />
         )}
-        {successModal && (
-          <SuccessModal
-            isOpen={successModal}
-            onOk={() => {
-              router.push("/admin/resource/");
-            }}
-          />
-        )}
-
         {selectedComponentType?.info != null && (
           <Box style={{ margin: "32px 0px 40px 0px" }}>
             <Typography
