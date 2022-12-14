@@ -32,6 +32,15 @@ import { editResourceFormField } from "../../../utility/types/resource_types";
 import SureModal from "../../admin/resource/SureModal";
 import Link from "@mui/material/Link";
 import Loader from "../Loader";
+import TemplateTable from "../../templateTable";
+import { SelectTemplateModal } from "../CreateResource/selectTemplateModal";
+import {
+  TableDimensionFormData,
+  TableDimensionModal,
+} from "../CreateResource/tableDimensionModal";
+import { SuccessModal } from "../SuccessModal";
+import { AddButton } from "../Buttons";
+import { TemplateFormData } from "../../templateTable/table.model";
 
 const defaultFormValue = {
   _id: "",
@@ -75,6 +84,14 @@ export default function EditForm(props: propTypes) {
   const preSignedURL = useRef<string>(null);
   const [resId, setResId] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
+  const [templateModal, setTemplateModal] = useState<boolean>(false);
+  const [dimensionModal, setDimensionModal] = useState<boolean>(false);
+  const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [selectedComponentType, setSelectedComponentType] = useState({
+    type: null,
+    initialData: undefined,
+    info: undefined,
+  });
 
   const resourceTypeOptions = [
     { id: 1, value: "Info Sheets" },
@@ -160,6 +177,56 @@ export default function EditForm(props: propTypes) {
     },
   });
 
+  const onTemplateSelect = (values: any) => {
+    if (values.component_name == "TemplateTable") {
+      setTemplateModal(false);
+      setDimensionModal(true);
+      setSelectedComponentType({ ...selectedComponentType, info: values });
+    }
+  };
+
+  const onGenerateTable = (values: TableDimensionFormData) => {
+    const initialData: TemplateFormData = { rows: [] };
+
+    for (let j = 0; j < values.rows; j++) {
+      initialData.rows.push({
+        cells: Array.from({ length: values.cols }, () => ({
+          type: "",
+        })),
+      });
+    }
+
+    setSelectedComponentType({
+      ...selectedComponentType,
+      type: "TemplateTable",
+      initialData: initialData,
+    });
+
+    setDimensionModal(false);
+  };
+
+  const onTemplateSave = (value) => {
+    setFormFields({
+      ...formFields,
+      template_data: JSON.stringify(value),
+      template_id: selectedComponentType?.info?._id,
+    });
+    setModalOpen(true);
+  };
+
+  const onTemplateCancel = () => {
+    setSelectedComponentType({
+      type: "",
+      initialData: {},
+      info: null,
+    });
+    setFormFields({
+      ...formFields,
+      template_data: "",
+      template_id: "",
+    });
+  };
+
   useLayoutEffect(() => {
     return () => {
       refetch();
@@ -170,6 +237,18 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     if (!resourceLoading && resourceData) {
       setLoader(false);
+      if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
+        setSelectedComponentType({
+          info: {
+            name: resourceData?.getResourceById[0]?.component_name,
+            _id: resourceData?.getResourceById[0]?.template_id,
+          },
+          type: "TemplateTable",
+          initialData: JSON.parse(
+            resourceData?.getResourceById[0]?.template_data
+          ),
+        });
+      }
     }
   }, [resId]);
 
@@ -323,7 +402,12 @@ export default function EditForm(props: propTypes) {
       });
       return;
     }
-    setModalOpen(true);
+
+    if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
+      setTemplateModal(true);
+    } else {
+      setModalOpen(true);
+    }
     /* istanbul ignore next */
     if (!confirmSubmission) return;
   };
@@ -333,7 +417,7 @@ export default function EditForm(props: propTypes) {
     try {
       props.setLoader(true);
       /* istanbul ignore next */
-      if (preSignedURL.current) {
+      if (preSignedURL.current && formFields?.resource_issmartdraw != "1") {
         const uploadStatus = await uploadToS3(
           selectedFile,
           preSignedURL.current
@@ -359,13 +443,14 @@ export default function EditForm(props: propTypes) {
   return (
     <>
       <Loader visible={loader} />
-      <form onSubmit={handleSubmit} data-testid="resource-edit-form">
-        <Box
-          sx={{ flexGrow: 1, border: "1px solid #cecece" }}
-          p={5}
-          borderRadius="7px"
-        >
-          <>
+
+      <Box
+        sx={{ flexGrow: 1, border: "1px solid #cecece" }}
+        p={5}
+        borderRadius="7px"
+      >
+        <>
+          <form onSubmit={handleSubmit} data-testid="resource-edit-form">
             <Grid container spacing={2} marginBottom={5}>
               <Grid item xs={4}>
                 <TextFieldComponent
@@ -527,7 +612,8 @@ export default function EditForm(props: propTypes) {
                   className="form-control-bg"
                 />
               </Grid>
-              {resourceData?.getResourceById != null ? (
+              {resourceData?.getResourceById != null &&
+              resourceData?.getResourceById[0]?.resource_issmartdraw != 1 ? (
                 <Grid item xs={7}>
                   Upload Resource :{" "}
                   <Link
@@ -542,17 +628,19 @@ export default function EditForm(props: propTypes) {
               ) : (
                 ""
               )}
-              <Grid item xs={7}>
-                <Box display="flex" alignItems="center">
-                  <UploadButtonComponent
-                    variant="contained"
-                    name="RESOURCE_FILENAME"
-                    inputProps={{ "data-testid": "resource_file_upload" }}
-                    onChange={fileOnChange}
-                    fileName={selectedFile?.name}
-                  />
-                </Box>
-              </Grid>
+              {resourceData?.getResourceById[0]?.resource_issmartdraw != 1 && (
+                <Grid item xs={7}>
+                  <Box display="flex" alignItems="center">
+                    <UploadButtonComponent
+                      variant="contained"
+                      name="RESOURCE_FILENAME"
+                      inputProps={{ "data-testid": "resource_file_upload" }}
+                      onChange={fileOnChange}
+                      fileName={selectedFile?.name}
+                    />
+                  </Box>
+                </Grid>
+              )}
             </Grid>
 
             <Grid container spacing={2} marginBottom={5}>
@@ -641,20 +729,84 @@ export default function EditForm(props: propTypes) {
                 </Button>
               </Box>
             </SureModal>
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={12} textAlign="center">
-                <Button
-                  data-testid="editResourceSubmitButton"
-                  variant="contained"
-                  type="submit"
-                >
-                  Save Edit
-                </Button>
+            {resourceData?.getResourceById[0]?.resource_issmartdraw != 1 && (
+              <Grid container spacing={2} marginBottom={5}>
+                <Grid item xs={12} textAlign="center">
+                  <Button
+                    data-testid="editResourceSubmitButton"
+                    variant="contained"
+                    type="submit"
+                  >
+                    Save Edit
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </>
-        </Box>
-      </form>
+            )}
+            {resourceData?.getResourceById[0]?.resource_issmartdraw == 1 && (
+              <Grid container spacing={2} marginBottom={5}>
+                <Grid item xs={12} textAlign="center">
+                  <AddButton
+                    data-testid="selectTemplateButton"
+                    variant="contained"
+                    type="submit"
+                    label="SELECT TEMPLATE*"
+                  />
+                </Grid>
+              </Grid>
+            )}
+          </form>
+        </>
+        {templateModal && (
+          <SelectTemplateModal
+            isOpen={templateModal}
+            setConfirmSubmission={setConfirmSubmission}
+            onSubmit={onTemplateSelect}
+            onModalClose={setTemplateModal}
+          />
+        )}
+        {dimensionModal && (
+          <TableDimensionModal
+            isOpen={dimensionModal}
+            setConfirmSubmission={setConfirmSubmission}
+            onSubmit={(values) => onGenerateTable(values)}
+            onModalClose={setDimensionModal}
+          />
+        )}
+        {successModal && (
+          <SuccessModal
+            isOpen={successModal}
+            onOk={() => {
+              router.push("/admin/resource/");
+            }}
+          />
+        )}
+
+        {selectedComponentType?.info != null && (
+          <Box style={{ margin: "32px 0px 40px 0px" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontFamily: "Montserrat",
+                fontStyle: "normal",
+                fontWeight: 700,
+                fontSize: "20px",
+                lineHeight: "24px",
+              }}
+              color={"primary.main"}
+            >
+              {selectedComponentType?.info?.name}
+            </Typography>
+          </Box>
+        )}
+        {selectedComponentType.type == "TemplateTable" && (
+          <TemplateTable
+            initialData={selectedComponentType.initialData}
+            mode="edit"
+            onSubmit={onTemplateSave}
+            onCancel={onTemplateCancel}
+          />
+        )}
+      </Box>
     </>
   );
 }

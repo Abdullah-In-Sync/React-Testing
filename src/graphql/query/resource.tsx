@@ -186,6 +186,9 @@ export const GET_RESOURCE_DETAIL = gql`
       resource_filename
       resource_url
       download_resource_url
+      resource_issmartdraw
+      template_id
+      template_data
       disorder_detail {
         _id
         disorder_name
