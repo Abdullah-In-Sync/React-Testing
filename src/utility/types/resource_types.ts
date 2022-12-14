@@ -2,6 +2,7 @@ export type addResourceFormField = {
   resource_name: string;
   resource_type: number;
   disorder_id: string;
+  org_id: string;
   model_id: string;
   category_id: string;
   resource_desc: string;
@@ -20,6 +21,7 @@ export type editResourceFormField = {
   resource_name: string;
   resource_type: number;
   disorder_id: string;
+  org_id: string;
   model_id: string;
   category_id: string;
   resource_desc: string;

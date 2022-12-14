@@ -23,11 +23,6 @@ const Index = () => {
     setLoader(true);
   }, []);
 
-  /* istanbul ignore next */
-  // if (getTokenData && !tokenLoading && adminId) {
-  //   /* istanbul ignore next */
-  // }
-
   const editFormHandler = async (formFields: editResourceFormField) => {
     try {
       updateResource({
@@ -54,6 +49,7 @@ const Index = () => {
                   template_data: formFields?.template_data,
                 }
               : {}),
+            org_id: formFields.org_id,
           },
         },
         onCompleted: (data) => {

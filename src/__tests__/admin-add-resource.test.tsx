@@ -11,9 +11,9 @@ import AddResource from "../pages/admin/resource/add";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
   GET_ADMIN_TOKEN_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
 } from "../graphql/query/common";
 import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
 
@@ -29,18 +29,37 @@ jest.mock("../contexts/AuthContext");
 
 import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { useAppContext } from "../contexts/AuthContext";
+import { GET_ORG_DATA } from "../graphql/query";
 
 // mocks
 const mocksData = [];
 // disorder
 mocksData.push({
   request: {
-    query: GET_DISORDER_DATA,
-    variables: {},
+    query: GET_ORG_DATA,
   },
   result: {
     data: {
-      getAllDisorder: [
+      getOrganizationData: [
+        {
+          _id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+          name: "dev-myhelp",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_DATA_BY_ORG_ID,
+    variables: {
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByOrgId: [
         {
           _id: "disorder_id_1",
           user_type: "admin",
@@ -50,6 +69,7 @@ mocksData.push({
     },
   },
 });
+
 mocksData.push({
   request: {
     query: GET_UPLOAD_RESOURCE_URL,
@@ -168,6 +188,7 @@ mocksData.push({
       resourceReferences: "",
       templateData: "",
       templateId: "",
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
     },
   },
   result: {
@@ -240,21 +261,32 @@ describe("Admin add resource page", () => {
     expect(screen.getByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
 
-  it("should click disorder dropdown", async () => {
+  it("should click org dropdown", async () => {
     await sut();
-    fireEvent.change(screen.queryByTestId("disorder_id"), {
-      target: { value: "disorder_id_1" },
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
     });
-    expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
-      "disorder_id_1"
+    expect(screen.queryByTestId("org_id").getAttribute("value")).toBe(
+      "e7b5b7c0568b4eacad6f05f11d9c4884"
     );
   });
 
-  it("should click model dropdown", async () => {
+  it("should click disorder dropdown and model dropdown", async () => {
     await sut();
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
+    await expect(
+      screen.queryByTestId("disorder_id").getAttribute("value")
+    ).toBe("disorder_id_1");
+
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId("activity-indicator")
     );
@@ -294,6 +326,9 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -303,9 +338,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("category_id"), {
       target: { value: "category_id_1" },
     });
@@ -319,7 +352,9 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(screen.queryByText("Please select a file")).toBeInTheDocument();
+    await (async () => {
+      expect(screen.getByText("Please select a file")).toBeInTheDocument();
+    });
   });
 
   it("submit form with out selecting avail resource should return error", async () => {
@@ -331,12 +366,13 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
@@ -360,9 +396,11 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(
-      screen.queryByText("Please select availability of resource")
-    ).toBeInTheDocument();
+    await (async () => {
+      expect(
+        screen.getByText("Please select availability of resource")
+      ).toBeInTheDocument();
+    });
   });
 
   it("submit form with valid data", async () => {
@@ -385,6 +423,13 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -447,6 +492,9 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -456,9 +504,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("category_id"), {
       target: { value: "category_id_1" },
     });
@@ -474,19 +520,27 @@ describe("Admin add resource page", () => {
       });
     });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+    fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+
+    await (async () => {
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    await waitFor(async () => {
+    await (async () => {
       expect(
         screen.getByTestId("addResourceModalConfirmButton")
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
-    expect(screen.queryByTestId("addResourceSubmitButton")).toBeInTheDocument();
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
+    });
+
+    await (async () => {
+      expect(
+        screen.queryByTestId("addResourceSubmitButton")
+      ).toBeInTheDocument();
+    });
   });
 
   it("checkbox check admin add resources", async () => {

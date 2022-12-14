@@ -11,7 +11,7 @@ import AddResource from "../pages/therapist/resource/add";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
   GET_MODEL_BY_DISORDERID_DATA,
   GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
@@ -30,24 +30,50 @@ jest.mock("../contexts/AuthContext");
 
 // mocks
 const mocksData = [];
-// disorder
 mocksData.push({
   request: {
-    query: GET_DISORDER_DATA,
+    query: GET_THERAPIST_TOKEN_DATA,
     variables: {},
   },
   result: {
     data: {
-      getAllDisorder: [
+      getTokenData: {
+        _id: "some-therapist-id",
+        user_type: "therapist",
+        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
+        perm_ids: "9,10,14,21,191,65,66",
+        user_status: "1",
+        created_date: "2021-12-20 16:20:55",
+        updated_date: "2021-12-20 16:20:55",
+        therapist_data: {
+          _id: "therapist_id",
+          org_id: "myhelp",
+        },
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_DATA_BY_ORG_ID,
+    variables: {
+      orgId: "myhelp",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByOrgId: [
         {
           _id: "disorder_id_1",
-          user_type: "admin",
+          user_type: "therapist",
           disorder_name: "disorder 1",
         },
       ],
     },
   },
 });
+
 mocksData.push({
   request: {
     query: GET_UPLOAD_RESOURCE_URL,
@@ -126,29 +152,7 @@ mocksData.push({
 // upload file, presigned URL
 const file = new File(["hello"], "hello.png", { type: "image/png" });
 // token data
-mocksData.push({
-  request: {
-    query: GET_THERAPIST_TOKEN_DATA,
-    variables: {},
-  },
-  result: {
-    data: {
-      getTokenData: {
-        _id: "some-therapist-id",
-        user_type: "therapist",
-        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
-        perm_ids: "9,10,14,21,191,65,66",
-        user_status: "1",
-        created_date: "2021-12-20 16:20:55",
-        updated_date: "2021-12-20 16:20:55",
-        therapist_data: {
-          _id: "therapist_id",
-          org_id: "myhelp",
-        },
-      },
-    },
-  },
-});
+
 // add resource
 mocksData.push({
   request: {
@@ -170,6 +174,7 @@ mocksData.push({
       resourceReferences: "",
       templateData: "",
       templateId: "",
+      orgId: "myhelp",
     },
   },
   result: {
@@ -189,12 +194,9 @@ const sut = async () => {
       </SnackbarProvider>
     </MockedProvider>
   );
-  await waitForElementToBeRemoved(() =>
-    screen.queryByTestId("activity-indicator")
-  );
 };
 
-describe("Admin add resource page", () => {
+describe("Therapist add resource page", () => {
   beforeEach(() => {
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
@@ -206,6 +208,10 @@ describe("Admin add resource page", () => {
         user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
+        therapist_data: {
+          _id: "therapist_id",
+          org_id: "myhelp",
+        },
       },
     });
   });
@@ -243,16 +249,22 @@ describe("Admin add resource page", () => {
 
   it("should click disorder dropdown", async () => {
     await sut();
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
-    expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
-      "disorder_id_1"
-    );
+    await expect(
+      (await screen.findByTestId("disorder_id")).getAttribute("value")
+    ).toBe("disorder_id_1");
   });
 
   it("should click model dropdown", async () => {
     await sut();
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -298,9 +310,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
@@ -320,7 +330,9 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(screen.queryByText("Please select a file")).toBeInTheDocument();
+    await (async () => {
+      expect(screen.getByText("Please select a file")).toBeInTheDocument();
+    });
   });
 
   it("submit form with out selecting avail resource should return error", async () => {
@@ -335,9 +347,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
@@ -361,9 +371,11 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(
-      screen.queryByText("Please select availability of resource")
-    ).toBeInTheDocument();
+    await (async () => {
+      expect(
+        screen.getByText("Please select availability of resource")
+      ).toBeInTheDocument();
+    });
   });
 
   it("submit form with valid data", async () => {
@@ -386,6 +398,9 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -451,9 +466,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("model_id"), {
       target: { value: "model_id_1" },
     });
@@ -479,14 +492,18 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    await waitFor(async () => {
+    await (async () => {
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    });
+    await (async () => {
       expect(
         screen.getByTestId("addResourceModalConfirmButton")
       ).toBeInTheDocument();
     });
-
-    fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
+    });
+    // fireEvent.click(screen.queryByTestId("addResourceModalCancelButton"));
     expect(screen.queryByTestId("addResourceSubmitButton")).toBeInTheDocument();
   });
 

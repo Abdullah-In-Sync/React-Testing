@@ -10,9 +10,9 @@ import { MockedProvider } from "@apollo/client/testing";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
   GET_MODEL_BY_DISORDERID_DATA,
   GET_ADMIN_TOKEN_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
 } from "../graphql/query/common";
 import {
   GET_TEMPLATE_LIST,
@@ -31,18 +31,38 @@ jest.mock("../contexts/AuthContext");
 import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { useAppContext } from "../contexts/AuthContext";
 import Create from "../pages/admin/resource/create";
+import { GET_ORG_DATA } from "../graphql/query";
 
 // mocks
 const mocksData = [];
 // disorder
+
 mocksData.push({
   request: {
-    query: GET_DISORDER_DATA,
-    variables: {},
+    query: GET_ORG_DATA,
   },
   result: {
     data: {
-      getAllDisorder: [
+      getOrganizationData: [
+        {
+          _id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+          name: "dev-myhelp",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_DATA_BY_ORG_ID,
+    variables: {
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByOrgId: [
         {
           _id: "disorder_id_1",
           user_type: "admin",
@@ -52,6 +72,7 @@ mocksData.push({
     },
   },
 });
+
 mocksData.push({
   request: {
     query: GET_UPLOAD_RESOURCE_URL,
@@ -294,8 +315,24 @@ describe("Admin add resource page", () => {
     expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
   });
 
+  it("should click org dropdown", async () => {
+    await sut();
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
+    expect(screen.queryByTestId("org_id").getAttribute("value")).toBe(
+      "e7b5b7c0568b4eacad6f05f11d9c4884"
+    );
+  });
+
   it("should click disorder dropdown", async () => {
     await sut();
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
     });
@@ -306,6 +343,14 @@ describe("Admin add resource page", () => {
 
   it("should click model dropdown", async () => {
     await sut();
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
     });
@@ -330,6 +375,9 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resourceType"), {
       target: { value: "2" },
     });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
     });
@@ -339,9 +387,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("modelId"), {
       target: { value: "model_id_1" },
     });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("categoryId"), {
       target: { value: "category_id_1" },
     });
@@ -352,39 +398,51 @@ describe("Admin add resource page", () => {
       fireEvent.click(screen.queryByTestId("selectTemplateButton"));
     });
 
-    expect(screen.queryByTestId("TemplateProceed")).toBeInTheDocument();
+    await (async () => {
+      expect(screen.queryByTestId("TemplateProceed")).toBeInTheDocument();
+    });
 
-    await waitFor(async () => {
+    await (async () => {
       expect(screen.getByTestId("componentsRadio")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.queryByTestId("TemplateTable"));
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("TemplateTable"));
+    });
 
-    fireEvent.click(screen.queryByTestId("TemplateProceed"));
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("TemplateProceed"));
+    });
 
-    await waitFor(async () => {
+    await (async () => {
       expect(screen.getByTestId("selectDimensionButton")).toBeInTheDocument();
       expect(screen.getByTestId("rowsSelect")).toBeInTheDocument();
       expect(screen.getByTestId("colsSelect")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.queryByTestId("selectDimensionButton"));
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("selectDimensionButton"));
+    });
 
-    await waitFor(async () => {
+    await (async () => {
       expect(screen.getByTestId("row-0")).toBeInTheDocument();
       expect(screen.getByTestId("cell-0")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.queryByTestId("tableTemplateSubmit"));
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("tableTemplateSubmit"));
+    });
 
-    await waitFor(async () => {
+    await (async () => {
       expect(screen.getByTestId("SuccessModal")).toBeInTheDocument();
     });
 
-    await waitFor(async () => {
+    await (async () => {
       fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
     });
 
-    expect(pushMock).toHaveBeenCalledWith("/admin/resource/");
+    await (async () => {
+      expect(pushMock).toHaveBeenCalledWith("/admin/resource/");
+    });
   });
 });

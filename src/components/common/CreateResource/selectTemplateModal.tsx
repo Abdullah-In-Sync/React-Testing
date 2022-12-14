@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useLazyQuery } from "@apollo/client";
 import {
   Box,

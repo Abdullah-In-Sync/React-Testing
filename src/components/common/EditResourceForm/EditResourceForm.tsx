@@ -15,7 +15,7 @@ import { useLazyQuery } from "@apollo/client";
 import {
   GET_AGENDA_BY_DISORDER_AND_MODEL_DATA,
   GET_CATEGORY_BY_MODELID_DATA,
-  GET_DISORDER_DATA,
+  GET_DISORDER_DATA_BY_ORG_ID,
   GET_MODEL_BY_DISORDERID_DATA,
 } from "../../../graphql/query/common";
 import {
@@ -38,15 +38,17 @@ import {
   TableDimensionFormData,
   TableDimensionModal,
 } from "../CreateResource/tableDimensionModal";
-import { SuccessModal } from "../SuccessModal";
 import { AddButton } from "../Buttons";
 import { TemplateFormData } from "../../templateTable/table.model";
+import { useAppContext } from "../../../contexts/AuthContext";
+import { GET_ORG_DATA } from "../../../graphql/query";
 
 const defaultFormValue = {
   _id: "",
   resource_name: "",
   resource_type: 2,
   disorder_id: "",
+  org_id: "",
   model_id: "",
   category_id: "",
   resource_desc: "",
@@ -64,6 +66,7 @@ const defaultFormValue = {
   download_resource_url: "",
 };
 
+/* istanbul ignore next */
 type propTypes = {
   resourceType: "edit" | "update";
   onSubmit?: any;
@@ -71,11 +74,17 @@ type propTypes = {
 };
 
 export default function EditForm(props: propTypes) {
+  const {
+    user: { user_type: userType, therapist_data: { org_id: orgId = "" } = {} },
+  } = useAppContext();
   const router = useRouter();
   const id = router?.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
-  const [formFields, setFormFields] =
-    useState<editResourceFormField>(defaultFormValue);
+
+  const [formFields, setFormFields] = useState<editResourceFormField>({
+    ...defaultFormValue,
+    org_id: orgId,
+  });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -99,12 +108,16 @@ export default function EditForm(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
-  const [getDisorderData, { data: disorderData }] = useLazyQuery(
-    GET_DISORDER_DATA,
+  const [getOrgData, { data: orgData }] = useLazyQuery(GET_ORG_DATA, {
+    onCompleted: () => {
+      props.setLoader(false);
+    },
+  });
+
+  const [getDisorderByOrgId, { data: disorderData }] = useLazyQuery(
+    GET_DISORDER_DATA_BY_ORG_ID,
     {
-      /* istanbul ignore next */
       onCompleted: () => {
-        /* istanbul ignore next */
         props.setLoader(false);
       },
     }
@@ -225,6 +238,12 @@ export default function EditForm(props: propTypes) {
       template_id: "",
     });
   };
+  useEffect(() => {
+    props.setLoader(true);
+    if (userType == "admin") {
+      getOrgData();
+    }
+  }, []);
 
   useLayoutEffect(() => {
     return () => {
@@ -251,13 +270,6 @@ export default function EditForm(props: propTypes) {
 
   useEffect(() => {
     /* istanbul ignore next */
-    props.setLoader(true);
-    getDisorderData();
-    props.setLoader(false);
-  }, []);
-
-  useEffect(() => {
-    /* istanbul ignore next */
     setLoader(true);
     getResourceData({
       variables: { resourceId: id },
@@ -273,6 +285,27 @@ export default function EditForm(props: propTypes) {
       setFormFields(data);
     }
   }, [resourceData]);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    const orgId =
+      formFields.org_id === undefined
+        ? resourceData?.getResourceById[0]?.org_id
+        : formFields.org_id;
+    /* istanbul ignore next */
+    if (orgId) {
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        org_id: orgId,
+        model_id: "",
+        disorder_id: "",
+        category_id: "",
+      }));
+      getDisorderByOrgId({
+        variables: { orgId },
+      });
+    }
+  }, [formFields?.org_id]);
 
   useEffect(() => {
     /* istanbul ignore next */
@@ -416,6 +449,7 @@ export default function EditForm(props: propTypes) {
       /* istanbul ignore next */
       if (preSignedURL.current && formFields?.resource_issmartdraw != "1") {
         const uploadStatus = await uploadToS3(
+          /* istanbul ignore next */
           selectedFile,
           preSignedURL.current
         );
@@ -427,12 +461,14 @@ export default function EditForm(props: propTypes) {
             variant: "error",
           });
         }
+        /* istanbul ignore next */
         props.setLoader(false);
       } else {
         props.onSubmit(formFields);
         props.setLoader(false);
       }
     } catch (e) {
+      /* istanbul ignore next */
       props.setLoader(false);
     }
   };
@@ -481,7 +517,27 @@ export default function EditForm(props: propTypes) {
                   className="form-control-bg"
                 />
               </Grid>
-              <Grid item xs={4}></Grid>
+              {userType == "admin" ? (
+                <Grid item xs={4}>
+                  <SingleSelectComponent
+                    fullWidth={true}
+                    required={true}
+                    id="resourceOrgSelect"
+                    labelId="resourceOrg"
+                    name="org_id"
+                    value={formFields?.org_id}
+                    label="Select Organization"
+                    onChange={set2}
+                    inputProps={{ "data-testid": "org_id" }}
+                    options={(orgData && orgData?.getOrganizationData) || []}
+                    mappingKeys={["_id", "name"]}
+                    size="small"
+                    className="form-control-bg"
+                  />
+                </Grid>
+              ) : (
+                <Grid item xs={4}></Grid>
+              )}
             </Grid>
 
             <Grid container spacing={2} marginBottom={5}>
@@ -496,7 +552,9 @@ export default function EditForm(props: propTypes) {
                   label="Select Disorder"
                   onChange={set2}
                   inputProps={{ "data-testid": "disorder_id" }}
-                  options={(disorderData && disorderData.getAllDisorder) || []}
+                  options={
+                    (disorderData && disorderData.getDisorderByOrgId) || []
+                  }
                   mappingKeys={["_id", "disorder_name"]}
                   size="small"
                   className="form-control-bg"
