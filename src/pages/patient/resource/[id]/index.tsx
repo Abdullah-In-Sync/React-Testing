@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import AttachmentIcon from "@mui/icons-material/Attachment";
@@ -111,6 +112,25 @@ const ResourceDetailById: NextPage = () => {
                   >
                     <KeyboardBackspaceIcon />
                     Back
+                  </Button>
+                </NextLink>
+                <NextLink
+                  passHref
+                  href={{
+                    pathname: `/patient/resource/edit/${id}`,
+                    query: {
+                      tabName: router.query.tabName,
+                    },
+                  }}
+                >
+                  <Button
+                    mat-button
+                    className={`text-white bg-themeblue`}
+                    variant="contained"
+                    sx={{ textTransform: "none", ml: 2 }}
+                  >
+                    Next
+                    <ArrowRightAlt />
                   </Button>
                 </NextLink>
               </Grid>

@@ -6,6 +6,7 @@ import TemplateTableViewModel, {
   TemplateFormData,
   TemplateTableContext,
 } from "./table.model";
+import { useAppContext } from "../../contexts/AuthContext";
 import { ColumnActionTitle } from "./TableActionHeader";
 import { TemplateTableRow } from "./TableRow";
 
@@ -31,6 +32,9 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
   onCancel,
   onPreview,
 }) => {
+  const {
+    user: { user_type: userType } = {},
+  } = useAppContext();
   const { validationSchema } = useContext(TemplateTableContext);
 
   const defaultInitialData: TemplateFormData = {
@@ -60,7 +64,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 render={() => (
                   <>
                     {/*For the top column action menu for add new column */}
-                    <Grid container wrap="nowrap">
+                    {userType === 'admin' && <Grid container wrap="nowrap">
                       <Grid item style={{ minWidth: "58px" }}>
                         {" "}
                         <div></div>{" "}
@@ -71,13 +75,14 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                           formikHelper={formikHelper}
                         />
                       ))}
-                    </Grid>
+                    </Grid>}
                     {formikHelper?.values?.rows.map((row, rowIndex) => (
                       <TemplateTableRow
                         key={rowIndex}
                         rowData={row}
                         rowIndex={rowIndex}
                         formikHelper={formikHelper}
+                        userType={userType}
                       />
                     ))}
                   </>
@@ -112,7 +117,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 >
                   Cancel
                 </Button>
-                <Button
+                {userType === 'admin' && <Button
                   data-testid="tableTemplatePreview"
                   color="primary"
                   variant="contained"
@@ -124,7 +129,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                   onClick={() => onPreview?.(formikHelper.values, formikHelper)}
                 >
                   Preview
-                </Button>
+                </Button>}
               </Grid>
             </Grid>
           </Form>

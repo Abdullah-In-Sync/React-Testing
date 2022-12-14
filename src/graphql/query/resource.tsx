@@ -170,6 +170,27 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
   }
 `;
 
+export const GET_PATIENT_RESOURCE_TEMPLATE = gql`
+  query getResourceDetailById($ptsharresId: String!) {
+    getResourceDetailById(ptsharresId: $ptsharresId) {
+      created_date
+      resource_data {
+        template_data
+        resource_issmartdraw
+        resource_name
+        resource_type
+        template_id
+      }
+      template_detail {
+        component_name
+        category
+        _id
+        name
+      }
+    }
+  }
+`;
+
 export const GET_RESOURCE_DETAIL = gql`
   query getResourceById($resourceId: String!) {
     getResourceById(resourceId: $resourceId) {
