@@ -566,7 +566,7 @@ export default function CreateResource(props: propTypes) {
                 data-testid="selectTemplateButton"
                 variant="contained"
                 type="submit"
-                label="SELECT TEMPLATE*"
+                label="SELECT TEMPLATE"
               />
             </Grid>
           </Grid>
@@ -593,7 +593,7 @@ export default function CreateResource(props: propTypes) {
         />
       )}
 
-      {selectedComponentType.type != null && (
+      {selectedComponentType?.info != null && (
         <Box style={{ margin: "32px 0px 40px 0px" }}>
           <Typography
             variant="h5"
