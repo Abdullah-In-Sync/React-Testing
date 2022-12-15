@@ -53,7 +53,6 @@ const Index = () => {
           },
         },
         onCompleted: (data) => {
-          console.log("data: ", data);
           if (data && data.updateResourceById) {
             enqueueSnackbar("Resource edit successfully", {
               variant: "success",
