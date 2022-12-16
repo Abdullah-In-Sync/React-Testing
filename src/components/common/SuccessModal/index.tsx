@@ -52,7 +52,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({
             </div>
           )}
           {description && (
-            <div >
+            <div>
               <Typography
                 sx={{
                   color: "#000",
