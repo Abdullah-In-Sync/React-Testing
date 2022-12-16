@@ -20,7 +20,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   templateDetail,
   onSubmit,
 }) => {
-  const { user: { user_type: userType } = {} } = useAppContext();
+  const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
   const id = router?.query?.id as string;
   const TemplateDynamic = templateComponents[templateDetail?.component_name];
