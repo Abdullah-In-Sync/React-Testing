@@ -1,6 +1,6 @@
 import { Button, Grid } from "@mui/material";
 import { FieldArray, Form, Formik, FormikProps } from "formik";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import withViewModel from "../../hoc/withModal";
 import TemplateTableViewModel, {
   TemplateFormData,
@@ -35,8 +35,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
 }) => {
   // const { user: { user_type: userType } = {} } = useAppContext();
   const { validationSchema } = useContext(TemplateTableContext);
-
-  const defaultInitialData: TemplateFormData = {
+  const [initialValues, setInitialValues] = useState<TemplateFormData>({
     rows: [
       {
         cells: [
@@ -46,13 +45,20 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
         ],
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    if (initialData) {
+      setInitialValues(initialData);
+    }
+  }, [initialData]);
 
   return (
     <Formik<TemplateFormData>
-      initialValues={initialData || defaultInitialData}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      enableReinitialize={true}
     >
       {(formikHelper) => {
         return (
