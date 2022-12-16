@@ -114,25 +114,28 @@ const ResourceDetailById: NextPage = () => {
                     Back
                   </Button>
                 </NextLink>
-                <NextLink
-                  passHref
-                  href={{
-                    pathname: `/patient/resource/edit/${id}`,
-                    query: {
-                      tabName: router.query.tabName,
-                    },
-                  }}
-                >
-                  <Button
-                    mat-button
-                    className={`text-white bg-themeblue`}
-                    variant="contained"
-                    sx={{ textTransform: "none", ml: 2 }}
+                {patientResourceData.getResourceDetailById[0].resource_data[0]
+                  .resource_issmartdraw == "1" && (
+                  <NextLink
+                    passHref
+                    href={{
+                      pathname: `/patient/resource/edit/${id}`,
+                      query: {
+                        tabName: router.query.tabName,
+                      },
+                    }}
                   >
-                    Next
-                    <ArrowRightAlt />
-                  </Button>
-                </NextLink>
+                    <Button
+                      mat-button
+                      className={`text-white bg-themeblue`}
+                      variant="contained"
+                      sx={{ textTransform: "none", ml: 2 }}
+                    >
+                      Next
+                      <ArrowRightAlt />
+                    </Button>
+                  </NextLink>
+                )}
               </Grid>
               <Grid
                 xs={6}
@@ -214,44 +217,50 @@ const ResourceDetailById: NextPage = () => {
                   md={12}
                 >
                   {patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_type == 2 && (
+                    .resource_type == 2 &&
+                    patientResourceData.getResourceDetailById[0]
+                      .resource_data[0].resource_issmartdraw != "1" && (
+                      <IconButton
+                        size="small"
+                        onClick={openFileUploadDialog}
+                        data-testid="fileUpload"
+                      >
+                        <FileUpload
+                          closeFileUploadDialog={closeFileUploadDialog}
+                          open={fileUpload}
+                          ptshareId={
+                            resData?.getPatientResourceList?.find(
+                              (val) =>
+                                val?.resource_data[0]?.resource_type === 2
+                            )._id
+                          }
+                        />
+                        <FileUploadIcon />
+                      </IconButton>
+                    )}
+                  {patientResourceData.getResourceDetailById[0].resource_data[0]
+                    .resource_issmartdraw != "1" && (
                     <IconButton
-                      size="small"
-                      onClick={openFileUploadDialog}
-                      data-testid="fileUpload"
+                      size="medium"
+                      data-testid="shareViewUrl"
+                      href={
+                        patientResourceData.getResourceDetailById[0]
+                          .patient_share_filename != null
+                          ? patientResourceData.getResourceDetailById[0]
+                              .patient_share_filename
+                          : "#"
+                      }
+                      sx={{
+                        color:
+                          patientResourceData.getResourceDetailById[0]
+                            ?.patient_share_filename != null
+                            ? "primary.main"
+                            : "",
+                      }}
                     >
-                      <FileUpload
-                        closeFileUploadDialog={closeFileUploadDialog}
-                        open={fileUpload}
-                        ptshareId={
-                          resData?.getPatientResourceList?.find(
-                            (val) => val?.resource_data[0]?.resource_type === 2
-                          )._id
-                        }
-                      />
-                      <FileUploadIcon />
+                      <AttachmentIcon />
                     </IconButton>
                   )}
-                  <IconButton
-                    size="medium"
-                    data-testid="shareViewUrl"
-                    href={
-                      patientResourceData.getResourceDetailById[0]
-                        .patient_share_filename != null
-                        ? patientResourceData.getResourceDetailById[0]
-                            .patient_share_filename
-                        : "#"
-                    }
-                    sx={{
-                      color:
-                        patientResourceData.getResourceDetailById[0]
-                          ?.patient_share_filename != null
-                          ? "primary.main"
-                          : "",
-                    }}
-                  >
-                    <AttachmentIcon />
-                  </IconButton>
 
                   <IconButton
                     size="medium"

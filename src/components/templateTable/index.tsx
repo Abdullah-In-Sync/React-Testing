@@ -6,7 +6,6 @@ import TemplateTableViewModel, {
   TemplateFormData,
   TemplateTableContext,
 } from "./table.model";
-import { useAppContext } from "../../contexts/AuthContext";
 import { ColumnActionTitle } from "./TableActionHeader";
 import { TemplateTableRow } from "./TableRow";
 
@@ -25,16 +24,16 @@ interface TemplateTableProps {
     formData: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
   ) => void;
+  userType?: string;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
   initialData,
   onSubmit,
   onCancel,
   onPreview,
+  userType,
 }) => {
-  const {
-    user: { user_type: userType } = {},
-  } = useAppContext();
+  // const { user: { user_type: userType } = {} } = useAppContext();
   const { validationSchema } = useContext(TemplateTableContext);
 
   const defaultInitialData: TemplateFormData = {
@@ -64,18 +63,20 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 render={() => (
                   <>
                     {/*For the top column action menu for add new column */}
-                    {userType === 'admin' && <Grid container wrap="nowrap">
-                      <Grid item style={{ minWidth: "58px" }}>
-                        {" "}
-                        <div></div>{" "}
+                    {userType === "admin" && (
+                      <Grid container wrap="nowrap">
+                        <Grid item style={{ minWidth: "58px" }}>
+                          {" "}
+                          <div></div>{" "}
+                        </Grid>
+                        {formikHelper?.values?.rows[0].cells.map((c, index) => (
+                          <ColumnActionTitle
+                            index={index}
+                            formikHelper={formikHelper}
+                          />
+                        ))}
                       </Grid>
-                      {formikHelper?.values?.rows[0].cells.map((c, index) => (
-                        <ColumnActionTitle
-                          index={index}
-                          formikHelper={formikHelper}
-                        />
-                      ))}
-                    </Grid>}
+                    )}
                     {formikHelper?.values?.rows.map((row, rowIndex) => (
                       <TemplateTableRow
                         key={rowIndex}
@@ -117,19 +118,23 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 >
                   Cancel
                 </Button>
-                {userType === 'admin' && <Button
-                  data-testid="tableTemplatePreview"
-                  color="primary"
-                  variant="contained"
-                  style={{
-                    padding: "5px 79px 5px 79px",
-                    fontSize: "20px",
-                  }}
-                  disabled={formikHelper?.isSubmitting}
-                  onClick={() => onPreview?.(formikHelper.values, formikHelper)}
-                >
-                  Preview
-                </Button>}
+                {userType === "admin" && (
+                  <Button
+                    data-testid="tableTemplatePreview"
+                    color="primary"
+                    variant="contained"
+                    style={{
+                      padding: "5px 79px 5px 79px",
+                      fontSize: "20px",
+                    }}
+                    disabled={formikHelper?.isSubmitting}
+                    onClick={() =>
+                      onPreview?.(formikHelper.values, formikHelper)
+                    }
+                  >
+                    Preview
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Form>

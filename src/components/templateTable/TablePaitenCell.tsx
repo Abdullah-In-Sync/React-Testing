@@ -17,7 +17,6 @@ export const TablePaitenCell: FC<TemplateTableCellProps> = ({
   cellData,
   formikHelper,
 }) => {
-
   const formCellKey = useMemo(() => {
     return `rows[${rowIndex}].cells[${cellIndex}]`;
   }, [rowIndex, cellIndex]);
@@ -36,15 +35,16 @@ export const TablePaitenCell: FC<TemplateTableCellProps> = ({
         minWidth: "33.33%",
       }}
     >
-
       {cellData.type == "header" && (
         <Box sx={{ py: 2 }}>
-          <Typography variant="h5" component="h4" textAlign={'center'}>
+          <Typography variant="h5" component="h4" textAlign={"center"}>
             {cellData.title}
           </Typography>
-          {cellData.description && <Typography component="p" textAlign={'center'}>
-            {cellData.description}
-          </Typography>}
+          {cellData.description && (
+            <Typography component="p" textAlign={"center"}>
+              {cellData.description}
+            </Typography>
+          )}
         </Box>
       )}
       {cellData.type == "answer" && (
@@ -54,8 +54,6 @@ export const TablePaitenCell: FC<TemplateTableCellProps> = ({
           formikHelper={formikHelper}
         />
       )}
-
     </Grid>
   );
 };
-

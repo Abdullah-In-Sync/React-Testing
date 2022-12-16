@@ -10,23 +10,25 @@ export interface TemplateTableRowProps {
   rowIndex: number;
   rowData: TableRow;
   formikHelper: FormikProps<TemplateFormData>;
-  userType: string
+  userType: string;
 }
 
 export const TemplateTableRow: FC<TemplateTableRowProps> = ({
   rowIndex,
   rowData,
   formikHelper,
-  userType
+  userType,
 }) => {
-  const TableCell = userType === 'admin' ? TemplateTableCell : TablePaitenCell;
+  const TableCell = userType === "admin" ? TemplateTableCell : TablePaitenCell;
   return (
     <Grid container data-testid={`row-${rowIndex}`} wrap="nowrap">
       <FieldArray
         name="cells"
         render={() => (
           <>
-            {userType === 'admin' && <RawActionTitle index={rowIndex} formikHelper={formikHelper} />}
+            {userType === "admin" && (
+              <RawActionTitle index={rowIndex} formikHelper={formikHelper} />
+            )}
             {rowData?.cells?.map((cell, index) => (
               <TableCell
                 key={index}

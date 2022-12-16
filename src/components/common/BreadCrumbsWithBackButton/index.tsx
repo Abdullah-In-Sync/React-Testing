@@ -1,6 +1,5 @@
-import { Grid, Button } from "@mui/material";
 import ArrowBackAlt from "@mui/icons-material/ArrowBack";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Button, Grid } from "@mui/material";
 import React from "react";
 import { CustomBreadcrumbs } from "../Breadcrumbs";
 import CardWithHeader from "../Cards/CardWithHeader";
@@ -9,12 +8,18 @@ import { useStyles } from "./BreadCrumbsWidhtBackButtonStyles";
 type Props = React.PropsWithChildren<{
   breadCrumbsLabels?: Array<string>;
   heading?: string;
-  backButtonClick?: ()=>void
-  onClickView?: ()=>void
+  backButtonClick?: () => void;
+  onClickView?: () => void;
 }>;
 
 /* istanbul ignore next */
-export const BreadCrumbsWithBackButton = ({ children, breadCrumbsLabels = [], heading = '', backButtonClick, onClickView }: Props) => {
+const BreadCrumbsWithBackButton = ({
+  children,
+  breadCrumbsLabels = [],
+  heading = "",
+  backButtonClick,
+  onClickView,
+}: Props) => {
   const styles = useStyles();
 
   return (
@@ -28,17 +33,17 @@ export const BreadCrumbsWithBackButton = ({ children, breadCrumbsLabels = [], he
         }}
         className={styles.backButtonBreadcrumbsWrapper}
       >
-        {backButtonClick && <Button
-          data-testid="backButton"
-          variant="contained"
-          onClick={backButtonClick}
-          startIcon={<ArrowBackAlt />}
-        >
-          Back
-        </Button>}
-        <CustomBreadcrumbs
-          labels={breadCrumbsLabels}
-        />
+        {backButtonClick && (
+          <Button
+            data-testid="backButton"
+            variant="contained"
+            onClick={backButtonClick}
+            startIcon={<ArrowBackAlt />}
+          >
+            Back
+          </Button>
+        )}
+        <CustomBreadcrumbs labels={breadCrumbsLabels} />
       </Grid>
       <CardWithHeader label={heading} onClickView={onClickView}>
         {children}
@@ -47,4 +52,4 @@ export const BreadCrumbsWithBackButton = ({ children, breadCrumbsLabels = [], he
   );
 };
 
-export default BreadCrumbsWithBackButton
+export default BreadCrumbsWithBackButton;

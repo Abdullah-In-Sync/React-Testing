@@ -20,7 +20,7 @@ type propTypes = {
   padding?: string;
   size?: "small" | "medium";
   disabled?: boolean;
-  autoComplete?: string
+  autoComplete?: string;
 };
 
 export default function TextFieldComponent(props: propTypes) {
@@ -42,7 +42,6 @@ export default function TextFieldComponent(props: propTypes) {
       size={props.size ?? "medium"}
       disabled={props.disabled}
       autoComplete={props?.autoComplete}
-      
     />
   );
 }
