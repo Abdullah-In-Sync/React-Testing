@@ -446,7 +446,7 @@ describe("Admin add resource page", () => {
     });
   });
 
-  it.only("On cancel it should remove the template table from page", async () => {
+  it("On cancel it should remove the template table from page", async () => {
     await sut();
 
     fireEvent.change(screen.queryByTestId("resourceName"), {
