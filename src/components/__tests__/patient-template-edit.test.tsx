@@ -41,9 +41,6 @@ describe("When render a paitent template edit", () => {
   it("Should display name text in card header and breadcrum", async () => {
     await sut();
     expect(screen.getAllByText(/test name/i)).toHaveLength(2);
-    const eyeIconButton = screen.getByTestId("eyeIconButton");
-    fireEvent.click(eyeIconButton);
-    expect(screen.getByTestId("eyeIconButton")).toBeInTheDocument();
   });
 
   it("should load dynamic template", async () => {
