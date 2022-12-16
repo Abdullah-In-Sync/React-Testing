@@ -445,4 +445,76 @@ describe("Admin add resource page", () => {
       expect(pushMock).toHaveBeenCalledWith("/admin/resource/");
     });
   });
+
+  it("On cancel it should remove the template table from page", async () => {
+    await sut();
+
+    fireEvent.change(screen.queryByTestId("resourceName"), {
+      target: { value: "test" },
+    });
+    fireEvent.change(screen.queryByTestId("resourceType"), {
+      target: { value: "2" },
+    });
+    fireEvent.change(screen.queryByTestId("org_id"), {
+      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
+    });
+    fireEvent.change(screen.queryByTestId("disorderId"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("modelId"), {
+      target: { value: "model_id_1" },
+    });
+
+    fireEvent.change(screen.queryByTestId("categoryId"), {
+      target: { value: "category_id_1" },
+    });
+
+    fireEvent.click(screen.queryByTestId("resourceAvailOnlyme"));
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("selectTemplateButton"));
+    });
+
+    await (async () => {
+      expect(screen.queryByTestId("TemplateProceed")).toBeInTheDocument();
+    });
+
+    await (async () => {
+      expect(screen.getByTestId("componentsRadio")).toBeInTheDocument();
+    });
+
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("TemplateTable"));
+    });
+
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("TemplateProceed"));
+    });
+
+    await (async () => {
+      expect(screen.getByTestId("selectDimensionButton")).toBeInTheDocument();
+      expect(screen.getByTestId("rowsSelect")).toBeInTheDocument();
+      expect(screen.getByTestId("colsSelect")).toBeInTheDocument();
+    });
+
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("selectDimensionButton"));
+    });
+
+    await (async () => {
+      expect(screen.getByTestId("row-0")).toBeInTheDocument();
+      expect(screen.getByTestId("cell-0")).toBeInTheDocument();
+    });
+
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("tableTemplateCancel"));
+    });
+
+    const allRows = await screen.queryAllByTestId("row-0");
+
+    expect(allRows.length).toEqual(0);
+  });
 });
