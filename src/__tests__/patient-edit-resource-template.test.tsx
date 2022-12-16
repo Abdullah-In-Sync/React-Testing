@@ -144,7 +144,9 @@ describe("Patient view template page", () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getAllByText(/test name/i)).toHaveLength(2);
-      const tableTemplateSubmitButton = screen.getByTestId("tableTemplateSubmit");
+      const tableTemplateSubmitButton = screen.getByTestId(
+        "tableTemplateSubmit"
+      );
       expect(tableTemplateSubmitButton).toBeInTheDocument();
       const inputRow = screen.getByTestId("answer_rows[1].cells[0]");
       expect(inputRow).toBeInTheDocument();
