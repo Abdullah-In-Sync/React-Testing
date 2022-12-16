@@ -54,7 +54,7 @@ mocksData.push({
       ptsharresId: "750a6993f61d4e58917e31e1244711f5",
       update: {
         template_response:
-          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
+          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
       },
     },
   },
@@ -62,7 +62,7 @@ mocksData.push({
     data: {
       updatePatientResourceById: {
         template_response:
-          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
+          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
         _id: "750a6993f61d4e58917e31e1244711f5",
       },
     },
@@ -82,7 +82,7 @@ mocksData.push({
           resource_data: [
             {
               template_data:
-                '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
+                '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
               resource_issmartdraw: "1",
               resource_name: "test name",
               resource_type: 2,

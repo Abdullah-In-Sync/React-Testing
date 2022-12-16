@@ -31,7 +31,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
   onSubmit,
   onCancel,
   onPreview,
-  userType,
+  userType = "admin",
 }) => {
   // const { user: { user_type: userType } = {} } = useAppContext();
   const { validationSchema } = useContext(TemplateTableContext);
