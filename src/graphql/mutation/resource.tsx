@@ -52,6 +52,15 @@ export const CREATE_RESOURCE = gql`
   }
 `;
 
+export const UPDATE_RESOURCE_TEMPLATE_RESPONSE = gql`
+  mutation ($ptsharresId: ID!, $update: UpdatePatientResourceInput!) {
+    updatePatientResourceById(ptsharresId: $ptsharresId, update: $update) {
+      template_response
+      _id
+    }
+  }
+`;
+
 export const UPDATE_RESOURCE_BY_ID = gql`
   mutation ($resourceId: ID!, $update: UpdateResourceInput!) {
     updateResourceById(resourceId: $resourceId, update: $update) {
@@ -78,6 +87,7 @@ export const UPDATE_RESOURCE_BY_ID = gql`
       created_date
       resource_returnurl
       download_resource_url
+      template_data
     }
   }
 `;
