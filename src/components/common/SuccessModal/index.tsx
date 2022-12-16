@@ -45,13 +45,14 @@ export const SuccessModal: FC<SuccessModalProps> = ({
                   font: "500",
                   fontSize: "16px",
                 }}
+                data-testid="title"
               >
                 {title}
               </Typography>
             </div>
           )}
           {description && (
-            <div>
+            <div >
               <Typography
                 sx={{
                   color: "#000",
@@ -60,6 +61,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({
                   paddingBottom: "20px",
                   fontSize: "16px",
                 }}
+                data-testid="description"
               >
                 {description}
               </Typography>
