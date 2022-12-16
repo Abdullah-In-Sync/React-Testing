@@ -37,6 +37,9 @@ export type editResourceFormField = {
   download_resource_url?: string;
   disorder_detail: string;
   model_detail: string;
+  template_id?: string;
+  template_data?: string;
+  resource_issmartdraw?: string;
 };
 
 export type editTemplatesFormField = {
