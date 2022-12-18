@@ -9,7 +9,6 @@ import {
   GET_PATIENTTHERAPY_DATA,
   GET_PATIENT_GOAL_DATA,
 } from "../graphql/query/common";
-import { Guid } from "guid-typescript";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
