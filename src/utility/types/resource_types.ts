@@ -67,6 +67,24 @@ export type editSafetyPlanFormField = {
   therapist_id: string;
   updated_date: string;
 };
+export type editGoalsFormField = {
+  _id: string;
+  created_date: string;
+  patient_id: string;
+  ptgoal_achievementdate: string;
+  ptgoal_achievementgoal: string;
+  ptgoal_audio: string;
+  ptgoal_file: string;
+  ptgoal_mygoal: string;
+  ptgoal_pregoal: string;
+  ptgoal_reviewdate: string;
+  ptgoal_status: string;
+  ptgoal_success: string;
+  ptsession_id: string;
+  pttherapy_id: string;
+  therapist_id: string;
+  updated_date: string;
+};
 
 export type patientAgreementFormFeild = {
   _id: string;

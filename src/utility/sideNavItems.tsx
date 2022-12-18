@@ -288,7 +288,12 @@ export const patient_routes: RoutesType[] = [
     path: Link + "/patient/appointments",
     icon: <CalendarMonthIcon />,
   },
-  { key: 4, label: "Goals", path: Link + "/patient/goal", icon: <StarsIcon /> },
+  {
+    key: 4,
+    label: "Goals",
+    path: "/patient/goals/",
+    icon: <StarsIcon />,
+  },
   {
     key: 5,
     label: "Safety Plan",

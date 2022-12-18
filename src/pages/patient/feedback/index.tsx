@@ -88,12 +88,14 @@ const Feedback: NextPage = () => {
       console.log(error, "error");
     },
   });
+  console.log("Koca: patientSessionData ", patientSessionData);
 
   const [
     getPatientFeedbackListData,
     { loading: feedbackLoading, data: patientFeedbackData },
   ] = useLazyQuery(GET_PATIENTFEEDBACKLIST_DATA);
   /* istanbul ignore else */
+
   const setDefaultStateExcludingLoader = () => {
     /* istanbul ignore else */
     setFeedbackType(null);
