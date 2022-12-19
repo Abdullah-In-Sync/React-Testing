@@ -54,11 +54,11 @@ interface CreateResourceInput {
 }
 
 export default function CreateResource(props: propTypes) {
-  const {
-    user: { user_type: userType },
-  } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
+  const {
+    user: { user_type: userType, therapist_data: { org_id: orgId = "" } = {} },
+  } = useAppContext();
   const [formFields, setFormFields] = useState<CreateResourceInput>({
     disorderId: "",
     modelId: "",
@@ -69,7 +69,7 @@ export default function CreateResource(props: propTypes) {
     resourceType: 1,
     agendaId: "",
     categoryId: "",
-    orgId: "",
+    orgId: orgId,
     resourceIssmartdraw: "1",
     templateData: "",
     templateId: "",
