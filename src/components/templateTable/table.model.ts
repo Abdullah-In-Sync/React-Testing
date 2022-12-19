@@ -91,6 +91,11 @@ function useTemplateTable(): TemplateTableViewModelState {
               is: "header",
               then: Yup.string().required("Title is required"),
             }),
+            patientAns: Yup.string().when("type", {
+              is: "answer",
+              then: Yup.string().required("Title is required"),
+            }),
+            // patientAns: Yup.string().required("Response is required")
           })
         ),
       })

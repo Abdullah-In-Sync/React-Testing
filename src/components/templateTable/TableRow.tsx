@@ -4,27 +4,33 @@ import { FC } from "react";
 import { TableRow, TemplateFormData } from "./table.model";
 import { RawActionTitle } from "./TableActionHeader";
 import { TemplateTableCell } from "./TableCell";
+import { TablePaitenCell } from "./TablePaitenCell";
 
 export interface TemplateTableRowProps {
   rowIndex: number;
   rowData: TableRow;
   formikHelper: FormikProps<TemplateFormData>;
+  userType: string;
 }
 
 export const TemplateTableRow: FC<TemplateTableRowProps> = ({
   rowIndex,
   rowData,
   formikHelper,
+  userType,
 }) => {
+  const TableCell = userType === "admin" ? TemplateTableCell : TablePaitenCell;
   return (
     <Grid container data-testid={`row-${rowIndex}`} wrap="nowrap">
       <FieldArray
         name="cells"
         render={() => (
           <>
-            <RawActionTitle index={rowIndex} formikHelper={formikHelper} />
+            {userType === "admin" && (
+              <RawActionTitle index={rowIndex} formikHelper={formikHelper} />
+            )}
             {rowData?.cells?.map((cell, index) => (
-              <TemplateTableCell
+              <TableCell
                 key={index}
                 cellData={cell}
                 cellIndex={index}

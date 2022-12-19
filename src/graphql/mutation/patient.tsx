@@ -92,6 +92,29 @@ export const UPDATE_PROFILE_DATA = gql`
   }
 `;
 
+export const UPDATE_PATIENT_GOAL_BY_ID = gql`
+  mutation ($ptGoalId: ID!, $update: UpdatePatientGoalInput!) {
+    updatePatientGoalById(ptGoalId: $ptGoalId, update: $update) {
+      _id
+      created_date
+      patient_id
+      ptgoal_achievementdate
+      ptgoal_audio
+      ptgoal_achievementgoal
+      ptgoal_file
+      ptgoal_mygoal
+      ptgoal_pregoal
+      ptgoal_status
+      ptgoal_reviewdate
+      ptgoal_success
+      ptsession_id
+      pttherapy_id
+      updated_date
+      therapist_id
+    }
+  }
+`;
+
 export const UPDATE_SAFETY_PLAN_QUESTION_DATA = gql`
   mutation ($quesData: String!) {
     updateSafetyPlanByPatient(quesData: $quesData) {
