@@ -118,6 +118,53 @@ mocksData.push({
   },
 });
 
+//RESOURCE WITH TEMPLATE DATA By RESOURCE ID
+mocksData.push({
+  request: {
+    query: GET_RESOURCE_DETAIL,
+    variables: { resourceId: "750a6993f61d4e58917e31e1244711f6" },
+  },
+  result: {
+    data: {
+      getResourceById: [
+        {
+          _id: "750a6993f61d4e58917e31e1244711f5",
+          resource_name: "test name",
+          resource_desc: "test desc",
+          resource_instruction: "test instruct",
+          resource_references: "test reference",
+          resource_url: "http://google.com",
+          download_resource_url: "http://google.com",
+          resource_type: 2,
+          category_id: "category-id",
+          agenda_id: "agenda-id",
+          disorder_detail: {
+            _id: "disorder-id",
+            disorder_name: "test disorder",
+          },
+          model_detail: {
+            _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+            model_name: "test mddel",
+          },
+          resource_avail_onlyme: "0",
+          resource_avail_therapist: "1",
+          resource_filename: "sample.pdf",
+          resource_issmartdraw: "1",
+          template_detail: {
+            component_name: "TemplateTable",
+            name: "Test Template",
+            _id: "750a6993f61d4e58917e31e1244711f6",
+          },
+          template_id: "750a6993f61d4e58917e31e1244711f6",
+          org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+          template_data:
+            '{"rows":[{"cells":[{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""}]}]}',
+        },
+      ],
+    },
+  },
+});
+
 //UPDATE RESOURCE BY ID
 
 mocksData.push({
@@ -374,7 +421,52 @@ describe("Admin edit resource page", () => {
     expect(screen.getByTestId("editResourceSubmitButton")).toBeInTheDocument();
   });
 
+  it("should render complete edit resource form with template data", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f6",
+      },
+    }));
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("resource_name")).toHaveValue("test name");
+
+      expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
+
+      expect(screen.getByTestId("resource_type")).toHaveValue("2");
+
+      expect(screen.getByTestId("disorder_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("model_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("category_id")).toBeInTheDocument(); // todo
+
+      expect(screen.getByTestId("resource_desc")).toHaveValue("test desc");
+
+      expect(screen.getByTestId("resource_instruction")).toHaveValue(
+        "test instruct"
+      );
+
+      expect(screen.getByTestId("resource_references")).toHaveValue(
+        "test reference"
+      );
+
+      expect(screen.getByTestId("agenda_id")).toHaveValue("agenda-id");
+
+      expect(screen.getByTestId("resource_avail_therapist")).toBeChecked();
+
+      expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
+
+      expect(screen.queryByTestId("row-0")).toBeInTheDocument();
+      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+    });
+  });
+
   it("submit form with out selecting avail resource should return error", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f5",
+      },
+    }));
     await sut();
 
     fireEvent.change(screen.queryByTestId("resource_name"), {

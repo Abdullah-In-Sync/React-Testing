@@ -544,7 +544,7 @@ const Resource: NextPage = () => {
                 label="Add Resource"
               />
               <AddButton
-                href="/therapist/resource/add?create=1"
+                href="/v2/therapist/resource/create"
                 className="mr-3"
                 label="Create Resource"
               />
