@@ -57,7 +57,7 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
         <ActionMenu
           onChange={onMenuClick}
           options={[
-            ...(formikHelper.values.rows[0].cells.length <= 15
+            ...(formikHelper.values.rows[0].cells.length <= 10
               ? [
                   {
                     key: "ICL",
@@ -126,7 +126,7 @@ export const RawActionTitle: FC<RowActionTitleProps> = ({
           onChange={onMenuClick}
           icon={<MoreHoriz />}
           options={[
-            ...(formikHelper.values.rows.length <= 25
+            ...(formikHelper.values.rows.length <= 50
               ? [
                   {
                     key: "IRL",
