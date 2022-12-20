@@ -25,7 +25,6 @@ import * as s3 from "../lib/helpers/s3";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_ORG_DATA } from "../graphql/query";
-
 const pushMock = jest.fn();
 
 jest.mock("next/router", () => ({
@@ -113,8 +112,54 @@ mocksData.push({
   },
 });
 
-//UPDATE RESOURCE BY ID
+//RESOURCE WITH TEMPLATE DATA By RESOURCE ID
+mocksData.push({
+  request: {
+    query: GET_RESOURCE_DETAIL,
+    variables: { resourceId: "750a6993f61d4e58917e31e1244711f6" },
+  },
+  result: {
+    data: {
+      getResourceById: [
+        {
+          _id: "750a6993f61d4e58917e31e1244711f5",
+          resource_name: "test name",
+          resource_desc: "test desc",
+          resource_instruction: "test instruct",
+          resource_references: "test reference",
+          resource_url: "http://google.com",
+          download_resource_url: "http://google.com",
+          resource_type: 2,
+          category_id: "category-id",
+          agenda_id: "agenda-id",
+          disorder_detail: {
+            _id: "disorder-id",
+            disorder_name: "test disorder",
+          },
+          model_detail: {
+            _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+            model_name: "test mddel",
+          },
+          resource_avail_onlyme: "0",
+          resource_avail_therapist: "1",
+          resource_filename: "sample.pdf",
+          resource_issmartdraw: "1",
+          template_detail: {
+            component_name: "TemplateTable",
+            name: "Test Template",
+            _id: "750a6993f61d4e58917e31e1244711f6",
+          },
+          template_id: "750a6993f61d4e58917e31e1244711f6",
+          org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+          template_data:
+            '{"rows":[{"cells":[{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""}]}]}',
+        },
+      ],
+    },
+  },
+});
 
+//UPDATE RESOURCE BY ID
 mocksData.push({
   request: {
     query: UPDATE_RESOURCE_BY_ID,
@@ -123,7 +168,6 @@ mocksData.push({
       update: {
         resource_name: "avbv",
         resource_type: 2,
-        resource_issmartdraw: "0",
         resource_isformualation: "0",
         disorder_id: "",
         model_id: "",
@@ -135,6 +179,7 @@ mocksData.push({
         resource_avail_therapist: 1,
         resource_avail_onlyme: 0,
         resource_filename: "",
+        resource_issmartdraw: "0",
         org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
       },
     },
@@ -171,6 +216,68 @@ mocksData.push({
     },
   },
 });
+
+//UPDATE RESOURCE with template data
+mocksData.push({
+  request: {
+    query: UPDATE_RESOURCE_BY_ID,
+    variables: {
+      resourceId: "750a6993f61d4e58917e31e1244711f6",
+      update: {
+        resource_name: "test name",
+        resource_type: 2,
+        resource_isformualation: "0",
+        disorder_id: "disorder-id",
+        model_id: "4e110b3e7faa47c9be82540fe8e78fb0",
+        category_id: "category-id",
+        resource_desc: "test desc",
+        resource_instruction: "test instruct",
+        resource_references: "test reference",
+        agenda_id: "agenda-id",
+        resource_avail_therapist: "1",
+        resource_avail_onlyme: "0",
+        resource_filename: undefined,
+        resource_issmartdraw: "1",
+        template_id: undefined,
+        template_data:
+          '{"rows":[{"cells":[{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""}]}]}',
+        org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateResourceById: [
+        {
+          user_id: "user_id",
+          user_type: "use type",
+          resource_name: "user name",
+          resource_type: 2,
+          resource_issmartdraw: "is_draw",
+          resource_isformualation: "is for",
+          disorder_id: " disorder_id",
+          model_id: "model_id",
+          category_id: "cata_id",
+          org_id: "org_id",
+          resource_desc: "resource dis",
+          resource_instruction: "resource ins",
+          resource_references: "resourse ref",
+          resource_session_no: "resource session",
+          agenda_id: "agenda_id",
+          resource_url: "resource_url",
+          resource_avail_therapist: "therapist",
+          resource_avail_onlyme: "only me",
+          resource_filename: "file name",
+          resource_status: "status",
+          created_date: "2-1-22",
+          resource_returnurl: "url",
+          download_resource_url: "download url",
+        },
+      ],
+    },
+  },
+});
+
 mocksData.push({
   request: {
     query: UPDATE_RESOURCE_BY_ID,
@@ -451,46 +558,164 @@ describe("Admin edit resource page", () => {
     });
   });
 
-  it("click cancle button to cancle upload process", async () => {
+  it("should render complete edit resource form with template data", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f6",
+      },
+    }));
     await sut();
-    fireEvent.change(screen.queryByTestId("resource_name"), {
-      target: { value: "avbv" },
-    });
-    fireEvent.change(screen.queryByTestId("resource_type"), {
-      target: { value: 2 },
-    });
-    fireEvent.change(screen.queryByTestId("disorder_id"), {
-      target: { value: "disorder_id_1" },
-    });
-
-    screen.queryByTestId("activity-indicator");
-
-    fireEvent.change(screen.queryByTestId("model_id"), {
-      target: { value: "model_id_1" },
-    });
-
-    screen.queryByTestId("activity-indicator");
-
-    fireEvent.change(screen.queryByTestId("category_id"), {
-      target: { value: "category_id_1" },
-    });
-    fireEvent.change(screen.queryByTestId("agenda_id"), {
-      target: { value: "agenda_id_1" },
-    });
-
-    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
     await waitFor(async () => {
-      fireEvent.submit(screen.queryByTestId("resource-edit-form"));
+      expect(screen.getByTestId("resource_name")).toHaveValue("test name");
+
+      expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
+
+      expect(screen.getByTestId("resource_type")).toHaveValue("2");
+
+      expect(screen.getByTestId("disorder_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("model_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("category_id")).toBeInTheDocument(); // todo
+
+      expect(screen.getByTestId("resource_desc")).toHaveValue("test desc");
+
+      expect(screen.getByTestId("resource_instruction")).toHaveValue(
+        "test instruct"
+      );
+
+      expect(screen.getByTestId("resource_references")).toHaveValue(
+        "test reference"
+      );
+
+      expect(screen.getByTestId("agenda_id")).toHaveValue("agenda-id");
+
+      expect(screen.getByTestId("resource_avail_therapist")).toBeChecked();
+
+      expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
+
+      expect(screen.queryByTestId("row-0")).toBeInTheDocument();
+      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+    });
+  });
+
+  it("on Cancel button it should remove the template from the page", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f6",
+      },
+    }));
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("tableTemplateCancel")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByTestId("tableTemplateCancel"));
+    expect(screen.queryByTestId("row-0")).not.toBeInTheDocument();
+  });
+
+  it("submit updated resource with the templat data", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f6",
+      },
+      push: pushMock,
+    }));
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("resource_name")).toHaveValue("test name");
+
+      expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
+
+      expect(screen.getByTestId("resource_type")).toHaveValue("2");
+
+      expect(screen.getByTestId("disorder_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("model_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("category_id")).toBeInTheDocument(); // todo
+
+      expect(screen.getByTestId("resource_desc")).toHaveValue("test desc");
+
+      expect(screen.getByTestId("resource_instruction")).toHaveValue(
+        "test instruct"
+      );
+
+      expect(screen.getByTestId("resource_references")).toHaveValue(
+        "test reference"
+      );
+
+      expect(screen.getByTestId("agenda_id")).toHaveValue("agenda-id");
+
+      expect(screen.getByTestId("resource_avail_therapist")).toBeChecked();
+
+      expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
+
+      expect(screen.queryByTestId("row-0")).toBeInTheDocument();
+      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("tableTemplateSubmit"));
+    });
+
+    await waitFor(async () => {
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     });
 
     expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    expect(screen.getByTestId("editResourceModalCancelButton")).toBeVisible();
+    expect(screen.getByTestId("editResourceModalConfirmButton")).toBeVisible();
 
     await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("editResourceModalCancelButton"));
+      fireEvent.click(screen.queryByTestId("editResourceModalConfirmButton"));
     });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Resource edit successfully")
+      ).toBeInTheDocument();
+    });
+
+    expect(pushMock).toHaveBeenCalledWith("/admin/resource");
   });
+
+  // it("click cancle button to cancle upload process", async () => {
+  //   await sut();
+  //   fireEvent.change(screen.queryByTestId("resource_name"), {
+  //     target: { value: "avbv" },
+  //   });
+  //   fireEvent.change(screen.queryByTestId("resource_type"), {
+  //     target: { value: 2 },
+  //   });
+  //   fireEvent.change(screen.queryByTestId("disorder_id"), {
+  //     target: { value: "disorder_id_1" },
+  //   });
+
+  //   screen.queryByTestId("activity-indicator");
+
+  //   fireEvent.change(screen.queryByTestId("model_id"), {
+  //     target: { value: "model_id_1" },
+  //   });
+
+  //   screen.queryByTestId("activity-indicator");
+
+  //   fireEvent.change(screen.queryByTestId("category_id"), {
+  //     target: { value: "category_id_1" },
+  //   });
+  //   fireEvent.change(screen.queryByTestId("agenda_id"), {
+  //     target: { value: "agenda_id_1" },
+  //   });
+
+  //   fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
+
+  //   await waitFor(async () => {
+  //     fireEvent.submit(screen.queryByTestId("resource-edit-form"));
+  //   });
+
+  //   expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+  //   expect(screen.getByTestId("editResourceModalCancelButton")).toBeVisible();
+
+  //   await waitFor(async () => {
+  //     fireEvent.click(screen.queryByTestId("editResourceModalCancelButton"));
+  //   });
+  // });
 
   it("submit edit form with file", async () => {
     (useRouter as jest.Mock).mockReturnValue({
@@ -536,10 +761,8 @@ describe("Admin edit resource page", () => {
 
     fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
 
-    await waitFor(async () => {
-      fireEvent.change(screen.getByTestId("resource_file_upload"), {
-        target: { files: [file] },
-      });
+    fireEvent.change(screen.getByTestId("resource_file_upload"), {
+      target: { files: [file] },
     });
 
     await waitFor(async () => {

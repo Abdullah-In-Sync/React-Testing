@@ -30,7 +30,7 @@ jest.mock("../contexts/AuthContext");
 
 import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { useAppContext } from "../contexts/AuthContext";
-import Create from "../pages/admin/resource/create";
+import Create from "../pages/therapist/resource/create";
 import { GET_ORG_DATA } from "../graphql/query";
 
 // mocks
@@ -65,7 +65,7 @@ mocksData.push({
       getDisorderByOrgId: [
         {
           _id: "disorder_id_1",
-          user_type: "admin",
+          user_type: "therapist",
           disorder_name: "disorder 1",
         },
       ],
@@ -189,8 +189,8 @@ mocksData.push({
   result: {
     data: {
       getTokenData: {
-        _id: "some-admin-id",
-        user_type: "admin",
+        _id: "some-therapist-id",
+        user_type: "therapist",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
         user_status: "1",
@@ -267,7 +267,7 @@ const sut = async () => {
   );
 };
 
-describe("Admin add resource page", () => {
+describe("Therapist add resource page", () => {
   beforeEach(() => {
     (useRouter as jest.Mock).mockReturnValue({
       push: pushMock,
@@ -276,12 +276,16 @@ describe("Admin add resource page", () => {
       isAuthenticated: true,
       user: {
         _id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-        user_type: "admin",
+        user_type: "therapist",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
         user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
+        therapist_data: {
+          _id: "therapist_id",
+          org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+        },
       },
     });
   });
@@ -315,24 +319,9 @@ describe("Admin add resource page", () => {
     expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
   });
 
-  it("should click org dropdown", async () => {
-    await sut();
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
-    expect(screen.queryByTestId("org_id").getAttribute("value")).toBe(
-      "e7b5b7c0568b4eacad6f05f11d9c4884"
-    );
-  });
-
   it("should click disorder dropdown", async () => {
     await sut();
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
+
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
     });
@@ -343,13 +332,6 @@ describe("Admin add resource page", () => {
 
   it("should click model dropdown", async () => {
     await sut();
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
-
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId("activity-indicator")
-    );
 
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
@@ -375,9 +357,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resourceType"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
     });
@@ -442,7 +422,7 @@ describe("Admin add resource page", () => {
     });
 
     await (async () => {
-      expect(pushMock).toHaveBeenCalledWith("/admin/resource/");
+      expect(pushMock).toHaveBeenCalledWith("/therapist/resource/");
     });
   });
 
@@ -455,9 +435,7 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resourceType"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+
     fireEvent.change(screen.queryByTestId("disorderId"), {
       target: { value: "disorder_id_1" },
     });

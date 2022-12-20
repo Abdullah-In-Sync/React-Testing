@@ -80,6 +80,29 @@ export const GET_PATIENTFEEDBACKLIST_DATA = gql`
     }
   }
 `;
+
+export const GET_PATIENT_GOAL_DATA = gql`
+  query GetPatientGoalList($pttherapyId: String!) {
+    getPatientGoalList(pttherapyId: $pttherapyId) {
+      _id
+      created_date
+      patient_id
+      ptgoal_achievementdate
+      ptgoal_achievementgoal
+      ptgoal_audio
+      ptgoal_file
+      ptgoal_mygoal
+      ptgoal_pregoal
+      ptgoal_reviewdate
+      ptgoal_status
+      ptgoal_success
+      ptsession_id
+      pttherapy_id
+      therapist_id
+      updated_date
+    }
+  }
+`;
 export const GET_TOKEN_DATA = gql`
   query MyQuery {
     getTokenData {
