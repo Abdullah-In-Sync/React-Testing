@@ -12,6 +12,7 @@ import { useAppContext } from "../../../../contexts/AuthContext";
 interface ViewProps {
   resourceData?: PaitentTemplateInterface.ResourceDataInterface;
   templateDetail?: PaitentTemplateInterface.TemplateDetailInterface;
+  templateResponse?: string;
   onSubmit?: (v) => void;
   onClickView?: () => void;
   mode?: string;
@@ -20,6 +21,7 @@ interface ViewProps {
 const PaitentTemplateEdit: React.FC<ViewProps> = ({
   resourceData,
   templateDetail,
+  templateResponse,
   onSubmit,
   onClickView,
   mode,
@@ -32,9 +34,12 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   const resourceDetailUrl = `/patient/resource/${id}/?tabName=work-sheet`;
 
   const TemplateDynamic = templateComponents[templateDetail?.component_name];
-
+  const templateData =
+    templateResponse && templateResponse !== ""
+      ? templateResponse
+      : resourceData?.template_data;
   const staticTemplate: TemplateFormData =
-    resourceData?.template_data && JSON.parse(resourceData?.template_data);
+    templateData && JSON.parse(templateData);
 
   const handleBackButton = (): any => {
     return mode !== "edit" ? onClickView() : router.push(resourceDetailUrl);

@@ -189,6 +189,7 @@ export const GET_PATIENT_RESOURCE_TEMPLATE = gql`
         _id
         name
       }
+      template_response
     }
   }
 `;

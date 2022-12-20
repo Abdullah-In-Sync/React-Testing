@@ -121,7 +121,6 @@ const AnswerType: FC<AnswerTypeProps> = ({
   };
 
   const answerTypeComponent = () => {
-    console.log("mode0", mode);
     const { answerType } = cellData;
     switch (answerType) {
       case "boolean":
