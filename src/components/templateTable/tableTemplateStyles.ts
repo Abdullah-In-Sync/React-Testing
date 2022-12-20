@@ -16,4 +16,18 @@ export const useStyles = makeStyles({
     width: "100%",
     height: "100%",
   },
+  viewBoxAnswer: {
+    height: "100%",
+    padding: 10,
+    typography: "body1",
+    display: "flex",
+    alignItems: "center",
+  },
+  patientView: {
+    pointerEvents: "none",
+  },
+  tableCellView: {
+    overflow: "hidden",
+    overflowX: "scroll",
+  },
 });

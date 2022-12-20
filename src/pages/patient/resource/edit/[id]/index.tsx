@@ -21,6 +21,7 @@ const PatientEditTemplatePage: NextPage = () => {
   const [resourceData, setRecourceData] = useState<ResourceDataInterface>();
   const [templateDetail, setTemplateDetail] =
     useState<TemplateDetailInterface>();
+  const [isViewEnabled, setIsViewEnabled] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const router = useRouter();
 
@@ -74,15 +75,23 @@ const PatientEditTemplatePage: NextPage = () => {
     }
   };
 
+  const handleViewOpen = () => {
+    setIsViewEnabled(!isViewEnabled);
+  };
+
   return (
     <>
       <Layout>
         <Loader visible={loader} />
-        <ContentHeader title="Resource Edit" />
+        <ContentHeader
+          title={`${isViewEnabled ? "Resource Preview" : "Resource Edit"}`}
+        />
         <PatientEditTemplate
           resourceData={resourceData}
           templateDetail={templateDetail}
           onSubmit={handleSubmitTemplateData}
+          onClickView={handleViewOpen}
+          mode={`${isViewEnabled ? "patientView" : "edit"}`}
         />
         {successModal && (
           <SuccessModal

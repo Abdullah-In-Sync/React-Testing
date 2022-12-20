@@ -9,13 +9,15 @@ export interface TemplateTableCellProps {
   rowIndex: number;
   cellData: TableCell;
   formikHelper: FormikProps<TemplateFormData>;
+  mode: string;
 }
 
-export const TablePaitenCell: FC<TemplateTableCellProps> = ({
+export const TablePatientCell: FC<TemplateTableCellProps> = ({
   rowIndex,
   cellIndex,
   cellData,
   formikHelper,
+  mode,
 }) => {
   const formCellKey = useMemo(() => {
     return `rows[${rowIndex}].cells[${cellIndex}]`;
@@ -52,6 +54,7 @@ export const TablePaitenCell: FC<TemplateTableCellProps> = ({
           formCellKey={formCellKey}
           cellData={cellData}
           formikHelper={formikHelper}
+          mode={mode}
         />
       )}
     </Grid>

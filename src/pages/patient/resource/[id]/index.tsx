@@ -262,33 +262,39 @@ const ResourceDetailById: NextPage = () => {
                     </IconButton>
                   )}
 
-                  <IconButton
-                    size="medium"
-                    data-testid="viewUrl"
-                    target="_blank"
-                    href={
-                      patientResourceData.getResourceDetailById[0]
-                        .resource_data[0].resource_url != null
-                        ? patientResourceData.getResourceDetailById[0]
-                            .resource_data[0].resource_url
-                        : "#"
-                    }
-                  >
-                    <VisibilityIcon />
-                  </IconButton>
-                  <IconButton
-                    size="medium"
-                    data-testid="downloadUrl"
-                    href={
-                      patientResourceData.getResourceDetailById[0]
-                        .resource_data[0].download_resource_url != null
-                        ? patientResourceData.getResourceDetailById[0]
-                            .resource_data[0].download_resource_url
-                        : "#"
-                    }
-                  >
-                    <FileDownloadIcon />
-                  </IconButton>
+                  {patientResourceData.getResourceDetailById[0].resource_data[0]
+                    .resource_issmartdraw != "1" && (
+                    <IconButton
+                      size="medium"
+                      data-testid="viewUrl"
+                      target="_blank"
+                      href={
+                        patientResourceData.getResourceDetailById[0]
+                          .resource_data[0].resource_url != null
+                          ? patientResourceData.getResourceDetailById[0]
+                              .resource_data[0].resource_url
+                          : "#"
+                      }
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  )}
+                  {patientResourceData.getResourceDetailById[0].resource_data[0]
+                    .resource_issmartdraw != "1" && (
+                    <IconButton
+                      size="medium"
+                      data-testid="downloadUrl"
+                      href={
+                        patientResourceData.getResourceDetailById[0]
+                          .resource_data[0].download_resource_url != null
+                          ? patientResourceData.getResourceDetailById[0]
+                              .resource_data[0].download_resource_url
+                          : "#"
+                      }
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  )}
                 </Grid>
                 <ResourceDetail
                   title="Description"

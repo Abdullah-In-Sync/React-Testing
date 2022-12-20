@@ -3,7 +3,7 @@ import React from "react";
 import { TemplateFormData } from "../../../templateTable/table.model";
 
 import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
-import { templateComponents } from "./paitentTemplateData";
+import { templateComponents } from "./patientTemplateData";
 
 import * as PaitentTemplateInterface from "./patientTemplateEditInterface";
 
@@ -13,20 +13,32 @@ interface ViewProps {
   resourceData?: PaitentTemplateInterface.ResourceDataInterface;
   templateDetail?: PaitentTemplateInterface.TemplateDetailInterface;
   onSubmit?: (v) => void;
+  onClickView?: () => void;
+  mode?: string;
 }
 
 const PaitentTemplateEdit: React.FC<ViewProps> = ({
   resourceData,
   templateDetail,
   onSubmit,
+  onClickView,
+  mode,
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
   const id = router?.query?.id as string;
+  const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
+  // /patient/resource/undefined/?tabName=work-shee
+  const resourceDetailUrl = `/patient/resource/${id}/?tabName=work-sheet`;
+
   const TemplateDynamic = templateComponents[templateDetail?.component_name];
 
   const staticTemplate: TemplateFormData =
     resourceData?.template_data && JSON.parse(resourceData?.template_data);
+
+  const handleBackButton = (): any => {
+    return mode !== "edit" ? onClickView() : router.push(resourceDetailUrl);
+  };
 
   return (
     <>
@@ -37,18 +49,16 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
           "Model Name",
           resourceData?.resource_name || "",
         ]}
-        backButtonClick={() => {
-          /* istanbul ignore else */
-          router.push(`/patient/resource/${id}/?tabName=work-sheet`);
-          /* istanbul ignore else */
-        }}
+        backButtonClick={handleBackButton}
+        {...onClickViewProps}
       >
         {staticTemplate && TemplateDynamic && (
           <TemplateDynamic
-            mode="edit"
+            mode={mode}
             initialData={staticTemplate}
             onSubmit={onSubmit}
             userType={userType}
+            onCancel={() => router.push(resourceDetailUrl)}
           />
         )}
       </BreadCrumbsWithBackButton>

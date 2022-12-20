@@ -11,6 +11,7 @@ export interface TemplateTableCellProps {
   rowIndex: number;
   cellData: TableCell;
   formikHelper: FormikProps<TemplateFormData>;
+  mode: string;
 }
 
 export const TemplateTableCell: FC<TemplateTableCellProps> = ({

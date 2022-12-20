@@ -162,6 +162,21 @@ describe("Patient view template page", () => {
     });
   });
 
+  it("Should display the view on eye button click", async () => {
+    await sut();
+    const eyeIconButton = screen.getByTestId("eyeIconButton");
+    expect(eyeIconButton).toBeInTheDocument();
+    const inputRow = await screen.findByTestId("answer_rows[1].cells[0]");
+    expect(inputRow).toBeInTheDocument();
+    fireEvent.change(inputRow, {
+      target: { value: "some text" },
+    });
+    fireEvent.click(eyeIconButton);
+    expect(await screen.getByTestId("view-text-input")).toHaveTextContent(
+      "some text"
+    );
+  });
+
   it("should render submit exception", async () => {
     (useRouter as jest.Mock).mockClear();
     (useRouter as jest.Mock).mockImplementation(() => ({
