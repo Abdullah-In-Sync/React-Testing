@@ -96,6 +96,7 @@ const PatientEditTemplatePage: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
+            description={"Your worksheet has been submitted successfully."}
             onOk={() => setSuccessModal(false)}
           />
         )}
