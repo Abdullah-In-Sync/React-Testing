@@ -9,6 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import CreateIcon from "@mui/icons-material/Create";
 import ContentHeader from "../../components/common/ContentHeader";
 import Loader from "../../components/common/Loader";
 const TableGenerator = dynamic(
@@ -51,6 +52,17 @@ const WorkSheet = () => {
 
   const { data: resData, loading } = useQuery(GET_PATIENT_RESOURCE_DATA);
 
+  const checkIsSmart = (item) => {
+    // resource_issmartdraw
+    const itemId = item?._id;
+    const id = resData?.getPatientResourceList?.find(
+      (val) => val?.resource_data[0]?.resource_issmartdraw == "1"
+    )?._id;
+
+    if (itemId == id) return true;
+    else return false;
+  };
+
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
   const fields = [
@@ -80,34 +92,38 @@ const WorkSheet = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton size="small" onClick={openFileUploadDialog}>
-            <FileUpload
-              data-testid="fileUpload"
-              key={value}
-              closeFileUploadDialog={closeFileUploadDialog}
-              open={fileUpload}
-              ptshareId={
-                resData?.getPatientResourceList?.find(
-                  (val) => val?.resource_data[0]?.resource_type === 2
-                )._id
+          {!checkIsSmart(value) && (
+            <IconButton size="small" onClick={openFileUploadDialog}>
+              <FileUpload
+                data-testid="fileUpload"
+                key={value}
+                closeFileUploadDialog={closeFileUploadDialog}
+                open={fileUpload}
+                ptshareId={
+                  resData?.getPatientResourceList?.find(
+                    (val) => val?.resource_data[0]?.resource_type === 2
+                  )._id
+                }
+              />
+              <CloudUploadIcon />
+            </IconButton>
+          )}
+          {!checkIsSmart(value) && (
+            <IconButton
+              size="small"
+              href={
+                value?.patient_share_filename != null
+                  ? value?.patient_share_filename
+                  : "#"
               }
-            />
-            <CloudUploadIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            href={
-              value?.patient_share_filename != null
-                ? value?.patient_share_filename
-                : "#"
-            }
-            sx={{
-              color:
-                value?.patient_share_filename != null ? "primary.main" : "",
-            }}
-          >
-            <AttachFileIcon />
-          </IconButton>
+              sx={{
+                color:
+                  value?.patient_share_filename != null ? "primary.main" : "",
+              }}
+            >
+              <AttachFileIcon />
+            </IconButton>
+          )}
           <Link
             href={{
               pathname: "/patient/resource/" + value._id,
@@ -121,17 +137,34 @@ const WorkSheet = () => {
               <VisibilityIcon />
             </IconButton>
           </Link>
-          <IconButton
-            size="small"
-            data-testid="downloadUrl"
-            href={
-              value.resource_data[0]?.download_resource_url != null
-                ? value.resource_data[0]?.download_resource_url
-                : "#"
-            }
-          >
-            <CloudDownloadIcon />
-          </IconButton>
+          {checkIsSmart(value) && (
+            <Link
+              href={{
+                pathname: "/patient/resource/edit/" + value._id,
+                query: {
+                  tabName: "work-sheet",
+                },
+              }}
+              passHref
+            >
+              <IconButton size="small" data-testid={`editIcon_` + value._id}>
+                <CreateIcon />
+              </IconButton>
+            </Link>
+          )}
+          {!checkIsSmart(value) && (
+            <IconButton
+              size="small"
+              data-testid="downloadUrl"
+              href={
+                value.resource_data[0]?.download_resource_url != null
+                  ? value.resource_data[0]?.download_resource_url
+                  : "#"
+              }
+            >
+              <CloudDownloadIcon />
+            </IconButton>
+          )}
         </>
       ),
     },

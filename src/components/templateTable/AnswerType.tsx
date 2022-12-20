@@ -16,12 +16,14 @@ interface AnswerTypeProps {
   formCellKey: string;
   cellData: TableCell;
   formikHelper?: FormikProps<TemplateFormData>;
+  mode?: string;
 }
 
 const AnswerType: FC<AnswerTypeProps> = ({
   formCellKey,
   cellData,
   formikHelper,
+  mode,
 }) => {
   const styles = useStyles();
 
@@ -61,6 +63,14 @@ const AnswerType: FC<AnswerTypeProps> = ({
           }}
         />
       </div>
+    );
+  };
+
+  const textInputView = () => {
+    return (
+      <Box className={styles.viewBoxAnswer} data-testid="view-text-input">
+        {(cellData?.patientAns as string) || ""}
+      </Box>
     );
   };
 
@@ -111,6 +121,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
   };
 
   const answerTypeComponent = () => {
+    console.log("mode0", mode);
     const { answerType } = cellData;
     switch (answerType) {
       case "boolean":
@@ -122,7 +133,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
           />
         );
       case "text":
-        return textInputAnswerType();
+        return mode === "patientView" ? textInputView() : textInputAnswerType();
       default:
         return null;
     }

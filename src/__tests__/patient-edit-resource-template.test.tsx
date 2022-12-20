@@ -54,7 +54,7 @@ mocksData.push({
       ptsharresId: "750a6993f61d4e58917e31e1244711f5",
       update: {
         template_response:
-          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
+          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
       },
     },
   },
@@ -62,7 +62,7 @@ mocksData.push({
     data: {
       updatePatientResourceById: {
         template_response:
-          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
+          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
         _id: "750a6993f61d4e58917e31e1244711f5",
       },
     },
@@ -155,11 +155,25 @@ describe("Patient view template page", () => {
       target: { value: "updated_value" },
     });
     fireEvent.click(tableTemplateSubmitButton);
-    waitFor(() => {
-      expect(
-        screen.getByText("Your worksheet has been created successfully.")
-      ).toBeInTheDocument();
+    const successOkBtn = await screen.findByTestId("SuccessOkBtn");
+    expect(successOkBtn).toBeInTheDocument();
+    fireEvent.click(successOkBtn);
+    expect(successOkBtn).not.toBeInTheDocument();
+  });
+
+  it("Should display the view on eye button click", async () => {
+    await sut();
+    const eyeIconButton = screen.getByTestId("eyeIconButton");
+    expect(eyeIconButton).toBeInTheDocument();
+    const inputRow = await screen.findByTestId("answer_rows[1].cells[0]");
+    expect(inputRow).toBeInTheDocument();
+    fireEvent.change(inputRow, {
+      target: { value: "some text" },
     });
+    fireEvent.click(eyeIconButton);
+    expect(await screen.getByTestId("view-text-input")).toHaveTextContent(
+      "some text"
+    );
   });
 
   it("should render submit exception", async () => {

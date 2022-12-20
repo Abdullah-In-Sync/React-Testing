@@ -96,6 +96,7 @@ export const GET_PATIENT_RESOURCE_DATA = gql`
         resource_type
         resource_url
         download_resource_url
+        resource_issmartdraw
       }
     }
   }

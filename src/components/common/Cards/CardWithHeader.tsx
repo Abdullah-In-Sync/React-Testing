@@ -2,7 +2,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { AppBar, Box, Fab, Toolbar, Typography } from "@mui/material";
 import * as React from "react";
 
-import styles from "./CardWithHeader.module.css";
+import { useStyles } from "./CardWithHeaderStyles";
 
 type propTypes = {
   label: string;
@@ -11,6 +11,7 @@ type propTypes = {
 };
 
 const CardWithHeader = (props: propTypes) => {
+  const styles = useStyles();
   const { onClickView, label, children } = props || {};
   return (
     <div className={styles.boxWithHeader}>

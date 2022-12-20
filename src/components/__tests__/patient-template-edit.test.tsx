@@ -33,6 +33,7 @@ const sut = () => {
     <PaitentTemplateEdit
       templateDetail={currentTemplateData}
       resourceData={resourceData}
+      mode={"edit"}
     />
   );
 };
