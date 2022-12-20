@@ -21,6 +21,7 @@ const PatientEditTemplatePage: NextPage = () => {
   const [resourceData, setRecourceData] = useState<ResourceDataInterface>();
   const [templateDetail, setTemplateDetail] =
     useState<TemplateDetailInterface>();
+  const [templateResponse, setTemplateResponse] = useState<string>();
   const [isViewEnabled, setIsViewEnabled] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const router = useRouter();
@@ -41,6 +42,7 @@ const PatientEditTemplatePage: NextPage = () => {
           /* istanbul ignore else */
           setTemplateDetail(resourceDetail?.template_detail);
           setRecourceData(resourceDetail?.resource_data[0]);
+          setTemplateResponse(resourceDetail?.template_response);
         }
         /* istanbul ignore else */
         setLoader(false);
@@ -89,6 +91,7 @@ const PatientEditTemplatePage: NextPage = () => {
         <PatientEditTemplate
           resourceData={resourceData}
           templateDetail={templateDetail}
+          templateResponse={templateResponse}
           onSubmit={handleSubmitTemplateData}
           onClickView={handleViewOpen}
           mode={`${isViewEnabled ? "patientView" : "edit"}`}
