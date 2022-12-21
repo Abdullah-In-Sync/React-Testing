@@ -29,11 +29,11 @@ export const TableDimensionModal: FC<TableDimensionModalProps> = ({
 }) => {
   const { rowsOptions, colsOptions } = useMemo(() => {
     return {
-      rowsOptions: Array.from({ length: 25 }, (_, i) => ({
+      rowsOptions: Array.from({ length: 50 }, (_, i) => ({
         id: i + 1,
         value: (i + 1).toString(),
       })),
-      colsOptions: Array.from({ length: 25 }, (_, i) => ({
+      colsOptions: Array.from({ length: 10 }, (_, i) => ({
         id: i + 1,
         value: (i + 1).toString(),
       })),
