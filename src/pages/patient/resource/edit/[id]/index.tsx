@@ -35,7 +35,7 @@ const PatientEditTemplatePage: NextPage = () => {
   const [getPatientResourceTemplate] = useLazyQuery(
     GET_PATIENT_RESOURCE_TEMPLATE,
     {
-      fetchPolicy: 'network-only',
+      fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore else */
         const resourceDetail = data!.getResourceDetailById[0];
