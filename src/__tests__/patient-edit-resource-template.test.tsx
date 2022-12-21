@@ -1,12 +1,13 @@
 import { MockedProvider } from "@apollo/client/testing";
-import { SnackbarProvider } from "notistack";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
-import { GET_PATIENT_RESOURCE_TEMPLATE } from "../graphql/query/resource";
+import { SnackbarProvider } from "notistack";
 import { UPDATE_RESOURCE_TEMPLATE_RESPONSE } from "../graphql/mutation/resource";
+import { GET_PATIENT_RESOURCE_TEMPLATE } from "../graphql/query/resource";
 import PatientEditTemplatePage from "../pages/patient/resource/edit/[id]/index";
 
 jest.mock("next/router", () => ({
+  __esModule: true,
   useRouter: jest.fn(),
 }));
 
@@ -136,10 +137,14 @@ const sut = async () => {
 describe("Patient view template page", () => {
   it("should render patient view template", async () => {
     (useRouter as jest.Mock).mockClear();
+    const mockRouter = {
+      push: jest.fn(),
+    };
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "750a6993f61d4e58917e31e1244711f5",
       },
+      ...mockRouter,
     }));
     await sut();
     waitFor(async () => {
@@ -156,9 +161,11 @@ describe("Patient view template page", () => {
     });
     fireEvent.click(tableTemplateSubmitButton);
     const successOkBtn = await screen.findByTestId("SuccessOkBtn");
-    expect(successOkBtn).toBeInTheDocument();
     fireEvent.click(successOkBtn);
     expect(successOkBtn).not.toBeInTheDocument();
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      "/patient/resource/?tabName=work-sheet"
+    );
   });
 
   it("Should display the view on eye button click", async () => {
