@@ -14,7 +14,7 @@ const ResourcePreview: NextPage = () => {
     query: { id },
   } = useRouter();
 
-  const { data, name } = JSON.parse(sessionStorage.getItem(id));
+  const { data, name } = JSON.parse(sessionStorage.getItem(id as string));
 
   return (
     <Layout>
