@@ -74,7 +74,7 @@ class TemplateTableViewModel implements ViewModel<TemplateTableViewModelState> {
 function useTemplateTable(): TemplateTableViewModelState {
   const { user: { user_type: userType = "admin" } = {} } = useAppContext();
   const paitentAns =
-    userType !== "admin"
+    userType === "patient"
       ? {
           patientAns: Yup.string().when("type", {
             is: "answer",
