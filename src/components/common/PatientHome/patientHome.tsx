@@ -36,14 +36,12 @@ const PatientHome = (props: propTypes) => {
   const [formFields, setFormFields] =
     useState<cancleAppointmentPatientHome>(defaultFormValue);
 
-  const [
-    getHomeData,
-    { loading: homeDataLoading, data: homeDataData, refetch },
-  ] = useLazyQuery(GET_PATIENT_HOME_DATA, {
-    onCompleted: (data) => {
-      setFormFields(data?.getPatientHomeData[0]?.appointment[0]._id);
-    },
-  });
+  const [getHomeData, { loading: homeDataLoading, data: homeDataData }] =
+    useLazyQuery(GET_PATIENT_HOME_DATA, {
+      onCompleted: (data) => {
+        setFormFields(data?.getPatientHomeData[0]?.appointment[0]._id);
+      },
+    });
   console.log("Koca: homeDataData ", homeDataData);
 
   const appointmentDate = moment(
