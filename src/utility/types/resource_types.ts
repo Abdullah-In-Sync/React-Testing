@@ -67,6 +67,10 @@ export type editSafetyPlanFormField = {
   therapist_id: string;
   updated_date: string;
 };
+
+export type cancleAppointmentPatientHome = {
+  _id: string;
+};
 export type editGoalsFormField = {
   _id: string;
   created_date: string;
