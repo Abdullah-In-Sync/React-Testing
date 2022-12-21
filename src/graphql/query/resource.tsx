@@ -134,6 +134,18 @@ export const GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID = gql`
   }
 `;
 
+export const GET_PATIENT_HOME_DATA = gql`
+  query getPatientHomeData {
+    getPatientHomeData {
+      appointment {
+        _id
+        app_finish
+        app_start
+        app_date
+      }
+    }
+  }
+`;
 export const GET_PATIENT_RESOURCE_DETAIL = gql`
   query getResourceDetailById($ptsharresId: String!) {
     getResourceDetailById(ptsharresId: $ptsharresId) {
