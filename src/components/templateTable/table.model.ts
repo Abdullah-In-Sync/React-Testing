@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { ViewModel } from "../../hoc/withModal";
 import * as Yup from "yup";
+import { useAppContext } from "../../contexts/AuthContext";
 
 type TableCellType = "header" | "answer" | "";
 type TableCellAnswerType = "list" | "boolean" | "text";
@@ -71,31 +72,40 @@ class TemplateTableViewModel implements ViewModel<TemplateTableViewModelState> {
  * Business logic of the screen: EventsScreen
  */
 function useTemplateTable(): TemplateTableViewModelState {
+  const { user: { user_type: userType = "admin" } = {} } = useAppContext();
+  const paitentAns =
+    userType !== "admin"
+      ? {
+          patientAns: Yup.string().when("type", {
+            is: "answer",
+            then: Yup.string().required("Title is required"),
+          }),
+        }
+      : {};
   const validationSchema = Yup.object().shape({
     rows: Yup.array().of(
       Yup.object().shape({
         cells: Yup.array().of(
           Yup.object().shape({
-            type: Yup.string().optional(),
-            question: Yup.string().optional(),
-            description: Yup.string().optional(),
-            answerType: Yup.string().when("type", {
-              is: "answer",
-              then: Yup.string().required("Please select the answer type"),
-            }),
-            answerValues: Yup.array().when("answerType", {
-              is: "list",
-              then: Yup.array().required("Answer Values is required"),
-            }),
-            title: Yup.string().when("type", {
-              is: "header",
-              then: Yup.string().required("Title is required"),
-            }),
-            patientAns: Yup.string().when("type", {
-              is: "answer",
-              then: Yup.string().required("Title is required"),
-            }),
-            // patientAns: Yup.string().required("Response is required")
+            ...{
+              type: Yup.string().optional(),
+              question: Yup.string().optional(),
+              description: Yup.string().optional(),
+              answerType: Yup.string().when("type", {
+                is: "answer",
+                then: Yup.string().required("Please select the answer type"),
+              }),
+              answerValues: Yup.array().when("answerType", {
+                is: "list",
+                then: Yup.array().required("Answer Values is required"),
+              }),
+              title: Yup.string().when("type", {
+                is: "header",
+                then: Yup.string().required("Title is required"),
+              }),
+              // patientAns: Yup.string().required("Response is required")
+            },
+            ...paitentAns,
           })
         ),
       })
