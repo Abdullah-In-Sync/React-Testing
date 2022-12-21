@@ -330,6 +330,14 @@ export default function CreateResource(props: propTypes) {
     });
   };
 
+  const onPreview = (values) => {
+    sessionStorage.setItem(
+      "create",
+      JSON.stringify({ data: values, name: formFields.resourceName })
+    );
+    window.open("/v2/template/preview/create", "_blank");
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-crate-form">
@@ -626,6 +634,7 @@ export default function CreateResource(props: propTypes) {
           mode="edit"
           onSubmit={onTemplateSave}
           onCancel={onTemplateCancel}
+          onPreview={onPreview}
         />
       )}
       {successModal && (
