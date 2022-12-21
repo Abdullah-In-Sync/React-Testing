@@ -49,6 +49,8 @@ const AnswerType: FC<AnswerTypeProps> = ({
           variant="outlined"
           className="form-control-bg"
           fullWidth
+          multiline
+          rows={8}
           autoComplete="off"
           inputProps={{ "data-testid": `answer_${formCellKey}` }}
           extraProps={{
@@ -83,7 +85,8 @@ const AnswerType: FC<AnswerTypeProps> = ({
         <RadioGroup
           {...props?.row}
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
+          className="radio-buttons"
+          defaultValue={cellData?.patientAns}
           name="radio-buttons-group"
           value={cellData?.patientAns}
         >
@@ -106,6 +109,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
     return (
       <Box
         display="flex"
+        className={styles.yesNoRadioButtonsWrapper}
         justifyContent="center"
         alignItems="center"
         flexDirection="column"

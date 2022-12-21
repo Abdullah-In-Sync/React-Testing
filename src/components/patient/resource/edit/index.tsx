@@ -30,7 +30,6 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   const router = useRouter();
   const id = router?.query?.id as string;
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
-  // /patient/resource/undefined/?tabName=work-shee
   const resourceDetailUrl = `/patient/resource/${id}/?tabName=work-sheet`;
 
   const TemplateDynamic = templateComponents[templateDetail?.component_name];
