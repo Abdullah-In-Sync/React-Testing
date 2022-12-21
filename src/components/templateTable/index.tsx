@@ -25,7 +25,8 @@ interface TemplateTableProps {
     formData: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
   ) => void;
-  userType?: string;
+  userType?: "admin" | "patient";
+  disabled?: boolean;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
   initialData,
@@ -34,6 +35,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
   onPreview,
   userType = "admin",
   mode,
+  disabled = false,
 }) => {
   const styles = useStyles();
   // const { user: { user_type: userType } = {} } = useAppContext();
@@ -114,7 +116,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                       padding: "5px 79px 5px 79px",
                       fontSize: "20px",
                     }}
-                    disabled={!formikHelper.isValid}
+                    disabled={!formikHelper.isValid || disabled}
                   >
                     Submit
                   </Button>
@@ -127,7 +129,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                       padding: "5px 79px 5px 79px",
                       fontSize: "20px",
                     }}
-                    disabled={formikHelper?.isSubmitting}
+                    disabled={formikHelper?.isSubmitting || disabled}
                     onClick={() =>
                       onCancel?.(formikHelper.values, formikHelper)
                     }
@@ -143,7 +145,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                         padding: "5px 79px 5px 79px",
                         fontSize: "20px",
                       }}
-                      disabled={formikHelper?.isSubmitting}
+                      disabled={formikHelper?.isSubmitting || disabled}
                       onClick={() =>
                         onPreview?.(formikHelper.values, formikHelper)
                       }
