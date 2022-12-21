@@ -634,7 +634,7 @@ export default function CreateResource(props: propTypes) {
           description="Your resource has been created successfully."
           title="Success"
           onOk={() => {
-            router.push("/admin/resource/");
+            router.push(`/${userType}/resource/`);
           }}
         />
       )}
