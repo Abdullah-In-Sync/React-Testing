@@ -83,8 +83,8 @@ const PatientEditTemplatePage: NextPage = () => {
   };
 
   const handleSuccessOk = () => {
-    setSuccessModal(false);
     router.push(`/patient/resource/?tabName=work-sheet`);
+    setSuccessModal(false);
   };
 
   return (

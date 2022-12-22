@@ -162,10 +162,10 @@ describe("Patient view template page", () => {
     fireEvent.click(tableTemplateSubmitButton);
     const successOkBtn = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(successOkBtn);
-    expect(successOkBtn).not.toBeInTheDocument();
     expect(mockRouter.push).toHaveBeenCalledWith(
       "/patient/resource/?tabName=work-sheet"
     );
+    expect(successOkBtn).not.toBeInTheDocument();
   });
 
   it("Should display the view on eye button click", async () => {
