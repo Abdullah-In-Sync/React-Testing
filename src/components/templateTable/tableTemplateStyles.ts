@@ -30,4 +30,14 @@ export const useStyles = makeStyles({
     overflow: "hidden",
     overflowX: "scroll",
   },
+  yesNoRadioButtonsWrapper: {
+    display: "flex",
+    flex: 1,
+    "& .radio-buttons": {
+      flexDirection: "row",
+    },
+    "& .radio-buttons label": {
+      margin: "0px 10px",
+    },
+  },
 });

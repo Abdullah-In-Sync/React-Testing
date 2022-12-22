@@ -107,20 +107,21 @@ const AnswerType: FC<AnswerTypeProps> = ({
 
   const booleanAnswerType = () => {
     return (
-      <Box
-        display="flex"
-        className={styles.yesNoRadioButtonsWrapper}
-        justifyContent="center"
-        alignItems="center"
-        flexDirection="column"
-        sx={{ flex: 1 }}
-      >
-        <ListAnswerType
-          row
-          onClickRadio={(option) => onChangeRadioAnswerType(option)}
-          booleantype="true"
-        />
-      </Box>
+      <div className={styles.yesNoRadioButtonsWrapper}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+          sx={{ flex: 1 }}
+        >
+          <ListAnswerType
+            row
+            onClickRadio={(option) => onChangeRadioAnswerType(option)}
+            booleantype="true"
+          />
+        </Box>
+      </div>
     );
   };
 
