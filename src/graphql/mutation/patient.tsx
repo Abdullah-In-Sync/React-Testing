@@ -115,6 +115,15 @@ export const UPDATE_PATIENT_GOAL_BY_ID = gql`
   }
 `;
 
+export const UPDATE_PATIENT_HOME_BY_ID = gql`
+  mutation ($appId: ID!) {
+    cancelAppByPatient(appId: $appId) {
+      _id
+      app_trackstatus
+    }
+  }
+`;
+
 export const UPDATE_SAFETY_PLAN_QUESTION_DATA = gql`
   mutation ($quesData: String!) {
     updateSafetyPlanByPatient(quesData: $quesData) {
