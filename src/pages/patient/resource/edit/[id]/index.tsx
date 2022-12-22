@@ -35,6 +35,7 @@ const PatientEditTemplatePage: NextPage = () => {
   const [getPatientResourceTemplate] = useLazyQuery(
     GET_PATIENT_RESOURCE_TEMPLATE,
     {
+      fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore else */
         const resourceDetail = data!.getResourceDetailById[0];
@@ -81,6 +82,11 @@ const PatientEditTemplatePage: NextPage = () => {
     setIsViewEnabled(!isViewEnabled);
   };
 
+  const handleSuccessOk = () => {
+    router.push(`/patient/resource/?tabName=work-sheet`);
+    setSuccessModal(false);
+  };
+
   return (
     <>
       <Layout>
@@ -100,7 +106,7 @@ const PatientEditTemplatePage: NextPage = () => {
           <SuccessModal
             isOpen={successModal}
             description={"Your worksheet has been submitted successfully."}
-            onOk={() => setSuccessModal(false)}
+            onOk={handleSuccessOk}
           />
         )}
       </Layout>
