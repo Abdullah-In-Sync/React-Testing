@@ -9,9 +9,8 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ initialData }) => {
   return (
     <TemplateTable
       initialData={initialData}
-      mode={"view"}
+      mode={"patientView"}
       userType="patient"
-      disabled={true}
     />
   );
 };
