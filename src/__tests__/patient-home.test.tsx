@@ -7,7 +7,7 @@ import { useAppContext } from "../contexts/AuthContext";
 
 import HomePage from "../pages/patient/home";
 import { UPDATE_PATIENT_HOME_BY_ID } from "../graphql/mutation/patient";
-
+// global.window = { location: { pathname: null } };
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
@@ -49,6 +49,7 @@ mocksData.push({
 });
 
 const sut = async () => {
+  // localStorage.setItem("Cookies Policy", "true");
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
@@ -74,6 +75,26 @@ describe("Admin edit template page", () => {
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
       },
+    });
+  });
+
+  test("View detail button", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("viewDetailClick")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("viewDetailClick"));
+      await expect(global.window.location.pathname).toContain("/");
+    });
+  });
+
+  test("Accept Cookies", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("acceptCookiesButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("acceptCookiesButton"));
+      expect(screen.getByTestId("wiewAppointmentButton")).toBeInTheDocument();
     });
   });
 
@@ -110,8 +131,10 @@ describe("Admin edit template page", () => {
     await waitFor(async () => {
       fireEvent.submit(screen.queryByTestId("home-form"));
     });
+    await (async () => {
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     expect(screen.getByTestId("ConfirmButton")).toBeVisible();
 
     fireEvent.change(screen.queryByTestId("ConfirmButton"), {
@@ -136,7 +159,9 @@ describe("Admin edit template page", () => {
       fireEvent.submit(screen.queryByTestId("home-form"));
     });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    await (async () => {
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    });
     expect(screen.getByTestId("ConfirmButton")).toBeVisible();
 
     await waitFor(async () => {
