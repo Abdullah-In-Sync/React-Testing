@@ -13,9 +13,10 @@ const wrapper = {
 
 interface SidebarLayoutProps {
   children?: ReactNode;
+  boxStyle?: object;
 }
 
-const Layout: FC<SidebarLayoutProps> = ({ children }) => {
+const Layout: FC<SidebarLayoutProps> = ({ children, boxStyle }) => {
   const theme = useTheme();
 
   return (
@@ -50,6 +51,7 @@ const Layout: FC<SidebarLayoutProps> = ({ children }) => {
             [theme.breakpoints.up("lg")]: {
               ml: "250px",
             },
+            ...boxStyle,
           }}
         >
           <Box display="block" style={wrapper}>

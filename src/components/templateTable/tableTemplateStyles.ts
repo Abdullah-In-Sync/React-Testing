@@ -22,9 +22,12 @@ export const useStyles = makeStyles({
     typography: "body1",
     display: "flex",
     alignItems: "center",
+    whiteSpace: "pre-wrap",
   },
   patientView: {
-    pointerEvents: "none",
+    "& div": {
+      pointerEvents: "none",
+    },
   },
   tableCellView: {
     overflow: "hidden",
