@@ -63,3 +63,53 @@ export const GET_PROFILE_DATA = gql`
     }
   }
 `;
+
+export const GET_PATIENT_HOMEWORK_LIST = gql`
+  query GetHomeworksByPatientId($therapyId: ID!) {
+    getHomeworksByPatientId(therapyId: $therapyId) {
+      therapy_id
+      ptsession_id
+      therapist_id
+      patient_id
+      pthomewrk_task
+      pthomewrk_status
+      pthomewrk_date
+      pthomewrk_resp
+      therapist_resp
+      resource_id
+      ptshareres_id
+      complete_status
+      created_date
+      resource_data {
+        user_id
+        user_type
+        resource_name
+        resource_type
+        resource_issmartdraw
+        resource_isformualation
+        disorder_id
+        model_id
+        category_id
+        org_id
+        resource_desc
+        resource_instruction
+        resource_references
+        resource_session_no
+        agenda_id
+        resource_url
+        resource_avail_therapist
+        resource_avail_onlyme
+        resource_filename
+        resource_status
+        resource_returnurl
+        download_resource_url
+        template_id
+        template_data
+        created_date
+        updated_date
+        _id
+      }
+      _id
+    }
+  }
+`;

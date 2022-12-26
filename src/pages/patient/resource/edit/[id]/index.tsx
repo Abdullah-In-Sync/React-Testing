@@ -38,12 +38,14 @@ const PatientEditTemplatePage: NextPage = () => {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore else */
-        const resourceDetail = data!.getResourceDetailById[0];
-        if (resourceDetail) {
-          /* istanbul ignore else */
-          setTemplateDetail(resourceDetail?.template_detail);
-          setRecourceData(resourceDetail?.resource_data[0]);
-          setTemplateResponse(resourceDetail?.template_response);
+        if (data!.getResourceDetailById) {
+          const resourceDetail = data!.getResourceDetailById[0];
+          if (resourceDetail) {
+            /* istanbul ignore else */
+            setTemplateDetail(resourceDetail?.template_detail);
+            setRecourceData(resourceDetail?.resource_data[0]);
+            setTemplateResponse(resourceDetail?.template_response);
+          }
         }
         /* istanbul ignore else */
         setLoader(false);
