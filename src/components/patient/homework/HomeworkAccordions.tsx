@@ -108,25 +108,28 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
   }
 
   const commonform = (completed?: number) => {
-    return homeworkList.map((item, index) => {
-      const {
-        pthomewrk_task,
-        pthomewrk_resp = "",
-        _id,
-        complete_status,
-        resource_data,
-      } = item;
+    return homeworkList
+      .filter(({ complete_status }) => {
+        return completed == complete_status;
+      })
+      .map((item, index) => {
+        const {
+          pthomewrk_task,
+          pthomewrk_resp = "",
+          _id,
+          complete_status,
+          resource_data,
+        } = item;
 
-      const initialValues = {
-        _id,
-        response: pthomewrk_resp,
-        pthomewrk_task,
-      };
-
-      return (
-        completed == complete_status && (
+        const initialValues = {
+          _id,
+          response: pthomewrk_resp,
+          pthomewrk_task,
+        };
+        return (
           <Formik
             initialValues={initialValues}
+            key={`homework_response_form_${index}`}
             validationSchema={validationSchema}
             onSubmit={onSubmit}
             children={(props: any) =>
@@ -140,38 +143,57 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
               })
             }
           />
-        )
-      );
-    });
+        );
+      });
   };
 
-  const commonAccordion = ({ homeworkCompletedStatus, label }) => (
-    <Stack mb={2}>
-      <Accordion
-        className={styles.accordion}
-        TransitionProps={{ unmountOnExit: false, mountOnEnter: false }}
-      >
-        <AccordionSummary
-          expandIcon={<AddIcon className={styles.accordionAddIcon} />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-          className={styles.accordionSummary}
+  const commonAccordion = ({
+    homeworkCompletedStatus,
+    label,
+    emptyMessage,
+  }) => {
+    return (
+      <Stack mb={2}>
+        <Accordion
+          className={styles.accordion}
+          TransitionProps={{ unmountOnExit: false, mountOnEnter: false }}
         >
-          <Typography variant="h6">{label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {commonform(homeworkCompletedStatus)}
-        </AccordionDetails>
-      </Accordion>
-    </Stack>
-  );
+          <AccordionSummary
+            expandIcon={<AddIcon className={styles.accordionAddIcon} />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+            className={styles.accordionSummary}
+          >
+            <Typography variant="h6">{label}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {commonform(homeworkCompletedStatus).length > 0 ? (
+              commonform(homeworkCompletedStatus)
+            ) : (
+              <Typography
+                className={styles.emptyText}
+                data-testid={"emptyMessage"}
+              >
+                {emptyMessage}
+              </Typography>
+            )}
+          </AccordionDetails>
+        </Accordion>
+      </Stack>
+    );
+  };
 
   return (
     <Stack pb={2} pt={2}>
-      {commonAccordion({ homeworkCompletedStatus: 0, label: "Homework" })}
+      {commonAccordion({
+        homeworkCompletedStatus: 0,
+        label: "Homework",
+        emptyMessage: "You have not assigned any homework yet.",
+      })}
       {commonAccordion({
         homeworkCompletedStatus: 1,
         label: "My Completed Homework",
+        emptyMessage: "You have not completed any homework yet.",
       })}
     </Stack>
   );

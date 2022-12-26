@@ -20,7 +20,7 @@ const TherapySelectBox: React.FC<homeworkListTypes.HomeworkListProps> = ({
   }, []);
 
   const options = () => {
-    return therapyData.map((item) => {
+    return therapyData.map((item, i) => {
       const {
         therapy_detail: { therapy_name = "" } = {},
         disorder_detail: { disorder_name = "" } = {},
@@ -30,6 +30,7 @@ const TherapySelectBox: React.FC<homeworkListTypes.HomeworkListProps> = ({
       return (
         <MenuItem
           value={_id}
+          key={`therapy_option_${i}`}
         >{`${therapy_name}/${disorder_name}/${model_name}`}</MenuItem>
       );
     });

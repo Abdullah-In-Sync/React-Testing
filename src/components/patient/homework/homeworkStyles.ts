@@ -79,4 +79,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
   attachIcon: {
     fontSize: "1.5em",
   },
+  emptyText: {
+    color: theme.palette.primary.main,
+    textAlign: "center",
+  },
 }));

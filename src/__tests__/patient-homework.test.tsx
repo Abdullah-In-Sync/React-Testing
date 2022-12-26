@@ -150,7 +150,7 @@ mocksData.push({
           therapist_resp: "",
           resource_id: "",
           ptshareres_id: "",
-          complete_status: "1",
+          complete_status: "0",
           created_date: "2022-12-14T08:34:45.000Z",
           resource_data: [],
           _id: "d8579de63e4d43c7b114456aa9ca4e4b",
@@ -227,6 +227,7 @@ const therapySaveButtonPress = async ({ textAreaText }) => {
 
   const firstTherapyButton = await screen.findByTestId("therapy_save_button_1");
   fireEvent.click(firstTherapyButton);
+  expect(await screen.findByTestId("emptyMessage")).toBeInTheDocument();
 };
 
 const confirmButton = async ({ textAreaText }) => {
