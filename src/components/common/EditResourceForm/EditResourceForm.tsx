@@ -245,6 +245,17 @@ export default function EditForm(props: propTypes) {
     }
   }, []);
 
+  const onPreview = (values) => {
+    sessionStorage.setItem(
+      resourceData?.getResourceById[0]?._id,
+      JSON.stringify({ data: values, name: formFields.resource_name })
+    );
+    window.open(
+      `/v2/template/preview/${resourceData?.getResourceById[0]?._id}`,
+      "_blank"
+    );
+  };
+
   useLayoutEffect(() => {
     return () => {
       refetch();
@@ -850,6 +861,7 @@ export default function EditForm(props: propTypes) {
             mode="edit"
             onSubmit={onTemplateSave}
             onCancel={onTemplateCancel}
+            onPreview={onPreview}
           />
         )}
       </Box>

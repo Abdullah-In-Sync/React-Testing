@@ -16,8 +16,20 @@ const style = {
 };
 
 export default function BasicModal(props) {
-  const { modalOpen, setModalOpen } = props;
-  const handleClose = () => setModalOpen(false);
+  const {
+    modalOpen,
+    setModalOpen,
+    shouldCloseOnBackgroundClick = true,
+  } = props;
+
+  const handleClose = (event, reason) => {
+    // Do not close Modal on background click.
+    if (!shouldCloseOnBackgroundClick && reason === "backdropClick") {
+      return;
+    }
+
+    setModalOpen(false);
+  };
 
   return (
     <div>

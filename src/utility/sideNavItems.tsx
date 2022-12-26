@@ -272,7 +272,7 @@ export const patient_routes: RoutesType[] = [
   {
     key: 1,
     label: "Home",
-    path: Link + "/patient/dashboard",
+    path: "/patient/home",
     icon: <HomeIcon />,
     showNow: 1,
   },

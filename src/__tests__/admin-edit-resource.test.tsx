@@ -676,6 +676,54 @@ describe("Admin edit resource page", () => {
     expect(pushMock).toHaveBeenCalledWith("/admin/resource");
   });
 
+  it("check table preview", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "750a6993f61d4e58917e31e1244711f6",
+      },
+      push: pushMock,
+    }));
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("resource_name")).toHaveValue("test name");
+
+      expect(screen.getByTestId("resource-edit-form")).toBeInTheDocument();
+
+      expect(screen.getByTestId("resource_type")).toHaveValue("2");
+
+      expect(screen.getByTestId("disorder_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("model_id")).toBeInTheDocument(); // todo
+      expect(screen.getByTestId("category_id")).toBeInTheDocument(); // todo
+
+      expect(screen.getByTestId("resource_desc")).toHaveValue("test desc");
+
+      expect(screen.getByTestId("resource_instruction")).toHaveValue(
+        "test instruct"
+      );
+
+      expect(screen.getByTestId("resource_references")).toHaveValue(
+        "test reference"
+      );
+
+      expect(screen.getByTestId("agenda_id")).toHaveValue("agenda-id");
+
+      expect(screen.getByTestId("resource_avail_therapist")).toBeChecked();
+
+      expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
+
+      expect(screen.queryByTestId("row-0")).toBeInTheDocument();
+      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+    });
+    await (async () => {
+      fireEvent.click(screen.queryByTestId("tableTemplatePreview"));
+    });
+
+    await (async () => {
+      expect(pushMock).toHaveBeenCalledWith("/template/preview/create/");
+    });
+  });
+
   // it("click cancle button to cancle upload process", async () => {
   //   await sut();
   //   fireEvent.change(screen.queryByTestId("resource_name"), {

@@ -25,7 +25,8 @@ interface TemplateTableProps {
     formData: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
   ) => void;
-  userType?: string;
+  userType?: "admin" | "patient";
+  showActionsBottom?: boolean;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
   initialData,
@@ -34,6 +35,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
   onPreview,
   userType = "admin",
   mode,
+  showActionsBottom = true,
 }) => {
   const styles = useStyles();
   // const { user: { user_type: userType } = {} } = useAppContext();
@@ -103,7 +105,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 )}
               />
             </Grid>
-            {mode !== "patientView" && (
+            {mode !== "patientView" && showActionsBottom && (
               <Grid container justifyContent={"center"}>
                 <Grid item padding={"63px 0px 94px 0px"}>
                   <Button
