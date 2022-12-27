@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import NextLink from "next/link";
@@ -79,6 +80,27 @@ const ResourceById: NextPage = () => {
                     Back
                   </Button>
                 </NextLink>
+                {resourceData.getResourceById[0]?.template_data && (
+                  <NextLink
+                    passHref
+                    href={{
+                      pathname: `/therapist/resource/view/${id}`,
+                      query: {
+                        tabName: router.query.tabName,
+                      },
+                    }}
+                  >
+                    <Button
+                      mat-button
+                      className={`text-white bg-themeblue`}
+                      variant="contained"
+                      sx={{ textTransform: "none", ml: 2 }}
+                    >
+                      Next
+                      <ArrowRightAlt />
+                    </Button>
+                  </NextLink>
+                )}
               </Grid>
               <Grid
                 xs={6}
