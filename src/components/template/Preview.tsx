@@ -11,7 +11,7 @@ const TemplatePreview: React.FC<TemplatePreviewProps> = ({ initialData }) => {
       initialData={initialData}
       mode={"view"}
       userType="patient"
-      disabled={true}
+      showActionsBottom={false}
     />
   );
 };

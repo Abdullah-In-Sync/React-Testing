@@ -26,7 +26,7 @@ interface TemplateTableProps {
     formikHelper: FormikProps<TemplateFormData>
   ) => void;
   userType?: "admin" | "patient";
-  disabled?: boolean;
+  showActionsBottom?: boolean;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
   initialData,
@@ -35,7 +35,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
   onPreview,
   userType = "admin",
   mode,
-  disabled = false,
+  showActionsBottom = true,
 }) => {
   const styles = useStyles();
   // const { user: { user_type: userType } = {} } = useAppContext();
@@ -105,7 +105,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 )}
               />
             </Grid>
-            {mode !== "patientView" && (
+            {mode !== "patientView" && showActionsBottom && (
               <Grid container justifyContent={"center"}>
                 <Grid item padding={"63px 0px 94px 0px"}>
                   <Button
@@ -116,7 +116,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                       padding: "5px 79px 5px 79px",
                       fontSize: "20px",
                     }}
-                    disabled={!formikHelper.isValid || disabled}
+                    disabled={!formikHelper.isValid}
                   >
                     Submit
                   </Button>
@@ -129,7 +129,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                       padding: "5px 79px 5px 79px",
                       fontSize: "20px",
                     }}
-                    disabled={formikHelper?.isSubmitting || disabled}
+                    disabled={formikHelper?.isSubmitting}
                     onClick={() =>
                       onCancel?.(formikHelper.values, formikHelper)
                     }
@@ -145,7 +145,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                         padding: "5px 79px 5px 79px",
                         fontSize: "20px",
                       }}
-                      disabled={formikHelper?.isSubmitting || disabled}
+                      disabled={formikHelper?.isSubmitting}
                       onClick={() =>
                         onPreview?.(formikHelper.values, formikHelper)
                       }

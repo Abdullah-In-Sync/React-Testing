@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
 import StarsIcon from "@mui/icons-material/Stars";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
@@ -18,6 +18,8 @@ import { GET_PATIENT_HOME_DATA } from "../../../graphql/query/resource";
 import SureModal from "../../admin/resource/SureModal";
 import { cancleAppointmentPatientHome } from "../../../utility/types/resource_types";
 import moment from "moment";
+import CustomModal from "../CustomModal/customModel";
+import { env } from "../../../lib/env";
 
 type propTypes = {
   onSubmit?: any;
@@ -30,7 +32,8 @@ const PatientHome = (props: propTypes) => {
   const { user } = useAppContext();
   const therapistName = user?.therapist_data?.therapist_name;
   const username = user?.patient_data;
-
+  const cookies = env.corpWebsite.cookies;
+  const [cookiesModalOpen, setCookiesModalOpen] = useState<boolean>(true);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   const [formFields, setFormFields] =
@@ -42,7 +45,6 @@ const PatientHome = (props: propTypes) => {
         setFormFields(data?.getPatientHomeData[0]?.appointment[0]._id);
       },
     });
-  console.log("Koca: homeDataData ", homeDataData);
 
   const appointmentDate = moment(
     homeDataData?.getPatientHomeData[0].appointment[0]?.app_date
@@ -61,11 +63,25 @@ const PatientHome = (props: propTypes) => {
     if (!confirmSubmission) return;
   };
 
+  const cookiesName = localStorage.getItem("Cookies Policy");
+
+  const acceptCookies = () => {
+    localStorage.setItem("Cookies Policy", "true");
+    setCookiesModalOpen(false);
+  };
+
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
     getHomeData();
     props.setLoader(false);
+  }, []);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (cookiesName == "true") {
+      setCookiesModalOpen(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -76,6 +92,87 @@ const PatientHome = (props: propTypes) => {
   }, [homeDataData]);
   return (
     <>
+      <CustomModal
+        modalOpen={cookiesModalOpen}
+        setModalOpen={setCookiesModalOpen}
+        shouldCloseOnBackgroundClick={false}
+      >
+        <Typography
+          sx={{
+            padding: "20px",
+            textAlign: "center",
+            fontFamily: "Montserrat",
+            fontWeight: 600,
+            fontSize: "20px",
+            lineHeight: "24px",
+          }}
+        >
+          Cookies Policy
+        </Typography>
+        <Typography
+          sx={{
+            textAlign: "center",
+            padding: "20px",
+            fontFamily: "Montserrat",
+            fontWeight: 400,
+            fontSize: "16px",
+            lineHeight: "20px",
+          }}
+        >
+          The MyHelp plateform uses "Cookies" to help give you the best
+          experience on our plateform. By continuing to use MyHelp plateform you
+          accept the "Cookies" may be stored in your device as outlined in our
+          privacy policy.
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            p: 1,
+            m: 1,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            paddingTop: "50px",
+          }}
+        >
+          <Button
+            className={`text-white`}
+            variant="contained"
+            onClick={acceptCookies}
+            sx={{
+              height: "48px",
+              paddingLeft: "30px",
+              textTransform: "none",
+              paddingRight: "30px",
+              fontFamily: "Montserrat",
+              fontWeight: "600",
+            }}
+            data-testid="acceptCookiesButton"
+          >
+            Accept All Cookies
+          </Button>
+
+          <Link href={cookies} underline="none" target="_blank">
+            <Button
+              variant="outlined"
+              sx={{
+                height: "48px",
+                textTransform: "none",
+                fontFamily: "Montserrat",
+                paddingLeft: "30px",
+                paddingRight: "30px",
+                fontWeight: "600",
+                color: "#6DA18F",
+              }}
+              data-testid="viewDetailClick"
+            >
+              View Details
+            </Button>
+          </Link>
+        </Box>
+      </CustomModal>
+
       <form
         data-testid="home-form"
         style={{ paddingBottom: "30px" }}
@@ -100,7 +197,7 @@ const PatientHome = (props: propTypes) => {
             }}
           >
             We have created the MyHelp platform to support both therapists and
-            Patientss in their pursuit of a smoother therapy process. MyHelp
+            Patients in their pursuit of a smoother therapy process. MyHelp
             empowers therapists throughout the entire process and delivers
             personalised care with the aim to improve patients outcomes.
             Simultaneously, patients can access their own platform to access key
@@ -506,7 +603,6 @@ const PatientHome = (props: propTypes) => {
             </Grid>
           </Box>
         </Box>
-
         <SureModal
           modalOpen={modalOpen}
           setModalOpen={setModalOpen}
