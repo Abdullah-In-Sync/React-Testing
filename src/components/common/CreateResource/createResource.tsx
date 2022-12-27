@@ -615,7 +615,6 @@ export default function CreateResource(props: propTypes) {
           <Typography
             variant="h5"
             sx={{
-              fontFamily: "Montserrat",
               fontStyle: "normal",
               fontWeight: 700,
               fontSize: "20px",
