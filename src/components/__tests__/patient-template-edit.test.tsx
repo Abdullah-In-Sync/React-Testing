@@ -52,7 +52,7 @@ describe("When render a paitent template edit", () => {
 
   it("should back button navigate to patient resource detail page", async () => {
     const mockRouter = {
-      push: jest.fn(),
+      back: jest.fn(),
     };
     (useRouter as jest.Mock).mockReturnValue(mockRouter);
 
@@ -60,8 +60,6 @@ describe("When render a paitent template edit", () => {
     const backButton = screen.getByTestId("backButton");
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockRouter.push).toHaveBeenCalledWith(
-      "/patient/resource/undefined/?tabName=work-sheet"
-    );
+    expect(mockRouter.back).toHaveBeenCalled();
   });
 });

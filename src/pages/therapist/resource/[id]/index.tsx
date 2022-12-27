@@ -85,9 +85,6 @@ const ResourceById: NextPage = () => {
                     passHref
                     href={{
                       pathname: `/therapist/resource/view/${id}`,
-                      query: {
-                        tabName: router.query.tabName,
-                      },
                     }}
                   >
                     <Button
@@ -172,6 +169,7 @@ const ResourceById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
+                  {/* <NextLink href={`/therapist/resource/view/${id}`}> */}
                   <IconButton
                     size="medium"
                     data-testid="viewUrl"
@@ -184,6 +182,7 @@ const ResourceById: NextPage = () => {
                   >
                     <VisibilityIcon />
                   </IconButton>
+                  {/* </NextLink> */}
                   <IconButton
                     size="medium"
                     data-testid="downloadUrl"

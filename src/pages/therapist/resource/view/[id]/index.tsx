@@ -48,10 +48,6 @@ const PatientEditTemplatePage: NextPage = () => {
     });
   }, []);
 
-  const handleBackButton = (): any => {
-    router.push(`/therapist/resource/${id}`);
-  };
-
   return (
     <>
       <Layout>
@@ -62,7 +58,6 @@ const PatientEditTemplatePage: NextPage = () => {
           templateDetail={templateDetail}
           templateResponse={templateResponse}
           mode={`patientView`}
-          onPressBack={handleBackButton}
         />
       </Layout>
     </>

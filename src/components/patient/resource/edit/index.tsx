@@ -43,7 +43,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
     templateData && JSON.parse(templateData);
 
   const handleBackButton = (): any => {
-    return mode !== "edit" ? onClickView() : router.push(resourceDetailUrl);
+    return mode !== "edit" && onClickView ? onClickView() : router.back();
   };
 
   return (

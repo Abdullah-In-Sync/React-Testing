@@ -75,7 +75,7 @@ describe("Therapist view template page", () => {
   it("should render therapist patient template", async () => {
     (useRouter as jest.Mock).mockClear();
     const mockRouter = {
-      push: jest.fn(),
+      back: jest.fn(),
     };
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
@@ -90,8 +90,6 @@ describe("Therapist view template page", () => {
     const backButton = screen.getByTestId("backButton");
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
-    expect(mockRouter.push).toHaveBeenCalledWith(
-      "/therapist/resource/750a6993f61d4e58917e31e1244711f5"
-    );
+    expect(mockRouter.back).toHaveBeenCalled();
   });
 });
