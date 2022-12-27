@@ -42,6 +42,7 @@ const PatientEditTemplatePage: NextPage = () => {
   });
 
   useEffect(() => {
+    setLoader(true);
     getPatientResourceDetail({
       variables: { resourceId: id },
     });
