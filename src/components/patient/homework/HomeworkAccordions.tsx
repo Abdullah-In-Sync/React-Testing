@@ -76,7 +76,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
                 <ResponseTextArea
                   label="Patient Response"
                   name="response"
-                  rows="5"
+                  rows="6"
                   id={`therapy_response_${index + 1}`}
                   placeholder="Please type response here"
                   disabled={completeStatus}
