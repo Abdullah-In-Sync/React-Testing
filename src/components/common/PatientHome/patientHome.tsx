@@ -79,9 +79,11 @@ const PatientHome = (props: propTypes) => {
 
   useEffect(() => {
     /* istanbul ignore next */
-    cookiesName === "true"
-      ? setCookiesModalOpen(false)
-      : setCookiesModalOpen(true);
+    if (cookiesName === "true") {
+      setCookiesModalOpen(false);
+    } else {
+      setCookiesModalOpen(true);
+    }
   }, []);
 
   useEffect(() => {
