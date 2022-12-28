@@ -17,26 +17,22 @@ const PatientEditTemplatePage: NextPage = () => {
   const [resourceData, setRecourceData] = useState<ResourceDataInterface>();
   const [templateDetail, setTemplateDetail] =
     useState<TemplateDetailInterface>();
-  const [templateResponse, setTemplateResponse] = useState<string>();
+  // const [templateResponse, setTemplateResponse] = useState<string>();
   const router = useRouter();
 
   const id = router?.query?.id as string;
 
   const [getPatientResourceDetail] = useLazyQuery(GET_RESOURCE_DETAIL, {
     onCompleted: (data) => {
-      /* istanbul ignore else */
       if (data!.getResourceById) {
-        /* istanbul ignore else */
         const resourceDetail = data!.getResourceById[0];
         if (resourceDetail) {
-          /* istanbul ignore else */
           setTemplateDetail(resourceDetail?.template_detail);
           // setRecourceData(resourceDetail?.resource_data[0]);
           // setTemplateResponse(resourceDetail?.template_response);
           setRecourceData(resourceDetail);
         }
       }
-      /* istanbul ignore else */
       setLoader(false);
     },
   });
@@ -56,7 +52,6 @@ const PatientEditTemplatePage: NextPage = () => {
         <PatientEditTemplate
           resourceData={resourceData}
           templateDetail={templateDetail}
-          templateResponse={templateResponse}
           mode={`patientView`}
         />
       </Layout>

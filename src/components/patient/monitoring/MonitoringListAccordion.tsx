@@ -29,8 +29,6 @@ const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
           <Stack className={styles.listButtonsWrapper}>
             <Button
               variant="contained"
-              color="secondary"
-              type="submit"
               className={styles.toolsButton}
               data-testid={`monitoring_view_reponse_${index}`}
             >
@@ -38,8 +36,6 @@ const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
             </Button>
             <Button
               variant="contained"
-              color="secondary"
-              type="submit"
               className={styles.toolsButton}
               data-testid={`monitoring_complete_reponse_${index}`}
             >
