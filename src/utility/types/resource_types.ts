@@ -68,6 +68,13 @@ export type editSafetyPlanFormField = {
   updated_date: string;
 };
 
+export type editRelapseFormField = {
+  _id: string;
+  relapse_ans: string;
+  relapse_ques: string;
+  relapse_ques_id: string;
+};
+
 export type cancleAppointmentPatientHome = {
   _id: string;
 };
