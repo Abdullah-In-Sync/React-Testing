@@ -114,13 +114,13 @@ const Homework: NextPage = () => {
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
+        <Loader visible={loader} />
         <HomeworkComponent
           homeworkList={homeworkList}
           handleSubmit={handleSubmit}
           therapyData={therapyData}
           onChangeTherapy={onChangeTherapy}
         />
-        <Loader visible={loader} />
         {isConfirm.status && (
           <ConfirmationModal
             label="Are you sure want to save the homework"

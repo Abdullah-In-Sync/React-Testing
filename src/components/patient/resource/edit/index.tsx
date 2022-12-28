@@ -16,6 +16,7 @@ interface ViewProps {
   onSubmit?: (v) => void;
   onClickView?: () => void;
   mode?: string;
+  onPressBack?: () => void;
 }
 
 const PaitentTemplateEdit: React.FC<ViewProps> = ({
@@ -25,6 +26,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   onSubmit,
   onClickView,
   mode,
+  onPressBack,
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
@@ -41,7 +43,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
     templateData && JSON.parse(templateData);
 
   const handleBackButton = (): any => {
-    return mode !== "edit" ? onClickView() : router.push(resourceDetailUrl);
+    return mode !== "edit" && onClickView ? onClickView() : router.back();
   };
 
   return (
@@ -53,7 +55,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
           "Model Name",
           resourceData?.resource_name || "",
         ]}
-        backButtonClick={handleBackButton}
+        backButtonClick={onPressBack ? onPressBack : handleBackButton}
         {...onClickViewProps}
       >
         {staticTemplate && TemplateDynamic && (
