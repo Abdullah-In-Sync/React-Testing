@@ -113,3 +113,21 @@ export const GET_PATIENT_HOMEWORK_LIST = gql`
     }
   }
 `;
+
+export const GET_PATIENT_MONITORING_LIST = gql`
+  query GetPatientMonitorList {
+    getPatientMonitorList {
+      _id
+      ca_cat_id
+      ca_subcat_id
+      created_date
+      last_completed_date
+      monitor_cat_id
+      patient_id
+      ptmon_frequency
+      ptmon_name
+      ptmon_status
+      therapist_id
+    }
+  }
+`;
