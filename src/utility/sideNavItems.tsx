@@ -311,7 +311,7 @@ export const patient_routes: RoutesType[] = [
     {
       key: 8,
       label: "Relapse",
-      path: Link + "/patient/relapse",
+      path: "/patient/relapse",
       icon: <HomeWorkIcon />,
     },
   ],
