@@ -134,6 +134,32 @@ export const GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID = gql`
   }
 `;
 
+export const GET_PATIENT_RELAPSE_DETAIL_BY_ID = gql`
+  query getPatientRelapseList {
+    getPatientRelapseList {
+      _id
+      created_date
+      order_by
+      patient_id
+      relapse_additional_details
+      relapse_ans_detail {
+        _id
+        created_date
+        relapse_ans
+        patient_id
+        relapse_ans_status
+        relapse_ques_id
+        therapist_id
+        updated_date
+      }
+      relapse_ques
+      relapse_ques_status
+      updated_date
+      user_type
+    }
+  }
+`;
+
 export const GET_PATIENT_HOME_DATA = gql`
   query getPatientHomeData {
     getPatientHomeData {

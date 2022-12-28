@@ -33,7 +33,7 @@ const PatientHome = (props: propTypes) => {
   const therapistName = user?.therapist_data?.therapist_name;
   const username = user?.patient_data;
   const cookies = env.corpWebsite.cookies;
-  const [cookiesModalOpen, setCookiesModalOpen] = useState<boolean>(true);
+  const [cookiesModalOpen, setCookiesModalOpen] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   const [formFields, setFormFields] =
@@ -79,9 +79,9 @@ const PatientHome = (props: propTypes) => {
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (cookiesName == "true") {
-      setCookiesModalOpen(false);
-    }
+    cookiesName === "true"
+      ? setCookiesModalOpen(false)
+      : setCookiesModalOpen(true);
   }, []);
 
   useEffect(() => {
