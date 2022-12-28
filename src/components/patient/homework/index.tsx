@@ -18,19 +18,15 @@ const PatientHomeWorkComponent: React.FC<
     <div>
       <div className={styles.headerWrapper}>
         <ContentHeader title="Homework" />
-        {therapyData.length > 0 && (
-          <TherapySelectBox
-            therapyData={therapyData}
-            onChangeTherapy={onChangeTherapy}
-          />
-        )}
-      </div>
-      {homeworkList.length > 0 && (
-        <HomeworkAccordions
-          homeworkList={homeworkList}
-          handleSubmit={handleSubmit}
+        <TherapySelectBox
+          therapyData={therapyData}
+          onChangeTherapy={onChangeTherapy}
         />
-      )}
+      </div>
+      <HomeworkAccordions
+        homeworkList={homeworkList}
+        handleSubmit={handleSubmit}
+      />
     </div>
   );
 };
