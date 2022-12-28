@@ -62,7 +62,6 @@ export const TableDimensionModal: FC<TableDimensionModalProps> = ({
                 fontWeight: "600",
                 textAlign: "center",
                 paddingBottom: "20px",
-                fontFamily: "Montserrat",
                 font: "500",
                 fontSize: "16px",
               }}
