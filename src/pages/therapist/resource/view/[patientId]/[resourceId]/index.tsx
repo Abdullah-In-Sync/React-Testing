@@ -22,8 +22,6 @@ const PatientEditTemplatePage: NextPage = () => {
 
   const { patientId, resourceId } = router.query || {};
 
-  if (!patientId || !resourceId) return null;
-
   const [getPatientResourceDetail] = useLazyQuery(GET_PATH_RESOURCE_BY_ID, {
     onCompleted: (data) => {
       if (data!.getPatResourceById) {
