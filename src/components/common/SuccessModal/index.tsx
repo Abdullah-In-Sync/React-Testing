@@ -8,6 +8,7 @@ export interface SuccessModalProps {
   onOk: () => void;
   title?: string;
   description?: string;
+  icon?: any;
 }
 
 export const SuccessModal: FC<SuccessModalProps> = ({
@@ -15,6 +16,7 @@ export const SuccessModal: FC<SuccessModalProps> = ({
   onOk,
   title,
   description,
+  icon,
 }) => {
   return (
     isOpen && (
@@ -24,15 +26,17 @@ export const SuccessModal: FC<SuccessModalProps> = ({
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
-            marginBottom={"40px"}
+            marginBottom={"25px"}
             data-testid="SuccessModal"
           >
-            <Image
-              alt="My Help"
-              src="/images/rightmark.png"
-              height="67"
-              width="67"
-            />
+            {icon || (
+              <Image
+                alt="My Help"
+                src="/images/rightmark.png"
+                height="67"
+                width="67"
+              />
+            )}
           </Grid>
           {title && (
             <div>
