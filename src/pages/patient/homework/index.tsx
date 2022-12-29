@@ -131,6 +131,7 @@ const Homework: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
+            title="HOMEWORK TASK"
             description={"Task saved successfully"}
             onOk={handleOk}
           />
