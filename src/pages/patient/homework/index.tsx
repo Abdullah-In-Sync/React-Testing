@@ -46,6 +46,7 @@ const Homework: NextPage = () => {
       /* istanbul ignore else */
       const { getHomeworksByPatientId } = data;
       if (getHomeworksByPatientId) setHomeworkList(getHomeworksByPatientId);
+      else setHomeworkList([]);
 
       setLoader(false);
     },
