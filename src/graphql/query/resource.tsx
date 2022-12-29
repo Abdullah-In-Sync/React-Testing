@@ -290,3 +290,33 @@ export const GET_PATIENT_LIST = gql`
     }
   }
 `;
+
+export const GET_PATH_RESOURCE_BY_ID = gql`
+  query getPatResourceById($patientId: String!, $resourceId: String!) {
+    getPatResourceById(patientId: $patientId, resourceId: $resourceId) {
+      ptsharres_session
+      ptsharres_status
+      created_date
+      ptsharres_from
+      ptsharres_subfrom
+      share_from
+      resource_upload
+      patient_share_filename
+      download_patient_filename_url
+      template_id
+      template_response
+      _id
+      resource_data {
+        template_data
+        template_id
+        resource_name
+        resource_issmartdraw
+      }
+      template_detail {
+        _id
+        category
+        component_name
+      }
+    }
+  }
+`;
