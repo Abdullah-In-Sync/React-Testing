@@ -15,19 +15,21 @@ const PatientHomeWorkComponent: React.FC<
 }) => {
   const styles = useStyles();
   return (
-    <div>
-      <div className={styles.headerWrapper}>
-        <ContentHeader title="Homework" />
-        <TherapySelectBox
-          therapyData={therapyData}
-          onChangeTherapy={onChangeTherapy}
+    therapyData.length > 0 && (
+      <div>
+        <div className={styles.headerWrapper}>
+          <ContentHeader title="Homework" />
+          <TherapySelectBox
+            therapyData={therapyData}
+            onChangeTherapy={onChangeTherapy}
+          />
+        </div>
+        <HomeworkAccordions
+          homeworkList={homeworkList}
+          handleSubmit={handleSubmit}
         />
       </div>
-      <HomeworkAccordions
-        homeworkList={homeworkList}
-        handleSubmit={handleSubmit}
-      />
-    </div>
+    )
   );
 };
 
