@@ -16,5 +16,6 @@ export interface Measure {
   last_completed_date?: string;
   is_default: number;
   created_date: string;
+  current_score: string;
   _id: string;
 }

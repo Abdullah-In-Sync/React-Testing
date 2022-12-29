@@ -27,8 +27,7 @@ export default function BasicModal(props) {
     if (!shouldCloseOnBackgroundClick && reason === "backdropClick") {
       return;
     }
-
-    setModalOpen(false);
+    setModalOpen?.(false);
   };
 
   return (

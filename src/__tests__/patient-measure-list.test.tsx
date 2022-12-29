@@ -1,4 +1,10 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import {
+  screen,
+  render,
+  waitFor,
+  fireEvent,
+  within,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { GET_PATIENT_HOME_DATA } from "../graphql/query/resource";
@@ -6,8 +12,11 @@ import { useAppContext } from "../contexts/AuthContext";
 
 import Measure from "../pages/patient/measure";
 import { GET_PATIENT_MEASURE_LIST } from "../graphql/query/Measure/graphql";
+import { useRouter } from "next/router";
 
+const pushMock = jest.fn();
 jest.mock("next/router", () => ({
+  __esModule: true,
   useRouter: jest.fn(),
 }));
 
@@ -107,6 +116,9 @@ const sut = async () => {
 
 describe("Measure list", () => {
   beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: pushMock,
+    });
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
@@ -119,6 +131,7 @@ describe("Measure list", () => {
         updated_date: "2021-12-20 16:20:55",
       },
     });
+    jest.useFakeTimers().setSystemTime(new Date("2022-12-23"));
   });
 
   test("Renders measure list", async () => {
@@ -126,5 +139,63 @@ describe("Measure list", () => {
     await waitFor(async () => {
       expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
     });
+    await waitFor(() =>
+      fireEvent.click(
+        within(screen.queryAllByTestId("list-tile")[1]).getByTestId(
+          "toggleContent"
+        )
+      )
+    );
+    await waitFor(() =>
+      fireEvent.click(screen.queryByTestId("view-score-btn"))
+    );
+
+    expect(pushMock).toHaveBeenCalledWith(
+      `/patient/score/98392bff10104aa3a4aa3908141ec65a`
+    );
+    await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
+    expect(pushMock).toHaveBeenCalledWith(
+      `/patient/test/98392bff10104aa3a4aa3908141ec65a`
+    );
+  });
+
+  test("If score data is not available it will show the error popup", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
+    });
+    await waitFor(() =>
+      fireEvent.click(
+        within(screen.queryAllByTestId("list-tile")[0]).getByTestId(
+          "toggleContent"
+        )
+      )
+    );
+    await waitFor(() =>
+      fireEvent.click(screen.queryByTestId("view-score-btn"))
+    );
+
+    expect(
+      screen.queryByText("No Score information is available")
+    ).toBeInTheDocument();
+  });
+
+  test("If test already token for today it will show the error popup", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
+    });
+    await waitFor(() =>
+      fireEvent.click(
+        within(screen.queryAllByTestId("list-tile")[2]).getByTestId(
+          "toggleContent"
+        )
+      )
+    );
+    await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
+
+    expect(
+      screen.queryByText("Today test has been taken already")
+    ).toBeInTheDocument();
   });
 });

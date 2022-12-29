@@ -1,13 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { useRouter } from "next/router";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Measure } from "../../graphql/query/Measure/types";
 import { MeasureTile } from "../patient/measure/measureTile";
-
-const pushMock = jest.fn();
-jest.mock("next/router", () => ({
-  __esModule: true,
-  useRouter: jest.fn(),
-}));
 
 const measure: Measure = {
   user_type: "therapist",
@@ -20,15 +13,11 @@ const measure: Measure = {
   last_completed_date: "2022-12-23T10:13:58.000Z",
   is_default: 0,
   created_date: "2022-12-23T10:10:39.000Z",
+  current_score: "1",
   _id: "f7ebcd5b73874d2691bce97a70b6035f",
 };
 
 describe("when rendered with a `visible` prop", () => {
-  beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue({
-      push: pushMock,
-    });
-  });
   it("should visible or hide", async () => {
     render(<MeasureTile measure={measure} />);
 
@@ -41,15 +30,5 @@ describe("when rendered with a `visible` prop", () => {
     fireEvent.click(screen.queryByTestId("toggleContent"));
 
     expect(screen.queryByTestId("view-score-btn")).toBeInTheDocument();
-
-    await waitFor(() =>
-      fireEvent.click(screen.queryByTestId("view-score-btn"))
-    );
-
-    expect(pushMock).toHaveBeenCalledWith(`/patient/score/${measure._id}`);
-
-    await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
-
-    expect(pushMock).toHaveBeenCalledWith(`/patient/test/${measure._id}`);
   });
 });
