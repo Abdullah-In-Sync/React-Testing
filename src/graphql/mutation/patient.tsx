@@ -162,3 +162,29 @@ export const UPDATE_PATIENT_HOMEWORK_BY_ID = gql`
     }
   }
 `;
+
+export const UPDATE_RELAPSE_QUESTION_ANSWER_DATA = gql`
+  mutation ($relapse_ans_data: String!) {
+    updateRelapseAnswerByPatient(relapse_ans_data: $relapse_ans_data) {
+      _id
+      created_date
+      order_by
+      patient_id
+      relapse_additional_details
+      relapse_ans_detail {
+        _id
+        created_date
+        patient_id
+        relapse_ans
+        relapse_ans_status
+        relapse_ques_id
+        therapist_id
+        updated_date
+      }
+      relapse_ques
+      relapse_ques_status
+      updated_date
+      user_type
+    }
+  }
+`;

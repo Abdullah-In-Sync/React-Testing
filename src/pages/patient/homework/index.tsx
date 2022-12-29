@@ -114,13 +114,13 @@ const Homework: NextPage = () => {
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
+        <Loader visible={loader} />
         <HomeworkComponent
           homeworkList={homeworkList}
           handleSubmit={handleSubmit}
           therapyData={therapyData}
           onChangeTherapy={onChangeTherapy}
         />
-        <Loader visible={loader} />
         {isConfirm.status && (
           <ConfirmationModal
             label="Are you sure want to save the homework"
@@ -131,6 +131,7 @@ const Homework: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
+            title="HOMEWORK TASK"
             description={"Task saved successfully"}
             onOk={handleOk}
           />

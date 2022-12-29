@@ -13,6 +13,9 @@ const style = {
   boxShadow: 24,
   p: 4,
   borderRadius: "5px",
+  "&:focus-visible": {
+    outline: "unset",
+  },
 };
 
 export default function BasicModal(props) {
