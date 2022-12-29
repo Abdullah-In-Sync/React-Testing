@@ -188,7 +188,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
       {commonAccordion({
         homeworkCompletedStatus: 0,
         label: "Homework",
-        emptyMessage: "You have not been assigned any homework yet.",
+        emptyMessage: "There is no homework assigned to you yet.",
       })}
       {commonAccordion({
         homeworkCompletedStatus: 1,

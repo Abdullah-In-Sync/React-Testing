@@ -142,7 +142,7 @@ const WorkSheet = () => {
               href={{
                 pathname: "/patient/resource/edit/" + value._id,
                 query: {
-                  tabName: "work-sheet",
+                  from: "/patient/resource/?tabName=work-sheet",
                 },
               }}
               passHref

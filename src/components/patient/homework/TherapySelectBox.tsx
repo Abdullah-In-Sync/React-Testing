@@ -17,7 +17,7 @@ const TherapySelectBox: React.FC<homeworkListTypes.HomeworkListProps> = ({
     if (value) {
       updateSelectValue(value);
     }
-  }, []);
+  }, [therapyData]);
 
   const options = () => {
     return therapyData.map((item, i) => {
