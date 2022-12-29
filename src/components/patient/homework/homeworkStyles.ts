@@ -82,6 +82,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
   emptyText: {
     color: theme.palette.primary.main,
     textAlign: "center",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 }));
