@@ -163,6 +163,18 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: GET_PATIENT_HOMEWORK_LIST,
+    variables: { therapyId: "05be3e5df21a40a3b04bcbb5a22b219bempty" },
+  },
+  result: {
+    data: {
+      getHomeworksByPatientId: null,
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: UPDATE_PATIENT_HOMEWORK_BY_ID,
     variables: {
       ptHomeworkId: "526f2b09364641cb8a26694c728c38c6",
@@ -207,7 +219,7 @@ const sut = async () => {
   );
 };
 
-const therapySaveButtonPress = async ({ textAreaText }) => {
+const selectFromTherapyDropdown = async () => {
   await sut();
   const selectTherapy = await screen.findByTestId("selectTherapy");
 
@@ -220,9 +232,12 @@ const therapySaveButtonPress = async ({ textAreaText }) => {
   const options = within(listbox).getAllByRole("option");
 
   fireEvent.click(options[0]);
+};
+
+const therapySaveButtonPress = async ({ textAreaText }) => {
+  selectFromTherapyDropdown();
   const firstTherapyTextarea = await screen.findByTestId("therapy_response_1");
   expect(firstTherapyTextarea).toBeInTheDocument();
-
   fireEvent.change(firstTherapyTextarea, { target: { value: textAreaText } });
 
   const firstTherapyButton = await screen.findByTestId("therapy_save_button_1");
@@ -246,6 +261,7 @@ describe("Patient homwork page", () => {
       },
     });
   });
+
   it("should render patient homework screen and submit response success", async () => {
     await confirmButton({ textAreaText: "updated_text" });
     const okButton = await screen.findByTestId("SuccessOkBtn");
@@ -266,6 +282,19 @@ describe("Patient homwork page", () => {
     await confirmButton({ textAreaText: "failApi" });
     expect(
       await screen.findByText(/Server error please try later./i)
+    ).toBeInTheDocument();
+  });
+
+  it("Should display empty message if no homework assigned", async () => {
+    (useRouter as jest.Mock).mockClear();
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "05be3e5df21a40a3b04bcbb5a22b219bempty",
+      },
+    }));
+    selectFromTherapyDropdown();
+    expect(
+      await screen.findByText("There is no homework assigned to you yet.")
     ).toBeInTheDocument();
   });
 });
