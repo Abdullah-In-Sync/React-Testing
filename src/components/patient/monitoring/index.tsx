@@ -9,9 +9,7 @@ const MonitoringComponent: React.FC<monitoringTypes.MonitoringProps> = ({
   return (
     <>
       <ContentHeader title="Monitoring" />
-      {monitoringList.length > 0 && (
-        <MonitoringListAccordion monitoringList={monitoringList} />
-      )}
+      <MonitoringListAccordion monitoringList={monitoringList} />
     </>
   );
 };

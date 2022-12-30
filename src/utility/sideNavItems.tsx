@@ -305,7 +305,7 @@ export const patient_routes: RoutesType[] = [
     {
       key: 7,
       label: "Homework",
-      path: Link + "/patient/homework",
+      path: "/patient/homework",
       icon: <HomeWorkIcon />,
     },
     {
@@ -326,7 +326,7 @@ export const patient_routes: RoutesType[] = [
     {
       key: 11,
       label: "Monitoring",
-      path: Link + "/patient/monitoring",
+      path: "/patient/monitoring",
       icon: <PreviewIcon />,
     },
   ],
