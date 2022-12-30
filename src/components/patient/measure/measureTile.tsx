@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material";
-import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { Measure } from "../../../graphql/query/Measure/types";
 import { useStyles } from "./measureStyle";
@@ -8,29 +7,26 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 interface MeasureTileProps {
   measure: Measure;
+  onClickTest?: (measure: Measure) => void;
+  onClickScore?: (measure: Measure) => void;
 }
-export const MeasureTile: FC<MeasureTileProps> = ({ measure }) => {
+export const MeasureTile: FC<MeasureTileProps> = ({
+  measure,
+  onClickTest,
+  onClickScore,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
   const classes = useStyles();
 
   const toggleContent = () => {
     setIsOpen(!isOpen);
   };
 
-  const onClickTest = () => {
-    router.push(`/patient/test/${measure._id}`);
-  };
-  const onClickScore = () => {
-    console.debug("im here");
-    router.push(`/patient/score/${measure._id}`);
-  };
-
   return (
     <Box
       className={classes.wrapper}
       style={{ border: "1px solid rgb(107 160 142)" }}
-      data-testid="list-tile"
+      data-testid={`list-tile`}
     >
       <Box
         className={classes.tileHeader}
@@ -55,13 +51,13 @@ export const MeasureTile: FC<MeasureTileProps> = ({ measure }) => {
       {isOpen && (
         <Box className={classes.contentWrapper}>
           <Box data-testid="score" className={classes.scoreDiv}>
-            Current Score: 9
+            Current Score: {measure?.current_score}
           </Box>
           <Box>
             <Button
               data-testid="view-score-btn"
               className={classes.actionButton}
-              onClick={onClickScore}
+              onClick={() => onClickScore?.(measure)}
             >
               View score
             </Button>
@@ -69,7 +65,7 @@ export const MeasureTile: FC<MeasureTileProps> = ({ measure }) => {
               className={classes.actionButton}
               style={{ marginLeft: "60px" }}
               data-testid="take-test-btn"
-              onClick={onClickTest}
+              onClick={() => onClickTest?.(measure)}
             >
               Test
             </Button>
