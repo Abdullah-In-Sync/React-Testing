@@ -128,6 +128,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
         };
         return (
           <Formik
+            enableReinitialize
             initialValues={initialValues}
             key={`homework_response_form_${index}`}
             validationSchema={validationSchema}
