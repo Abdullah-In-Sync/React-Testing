@@ -31,6 +31,7 @@ import withAuthentication from "../../../../hoc/auth";
 
 const ResourceDetailById: NextPage = () => {
   const router = useRouter();
+  const fromUrl = router?.query?.from;
   const id = router.query.id as string;
   const [loader, setLoader] = useState<boolean>(false);
   const [ptId, setPtId] = useState<string>("");
@@ -85,7 +86,6 @@ const ResourceDetailById: NextPage = () => {
       setLoader(false);
     }
   }, [ptId]);
-
   return (
     <>
       <Layout>
@@ -98,7 +98,9 @@ const ResourceDetailById: NextPage = () => {
                 <NextLink
                   passHref
                   href={{
-                    pathname: "/patient/resource",
+                    pathname: fromUrl
+                      ? (fromUrl as string)
+                      : "/patient/resource",
                     query: {
                       tabName: router.query.tabName,
                     },

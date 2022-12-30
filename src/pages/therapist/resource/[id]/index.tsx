@@ -80,24 +80,6 @@ const ResourceById: NextPage = () => {
                     Back
                   </Button>
                 </NextLink>
-                {resourceData.getResourceById[0]?.template_data && (
-                  <NextLink
-                    passHref
-                    href={{
-                      pathname: `/therapist/resource/view/${id}`,
-                    }}
-                  >
-                    <Button
-                      mat-button
-                      className={`text-white bg-themeblue`}
-                      variant="contained"
-                      sx={{ textTransform: "none", ml: 2 }}
-                    >
-                      Next
-                      <ArrowRightAlt />
-                    </Button>
-                  </NextLink>
-                )}
               </Grid>
               <Grid
                 xs={6}

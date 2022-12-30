@@ -29,15 +29,21 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
     response: Yup.string().required(),
   });
 
-  const handleResourceAttachedClick = () => {
-    router.push("/patient/resource/");
+  const handleResourceAttachedClick = (resourceId: string) => {
+    router.push({
+      pathname: `/patient/resource/${resourceId}`,
+      query: { from: "/patient/homework/" },
+    });
   };
 
-  const resourceAttachedButton = (resourceData: object[]) => {
+  const resourceAttachedButton = (resourceData: { _id: string }[]) => {
     return (
       <div className={styles.attachButtonWrapper}>
         {resourceData.length > 0 ? (
-          <Button variant="outlined" onClick={handleResourceAttachedClick}>
+          <Button
+            variant="outlined"
+            onClick={() => handleResourceAttachedClick(resourceData[0]._id)}
+          >
             <AttachFileIcon className={styles.attachIcon} /> Resources Attached
           </Button>
         ) : (
