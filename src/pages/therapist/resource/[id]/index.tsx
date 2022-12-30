@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from "react";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import Layout from "../../../../components/layout";
-import Loader from "../../../../components/common/Loader";
-import ContentHeader from "../../../../components/common/ContentHeader";
-import ResourceDetail from "../../../../components/common/ResourceDetail";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
+  Box,
+  Breadcrumbs,
   Button,
   Grid,
-  Box,
   IconButton,
-  Breadcrumbs,
   Typography,
 } from "@mui/material";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import type { NextPage } from "next";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import ContentHeader from "../../../../components/common/ContentHeader";
+import Loader from "../../../../components/common/Loader";
+import ResourceDetail from "../../../../components/common/ResourceDetail";
+import Layout from "../../../../components/layout";
 
 import { useLazyQuery } from "@apollo/client";
 import { GET_RESOURCE_DETAIL } from "../../../../graphql/query/resource";
