@@ -8,21 +8,20 @@ import ContentHeader from "../ContentHeader";
 import TableGenerator from "../TableGenerator";
 import moment from "moment";
 import SingleSelectComponent from "../SelectBox/SingleSelect/SingleSelectComponent";
+import Loader from "../Loader";
 
 const BookedAppointment = () => {
   const router = useRouter();
   const [page, setPage] = useState<number>(0);
+  const [nameTherapist, setNameTherapist] = useState();
+
   const [loader, setLoader] = useState<boolean>(false);
-  const [getTemplateData, { data: resData }] = useLazyQuery(
-    GET_PATIENT_APPOINTMENTS_LIST,
-    {
+  const [getTemplateData, { loading: resLoading, data: resData }] =
+    useLazyQuery(GET_PATIENT_APPOINTMENTS_LIST, {
       onCompleted: () => {
         setLoader(false);
       },
-    }
-  );
-  const nameTherapist =
-    resData?.getAppointmentsByPatientId[0]?.therapist_data[0]?.therapist_name;
+    });
 
   const set2 = () => {
     /* istanbul ignore next */
@@ -139,8 +138,25 @@ const BookedAppointment = () => {
     getTemplateData();
   }, []);
 
+  useEffect(() => {
+    if (resData) {
+      setNameTherapist(
+        resData?.getAppointmentsByPatientId[0]?.therapist_data[0]
+          ?.therapist_name
+      );
+    }
+  }, [resData]);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (!resLoading && resData) {
+      setLoader(false);
+    }
+  }, [resData]);
+
   return (
     <>
+      <Loader visible={loader} />
       <ContentHeader data-testid="bookedAppointment" />
 
       <Box
