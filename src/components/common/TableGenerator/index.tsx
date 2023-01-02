@@ -114,7 +114,7 @@ const TableGenerator = ({
   dataCount,
   onPageChange,
   onChangeSelected,
-  onRowPerPageChange,
+  // onRowPerPageChange,
   rowOnePage = 10,
   size,
   showPagination = true,
@@ -153,7 +153,7 @@ const TableGenerator = ({
     /* istanbul ignore next */
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-    onRowPerPageChange(event.target.value);
+    // onRowPerPageChange(event.target.value);
   };
 
   const handleSelectAll = (selected) => {
