@@ -77,7 +77,7 @@ export const GET_PATIENT_HOMEWORK_LIST = gql`
       pthomewrk_resp
       therapist_resp
       resource_id
-      ptshareres_id
+      ptsharres_id
       complete_status
       created_date
       resource_data {
@@ -125,6 +125,26 @@ export const GET_PATIENT_MONITORING_LIST = gql`
       ptmon_frequency
       ptmon_name
       ptmon_status
+      therapist_id
+    }
+  }
+`;
+
+export const GET_PATIENT_MONITOR_BY_ID = gql`
+  query GetPatientMonitorById($monitorId: String!) {
+    getPatientMonitorById(monitorId: $monitorId) {
+      _id
+      created_date
+      emoji_ids
+      patient_id
+      ptmon_ans
+      ptmon_id
+      ptmonques_listtype
+      ptmonques_question
+      ptmonques_scalecaption
+      ptmonques_scalepoint
+      ptmonques_status
+      ptmonques_type
       therapist_id
     }
   }

@@ -36,13 +36,13 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
     });
   };
 
-  const resourceAttachedButton = (resourceData: { _id: string }[]) => {
+  const resourceAttachedButton = (ptsharres_id = "") => {
     return (
       <div className={styles.attachButtonWrapper}>
-        {resourceData.length > 0 ? (
+        {ptsharres_id !== "" ? (
           <Button
             variant="outlined"
-            onClick={() => handleResourceAttachedClick(resourceData[0]._id)}
+            onClick={() => handleResourceAttachedClick(ptsharres_id)}
           >
             <AttachFileIcon className={styles.attachIcon} /> Resources Attached
           </Button>
@@ -61,7 +61,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
     isSubmitting,
     completeStatus,
     index,
-    resource_data,
+    ptsharres_id,
   }) => {
     const { pthomewrk_task } = values;
     return (
@@ -77,7 +77,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
                   <Typography>{pthomewrk_task}</Typography>
                 </Stack>
               </div>
-              {resourceAttachedButton(resource_data)}
+              {resourceAttachedButton(ptsharres_id)}
               <div>
                 <ResponseTextArea
                   label="Patient Response"
@@ -125,6 +125,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
           _id,
           complete_status,
           resource_data,
+          ptsharres_id,
         } = item;
 
         const initialValues = {
@@ -146,6 +147,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
                   completeStatus: parseInt(complete_status as string),
                   index,
                   resource_data,
+                  ptsharres_id,
                 },
               })
             }
