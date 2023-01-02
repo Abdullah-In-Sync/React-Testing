@@ -11,6 +11,7 @@ const ResponseTextArea = (props) => {
         {props.label}
       </label>
       <TextareaAutosize
+        minRows={props.rows}
         maxRows={props.rows}
         {...field}
         {...props}

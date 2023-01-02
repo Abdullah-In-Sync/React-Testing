@@ -29,15 +29,21 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
     response: Yup.string().required(),
   });
 
-  const handleResourceAttachedClick = () => {
-    router.push("/patient/resource/");
+  const handleResourceAttachedClick = (resourceId: string) => {
+    router.push({
+      pathname: `/patient/resource/${resourceId}`,
+      query: { from: "/patient/homework/" },
+    });
   };
 
-  const resourceAttachedButton = (resourceData: object[]) => {
+  const resourceAttachedButton = (ptsharres_id = "") => {
     return (
       <div className={styles.attachButtonWrapper}>
-        {resourceData.length > 0 ? (
-          <Button variant="outlined" onClick={handleResourceAttachedClick}>
+        {ptsharres_id !== "" ? (
+          <Button
+            variant="outlined"
+            onClick={() => handleResourceAttachedClick(ptsharres_id)}
+          >
             <AttachFileIcon className={styles.attachIcon} /> Resources Attached
           </Button>
         ) : (
@@ -55,7 +61,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
     isSubmitting,
     completeStatus,
     index,
-    resource_data,
+    ptsharres_id,
   }) => {
     const { pthomewrk_task } = values;
     return (
@@ -71,7 +77,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
                   <Typography>{pthomewrk_task}</Typography>
                 </Stack>
               </div>
-              {resourceAttachedButton(resource_data)}
+              {resourceAttachedButton(ptsharres_id)}
               <div>
                 <ResponseTextArea
                   label="Patient Response"
@@ -119,6 +125,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
           _id,
           complete_status,
           resource_data,
+          ptsharres_id,
         } = item;
 
         const initialValues = {
@@ -128,6 +135,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
         };
         return (
           <Formik
+            enableReinitialize
             initialValues={initialValues}
             key={`homework_response_form_${index}`}
             validationSchema={validationSchema}
@@ -139,6 +147,7 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
                   completeStatus: parseInt(complete_status as string),
                   index,
                   resource_data,
+                  ptsharres_id,
                 },
               })
             }
