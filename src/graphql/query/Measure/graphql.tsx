@@ -13,6 +13,7 @@ export const GET_PATIENT_MEASURE_LIST = gql`
       last_completed_date
       is_default
       created_date
+      current_score
       _id
     }
   }
