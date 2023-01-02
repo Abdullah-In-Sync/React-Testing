@@ -17,7 +17,7 @@ export interface HomeworkListObject {
   pthomewrk_date?: string;
   _id?: string;
   resource_data?: object[];
-  ptsharres_id;
+  ptsharres_id?: string;
 }
 
 export interface therapyData {
