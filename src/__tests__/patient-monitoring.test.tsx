@@ -2,11 +2,11 @@ import { MockedProvider } from "@apollo/client/testing";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import { ThemeProvider } from "@mui/material";
+import { SUBMIT_PATIENT_MONITOR_BY_ID } from "../graphql/mutation/patient";
 import {
   GET_PATIENT_MONITORING_LIST,
   GET_PATIENT_MONITOR_BY_ID,
 } from "../graphql/query/patient";
-import { SUBMIT_PATIENT_MONITOR_BY_ID } from "../graphql/mutation/patient";
 
 import Monitoring from "../pages/patient/monitoring";
 import theme from "../styles/theme/theme";
@@ -169,7 +169,7 @@ mocksData.push({
     query: SUBMIT_PATIENT_MONITOR_BY_ID,
     variables: {
       monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
-      data: `[{"ptmonques_id":"5ad3cbef50894ba6bedb66cd2a7a48b6","ptmon_ans":""},{"ptmonques_id":"f4f152b3841f46049c1758860806086c","ptmon_ans":""},{"ptmonques_id":"7faf8bb656ce48e0bd66ed766310ba69","ptmon_ans":""},{"ptmonques_id":"f10be2c4e37549d0a99e795fcef4bbe1","ptmon_ans":""}]`,
+      data: `[{"ptmonques_id":"5ad3cbef50894ba6bedb66cd2a7a48b6","ptmon_ans":"61e596189a57eb27735c4791"},{"ptmonques_id":"f4f152b3841f46049c1758860806086c","ptmon_ans":""},{"ptmonques_id":"7faf8bb656ce48e0bd66ed766310ba69","ptmon_ans":10},{"ptmonques_id":"f10be2c4e37549d0a99e795fcef4bbe1","ptmon_ans":"dfssfsdfdsf"}]`,
     },
   },
   result: {
@@ -210,14 +210,52 @@ const sut = async () => {
   );
 };
 
-const saveClickFlow = async () => {
+const clickBox = async () => {
   await sut();
   const completeButtonFirst = await screen.findByTestId(
     "monitoringCompleteReponse_0"
   );
   fireEvent.click(completeButtonFirst);
+  emojiClick();
+  listCsvClick();
+};
+
+const saveClickFlow = async () => {
+  await clickBox();
+  hoursInputChange(10);
   const saveButton = await screen.findByRole("button", { name: "Save" });
   fireEvent.click(saveButton);
+};
+
+const saveClickFlowFail = async () => {
+  await clickBox();
+  hoursInputChange("15");
+  const saveButton = await screen.findByRole("button", { name: "Save" });
+  fireEvent.click(saveButton);
+};
+//61e596189a57eb27735c4791
+//hoursInput
+
+const hoursInputChange = async (value) => {
+  const hourInput = await screen.findByTestId("hoursInput");
+  expect(hourInput).toBeInTheDocument();
+  fireEvent.change(hourInput, { target: { value } });
+};
+
+const emojiClick = async () => {
+  const emojiButton = await screen.findByTestId("61e596189a57eb27735c4791");
+  fireEvent.click(emojiButton);
+  expect(emojiButton).toHaveClass("active");
+};
+const listCsvClick = async () => {
+  const csvButton = await screen.findByTestId("csvElement_0");
+  fireEvent.click(csvButton);
+  // expect(csvButton).toBeInTheDocument();
+  // expect(mockCallBack.mock.calls.length).toEqual(1);
+  // fireEvent.click(incrementButton)
+  // expect(csvButton).toHaveBeenCalled()
+  expect(csvButton).toHaveClass("active");
+  // expect(csvButton.firstChild.classList.contains('active')).toBe(true)
 };
 
 describe("Patient monitoring page", () => {
@@ -254,5 +292,14 @@ describe("Patient monitoring page", () => {
     expect(nextButton).toBeInTheDocument();
     fireEvent.click(nextButton);
     expect(await screen.findByText(/Test next/i)).toBeInTheDocument();
+  });
+
+  it("Should display the error if submit api fail", async () => {
+    await saveClickFlowFail();
+    const confirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Server error please try later./i)
+    ).toBeInTheDocument();
   });
 });

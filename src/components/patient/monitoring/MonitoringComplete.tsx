@@ -72,6 +72,7 @@ const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
         {listTypeArray.map((listTypeValue, listIndex) => (
           <Box
             key={`csvElement_${listIndex}`}
+            data-testid={`csvElement_${listIndex}`}
             className={
               selectedListTypeArray.includes(listIndex) ? "active" : ""
             }
@@ -110,6 +111,7 @@ const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
       <Box>
         <Field
           type="number"
+          data-testid="hoursInput"
           name={`data.${i}.ptmon_ans`}
           placeholder="Enter Number of Hours"
         />
@@ -154,6 +156,7 @@ const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
             return (
               <ImageListItem
                 key={_id}
+                data-testid={`${_id}`}
                 className={_id == values.data[i]?.ptmon_ans ? "active" : ""}
                 onClick={() => setFieldValue(`data.${i}.ptmon_ans`, _id)}
               >

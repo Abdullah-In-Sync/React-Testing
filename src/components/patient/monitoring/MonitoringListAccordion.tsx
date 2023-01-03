@@ -12,10 +12,11 @@ import * as React from "react";
 import * as monitoringTypes from "./types";
 
 import { useStyles } from "./monitoringStyles";
-
+// onClick={() =>
+//   viewResponseButtonClick && viewResponseButtonClick(item)
+// }   viewResponseButtonClick,
 const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
   monitoringList = [],
-  viewResponseButtonClick,
   completeButtonClick,
 }) => {
   const styles = useStyles();
@@ -33,9 +34,6 @@ const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
               variant="contained"
               className={styles.toolsButton}
               data-testid={`monitoring_view_reponse_${index}`}
-              onClick={() =>
-                viewResponseButtonClick && viewResponseButtonClick(item)
-              }
             >
               View Response
             </Button>
