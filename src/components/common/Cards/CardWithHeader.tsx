@@ -8,16 +8,21 @@ type propTypes = {
   label: string;
   children: React.ReactNode;
   onClickView?: () => void;
+  simpleHeader?: boolean;
 };
 
 const CardWithHeader = (props: propTypes) => {
   const styles = useStyles();
-  const { onClickView, label, children } = props || {};
+  const { onClickView, label, children, simpleHeader } = props || {};
   return (
-    <div className={styles.boxWithHeader}>
-      <AppBar color="secondary" position="static" className={styles.appBar}>
-        <Toolbar disableGutters style={{ justifyContent: "center" }}>
-          <Typography variant="h6" noWrap component="div" sx={{ mr: 2 }}>
+    <div
+      className={
+        simpleHeader ? styles.simpleHeaderAppBar : styles.boxWithHeader
+      }
+    >
+      <AppBar color="secondary" position="static">
+        <Toolbar disableGutters>
+          <Typography variant="h6" noWrap component="div">
             {label}
           </Typography>
           {onClickView && (
@@ -37,9 +42,7 @@ const CardWithHeader = (props: propTypes) => {
           )}
         </Toolbar>
       </AppBar>
-      <Box border={1} borderColor="#ccc" sx={{ p: 2 }}>
-        {children}
-      </Box>
+      <Box>{children && children}</Box>
     </div>
   );
 };

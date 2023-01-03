@@ -15,6 +15,8 @@ import { useStyles } from "./monitoringStyles";
 
 const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
   monitoringList = [],
+  viewResponseButtonClick,
+  completeButtonClick,
 }) => {
   const styles = useStyles();
 
@@ -31,13 +33,17 @@ const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
               variant="contained"
               className={styles.toolsButton}
               data-testid={`monitoring_view_reponse_${index}`}
+              onClick={() =>
+                viewResponseButtonClick && viewResponseButtonClick(item)
+              }
             >
               View Response
             </Button>
             <Button
               variant="contained"
               className={styles.toolsButton}
-              data-testid={`monitoring_complete_reponse_${index}`}
+              data-testid={`monitoringCompleteReponse_${index}`}
+              onClick={() => completeButtonClick({ ...item, ...{ index } })}
             >
               Complete
             </Button>
@@ -53,7 +59,7 @@ const MonitoringListAccordion: React.FC<monitoringTypes.MonitoringProps> = ({
   const commonAccordion = ({ label, emptyMessage }) => {
     return (
       <Stack mb={2}>
-        <Accordion className={styles.accordion}>
+        <Accordion defaultExpanded className={styles.accordion}>
           <AccordionSummary
             expandIcon={<RemoveIcon className={styles.accordionAddIcon} />}
             aria-controls="panel2a-content"

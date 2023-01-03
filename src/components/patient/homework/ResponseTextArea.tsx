@@ -16,6 +16,7 @@ const ResponseTextArea = (props) => {
         {...field}
         {...props}
         data-testid={props.id}
+        spellcheck="false"
       />
       <ErrorMessage
         name={`response`}
