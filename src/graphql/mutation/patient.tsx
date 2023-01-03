@@ -188,3 +188,25 @@ export const UPDATE_RELAPSE_QUESTION_ANSWER_DATA = gql`
     }
   }
 `;
+
+export const SUBMIT_PATIENT_MONITOR_BY_ID = gql`
+  mutation ($monitorId: String!, $data: String!) {
+    submitMonitorByPatient(data: $data, monitorId: $monitorId) {
+      _id
+      created_date
+      emoji_ids
+      patient_id
+      ptmon_ans
+      ptmon_id
+      ptmonques_id
+      ptmonques_listtype
+      ptmonques_question
+      ptmonques_scalecaption
+      ptmonques_scalepoint
+      ptmonques_status
+      ptmonques_type
+      ptmonqueslog_by
+      therapist_id
+    }
+  }
+`;

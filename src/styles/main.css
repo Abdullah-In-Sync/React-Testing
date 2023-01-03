@@ -1,42 +1,59 @@
 .bg-themegreen {
   background-color: #6ba08e !important;
 }
+
 .text-blue {
   color: #6ec9db;
 }
+
 .text-white {
   color: #fff !important;
 }
+
 .tit {
   text-transform: capitalize;
   font-size: 20px;
   padding-top: 20px;
   font-weight: 400 !important;
 }
+
 .patientviewtabs .active {
   color: #fff;
   background-color: #6ba08e;
 }
+
 .patientviewtherapy_tabs .active {
   background-color: #6ba08e;
 }
+
 .bg-themeblue {
   background-color: #6ec9db !important;
 }
+
 .form-control-bg {
   background: #dadada52;
 }
 
-.myhelp-select-control > label {
+.myhelp-select-control>label {
   color: rgba(0, 0, 0, 0.38);
 }
 
-.text-ellipsis{
-  text-overflow:ellipsis;
-  overflow:hidden;
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
   display: -webkit-box !important;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   white-space: normal;
 }
 
+.disable-text-selection {
+  -moz-user-select: none;
+  /* firefox */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE*/
+  user-select: none;
+  /* Standard syntax */
+}
