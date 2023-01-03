@@ -9,11 +9,13 @@ import TableGenerator from "../TableGenerator";
 import moment from "moment";
 import SingleSelectComponent from "../SelectBox/SingleSelect/SingleSelectComponent";
 import Loader from "../Loader";
+import { useAppContext } from "../../../contexts/AuthContext";
 
 const BookedAppointment = () => {
   const router = useRouter();
   const [page, setPage] = useState<number>(0);
-  const [nameTherapist, setNameTherapist] = useState();
+  const { user } = useAppContext();
+  const therapistName = user?.therapist_data?.therapist_name;
 
   const [loader, setLoader] = useState<boolean>(false);
   const [getTemplateData, { loading: resLoading, data: resData }] =
@@ -139,15 +141,6 @@ const BookedAppointment = () => {
   }, []);
 
   useEffect(() => {
-    if (resData) {
-      setNameTherapist(
-        resData?.getAppointmentsByPatientId[0]?.therapist_data[0]
-          ?.therapist_name
-      );
-    }
-  }, [resData]);
-
-  useEffect(() => {
     /* istanbul ignore next */
     if (!resLoading && resData) {
       setLoader(false);
@@ -189,8 +182,8 @@ const BookedAppointment = () => {
                 id="nameTherapist"
                 labelId="nameTherapist"
                 name="resource_type"
-                value={nameTherapist}
-                label={nameTherapist}
+                value={""}
+                label={resData?.getAppointmentsByPatientId ? therapistName : ""}
                 onChange={set2}
                 inputProps={{ "data-testid": "nameTherapist" }}
                 options={[]}
