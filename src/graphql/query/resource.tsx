@@ -115,6 +115,51 @@ export const GET_TEMPLATE_LIST = gql`
   }
 `;
 
+export const GET_PATIENT_APPOINTMENTS_LIST = gql`
+  query getAppointmentsByPatientId {
+    getAppointmentsByPatientId {
+      _id
+      app_attendee
+      app_comments
+      app_communication
+      app_date
+      app_finish
+      app_no
+      app_paystatus
+      app_recurrence
+      app_start
+      app_status
+      app_trackstatus
+      app_type
+      app_until
+      app_untildate
+      created_date
+      patient_id
+      requested_by
+      therapist_data {
+        _id
+        accredited_body
+        created_date
+        hos_id
+        hospital_admin_id
+        org_id
+        therapist_add
+        therapist_inscover
+        therapist_name
+        therapist_no
+        therapist_poa_attachment
+        therapist_profaccredition
+        therapist_specialization
+        therapist_status
+        therapist_totexp
+        therapit_proofacredition
+        user_id
+      }
+      therapist_id
+    }
+  }
+`;
+
 export const GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID = gql`
   query getPatientSafetyPlanList {
     getPatientSafetyPlanList {
