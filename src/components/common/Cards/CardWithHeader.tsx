@@ -13,7 +13,7 @@ type propTypes = {
 
 const CardWithHeader = (props: propTypes) => {
   const styles = useStyles();
-  const { onClickView, label, children, simpleHeader } = props || {};
+  const { onClickView, label, children = null, simpleHeader } = props || {};
   return (
     <div
       className={
@@ -42,7 +42,7 @@ const CardWithHeader = (props: propTypes) => {
           )}
         </Toolbar>
       </AppBar>
-      <Box>{children && children}</Box>
+      <Box>{children}</Box>
     </div>
   );
 };
