@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { FC, useState } from "react";
-import { Measure } from "../../../graphql/query/Measure/types";
+import { Measure } from "../../../graphql/Measure/types";
 import { useStyles } from "./measureStyle";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -23,11 +23,7 @@ export const MeasureTile: FC<MeasureTileProps> = ({
   };
 
   return (
-    <Box
-      className={classes.wrapper}
-      style={{ border: "1px solid rgb(107 160 142)" }}
-      data-testid={`list-tile`}
-    >
+    <Box className={classes.wrapper} data-testid={`list-tile`}>
       <Box
         className={classes.tileHeader}
         display="flex"

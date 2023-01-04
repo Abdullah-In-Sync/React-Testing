@@ -4,6 +4,7 @@ export const useStyles = makeStyles({
   wrapper: {
     marginBottom: "10px",
     borderRadius: "10px",
+    border: "1px solid rgb(107 160 142)",
   },
   tileHeader: {
     backgroundColor: "#6ba08e",
@@ -46,6 +47,75 @@ export const useStyles = makeStyles({
     textTransform: "initial",
     "&:hover": {
       backgroundColor: "#d8ecf0",
+    },
+  },
+  questionTable: {
+    padding: "20px 10px",
+    "& th > span": {
+      fontSize: "14px",
+      fontWeight: 700,
+      lineHeight: "20px",
+      "& :hover": {
+        color: "#000",
+      },
+    },
+    "& th": {
+      textAlign: "center",
+    },
+    "& td": {
+      textAlign: "center",
+      fontSize: "14px",
+      fontWeight: 600,
+    },
+    "& th > span:hover": {
+      color: "#fff",
+    },
+    "& table": {
+      border: "1px solid #6ec9db !important",
+      transition: "0.5s",
+      backgroundColor: "#fff",
+      // borderRadius: "7px !important",
+      borderCollapse: "separate",
+      width: "100% !important",
+    },
+    "& .MuiTableBody-root": {
+      borderTop: "unset !important",
+      textAlign: " center !important",
+      verticalAlign: "middle",
+      height: "32px !important",
+      borderBottom: "1px solid #6ec9db",
+      background: "#ecfcff",
+    },
+  },
+  showSelected: {
+    borderRadius: "50%",
+    cursor: "pointer",
+    fontSize: "12px",
+    verticalAlign: "middle",
+    padding: "6px 10px",
+  },
+  scoreTableTitle: {
+    fontSize: "14px",
+    fontWeight: 700,
+    color: "#6ec9db",
+  },
+  infoText: {
+    textRendering: "optimizeLegibility",
+    "-webkit-font-smoothing": "antialiased",
+    fontSize: "14px",
+    lineHeight: "1.42857143",
+    color: "#30373e",
+    fontWeight: 500,
+  },
+  radioHeading: {
+    fontSize: "14px",
+    fontWeight: 600,
+  },
+  smallRadioButton: {
+    margin: 0,
+    "& svg": {
+      width: "34px",
+      height: "34px",
     },
   },
 });
