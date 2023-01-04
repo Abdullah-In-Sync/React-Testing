@@ -16,7 +16,14 @@ import {
 import { Box } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { FC, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   MeasureDetail,
   UpdateMeasureScoreByPatientRes,
@@ -31,9 +38,10 @@ import { UPDATE_MEASURE_SCORE_BY_PATIENT } from "../../../graphql/Measure/graphq
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface MeasureTestProps {
   measureDetail: MeasureDetail[];
+  setLoader: Dispatch<SetStateAction<boolean>>;
 }
 
-const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
+const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
   const router = useRouter();
   const classes = useStyles();
   const [tableQuestion, setTableQuestion] = useState([]);
@@ -42,10 +50,12 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
   const [sureModal, setSureModal] = useState(false);
   const [patmScoreDifficult, setPatmScoreDifficult] = useState<number>(0);
 
-  const [updateMeasureScore, { loading, data }] = useMutation<
+  const [updateMeasureScore, { data }] = useMutation<
     UpdateMeasureScoreByPatientRes,
     UpdateMeasureScoreByPatientVars
-  >(UPDATE_MEASURE_SCORE_BY_PATIENT);
+  >(UPDATE_MEASURE_SCORE_BY_PATIENT, {
+    onCompleted: () => setLoader?.(false),
+  });
 
   //**  TABLE DATA COLUMNS **//
   const fields = [
@@ -124,7 +134,6 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
     if (data?.updateMeasureScoreByPatient) {
       if (data?.updateMeasureScoreByPatient?.length > 0) {
         setSuccessModal(true);
-      } else {
       }
     }
   }, [data]);
@@ -135,6 +144,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
         border: isSelected && "1px solid #6ba08e",
       }}
       className={classes.showSelected}
+      data-testid={`${field}-${index}`}
       onClick={() => onSelectScore(field, index)}
     >
       {val}
@@ -239,6 +249,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
     }));
 
     delete testResponse?.title;
+    setLoader(true);
     updateMeasureScore({
       variables: {
         ...testResponse,
@@ -304,7 +315,11 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
                       {totalScore[1].title}
                     </span>
                   </TableCell>
-                  <TableCell align="center" colSpan={4}>
+                  <TableCell
+                    align="center"
+                    data-testid={"total-score"}
+                    colSpan={4}
+                  >
                     {totalScore[1].totalScore}
                   </TableCell>
                 </TableRow>
@@ -445,14 +460,14 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
           </Box>
           <Box display={"flex"} justifyContent="center" padding="20px">
             <Button
-              data-testid="view-score-btn"
+              data-testid="save-test-btn"
               className={classes.actionButton}
               onClick={onSave}
             >
               Save
             </Button>
             <Button
-              data-testid="view-score-btn"
+              data-testid="cancel-test-btn"
               style={{ marginLeft: "60px" }}
               className={classes.actionButton}
               onClick={onCancel}
@@ -519,7 +534,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
             variant="contained"
             color="inherit"
             size="small"
-            data-testid="editResourceModalCancelButton"
+            data-testid="submitCancel"
             onClick={() => {
               setSureModal(false);
             }}
@@ -531,7 +546,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail }) => {
             variant="contained"
             sx={{ marginLeft: "5px" }}
             size="small"
-            data-testid="editResourceModalConfirmButton"
+            data-testid="submitTest"
             onClick={() => {
               setSureModal(false);
               saveResponse();

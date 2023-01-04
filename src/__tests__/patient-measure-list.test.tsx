@@ -24,29 +24,6 @@ jest.mock("../contexts/AuthContext");
 
 const mocksData = [];
 
-mocksData.push({
-  request: {
-    query: GET_PATIENT_HOME_DATA,
-  },
-  result: {
-    data: {
-      getPatientHomeData: [
-        {
-          appointment: [
-            {
-              _id: "c129d2bed7584e2b9d6e53b43826fa0c",
-              app_finish: "07:30",
-              app_start: "06:30",
-              app_date: "2023-07-03T00:00:00.000Z",
-              __typename: "Appointment",
-            },
-          ],
-          __typename: "PatientHomeData",
-        },
-      ],
-    },
-  },
-});
 
 mocksData.push({
   request: {

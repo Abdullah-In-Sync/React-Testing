@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
@@ -16,6 +16,7 @@ import withAuthentication from "../../../../hoc/auth";
 
 const MeasureTestPage: NextPage = () => {
   const router = useRouter();
+  const [loader, setLoader] = useState(false);
 
   const { data, loading } = useQuery<
     GetMeasureDetailByPatientRes,
@@ -32,9 +33,12 @@ const MeasureTestPage: NextPage = () => {
     <>
       <Layout>
         <ContentHeader title="Measures" />
-        <Loader visible={loading} />
+        <Loader visible={loading || loader} />
         {data?.getMeasureDetailByPatient && (
-          <MeasureTest measureDetail={data.getMeasureDetailByPatient} />
+          <MeasureTest
+            measureDetail={data.getMeasureDetailByPatient}
+            setLoader={setLoader}
+          />
         )}
       </Layout>
     </>
