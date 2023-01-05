@@ -42,10 +42,12 @@ const Homework: NextPage = () => {
   });
 
   const [getPatientHomeworkList] = useLazyQuery(GET_PATIENT_HOMEWORK_LIST, {
+    fetchPolicy: "network-only",
     onCompleted: (data) => {
       /* istanbul ignore else */
       const { getHomeworksByPatientId } = data;
       if (getHomeworksByPatientId) setHomeworkList(getHomeworksByPatientId);
+      else setHomeworkList([]);
 
       setLoader(false);
     },
