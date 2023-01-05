@@ -189,7 +189,7 @@ describe("Measure Test", () => {
     expect(pushMock).toHaveBeenCalledWith("/patient/measure");
   });
 
-  test.only("on cancel it should redirect to measure list page", async () => {
+  test("on cancel it should redirect to measure list page", async () => {
     await sut();
 
     fireEvent.click(screen.queryByTestId("cancel-test-btn"));

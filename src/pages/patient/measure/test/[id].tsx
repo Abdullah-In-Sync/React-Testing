@@ -5,7 +5,7 @@ import { useState } from "react";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
-import MeasureTest from "../../../../components/patient/measure/test";
+import MeasureTest from "../../../../components/patient/measure/measureTest";
 import { GET_MEASURE_DETAIL_BY_PATIENT } from "../../../../graphql/Measure/graphql";
 import {
   GetMeasureDetailByPatientRes,

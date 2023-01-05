@@ -126,11 +126,11 @@ describe("Measure list", () => {
     );
 
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/score/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measure/score/98392bff10104aa3a4aa3908141ec65a`
     );
     await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/test/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measure/test/98392bff10104aa3a4aa3908141ec65a`
     );
   });
 
