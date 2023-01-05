@@ -53,9 +53,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
   const [updateMeasureScore, { data }] = useMutation<
     UpdateMeasureScoreByPatientRes,
     UpdateMeasureScoreByPatientVars
-  >(UPDATE_MEASURE_SCORE_BY_PATIENT, {
-    onCompleted: () => setLoader?.(false),
-  });
+  >(UPDATE_MEASURE_SCORE_BY_PATIENT);
 
   //**  TABLE DATA COLUMNS **//
   const fields = [
@@ -132,6 +130,8 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
 
   useEffect(() => {
     if (data?.updateMeasureScoreByPatient) {
+      setLoader?.(false);
+
       if (data?.updateMeasureScoreByPatient?.length > 0) {
         setSuccessModal(true);
       }
@@ -233,6 +233,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
   };
 
   const saveResponse = () => {
+    setSureModal(false);
     const testResponse = {
       measureCatId: router.query.id,
       patmscore_difficult: patmScoreDifficult,
@@ -249,12 +250,14 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
     }));
 
     delete testResponse?.title;
+
+    const variables = {
+      ...testResponse,
+      qdata: JSON.stringify(qdata),
+    };
     setLoader(true);
     updateMeasureScore({
-      variables: {
-        ...testResponse,
-        qdata: JSON.stringify(qdata),
-      },
+      variables: variables,
     });
   };
 
@@ -505,16 +508,6 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
           }}
         />
       )}
-      {successModal && (
-        <SuccessModal
-          isOpen={successModal}
-          title="TEST SCORE"
-          description="saved successfully"
-          onOk={() => {
-            router.push("/patient/measure");
-          }}
-        />
-      )}
       <SureModal
         modalOpen={sureModal}
         setModalOpen={setSureModal}
@@ -547,10 +540,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
             sx={{ marginLeft: "5px" }}
             size="small"
             data-testid="submitTest"
-            onClick={() => {
-              setSureModal(false);
-              saveResponse();
-            }}
+            onClick={saveResponse}
           >
             Confirm
           </Button>

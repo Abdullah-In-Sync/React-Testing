@@ -8,16 +8,15 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { GET_PATIENT_HOME_DATA } from "../graphql/query/resource";
 import { useAppContext } from "../contexts/AuthContext";
 
 import MeasureTestPage from "../pages/patient/measure/test/[id]";
 import {
   GET_MEASURE_DETAIL_BY_PATIENT,
-  GET_PATIENT_MEASURE_LIST,
   UPDATE_MEASURE_SCORE_BY_PATIENT,
 } from "../graphql/Measure/graphql";
 import { useRouter } from "next/router";
+// import React from "react";
 
 const pushMock = jest.fn();
 jest.mock("next/router", () => ({
@@ -77,14 +76,14 @@ mocksData.push({
     query: UPDATE_MEASURE_SCORE_BY_PATIENT,
     variables: {
       measureCatId: "98392bff10104aa3a4aa3908141ec65a",
-      patmscore_difficult: 2,
-      patmscore_value: 1,
+      patmscore_difficult: 0,
+      patmscore_value: 6,
       patmscore_notatall_value: 0,
       patmscore_severaldays_value: 1,
-      patmscore_halfthedays_value: 0,
-      patmscore_everyday_value: 0,
+      patmscore_halfthedays_value: 2,
+      patmscore_everyday_value: 3,
       qdata:
-        '[{"measure_cat_ques_id":"8e2908719f3e491ab1edc27473f22a5d","notatall":0,"severaldays":1,"halfthedays":0,"everyday":0}]',
+        '[{"measure_cat_ques_id":"533de7a24f54432aaeac7210b1514fe9","notatall":1,"severaldays":0,"halfthedays":0,"everyday":0},{"measure_cat_ques_id":"dced493e82a448ad8ba96dbc07c1df08","notatall":0,"severaldays":1,"halfthedays":0,"everyday":0},{"measure_cat_ques_id":"ee5dfc6ada9c46fabf2ca61665185ace","notatall":0,"severaldays":0,"halfthedays":1,"everyday":0},{"measure_cat_ques_id":"4963f08025bb4f50b0e66cd9063286ee","notatall":0,"severaldays":0,"halfthedays":0,"everyday":1}]',
     },
   },
   result: {
@@ -133,10 +132,9 @@ describe("Measure Test", () => {
         updated_date: "2021-12-20 16:20:55",
       },
     });
-    jest.useFakeTimers().setSystemTime(new Date("2022-12-23"));
   });
 
-  test.only("Renders measure test", async () => {
+  test("Renders measure test", async () => {
     await sut();
     await waitFor(async () => {
       expect(screen.queryByTestId("notatall-4")).toBeInTheDocument();
@@ -152,7 +150,7 @@ describe("Measure Test", () => {
     expect(screen.queryByText("Please choose score")).toBeInTheDocument();
   });
 
-  test.only("select the score the submit the score", async () => {
+  test("select the score the submit the score", async () => {
     await sut();
     await waitFor(async () => {
       fireEvent.click(screen.queryByTestId("notatall-1"));
@@ -177,8 +175,26 @@ describe("Measure Test", () => {
       screen.queryByText("Are you sure want to save test score?")
     ).toBeInTheDocument();
 
-    await waitFor(() => fireEvent.click(screen.queryByTestId("submitTest")));
+    fireEvent.click(screen.queryByTestId("submitTest"));
 
-    await waitFor(() => fireEvent.click(screen.queryByTestId("SuccessOkBtn")));
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+
+    expect(
+      screen.queryByText("Test score saved successfully")
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.queryAllByTestId("SuccessOkBtn")[0]);
+
+    expect(pushMock).toHaveBeenCalledWith("/patient/measure");
+  });
+
+  test.only("on cancel it should redirect to measure list page", async () => {
+    await sut();
+
+    fireEvent.click(screen.queryByTestId("cancel-test-btn"));
+
+    expect(pushMock).toHaveBeenCalledWith("/patient/measure");
   });
 });
