@@ -238,6 +238,8 @@ const TableGenerator = ({
                               sx={classes.tableCell}
                               padding={field.padding ? "checkbox" : "normal"}
                               align="left"
+                              colSpan={record[field.key]?.colSpan}
+                              rowSpan={record[field.key]?.rowSpan}
                             >
                               {field.render &&
                               typeof field.render === "function"
