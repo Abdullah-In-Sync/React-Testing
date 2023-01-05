@@ -1,11 +1,10 @@
 import { useQuery } from "@apollo/client";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
-import MeasureList from "../../../../components/patient/measure";
 import MeasureTest from "../../../../components/patient/measure/test";
 import { GET_MEASURE_DETAIL_BY_PATIENT } from "../../../../graphql/Measure/graphql";
 import {

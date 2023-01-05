@@ -7,7 +7,6 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { GET_PATIENT_HOME_DATA } from "../graphql/query/resource";
 import { useAppContext } from "../contexts/AuthContext";
 
 import Measure from "../pages/patient/measure";
@@ -23,7 +22,6 @@ jest.mock("next/router", () => ({
 jest.mock("../contexts/AuthContext");
 
 const mocksData = [];
-
 
 mocksData.push({
   request: {
