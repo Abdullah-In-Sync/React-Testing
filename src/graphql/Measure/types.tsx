@@ -49,3 +49,22 @@ export interface UpdateMeasureScoreByPatientVars {
 export interface UpdateMeasureScoreByPatientRes {
   updateMeasureScoreByPatient: MeasureDetail[];
 }
+
+export interface ViewMeasureScoreByPatientVars {
+  measureCatId: string;
+}
+
+export interface ViewMeasureScoreByPatientRes {
+  viewMeasureScoreByPatient: ViewMeasureScoreByPatient;
+}
+
+export interface ViewMeasureScoreByPatient {
+  scale_data: string[];
+  score_data: ScoreDatum[];
+}
+
+export interface ScoreDatum {
+  created_date: string;
+  _id: string;
+  patmscore_value: string;
+}

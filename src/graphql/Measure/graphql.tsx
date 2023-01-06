@@ -55,3 +55,16 @@ export const UPDATE_MEASURE_SCORE_BY_PATIENT = gql`
     }
   }
 `;
+
+export const VIEW_MEASURE_SCORE_BY_PATIENT = gql`
+  query viewMeasureScoreByPatient($measureCatId: String!) {
+    viewMeasureScoreByPatient(measureCatId: $measureCatId) {
+      scale_data
+      score_data {
+        created_date
+        _id
+        patmscore_value
+      }
+    }
+  }
+`;
