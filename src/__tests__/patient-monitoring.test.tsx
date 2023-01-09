@@ -267,12 +267,7 @@ const emojiClick = async () => {
 const listCsvClick = async () => {
   const csvButton = await screen.findByTestId("csvElement_0");
   fireEvent.click(csvButton);
-  // expect(csvButton).toBeInTheDocument();
-  // expect(mockCallBack.mock.calls.length).toEqual(1);
-  // fireEvent.click(incrementButton)
-  // expect(csvButton).toHaveBeenCalled()
   expect(csvButton).toHaveClass("active");
-  // expect(csvButton.firstChild.classList.contains('active')).toBe(true)
 };
 
 describe("Patient monitoring page", () => {
