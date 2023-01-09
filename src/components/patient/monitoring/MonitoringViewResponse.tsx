@@ -209,7 +209,21 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
     );
   };
 
-  return <Stack className={styles.viewResponseWrapper}>{answerList()}</Stack>;
+  const viewWithEmptyMessage = () => {
+    return ansResponseData.length > 0 ? (
+      answerList()
+    ) : (
+      <Typography className={styles.emptyText} data-testid={"emptyMessage"}>
+        {"No data found."}
+      </Typography>
+    );
+  };
+
+  return (
+    <Stack className={styles.viewResponseWrapper}>
+      {viewWithEmptyMessage()}
+    </Stack>
+  );
 };
 
 export default MonitoringViewResponse;
