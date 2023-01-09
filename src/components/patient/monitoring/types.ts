@@ -1,11 +1,15 @@
 export interface MonitoringProps {
   monitoringList?: ApiMonitoringListData[];
+  viewResponseData?: any; //ApiViewResponseData[];
   completeData?: ApiCompleteData[];
   viewResponseButtonClick?: (v) => void;
   completeButtonClick?: (v) => void;
   onSubmit?: any;
   backPress?: () => void;
   nextPress?: () => void;
+  onGoButton?: (v) => void;
+  initialDate?: string;
+  view?: string;
 }
 
 export interface ApiMonitoringListData {
@@ -35,4 +39,41 @@ export interface ApiCompleteData {
   ptmonques_status?: number;
   ptmonques_type?: number;
   therapist_id?: string;
+}
+
+export interface ApiViewResponseData {
+  __typename: string;
+  _id: string;
+  created_date: string;
+  emoji_ids: string;
+  patient_id: string;
+  ptmon_ans: string;
+  ptmon_id: string;
+  ptmonques_id: string;
+  ptmonques_listtype: string;
+  ptmonques_question: string;
+  ptmonques_scalecaption: string;
+  ptmonques_scalepoint: string;
+  ptmonques_status: number;
+  ptmonques_type: number;
+  ptmonqueslog_by: string;
+  therapist_id: string;
+}
+export interface emojisData {
+  _id: string;
+  emoji_url: string;
+  emoji_caption: string;
+  color: string;
+}
+
+export interface chartData {
+  labels?: Array<string>;
+  datasets?: {
+    label?: string;
+    data?: Array<any>;
+    backgroundColor?: Array<any> | string;
+    borderColor?: Array<any> | string;
+    borderWidth?: number;
+    fill?: boolean;
+  }[];
 }
