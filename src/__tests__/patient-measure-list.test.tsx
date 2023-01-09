@@ -7,11 +7,10 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { GET_PATIENT_HOME_DATA } from "../graphql/query/resource";
 import { useAppContext } from "../contexts/AuthContext";
 
 import Measure from "../pages/patient/measure";
-import { GET_PATIENT_MEASURE_LIST } from "../graphql/query/Measure/graphql";
+import { GET_PATIENT_MEASURE_LIST } from "../graphql/Measure/graphql";
 import { useRouter } from "next/router";
 
 const pushMock = jest.fn();
@@ -23,30 +22,6 @@ jest.mock("next/router", () => ({
 jest.mock("../contexts/AuthContext");
 
 const mocksData = [];
-
-mocksData.push({
-  request: {
-    query: GET_PATIENT_HOME_DATA,
-  },
-  result: {
-    data: {
-      getPatientHomeData: [
-        {
-          appointment: [
-            {
-              _id: "c129d2bed7584e2b9d6e53b43826fa0c",
-              app_finish: "07:30",
-              app_start: "06:30",
-              app_date: "2023-07-03T00:00:00.000Z",
-              __typename: "Appointment",
-            },
-          ],
-          __typename: "PatientHomeData",
-        },
-      ],
-    },
-  },
-});
 
 mocksData.push({
   request: {
@@ -151,11 +126,11 @@ describe("Measure list", () => {
     );
 
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/score/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measure/score/98392bff10104aa3a4aa3908141ec65a`
     );
     await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/test/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measure/test/98392bff10104aa3a4aa3908141ec65a`
     );
   });
 

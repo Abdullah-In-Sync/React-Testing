@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { Measure } from "../../graphql/query/Measure/types";
+import { Measure } from "../../graphql/Measure/types";
 import { MeasureTile } from "../patient/measure/measureTile";
 
 const measure: Measure = {

@@ -2,12 +2,12 @@ import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { GET_PATIENT_MEASURE_LIST } from "../../../graphql/query/Measure/graphql";
+import { GET_PATIENT_MEASURE_LIST } from "../../../graphql/Measure/graphql";
 import {
   GetPatientMeasureListRes,
   GetPatientMeasureListVars,
   Measure,
-} from "../../../graphql/query/Measure/types";
+} from "../../../graphql/Measure/types";
 import Loader from "../../common/Loader";
 import { SuccessModal } from "../../common/SuccessModal";
 import { MeasureTile } from "./measureTile";
@@ -23,7 +23,9 @@ const MeasureList: FC<MeasureListProps> = () => {
   const { data: measureListRes, loading } = useQuery<
     GetPatientMeasureListRes,
     GetPatientMeasureListVars
-  >(GET_PATIENT_MEASURE_LIST);
+  >(GET_PATIENT_MEASURE_LIST, {
+    fetchPolicy: "no-cache",
+  });
 
   const onClickTest = (measure: Measure) => {
     const lastTestDate = measure?.last_completed_date?.split("T")[0];
@@ -31,12 +33,12 @@ const MeasureList: FC<MeasureListProps> = () => {
     if (measure?.last_completed_date && lastTestDate == todayDate) {
       setTestErrorModal(true);
     } else {
-      router.push(`/patient/test/${measure._id}`);
+      router.push(`/patient/measure/test/${measure._id}`);
     }
   };
   const onClickScore = (measure: Measure) => {
     if (measure?.last_completed_date) {
-      router.push(`/patient/score/${measure._id}`);
+      router.push(`/patient/measure/score/${measure._id}`);
     } else {
       setErrorModal(true);
     }
