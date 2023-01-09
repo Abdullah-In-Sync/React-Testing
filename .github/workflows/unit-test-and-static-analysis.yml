@@ -166,13 +166,13 @@ jobs:
       working-directory: src
     
     - name: Archive coverage report results
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: coverage-report
         path: src/coverage/lcov.info
 
     - name: Archive tests report results
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: tests-report
         path: src/test-report.xml
