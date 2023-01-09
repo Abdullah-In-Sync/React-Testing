@@ -129,7 +129,7 @@ const Monitoring: NextPage = () => {
         monitorId,
         endDate: moment().format("YYYY-MM-DD"),
         startDate: initialDate,
-        dateSort: "ASC",
+        dateSort: "asc",
       },
     });
     setCurrentMonitoring(item);
@@ -198,7 +198,7 @@ const Monitoring: NextPage = () => {
           monitorId,
           endDate: formatDate(toDate),
           startDate: formatDate(fromDate),
-          dateSort: "ASC",
+          dateSort: "asc",
         },
       });
     }
