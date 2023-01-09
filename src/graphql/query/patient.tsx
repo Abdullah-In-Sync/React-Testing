@@ -149,3 +149,35 @@ export const GET_PATIENT_MONITOR_BY_ID = gql`
     }
   }
 `;
+
+export const GET_PATIENT_MONITOR_ANS_BY_ID = gql`
+  query GetPatientMonitorAnsById(
+    $monitorId: String!
+    $endDate: String!
+    $startDate: String!
+    $dateSort: String!
+  ) {
+    getPatientMonitorAnsById(
+      monitorId: $monitorId
+      endDate: $endDate
+      startDate: $startDate
+      dateSort: $dateSort
+    ) {
+      _id
+      created_date
+      emoji_ids
+      patient_id
+      ptmon_ans
+      ptmon_id
+      ptmonques_id
+      ptmonques_listtype
+      ptmonques_question
+      ptmonques_scalecaption
+      ptmonques_scalepoint
+      ptmonques_status
+      ptmonques_type
+      ptmonqueslog_by
+      therapist_id
+    }
+  }
+`;

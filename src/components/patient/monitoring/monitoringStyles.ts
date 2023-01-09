@@ -4,6 +4,22 @@ import { Theme } from "@mui/system";
 export const useStyles = makeStyles((theme: Theme) => ({
   monitoringMain: {
     padding: "10px 0px",
+    "& .headerWrapper": {
+      flexDirection: "row",
+      flex: 1,
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "0px 10px",
+    },
+    "& .rangeDatePickerWrapper": {
+      padding: 15,
+    },
+    "& .dateRangeToWrapper": {
+      padding: 15,
+    },
+    "& .goButtonWrapper": {
+      padding: "0px 10px",
+    },
   },
   accordion: {
     border: `1px solid ${theme.palette.secondary.main}`,
@@ -146,5 +162,105 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   completeWrapper: {
     padding: "16px 0px",
+  },
+  viewResponseWrapper: {
+    "& .emojiPieChartWrapper": {
+      padding: "10px",
+      alignItems: "center",
+
+      "& .MuiBox-root": {
+        // height: 300
+      },
+      "& .emojisBox": {
+        marginBottom: 10,
+        display: "flex",
+        justifyContent: "center",
+        width: "70%",
+        background: "#e4faff",
+        "& .vImgIconWraper": {
+          width: 80,
+          "& .vImgIcon": {
+            width: 25,
+          },
+          "& p": {
+            color: "black",
+            textAlign: "center",
+            fontSize: "0.7rem",
+          },
+          "& img": {
+            padding: "0px 20px !important",
+          },
+        },
+      },
+      "& .pieChart": {
+        width: "25%",
+        display: "flex",
+        justifyContent: "center",
+      },
+    },
+    "& .emojiLineChartWrapper": {
+      padding: "10px",
+      "& .emojisLineChart": {
+        display: "flex",
+        position: "relative",
+        "& ul": {
+          // margin: "0px 0px -10px 0px"
+
+          position: "absolute",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          /* top: -30px; */
+          bottom: 0,
+          padding: "10px 0px",
+        },
+      },
+      alignItems: "center",
+
+      "& .MuiBox-root": {
+        // height: 300
+      },
+    },
+    "& .yesNoChartWrapper": {
+      padding: "10px",
+      alignItems: "center",
+
+      "& .MuiBox-root": {
+        // height: 300
+      },
+    },
+    "& .hoursChartWrapper": {
+      padding: "10px",
+      alignItems: "center",
+
+      "& .MuiBox-root": {},
+    },
+
+    "& .vImgIcon": {
+      width: 25,
+    },
+    "& .csvSectionWrapper": {
+      "& p": {
+        color: "black",
+        fontWeight: "bold",
+        fontSize: 14,
+      },
+      "& .headerAdditionalQues": {
+        color: theme.palette.secondary.main,
+        fontSize: 18,
+      },
+      "& .queMain": {
+        padding: "12px",
+      },
+      "& .ansWrapper": {
+        padding: "10px",
+      },
+      "& .completedOnText": {
+        color: theme.palette.secondary.main,
+        textAlign: "right",
+        fontWeight: 400,
+      },
+    },
   },
 }));
