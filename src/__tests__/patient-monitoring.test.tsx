@@ -207,7 +207,7 @@ mocksData.push({
       monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
       endDate: "2023-01-09",
       startDate: "2022-03-02",
-      dateSort: "ASC",
+      dateSort: "asc",
     },
   },
   result: {
