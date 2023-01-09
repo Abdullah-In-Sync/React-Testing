@@ -16,6 +16,7 @@ import { DELETE_ORG_BY_ID } from "../../../../graphql/mutation/patient";
 import { useSnackbar } from "notistack";
 import { SuccessModal } from "../../../../components/common/SuccessModal";
 import { useRouter } from "next/router";
+import { Link } from "../../../../lib/helpers/common";
 
 const crudButtons = {
   display: "flex",
@@ -91,7 +92,7 @@ const OrganizationList = () => {
         <>
           <IconButton size="small" data-testid="edit-icon-button">
             <NextLink
-              href={"/superadmin/organization/edit/" + value._id}
+              href={Link + "/superadmin/organization/edit/" + value._id}
               passHref
             >
               <CreateIcon />
@@ -100,7 +101,7 @@ const OrganizationList = () => {
 
           <IconButton size="small" data-testid={"viewIcon_" + value._id}>
             <NextLink
-              href={"/superadmin/organization/config/" + value._id}
+              href={Link + "/superadmin/organization/config/" + value._id}
               passHref
             >
               <SettingsIcon />
