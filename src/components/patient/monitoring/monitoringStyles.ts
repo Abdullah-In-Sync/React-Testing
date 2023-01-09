@@ -219,7 +219,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
       alignItems: "center",
 
       "& .MuiBox-root": {
-        width: "50%",
         // height: 300
       },
     },
@@ -228,7 +227,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
       alignItems: "center",
 
       "& .MuiBox-root": {
-        width: "50%",
         // height: 300
       },
     },
@@ -236,9 +234,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       padding: "10px",
       alignItems: "center",
 
-      "& .MuiBox-root": {
-        width: "50%",
-      },
+      "& .MuiBox-root": {},
     },
 
     "& .vImgIcon": {

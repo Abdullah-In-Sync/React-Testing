@@ -1,12 +1,11 @@
-import React from "react";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 ChartJS.register(
@@ -19,6 +18,7 @@ ChartJS.register(
 );
 
 const barOptions = {
+  maintainAspectRatio: false,
   responsive: true,
   plugins: {
     legend: {
@@ -45,7 +45,7 @@ const barOptions = {
 function BarChart({ data }) {
   const barChart = () => <Bar data={data} options={barOptions} />;
 
-  return <div>{barChart()}</div>;
+  return <div className="canvas-bar-container">{barChart()}</div>;
 }
 
 export default BarChart;

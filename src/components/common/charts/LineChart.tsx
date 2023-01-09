@@ -12,7 +12,6 @@ import {
 import { useRef } from "react";
 import { Line } from "react-chartjs-2";
 
-// defaults.maintainAspectRatio = false
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,6 +26,7 @@ ChartJS.register(
 const LineChart = ({ data, displayY = true }: any) => {
   const chartRef = useRef(null);
   const lineOptions = {
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       legend: {
@@ -50,7 +50,11 @@ const LineChart = ({ data, displayY = true }: any) => {
     },
   };
 
-  return <Line options={lineOptions} data={data} ref={chartRef} />;
+  return (
+    <div className="canvas-container">
+      <Line options={lineOptions} data={data} ref={chartRef} />
+    </div>
+  );
 };
 
 export default LineChart;

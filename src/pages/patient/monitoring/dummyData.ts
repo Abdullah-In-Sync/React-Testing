@@ -1,4 +1,4 @@
-export default {
+const dummyData = {
   emojis: [
     {
       _id: "61e596949a57eb27735c4795",
@@ -2070,3 +2070,5 @@ export default {
     },
   ],
 };
+
+export default dummyData;

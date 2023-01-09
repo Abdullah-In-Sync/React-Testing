@@ -1,28 +1,24 @@
-import React from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// interface PieData {
-//   labels?: string[];
-//   datasets?: [
-//     {
-//       label?: string;
-//       data?: number[];
-//       backgroundColor?: string[];
-//       borderColor?: string[];
-//       borderWidth?: number;
-//     }
-//   ];
-// }
-
-// type Props = React.PropsWithChildren<{
-//   data?: PieData;
-// }>;
+const pieOptions = {
+  maintainAspectRatio: false,
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+};
 
 const PieChartComponent = ({ data }) => {
-  return <Pie data={data} />;
+  return (
+    <div className="canvas-container">
+      <Pie data={data} options={pieOptions} />
+    </div>
+  );
 };
 
 export default PieChartComponent;
