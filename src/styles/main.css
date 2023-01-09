@@ -57,3 +57,14 @@
   user-select: none;
   /* Standard syntax */
 }
+.canvas-container {
+  height: 60vh !important;
+  width: 60vw !important;
+  position: relative;
+}
+
+.canvas-bar-container{
+  height: 60vh !important;
+  width: 40vw !important;
+  position: relative;
+}

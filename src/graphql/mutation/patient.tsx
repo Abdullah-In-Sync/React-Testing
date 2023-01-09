@@ -124,6 +124,14 @@ export const UPDATE_PATIENT_HOME_BY_ID = gql`
   }
 `;
 
+export const DELETE_ORG_BY_ID = gql`
+  mutation ($orgId: String!) {
+    deleteOrgById(orgId: $orgId) {
+      deleted
+    }
+  }
+`;
+
 export const UPDATE_SAFETY_PLAN_QUESTION_DATA = gql`
   mutation ($quesData: String!) {
     updateSafetyPlanByPatient(quesData: $quesData) {

@@ -84,7 +84,7 @@ export const superadmin_routes: RoutesType[] = [
   {
     key: 5,
     label: "Organization",
-    path: Link + "/superadmin/organization/list",
+    path: "/admin/organization/list",
     icon: <CorporateFareIcon />,
   },
   {

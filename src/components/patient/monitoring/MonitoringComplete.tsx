@@ -40,14 +40,16 @@ const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
     return (
       <Stack className="bottomButtonsWrapper">
         <Box>
-          <Button
-            disabled={isSubmitting}
-            variant="contained"
-            color="secondary"
-            type="submit"
-          >
-            Save
-          </Button>
+          {completeData.length > 0 && (
+            <Button
+              disabled={isSubmitting}
+              variant="contained"
+              color="secondary"
+              type="submit"
+            >
+              Save
+            </Button>
+          )}
         </Box>
         <Box>
           <Button variant="contained" color="secondary" onClick={backPress}>
