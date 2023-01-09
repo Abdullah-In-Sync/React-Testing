@@ -88,7 +88,6 @@ export const generateEmojiLineData = (
   filterQuesAnsData
 ): monitoringTypes.chartData => {
   const filterDateData = filterAnswer(filterQuesAnsData);
-  console.log("filterDateData hours 1", filterDateData);
   const tempData = {
     labels: [],
     datasets: [
@@ -163,7 +162,10 @@ export const generateBarData = (
   filterQuesAnsData
 ): monitoringTypes.chartData => {
   const filterDateData = totalAnsCount(filterAnswer(filterQuesAnsData));
-  // console.log("filterDateData barrrrrrrrrr", filterDateData)
+  const noDataCount = filterDateData["0"] ? filterDateData["0"]?.count || 0 : 0;
+  const yesDataCount = filterDateData["1"]
+    ? filterDateData["1"]?.count || 0
+    : 0;
   const tempData = {
     labels: ["No", "Yes"],
     datasets: [
@@ -176,10 +178,7 @@ export const generateBarData = (
     ],
   };
 
-  tempData["datasets"][0]["data"] = [
-    filterDateData["0"].count,
-    filterDateData["1"].count,
-  ];
+  tempData["datasets"][0]["data"] = [noDataCount, yesDataCount];
 
   return tempData;
 };
@@ -193,7 +192,6 @@ export const generateLineHoursData = (
   filterQuesAnsData
 ): monitoringTypes.chartData => {
   const filterDateData = filterAnswer(filterQuesAnsData);
-  console.log("filterDateData +++++ barrrrrrrrrr", filterDateData);
   const tempData = {
     labels: [],
     datasets: [
