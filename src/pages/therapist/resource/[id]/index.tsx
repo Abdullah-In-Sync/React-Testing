@@ -9,6 +9,8 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+
 import type { NextPage } from "next";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -27,6 +29,7 @@ const ResourceById: NextPage = () => {
   const id = router.query.id as string;
   const [loader, setLoader] = useState<boolean>(false);
   const [resId, setResId] = useState<string>("");
+  const classes = useStyles();
 
   const [getResourceData, { loading: resourceLoading, data: resourceData }] =
     useLazyQuery(GET_RESOURCE_DETAIL, {
@@ -53,6 +56,17 @@ const ResourceById: NextPage = () => {
       setLoader(false);
     }
   }, [resId]);
+
+  const onViewTemplate = () => {
+    sessionStorage.setItem(
+      resourceData?.getResourceById[0]?._id,
+      JSON.stringify({
+        data: JSON.parse(resourceData?.getResourceById[0]?.template_data),
+        name: resourceData?.getResourceById[0].resource_name,
+      })
+    );
+    router.push(`/template/preview/${resourceData?.getResourceById[0]?._id}`);
+  };
 
   return (
     <>
@@ -125,10 +139,30 @@ const ResourceById: NextPage = () => {
                   color: "primary.contrastText",
                   borderRadius: "12px",
                   textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
                 md={12}
               >
-                {resourceData.getResourceById[0].resource_name}
+                <Box flex={1}>
+                  <Typography>
+                    {resourceData.getResourceById[0].resource_name}
+                  </Typography>
+                </Box>
+                {resourceData.getResourceById[0]?.resource_issmartdraw ==
+                  "1" && (
+                  <Box marginLeft={"auto"} className={classes.ellipseDiv}>
+                    <IconButton
+                      size="medium"
+                      data-testid="viewTemplate"
+                      onClick={onViewTemplate}
+                      className={classes.viewIcon}
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Box>
+                )}
               </Grid>
               <Grid
                 p={1}
@@ -140,43 +174,47 @@ const ResourceById: NextPage = () => {
                 borderColor="secondary.main"
               >
                 <Grid pl={2} xs={12} md={12}></Grid>
-                <Grid
-                  data-testid="iconsTarget"
-                  sx={{
-                    textAlign: "right",
-                  }}
-                  pl={2}
-                  mr={2}
-                  xs={12}
-                  md={12}
-                >
-                  {/* <NextLink href={`/therapist/resource/view/${id}`}> */}
-                  <IconButton
-                    size="medium"
-                    data-testid="viewUrl"
-                    target="_blank"
-                    href={
-                      resourceData.getResourceById[0].resource_url != null
-                        ? resourceData.getResourceById[0].resource_url
-                        : "#"
-                    }
+                {resourceData.getResourceById[0]?.resource_issmartdraw !=
+                  "1" && (
+                  <Grid
+                    data-testid="iconsTarget"
+                    sx={{
+                      textAlign: "right",
+                    }}
+                    pl={2}
+                    mr={2}
+                    xs={12}
+                    md={12}
                   >
-                    <VisibilityIcon />
-                  </IconButton>
-                  {/* </NextLink> */}
-                  <IconButton
-                    size="medium"
-                    data-testid="downloadUrl"
-                    href={
-                      resourceData.getResourceById[0].download_resource_url !=
-                      null
-                        ? resourceData.getResourceById[0].download_resource_url
-                        : "#"
-                    }
-                  >
-                    <FileDownloadIcon />
-                  </IconButton>
-                </Grid>
+                    {/* <NextLink href={`/therapist/resource/view/${id}`}> */}
+                    <IconButton
+                      size="medium"
+                      data-testid="viewUrl"
+                      target="_blank"
+                      href={
+                        resourceData.getResourceById[0].resource_url != null
+                          ? resourceData.getResourceById[0].resource_url
+                          : "#"
+                      }
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                    {/* </NextLink> */}
+                    <IconButton
+                      size="medium"
+                      data-testid="downloadUrl"
+                      href={
+                        resourceData.getResourceById[0].download_resource_url !=
+                        null
+                          ? resourceData.getResourceById[0]
+                              .download_resource_url
+                          : "#"
+                      }
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  </Grid>
+                )}
                 <ResourceDetail
                   title="Description"
                   description={resourceData.getResourceById[0].resource_desc}
@@ -214,3 +252,19 @@ const ResourceById: NextPage = () => {
   );
 };
 export default withAuthentication(ResourceById, ["therapist"]);
+
+export const useStyles = makeStyles({
+  viewIcon: {
+    "& svg": {
+      width: "16px",
+      height: "16px",
+      color: "#000",
+    },
+  },
+  ellipseDiv: {
+    background: "#FFFFFF",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+    borderRadius: "50%",
+    marginRight: "12px",
+  },
+});
