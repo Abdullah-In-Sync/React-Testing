@@ -15,7 +15,7 @@ import {
   GET_PATIENT_MONITOR_ANS_BY_ID,
 } from "../../../graphql/query/patient";
 
-import dummyData from "./dummyData";
+import dummyData from "../../../components/patient/monitoring/data";
 
 const Monitoring: NextPage = () => {
   const initialDate = "2022-03-02";

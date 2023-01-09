@@ -10,7 +10,7 @@ import {
 } from "../graphql/query/patient";
 
 import Monitoring from "../pages/patient/monitoring";
-import dummyData from "../pages/patient/monitoring/dummyData";
+import dummyData from "../components/patient/monitoring/data";
 import theme from "../styles/theme/theme";
 
 import { SnackbarProvider } from "notistack";
