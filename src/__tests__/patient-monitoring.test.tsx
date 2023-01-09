@@ -5,10 +5,12 @@ import { ThemeProvider } from "@mui/material";
 import { SUBMIT_PATIENT_MONITOR_BY_ID } from "../graphql/mutation/patient";
 import {
   GET_PATIENT_MONITORING_LIST,
+  GET_PATIENT_MONITOR_ANS_BY_ID,
   GET_PATIENT_MONITOR_BY_ID,
 } from "../graphql/query/patient";
 
 import Monitoring from "../pages/patient/monitoring";
+import dummyData from "../pages/patient/monitoring/dummyData";
 import theme from "../styles/theme/theme";
 
 import { SnackbarProvider } from "notistack";
@@ -198,6 +200,23 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_PATIENT_MONITOR_ANS_BY_ID,
+    variables: {
+      monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
+      endDate: "2023-01-09",
+      startDate: "2022-03-02",
+      dateSort: "ASC",
+    },
+  },
+  result: {
+    data: {
+      getPatientMonitorAnsById: dummyData.ansResponseData,
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -215,7 +234,7 @@ const clickBox = async () => {
   const completeButtonFirst = await screen.findByTestId(
     "monitoringCompleteReponse_0"
   );
-  fireEvent.click(completeButtonFirst);
+  await fireEvent.click(completeButtonFirst);
   emojiClick();
   listCsvClick();
 };
@@ -233,8 +252,6 @@ const saveClickFlowFail = async () => {
   const saveButton = await screen.findByRole("button", { name: "Save" });
   fireEvent.click(saveButton);
 };
-//61e596189a57eb27735c4791
-//hoursInput
 
 const hoursInputChange = async (value) => {
   const hourInput = await screen.findByTestId("hoursInput");
@@ -301,5 +318,22 @@ describe("Patient monitoring page", () => {
     expect(
       await screen.findByText(/Server error please try later./i)
     ).toBeInTheDocument();
+  });
+
+  it("should render monitoring view response screen", async () => {
+    // const mockClick = jest.fn();
+    await sut();
+    const viewButtonFirst = await screen.findByTestId(
+      "monitoringViewReponse_0"
+    );
+    fireEvent.click(viewButtonFirst);
+
+    expect(
+      await screen.findByText(/sfsdfdsfsfsdf sdf sdf sd f sdf sd f dsf/i)
+    ).toBeInTheDocument();
+
+    // const goButton = await screen.findByTestId("goButton");
+    // expect(goButton).toBeInTheDocument();
+    // fireEvent.click(goButton);
   });
 });
