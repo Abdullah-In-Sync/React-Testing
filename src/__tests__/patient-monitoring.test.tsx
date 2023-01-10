@@ -205,7 +205,7 @@ mocksData.push({
     query: GET_PATIENT_MONITOR_ANS_BY_ID,
     variables: {
       monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
-      endDate: "2023-01-09",
+      endDate: "2023-01-10",
       startDate: "2022-03-02",
       dateSort: "asc",
     },
@@ -323,7 +323,7 @@ describe("Patient monitoring page", () => {
     );
     fireEvent.click(viewButtonFirst);
 
-    expect(await screen.findByText(/Test/i)).toBeInTheDocument();
+    expect(await screen.findByTestId("completedON_24")).toBeInTheDocument();
 
     // const goButton = await screen.findByTestId("goButton");
     // expect(goButton).toBeInTheDocument();

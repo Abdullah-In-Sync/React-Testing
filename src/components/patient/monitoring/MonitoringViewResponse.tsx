@@ -180,7 +180,10 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
                             <Typography>{ptmon_ans}</Typography>
                           </Box>
                           <Box>
-                            <Typography className="completedOnText">
+                            <Typography
+                              data-testId={`completedON_${i}`}
+                              className="completedOnText"
+                            >
                               Completed on{" "}
                               {moment(created_date).format("D MMM YYYY")}
                             </Typography>
