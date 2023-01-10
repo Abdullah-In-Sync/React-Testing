@@ -68,3 +68,10 @@
   width: 40vw !important;
   position: relative;
 }
+
+.canvas-pie-container{
+  height: 45vh !important;
+  width: 45vw !important;
+  position: relative;
+}
+

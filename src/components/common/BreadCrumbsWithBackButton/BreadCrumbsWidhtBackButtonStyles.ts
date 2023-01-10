@@ -5,5 +5,8 @@ export const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "10px 0px",
+    "& .nextButton": {
+      marginLeft: 10,
+    },
   },
 });
