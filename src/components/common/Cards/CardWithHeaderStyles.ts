@@ -1,6 +1,7 @@
 import { makeStyles } from "@mui/styles";
+import { Theme } from "@mui/system";
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme: Theme) => ({
   boxWithHeader: {
     "& .MuiPaper-root": {
       color: "#fff",
@@ -20,6 +21,7 @@ export const useStyles = makeStyles(() => ({
     "& .active-border": {
       padding: 2,
       border: "1px solid",
+      borderColor: theme.palette.secondary.main,
     },
   },
   simpleHeaderAppBar: {
