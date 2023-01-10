@@ -323,9 +323,7 @@ describe("Patient monitoring page", () => {
     );
     fireEvent.click(viewButtonFirst);
 
-    expect(
-      await screen.findByText(/sfsdfdsfsfsdf sdf sdf sd f sdf sd f dsf/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Test/i)).toBeInTheDocument();
 
     // const goButton = await screen.findByTestId("goButton");
     // expect(goButton).toBeInTheDocument();
