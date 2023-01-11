@@ -25,27 +25,34 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
   const { ansResponseData, emojis: emojisData } = viewResponseData;
   const filterQuesAnsData = monitorHelper.filterQuesType(ansResponseData);
 
-  const emojisVerticalImage = () => {
+  const emojisVerticalImage = (lineData) => {
+    const isPositionExist = (v) => {
+      return lineData.length < 2
+        ? lineData.some((nitem) => nitem.y === v.position)
+        : true;
+    };
     return (
       <ImageList cols={1} className="emojListWrapper">
-        {emojisData.map((item) => {
-          const { _id, emoji_caption, emoji_url } = item;
-          return (
-            <ImageListItem
-              key={_id}
-              data-testid={`${_id}`}
-              className="vImgIcon"
-            >
-              <Image
-                src={`/images/emoji/${emoji_url}`}
-                alt={emoji_caption}
-                loading="lazy"
-                width="153"
-                height="152"
-              />
-            </ImageListItem>
-          );
-        })}
+        {emojisData
+          .filter((emojisValue) => isPositionExist(emojisValue))
+          .map((item) => {
+            const { _id, emoji_caption, emoji_url } = item;
+            return (
+              <ImageListItem
+                key={_id}
+                data-testid={`${_id}`}
+                className="vImgIcon"
+              >
+                <Image
+                  src={`/images/emoji/${emoji_url}`}
+                  alt={emoji_caption}
+                  loading="lazy"
+                  width="153"
+                  height="152"
+                />
+              </ImageListItem>
+            );
+          })}
       </ImageList>
     );
   };
@@ -81,17 +88,26 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
     if (!filterQuesAnsData["1"]) return null;
 
     const { que } = filterQuesAnsData["1"];
+    const emojisLine = monitorHelper.generateEmojiLineData(
+      filterQuesAnsData["1"]["data"]
+    );
     return (
       <CardWithHeader label={que} simpleHeader>
         <Stack className="emojiLineChartWrapper">
-          <Box className="emojisLineChart">
-            {emojisVerticalImage()}
-
+          <Box
+            className={` ${
+              emojisLine["datasets"][0]["data"].length < 2
+                ? "emojListWrapperCenter"
+                : "emojisLineChart"
+            }`}
+          >
+            {emojisVerticalImage(emojisLine["datasets"][0]["data"])}
             <LineChart
-              data={monitorHelper.generateEmojiLineData(
-                filterQuesAnsData["1"]["data"]
-              )}
+              data={emojisLine}
               displayY={false}
+              displayYlabel={true}
+              grid={{ display: false }}
+              yTicks={{ min: 0, stepSize: 2 }}
             />
           </Box>
         </Stack>
@@ -181,7 +197,7 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
                           </Box>
                           <Box>
                             <Typography
-                              data-testId={`completedON_${i}`}
+                              data-testid={`completedON_${i}`}
                               className="completedOnText"
                             >
                               Completed on{" "}
