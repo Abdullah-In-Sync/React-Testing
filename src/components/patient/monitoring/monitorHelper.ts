@@ -113,8 +113,8 @@ export const generateEmojiLineData = (
       tempData["labels"].push(formatCreateDate);
       tempData["datasets"][0]["data"].push({
         x: formatCreateDate,
-        y: emojisAnsObj.position,
-        label: emojisAnsObj.emoji_caption,
+        y: emojisAnsObj ? emojisAnsObj.position : 0,
+        label: emojisAnsObj ? emojisAnsObj.emoji_caption : "Terribles",
       });
     }
   });
