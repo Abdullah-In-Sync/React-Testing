@@ -8,6 +8,14 @@ export const GET_UPLOAD_RESOURCE_URL = gql`
   }
 `;
 
+export const GET_UPLOAD_LOGO_URL = gql`
+  query MyQuery($fileName: String!, $imageFolder: String) {
+    getFileUploadUrl(fileName: $fileName, imageFolder: $imageFolder) {
+      upload_file_url
+    }
+  }
+`;
+
 export const GET_CATEGORY = gql`
   query GetCategoryByModelId($modelId: String) {
     getCategoryByModelId(modelId: $modelId) {

@@ -42,6 +42,23 @@ export type editResourceFormField = {
   resource_issmartdraw?: string;
 };
 
+export type addAndEditOrganizationFormFields = {
+  _id?: string;
+  contract?: string;
+  created_date?: string;
+  logo?: string;
+  logo_url?: string;
+  name?: string;
+  panel_color?: string;
+  patient?: string;
+  patient_plural?: string;
+  patient_welcome_email?: string;
+  side_menu_color?: string;
+  therapist?: string;
+  therapy?: string;
+  file_name?: string;
+};
+
 export type editTemplatesFormField = {
   _id: string;
   category: string;
