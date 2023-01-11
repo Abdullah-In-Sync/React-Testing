@@ -15,6 +15,12 @@ import theme from "../styles/theme/theme";
 
 import { SnackbarProvider } from "notistack";
 import moment from "moment";
+import { useRouter } from "next/router";
+
+jest.mock("next/router", () => ({
+  __esModule: true,
+  useRouter: jest.fn(),
+}));
 
 const mocksData = [];
 
@@ -272,6 +278,16 @@ const listCsvClick = async () => {
 };
 
 describe("Patient monitoring page", () => {
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockClear();
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+    }));
+  });
+
   it("should render monitoring list screen", async () => {
     await sut();
     expect(await screen.findByText(/Dummt Moniter/i)).toBeInTheDocument();
@@ -318,6 +334,7 @@ describe("Patient monitoring page", () => {
 
   it("should render monitoring view response screen", async () => {
     // const mockClick = jest.fn();
+
     await sut();
     const viewButtonFirst = await screen.findByTestId(
       "monitoringViewReponse_0"
