@@ -176,7 +176,7 @@ const OrganizationList = () => {
                 paddingRight: " 40px",
               }}
               data-testid="addResource"
-              href="/superadmin/organization/add"
+              href="/v2/admin/organization/add"
             >
               <PersonAddIcon />
               Add Organization
@@ -196,7 +196,6 @@ const OrganizationList = () => {
             }}
             loader={loader}
             backendPagination={false}
-            dataCount={10}
             selectedRecords={[]}
             rowOnePage={10}
             showPagination={true}
