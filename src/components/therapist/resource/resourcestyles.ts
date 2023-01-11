@@ -24,9 +24,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
         fontSize: "1rem",
         paddingBottom: 3,
       },
-      "& .MuiBox-root p": {
+      "& .MuiBox-root": {
         padding: 10,
         borderRadius: 10,
+      },
+      "& .MuiBox-root p": {
         fonSize: "0.8rem",
         color: theme.palette.custom.contrastText,
       },

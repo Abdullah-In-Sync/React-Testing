@@ -16,6 +16,7 @@ export const useStyles = makeStyles(() => ({
     "& .MuiBox-root": {
       padding: 2,
       border: `1px solid #ccc`,
+      borderRadius: "0px 0px 10px 10px",
     },
     "& .active-border": {
       padding: 2,

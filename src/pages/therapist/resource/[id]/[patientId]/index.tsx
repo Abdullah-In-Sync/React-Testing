@@ -45,7 +45,7 @@ const PatientResourceDetailPage: NextPage = () => {
 
   return (
     <>
-      <Layout boxStyle={{ height: "100vh" }} cardStyle={{ height: "80vh" }}>
+      <Layout boxStyle={{ height: "100vh" }} cardClass="layoutCard">
         <Loader visible={loader} />
         <ContentHeader title={"Resource Detail"} />
         <ResourceDetail

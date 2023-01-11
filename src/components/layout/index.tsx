@@ -15,12 +15,13 @@ interface SidebarLayoutProps {
   children?: ReactNode;
   boxStyle?: object;
   cardStyle?: object;
+  cardClass?: string;
 }
 
 const Layout: FC<SidebarLayoutProps> = ({
   children,
   boxStyle,
-  cardStyle = {},
+  cardClass = "",
 }) => {
   const theme = useTheme();
 
@@ -59,7 +60,7 @@ const Layout: FC<SidebarLayoutProps> = ({
             ...boxStyle,
           }}
         >
-          <Box display="block" style={{ ...wrapper, ...cardStyle }}>
+          <Box display="block" style={wrapper} className={cardClass}>
             {children}
           </Box>
           <Footer />
