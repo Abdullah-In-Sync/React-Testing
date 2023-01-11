@@ -23,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-const LineChart = ({ data, displayY = true }: any) => {
+const LineChart = ({ data, displayY = true, grid = {}, yTicks = {} }: any) => {
   const chartRef = useRef(null);
   const lineOptions = {
     maintainAspectRatio: false,
@@ -33,12 +33,15 @@ const LineChart = ({ data, displayY = true }: any) => {
         display: false,
       },
     },
-
     scales: {
       y: {
+        grid,
         ticks: {
-          display: displayY,
-          beginAtZero: true,
+          ...{
+            display: displayY,
+            beginAtZero: true,
+          },
+          ...yTicks,
         },
       },
       x: {
