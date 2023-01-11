@@ -9,11 +9,18 @@ type propTypes = {
   children: React.ReactNode;
   onClickView?: () => void;
   simpleHeader?: boolean;
+  activeBoxBorder?: boolean;
 };
 
 const CardWithHeader = (props: propTypes) => {
   const styles = useStyles();
-  const { onClickView, label, children = null, simpleHeader } = props || {};
+  const {
+    onClickView,
+    label,
+    children = null,
+    simpleHeader,
+    activeBoxBorder,
+  } = props || {};
   return (
     <div
       className={
@@ -42,7 +49,7 @@ const CardWithHeader = (props: propTypes) => {
           )}
         </Toolbar>
       </AppBar>
-      <Box>{children}</Box>
+      <Box className={activeBoxBorder ? `active-border` : ""}>{children}</Box>
     </div>
   );
 };

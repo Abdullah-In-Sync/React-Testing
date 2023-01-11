@@ -356,6 +356,11 @@ export const GET_PATH_RESOURCE_BY_ID = gql`
         template_id
         resource_name
         resource_issmartdraw
+        resource_url
+        download_resource_url
+        resource_desc
+        resource_instruction
+        resource_references
       }
       template_detail {
         _id

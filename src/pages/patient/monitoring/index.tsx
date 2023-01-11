@@ -11,8 +11,8 @@ import MonitoringComponent from "../../../components/patient/monitoring";
 import { SUBMIT_PATIENT_MONITOR_BY_ID } from "../../../graphql/mutation/patient";
 import {
   GET_PATIENT_MONITORING_LIST,
-  GET_PATIENT_MONITOR_BY_ID,
   GET_PATIENT_MONITOR_ANS_BY_ID,
+  GET_PATIENT_MONITOR_BY_ID,
 } from "../../../graphql/query/patient";
 
 import dummyData from "../../../components/patient/monitoring/data";
@@ -20,14 +20,15 @@ import dummyData from "../../../components/patient/monitoring/data";
 const Monitoring: NextPage = () => {
   const initialDate = "2022-03-02";
   const [loader, setLoader] = useState<boolean>(false);
-  // const [monitoringList, setMonitoringList] = useState<object[]>([]);
   const [completeData, setCompleteData] = useState<object[]>([]);
   const [currentMonitoring, setCurrentMonitoring] = useState();
   const [submitMonitorkById] = useMutation(SUBMIT_PATIENT_MONITOR_BY_ID);
   const [getPatientMonitorById] = useLazyQuery(GET_PATIENT_MONITOR_BY_ID);
   const [viewResponseData, setViewResponseData] = useState<any>();
   const [view, setView] = useState("");
-  // const [getPatientMonitorAnsById] = useLazyQuery(GET_PATIENT_MONITOR_ANS_BY_ID);
+  const [getPatientMonitorAnsById] = useLazyQuery(
+    GET_PATIENT_MONITOR_ANS_BY_ID
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -46,17 +47,30 @@ const Monitoring: NextPage = () => {
     setView("viewResponse");
   };
 
-  const [getPatientMonitorAnsById] = useLazyQuery(
-    GET_PATIENT_MONITOR_ANS_BY_ID,
-    {
-      fetchPolicy: "network-only",
-      onCompleted: (data) => {
-        const { getPatientMonitorAnsById: viewResponse = [] } = data;
-        setViewResponseWithEmojis(viewResponse);
-        setLoader(false);
-      },
+  const fetchPatientMonitorAnsById = async (item, { endDate, startDate }) => {
+    setLoader(true);
+
+    const { _id: monitorId } = item;
+    try {
+      await getPatientMonitorAnsById({
+        variables: {
+          monitorId,
+          endDate,
+          startDate,
+          dateSort: "asc",
+        },
+        onCompleted: (data) => {
+          const { getPatientMonitorAnsById: viewResponse = [] } = data;
+          setCurrentMonitoring(item);
+          setViewResponseWithEmojis(viewResponse);
+        },
+      });
+    } catch (e) {
+      //
+    } finally {
+      setLoader(false);
     }
-  );
+  };
 
   //grphql apis
   const confirmedSubmit = async (formFields, monitoring, doneCallback) => {
@@ -117,22 +131,12 @@ const Monitoring: NextPage = () => {
 
   const completeButtonClick = (item) => {
     fetchPatientMonitorById(item);
-    // setCurrentMonitoring(item);
-    // setView("complete");
   };
 
-  const viewResponseButtonClick = (item) => {
-    const { _id: monitorId } = item;
-    // $monitorId: String!, $endDate: String!, $startDate: String!
-    getPatientMonitorAnsById({
-      variables: {
-        monitorId,
-        endDate: moment().format("YYYY-MM-DD"),
-        startDate: initialDate,
-        dateSort: "asc",
-      },
-    });
-    setCurrentMonitoring(item);
+  const viewResponseButtonClick = async (item) => {
+    const endDate = moment().format("YYYY-MM-DD");
+    const startDate = initialDate;
+    fetchPatientMonitorAnsById(item, { endDate, startDate });
   };
 
   useEffect(() => {
@@ -190,18 +194,10 @@ const Monitoring: NextPage = () => {
   };
 
   const handleRangeGoButton = (v) => {
-    const { _id: monitorId }: any = currentMonitoring || {};
-    if (monitorId) {
-      const { fromDate, toDate } = v;
-      getPatientMonitorAnsById({
-        variables: {
-          monitorId,
-          endDate: formatDate(toDate),
-          startDate: formatDate(fromDate),
-          dateSort: "asc",
-        },
-      });
-    }
+    const { fromDate, toDate } = v;
+    const endDate = formatDate(toDate);
+    const startDate = formatDate(fromDate);
+    fetchPatientMonitorAnsById(currentMonitoring, { endDate, startDate });
   };
 
   return (

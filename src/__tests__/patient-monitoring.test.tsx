@@ -14,6 +14,7 @@ import dummyData from "../components/patient/monitoring/data";
 import theme from "../styles/theme/theme";
 
 import { SnackbarProvider } from "notistack";
+import moment from "moment";
 
 const mocksData = [];
 
@@ -205,7 +206,7 @@ mocksData.push({
     query: GET_PATIENT_MONITOR_ANS_BY_ID,
     variables: {
       monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
-      endDate: "2023-01-09",
+      endDate: moment().format("YYYY-MM-DD"),
       startDate: "2022-03-02",
       dateSort: "asc",
     },
@@ -323,9 +324,7 @@ describe("Patient monitoring page", () => {
     );
     fireEvent.click(viewButtonFirst);
 
-    expect(
-      await screen.findByText(/sfsdfdsfsfsdf sdf sdf sd f sdf sd f dsf/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByTestId("completedON_24")).toBeInTheDocument();
 
     // const goButton = await screen.findByTestId("goButton");
     // expect(goButton).toBeInTheDocument();
