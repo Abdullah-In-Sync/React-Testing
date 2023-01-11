@@ -15,9 +15,12 @@ import {
   GET_PATIENT_MONITOR_BY_ID,
 } from "../../../graphql/query/patient";
 
+import { useRouter } from "next/router";
+
 import dummyData from "../../../components/patient/monitoring/data";
 
 const Monitoring: NextPage = () => {
+  const router = useRouter();
   const initialDate = "2022-03-02";
   const [loader, setLoader] = useState<boolean>(false);
   const [completeData, setCompleteData] = useState<object[]>([]);
@@ -38,6 +41,31 @@ const Monitoring: NextPage = () => {
     setSubmitting: null,
   });
   const [successModal, setSuccessModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    setLoader(true);
+    getPatientMonitorList();
+  }, []);
+
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handlePageRerfresh);
+    return () => {
+      router.events.off("routeChangeComplete", handlePageRerfresh);
+    };
+  }, [router.events]);
+
+  const resetState = () => {
+    setCompleteData([]);
+    setCurrentMonitoring(undefined);
+    setViewResponseData(undefined);
+    setView("");
+  };
+
+  const handlePageRerfresh = () => {
+    resetState();
+    setLoader(true);
+    getPatientMonitorList();
+  };
 
   const setViewResponseWithEmojis = (viewResponse) => {
     setViewResponseData({
@@ -138,11 +166,6 @@ const Monitoring: NextPage = () => {
     const startDate = initialDate;
     fetchPatientMonitorAnsById(item, { endDate, startDate });
   };
-
-  useEffect(() => {
-    setLoader(true);
-    getPatientMonitorList();
-  }, []);
 
   const handleBackPress = () => {
     setCompleteData([]);
