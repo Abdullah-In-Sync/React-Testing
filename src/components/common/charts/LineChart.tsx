@@ -23,12 +23,25 @@ ChartJS.register(
   Legend
 );
 
-const LineChart = ({ data, displayY = true, grid = {}, yTicks = {} }: any) => {
+const LineChart = ({
+  data,
+  displayY = true,
+  displayYlabel,
+  grid = {},
+  yTicks = {},
+}: any) => {
   const chartRef = useRef(null);
   const lineOptions = {
     maintainAspectRatio: false,
     responsive: true,
     plugins: {
+      tooltip: {
+        callbacks: displayYlabel && {
+          label: (yDatapoint) => {
+            return yDatapoint.raw.label;
+          },
+        },
+      },
       legend: {
         display: false,
       },

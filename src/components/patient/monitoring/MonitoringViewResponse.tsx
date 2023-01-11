@@ -105,6 +105,7 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
             <LineChart
               data={emojisLine}
               displayY={false}
+              displayYlabel={true}
               grid={{ display: false }}
               yTicks={{ min: 0, stepSize: 2 }}
             />

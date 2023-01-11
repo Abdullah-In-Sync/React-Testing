@@ -109,11 +109,12 @@ export const generateEmojiLineData = (
     const { created_date, ptmon_ans } = value;
     if (ptmon_ans) {
       const formatCreateDate = moment(created_date).format("YYYY-MM-DD");
+      const emojisAnsObj = filterBasedOnEmojis(ptmon_ans);
       tempData["labels"].push(formatCreateDate);
       tempData["datasets"][0]["data"].push({
-        label: "some",
         x: formatCreateDate,
-        y: filterBasedOnEmojis(ptmon_ans).position,
+        y: emojisAnsObj.position,
+        label: emojisAnsObj.emoji_caption,
       });
     }
   });
