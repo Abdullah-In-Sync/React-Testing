@@ -90,23 +90,23 @@ const OrganizationList = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton size="small" data-testid="edit-icon-button">
-            <NextLink
-              href={Link + "/superadmin/organization/edit/" + value._id}
-              passHref
-            >
+          <NextLink
+            href={Link + "/superadmin/organization/edit/" + value._id}
+            passHref
+          >
+            <IconButton size="small" data-testid="edit-icon-button">
               <CreateIcon />
-            </NextLink>
-          </IconButton>
+            </IconButton>
+          </NextLink>
 
-          <IconButton size="small" data-testid={"viewIcon_" + value._id}>
-            <NextLink
-              href={Link + "/superadmin/organization/config/" + value._id}
-              passHref
-            >
+          <NextLink
+            href={Link + "/superadmin/organization/config/" + value._id}
+            passHref
+          >
+            <IconButton size="small" data-testid={"viewIcon_" + value._id}>
               <SettingsIcon />
-            </NextLink>
-          </IconButton>
+            </IconButton>
+          </NextLink>
 
           <IconButton
             size="small"

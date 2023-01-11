@@ -15,6 +15,7 @@ import { useAppContext } from "../contexts/AuthContext";
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 jest.mock("../contexts/AuthContext");
+const pushMock = jest.fn();
 
 // mocks
 const buildMocks = (): {
@@ -72,6 +73,54 @@ const buildMocks = (): {
                 _id: "4e110b3e7faa47c9be82540fe8e78fb0",
                 model_name: "test mddel",
               },
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: GET_RESOURCE_DETAIL,
+        variables: { resourceId: "e2114714-18dc-4c91-83e0-7cbd5c98c33e" },
+      },
+      result: {
+        data: {
+          getResourceById: [
+            {
+              _id: "e2114714-18dc-4c91-83e0-7cbd5c98c33e",
+              agenda_id: "",
+              org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+              resource_avail_onlyme: "0",
+              resource_avail_therapist: "1",
+              category_id: "",
+              resource_name: "Testing Template view",
+              resource_type: 1,
+              resource_desc: "a",
+              resource_instruction: "",
+              resource_references: "",
+              resource_filename: "",
+              resource_url: "",
+              download_resource_url: null,
+              resource_issmartdraw: "1",
+              template_id: "63774edbc553fac5d6a9bd74",
+              template_data:
+                '{"rows":[{"cells":[{"type":"answer","answerType":"text","answerValues":[]},{"type":"answer","answerType":"text","answerValues":[]}]},{"cells":[{"type":"header","title":"Jo margi dal lo"},{"type":"header","title":"Jo timhe accha lage"}]}]}',
+              disorder_detail: {
+                _id: "4af58b3923074fd2bd111708e0145e2a",
+                disorder_name: "28th amar disorder",
+                __typename: "Disorder",
+              },
+              model_detail: {
+                _id: "bd0d22a6c2a44124a524699c74e5909c",
+                model_name: "28th amar model",
+                __typename: "DisorderModel",
+              },
+              template_detail: {
+                component_name: "TemplateTable",
+                name: "Table Template",
+                __typename: "Templates",
+              },
+              __typename: "ResourceDetail",
             },
           ],
         },
@@ -214,5 +263,24 @@ describe("Render therapist resource detail page", () => {
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
     fireEvent.click(screen.queryByTestId("downloadUrl"));
     expect(screen.queryByTestId("viewUrl")).toHaveAttribute("href", "#");
+  });
+
+  test("View Template if resource is template resource", async () => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        id: "e2114714-18dc-4c91-83e0-7cbd5c98c33e",
+      },
+      push: pushMock,
+    }));
+    await sut();
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("therapistResourceDetail")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("viewTemplate"));
+    expect(pushMock).toHaveBeenCalledWith(
+      "/template/preview/e2114714-18dc-4c91-83e0-7cbd5c98c33e"
+    );
   });
 });
