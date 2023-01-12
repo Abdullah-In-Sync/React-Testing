@@ -533,7 +533,7 @@ const MeasureTest: FC<MeasureTestProps> = ({
             fontSize: "27px",
           }}
         >
-          Are you sure you want to save this test score
+          Are you sure you want to save this test score?
         </Typography>
         <Box marginTop="20px" display="flex" justifyContent="end">
           <Button

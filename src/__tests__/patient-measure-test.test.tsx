@@ -118,6 +118,7 @@ describe("Measure Test", () => {
       query: {
         id: "98392bff10104aa3a4aa3908141ec65a",
       },
+      back: pushMock,
     });
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
@@ -171,7 +172,7 @@ describe("Measure Test", () => {
     await waitFor(() => fireEvent.click(screen.queryByTestId("save-test-btn")));
 
     expect(
-      screen.queryByText("Are you sure want to save test score?")
+      screen.queryByText("Are you sure you want to save this test score?")
     ).toBeInTheDocument();
 
     fireEvent.click(screen.queryByTestId("submitTest"));
@@ -186,7 +187,7 @@ describe("Measure Test", () => {
 
     fireEvent.click(screen.queryAllByTestId("SuccessOkBtn")[0]);
 
-    expect(pushMock).toHaveBeenCalledWith("/patient/measure");
+    expect(pushMock).toBeCalled();
   });
 
   test("on cancel it should redirect to measure list page", async () => {
@@ -194,6 +195,6 @@ describe("Measure Test", () => {
 
     fireEvent.click(screen.queryByTestId("cancel-test-btn"));
 
-    expect(pushMock).toHaveBeenCalledWith("/patient/measure");
+    expect(pushMock).toBeCalled();
   });
 });

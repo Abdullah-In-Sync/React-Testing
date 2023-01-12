@@ -126,11 +126,11 @@ describe("Measure list", () => {
     );
 
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/measure/score/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measures/score/98392bff10104aa3a4aa3908141ec65a`
     );
     await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/measure/test/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measures/test/98392bff10104aa3a4aa3908141ec65a`
     );
   });
 
@@ -170,7 +170,7 @@ describe("Measure list", () => {
     await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
 
     expect(
-      screen.queryByText("Today test has been taken already")
+      screen.queryByText("Today’s test has been taken already")
     ).toBeInTheDocument();
   });
 });
