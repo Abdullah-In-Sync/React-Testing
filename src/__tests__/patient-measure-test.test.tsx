@@ -9,7 +9,7 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
 
-import MeasureTestPage from "../pages/patient/measure/test/[id]";
+import MeasureTestPage from "../pages/patient/measures/test/[id]";
 import {
   GET_MEASURE_DETAIL_BY_PATIENT,
   UPDATE_MEASURE_SCORE_BY_PATIENT,

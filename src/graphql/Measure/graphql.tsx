@@ -68,3 +68,30 @@ export const VIEW_MEASURE_SCORE_BY_PATIENT = gql`
     }
   }
 `;
+
+export const VIEW_MEASURE_RESPONSE = gql`
+  query viewMeasureResponse($patScoreId: String = "") {
+    viewMeasureResponse(patScoreId: $patScoreId) {
+      created_date
+      measure_cat_id
+      patient_id
+      patmscore_difficult
+      patmscore_everyday_value
+      patmscore_halfthedays_value
+      patmscore_severaldays_value
+      patmscore_notatall_value
+      patmscore_status
+      patmscore_value
+      patientmeasurequestion {
+        measure_cat_ques_id
+        patmques_everyday
+        measure_cat_id
+        patmques_ques
+        patmques_halfthedays
+        patmques_notatall
+        patmques_severaldays
+      }
+      _id
+    }
+  }
+`;
