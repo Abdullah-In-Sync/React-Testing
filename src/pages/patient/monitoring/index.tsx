@@ -87,6 +87,7 @@ const Monitoring: NextPage = () => {
           startDate,
           dateSort: "asc",
         },
+        fetchPolicy: "network-only",
         onCompleted: (data) => {
           const { getPatientMonitorAnsById: viewResponse = [] } = data;
           setCurrentMonitoring(item);
@@ -142,6 +143,7 @@ const Monitoring: NextPage = () => {
         variables: {
           monitorId,
         },
+        fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data!.getPatientMonitorById) {
             setCompleteData(data!.getPatientMonitorById);
