@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-export const useStyles = makeStyles({
+export const useStyles = makeStyles(() => ({
   boxWithHeader: {
     "& .MuiPaper-root": {
       color: "#fff",
@@ -16,6 +16,11 @@ export const useStyles = makeStyles({
     "& .MuiBox-root": {
       padding: 2,
       border: `1px solid #ccc`,
+      borderRadius: "0px 0px 10px 10px",
+    },
+    "& .active-border": {
+      padding: 2,
+      border: "1px solid",
     },
   },
   simpleHeaderAppBar: {
@@ -36,4 +41,4 @@ export const useStyles = makeStyles({
       marginRight: 2,
     },
   },
-});
+}));

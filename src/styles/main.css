@@ -57,14 +57,31 @@
   user-select: none;
   /* Standard syntax */
 }
+
 .canvas-container {
   height: 60vh !important;
   width: 60vw !important;
   position: relative;
 }
 
-.canvas-bar-container{
+.canvas-bar-container {
   height: 60vh !important;
   width: 40vw !important;
   position: relative;
+}
+
+.canvas-pie-container {
+  height: 45vh !important;
+  width: 45vw !important;
+  position: relative;
+}
+
+.layoutCard {
+  height: 80vh;
+}
+
+@media screen and (max-height: 700px) {
+  .layoutCard {
+    height: 100vh;
+  }
 }

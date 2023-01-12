@@ -1,4 +1,6 @@
+import moment from "moment";
 import * as monitoringTypes from "./types";
+import hdata from "./data";
 
 /**
  * Sorting api data based on questions type.
@@ -87,7 +89,6 @@ export const totalAnsCount = (data: {
 export const generateEmojiLineData = (
   filterQuesAnsData
 ): monitoringTypes.chartData => {
-  const filterDateData = filterAnswer(filterQuesAnsData);
   const tempData = {
     labels: [],
     datasets: [
@@ -100,17 +101,22 @@ export const generateEmojiLineData = (
     ],
   };
 
-  Object.entries(filterDateData).forEach((entry) => {
-    const [dateKey, value] = entry;
+  const filterBasedOnEmojis = (ptmon_ans) => {
+    return hdata.emojis.filter((item) => ptmon_ans === item._id)[0];
+  };
 
-    Object.entries(value).forEach((entry) => {
-      const [_, countObj] = entry; // eslint-disable-line @typescript-eslint/no-unused-vars
-      tempData["labels"].push(dateKey);
+  filterQuesAnsData.forEach((value) => {
+    const { created_date, ptmon_ans } = value;
+    if (ptmon_ans) {
+      const formatCreateDate = moment(created_date).format("YYYY-MM-DD");
+      const emojisAnsObj = filterBasedOnEmojis(ptmon_ans);
+      tempData["labels"].push(formatCreateDate);
       tempData["datasets"][0]["data"].push({
-        x: new Date(dateKey),
-        y: countObj.count,
+        x: formatCreateDate,
+        y: emojisAnsObj ? emojisAnsObj.position : 0,
+        label: emojisAnsObj ? emojisAnsObj.emoji_caption : "Terribles",
       });
-    });
+    }
   });
 
   return tempData;

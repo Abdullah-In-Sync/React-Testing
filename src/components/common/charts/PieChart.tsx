@@ -15,7 +15,7 @@ const pieOptions = {
 
 const PieChartComponent = ({ data }) => {
   return (
-    <div className="canvas-container">
+    <div className="canvas-pie-container">
       <Pie data={data} options={pieOptions} />
     </div>
   );

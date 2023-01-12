@@ -216,8 +216,21 @@ export const useStyles = makeStyles((theme: Theme) => ({
           padding: "10px 0px",
         },
       },
+      "& .emojListWrapperCenter": {
+        display: "flex",
+        position: "relative",
+        "& ul": {
+          position: "absolute",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          height: "100%",
+          /* top: -30px; */
+          bottom: 0,
+          padding: "10px 0px",
+        },
+      },
       alignItems: "center",
-
       "& .MuiBox-root": {
         // height: 300
       },
