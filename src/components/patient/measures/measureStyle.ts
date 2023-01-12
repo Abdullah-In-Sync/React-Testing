@@ -111,11 +111,40 @@ export const useStyles = makeStyles({
     fontSize: "14px",
     fontWeight: 600,
   },
+  chartWrapper: {
+    padding: "10px",
+    border: "2px solid #d5d8da",
+    borderRadius: "5px",
+  },
   smallRadioButton: {
     margin: 0,
     "& svg": {
       width: "34px",
       height: "34px",
+    },
+  },
+  scoreTable: {
+    "&  td": {
+      fontSize: "14px",
+    },
+    "&  th > span": {
+      fontSize: "14px",
+    },
+  },
+  viewResponseButton: {
+    backgroundColor: "#6ec9db",
+    color: "#fff",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    fontSize: "14px",
+    fontWeight: "bold",
+    minWidth: "150px",
+    borderRadius: "4px",
+    textTransform: "initial",
+    "&:hover": {
+      backgroundColor: "#6ec9db",
     },
   },
 });
