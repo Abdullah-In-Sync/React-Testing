@@ -110,12 +110,15 @@ export const generateEmojiLineData = (
     if (ptmon_ans) {
       const formatCreateDate = moment(created_date).format("YYYY-MM-DD");
       const emojisAnsObj = filterBasedOnEmojis(ptmon_ans);
-      tempData["labels"].push(formatCreateDate);
-      tempData["datasets"][0]["data"].push({
-        x: formatCreateDate,
-        y: emojisAnsObj ? emojisAnsObj.position : 0,
-        label: emojisAnsObj ? emojisAnsObj.emoji_caption : "Terribles",
-      });
+
+      if (emojisAnsObj) {
+        tempData["labels"].push(formatCreateDate);
+        tempData["datasets"][0]["data"].push({
+          x: formatCreateDate,
+          y: emojisAnsObj.position,
+          label: emojisAnsObj.emoji_caption,
+        });
+      }
     }
   });
 

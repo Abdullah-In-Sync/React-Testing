@@ -27,9 +27,7 @@ const MonitoringViewResponse: React.FC<monitoringTypes.MonitoringProps> = ({
 
   const emojisVerticalImage = (lineData) => {
     const isPositionExist = (v) => {
-      return lineData.length < 2
-        ? lineData.some((nitem) => nitem.y === v.position)
-        : true;
+      return lineData.some((nitem) => nitem.y === v.position);
     };
     return (
       <ImageList cols={1} className="emojListWrapper">
