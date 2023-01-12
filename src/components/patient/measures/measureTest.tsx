@@ -39,17 +39,27 @@ import { UPDATE_MEASURE_SCORE_BY_PATIENT } from "../../../graphql/Measure/graphq
 interface MeasureTestProps {
   measureDetail: MeasureDetail[];
   setLoader: Dispatch<SetStateAction<boolean>>;
+  patmScoreDifficultInit?: number;
+  disabled?: boolean;
 }
 
-const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
+const MeasureTest: FC<MeasureTestProps> = ({
+  measureDetail,
+  setLoader,
+  patmScoreDifficultInit = 0,
+  disabled = false,
+}) => {
   const router = useRouter();
   const classes = useStyles();
   const [tableQuestion, setTableQuestion] = useState([]);
   const [errorModal, setErrorModal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
   const [sureModal, setSureModal] = useState(false);
-  const [patmScoreDifficult, setPatmScoreDifficult] = useState<number>(0);
+  const [patmScoreDifficult, setPatmScoreDifficult] = useState<number>(
+    patmScoreDifficultInit
+  );
 
+  console.log(patmScoreDifficultInit, patmScoreDifficult);
   const [updateMeasureScore, { data }] = useMutation<
     UpdateMeasureScoreByPatientRes,
     UpdateMeasureScoreByPatientVars
@@ -108,7 +118,9 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
       severaldays: 0,
       halfthedays: 0,
       everyday: 0,
+      ...value,
     }));
+    console.log(questions, "questions");
     setTableQuestion([
       {
         index: 0,
@@ -145,14 +157,13 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
       }}
       className={classes.showSelected}
       data-testid={`${field}-${index}`}
-      onClick={() => onSelectScore(field, index)}
+      onClick={() => !disabled && onSelectScore(field, index)}
     >
       {val}
     </span>
   );
 
   const onSelectScore = (field, index) => {
-    console.log("onlick is working");
     tableQuestion[index] = {
       ...tableQuestion[index],
       notatall: 0,
@@ -229,7 +240,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
   };
 
   const onCancel = () => {
-    router.push("/patient/measure");
+    router.back();
   };
 
   const saveResponse = () => {
@@ -332,15 +343,15 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
           <Box marginTop={"16px"}>
             <Box>
               <Typography component={"p"} className={classes?.infoText}>
-                If you checked of any problems, how difcult have these problems
-                made it for you to do your work, take care of things at home, or
-                get along with other people?
+                If you checked of any problems, how difficult have these
+                problems made it for you to do your work, take care of things at
+                home, or get along with other people?
               </Typography>
             </Box>
             <RadioGroup
               value={patmScoreDifficult}
               onChange={(val) =>
-                setPatmScoreDifficult(parseInt(val?.target?.value))
+                !disabled && setPatmScoreDifficult(parseInt(val?.target?.value))
               }
             >
               <Box display={"flex"} justifyContent="space-around">
@@ -351,7 +362,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
                   alignItems={"center"}
                 >
                   <Typography className={classes.radioHeading}>
-                    Not difcult at all
+                    Not difficult at all
                   </Typography>
                   <FormControlLabel
                     className={classes.smallRadioButton}
@@ -367,7 +378,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
                   alignItems={"center"}
                 >
                   <Typography className={classes.radioHeading}>
-                    Somewhat difcult
+                    Somewhat difficult
                   </Typography>
                   <FormControlLabel
                     className={classes.smallRadioButton}
@@ -383,7 +394,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
                   alignItems={"center"}
                 >
                   <Typography className={classes.radioHeading}>
-                    Very difcult
+                    Very difficult
                   </Typography>
                   <FormControlLabel
                     className={classes.smallRadioButton}
@@ -399,7 +410,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
                   alignItems={"center"}
                 >
                   <Typography className={classes.radioHeading}>
-                    Extremely difcult
+                    Extremely difficult
                   </Typography>
                   <FormControlLabel
                     className={classes.smallRadioButton}
@@ -462,13 +473,15 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
             </Box>
           </Box>
           <Box display={"flex"} justifyContent="center" padding="20px">
-            <Button
-              data-testid="save-test-btn"
-              className={classes.actionButton}
-              onClick={onSave}
-            >
-              Save
-            </Button>
+            {!disabled && (
+              <Button
+                data-testid="save-test-btn"
+                className={classes.actionButton}
+                onClick={onSave}
+              >
+                Save
+              </Button>
+            )}
             <Button
               data-testid="cancel-test-btn"
               style={{ marginLeft: "60px" }}
@@ -520,7 +533,7 @@ const MeasureTest: FC<MeasureTestProps> = ({ measureDetail, setLoader }) => {
             fontSize: "27px",
           }}
         >
-          Are you sure want to save test score?
+          Are you sure you want to save this test score?
         </Typography>
         <Box marginTop="20px" display="flex" justifyContent="end">
           <Button

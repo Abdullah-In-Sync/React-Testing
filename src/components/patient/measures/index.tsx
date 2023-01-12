@@ -33,12 +33,12 @@ const MeasureList: FC<MeasureListProps> = () => {
     if (measure?.last_completed_date && lastTestDate == todayDate) {
       setTestErrorModal(true);
     } else {
-      router.push(`/patient/measure/test/${measure._id}`);
+      router.push(`/patient/measures/test/${measure._id}`);
     }
   };
   const onClickScore = (measure: Measure) => {
     if (measure?.last_completed_date) {
-      router.push(`/patient/measure/score/${measure._id}`);
+      router.push(`/patient/measures/score/${measure._id}`);
     } else {
       setErrorModal(true);
     }
@@ -84,7 +84,7 @@ const MeasureList: FC<MeasureListProps> = () => {
             />
           }
           title="Error"
-          description="Today test has been taken already"
+          description="Today’s test has been taken already"
           onOk={() => {
             setTestErrorModal(false);
           }}
