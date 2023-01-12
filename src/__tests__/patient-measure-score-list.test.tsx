@@ -4,13 +4,14 @@ import {
   waitFor,
   fireEvent,
   within,
+  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
 
-import Measure from "../pages/patient/measures";
-import { GET_PATIENT_MEASURE_LIST } from "../graphql/Measure/graphql";
+import MeasureScoreList from "../pages/patient/measures/score/[id]";
+import { VIEW_MEASURE_SCORE_BY_PATIENT } from "../graphql/Measure/graphql";
 import { useRouter } from "next/router";
 
 const pushMock = jest.fn();
@@ -25,54 +26,66 @@ const mocksData = [];
 
 mocksData.push({
   request: {
-    query: GET_PATIENT_MEASURE_LIST,
+    query: VIEW_MEASURE_SCORE_BY_PATIENT,
   },
   result: {
     data: {
-      getPatientMeasureList: [
-        {
-          user_type: "therapist",
-          user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          status: 2,
-          patient_id: "1b112127af834c3e82f13daa3e84c495",
-          measure_cat_type: 1,
-          measure_cat_name: "test",
-          last_completed_date: null,
-          is_default: 0,
-          created_date: "2022-03-24T13:50:05.000Z",
-          _id: "1f48d0c3b8834d5a85836367bc6cb0b5",
-          __typename: "MeasureCat",
-        },
-        {
-          user_type: "therapist",
-          user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          status: 2,
-          patient_id: "c852c5de6ff14aee8a43804ea9d57ce3",
-          measure_cat_type: 1,
-          measure_cat_name: "measure for patient only",
-          last_completed_date: "2022-12-18T07:01:16.000Z",
-          is_default: 0,
-          created_date: "2022-04-29T06:08:23.000Z",
-          _id: "98392bff10104aa3a4aa3908141ec65a",
-          __typename: "MeasureCat",
-        },
-        {
-          user_type: "therapist",
-          user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          status: 2,
-          patient_id: "6605f4c3992c4fa691a1317c69054ae8",
-          measure_cat_type: 1,
-          measure_cat_name: "Ravi test",
-          last_completed_date: "2022-12-23T10:13:58.000Z",
-          is_default: 0,
-          created_date: "2022-12-23T10:10:39.000Z",
-          _id: "f7ebcd5b73874d2691bce97a70b6035f",
-          __typename: "MeasureCat",
-        },
-      ],
+      viewMeasureScoreByPatient: {
+        scale_data: [
+          "[1673241390900, 0]",
+          "[1673003679646, 1]",
+          "[1672818347252, 1]",
+          "[1672818296759, 2]",
+          "[1672818289221, 2]",
+          "[1672817045519, 2]",
+          "[1672410699000, 0]",
+        ],
+        score_data: [
+          {
+            created_date: "2023-01-09T05:16:30.900Z",
+            _id: "0aba91bc-c611-4bc2-9221-48da110e01ff",
+            patmscore_value: "0",
+            __typename: "PatientMeasureScore",
+          },
+          {
+            created_date: "2023-01-06T11:14:39.646Z",
+            _id: "18080a82-38bc-4e13-b8a1-06936a138676",
+            patmscore_value: "1",
+            __typename: "PatientMeasureScore",
+          },
+          {
+            created_date: "2023-01-04T07:45:47.252Z",
+            _id: "6829471c-a33b-4bb7-a30a-e43564eaa840",
+            patmscore_value: "1",
+            __typename: "PatientMeasureScore",
+          },
+          {
+            created_date: "2023-01-04T07:44:56.759Z",
+            _id: "90195ed0-27c6-457c-be09-4baec2ea681e",
+            patmscore_value: "2",
+            __typename: "PatientMeasureScore",
+          },
+          {
+            created_date: "2023-01-04T07:44:49.221Z",
+            _id: "989eaaa1-1804-4791-84b2-55b743da36ab",
+            patmscore_value: "2",
+            __typename: "PatientMeasureScore",
+          },
+          {
+            created_date: "2023-01-04T07:24:05.519Z",
+            _id: "11c03c36-6ed4-4ab3-967b-69a320e04386",
+            patmscore_value: "2",
+            __typename: "PatientMeasureScore",
+          },
+          {
+            created_date: "2022-12-30T14:31:39.000Z",
+            _id: "e2dedcb8409846acbacb69e3e5fe925e",
+            patmscore_value: "0",
+            __typename: "PatientMeasureScore",
+          },
+        ],
+        __typename: "viewMeasureScore",
+      },
     },
   },
 });
@@ -81,15 +94,17 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
-        <Measure />
+        <MeasureScoreList />
       </SnackbarProvider>
     </MockedProvider>
   );
 
-  screen.queryByTestId("activity-indicator");
+  await waitForElementToBeRemoved(() =>
+    screen.queryByTestId("activity-indicator")
+  );
 };
 
-describe("Measure list", () => {
+describe("Measures score list", () => {
   beforeEach(() => {
     (useRouter as jest.Mock).mockReturnValue({
       push: pushMock,
@@ -109,68 +124,19 @@ describe("Measure list", () => {
     jest.useFakeTimers().setSystemTime(new Date("2022-12-23"));
   });
 
-  test("Renders measure list", async () => {
+  test("Renders measure score list & chart", async () => {
     await sut();
-    await waitFor(async () => {
-      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
-    });
-    await waitFor(() =>
-      fireEvent.click(
-        within(screen.queryAllByTestId("list-tile")[1]).getByTestId(
-          "toggleContent"
-        )
-      )
-    );
-    await waitFor(() =>
-      fireEvent.click(screen.queryByTestId("view-score-btn"))
-    );
-
-    expect(pushMock).toHaveBeenCalledWith(
-      `/patient/measure/score/98392bff10104aa3a4aa3908141ec65a`
-    );
-    await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
-    expect(pushMock).toHaveBeenCalledWith(
-      `/patient/measure/test/98392bff10104aa3a4aa3908141ec65a`
-    );
+    expect(screen.queryByTestId("chart")).toBeInTheDocument();
+    expect(screen.queryByTestId("table-list")).toBeInTheDocument();
   });
 
-  test("If score data is not available it will show the error popup", async () => {
+  test("on click view response redirect to response page", async () => {
     await sut();
-    await waitFor(async () => {
-      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
-    });
-    await waitFor(() =>
-      fireEvent.click(
-        within(screen.queryAllByTestId("list-tile")[0]).getByTestId(
-          "toggleContent"
-        )
-      )
+    fireEvent.click(
+      screen.queryByTestId("view-response-0aba91bc-c611-4bc2-9221-48da110e01ff")
     );
-    await waitFor(() =>
-      fireEvent.click(screen.queryByTestId("view-score-btn"))
+    expect(pushMock).toBeCalledWith(
+      "response/0aba91bc-c611-4bc2-9221-48da110e01ff"
     );
-
-    expect(
-      screen.queryByText("No Score information is available")
-    ).toBeInTheDocument();
-  });
-
-  test("If test already token for today it will show the error popup", async () => {
-    await sut();
-    await waitFor(async () => {
-      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
-    });
-    await waitFor(() =>
-      fireEvent.click(
-        within(screen.queryAllByTestId("list-tile")[2]).getByTestId(
-          "toggleContent"
-        )
-      )
-    );
-    await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
-
-    expect(
-      screen.queryByText("Today test has been taken already")
-    ).toBeInTheDocument();
   });
 });

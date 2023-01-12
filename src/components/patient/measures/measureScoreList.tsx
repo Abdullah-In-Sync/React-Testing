@@ -55,6 +55,7 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
           className={classes.viewResponseButton}
           onClick={() => onViewResponseClick(record)}
           color="primary"
+          data-testid={`view-response-${record?._id}`}
         >
           View Response
         </Button>
@@ -76,10 +77,18 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       >
         <span>Test</span>
       </Grid>
-      <Box margin={"10px"} className={classes.chartWrapper}>
+      <Box
+        data-testid={"chart"}
+        margin={"10px"}
+        className={classes.chartWrapper}
+      >
         <LineChart seriesX={seriesX} seriesY={seriesY} />
       </Box>
-      <Box margin={"30px 10px"} className={classes.scoreTable}>
+      <Box
+        data-testid={"table-list"}
+        margin={"30px 10px"}
+        className={classes.scoreTable}
+      >
         <TableGenerator
           fields={fields}
           data={measureScoreDetail?.score_data}
