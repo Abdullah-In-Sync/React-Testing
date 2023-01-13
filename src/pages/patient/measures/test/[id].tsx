@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import moment from "moment";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -37,6 +38,7 @@ const MeasureTestPage: NextPage = () => {
           <MeasureTest
             measureDetail={data.getMeasureDetailByPatient}
             setLoader={setLoader}
+            testDate={moment().format("DD-MM-YYYY")}
           />
         )}
       </Layout>

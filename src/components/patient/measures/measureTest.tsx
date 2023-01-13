@@ -41,6 +41,7 @@ interface MeasureTestProps {
   setLoader: Dispatch<SetStateAction<boolean>>;
   patmScoreDifficultInit?: number;
   disabled?: boolean;
+  testDate?: string;
 }
 
 const MeasureTest: FC<MeasureTestProps> = ({
@@ -48,6 +49,7 @@ const MeasureTest: FC<MeasureTestProps> = ({
   setLoader,
   patmScoreDifficultInit = 0,
   disabled = false,
+  testDate,
 }) => {
   const router = useRouter();
   const classes = useStyles();
@@ -59,7 +61,6 @@ const MeasureTest: FC<MeasureTestProps> = ({
     patmScoreDifficultInit
   );
 
-  console.log(patmScoreDifficultInit, patmScoreDifficult);
   const [updateMeasureScore, { data }] = useMutation<
     UpdateMeasureScoreByPatientRes,
     UpdateMeasureScoreByPatientVars
@@ -120,7 +121,6 @@ const MeasureTest: FC<MeasureTestProps> = ({
       everyday: 0,
       ...value,
     }));
-    console.log(questions, "questions");
     setTableQuestion([
       {
         index: 0,
@@ -178,7 +178,6 @@ const MeasureTest: FC<MeasureTestProps> = ({
   const totalScore = useMemo(() => {
     const fieldSum = tableQuestion?.reduce(
       (value, element) => {
-        console.log(value, element);
         value.patmscore_notatall_value += 0;
         value.patmscore_severaldays_value += element?.severaldays == 1 ? 1 : 0;
         value.patmscore_halfthedays_value += element?.halfthedays == 1 ? 2 : 0;
@@ -212,7 +211,6 @@ const MeasureTest: FC<MeasureTestProps> = ({
   const onSave = () => {
     const fieldSum = tableQuestion?.reduce(
       (value, element) => {
-        console.log(value, element);
         value.notatall += element?.notatall || 0;
         value.severaldays += element?.severaldays || 0;
         value.halfthedays += element?.halfthedays || 0;
@@ -281,8 +279,8 @@ const MeasureTest: FC<MeasureTestProps> = ({
           justifyContent={"space-between"}
           style={{ fontWeight: 500, fontSize: "14px" }}
         >
-          <span>Test</span>
-          <span>Completed : 30-12-2022</span>
+          <span>{measureDetail?.[0]?.measure_cat_name}</span>
+          <span>Completed : {testDate}</span>
         </Grid>
         <Grid className={classes.questionTable}>
           <TableGenerator
@@ -517,7 +515,7 @@ const MeasureTest: FC<MeasureTestProps> = ({
           title="TEST SCORE"
           description="Test score saved successfully"
           onOk={() => {
-            router.push("/patient/measure");
+            router.push("/patient/measures");
           }}
         />
       )}

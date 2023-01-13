@@ -33,6 +33,7 @@ export interface MeasureDetail {
   measure_cat_id: string;
   measure_cat_ques: string;
   measure_cat_ques_type: number;
+  measure_cat_name: string;
   notatall?: number;
   severaldays?: number;
   halfthedays?: number;
@@ -65,6 +66,7 @@ export interface ViewMeasureScoreByPatientRes {
 export interface ViewMeasureScoreByPatient {
   scale_data: string[];
   score_data: ScoreDatum[];
+  measure_cat_name: string;
 }
 
 export interface ScoreDatum {
