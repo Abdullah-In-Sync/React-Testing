@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { Measure } from "../../graphql/Measure/types";
-import { MeasureTile } from "../patient/measure/measureTile";
+import { MeasureTile } from "../patient/measures/measureTile";
 
 const measure: Measure = {
   user_type: "therapist",
