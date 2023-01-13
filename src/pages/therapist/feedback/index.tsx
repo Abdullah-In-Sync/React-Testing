@@ -92,35 +92,35 @@ const Feedback: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    // if (patientData?.patient_id?.length > 0) {
-    setLoader(true);
-    getPatientTherapyData({
-      variables: { patientId: patientData.patient_id },
-    });
-    // }
+    if (patientData?.patient_id?.length > 0) {
+      setLoader(true);
+      getPatientTherapyData({
+        variables: { patientId: patientData.patient_id },
+      });
+    }
   }, [patientData]);
 
   useEffect(() => {
-    // if (patientData.patient_id.length > 0) {
-    setLoader(true);
-    getPatientSessionData({
-      variables: { pttherapyId: therapy, patientId: patientData.patient_id },
-    });
-    // }
+    if (patientData.patient_id.length > 0) {
+      setLoader(true);
+      getPatientSessionData({
+        variables: { pttherapyId: therapy, patientId: patientData.patient_id },
+      });
+    }
   }, [therapy]);
 
   useEffect(() => {
-    // if (patientData.patient_id.length > 0) {
-    setLoader(true);
-    getTherapistFeedbackListData({
-      variables: {
-        patientId: patientData.patient_id,
-        sessionNo: sessionNo,
-        feedbackType: feedbackType,
-        pttherapyId: therapy,
-      },
-    });
-    // }
+    if (patientData.patient_id.length > 0) {
+      setLoader(true);
+      getTherapistFeedbackListData({
+        variables: {
+          patientId: patientData.patient_id,
+          sessionNo: sessionNo,
+          feedbackType: feedbackType,
+          pttherapyId: therapy,
+        },
+      });
+    }
   }, [sessionNo, feedbackType]);
 
   useEffect(() => {
