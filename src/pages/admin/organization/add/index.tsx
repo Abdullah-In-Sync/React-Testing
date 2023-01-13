@@ -27,6 +27,17 @@ const Index = () => {
   const submitFormHandler = async (
     formFields: addAndEditOrganizationFormFields
   ) => {
+    /* istanbul ignore next */
+    if (
+      formFields?.contract === "<p></p>" ||
+      formFields?.patient_welcome_email === "<p></p>"
+    ) {
+      enqueueSnackbar("Please fill the require fields.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+      return;
+    }
     try {
       updateTemplate({
         variables: {
