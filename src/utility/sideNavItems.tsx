@@ -320,7 +320,7 @@ export const patient_routes: RoutesType[] = [
     {
       key: 10,
       label: "Measures",
-      path: Link + "/patient/measure/patientmeasure",
+      path: "/patient/measures",
       icon: <PreviewIcon />,
     },
     {
