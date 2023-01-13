@@ -370,3 +370,54 @@ export const GET_PATH_RESOURCE_BY_ID = gql`
     }
   }
 `;
+
+export const GET_PATH_RESOURCE_LIST = gql`
+  query getPatResourceList($patientId: String!) {
+    getPatResourceList(patientId: $patientId) {
+      _id
+      created_date
+      patient_id
+      patient_share_filename
+      ptsharres_from
+      ptsharres_status
+      ptsharres_session
+      ptsharres_subfrom
+      resource_id
+      share_from
+      resource_upload
+      template_id
+      template_response
+      updated_date
+      download_patient_filename_url
+      resource_data {
+        _id
+        created_date
+        disorder_id
+        download_resource_url
+        template_data
+        model_id
+        agenda_id
+        category_id
+        org_id
+        resource_avail_onlyme
+        resource_avail_therapist
+        resource_desc
+        resource_filename
+        resource_instruction
+        resource_isformualation
+        resource_issmartdraw
+        resource_name
+        resource_references
+        resource_returnurl
+        resource_session_no
+        resource_status
+        resource_type
+        resource_url
+        template_id
+        updated_date
+        user_id
+        user_type
+      }
+    }
+  }
+`;
