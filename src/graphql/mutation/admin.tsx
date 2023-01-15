@@ -41,3 +41,23 @@ export const ADD_ORGANIZATION_DATA = gql`
     }
   }
 `;
+
+export const UPDATE_ORG_BY_ID = gql`
+  mutation ($orgId: ID!, $update: UpdateOrgInput!) {
+    updateOrgById(orgId: $orgId, update: $update) {
+      _id
+      contract
+      created_date
+      logo
+      logo_url
+      name
+      panel_color
+      patient
+      patient_plural
+      patient_welcome_email
+      side_menu_color
+      therapist
+      therapy
+    }
+  }
+`;
