@@ -90,10 +90,7 @@ const OrganizationList = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <NextLink
-            href={Link + "/superadmin/organization/edit/" + value._id}
-            passHref
-          >
+          <NextLink href={"/admin/organization/edit/" + value._id} passHref>
             <IconButton size="small" data-testid="edit-icon-button">
               <CreateIcon />
             </IconButton>

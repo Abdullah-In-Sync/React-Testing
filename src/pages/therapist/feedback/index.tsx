@@ -92,7 +92,7 @@ const Feedback: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    if (patientData.patient_id.length > 0) {
+    if (patientData?.patient_id?.length > 0) {
       setLoader(true);
       getPatientTherapyData({
         variables: { patientId: patientData.patient_id },
