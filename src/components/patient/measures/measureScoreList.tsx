@@ -23,8 +23,8 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
     const scoreDetail = measureScoreDetail?.scale_data?.map((ele) =>
       JSON.parse(ele)
     );
-    const seriesX = scoreDetail?.map((e) => e[0]);
-    const seriesY = scoreDetail?.map((e) => e[1]);
+    const seriesX = scoreDetail?.map((e) => e[0]).reverse();
+    const seriesY = scoreDetail?.map((e) => e[1]).reverse();
     return { seriesX, seriesY };
   }, [measureScoreDetail]);
 
@@ -42,7 +42,7 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       render: (val) => moment(val).format("DD-MM-YYYY"),
     },
     {
-      columnName: "Score",
+      columnName: measureScoreDetail?.measure_cat_name,
       key: "patmscore_value",
       visible: true,
       render: (val) => val,
@@ -75,7 +75,7 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
         justifyContent={"space-between"}
         style={{ fontWeight: 500, fontSize: "14px" }}
       >
-        <span>Test</span>
+        <span>{measureScoreDetail?.measure_cat_name}</span>
       </Grid>
       <Box
         data-testid={"chart"}

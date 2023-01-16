@@ -25,6 +25,7 @@ export const GET_MEASURE_DETAIL_BY_PATIENT = gql`
       _id
       measure_cat_id
       measure_cat_ques
+      measure_cat_name
       measure_cat_ques_type
     }
   }
@@ -60,6 +61,7 @@ export const VIEW_MEASURE_SCORE_BY_PATIENT = gql`
   query viewMeasureScoreByPatient($measureCatId: String!) {
     viewMeasureScoreByPatient(measureCatId: $measureCatId) {
       scale_data
+      measure_cat_name
       score_data {
         created_date
         _id
