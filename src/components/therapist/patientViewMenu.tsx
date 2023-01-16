@@ -57,7 +57,7 @@ export default function PatientViewMenu({ activeTab, patientID }) {
           Therapy
         </Item>
         <Item
-          data-testId="notesTab"
+          data-testid="notesTab"
           onClick={navigateTo("notes")}
           className={`${activeTab == "notes" ? "active" : ""}`}
         >

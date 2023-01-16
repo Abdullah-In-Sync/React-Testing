@@ -35,6 +35,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
     resource_name = "",
     template_data,
   } = resourceData;
+  console.log("resourceData--->", resourceData);
   const nexButtonClick = template_data && { nexButtonClick: handleNextButton };
 
   const inputViewBox = ({ title, description }: any) => {
@@ -58,7 +59,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
       >
         {Object.keys(resourceData).length > 0 && (
           <Stack className={styles.resouceDetailBoxWrapper}>
-            {template_data && (
+            {!template_data && (
               <Stack data-testid="iconsTarget" className="buttonIconWrapper">
                 <IconButton
                   size="medium"
