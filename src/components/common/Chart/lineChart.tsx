@@ -32,7 +32,7 @@ ChartJS.register(
 export const LineChart: FC<LineChartProps> = ({ seriesX, seriesY }) => {
   const classes = useStyle();
 
-  const maxNumber = Math.max(...seriesY);
+  const maxNumber = Math.max(...(seriesY as Array<number>));
 
   const data = {
     labels: ["", ...seriesX.map((d) => moment(d).format("DD-MM-YYYY"))],
