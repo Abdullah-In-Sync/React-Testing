@@ -23,8 +23,8 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
     const scoreDetail = measureScoreDetail?.scale_data?.map((ele) =>
       JSON.parse(ele)
     );
-    const seriesX = scoreDetail?.map((e) => e[0]);
-    const seriesY = scoreDetail?.map((e) => e[1]);
+    const seriesX = scoreDetail?.map((e) => e[0]).reverse();
+    const seriesY = scoreDetail?.map((e) => e[1]).reverse();
     return { seriesX, seriesY };
   }, [measureScoreDetail]);
 
