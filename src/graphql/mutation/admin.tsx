@@ -61,3 +61,15 @@ export const UPDATE_ORG_BY_ID = gql`
     }
   }
 `;
+
+//Update API
+export const UPDATE_ORG_CONFIG = gql`
+  mutation ($moduleName: String!, $orgId: ID!) {
+    updateOrgConfig(moduleName: $moduleName, orgId: $orgId) {
+      _id
+      name
+      org_id
+      status
+    }
+  }
+`;
