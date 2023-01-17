@@ -51,7 +51,7 @@ export const LineChart: FC<LineChartProps> = ({ seriesX, seriesY }) => {
     scales: {
       y: {
         suggestedMin: 0,
-        suggestedMax: maxNumber < 10 ? 10 : maxNumber,
+        suggestedMax: maxNumber < 6 ? 6 : maxNumber,
       },
     },
     plugins: {
