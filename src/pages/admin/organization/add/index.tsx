@@ -64,7 +64,7 @@ const Index = () => {
     <>
       <Layout>
         <Loader visible={loader} />
-        <ContentHeader title="Add Organization" />
+        <ContentHeader title="Add Organisation" />
         <AddEditOrganization
           onSubmit={submitFormHandler}
           setLoader={setLoader}
@@ -74,8 +74,8 @@ const Index = () => {
       {successModal && (
         <SuccessModal
           isOpen={successModal}
-          title="ORGANIZATION"
-          description={"Organization added Successfully"}
+          title="ORGANISATION"
+          description={"Organisation added Successfully"}
           onOk={handleOk}
         />
       )}

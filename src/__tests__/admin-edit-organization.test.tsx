@@ -233,7 +233,7 @@ describe("Admin edit resource page", () => {
 
     await waitFor(async () => {
       expect(
-        screen.getByText("Organization Updated Successfully")
+        screen.getByText("Organisation Updated Successfully")
       ).toBeInTheDocument();
     });
 
