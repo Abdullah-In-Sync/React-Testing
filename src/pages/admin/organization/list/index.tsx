@@ -155,7 +155,7 @@ const OrganizationList = () => {
       <Loader visible={loader} />
 
       <Layout>
-        <ContentHeader title="Organization" data-testid="organization" />
+        <ContentHeader title="Organisation" data-testid="organization" />
         <Grid item xs={9}>
           <Box sx={crudButtons}>
             <Button
@@ -238,8 +238,8 @@ const OrganizationList = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="ORGANIZATION"
-            description={"Organization Deleted Successfully"}
+            title="ORGANISATION"
+            description={"Organisation Deleted Successfully"}
             onOk={handleOk}
           />
         )}

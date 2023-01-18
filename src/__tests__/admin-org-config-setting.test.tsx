@@ -15,6 +15,7 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 jest.mock("../contexts/AuthContext");
+const pushMock = jest.fn();
 
 const mocksData = [];
 
@@ -233,6 +234,7 @@ describe("Admin edit resource page", () => {
       query: {
         id: "4cc38ec8-78d7-44cb-b668-3c81cc3e7dee",
       },
+      push: pushMock,
     });
 
     await sut();
@@ -266,6 +268,9 @@ describe("Admin edit resource page", () => {
       await waitFor(async () => {
         fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
       });
+
+      // expect(mockRouter.push).toHaveBeenCalledWith("/admin/organization/list");
+      expect(pushMock).toHaveBeenCalledWith("/admin/organization/list");
     });
   });
 });
