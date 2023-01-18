@@ -193,7 +193,7 @@ describe("Admin add resource page", () => {
 
     await waitFor(async () => {
       expect(
-        screen.getByText("Organization added Successfully")
+        screen.getByText("Organisation added Successfully")
       ).toBeInTheDocument();
     });
 

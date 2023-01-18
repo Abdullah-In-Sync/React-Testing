@@ -48,11 +48,7 @@ const Index = () => {
   //To get org list with ID
   const [
     getOrgCongigListWithId,
-    {
-      loading: orgConfigListWithIdLoading,
-      data: orgConfigListWithIdData,
-      refetch,
-    },
+    { loading: orgConfigListWithIdLoading, data: orgConfigListWithIdData },
   ] = useLazyQuery(LIST_MODULE_BY_ORG_ID, {
     onCompleted: (data) => {
       console.log("Koca: data ", data);
@@ -121,7 +117,6 @@ const Index = () => {
 
   const handleOk = () => {
     setSuccessModal(false);
-    refetch();
   };
 
   return (

@@ -88,7 +88,7 @@ export default function OrgConfigSetting(props: propTypes) {
       };
     });
     setConfigurations(configures);
-  }, [props]);
+  }, [props.orgConfigListData, props.orgConfigListWithIdData]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     /* istanbul ignore next */
@@ -147,50 +147,6 @@ export default function OrgConfigSetting(props: propTypes) {
                 ))
               )}
 
-            <SureModal
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              setConfirmSubmission={setConfirmSubmission}
-            >
-              <Typography
-                sx={{
-                  fontWeight: "600",
-                  textAlign: "center",
-                  fontSize: "27px",
-                }}
-              >
-                "Are you sure want to Update This Config Setting?"
-              </Typography>
-              <Box marginTop="20px" display="flex" justifyContent="end">
-                <Button
-                  variant="contained"
-                  color="inherit"
-                  size="small"
-                  data-testid="addOrganizationCancleButton"
-                  onClick={() => {
-                    setModalOpen(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  color="error"
-                  variant="contained"
-                  sx={{ marginLeft: "5px" }}
-                  size="small"
-                  data-testid="addOrganizationConfirmButton"
-                  onClick={() => {
-                    setModalOpen(false);
-                    props.onSubmit(
-                      configurations.filter((obj) => obj.status === true)
-                    );
-                  }}
-                >
-                  Confirm
-                </Button>
-              </Box>
-            </SureModal>
-
             <Grid container spacing={5} marginBottom={0}>
               <Grid
                 item
@@ -208,6 +164,47 @@ export default function OrgConfigSetting(props: propTypes) {
               </Grid>
             </Grid>
           </form>
+          <SureModal
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+            setConfirmSubmission={setConfirmSubmission}
+          >
+            <Typography
+              sx={{
+                fontWeight: "600",
+                textAlign: "center",
+                fontSize: "27px",
+              }}
+            >
+              Are you sure want to Update This Config Setting?
+            </Typography>
+            <Box marginTop="20px" display="flex" justifyContent="end">
+              <Button
+                variant="contained"
+                color="inherit"
+                size="small"
+                data-testid="addOrganizationCancleButton"
+                onClick={() => setModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="error"
+                variant="contained"
+                sx={{ marginLeft: "5px" }}
+                size="small"
+                data-testid="addOrganizationConfirmButton"
+                onClick={() => {
+                  props.onSubmit(
+                    configurations.filter((obj) => obj.status === true)
+                  );
+                  setModalOpen(false);
+                }}
+              >
+                Confirm
+              </Button>
+            </Box>
+          </SureModal>
         </>
       </Box>
     </>
