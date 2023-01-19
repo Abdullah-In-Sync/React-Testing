@@ -13,6 +13,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
         height: "70vh",
       },
     },
+    "& .alertMessage": {
+      textAlign: "center",
+      width: 300,
+    },
+    "& .alertMessage .alertHead": {
+      fontSize: "2rem",
+      color: theme.palette.primary.main,
+    },
     "& table td p": {
       fontWeight: 600,
     },

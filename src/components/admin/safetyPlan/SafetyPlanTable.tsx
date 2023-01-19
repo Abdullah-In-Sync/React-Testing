@@ -1,4 +1,4 @@
-import { Alert, Stack, TablePagination, Typography } from "@mui/material";
+import { Stack, TablePagination, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -33,9 +33,16 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
   const { data: list = [], total = 0 } = safetyPlanList || {};
 
   const messageCheck = () => {
-    if (loadingSafetyPlanList) return "Loading...";
+    if (loadingSafetyPlanList) return <Typography>Loading...</Typography>;
     else if (list.length <= 0 && !loadingSafetyPlanList)
-      return "No data found !";
+      return (
+        <>
+          <Typography className="alertHead">Oops!</Typography>
+          <Typography>
+            Currently you have not created any safety plan
+          </Typography>
+        </>
+      );
     else return null;
   };
 
@@ -46,7 +53,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
         <TableRow className="rowMessageWrapper">
           <TableCell colSpan={5}>
             <Stack className="stackMesage" spacing={2}>
-              <Alert severity="info">{tempCheck}</Alert>
+              <span className="alertMessage"> {tempCheck} </span>
             </Stack>
           </TableCell>
         </TableRow>
