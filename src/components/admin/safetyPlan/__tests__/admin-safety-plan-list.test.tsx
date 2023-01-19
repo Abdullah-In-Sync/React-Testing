@@ -50,7 +50,7 @@ mocksData.push({
     query: GET_SAFETY_PLAN_LIST,
     variables: {
       limit: 10,
-      pageNo: 0,
+      pageNo: 1,
     },
   },
   result: {
@@ -84,7 +84,7 @@ mocksData.push({
     query: GET_SAFETY_PLAN_LIST,
     variables: {
       limit: 10,
-      pageNo: 0,
+      pageNo: 1,
       orgId: "73ccaf14b7cb4a5a9f9cf7534b358c51",
     },
   },
@@ -120,7 +120,7 @@ mocksData.push({
     variables: {
       limit: 10,
       searchText: "plan",
-      pageNo: 0,
+      pageNo: 1,
       orgId: "73ccaf14b7cb4a5a9f9cf7534b358c51",
     },
   },
@@ -155,7 +155,7 @@ mocksData.push({
     query: GET_SAFETY_PLAN_LIST,
     variables: {
       limit: 10,
-      pageNo: 0,
+      pageNo: 1,
       searchText: "plan",
       orgId: "73ccaf14b7cb4a5a9f9cf7534b358c51",
       planType: "fixed",
@@ -192,7 +192,7 @@ mocksData.push({
     query: GET_SAFETY_PLAN_LIST,
     variables: {
       limit: 10,
-      pageNo: 1,
+      pageNo: 2,
       searchText: "plan",
       orgId: "73ccaf14b7cb4a5a9f9cf7534b358c51",
       planType: "fixed",
