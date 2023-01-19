@@ -54,7 +54,6 @@ const Filter: React.FC<ViewProps> = ({
               value={selectFilterOptions["orgId"] || "all"}
               label="Select Organization"
               onChange={onChangeFilterDropdown}
-              // inputProps={{ "data-testid": "organizationSelect" }}
               options={[...[{ _id: "all", name: "All" }], ...organizationList]}
               mappingKeys={["_id", "name"]}
               size="small"

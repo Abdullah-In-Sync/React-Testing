@@ -120,7 +120,7 @@ const SafetyPlanPage: NextPage = () => {
         <ContentHeader title="Safety Plan" />
         <SafetyPlanComponent
           safetyPlanList={listData}
-          buttonClick={() => alert("click")}
+          pageActionButtonClick={() => null}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
