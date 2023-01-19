@@ -5,7 +5,7 @@ import SafetyPlanTable from "./SafetyPlanTable";
 
 interface ViewProps {
   safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
-  buttonClick: (value) => void;
+  pageActionButtonClick: (value) => void;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
   tableCurentPage?: number;
@@ -20,7 +20,7 @@ interface ViewProps {
 
 const SafetyPlanComponent: React.FC<ViewProps> = ({
   safetyPlanList,
-  buttonClick,
+  pageActionButtonClick,
   onPageChange,
   onSelectPageDropdown,
   tableCurentPage,
@@ -43,7 +43,7 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
       />
       <SafetyPlanTable
         safetyPlanList={safetyPlanList}
-        buttonClick={buttonClick}
+        pageActionButtonClick={pageActionButtonClick}
         onPageChange={onPageChange}
         onSelectPageDropdown={onSelectPageDropdown}
         tableCurentPage={tableCurentPage}

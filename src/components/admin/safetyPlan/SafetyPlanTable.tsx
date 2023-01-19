@@ -14,7 +14,7 @@ interface ViewProps {
   safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
-  buttonClick?: (value) => void;
+  pageActionButtonClick?: (value) => void;
   tableCurentPage?: number;
   rowsLimit?: number;
   loadingSafetyPlanList?: boolean;
@@ -22,7 +22,7 @@ interface ViewProps {
 
 const SafetyPlanTable: React.FC<ViewProps> = ({
   safetyPlanList,
-  buttonClick,
+  pageActionButtonClick,
   onPageChange,
   onSelectPageDropdown,
   tableCurentPage,
@@ -96,7 +96,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
                         {column.format
                           ? column.format(
                               row,
-                              buttonClick,
+                              pageActionButtonClick,
                               tableCurentPage * rowsLimit + i
                             )
                           : value}
