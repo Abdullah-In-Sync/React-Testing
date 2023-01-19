@@ -3,11 +3,23 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   tablePaper: {
-    padding: 10,
+    padding: "10px 0px 30px 0px",
     "& table": {
       width: "100%",
-      height: "100%",
-      overflowY: "scroll",
+      "& .rowMessageWrapper .stackMesage": {
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "70vh",
+      },
+    },
+    "& .alertMessage": {
+      textAlign: "center",
+      width: 300,
+    },
+    "& .alertMessage .alertHead": {
+      fontSize: "2rem",
+      color: theme.palette.primary.main,
     },
     "& table td p": {
       fontWeight: 600,
@@ -44,6 +56,24 @@ export const useStyles = makeStyles((theme: Theme) => ({
       border: "1px solid",
       borderColor: theme.palette.primary.main,
       borderRadius: 10,
+    },
+  },
+  filterWrapper: {
+    flexDirection: "row",
+    "& .myhelp-select-control": {
+      minWidth: 300,
+      // flex: 1,
+      padding: "0px 5px",
+    },
+    "& .filterDropdownInput": {
+      display: "flex",
+      flex: 1,
+      "& .MuiBox-root": {
+        paddingRight: 5,
+      },
+    },
+    "& .form-control-bg": {
+      background: "unset",
     },
   },
   root: {
