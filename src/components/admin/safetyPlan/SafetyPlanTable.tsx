@@ -43,10 +43,9 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
     const tempCheck = messageCheck();
     return (
       tempCheck != null && (
-        <TableRow>
-          {" "}
+        <TableRow className="rowMessageWrapper">
           <TableCell colSpan={5}>
-            <Stack sx={{ width: "100%" }} spacing={2}>
+            <Stack className="stackMesage" spacing={2}>
               <Alert severity="info">{tempCheck}</Alert>
             </Stack>
           </TableCell>

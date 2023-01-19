@@ -115,7 +115,7 @@ const SafetyPlanPage: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
         <ContentHeader title="Safety Plan" />
         <SafetyPlanComponent

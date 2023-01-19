@@ -3,9 +3,15 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   tablePaper: {
-    padding: 10,
+    padding: "10px 0px 30px 0px",
     "& table": {
       width: "100%",
+      "& .rowMessageWrapper .stackMesage": {
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "70vh",
+      },
     },
     "& table td p": {
       fontWeight: 600,
