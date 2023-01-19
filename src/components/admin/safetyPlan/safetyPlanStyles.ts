@@ -6,8 +6,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: 10,
     "& table": {
       width: "100%",
-      height: "100%",
-      overflowY: "scroll",
     },
     "& table td p": {
       fontWeight: 600,
@@ -44,6 +42,24 @@ export const useStyles = makeStyles((theme: Theme) => ({
       border: "1px solid",
       borderColor: theme.palette.primary.main,
       borderRadius: 10,
+    },
+  },
+  filterWrapper: {
+    flexDirection: "row",
+    "& .myhelp-select-control": {
+      minWidth: 300,
+      // flex: 1,
+      padding: "0px 5px",
+    },
+    "& .filterDropdownInput": {
+      display: "flex",
+      flex: 1,
+      "& .MuiBox-root": {
+        paddingRight: 5,
+      },
+    },
+    "& .form-control-bg": {
+      background: "unset",
     },
   },
   root: {
