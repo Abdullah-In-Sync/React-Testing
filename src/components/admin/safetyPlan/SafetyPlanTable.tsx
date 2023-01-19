@@ -30,11 +30,11 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
   loadingSafetyPlanList,
 }) => {
   const styles = useStyles();
-  const { data: list = [], total = 0 } = safetyPlanList || {};
+  const { data: list, total = 0 } = safetyPlanList || {};
 
   const messageCheck = () => {
     if (loadingSafetyPlanList) return <Typography>Loading...</Typography>;
-    else if (list.length <= 0 && !loadingSafetyPlanList)
+    else if (!list && !loadingSafetyPlanList)
       return (
         <>
           <Typography className="alertHead">Oops!</Typography>
@@ -43,6 +43,8 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
           </Typography>
         </>
       );
+    else if (list.length <= 0 && !loadingSafetyPlanList)
+      return <Typography>No data found.</Typography>;
     else return null;
   };
 
@@ -79,7 +81,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.map((row, i) => {
+            {(list || []).map((row, i) => {
               return (
                 <TableRow
                   hover

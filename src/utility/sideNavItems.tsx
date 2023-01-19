@@ -135,7 +135,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 13,
       label: "Safety Plan",
-      path: Link + "/superadmin/safety/list",
+      path: "/admin/safetyPlan/",
       icon: <BadgeIcon />,
     },
     {
