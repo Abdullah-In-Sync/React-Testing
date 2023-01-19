@@ -1,17 +1,18 @@
 import { useQuery } from "@apollo/client";
+import moment from "moment";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ContentHeader from "../../../../components/common/ContentHeader";
-import Loader from "../../../../components/common/Loader";
-import Layout from "../../../../components/layout";
-import MeasureTest from "../../../../components/patient/measures/measureTest";
-import { GET_MEASURE_DETAIL_BY_PATIENT } from "../../../../graphql/Measure/graphql";
+import ContentHeader from "../../../../../components/common/ContentHeader";
+import Loader from "../../../../../components/common/Loader";
+import Layout from "../../../../../components/layout";
+import MeasureTest from "../../../../../components/patient/measures/measureTest";
+import { GET_MEASURE_DETAIL_BY_PATIENT } from "../../../../../graphql/Measure/graphql";
 import {
   GetMeasureDetailByPatientRes,
   GetMeasureDetailByPatientVars,
-} from "../../../../graphql/Measure/types";
-import withAuthentication from "../../../../hoc/auth";
+} from "../../../../../graphql/Measure/types";
+import withAuthentication from "../../../../../hoc/auth";
 
 const MeasureTestPage: NextPage = () => {
   const router = useRouter();
@@ -37,6 +38,7 @@ const MeasureTestPage: NextPage = () => {
           <MeasureTest
             measureDetail={data.getMeasureDetailByPatient}
             setLoader={setLoader}
+            testDate={moment().format("DD-MM-YYYY")}
           />
         )}
       </Layout>

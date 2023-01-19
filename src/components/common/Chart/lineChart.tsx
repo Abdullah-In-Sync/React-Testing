@@ -29,41 +29,10 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-    },
-    scales: {
-      yAxes: {
-        title: {
-          display: true,
-          font: {
-            size: 50,
-          },
-        },
-        ticks: {
-          precision: 0,
-        },
-      },
-      xAxes: {
-        title: {
-          display: true,
-          font: {
-            size: 50,
-          },
-        },
-      },
-    },
-  },
-};
-
 export const LineChart: FC<LineChartProps> = ({ seriesX, seriesY }) => {
   const classes = useStyle();
+
+  const maxNumber = Math.max(...(seriesY as Array<number>));
 
   const data = {
     labels: ["", ...seriesX.map((d) => moment(d).format("DD-MM-YYYY"))],
@@ -76,6 +45,25 @@ export const LineChart: FC<LineChartProps> = ({ seriesX, seriesY }) => {
       },
     ],
   };
+
+  const options = {
+    responsive: true,
+    scales: {
+      y: {
+        suggestedMin: 0,
+        suggestedMax: maxNumber < 6 ? 6 : maxNumber,
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+  };
+
   return <Line className={classes.chart} options={options} data={data} />;
 };
 

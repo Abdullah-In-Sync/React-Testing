@@ -152,7 +152,7 @@ describe("TemplateList Page", () => {
 
     await waitFor(async () => {
       expect(
-        screen.getByText("Organization Deleted Successfully")
+        screen.getByText("Organisation Deleted Successfully")
       ).toBeInTheDocument();
     });
 

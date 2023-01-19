@@ -15,7 +15,7 @@ const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
-  const [updateTemplate] = useMutation(ADD_ORGANIZATION_DATA);
+  const [addOrganisation] = useMutation(ADD_ORGANIZATION_DATA);
   const router = useRouter();
 
   const handleOk = () => {
@@ -27,19 +27,8 @@ const Index = () => {
   const submitFormHandler = async (
     formFields: addAndEditOrganizationFormFields
   ) => {
-    /* istanbul ignore next */
-    if (
-      formFields?.contract === "<p></p>" ||
-      formFields?.patient_welcome_email === "<p></p>"
-    ) {
-      enqueueSnackbar("Please fill the require fields.", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-      return;
-    }
     try {
-      updateTemplate({
+      addOrganisation({
         variables: {
           orgName: formFields.name,
           panelColor: formFields.panel_color,
@@ -50,7 +39,7 @@ const Index = () => {
           therapy: formFields.therapy,
           contract: formFields.contract,
           patientWelcomeEmail: formFields.patient_welcome_email,
-          logo: formFields.logo,
+          logo: formFields.file_name,
         },
         onCompleted: (data) => {
           if (data && data.createOrganization) {
@@ -75,7 +64,7 @@ const Index = () => {
     <>
       <Layout>
         <Loader visible={loader} />
-        <ContentHeader title="Add Organization" />
+        <ContentHeader title="Add Organisation" />
         <AddEditOrganization
           onSubmit={submitFormHandler}
           setLoader={setLoader}
@@ -85,8 +74,8 @@ const Index = () => {
       {successModal && (
         <SuccessModal
           isOpen={successModal}
-          title="ORGANIZATION"
-          description={"Organization added Successfully"}
+          title="ORGANISATION"
+          description={"Organisation added Successfully"}
           onOk={handleOk}
         />
       )}

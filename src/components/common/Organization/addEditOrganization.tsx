@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Link, Typography } from "@mui/material";
 //To ignore text encoder issue.
 import { TextEncoder, TextDecoder } from "util";
 global.TextEncoder = TextEncoder;
@@ -25,7 +25,7 @@ const defaultFormValue = {
   _id: "",
   contract: "",
   created_date: "",
-  logo: "invalid.pdf",
+  logo: "invalid.jpg",
   logo_url: "",
   name: "",
   panel_color: "",
@@ -42,6 +42,7 @@ const defaultFormValue = {
 type propTypes = {
   onSubmit?: any;
   setLoader: any;
+  orgData?: any;
 };
 
 export default function AddEditOrganization(props: propTypes) {
@@ -61,9 +62,9 @@ export default function AddEditOrganization(props: propTypes) {
     EditorState.createEmpty()
   );
 
-  const { data: uploadResourceURL } = useQuery(GET_UPLOAD_LOGO_URL, {
+  const { data: uploadOrgURL } = useQuery(GET_UPLOAD_LOGO_URL, {
     variables: {
-      fileName: formFields.file_name,
+      fileName: formFields && formFields.file_name,
       imageFolder: "images",
     },
   });
@@ -95,7 +96,17 @@ export default function AddEditOrganization(props: propTypes) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     /* istanbul ignore next */
     e.preventDefault();
-
+    /* istanbul ignore next */
+    if (
+      formFields?.contract === "<p></p>" ||
+      formFields?.patient_welcome_email === "<p></p>"
+    ) {
+      enqueueSnackbar("Please fill the require fields.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+      return;
+    }
     setModalOpen(true);
     /* istanbul ignore next */
     if (!confirmSubmission) return;
@@ -104,13 +115,13 @@ export default function AddEditOrganization(props: propTypes) {
   const uploadFile = async () => {
     try {
       props.setLoader(true);
-      if (!uploadResourceURL?.getFileUploadUrl?.upload_file_url) {
+      if (!uploadOrgURL?.getFileUploadUrl?.upload_file_url) {
         props.onSubmit(formFields);
       } else {
         if (
           !(await uploadToS3(
             selectedFile,
-            uploadResourceURL.getFileUploadUrl.upload_file_url
+            uploadOrgURL.getFileUploadUrl.upload_file_url
           ))
         ) {
           throw new Error("There is an error with file upload!");
@@ -144,11 +155,15 @@ export default function AddEditOrganization(props: propTypes) {
   }, [editorStateContract, editorStateEmail]);
 
   useEffect(() => {
+    const data = props.orgData?.viewOrganizationById;
+
     setEditorStateContract(
       EditorState.createWithContent(
         ContentState.createFromBlockArray(
           convertFromHTML(
-            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>"
+            data
+              ? data.contract
+              : "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>"
           )
         )
       )
@@ -158,17 +173,24 @@ export default function AddEditOrganization(props: propTypes) {
       EditorState.createWithContent(
         ContentState.createFromBlockArray(
           convertFromHTML(
-            "<p>Welcome to MyHelp</p><p>Your details have been given by [THERAPIST_NAME] to provide you access with the MyHelp platform. The platform will support your therapy allowing you to share information between yourself and your therapist. We have created the MyHelp platform to support both therapist&#x27;s and patients in their pursuit of a smoother therapy process.</p><p></p><p>MyHelp empowers therapist&#x27;s throughout the entire process and delivers personalised care with the aim to improve patient outcomes. Simultaneously, patients can access their own platform to access key information to support their progress and communicate more efficiently with their therapist. We believe the MyHelp platform will enhance the therapeutic relationship in order to deliver better results. In order to access your private area of the MyHelp platform you will need to:</p><p>Visit the website: https://portal.dev-myhelp.co.uk/</p><p>Enter the access details: Username – your email address, Password – Happ1ness</p><p>We recommend that you change your password by clicking the icon in the right hand corner to something personal and more memorable.</p><p>Now you have access to your personal therapy guide, which will be developed with the support of your therapist over the period of your therapy This will allow you to access the information and resources now and in the future.</p><p>If you have any other questions then please email info@myhelp.co.uk and we will endeavor to get back to you within 24 hours.</p><p>Thank you,</p><p>MyHelp Team.</p><p>P.S. Need help getting started? Please have a look at our help documentation or just reply to this email with any questions or issues you may have. The MyHelp support team is available to help with the platform only. Unfortunately, we do not provide mental health services and cannot support you in this respect. Please contact your therapist in such cases.</p>"
+            data
+              ? data.patient_welcome_email
+              : "<p>Welcome to MyHelp</p><p>Your details have been given by [THERAPIST_NAME] to provide you access with the MyHelp platform. The platform will support your therapy allowing you to share information between yourself and your therapist. We have created the MyHelp platform to support both therapist&#x27;s and patients in their pursuit of a smoother therapy process.</p><p></p><p>MyHelp empowers therapist&#x27;s throughout the entire process and delivers personalised care with the aim to improve patient outcomes. Simultaneously, patients can access their own platform to access key information to support their progress and communicate more efficiently with their therapist. We believe the MyHelp platform will enhance the therapeutic relationship in order to deliver better results. In order to access your private area of the MyHelp platform you will need to:</p><p>Visit the website: https://portal.dev-myhelp.co.uk/</p><p>Enter the access details: Username – your email address, Password – Happ1ness</p><p>We recommend that you change your password by clicking the icon in the right hand corner to something personal and more memorable.</p><p>Now you have access to your personal therapy guide, which will be developed with the support of your therapist over the period of your therapy This will allow you to access the information and resources now and in the future.</p><p>If you have any other questions then please email info@myhelp.co.uk and we will endeavor to get back to you within 24 hours.</p><p>Thank you,</p><p>MyHelp Team.</p><p>P.S. Need help getting started? Please have a look at our help documentation or just reply to this email with any questions or issues you may have. The MyHelp support team is available to help with the platform only. Unfortunately, we do not provide mental health services and cannot support you in this respect. Please contact your therapist in such cases.</p>"
           )
         )
       )
     );
-  }, []);
+  }, [props.orgData]);
 
+  useEffect(() => {
+    const data = props.orgData?.viewOrganizationById;
+    /* istanbul ignore next */
+    if (data) {
+      setFormFields(data);
+    }
+  }, [props.orgData]);
   return (
     <>
-      {/* <Loader visible={loader} /> */}
-
       <Box
         sx={{ flexGrow: 1, border: "1px solid #cecece" }}
         p={5}
@@ -300,6 +322,15 @@ export default function AddEditOrganization(props: propTypes) {
                     buttonText={"Logo"}
                   />
                 </Box>
+                <Box data-testid="edit-upload-file">
+                  <Link
+                    href={props.orgData?.viewOrganizationById.logo_url}
+                    underline="none"
+                    target="_blank"
+                  >
+                    {props.orgData?.viewOrganizationById.logo}
+                  </Link>
+                </Box>
               </Grid>
               <Grid item xs={4}></Grid>
             </Grid>
@@ -360,7 +391,9 @@ export default function AddEditOrganization(props: propTypes) {
                   fontSize: "27px",
                 }}
               >
-                Are you sure want to add organisation?
+                {props.orgData
+                  ? "Are you sure want to Update This Organisation?"
+                  : "Are you sure want to add organisation?"}
               </Typography>
               <Box marginTop="20px" display="flex" justifyContent="end">
                 <Button

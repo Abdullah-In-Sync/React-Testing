@@ -247,6 +247,10 @@ export const GET_ADMIN_TOKEN_DATA = gql`
       user_status
       created_date
       updated_date
+      organization_settings {
+        _id
+        name
+      }
     }
   }
 `;

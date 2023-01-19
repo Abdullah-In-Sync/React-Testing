@@ -16,7 +16,6 @@ import { DELETE_ORG_BY_ID } from "../../../../graphql/mutation/patient";
 import { useSnackbar } from "notistack";
 import { SuccessModal } from "../../../../components/common/SuccessModal";
 import { useRouter } from "next/router";
-import { Link } from "../../../../lib/helpers/common";
 
 const crudButtons = {
   display: "flex",
@@ -90,19 +89,13 @@ const OrganizationList = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <NextLink
-            href={Link + "/superadmin/organization/edit/" + value._id}
-            passHref
-          >
+          <NextLink href={"/admin/organization/edit/" + value._id} passHref>
             <IconButton size="small" data-testid="edit-icon-button">
               <CreateIcon />
             </IconButton>
           </NextLink>
 
-          <NextLink
-            href={Link + "/superadmin/organization/config/" + value._id}
-            passHref
-          >
+          <NextLink href={"/admin/organization/config/" + value._id} passHref>
             <IconButton size="small" data-testid={"viewIcon_" + value._id}>
               <SettingsIcon />
             </IconButton>
@@ -162,7 +155,7 @@ const OrganizationList = () => {
       <Loader visible={loader} />
 
       <Layout>
-        <ContentHeader title="Organization" data-testid="organization" />
+        <ContentHeader title="Organisation" data-testid="organization" />
         <Grid item xs={9}>
           <Box sx={crudButtons}>
             <Button
@@ -245,8 +238,8 @@ const OrganizationList = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="ORGANIZATION"
-            description={"Organization Deleted Successfully"}
+            title="ORGANISATION"
+            description={"Organisation Deleted Successfully"}
             onOk={handleOk}
           />
         )}

@@ -63,7 +63,7 @@ export const MeasureTile: FC<MeasureTileProps> = ({
               data-testid="take-test-btn"
               onClick={() => onClickTest?.(measure)}
             >
-              Test
+              Take test
             </Button>
           </Box>
         </Box>
