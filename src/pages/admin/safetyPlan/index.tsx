@@ -9,6 +9,7 @@ import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import { GET_SAFETY_PLAN_LIST } from "../../../graphql/SafetyPlan/graphql";
 
 const SafetyPlanPage: NextPage = () => {
+  const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
@@ -18,7 +19,7 @@ const SafetyPlanPage: NextPage = () => {
   useEffect(() => {
     getOrgList();
     getSafetyPlanList({
-      variables: { limit: rowsLimit, pageNo: tableCurentPage },
+      variables: { limit: rowsLimit, pageNo: initialPageNo },
     });
   }, []);
 
@@ -40,7 +41,6 @@ const SafetyPlanPage: NextPage = () => {
       data: { getSafetyPlanList: listData = {} } = {},
     },
   ] = useLazyQuery(GET_SAFETY_PLAN_LIST, {
-    fetchPolicy: "network-only",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
@@ -56,7 +56,7 @@ const SafetyPlanPage: NextPage = () => {
     getSafetyPlanList({
       variables: {
         limit: rowsLimit,
-        pageNo: newPage,
+        pageNo: newPage + 1,
         ...searchText,
         ...selectFilterOptions,
       },
@@ -74,7 +74,7 @@ const SafetyPlanPage: NextPage = () => {
     getSafetyPlanList({
       variables: {
         limit: +event.target.value,
-        pageNo: 0,
+        pageNo: initialPageNo,
         ...searchText,
         ...selectFilterOptions,
       },
@@ -90,7 +90,7 @@ const SafetyPlanPage: NextPage = () => {
         variables: {
           limit: rowsLimit,
           searchText: e.target.value,
-          pageNo: 0,
+          pageNo: initialPageNo,
           ...selectFilterOptions,
         },
       });
@@ -107,7 +107,12 @@ const SafetyPlanPage: NextPage = () => {
 
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     getSafetyPlanList({
-      variables: { limit: rowsLimit, pageNo: 0, ...searchText, ...temp },
+      variables: {
+        limit: rowsLimit,
+        pageNo: initialPageNo,
+        ...searchText,
+        ...temp,
+      },
     });
     /* istanbul ignore next */
     setSelectFilterOptions({ ...temp });
