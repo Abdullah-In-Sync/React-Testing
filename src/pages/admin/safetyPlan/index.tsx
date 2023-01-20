@@ -94,6 +94,7 @@ const SafetyPlanPage: NextPage = () => {
           ...selectFilterOptions,
         },
       });
+      setTableCurrentPage(0);
       return e.target.value;
     });
   };
@@ -115,6 +116,7 @@ const SafetyPlanPage: NextPage = () => {
       },
     });
     /* istanbul ignore next */
+    setTableCurrentPage(0);
     setSelectFilterOptions({ ...temp });
   };
 
