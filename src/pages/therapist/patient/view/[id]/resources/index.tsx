@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Patients from "../../../../../../components/therapist/patient";
 import { GET_PATH_RESOURCE_LIST } from "../../../../../../graphql/query/resource";
-import PageWrapper from "./PageWrapper";
+// import PageWrapper from "./PageWrapper";
 
 const PatientEditTemplatePage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
@@ -35,12 +35,12 @@ const PatientEditTemplatePage: NextPage = () => {
   return (
     <>
       {patientId && (
-        <PageWrapper patientId={patientId} loader={loader}>
-          <Patients
-            patientResourceList={getPatResourceList}
-            buttonClick={handleIconButtonClick}
-          />
-        </PageWrapper>
+        // <PageWrapper patientId={patientId} loader={loader}>
+        <Patients
+          patientResourceList={getPatResourceList}
+          buttonClick={handleIconButtonClick}
+        />
+        // </PageWrapper>
       )}
     </>
   );
