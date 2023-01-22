@@ -3,17 +3,17 @@ import moment from "moment";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
-import ContentHeader from "../../../../../components/common/ContentHeader";
-import Loader from "../../../../../components/common/Loader";
-import Layout from "../../../../../components/layout";
-import MeasureTest from "../../../../../components/patient/measures/measureTest";
-import { VIEW_MEASURE_RESPONSE } from "../../../../../graphql/Measure/graphql";
+import ContentHeader from "../../../../../../components/common/ContentHeader";
+import Loader from "../../../../../../components/common/Loader";
+import Layout from "../../../../../../components/layout";
+import MeasureTest from "../../../../../../components/patient/measures/measureTest";
+import { VIEW_MEASURE_RESPONSE } from "../../../../../../graphql/Measure/graphql";
 import {
   MeasureDetail,
   ViewMeasureScoreResponse,
   ViewMeasureScoreResponseVar,
-} from "../../../../../graphql/Measure/types";
-import withAuthentication from "../../../../../hoc/auth";
+} from "../../../../../../graphql/Measure/types";
+import withAuthentication from "../../../../../../hoc/auth";
 
 const PatientResponsePage: NextPage = () => {
   const router = useRouter();
