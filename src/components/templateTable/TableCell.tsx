@@ -34,8 +34,8 @@ export const TemplateTableCell: FC<TemplateTableCellProps> = ({
         borderRight: "1px solid #000000",
         borderBottom: "1px solid #000000",
         position: "relative",
-        minHeight: cellData?.type ? "200px" : "400px",
-        minWidth: "33.33%",
+        minWidth: formikHelper.values.rows[rowIndex].cells[cellIndex].width,
+        maxWidth: formikHelper.values.rows[rowIndex].cells[cellIndex].width,
       }}
     >
       <div style={{ position: "absolute", right: 0, top: 0 }}>
@@ -54,6 +54,7 @@ export const TemplateTableCell: FC<TemplateTableCellProps> = ({
             cellData.type != event?.type &&
             formikHelper?.setFieldValue(`${formCellKey}`, {
               type: event?.key,
+              width: cellData?.width,
             })
           }
         />
