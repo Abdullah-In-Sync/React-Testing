@@ -23,10 +23,12 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
   const staticTemplate: TemplateFormData = {
     rows: [
       {
+        height: "400px",
         cells: [
           {
             type: "header",
             title: "Activities",
+            width: "250px",
           },
         ],
       },
