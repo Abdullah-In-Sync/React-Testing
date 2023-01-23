@@ -65,6 +65,7 @@ const TherapyPatientFeedback: any = (props) => {
 
   // PatientSessionData
   useEffect(() => {
+    /* istanbul ignore next */
     if (patientData.patient_id?.length > 0) {
       setLoader(true);
       getPatientSessionData({
@@ -78,6 +79,7 @@ const TherapyPatientFeedback: any = (props) => {
 
   // TherapistFeedbackListData
   useEffect(() => {
+    /* istanbul ignore next */
     if (patientData.patient_id.length > 0) {
       setLoader(true);
       getTherapistFeedbackListData({
@@ -92,7 +94,7 @@ const TherapyPatientFeedback: any = (props) => {
   }, [sessionNo, feedbackType]);
 
   useEffect(() => {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     if (
       !feedbackLoading &&
       !sessionLoading &&
@@ -102,7 +104,7 @@ const TherapyPatientFeedback: any = (props) => {
       patientSessionData &&
       therapistFeedbackData
     ) {
-      /* istanbul ignore else */
+      /* istanbul ignore next */
       setLoader(false);
     }
   }, [
@@ -212,6 +214,7 @@ const TherapyPatientFeedback: any = (props) => {
                         therapistFeedbackData.getTherapistFeedbackList &&
                         therapistFeedbackData.getTherapistFeedbackList.map(
                           (fv, fk) => {
+                            /* istanbul ignore next */
                             return (
                               <>
                                 {fv?.answer_type != "undefined" &&

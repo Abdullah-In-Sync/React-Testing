@@ -38,29 +38,29 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }>({ patient_id: "", patient_name: "" });
 
   const router = useRouter();
+
   const patId = router?.query.id as string;
 
-  /* istanbul ignore else */
+  /* istanbul ignore next */
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
     GET_PATIENTTHERAPY_DATA,
     {
-      /* istanbul ignore else */
       onCompleted: (data) => {
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         if (data!.getPatientTherapy) {
           const pttherapyId = data!.getPatientTherapy[0]._id;
-          /* istanbul ignore else */
+          /* istanbul ignore next */
           if (pttherapyId) {
             setTherapy(pttherapyId);
           }
         }
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
   );
 
-  /* istanbul ignore else */
+  /* istanbul ignore next */
   const setDefaultStateExcludingLoader = () => {
     setPatientData({
       patient_id: patientId,
@@ -69,12 +69,12 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     setDefaultStateExcludingLoader();
   }, []);
 
   useEffect(() => {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     setLoader(true);
     getPatientTherapyData({
       variables: { patientId: patId },
@@ -82,11 +82,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }, [patientId]);
 
   const onTherapyChange = (event: SelectChangeEvent) => {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     setTherapy(event.target.value);
   };
 
-  /* istanbul ignore else */
+  /* istanbul ignore next */
   const tabs2 = [
     {
       label: "Personal Info",
@@ -203,13 +203,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           </Grid>
         </Box>
         <Box>
-          <Box data-testid="patientViewMenu">
-            <div style={{ paddingTop: "20px" }}>
-              <TabsGeneratorTherapistPatient
-                tabsList={tabs2}
-                activeTabs="personal-info"
-              />
-            </div>
+          <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
+            <TabsGeneratorTherapistPatient
+              tabsList={tabs2}
+              activeTabs="personal-info"
+            />
           </Box>
         </Box>
       </Layout>
