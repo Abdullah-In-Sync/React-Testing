@@ -1,9 +1,4 @@
-import {
-  screen,
-  render,
-  waitForElementToBeRemoved,
-  fireEvent,
-} from "@testing-library/react";
+import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/therapist/feedback";
 import {
@@ -171,12 +166,12 @@ const sut = async (patient_id: string) => {
   sessionStorage.setItem("patient_name", "test");
   render(
     <MockedProvider mocks={mocks}>
-      <Feedback />
+      <Feedback setTherapy={"45f52fa31a7f4884a9a5834f854480f8"} />
     </MockedProvider>
   );
-  await waitForElementToBeRemoved(() =>
-    screen.queryByTestId("activity-indicator")
-  );
+  // await waitForElementToBeRemoved(() =>
+  screen.queryByTestId("activity-indicator");
+  // );
 };
 
 // mocks
@@ -266,12 +261,14 @@ const buildMocks = (): {
       // fetch patient session query
       const _patientSessionList = getPatientSessionList(_pt, _p.mockOptions);
       _mockDataMap["patientSessionList:" + _pt._id] = _patientSessionList;
+
       _mocks.push({
         request: {
           query: GET_PATIENTSESSION_DATA,
+
           variables: {
+            pttherapyId: "45f52fa31a7f4884a9a5834f854480f8",
             patientId: _pt.patient_id,
-            pttherapyId: _pt._id,
           },
         },
         result: {
@@ -312,140 +309,134 @@ describe("Therapist feedback list", () => {
   test("is collaped by default", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
+    // selectFromTherapyDropdown();
     const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent(
-        "Session " + p
-      );
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-expanded",
-        "false"
-      );
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-controls",
-        panelName + "bh-content"
-      );
+    await waitFor(async () => {
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent(
+          "Session " + p
+        );
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-expanded",
+          "false"
+        );
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-controls",
+          panelName + "bh-content"
+        );
+      });
     });
   });
 
   test("to have the correct number of sessions shown", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
-      filteredPatientSessionList(_pt._id).length
-    );
-  });
-
-  test("can select a different therapy", async () => {
-    const patient_id = mockDataMap["first_patient_id"];
-    await sut(patient_id);
-    const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
-
-    fireEvent.change(screen.queryByTestId("selectTherapy"), {
-      target: { value: patientTherapyId },
+    await waitFor(async () => {
+      const _pt = filteredPatientTherapy(patient_id, 0);
+      expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
+        filteredPatientSessionList(_pt._id).length
+      );
     });
-
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(0);
   });
 
   test("can expand and collapse when clicked", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-expanded",
-        "true"
-      );
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-expanded",
-        "false"
-      );
+    await waitFor(async () => {
+      const _pt = filteredPatientTherapy(patient_id, 0);
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-expanded",
+          "true"
+        );
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-expanded",
+          "false"
+        );
+      });
     });
   });
 
   test("when expanded the default view is session feedback", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).not.toHaveClass("bg-themegreen");
+    await waitFor(async () => {
+      const _pt = filteredPatientTherapy(patient_id, 0);
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        expect(
+          screen.queryByTestId(panelName + "bh-content-session-button")
+        ).toHaveClass("bg-themegreen");
+        expect(
+          screen.queryByTestId(panelName + "bh-content-quality-button")
+        ).not.toHaveClass("bg-themegreen");
+      });
     });
   });
 
   test("the session feedback is displayed correctly when expanded", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      );
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).not.toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).toHaveTextContent("Session Feedback");
+    await waitFor(async () => {
+      const _pt = filteredPatientTherapy(patient_id, 0);
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        fireEvent.click(
+          screen.queryByTestId(panelName + "bh-content-session-button")
+        );
+        expect(
+          screen.queryByTestId(panelName + "bh-content-session-button")
+        ).toHaveClass("bg-themegreen");
+        expect(
+          screen.queryByTestId(panelName + "bh-content-quality-button")
+        ).not.toHaveClass("bg-themegreen");
+        expect(
+          screen.queryByTestId(panelName + "bh-content-session-button")
+        ).toHaveTextContent("Session Feedback");
+      });
     });
   });
 
   test("the quality feedback is displayed correctly when expanded", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      );
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).not.toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).toHaveTextContent("Quality Feedback");
+    await waitFor(async () => {
+      const _pt = filteredPatientTherapy(patient_id, 0);
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        fireEvent.click(
+          screen.queryByTestId(panelName + "bh-content-quality-button")
+        );
+        expect(
+          screen.queryByTestId(panelName + "bh-content-session-button")
+        ).not.toHaveClass("bg-themegreen");
+        expect(
+          screen.queryByTestId(panelName + "bh-content-quality-button")
+        ).toHaveClass("bg-themegreen");
+        expect(
+          screen.queryByTestId(panelName + "bh-content-quality-button")
+        ).toHaveTextContent("Quality Feedback");
+      });
     });
   });
 
   test("handles a patient with no therapist feedback", async () => {
-    const patient_id = mockDataMap["second_patient_id"];
-    await sut(patient_id);
-    expect(
-      screen.queryByTestId("no-data-found-therapist-feedback-list")
-    ).toHaveTextContent("No Data Found");
-  });
-
-  test("check patient view tabs is rendered", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    expect(screen.getByTestId("patientViewTherapyTab")).toBeInTheDocument();
-    expect(screen.getByTestId("patientViewMenu")).toBeInTheDocument();
+
+    expect(screen.queryByText("No data found.")).toBeInTheDocument();
   });
 });

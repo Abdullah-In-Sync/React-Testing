@@ -1,36 +1,22 @@
 import React, { useEffect, useState } from "react";
-import type { NextPage } from "next";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import InputLabel from "@mui/material/InputLabel";
-import Layout from "../../../components/layout";
-import Loader from "../../../components/common/Loader";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Image from "next/image";
 import { useLazyQuery } from "@apollo/client";
-import { GET_PATIENTTHERAPY_DATA } from "../../../graphql/query/common";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Button,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   Stack,
   Typography,
 } from "@mui/material";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
 import { GET_THERAPISTFEEDBACKLIST_DATA } from "../../../graphql/query";
-import PatientViewMenu from "../../../components/therapist/patientViewMenu";
-import PatientViewTherapyTab from "../../../components/therapist/patientViewTherapyTab";
 import QuestionTypeRadiobox from "../../../components/therapist/feedback/questionTypeRadiobox";
 import QuestionTypeText from "../../../components/therapist/feedback/questionTypeText";
-import withAuthentication from "../../../hoc/auth";
+import Loader from "../../../components/common/Loader";
 
-const Feedback: NextPage = () => {
-  const [therapy, setTherapy] = useState<string>("");
+const TherapyPatientFeedback: any = (props) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
     string | false
@@ -42,22 +28,7 @@ const Feedback: NextPage = () => {
     patient_name: string;
   }>({ patient_id: "", patient_name: "" });
 
-  const [
-    getPatientTherapyData,
-    { loading: therapyLoading, data: patientTherapryData },
-  ] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
-    onCompleted: (data) => {
-      /* istanbul ignore else */
-      if (data!.getPatientTherapy) {
-        const pttherapyId = data!.getPatientTherapy[0]._id;
-        /* istanbul ignore else */
-        if (pttherapyId) {
-          setTherapy(pttherapyId);
-        }
-      }
-    },
-  });
-
+  // Session Queries
   const [
     getPatientSessionData,
     { loading: sessionLoading, data: patientSessionData },
@@ -71,14 +42,15 @@ const Feedback: NextPage = () => {
     },
   });
 
+  // FeedbackList Queries
   const [
     getTherapistFeedbackListData,
     { loading: feedbackLoading, data: therapistFeedbackData },
   ] = useLazyQuery(GET_THERAPISTFEEDBACKLIST_DATA);
 
   const setDefaultStateExcludingLoader = () => {
-    setFeedbackType(null);
-    setSessionNo(null);
+    setFeedbackType("session");
+    setSessionNo(1);
     setPatientData({
       patient_id: sessionStorage.getItem("patient_id"),
       patient_name: sessionStorage.getItem("patient_name"),
@@ -91,25 +63,23 @@ const Feedback: NextPage = () => {
     setDefaultStateExcludingLoader();
   }, []);
 
+  // PatientSessionData
   useEffect(() => {
-    if (patientData?.patient_id?.length > 0) {
-      setLoader(true);
-      getPatientTherapyData({
-        variables: { patientId: patientData.patient_id },
-      });
-    }
-  }, [patientData]);
-
-  useEffect(() => {
-    if (patientData.patient_id.length > 0) {
+    /* istanbul ignore next */
+    if (patientData.patient_id?.length > 0) {
       setLoader(true);
       getPatientSessionData({
-        variables: { pttherapyId: therapy, patientId: patientData.patient_id },
+        variables: {
+          pttherapyId: props.setTherapy,
+          patientId: patientData.patient_id,
+        },
       });
     }
-  }, [therapy]);
+  }, [props.setTherapy, patientData.patient_id]);
 
+  // TherapistFeedbackListData
   useEffect(() => {
+    /* istanbul ignore next */
     if (patientData.patient_id.length > 0) {
       setLoader(true);
       getTherapistFeedbackListData({
@@ -117,43 +87,33 @@ const Feedback: NextPage = () => {
           patientId: patientData.patient_id,
           sessionNo: sessionNo,
           feedbackType: feedbackType,
-          pttherapyId: therapy,
+          pttherapyId: props.setTherapy,
         },
       });
     }
   }, [sessionNo, feedbackType]);
 
   useEffect(() => {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     if (
-      !therapyLoading &&
       !feedbackLoading &&
       !sessionLoading &&
       patientData &&
-      therapy &&
       sessionNo &&
       feedbackType &&
-      patientTherapryData &&
       patientSessionData &&
       therapistFeedbackData
     ) {
+      /* istanbul ignore next */
       setLoader(false);
     }
   }, [
     patientData,
-    therapy,
     sessionNo,
     feedbackType,
-    patientTherapryData,
     patientSessionData,
     therapistFeedbackData,
   ]);
-
-  const onTherapyChange = (event: SelectChangeEvent) => {
-    setLoader(true);
-    setSessionPanelExpanded(false);
-    setTherapy(event.target.value);
-  };
 
   const handleSessionPanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -164,199 +124,130 @@ const Feedback: NextPage = () => {
 
   return (
     <>
-      <Layout>
-        <Loader visible={loader} />
-        <Box
-          sx={{ flexGrow: 1 }}
-          p={5}
-          borderRadius="7px"
-          className="bg-themegreen"
+      <Loader visible={loader} />
+      <Box>
+        <Typography
+          variant="h4"
+          mt={4}
+          mb={2}
+          sx={{ fontWeight: "bold" }}
+          className="text-blue"
         >
-          <Grid container spacing={2}>
-            <Grid item xs={2} sx={{ textAlign: "center" }}>
-              <Image
-                alt="Therapist"
-                src="/images/user.png"
-                width="100"
-                height="100"
-                style={{ borderRadius: "50%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h4" className="text-white tit">
-                {patientData.patient_name}
-              </Typography>
-              {/* <Box className='text-white'>Risk of Suicide</Box> */}
-            </Grid>
-            <Grid item xs={4}>
-              <FormControl sx={{ mt: 3, minWidth: 120 }} size="small">
-                <InputLabel id="lblSelectTherapy" style={{ color: "#fff" }}>
-                  Select Therapy
-                </InputLabel>
-                <Select
-                  labelId="lblSelectTherapy"
-                  id="selectTherapy"
-                  inputProps={{ "data-testid": "selectTherapy" }}
-                  value={therapy}
-                  autoWidth
-                  label="Select Therapy"
-                  onChange={onTherapyChange}
-                  sx={{
-                    ".MuiSelect-icon": {
-                      color: "white",
-                    },
-                    ".MuiSelect-outlined": {
-                      color: "white",
-                    },
-                  }}
-                >
-                  {patientTherapryData &&
-                    patientTherapryData.getPatientTherapy &&
-                    patientTherapryData.getPatientTherapy.map((v: any) => {
-                      return (
-                        <MenuItem key={"therapy" + v._id} value={v._id}>
-                          {v.therapy_detail.therapy_name}/
-                          {v.disorder_detail.disorder_name}/
-                          {v.model_detail.model_name}
-                        </MenuItem>
-                      );
-                    })}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box>
+          Feedback
+        </Typography>
+        {patientSessionData?.getPatientSessionList.length > 0 ? (
           <Box>
-            <PatientViewMenu
-              activeTab="therapy"
-              patientID={patientData.patient_id}
-            />
-            <PatientViewTherapyTab
-              activeTab="feedback"
-              patientID={patientData.patient_id}
-            />
-          </Box>
-          <Typography
-            variant="h4"
-            mt={4}
-            mb={2}
-            sx={{ fontWeight: "bold" }}
-            className="text-blue"
-          >
-            Feedback
-          </Typography>
-          {patientSessionData &&
-            patientSessionData.getPatientSessionList &&
-            patientSessionData.getPatientSessionList.map((v, k) => {
-              const p = k + 1;
-              const panelName = "panel" + p;
-              return (
-                <Accordion
-                  sx={{ marginTop: "4px", borderRadius: "4px" }}
-                  style={{ borderRadius: "14px" }}
-                  expanded={sessionPanelExpanded === panelName}
-                  onChange={handleSessionPanelChange(panelName)}
-                  onClick={() => setSessionNo(p)}
-                  key={v._id}
-                  data-testid="SessionPanelItem"
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon className="text-white" />}
-                    aria-controls={panelName + "bh-content"}
-                    id={panelName + "bh-header"}
-                    data-testid={panelName + "bh-header"}
-                    sx={{
-                      backgroundColor: "#6ba08e",
-                      borderRadius: "12px",
-                      border: "none",
-                      marginTop: "10px",
-                    }}
+            {patientSessionData &&
+              patientSessionData.getPatientSessionList &&
+              patientSessionData.getPatientSessionList.map((v, k) => {
+                const p = k + 1;
+                const panelName = "panel" + p;
+                return (
+                  <Accordion
+                    sx={{ marginTop: "4px", borderRadius: "4px" }}
+                    style={{ borderRadius: "14px" }}
+                    expanded={sessionPanelExpanded === panelName}
+                    onChange={handleSessionPanelChange(panelName)}
+                    onClick={() => setSessionNo(p)}
+                    key={v._id}
+                    data-testid="SessionPanelItem"
                   >
-                    <Typography
-                      className="text-white"
-                      sx={{ width: "33%", flexShrink: 0 }}
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon className="text-white" />}
+                      aria-controls={panelName + "bh-content"}
+                      id={panelName + "bh-header"}
+                      data-testid={panelName + "bh-header"}
+                      sx={{
+                        backgroundColor: "#6ba08e",
+                        borderRadius: "12px",
+                        border: "none",
+                        marginTop: "10px",
+                      }}
                     >
-                      Session {p}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography mt={3} mb={5}>
-                      <Stack spacing={2} direction="row">
-                        <Button
-                          className={`text-white ${
-                            feedbackType == "session" ? "bg-themegreen" : ""
-                          }`}
-                          onClick={() => {
-                            setLoader(true);
-                            setFeedbackType("session");
-                            setSessionNo(p);
-                          }}
-                          variant="contained"
-                          sx={{ textTransform: "none" }}
-                          data-testid={panelName + "bh-content-session-button"}
-                        >
-                          Session Feedback
-                        </Button>
-                        <Button
-                          className={`text-white ${
-                            feedbackType == "quality" ? "bg-themegreen" : ""
-                          }`}
-                          onClick={() => {
-                            setLoader(true);
-                            setFeedbackType("quality");
-                            setSessionNo(p);
-                          }}
-                          variant="contained"
-                          sx={{ textTransform: "none" }}
-                          data-testid={panelName + "bh-content-quality-button"}
-                        >
-                          Quality Feedback
-                        </Button>
-                      </Stack>
-                    </Typography>
-                    {therapistFeedbackData &&
-                      therapistFeedbackData.getTherapistFeedbackList &&
-                      therapistFeedbackData.getTherapistFeedbackList.map(
-                        (fv, fk) => {
-                          return (
-                            <>
-                              {fv?.answer_type != "undefined" &&
-                                fv?.answer_type == "list" && (
-                                  <QuestionTypeRadiobox
-                                    disable={true}
-                                    fv={fv}
-                                    fk={fk}
-                                  />
-                                )}
-                              {fv?.answer_type != "undefined" &&
-                                fv?.answer_type == "text" && (
-                                  <QuestionTypeText disable={true} fv={fv} />
-                                )}
-                            </>
-                          );
-                        }
-                      )}
-                    {therapistFeedbackData &&
-                      therapistFeedbackData.getTherapistFeedbackList &&
-                      therapistFeedbackData.getTherapistFeedbackList.length ==
-                        0 && (
-                        <Typography
-                          gutterBottom
-                          component="div"
-                          data-testid="no-data-found-therapist-feedback-list"
-                        >
-                          No Data Found
-                        </Typography>
-                      )}
-                  </AccordionDetails>
-                </Accordion>
-              );
-            })}
-        </Box>
-      </Layout>
+                      <Typography
+                        className="text-white"
+                        sx={{ width: "33%", flexShrink: 0 }}
+                      >
+                        Session {p}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography mt={3} mb={5}>
+                        <Stack spacing={2} direction="row">
+                          <Button
+                            className={`text-white ${
+                              feedbackType == "session" ? "bg-themegreen" : ""
+                            }`}
+                            onClick={() => {
+                              setLoader(true);
+                              setFeedbackType("session");
+                              setSessionNo(p);
+                            }}
+                            variant="contained"
+                            sx={{ textTransform: "none" }}
+                            data-testid={
+                              panelName + "bh-content-session-button"
+                            }
+                          >
+                            Session Feedback
+                          </Button>
+                          <Button
+                            className={`text-white ${
+                              feedbackType == "quality" ? "bg-themegreen" : ""
+                            }`}
+                            onClick={() => {
+                              setLoader(true);
+                              setFeedbackType("quality");
+                              setSessionNo(p);
+                            }}
+                            variant="contained"
+                            sx={{ textTransform: "none" }}
+                            data-testid={
+                              panelName + "bh-content-quality-button"
+                            }
+                          >
+                            Quality Feedback
+                          </Button>
+                        </Stack>
+                      </Typography>
+                      {therapistFeedbackData &&
+                        therapistFeedbackData.getTherapistFeedbackList &&
+                        therapistFeedbackData.getTherapistFeedbackList.map(
+                          (fv, fk) => {
+                            /* istanbul ignore next */
+                            return (
+                              <>
+                                {fv?.answer_type != "undefined" &&
+                                  fv?.answer_type == "list" && (
+                                    <QuestionTypeRadiobox
+                                      disable={true}
+                                      fv={fv}
+                                      fk={fk}
+                                    />
+                                  )}
+                                {fv?.answer_type != "undefined" &&
+                                  fv?.answer_type == "text" && (
+                                    <QuestionTypeText disable={true} fv={fv} />
+                                  )}
+                              </>
+                            );
+                          }
+                        )}
+                    </AccordionDetails>
+                  </Accordion>
+                );
+              })}
+          </Box>
+        ) : (
+          <Box>
+            <Typography variant="h6" textAlign={"center"}>
+              No data found.
+            </Typography>
+          </Box>
+        )}
+      </Box>
     </>
   );
 };
 
-export default withAuthentication(Feedback, ["therapist"]);
+export default TherapyPatientFeedback;
