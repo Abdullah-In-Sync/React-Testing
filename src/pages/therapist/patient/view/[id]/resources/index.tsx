@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import Patients from "../../../../../../components/therapist/patient";
 import { GET_PATH_RESOURCE_LIST } from "../../../../../../graphql/query/resource";
 import Loader from "../../../../../../components/common/Loader";
-import { Box } from "@material-ui/core";
-// import PageWrapper from "./PageWrapper";
 
 const PatientEditTemplatePage2: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
@@ -33,19 +31,15 @@ const PatientEditTemplatePage2: NextPage = () => {
     if (pressedIconButton == "view")
       router.push(`/therapist/resource/${resource_id}/${patientId}`);
   };
-  console.debug("PatientEditTemplatePage2");
 
   return (
     <>
       <Loader visible={loader} />
-      <Box>PatientEditTemplatePage2</Box>
       {patientId && (
-        // <PageWrapper patientId={patientId} loader={loader}>
         <Patients
           patientResourceList={getPatResourceList}
           buttonClick={handleIconButtonClick}
         />
-        // </PageWrapper>
       )}
     </>
   );

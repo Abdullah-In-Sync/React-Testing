@@ -284,6 +284,8 @@ describe("Therapist Resource page", () => {
         target: { value: "a8bf94e308d04c598d0a06413cf30ef1" },
       });
       expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(0);
+      expect(screen.getByTestId("patient_name")).toBeInTheDocument();
+      expect(screen.getByTestId("container_img")).toBeInTheDocument();
     });
   });
 

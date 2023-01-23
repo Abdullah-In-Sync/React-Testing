@@ -38,9 +38,9 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }>({ patient_id: "", patient_name: "" });
 
   const router = useRouter();
-  /* istanbul ignore next */
   const patId = router?.query.id as string;
 
+  /* istanbul ignore else */
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
     GET_PATIENTTHERAPY_DATA,
     {
@@ -69,6 +69,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    /* istanbul ignore else */
     setDefaultStateExcludingLoader();
   }, []);
 
@@ -140,7 +141,12 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           className="bg-themegreen"
         >
           <Grid container spacing={2}>
-            <Grid item xs={2} sx={{ textAlign: "center" }}>
+            <Grid
+              item
+              xs={2}
+              sx={{ textAlign: "center" }}
+              data-testid="container_img"
+            >
               <Image
                 alt="Therapist"
                 src="/images/user.png"
@@ -150,7 +156,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
               />
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h4" className="text-white tit">
+              <Typography
+                variant="h4"
+                className="text-white tit"
+                data-testid="patient_name"
+              >
                 {patientData.patient_name}
               </Typography>
             </Grid>
