@@ -9,26 +9,32 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Activities",
+          width: "250px",
         },
         {
           type: "header",
           title: "Rating",
           description: "Add rating based on activities",
+          width: "250px",
         },
       ],
+      height: "200px",
     },
     {
       cells: [
         {
           type: "header",
           title: "Did you take break fast",
+          width: "250px",
         },
         {
           type: "answer",
           answerType: "list",
           answerValues: ["banana", "mengo", "papita"],
+          width: "250px",
         },
       ],
+      height: "200px",
     },
   ],
 };
