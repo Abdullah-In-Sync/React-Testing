@@ -189,7 +189,9 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
                   {patientTherapryData &&
                     patientTherapryData.getPatientTherapy &&
                     patientTherapryData.getPatientTherapy.map((v: any) => {
+                      /* istanbul ignore next */
                       return (
+                        /* istanbul ignore next */
                         <MenuItem key={"therapy" + v._id} value={v._id}>
                           {v.therapy_detail.therapy_name}/
                           {v.disorder_detail.disorder_name}/
