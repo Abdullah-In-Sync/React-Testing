@@ -11,11 +11,13 @@ import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import Loader from "../../../../../../components/common/Loader";
-import Layout from "../../../../../../components/layout";
-import PatientViewMenu from "../../../../../../components/therapist/patientViewMenu";
-import PatientViewTherapyTab from "../../../../../../components/therapist/patientViewTherapyTab";
-import { GET_PATIENTTHERAPY_DATA } from "../../../../../../graphql/query/common";
+import Loader from "../../../../../components/common/Loader";
+import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
+import Layout from "../../../../../components/layout";
+
+import TherapyMainComponent from "./therapy";
+import { useRouter } from "next/router";
+import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 
 interface Props {
   children: React.ReactNode;
@@ -23,21 +25,26 @@ interface Props {
   loader: boolean;
 }
 
-const PageWrapper: React.FC<Props> = ({
-  children,
+const MainWraperTherapyPatient: React.FC<Props> = ({
   patientId,
   loader: pLoader,
 }) => {
-  const [therapy, setTherapy] = useState<string>("");
+  const [therapy, setTherapy] = useState<string>("pt_therapy_id");
   const [loader, setLoader] = useState<boolean>(pLoader);
+
   const [patientData, setPatientData] = useState<{
     patient_id: string;
     patient_name: string;
   }>({ patient_id: "", patient_name: "" });
 
+  const router = useRouter();
+  /* istanbul ignore next */
+  const patId = router?.query.id as string;
+
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
     GET_PATIENTTHERAPY_DATA,
     {
+      /* istanbul ignore else */
       onCompleted: (data) => {
         /* istanbul ignore else */
         if (data!.getPatientTherapy) {
@@ -47,11 +54,13 @@ const PageWrapper: React.FC<Props> = ({
             setTherapy(pttherapyId);
           }
         }
+        /* istanbul ignore else */
         setLoader(false);
       },
     }
   );
 
+  /* istanbul ignore else */
   const setDefaultStateExcludingLoader = () => {
     setPatientData({
       patient_id: patientId,
@@ -64,15 +73,61 @@ const PageWrapper: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
+    /* istanbul ignore else */
     setLoader(true);
     getPatientTherapyData({
-      variables: { patientId: patientId },
+      variables: { patientId: patId },
     });
   }, [patientId]);
 
   const onTherapyChange = (event: SelectChangeEvent) => {
+    /* istanbul ignore else */
     setTherapy(event.target.value);
   };
+
+  /* istanbul ignore else */
+  const tabs2 = [
+    {
+      label: "Personal Info",
+      value: "personal-info",
+      //  component: <Agreement />,
+    },
+    {
+      label: "Assessment",
+      value: "assessment",
+      //  component: <Agreement />,
+    },
+    {
+      label: "Therapy",
+      value: "therapy",
+      component: <TherapyMainComponent setTherapy={therapy} />,
+    },
+    {
+      label: "Notes",
+      value: "notes",
+      //  component: <Agreement />,
+    },
+    {
+      label: "Appointments",
+      value: "appointments",
+      //  component: <Agreement />,
+    },
+    {
+      label: "To-Do",
+      value: "to-do",
+      //  component: <Agreement />,
+    },
+    {
+      label: "Files",
+      value: "files",
+      //  component: <Agreement />,
+    },
+    {
+      label: "Communications",
+      value: "communications",
+      //  component: <Agreement />,
+    },
+  ];
 
   return (
     <>
@@ -98,7 +153,6 @@ const PageWrapper: React.FC<Props> = ({
               <Typography variant="h4" className="text-white tit">
                 {patientData.patient_name}
               </Typography>
-              {/* <Box className='text-white'>Risk of Suicide</Box> */}
             </Grid>
             <Grid item xs={4}>
               <FormControl sx={{ mt: 3, minWidth: 120 }} size="small">
@@ -139,27 +193,18 @@ const PageWrapper: React.FC<Props> = ({
           </Grid>
         </Box>
         <Box>
-          <Box>
-            <PatientViewMenu activeTab="therapy" patientID={patientId} />
-            <PatientViewTherapyTab
-              activeTab="resources"
-              patientID={patientId}
-            />
+          <Box data-testid="patientViewMenu">
+            <div style={{ paddingTop: "20px" }}>
+              <TabsGeneratorTherapistPatient
+                tabsList={tabs2}
+                activeTabs="personal-info"
+              />
+            </div>
           </Box>
-          <Typography
-            variant="h4"
-            mt={4}
-            mb={2}
-            sx={{ fontWeight: "bold" }}
-            className="text-blue"
-          >
-            Resources
-          </Typography>
-          {children}
         </Box>
       </Layout>
     </>
   );
 };
 
-export default PageWrapper;
+export default MainWraperTherapyPatient;

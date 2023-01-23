@@ -6,8 +6,8 @@ import { SnackbarProvider } from "notistack";
 import { GET_PATH_RESOURCE_LIST } from "../graphql/query/resource";
 
 import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
-import ResourceList from "../pages/therapist/patient/view/[id]/resources";
 import theme from "../styles/theme/theme";
+import ResourceList from "../pages/therapist/patient/view/[id]/resources";
 
 jest.mock("next/router", () => ({
   __esModule: true,

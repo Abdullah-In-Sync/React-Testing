@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Patients from "../../../../../../components/therapist/patient";
 import { GET_PATH_RESOURCE_LIST } from "../../../../../../graphql/query/resource";
+import Loader from "../../../../../../components/common/Loader";
+import { Box } from "@material-ui/core";
 // import PageWrapper from "./PageWrapper";
 
-const PatientEditTemplatePage: NextPage = () => {
+const PatientEditTemplatePage2: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const router = useRouter();
 
@@ -31,9 +33,12 @@ const PatientEditTemplatePage: NextPage = () => {
     if (pressedIconButton == "view")
       router.push(`/therapist/resource/${resource_id}/${patientId}`);
   };
+  console.debug("PatientEditTemplatePage2");
 
   return (
     <>
+      <Loader visible={loader} />
+      <Box>PatientEditTemplatePage2</Box>
       {patientId && (
         // <PageWrapper patientId={patientId} loader={loader}>
         <Patients
@@ -46,4 +51,4 @@ const PatientEditTemplatePage: NextPage = () => {
   );
 };
 
-export default PatientEditTemplatePage;
+export default PatientEditTemplatePage2;

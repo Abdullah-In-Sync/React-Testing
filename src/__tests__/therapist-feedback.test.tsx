@@ -1,10 +1,4 @@
-import {
-  screen,
-  render,
-  waitForElementToBeRemoved,
-  fireEvent,
-  waitFor,
-} from "@testing-library/react";
+import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/therapist/feedback";
 import {
@@ -38,7 +32,7 @@ const getPatientTherapy = (
     patient_id: _patient_id,
     patientsTherapy: [
       {
-        _id: "paitent_therapy_id",
+        _id: Guid.create().toString(),
         patient_id: _patient_id,
         therapy_detail: {
           therapy_name: "localhost",
@@ -54,7 +48,7 @@ const getPatientTherapy = (
         },
       },
       {
-        _id: "paitent_therapy_id_2",
+        _id: Guid.create().toString(),
         patient_id: _patient_id,
         therapy_detail: {
           therapy_name: "some-therapy-name",
@@ -172,7 +166,7 @@ const sut = async (patient_id: string) => {
   sessionStorage.setItem("patient_name", "test");
   render(
     <MockedProvider mocks={mocks}>
-      <Feedback />
+      <Feedback setTherapy={"45f52fa31a7f4884a9a5834f854480f8"} />
     </MockedProvider>
   );
   // await waitForElementToBeRemoved(() =>
@@ -187,8 +181,8 @@ const buildMocks = (): {
 } => {
   const _mocks: MockedResponse[] = [];
   const _mockDataMap: Record<string, any> = {};
-  const _first_patient_id = "first_patient_id";
-  const _second_patient_id: string = "second_patient_id";
+  const _first_patient_id = Guid.create().toString();
+  const _second_patient_id: string = Guid.create().toString();
   // fetch token for user query
   _mocks.push({
     request: {
@@ -227,110 +221,63 @@ const buildMocks = (): {
   // build mocks for each "Patient" record
   _patients.forEach((_p: GetPatientTherapyType) => {
     // fetch patient therapy query
-    // _mocks.push({
-    //   request: {
-    //     query: GET_PATIENTTHERAPY_DATA,
-    //     variables: {
-    //       patientId: _p.patient_id,
-    //     },
-    //   },
-    //   result: {
-    //     data: {
-    //       getPatientTherapy: _p.patientsTherapy,
-    //     },
-    //   },
-    // });
+    _mocks.push({
+      request: {
+        query: GET_PATIENTTHERAPY_DATA,
+        variables: {
+          patientId: _p.patient_id,
+        },
+      },
+      result: {
+        data: {
+          getPatientTherapy: _p.patientsTherapy,
+        },
+      },
+    });
     // build mocks for each "PatientTherapy" record
+    _p.patientsTherapy.forEach((_pt: Record<string, any>) => {
+      // fetch therapist feedback list query
+      const _therapistFeedbackList = getTherapistFeedbackList(
+        _pt,
+        _p.mockOptions
+      );
+      _mockDataMap["therapistFeedbackList:" + _pt._id] = _therapistFeedbackList;
+      _mocks.push({
+        request: {
+          query: GET_THERAPISTFEEDBACKLIST_DATA,
+          variables: {
+            patientId: _pt.patient_id,
+            sessionNo: 1,
+            feedbackType: "session",
+            pttherapyId: _pt._id,
+          },
+        },
+        result: {
+          data: {
+            getTherapistFeedbackList: _therapistFeedbackList,
+          },
+        },
+      });
+      // fetch patient session query
+      const _patientSessionList = getPatientSessionList(_pt, _p.mockOptions);
+      _mockDataMap["patientSessionList:" + _pt._id] = _patientSessionList;
 
-    // _p.patientsTherapy.forEach((_pt: Record<string, any>) => {
-    // fetch therapist feedback list query
-    // const _therapistFeedbackList = getTherapistFeedbackList(
-    //   _pt,
-    //   _p.mockOptions
-    // );
-    // _mockDataMap["therapistFeedbackList:" + _pt._id] = _therapistFeedbackList;
-    _mocks.push({
-      request: {
-        query: GET_THERAPISTFEEDBACKLIST_DATA,
-        variables: {
-          patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
-          sessionNo: 1,
-          feedbackType: "session",
-          pttherapyId: "4937a27dc00d48bf983fdcd4b0762ebd",
-        },
-      },
-      result: {
-        data: {
-          getTherapistFeedbackList: [
-            {
-              _id: "02dcad6b-04d1-4e4e-9e36-78f2d84d8748",
-              answer_options: ["d", "p"],
-              answer_type: "list",
-              created_date: "2022-10-27T15:09:00.192Z",
-              feedback_ans: null,
-              feedback_type: "session",
-              org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-              question: "dfdfdfdf",
-              session_no: 1,
-              status: "active",
-              updated_date: "2022-10-27T15:09:00.192Z",
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              __typename: "FeedbackQuestionData",
-            },
-            {
-              _id: "fc2f449b-7551-4786-9254-a0b55cfe20ec",
-              answer_options: ["d", "p"],
-              answer_type: "list",
-              created_date: "2022-10-27T15:09:00.184Z",
-              feedback_ans: null,
-              feedback_type: "session",
-              org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-              question: "dfdff",
-              session_no: 1,
-              status: "active",
-              updated_date: "2022-10-27T15:09:00.184Z",
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              __typename: "FeedbackQuestionData",
-            },
-          ],
-        },
-      },
-    });
+      _mocks.push({
+        request: {
+          query: GET_PATIENTSESSION_DATA,
 
-    // fetch patient session query
-    // const _patientSessionList = getPatientSessionList(_pt, _p.mockOptions);
-    // _mockDataMap["patientSessionList:" + _pt._id] = _patientSessionList;
-    _mocks.push({
-      request: {
-        query: GET_PATIENTSESSION_DATA,
-        // variables: {
-        //   patientId: _pt.patient_id,
-        //   pttherapyId: _pt._id,
-        // },
-        variables: {
-          pttherapyId: "45f52fa31a7f4884a9a5834f854480f8",
-          patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
+          variables: {
+            pttherapyId: "45f52fa31a7f4884a9a5834f854480f8",
+            patientId: _pt.patient_id,
+          },
         },
-      },
-      result: {
-        data: {
-          getPatientSessionList: [
-            {
-              _id: "dcd59a2abf7a48ac9633d8ab656bfa88",
-              patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-              therapist_id: "686802e5123a482681a680a673ef7f53",
-              pttherapy_id: "45f52fa31a7f4884a9a5834f854480f8",
-              ptsession_no: 1,
-              ptsession_status: 1,
-              created_date: "2022-05-29T15:17:42.000Z",
-              updated_date: null,
-              __typename: "PatientSessionData",
-            },
-          ],
+        result: {
+          data: {
+            getPatientSessionList: _patientSessionList,
+          },
         },
-      },
+      });
     });
-    // });
   });
   // finished building mocks
   _mockDataMap["first_patient_id"] = _first_patient_id;
@@ -359,12 +306,11 @@ describe("Therapist feedback list", () => {
       },
     });
   });
-  test.only("Therapy::feedback, collaped by default", async () => {
+  test("is collaped by default", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
+    // selectFromTherapyDropdown();
     const _pt = filteredPatientTherapy(patient_id, 0);
-    // await waitForPaint(2);
-    // const accordianceInFeedBackTab = sut().
     await waitFor(async () => {
       filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
         const p = _k + 1;
@@ -395,20 +341,6 @@ describe("Therapist feedback list", () => {
       );
     });
   });
-
-  // test.only("can select a different therapy", async () => {
-  //   const patient_id = mockDataMap["first_patient_id"];
-  //   await sut(patient_id);
-  //   await waitFor(async () => {
-  //     const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
-
-  //     fireEvent.change(screen.queryByTestId("selectTherapy"), {
-  //       target: { value: patientTherapyId },
-  //     });
-
-  //     expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(0);
-  //   });
-  // });
 
   test("can expand and collapse when clicked", async () => {
     const patient_id = mockDataMap["first_patient_id"];
@@ -501,21 +433,10 @@ describe("Therapist feedback list", () => {
     });
   });
 
-  // test("handles a patient with no therapist feedback", async () => {
-  //   const patient_id = mockDataMap["second_patient_id"];
-  //   await sut(patient_id);
-  //   expect(
-  //     screen.queryByTestId("no-data-found-therapist-feedback-list")
-  //   ).toHaveTextContent("No Data Found");
-  // });
+  test("handles a patient with no therapist feedback", async () => {
+    const patient_id = mockDataMap["first_patient_id"];
+    await sut(patient_id);
 
-  // test("check patient view tabs is rendered", async () => {
-  //   const patient_id = mockDataMap["first_patient_id"];
-  //   await sut(patient_id);
-  //   await waitFor(async () => {
-  //     console.debug("Koca: patient_id ", patient_id);
-  //     expect(screen.getByTestId("patientViewTherapyTab")).toBeInTheDocument();
-  //     expect(screen.getByTestId("patientViewMenu")).toBeInTheDocument();
-  //   });
-  // });
+    expect(screen.queryByText("No data found.")).toBeInTheDocument();
+  });
 });
