@@ -96,7 +96,7 @@ const CommonForm: React.FC<ViewProps> = ({
                     ]}
                     mappingKeys={["_id", "name"]}
                     size="small"
-                    className="form-control-bg"
+                    className="form-control-bg multiSelect"
                     extraProps={{ "data-testid": "organizationSelect" }}
                     multiSelect={csvDecode(values.orgId)}
                   />
