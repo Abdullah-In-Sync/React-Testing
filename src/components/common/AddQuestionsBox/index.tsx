@@ -5,6 +5,7 @@ import FormikSelectDropdown from "../FormikFields/FormikSelectDropdown";
 import FormikTextField from "../FormikFields/FormikTextField";
 import { useStyles } from "./addQuestionsBoxStyles";
 import DeleteSharp from "@mui/icons-material/DeleteSharp";
+import { useSnackbar } from "notistack";
 
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
@@ -25,13 +26,19 @@ const questionTypes = [
 
 export const AddQuestionsBox = ({ formikProps }: Props, ref) => {
   const styles = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { values, setFieldValue } = formikProps;
   useImperativeHandle(ref, () => ({
     onAddQuesionBox() {
-      // update dynamic form
-      const questions = [...values.questions];
-      questions.push({ question: "", description: " ", questionType: "" });
-      setFieldValue("questions", questions);
+      if (values.questions.length < 10) {
+        const questions = [...values.questions];
+        questions.push({ question: "", description: " ", questionType: "" });
+        setFieldValue("questions", questions);
+      } else {
+        enqueueSnackbar("Adding more than 10 questions is not allowed.", {
+          variant: "info",
+        });
+      }
     },
   }));
 

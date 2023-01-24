@@ -13,8 +13,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
       marginRight: 10,
       color: theme.palette.custom.light,
       background: theme.palette.primary.main,
-      // boxShadow: "unset",
-      // borderRadius: 5,
       width: 35,
       height: 0,
     },
