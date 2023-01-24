@@ -86,7 +86,7 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
       flex={1}
       className={classis.actionColumn}
       ref={divRef}
-      data-testid={`.-${index}`}
+      data-testid={`action-menu-column-${index}`}
       style={{
         minWidth: formikHelper.values.rows[0].cells[index].width,
         width: formikHelper.values.rows[0].cells[index].width,

@@ -95,20 +95,43 @@ describe("When render a template table", () => {
     expect(screen.getAllByTestId("row-2").length).toEqual(1);
   });
 
-  it.only("should resize the column", async () => {
+  it("should resize the column", async () => {
     await sut();
-
-    expect(screen.queryByTestId("action-menu-column-1")).toBeInTheDocument();
-    const resizerCol = within(
-      screen.queryByTestId("action-menu-column-1")
-    ).queryByTestId("resizer-col");
+    const column = screen.queryByTestId("action-menu-column-1");
+    expect(column).toBeInTheDocument();
+    const resizerCol = within(column).queryByTestId("resizer-col");
     expect(resizerCol).toBeInTheDocument();
-    // fireEvent.click(resizerCol);
-    // const findOption = screen.getByTestId("IRL");
-    // await waitFor(async () => {
-    //   findOption.click();
-    // });
 
-    // expect(screen.getAllByTestId("row-2").length).toEqual(1);
+    expect(column.style.width).toEqual("250px");
+    fireEvent.mouseDown(resizerCol);
+    fireEvent.mouseMove(resizerCol, {
+      clientX: 120,
+    });
+    fireEvent.mouseMove(resizerCol, {
+      clientX: 225,
+    });
+    fireEvent.mouseUp(resizerCol);
+
+    expect(column.style.width).not.toEqual("250px");
+  });
+
+  it("should resize the row", async () => {
+    await sut();
+    const row = screen.queryByTestId("action-menu-row-1");
+    expect(row).toBeInTheDocument();
+    const resizerRow = within(row).queryByTestId("resizer-row");
+    expect(resizerRow).toBeInTheDocument();
+
+    expect(row.style.minHeight).toEqual("200px");
+    fireEvent.mouseDown(resizerRow);
+    fireEvent.mouseMove(resizerRow, {
+      clientY: 120,
+    });
+    fireEvent.mouseMove(resizerRow, {
+      clientY: 225,
+    });
+    fireEvent.mouseUp(resizerRow);
+
+    expect(row.style.minHeight).not.toEqual("250px");
   });
 });
