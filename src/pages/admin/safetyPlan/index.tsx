@@ -41,6 +41,7 @@ const SafetyPlanPage: NextPage = () => {
       data: { getSafetyPlanList: listData = {} } = {},
     },
   ] = useLazyQuery(GET_SAFETY_PLAN_LIST, {
+    fetchPolicy: "network-only",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
