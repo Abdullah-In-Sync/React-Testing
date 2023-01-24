@@ -64,6 +64,11 @@ export type editTemplatesFormField = {
   category: string;
   name: string;
 };
+
+export type therapyPatientFormField = {
+  pttherapyId: string;
+  // patientId: string;
+};
 export type viewTemplatesFormField = {
   _id: string;
   category: string;
