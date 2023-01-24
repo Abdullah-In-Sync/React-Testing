@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import TemplateTable from "../templateTable";
 import { TemplateFormData } from "../templateTable/table.model";
 
@@ -88,9 +94,21 @@ describe("When render a template table", () => {
 
     expect(screen.getAllByTestId("row-2").length).toEqual(1);
   });
-  // const secoundRow = screen.getAllByTestId("action-menu-row-1");
-  // expect(secoundRow[0].querySelector("[data-testid='cell-1']")).toContainHTML(
-  //   "<span>Add Options</span>"
-  // );
-  // });
+
+  it.only("should resize the column", async () => {
+    await sut();
+
+    expect(screen.queryByTestId("action-menu-column-1")).toBeInTheDocument();
+    const resizerCol = within(
+      screen.queryByTestId("action-menu-column-1")
+    ).queryByTestId("resizer-col");
+    expect(resizerCol).toBeInTheDocument();
+    // fireEvent.click(resizerCol);
+    // const findOption = screen.getByTestId("IRL");
+    // await waitFor(async () => {
+    //   findOption.click();
+    // });
+
+    // expect(screen.getAllByTestId("row-2").length).toEqual(1);
+  });
 });

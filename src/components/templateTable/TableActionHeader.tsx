@@ -86,7 +86,7 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
       flex={1}
       className={classis.actionColumn}
       ref={divRef}
-      data-testid={`action-menu-column-${index}`}
+      data-testid={`.-${index}`}
       style={{
         minWidth: formikHelper.values.rows[0].cells[index].width,
         width: formikHelper.values.rows[0].cells[index].width,
@@ -132,6 +132,7 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
       <div
         ref={resizerRef}
         className={classis.resizerY}
+        data-testid={"resizer-col"}
         data-currentWidth={formikHelper.values.rows[0].cells[index].width}
         onMouseDown={onMouseDown}
       ></div>
@@ -249,6 +250,7 @@ export const RawActionTitle: FC<RowActionTitleProps> = ({
       <div
         ref={resizerRef}
         className={classis.resizerX}
+        data-testid={"resizer-row"}
         onMouseDown={onMouseDown}
       ></div>
     </Grid>
@@ -299,19 +301,5 @@ const useStyles = makeStyles({
     height: "100%",
     width: "10px",
     backgroundColor: "#7EBCA7",
-    // "&::before": {
-    //   content: '" "',
-    //   width: "16px",
-    //   height: "5px",
-    //   margin: "0px",
-    //   background: "lightgray",
-    // },
-    // "&::after": {
-    //   content: '" "',
-    //   width: "16px",
-    //   height: "5px",
-    //   margin: "0px",
-    //   background: "lightgray",
-    // },
   },
 });
