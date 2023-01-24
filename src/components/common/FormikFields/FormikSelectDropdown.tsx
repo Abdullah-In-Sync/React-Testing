@@ -13,7 +13,7 @@ const SelectDropdown = (props) => {
           {...props}
           extraProps={{
             ...(props.extraProps || {}),
-            ...{ error: touched.touched && touched.error },
+            ...{ error: touched.touched && touched.error != undefined },
           }}
         />
       ) : (
@@ -22,7 +22,7 @@ const SelectDropdown = (props) => {
           {...props}
           extraProps={{
             ...(props.extraProps || {}),
-            ...{ error: touched.touched && touched.error },
+            ...{ error: touched.touched && touched.error != undefined },
           }}
         />
       )}

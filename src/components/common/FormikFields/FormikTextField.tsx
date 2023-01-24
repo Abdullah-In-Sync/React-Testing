@@ -12,7 +12,7 @@ const ResponseTextArea = (props) => {
         {...props}
         extraProps={{
           spellCheck: "false",
-          error: touched.touched && touched.error,
+          error: touched.touched && touched.error != undefined,
         }}
       />
       <ErrorMessage
