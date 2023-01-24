@@ -4,9 +4,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Patients from "../../../../../../components/therapist/patient";
 import { GET_PATH_RESOURCE_LIST } from "../../../../../../graphql/query/resource";
-import PageWrapper from "./PageWrapper";
+import Loader from "../../../../../../components/common/Loader";
 
-const PatientEditTemplatePage: NextPage = () => {
+const PatientEditTemplatePage2: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const router = useRouter();
 
@@ -34,16 +34,15 @@ const PatientEditTemplatePage: NextPage = () => {
 
   return (
     <>
+      <Loader visible={loader} />
       {patientId && (
-        <PageWrapper patientId={patientId} loader={loader}>
-          <Patients
-            patientResourceList={getPatResourceList}
-            buttonClick={handleIconButtonClick}
-          />
-        </PageWrapper>
+        <Patients
+          patientResourceList={getPatResourceList}
+          buttonClick={handleIconButtonClick}
+        />
       )}
     </>
   );
 };
 
-export default PatientEditTemplatePage;
+export default PatientEditTemplatePage2;
