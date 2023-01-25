@@ -46,7 +46,7 @@ const TabsGeneratorTherapistPatient = (props: propTypes) => {
     const redirectUrl =
       tabsList &&
       tabsList?.find((list) => list.value === activeTab)?.redirectUrl;
-    if (!!redirectUrl) {
+    if (redirectUrl) {
       // window.location.href = redirectUrl;
       router.push(redirectUrl);
     }

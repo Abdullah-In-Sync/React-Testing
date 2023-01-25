@@ -41,8 +41,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   const patId = router?.query.id as string;
 
-  const tabType = router?.query.tab as string;
-
   /* istanbul ignore next */
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
     GET_PATIENTTHERAPY_DATA,
@@ -94,14 +92,13 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Personal Info",
       value: "personal-info",
       //  component: <Agreement />,
-      // redirectUrl: `therapist/patient/view/${patId}?tab=personal-info`,
+      redirectUrl: `therapist/patient/view/${patId}?tab=personal-info`,
     },
     {
       label: "Assessment",
       value: "assessment",
       //  component: <Agreement />,
-      // redirectUrl: `therapist/patient/view/${patId}?tab=assessment`,
-      redirectUrl: "https://www.google.com/",
+      redirectUrl: `therapist/patient/view/${patId}?tab=assessment`,
     },
     {
       label: "Therapy",
