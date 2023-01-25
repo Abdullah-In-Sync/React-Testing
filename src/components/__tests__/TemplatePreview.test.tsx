@@ -9,13 +9,13 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Activities",
-          width: "250px",
+          width: "600px",
         },
         {
           type: "header",
           title: "Rating",
           description: "Add rating based on activities",
-          width: "250px",
+          width: "600px",
         },
       ],
       height: "200px",
@@ -25,13 +25,13 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Did you take break fast",
-          width: "250px",
+          width: "600px",
         },
         {
           type: "answer",
           answerType: "list",
           answerValues: ["banana", "mengo", "papita"],
-          width: "250px",
+          width: "600px",
         },
       ],
       height: "200px",

@@ -24,7 +24,7 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
       const values = formikHelper.values.rows.map((row) => {
         row.cells.splice(menu.key == "ICL" ? index : index + 1, 0, {
           type: "",
-          width: "250px",
+          width: "600px",
         });
         return row;
       });

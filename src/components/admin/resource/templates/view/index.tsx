@@ -28,7 +28,7 @@ const View: React.FC<ViewProps> = ({ currentTemplateData }) => {
           {
             type: "header",
             title: "Activities",
-            width: "250px",
+            width: "600px",
           },
         ],
       },

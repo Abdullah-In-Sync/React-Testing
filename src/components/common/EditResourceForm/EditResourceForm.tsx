@@ -205,7 +205,7 @@ export default function EditForm(props: propTypes) {
         height: "200px",
         cells: Array.from({ length: values.cols }, () => ({
           type: "",
-          width: "250px",
+          width: "600px",
         })),
       });
     }

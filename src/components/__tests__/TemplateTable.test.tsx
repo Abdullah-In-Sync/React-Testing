@@ -15,13 +15,13 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Activities",
-          width: "250Px",
+          width: "600px",
         },
         {
           type: "header",
           title: "Rating",
           description: "Add rating based on activities",
-          width: "250Px",
+          width: "600px",
         },
       ],
       height: "200px",
@@ -31,13 +31,13 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Did you take break fast",
-          width: "250Px",
+          width: "600px",
         },
         {
           type: "answer",
           answerType: "list",
           answerValues: ["banana", "mengo", "papita"],
-          width: "250Px",
+          width: "600px",
         },
       ],
       height: "200px",
@@ -102,7 +102,7 @@ describe("When render a template table", () => {
     const resizerCol = within(column).queryByTestId("resizer-col");
     expect(resizerCol).toBeInTheDocument();
 
-    expect(column.style.width).toEqual("250px");
+    expect(column.style.width).toEqual("600px");
     fireEvent.mouseDown(resizerCol);
     fireEvent.mouseMove(resizerCol, {
       clientX: 120,
@@ -112,7 +112,7 @@ describe("When render a template table", () => {
     });
     fireEvent.mouseUp(resizerCol);
 
-    expect(column.style.width).not.toEqual("250px");
+    expect(column.style.width).not.toEqual("600px");
   });
 
   it("should resize the row", async () => {
@@ -132,6 +132,6 @@ describe("When render a template table", () => {
     });
     fireEvent.mouseUp(resizerRow);
 
-    expect(row.style.minHeight).not.toEqual("250px");
+    expect(row.style.minHeight).not.toEqual("600px");
   });
 });
