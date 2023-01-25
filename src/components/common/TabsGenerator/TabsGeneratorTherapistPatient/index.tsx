@@ -43,6 +43,13 @@ const TabsGeneratorTherapistPatient = (props: propTypes) => {
 
   useEffect(() => {
     onTabChange?.(activeTab);
+    const redirectUrl =
+      tabsList &&
+      tabsList?.find((list) => list.value === activeTab)?.redirectUrl;
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+      // router?.push(redirectUrl);
+    }
   }, [activeTab]);
 
   return (
