@@ -66,7 +66,7 @@ export default function CreateResource(props: propTypes) {
     resourceAvailTherapist: "1",
     resourceFilename: "",
     resourceName: "",
-    resourceType: "",
+    resourceType: null,
     agendaId: "",
     categoryId: "",
     orgId: orgId,
