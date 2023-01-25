@@ -51,7 +51,7 @@ const TherapyTabsGenerator = (props: propTypes) => {
       tabsList?.find((list) => list.value === activeTab)?.redirectUrl;
     if (redirectUrl) {
       // window.location.href = redirectUrl;
-      router.push(redirectUrl);
+      router?.push(redirectUrl);
     }
   }, [activeTab]);
 
