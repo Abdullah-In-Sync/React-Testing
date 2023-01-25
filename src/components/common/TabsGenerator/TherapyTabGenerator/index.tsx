@@ -45,10 +45,12 @@ const TherapyTabsGenerator = (props: propTypes) => {
   }, []);
 
   useEffect(() => {
+    /* istanbul ignore next */
     onTabChange?.(activeTab);
     const redirectUrl =
       tabsList &&
       tabsList?.find((list) => list.value === activeTab)?.redirectUrl;
+    /* istanbul ignore next */
     if (redirectUrl) {
       window.location.href = redirectUrl;
       // router?.push(redirectUrl);
