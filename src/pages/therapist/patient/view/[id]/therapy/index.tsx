@@ -19,7 +19,7 @@ export default function TherapyMainComponent(props: propTypes) {
       label: "Safety Plan",
       value: "safety-plan",
       //  component: < />,
-      redirectUrl: Link + `therapist/patient/view/${patId}?tab=safety-plan`,
+      redirectUrl: Link + `therapist/patient/view/${patId}?tab=safety_plan`,
     },
     {
       label: "Measures",

@@ -92,7 +92,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Personal Info",
       value: "personal-info",
       //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=personal-info`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=peronalinfo`,
     },
     {
       label: "Assessment",
@@ -121,7 +121,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "To-Do",
       value: "to-do",
       //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=to-do`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=to_do`,
     },
     {
       label: "Files",
