@@ -3,6 +3,7 @@ import * as React from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "./safetyPlanStyles";
+import { useRouter } from "next/router";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -37,6 +38,7 @@ const Filter: React.FC<ViewProps> = ({
   onChangeFilterDropdown,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
   const iconButtons = () => {
     return (
       <Stack>
@@ -77,13 +79,21 @@ const Filter: React.FC<ViewProps> = ({
             />
           </Box>
           <Box>
-            <Button data-testid="createPlanButton" variant="contained">
+            <Button
+              data-testid="createPlanButton"
+              onClick={onPressCreateButton}
+              variant="contained"
+            >
               Create Plan
             </Button>
           </Box>
         </Stack>
       </Stack>
     );
+  };
+
+  const onPressCreateButton = () => {
+    router.push("/admin/safetyPlan/create");
   };
 
   return <Box className="actionsWrapper">{iconButtons()}</Box>;

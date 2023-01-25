@@ -32,3 +32,23 @@ export const GET_SAFETY_PLAN_LIST = gql`
     }
   }
 `;
+// mutation (
+export const CREATE_SAFETY_PLAN = gql`
+  mutation createSafetyPlan(
+    $planType: String!
+    $orgId: String!
+    $planName: String!
+    $planDesc: String
+    $questions: String
+  ) {
+    createSafetyPlan(
+      orgId: $orgId
+      planType: $planType
+      questions: $questions
+      planName: $planName
+      planDesc: $planDesc
+    ) {
+      result
+    }
+  }
+`;
