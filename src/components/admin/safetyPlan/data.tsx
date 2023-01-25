@@ -26,7 +26,7 @@ export const columns: readonly Column[] = [
   },
   {
     id: "planType",
-    label: "Plann Type",
+    label: "Plan Type",
     minWidth: 170,
     align: "center",
     format: (value) => {

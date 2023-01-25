@@ -4,6 +4,7 @@ import SureModal from "../../admin/resource/SureModal";
 
 interface ViewProps {
   label: string;
+  description?: string;
   onCancel: () => void;
   onConfirm: () => void;
 }
@@ -12,6 +13,7 @@ const ConfirmationModal: React.FC<ViewProps> = ({
   onCancel,
   onConfirm,
   label,
+  description,
 }) => {
   return (
     <div data-testid="openFileUpload">
@@ -26,6 +28,15 @@ const ConfirmationModal: React.FC<ViewProps> = ({
           >
             {label}
           </Typography>
+          {description && (
+            <Typography
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              {description}
+            </Typography>
+          )}
           <Box marginTop="20px" display="flex" justifyContent="end">
             <Button
               variant="contained"
