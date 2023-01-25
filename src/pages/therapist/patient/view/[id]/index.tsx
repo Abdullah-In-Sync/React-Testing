@@ -14,6 +14,7 @@ import React, { useEffect, useState } from "react";
 import Loader from "../../../../../components/common/Loader";
 import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
 import Layout from "../../../../../components/layout";
+import { Link } from "../../../../../lib/helpers/common";
 
 import TherapyMainComponent from "./therapy";
 import { useRouter } from "next/router";
@@ -38,7 +39,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }>({ patient_id: "", patient_name: "" });
 
   const router = useRouter();
-
   const patId = router?.query.id as string;
 
   /* istanbul ignore next */
@@ -92,13 +92,13 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Personal Info",
       value: "personal-info",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}?tab=personal-info`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=personal-info`,
     },
     {
       label: "Assessment",
       value: "assessment",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}?tab=assessment`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=assessment`,
     },
     {
       label: "Therapy",
@@ -109,31 +109,31 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Notes",
       value: "notes",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}?tab=notes`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=notes`,
     },
     {
       label: "Appointments",
       value: "appointments",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}?tab=appointments`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=appointments`,
     },
     {
       label: "To-Do",
       value: "to-do",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}??tab=notes`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=to-do`,
     },
     {
       label: "Files",
       value: "files",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}?tab=files`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=files`,
     },
     {
       label: "Communications",
       value: "communications",
       //  component: <Agreement />,
-      redirectUrl: `therapist/patient/view/${patId}?tab=communications`,
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=communications`,
     },
   ];
 
@@ -215,7 +215,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
-              activeTabs="personal-info"
+              activeTabs="therapy"
             />
           </Box>
         </Box>
