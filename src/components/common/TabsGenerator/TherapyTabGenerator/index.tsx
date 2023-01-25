@@ -58,11 +58,8 @@ const TherapyTabsGenerator = (props: propTypes) => {
   }, [activeTab]);
 
   useEffect(() => {
-    if (tabType === "feedback") {
-      setActiveTab("feedback");
-    }
-    if (tabType === "resources") {
-      setActiveTab("resources");
+    if (tabType) {
+      setActiveTab(tabType);
     }
   }, []);
 
