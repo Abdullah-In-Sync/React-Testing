@@ -46,8 +46,10 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
         cells: [
           {
             type: "",
+            width: "90%",
           },
         ],
+        height: "400px",
       },
     ],
   });

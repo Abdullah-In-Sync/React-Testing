@@ -14,10 +14,12 @@ export interface TableCell {
   answerValues?: string | Array<any>;
   patientAns?: string | Array<any>;
   title?: string;
+  width: string;
 }
 
 export interface TableRow {
   cells: Array<TableCell>;
+  height: string;
 }
 
 export interface TemplateFormData {
@@ -31,36 +33,45 @@ const staticTemplate: TemplateFormData = {
         {
           type: "header",
           title: "Activities",
+          width: "1",
         },
         {
           type: "header",
           title: "Rating",
           description: "Add rating based on activities",
+          width: "1",
         },
       ],
+      height: "0 200px",
     },
     {
       cells: [
         {
           type: "header",
           title: "Did you take break fast",
+          width: "1",
         },
         {
           type: "answer",
           answerType: "list",
           answerValues: ["banana", "mengo", "papita"],
+          width: "1",
         },
       ],
+      height: "0 100px",
     },
     {
       cells: [
         {
           type: "",
+          width: "1",
         },
         {
           type: "",
+          width: "1",
         },
       ],
+      height: "0 300px",
     },
   ],
 };
