@@ -6,6 +6,7 @@ import { Box } from "@material-ui/core";
 import PatientEditTemplatePage2 from "../resources";
 import { useRouter } from "next/router";
 import { Link } from "../../../../../../lib/helpers/common";
+import TherapistSafetyPlanIndex from "../safetyPlan";
 
 type propTypes = {
   setTherapy: any;
@@ -19,7 +20,8 @@ export default function TherapyMainComponent(props: propTypes) {
       label: "Safety Plan",
       value: "safety-plan",
       //  component: < />,
-      redirectUrl: Link + `therapist/patient/view/${patId}?tab=safety_plan`,
+      // redirectUrl: Link + `therapist/patient/view/${patId}?tab=safety_plan`,
+      component: <TherapistSafetyPlanIndex />,
     },
     {
       label: "Measures",
