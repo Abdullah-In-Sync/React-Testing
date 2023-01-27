@@ -202,8 +202,10 @@ export default function EditForm(props: propTypes) {
 
     for (let j = 0; j < values.rows; j++) {
       initialData.rows.push({
+        height: "200px",
         cells: Array.from({ length: values.cols }, () => ({
           type: "",
+          width: "600px",
         })),
       });
     }

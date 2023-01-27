@@ -106,3 +106,25 @@ export const DELETE_SAFETY_PLAN_QUESTION = gql`
     }
   }
 `;
+
+export const GET_SAFETY_PLAN_LIST_FOR_THERAPIST = gql`
+  query getSafetyPlanListByPatientId(
+    $patientId: String
+    $planType: String
+    $searchText: String
+  ) {
+    getSafetyPlanListByPatientId(
+      patientId: $patientId
+      planType: $planType
+      searchText: $searchText
+    ) {
+      _id
+      created_date
+      description
+      plan_owner
+      name
+      patient_id
+      plan_type
+    }
+  }
+`;
