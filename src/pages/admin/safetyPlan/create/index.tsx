@@ -2,7 +2,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import CreateSafetyPlanComponent from "../../../../components/admin/safetyPlan/create";
+import CreateSafetyPlanComponent from "../../../../components/admin/safetyPlan/create/CreatePlanForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
@@ -45,7 +45,6 @@ const CreateSafetyPlanPage: NextPage = () => {
   };
 
   const submitForm = async (formFields, doneCallback) => {
-    setLoader(true);
     const { orgId, planDescription, planName, planType, questions } =
       formFields;
 
@@ -64,23 +63,22 @@ const CreateSafetyPlanPage: NextPage = () => {
         onCompleted: (data) => {
           if (data) {
             setSuccessModal(true);
-            doneCallback();
           }
         },
       });
-      setLoader(false);
     } catch (e) {
       setLoader(false);
       doneCallback();
     } finally {
       setLoader(false);
+      doneCallback();
     }
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
     setIsConfirm({
       status: true,
-      storedFunction: () => submitForm(formFields, () => setSubmitting(false)),
+      storedFunction: (callback) => submitForm(formFields, callback),
       setSubmitting: setSubmitting,
     });
   };
@@ -98,8 +96,15 @@ const CreateSafetyPlanPage: NextPage = () => {
   };
 
   const onConfirmSubmit = () => {
-    isConfirm.storedFunction();
-    setIsConfirm({ status: false, storedFunction: null, setSubmitting: null });
+    isConfirm.storedFunction(() => {
+      setLoader(true);
+      isConfirm.setSubmitting(false);
+      setIsConfirm({
+        status: false,
+        storedFunction: null,
+        setSubmitting: null,
+      });
+    });
   };
 
   const clearIsConfirm = () => {
@@ -122,7 +127,7 @@ const CreateSafetyPlanPage: NextPage = () => {
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
-        <ContentHeader title="Create safety plan" />
+        <ContentHeader title="Create plan" />
         <CreateSafetyPlanComponent
           organizationList={organizationList}
           submitForm={handleSavePress}

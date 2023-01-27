@@ -7,8 +7,10 @@ import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import { GET_SAFETY_PLAN_LIST } from "../../../graphql/SafetyPlan/graphql";
+import { useRouter } from "next/router";
 
 const SafetyPlanPage: NextPage = () => {
+  const router = useRouter();
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
@@ -121,6 +123,14 @@ const SafetyPlanPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
+  const handleActionButtonClick = (value) => {
+    const { pressedIconButton, _id } = value;
+    switch (pressedIconButton) {
+      case "edit":
+        return router.push(`/admin/safetyPlan/edit/${_id}`);
+    }
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -128,7 +138,6 @@ const SafetyPlanPage: NextPage = () => {
         <ContentHeader title="Safety Plan" />
         <SafetyPlanComponent
           safetyPlanList={listData}
-          pageActionButtonClick={() => null}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
@@ -139,6 +148,7 @@ const SafetyPlanPage: NextPage = () => {
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingSafetyPlanList={loadingSafetyPlanList}
+          pageActionButtonClick={handleActionButtonClick}
         />
       </Layout>
     </>
