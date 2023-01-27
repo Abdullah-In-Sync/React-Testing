@@ -121,14 +121,15 @@ const EditSafetyPlanPage: NextPage = () => {
   };
 
   const onConfirmSubmit = () => {
+    setLoader(true);
     isConfirm.storedFunction(() => {
-      setLoader(true);
       clearIsConfirm();
     });
   };
 
   const clearIsConfirm = () => {
-    isConfirm?.setSubmitting(false);
+    if (isConfirm.setSubmitting) isConfirm.setSubmitting(false);
+
     setIsConfirm({
       status: false,
       storedFunction: null,
