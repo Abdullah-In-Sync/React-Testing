@@ -17,7 +17,8 @@ const SafetyPlanIndex = () => {
     getSafetyPlanViewData,
     { loading: loadingSafetyPlanView, data: viewData },
   ] = useLazyQuery(VIEW_SAFETY_BY_PATIENT_ID, {
-    onCompleted: () => {
+    onCompleted: (data) => {
+      console.log("Koca: data ", data);
       /* istanbul ignore next */
       setLoader(false);
     },
