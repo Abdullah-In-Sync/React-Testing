@@ -94,6 +94,9 @@ const EditSafetyPlanPage: NextPage = () => {
       });
     } catch (e) {
       setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
       doneCallback();
     } finally {
       setLoader(false);
@@ -162,6 +165,9 @@ const EditSafetyPlanPage: NextPage = () => {
         },
       });
     } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
       setLoader(false);
       doneCallback();
     } finally {

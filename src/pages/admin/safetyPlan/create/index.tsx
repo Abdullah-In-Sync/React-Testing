@@ -10,9 +10,11 @@ import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { CREATE_SAFETY_PLAN } from "../../../../graphql/SafetyPlan/graphql";
 import { SuccessModal } from "../../../../components/common/SuccessModal";
 import ConfirmationModal from "../../../../components/common/ConfirmationModal";
+import { useSnackbar } from "notistack";
 
 const CreateSafetyPlanPage: NextPage = () => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState<any>({
@@ -68,6 +70,9 @@ const CreateSafetyPlanPage: NextPage = () => {
       });
     } catch (e) {
       setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
       doneCallback();
     } finally {
       setLoader(false);
