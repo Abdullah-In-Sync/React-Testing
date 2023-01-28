@@ -32,7 +32,7 @@ export const GET_SAFETY_PLAN_LIST = gql`
     }
   }
 `;
-// mutation (
+
 export const CREATE_SAFETY_PLAN = gql`
   mutation createSafetyPlan(
     $planType: String!
@@ -49,6 +49,60 @@ export const CREATE_SAFETY_PLAN = gql`
       planDesc: $planDesc
     ) {
       result
+    }
+  }
+`;
+
+export const GET_SAFETY_PLAN_BY_ID = gql`
+  query viewSafetyPlanById($planId: ID!) {
+    viewSafetyPlanById(planId: $planId) {
+      _id
+      created_date
+      description
+      name
+      org_id
+      status
+      plan_type
+      updated_date
+      user_id
+      user_type
+      questions {
+        _id
+        created_date
+        plan_id
+        safety_additional_details
+        safety_ques
+        safety_ques_status
+        safety_ques_type
+        safety_ques_typeoption
+        updated_date
+        user_id
+        user_type
+      }
+    }
+  }
+`;
+
+export const UPDATE_SAFETY_PLAN = gql`
+  mutation updateSafetyPlanById(
+    $planId: ID!
+    $questions: String
+    $updatePlan: UpdateSafetyPlanInput
+  ) {
+    updateSafetyPlanById(
+      planId: $planId
+      questions: $questions
+      updatePlan: $updatePlan
+    ) {
+      _id
+    }
+  }
+`;
+
+export const DELETE_SAFETY_PLAN_QUESTION = gql`
+  mutation adminDeleteSafetyPlanQs($questionId: ID!) {
+    adminDeleteSafetyPlanQs(questionId: $questionId) {
+      _id
     }
   }
 `;

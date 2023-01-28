@@ -96,5 +96,3 @@ export default function MultiSelectComponent(props: propTypes) {
     </FormControl>
   );
 }
-
-//checked={personName.indexOf(name) > -1}
