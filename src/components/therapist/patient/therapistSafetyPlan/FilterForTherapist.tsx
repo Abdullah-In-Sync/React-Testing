@@ -67,6 +67,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
             sx={{
               display: "flex",
               justifyContent: "space-evenly",
+              paddingRight: "10px",
             }}
           >
             <Box style={{ paddingRight: "20px" }}>
@@ -76,11 +77,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
             </Box>
 
             <Box>
-              <Button
-                data-testid="addPlanButton"
-                variant="contained"
-                style={{ paddingRight: "20px" }}
-              >
+              <Button data-testid="addPlanButton" variant="contained">
                 Add Plan
               </Button>
             </Box>
