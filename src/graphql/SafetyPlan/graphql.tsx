@@ -128,3 +128,33 @@ export const GET_SAFETY_PLAN_LIST_FOR_THERAPIST = gql`
     }
   }
 `;
+
+export const VIEW_SAFETY_BY_PATIENT_ID = gql`
+  query viewSafetyPlanById($planId: ID!) {
+    viewSafetyPlanById(planId: $planId) {
+      _id
+      created_date
+      description
+      name
+      org_id
+      plan_type
+      status
+      updated_date
+      user_id
+      user_type
+      questions {
+        _id
+        created_date
+        plan_id
+        safety_ques
+        safety_additional_details
+        safety_ques_typeoption
+        safety_ques_type
+        safety_ques_status
+        updated_date
+        user_id
+        user_type
+      }
+    }
+  }
+`;
