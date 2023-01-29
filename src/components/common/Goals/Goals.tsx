@@ -279,14 +279,15 @@ const Goals = (props: propTypes) => {
                         item
                         xs={4}
                         style={{
-                          paddingLeft: "250px",
+                          paddingLeft: "220px",
                           paddingTop: "10px",
                           color: "#6EC9DB",
                           font: "bold",
                         }}
                       >
-                        Review Date
+                        <Typography>Review Date</Typography>
                       </Grid>
+
                       <Grid item xs={4}>
                         <TextFieldComponent
                           required={true}
