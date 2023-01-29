@@ -52,3 +52,19 @@ export const CREATE_SAFETY_PLAN = gql`
     }
   }
 `;
+
+export const UPDATE_SAFETY_PLAN_BY_ID = gql`
+  mutation updateSafetyPlanById(
+    $planId: ID = ""
+    $questions: String
+    $updatePlan: UpdateSafetyPlanInput
+  ) {
+    updateSafetyPlanById(
+      planId: $planId
+      questions: $questions
+      updatePlan: $updatePlan
+    ) {
+      _id
+    }
+  }
+`;

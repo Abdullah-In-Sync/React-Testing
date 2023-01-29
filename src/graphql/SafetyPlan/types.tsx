@@ -21,3 +21,15 @@ export interface DataEntity {
   user_id: string;
   user_type: string;
 }
+
+export interface UpdateSafetyPlanByIDRes {
+  updateSafetyPlanById: null;
+}
+export interface UpdateSafetyPlanByIdVars {
+  planId: string;
+  updatePlan: UpdatePlan;
+}
+
+export interface UpdatePlan {
+  status: number;
+}
