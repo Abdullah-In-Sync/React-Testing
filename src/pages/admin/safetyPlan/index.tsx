@@ -63,24 +63,18 @@ const SafetyPlanPage: NextPage = () => {
     },
   });
 
-  const [
-    deleteSeftyPlanFn,
-    {
-      loading: deleteSeftyPlanLoading,
-      data: { updateSafetyPlanById: deletedPlan = {} } = {},
+  const [deleteSeftyPlanFn, { loading: deleteSeftyPlanLoading }] = useMutation<
+    UpdateSafetyPlanByIDRes,
+    UpdateSafetyPlanByIdVars
+  >(UPDATE_SAFETY_PLAN, {
+    onCompleted: () => {
+      /* istanbul ignore next */
+      getSafetyPlanList({
+        variables: { limit: rowsLimit, pageNo: initialPageNo },
+      });
+      setShowSuccessModal(true);
     },
-  ] = useMutation<UpdateSafetyPlanByIDRes, UpdateSafetyPlanByIdVars>(
-    UPDATE_SAFETY_PLAN,
-    {
-      onCompleted: (data) => {
-        /* istanbul ignore next */
-        getSafetyPlanList({
-          variables: { limit: rowsLimit, pageNo: initialPageNo },
-        });
-        setShowSuccessModal(true);
-      },
-    }
-  );
+  });
 
   const onPageChange = (event?: any, newPage?: number) => {
     /* istanbul ignore next */
