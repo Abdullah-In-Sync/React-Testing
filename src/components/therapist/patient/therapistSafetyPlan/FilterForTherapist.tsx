@@ -8,7 +8,7 @@ interface ViewProps {
   searchInputValue?: string;
   handleClearSearchInput?: () => void;
   onChangeSearchInput?: (e) => void;
-
+  onPressCreatePlan?: () => void;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
 }
@@ -34,6 +34,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
   onChangeSearchInput,
   selectFilterOptions = {},
   onChangeFilterDropdown,
+  onPressCreatePlan,
 }) => {
   const styles = useStyles();
   const iconButtons = () => {
@@ -63,25 +64,38 @@ const FilterForTherapist: React.FC<ViewProps> = ({
             />
           </Box>
 
-          <Box>
-            <Button
-              data-testid="createPlanButton"
-              variant="contained"
-              style={{ marginRight: "10px" }}
-            >
-              Create Plan
-            </Button>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Box style={{ paddingRight: "20px" }}>
+              <Button
+                data-testid="createPlanButton"
+                variant="contained"
+                onClick={onPressCreatePlan}
+              >
+                Create Plan
+              </Button>
+            </Box>
 
-            <Button data-testid="createAddPlan" variant="contained">
-              Add Plan
-            </Button>
+            <Box>
+              <Button
+                data-testid="addPlanButton"
+                variant="contained"
+                style={{ paddingRight: "20px" }}
+              >
+                Add Plan
+              </Button>
+            </Box>
           </Box>
         </Stack>
       </Stack>
     );
   };
 
-  return <Box className="actionsWrapper">{iconButtons()}</Box>;
+  return <Box>{iconButtons()}</Box>;
 };
 
 export default FilterForTherapist;

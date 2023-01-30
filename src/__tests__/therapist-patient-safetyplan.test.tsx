@@ -7,11 +7,14 @@ import {
   waitFor,
   within,
 } from "@testing-library/react";
-import { SnackbarProvider } from "notistack";
 import { useRouter } from "next/router";
-import theme from "../styles/theme/theme";
-import { GET_SAFETY_PLAN_LIST_FOR_THERAPIST } from "../graphql/SafetyPlan/graphql";
+import { SnackbarProvider } from "notistack";
+import {
+  CREATE_THERAPIST_SAFETY_PLAN,
+  GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+} from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
+import theme from "../styles/theme/theme";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -120,6 +123,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: CREATE_THERAPIST_SAFETY_PLAN,
+    variables: {
+      patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
+      planDesc: "test des",
+      planName: "test",
+    },
+  },
+  result: {
+    data: {
+      data: {
+        createSafetyPlan: {
+          result: true,
+          __typename: "result",
+        },
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -132,66 +156,121 @@ const sut = async () => {
   );
 };
 
-it("should render safety plan data", async () => {
-  (useRouter as jest.Mock).mockImplementation(() => ({
-    query: {
-      id: "7a27dc00d48bf983fdcd4b0762ebd",
-    },
-  }));
-
-  await sut();
-  await waitFor(async () => {
-    expect(screen.getByTestId("panel1bh-header")).toBeInTheDocument();
-    // expect(screen.getByTestId("planTypeSelect")).toBeInTheDocument();
+const fillCreateSafeyPlanModalForm = async () => {
+  const createPlanButton = await screen.findByTestId("createPlanButton");
+  fireEvent.click(createPlanButton);
+  //createPlanButton
+  const planNameInput = await screen.findByTestId("planName");
+  fireEvent.change(planNameInput, {
+    target: { value: "test" },
   });
-});
 
-it("should search base on the search", async () => {
-  (useRouter as jest.Mock).mockImplementation(() => ({
-    query: {
-      id: "4937a27dc00d483fdcd4b0762ebd",
-    },
-  }));
+  const planDescriptionInput = await screen.findByTestId("planDescription");
 
+  fireEvent.change(planDescriptionInput, {
+    target: { value: "test des" },
+  });
+
+  expect(planDescriptionInput).toBeInTheDocument();
+};
+
+const submitForm = async () => {
   await sut();
-  await waitFor(async () => {
-    const searchInput = screen.getByTestId("searchInput");
-    expect(searchInput).toBeInTheDocument();
+  await fillCreateSafeyPlanModalForm();
+  const submitFormButton = await screen.findByTestId("submitForm");
+  fireEvent.click(submitFormButton);
+};
 
-    fireEvent.change(searchInput, {
-      target: { value: "sa" },
+describe("Therapist patient safety plan", () => {
+  it("should render safety plan data", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("panel1bh-header")).toBeInTheDocument();
+      // expect(screen.getByTestId("planTypeSelect")).toBeInTheDocument();
     });
-
-    expect(screen.getByText("safety_plans")).toBeInTheDocument();
   });
-});
 
-it("should change the plane type", async () => {
-  (useRouter as jest.Mock).mockImplementation(() => ({
-    query: {
-      id: "4937a27dc00d48bf983fdcd4b0762ebd",
-    },
-  }));
+  it("should search base on the search", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d483fdcd4b0762ebd",
+      },
+    }));
 
-  await sut();
-  await waitFor(async () => {
-    const planTypeSelect = screen.getByTestId("planTypeSelect");
+    await sut();
+    await waitFor(async () => {
+      const searchInput = screen.getByTestId("searchInput");
+      expect(searchInput).toBeInTheDocument();
 
-    const buttonPlanTypeSelect = within(planTypeSelect).getByRole("button");
-    console.log("Koca: buttonPlanTypeSelect ", buttonPlanTypeSelect);
-    fireEvent.mouseDown(buttonPlanTypeSelect);
+      fireEvent.change(searchInput, {
+        target: { value: "sa" },
+      });
 
-    const listboxPlanTypeSelect = within(
-      screen.getByRole("presentation")
-    ).getByRole("listbox");
+      expect(screen.getByText("safety_plans")).toBeInTheDocument();
+    });
+  });
 
-    const optionsPlanTypeSelect = within(listboxPlanTypeSelect).getAllByRole(
-      "option"
-    );
+  it("should change the plane type", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
 
-    fireEvent.click(optionsPlanTypeSelect[1]);
-    console.log("Koca: optionsPlanTypeSelect[1] ", optionsPlanTypeSelect[1]);
+    await sut();
+    await waitFor(async () => {
+      const planTypeSelect = screen.getByTestId("planTypeSelect");
 
-    expect(screen.getByText("Test Plan Data")).toBeInTheDocument();
+      const buttonPlanTypeSelect = within(planTypeSelect).getByRole("button");
+      fireEvent.mouseDown(buttonPlanTypeSelect);
+
+      const listboxPlanTypeSelect = within(
+        screen.getByRole("presentation")
+      ).getByRole("listbox");
+
+      const optionsPlanTypeSelect = within(listboxPlanTypeSelect).getAllByRole(
+        "option"
+      );
+
+      fireEvent.click(optionsPlanTypeSelect[1]);
+
+      expect(screen.getByText("Test Plan Data")).toBeInTheDocument();
+    });
+  });
+
+  it("should render admin create safety plan page and submit the form", async () => {
+    await submitForm();
+
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
+
+  it("should render admin cancel the submition", async () => {
+    await submitForm();
+    const cancelButton = await screen.findByTestId("cancelForm");
+    fireEvent.click(cancelButton);
+    expect(cancelButton).toBeInTheDocument();
+  });
+
+  it("should close modal when cross icon press", async () => {
+    await sut();
+    const createPlanButton = await screen.findByTestId("createPlanButton");
+    fireEvent.click(createPlanButton);
+    // fireEvent.click(cancelButton);
+    const crossButton = await screen.findByTestId("modalCrossIcon");
+    expect(crossButton).toBeInTheDocument();
+
+    fireEvent.click(crossButton);
+    expect(crossButton).toBeInTheDocument();
   });
 });
