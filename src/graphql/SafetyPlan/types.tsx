@@ -22,6 +22,17 @@ export interface DataEntity {
   user_type: string;
 }
 
+export interface UpdateSafetyPlanByIDRes {
+  updateSafetyPlanById: null;
+}
+export interface UpdateSafetyPlanByIdVars {
+  planId: string;
+  updatePlan: UpdatePlan;
+}
+
+export interface UpdatePlan {
+  status: number;
+}
 export interface ViewSafetyPlan {
   data: ViewSafetyPlanData;
 }
