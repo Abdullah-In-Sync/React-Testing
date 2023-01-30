@@ -128,6 +128,8 @@ const SafetyPlanPage: NextPage = () => {
     switch (pressedIconButton) {
       case "edit":
         return router.push(`/admin/safetyPlan/edit/${_id}`);
+      case "view":
+        return router.push(`/admin/safetyPlan/view/${_id}`);
     }
   };
 
