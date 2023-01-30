@@ -1,6 +1,8 @@
+import { FormikProps } from "formik";
 import React from "react";
-import TherapistSafetyPlanList from "./TherapistSafetyPlan";
 import FilterForTherapist from "./FilterForTherapist";
+import TherapistSafetyPlanList from "./TherapistSafetyPlan";
+import { InitialFormValues } from "./types";
 
 interface ViewProps {
   safetyPlanList?: any;
@@ -14,6 +16,13 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
+  submitForm?: (
+    formData: InitialFormValues,
+    formikHelper: FormikProps<InitialFormValues>
+  ) => void;
+  closeModal?: () => void;
+  onPressCancel?: () => void;
+  onPressCreatePlan?: () => void;
 }
 
 const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
@@ -22,6 +31,7 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
   onChangeSearchInput,
   selectFilterOptions,
   onChangeFilterDropdown,
+  onPressCreatePlan,
 }) => {
   return (
     <>
@@ -30,6 +40,7 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
         onChangeSearchInput={onChangeSearchInput}
         selectFilterOptions={selectFilterOptions}
         onChangeFilterDropdown={onChangeFilterDropdown}
+        onPressCreatePlan={onPressCreatePlan}
       />
       <TherapistSafetyPlanList safetyPlanList={safetyPlanList} />
     </>

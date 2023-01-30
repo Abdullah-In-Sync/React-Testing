@@ -32,10 +32,7 @@ const questionTypes = [
   },
 ];
 
-export const AddQuestionsBox = (
-  { formikProps, handleDeleteQuestion }: Props,
-  ref
-) => {
+const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { values, setFieldValue } = formikProps;

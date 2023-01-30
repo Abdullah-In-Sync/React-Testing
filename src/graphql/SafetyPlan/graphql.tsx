@@ -128,3 +128,19 @@ export const GET_SAFETY_PLAN_LIST_FOR_THERAPIST = gql`
     }
   }
 `;
+
+export const CREATE_THERAPIST_SAFETY_PLAN = gql`
+  mutation createTherapistSafetyPlan(
+    $patientId: String!
+    $planName: String!
+    $planDesc: String
+  ) {
+    createTherapistSafetyPlan(
+      patientId: $patientId
+      planName: $planName
+      planDesc: $planDesc
+    ) {
+      result
+    }
+  }
+`;

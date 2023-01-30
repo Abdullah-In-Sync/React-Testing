@@ -10,7 +10,10 @@ import {
 import { SnackbarProvider } from "notistack";
 import { useRouter } from "next/router";
 import theme from "../styles/theme/theme";
-import { GET_SAFETY_PLAN_LIST_FOR_THERAPIST } from "../graphql/SafetyPlan/graphql";
+import {
+  GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+  CREATE_THERAPIST_SAFETY_PLAN,
+} from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 
 jest.mock("next/router", () => ({
@@ -120,6 +123,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: CREATE_THERAPIST_SAFETY_PLAN,
+    variables: {
+      patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
+      planDesc: "test des",
+      planName: "test",
+    },
+  },
+  result: {
+    data: {
+      data: {
+        createSafetyPlan: {
+          result: true,
+          __typename: "result",
+        },
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -130,6 +154,31 @@ const sut = async () => {
       </ThemeProvider>
     </MockedProvider>
   );
+};
+
+const fillCreateSafeyPlanModalForm = async () => {
+  const createPlanButton = await screen.findByTestId("createPlanButton");
+  fireEvent.click(createPlanButton);
+  //createPlanButton
+  const planNameInput = await screen.findByTestId("planName");
+  fireEvent.change(planNameInput, {
+    target: { value: "test" },
+  });
+
+  const planDescriptionInput = await screen.findByTestId("planDescription");
+
+  fireEvent.change(planDescriptionInput, {
+    target: { value: "test des" },
+  });
+
+  expect(planDescriptionInput).toBeInTheDocument();
+};
+
+const submitForm = async () => {
+  await sut();
+  await fillCreateSafeyPlanModalForm();
+  const submitFormButton = await screen.findByTestId("submitForm");
+  fireEvent.click(submitFormButton);
 };
 
 it("should render safety plan data", async () => {
@@ -178,7 +227,6 @@ it("should change the plane type", async () => {
     const planTypeSelect = screen.getByTestId("planTypeSelect");
 
     const buttonPlanTypeSelect = within(planTypeSelect).getByRole("button");
-    console.log("Koca: buttonPlanTypeSelect ", buttonPlanTypeSelect);
     fireEvent.mouseDown(buttonPlanTypeSelect);
 
     const listboxPlanTypeSelect = within(
@@ -190,8 +238,25 @@ it("should change the plane type", async () => {
     );
 
     fireEvent.click(optionsPlanTypeSelect[1]);
-    console.log("Koca: optionsPlanTypeSelect[1] ", optionsPlanTypeSelect[1]);
 
     expect(screen.getByText("Test Plan Data")).toBeInTheDocument();
   });
+});
+
+it("should render admin create safety plan page and submit the form", async () => {
+  await submitForm();
+
+  const confirmButton = await screen.findByRole("button", {
+    name: "Confirm",
+  });
+  fireEvent.click(confirmButton);
+  const okButton = await screen.findByTestId("SuccessOkBtn");
+  expect(okButton).toBeInTheDocument();
+});
+
+it("should render admin cancel the submition", async () => {
+  await submitForm();
+  const cancelButton = await screen.findByTestId("cancelForm");
+  fireEvent.click(cancelButton);
+  expect(cancelButton).toBeInTheDocument();
 });

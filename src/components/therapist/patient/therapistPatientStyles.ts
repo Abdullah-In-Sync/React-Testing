@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     "& .actionsWrapper": {
       position: "relative",
       zIndex: 1,
+      display: "flex",
     },
     "& .actionsWrapper button": {
       marginRight: 10,

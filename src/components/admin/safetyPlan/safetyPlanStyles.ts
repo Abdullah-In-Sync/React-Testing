@@ -60,20 +60,53 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   filterWrapper: {
     flexDirection: "row",
+    flexWrap: "wrap",
+
     "& .myhelp-select-control": {
-      minWidth: 300,
+      // minWidth: 300,
       // flex: 1,
-      padding: "0px 5px",
+      // width: "100%",
+      [theme.breakpoints.down("lg")]: {
+        // flexDirection: "column",
+        flexDirection: "column",
+        marginBottom: 10,
+        width: "100%",
+        // "& .multiSelect": {
+        //   maxWidth: 900,
+        // },
+      },
+      [theme.breakpoints.up("md")]: {
+        // flexDirection: "column",
+        // marginBottom: 10,
+        minWidth: 300,
+        padding: "0px 5px",
+      },
     },
     "& .filterDropdownInput": {
       display: "flex",
+      // flexWrap: "wrap",
+      [theme.breakpoints.down("md")]: {
+        flexWrap: "wrap",
+      },
       flex: 1,
       "& .MuiBox-root": {
-        paddingRight: 5,
+        [theme.breakpoints.up("md")]: {
+          paddingRight: 5,
+        },
       },
     },
     "& .form-control-bg": {
       background: "unset",
+    },
+
+    "& .MuiBox-root": {
+      [theme.breakpoints.down("lg")]: {
+        width: "100%",
+      },
+
+      "& button": {
+        width: "100%",
+      },
     },
   },
   root: {
