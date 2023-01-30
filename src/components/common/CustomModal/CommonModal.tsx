@@ -40,6 +40,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
           <Box>
             <IconButton
               aria-label="close"
+              data-testid="modalCrossIcon"
               onClick={() => setState({ open: false })}
             >
               <CloseIcon />
