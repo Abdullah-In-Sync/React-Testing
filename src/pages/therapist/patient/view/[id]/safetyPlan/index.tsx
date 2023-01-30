@@ -54,6 +54,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     getSafetyPlanList,
     { loading: loadingSafetyPlanList, data: listData },
   ] = useLazyQuery(GET_SAFETY_PLAN_LIST_FOR_THERAPIST, {
+    fetchPolicy: "network-only",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
@@ -158,6 +159,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   const handleOk = () => {
     /* istanbul ignore next */
+    getSafetyPlanList({
+      variables: { patientId: patId },
+    });
     handleCloseCreatePlanModal();
     setSuccessModal(false);
   };
