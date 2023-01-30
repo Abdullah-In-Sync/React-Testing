@@ -5,7 +5,11 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
 
 const DeleteSureModal = (props) => {
-  const { modalOpen, setModalOpen } = props;
+  const {
+    modalOpen,
+    setModalOpen,
+    title = "Are you sure want to delete this resource?",
+  } = props;
   return (
     <div>
       <Modal
@@ -39,7 +43,7 @@ const DeleteSureModal = (props) => {
                   fontSize: "27px",
                 }}
               >
-                Are you sure want to delete this resource?
+                {title}
               </Typography>
             </Box>
             {props.children}
