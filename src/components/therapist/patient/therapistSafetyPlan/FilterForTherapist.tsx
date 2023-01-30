@@ -95,7 +95,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
     );
   };
 
-  return <Box className="actionsWrapper">{iconButtons()}</Box>;
+  return <Box>{iconButtons()}</Box>;
 };
 
 export default FilterForTherapist;
