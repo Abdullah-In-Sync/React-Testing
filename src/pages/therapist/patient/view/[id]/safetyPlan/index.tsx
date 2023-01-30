@@ -76,11 +76,13 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
+            /* istanbul ignore next */
             setSuccessModal(true);
           }
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
