@@ -1,10 +1,19 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import { GET_SAFETY_PLAN_LIST } from "../../../../graphql/SafetyPlan/graphql";
+import {
+  GET_SAFETY_PLAN_LIST,
+  UPDATE_SAFETY_PLAN_BY_ID,
+} from "../../../../graphql/SafetyPlan/graphql";
 
 import SafetyPlanPage from "../../../../pages/admin/safetyPlan";
 
@@ -224,6 +233,26 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_SAFETY_PLAN_BY_ID,
+    variables: {
+      planId: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
+      updatePlan: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateSafetyPlanById: {
+        _id: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
+        __typename: "viewMasterSafetyPlan",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -281,5 +310,22 @@ const selectFromOrganizationDropdown = async () => {
 describe("Admin safety plan list", () => {
   it("should render admin safety plan list with filter data", async () => {
     await selectFromOrganizationDropdown();
+  });
+
+  it("delele safty plan from list", async () => {
+    await sut();
+    const deleteButton = await screen.findByTestId(
+      "iconButton_delete_d2393912-bdd6-47a1-98b7-49f9ce9756a0"
+    );
+    expect(deleteButton).toBeInTheDocument();
+    fireEvent.click(deleteButton);
+
+    const approveDeleteBtn = screen.queryByTestId(
+      "approveDeletePlanModalConfirmButton"
+    );
+    expect(approveDeleteBtn).toBeInTheDocument();
+    await waitFor(() => fireEvent.click(approveDeleteBtn));
+
+    expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
   });
 });

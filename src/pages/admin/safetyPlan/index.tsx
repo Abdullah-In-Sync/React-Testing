@@ -70,7 +70,7 @@ const SafetyPlanPage: NextPage = () => {
   ] = useMutation<UpdateSafetyPlanByIDRes, UpdateSafetyPlanByIdVars>(
     UPDATE_SAFETY_PLAN_BY_ID,
     {
-      onCompleted: () => {
+      onCompleted: (data) => {
         /* istanbul ignore next */
         getSafetyPlanList({
           variables: { limit: rowsLimit, pageNo: initialPageNo },
@@ -200,7 +200,7 @@ const SafetyPlanPage: NextPage = () => {
               variant="contained"
               color="inherit"
               size="small"
-              data-testid="deleteResourceModalCancelButton"
+              data-testid="deleteSaftyPlanModalCancelButton"
               onClick={() => {
                 setDeleteConfirmation(false);
               }}
@@ -213,8 +213,7 @@ const SafetyPlanPage: NextPage = () => {
               variant="contained"
               sx={{ marginLeft: "5px" }}
               size="small"
-              data-testid="deleteResourceModalConfirmButton"
-              disabled={false}
+              data-testid="approveDeletePlanModalConfirmButton"
               disabled={deleteSeftyPlanLoading}
               onClick={() => {
                 setDeleteConfirmation(false);
