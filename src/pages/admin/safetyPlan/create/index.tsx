@@ -2,7 +2,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import CreateSafetyPlanComponent from "../../../../components/admin/safetyPlan/create";
+import CreateSafetyPlanComponent from "../../../../components/admin/safetyPlan/create/CreatePlanForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
@@ -10,9 +10,11 @@ import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { CREATE_SAFETY_PLAN } from "../../../../graphql/SafetyPlan/graphql";
 import { SuccessModal } from "../../../../components/common/SuccessModal";
 import ConfirmationModal from "../../../../components/common/ConfirmationModal";
+import { useSnackbar } from "notistack";
 
 const CreateSafetyPlanPage: NextPage = () => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState<any>({
@@ -45,7 +47,6 @@ const CreateSafetyPlanPage: NextPage = () => {
   };
 
   const submitForm = async (formFields, doneCallback) => {
-    setLoader(true);
     const { orgId, planDescription, planName, planType, questions } =
       formFields;
 
@@ -64,23 +65,25 @@ const CreateSafetyPlanPage: NextPage = () => {
         onCompleted: (data) => {
           if (data) {
             setSuccessModal(true);
-            doneCallback();
           }
         },
       });
-      setLoader(false);
     } catch (e) {
       setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
       doneCallback();
     } finally {
       setLoader(false);
+      doneCallback();
     }
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
     setIsConfirm({
       status: true,
-      storedFunction: () => submitForm(formFields, () => setSubmitting(false)),
+      storedFunction: (callback) => submitForm(formFields, callback),
       setSubmitting: setSubmitting,
     });
   };
@@ -98,8 +101,15 @@ const CreateSafetyPlanPage: NextPage = () => {
   };
 
   const onConfirmSubmit = () => {
-    isConfirm.storedFunction();
-    setIsConfirm({ status: false, storedFunction: null, setSubmitting: null });
+    isConfirm.storedFunction(() => {
+      setLoader(true);
+      isConfirm.setSubmitting(false);
+      setIsConfirm({
+        status: false,
+        storedFunction: null,
+        setSubmitting: null,
+      });
+    });
   };
 
   const clearIsConfirm = () => {
@@ -122,7 +132,7 @@ const CreateSafetyPlanPage: NextPage = () => {
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
-        <ContentHeader title="Create safety plan" />
+        <ContentHeader title="Create plan" />
         <CreateSafetyPlanComponent
           organizationList={organizationList}
           submitForm={handleSavePress}

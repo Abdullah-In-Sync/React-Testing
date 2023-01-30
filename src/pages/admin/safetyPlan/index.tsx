@@ -11,14 +11,16 @@ import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import {
   GET_SAFETY_PLAN_LIST,
-  UPDATE_SAFETY_PLAN_BY_ID,
+  UPDATE_SAFETY_PLAN,
 } from "../../../graphql/SafetyPlan/graphql";
 import {
   UpdateSafetyPlanByIDRes,
   UpdateSafetyPlanByIdVars,
 } from "../../../graphql/SafetyPlan/types";
+import { useRouter } from "next/router";
 
 const SafetyPlanPage: NextPage = () => {
+  const router = useRouter();
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
@@ -68,7 +70,7 @@ const SafetyPlanPage: NextPage = () => {
       data: { updateSafetyPlanById: deletedPlan = {} } = {},
     },
   ] = useMutation<UpdateSafetyPlanByIDRes, UpdateSafetyPlanByIdVars>(
-    UPDATE_SAFETY_PLAN_BY_ID,
+    UPDATE_SAFETY_PLAN,
     {
       onCompleted: (data) => {
         /* istanbul ignore next */
@@ -153,13 +155,6 @@ const SafetyPlanPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
-  const onRowActionButtonClick = (value) => {
-    if (value?.pressedIconButton == "delete") {
-      actionClickedId.current = value?._id;
-      setDeleteConfirmation(true);
-    }
-  };
-
   const deleteSeftyPlan = () => {
     deleteSeftyPlanFn({
       variables: {
@@ -171,6 +166,19 @@ const SafetyPlanPage: NextPage = () => {
     });
   };
 
+  const handleActionButtonClick = (value) => {
+    const { pressedIconButton, _id } = value;
+    switch (pressedIconButton) {
+      case "edit":
+        return router.push(`/admin/safetyPlan/edit/${_id}`);
+      case "view":
+        return router.push(`/admin/safetyPlan/view/${_id}`);
+      case "delete":
+        actionClickedId.current = value?._id;
+        setDeleteConfirmation(true);
+    }
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -178,7 +186,6 @@ const SafetyPlanPage: NextPage = () => {
         <ContentHeader title="Safety Plan" />
         <SafetyPlanComponent
           safetyPlanList={listData}
-          pageActionButtonClick={onRowActionButtonClick}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
@@ -189,6 +196,7 @@ const SafetyPlanPage: NextPage = () => {
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingSafetyPlanList={loadingSafetyPlanList}
+          pageActionButtonClick={handleActionButtonClick}
         />
         <DeleteSureModal
           modalOpen={deleteConfirmation}

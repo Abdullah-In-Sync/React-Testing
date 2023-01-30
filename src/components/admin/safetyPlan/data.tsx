@@ -34,8 +34,8 @@ export const columns: readonly Column[] = [
     },
   },
   {
-    id: "organisations",
-    label: "Organisations",
+    id: "Organisation",
+    label: "Organisation",
     minWidth: 170,
     align: "center",
     format: (value) => <Typography>{value.organization_name}</Typography>,

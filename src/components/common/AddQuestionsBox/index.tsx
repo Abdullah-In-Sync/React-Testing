@@ -6,11 +6,19 @@ import FormikTextField from "../FormikFields/FormikTextField";
 import { useStyles } from "./addQuestionsBoxStyles";
 import DeleteSharp from "@mui/icons-material/DeleteSharp";
 import { useSnackbar } from "notistack";
+import AutoCompleteList from "./AutoCompleteList";
 
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
-    questions: object[];
+    questions: {
+      questionId?: string;
+      question?: string;
+      description?: string;
+      questionType?: string;
+      questionOption?: string;
+    }[];
   }>;
+  handleDeleteQuestion: (v) => void;
 }>;
 
 const questionTypes = [
@@ -24,7 +32,10 @@ const questionTypes = [
   },
 ];
 
-export const AddQuestionsBox = ({ formikProps }: Props, ref) => {
+export const AddQuestionsBox = (
+  { formikProps, handleDeleteQuestion }: Props,
+  ref
+) => {
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { values, setFieldValue } = formikProps;
@@ -32,7 +43,7 @@ export const AddQuestionsBox = ({ formikProps }: Props, ref) => {
     onAddQuesionBox() {
       if (values.questions.length < 10) {
         const questions = [...values.questions];
-        questions.push({ question: "", description: " ", questionType: "" });
+        questions.push({ question: "", description: "", questionType: "" });
         setFieldValue("questions", questions);
       } else {
         enqueueSnackbar("Adding more than 10 questions is not allowed.", {
@@ -42,31 +53,52 @@ export const AddQuestionsBox = ({ formikProps }: Props, ref) => {
     },
   }));
 
-  const onClickDelete = ({ i }) => {
+  const removeBox = (i) => {
     const questions = [...values.questions];
     questions.splice(i, 1);
     setFieldValue("questions", questions);
   };
+  //onDeleteQuestion={onDeleteQuestion}
+  const onClickDelete = ({ i, questionId }) => {
+    if (handleDeleteQuestion && questionId)
+      handleDeleteQuestion({
+        questionId,
+        callback: () => {
+          removeBox(i);
+        },
+      });
+    else removeBox(i);
+  };
 
-  const deleteButton = ({ i }) => {
+  const deleteButton = ({ i, questionId }) => {
     return (
       <Fab
         key={`deleteIconButton_${i}`}
-        aria-label={`deleteIconButton_${i}}`}
+        aria-label={`deleteIconButton_${i}`}
         data-testid={`iconButton_${i}`}
-        onClick={() => onClickDelete({ i })}
+        onClick={() => onClickDelete({ i, questionId })}
       >
         <DeleteSharp />
       </Fab>
     );
   };
 
+  const onChangeQuestionType = (e, i, questionOption) => {
+    const value = e.target.value;
+    if (value == "1" && questionOption)
+      setFieldValue(`questions.${i}.questionOption`, "");
+    setFieldValue(`questions.${i}.questionType`, value);
+  };
+
   const questionBox = ({ i }) => {
+    const { questions = [] } = values;
+    const { questionType, questionOption, questionId } = questions[i] || {};
     return (
       <Card key={`questionCard_${i}`} className="questionCard">
         <CardContent>
-          <Box className="deleteButtonWrapper">{deleteButton({ i })}</Box>
-
+          <Box className="deleteButtonWrapper">
+            {deleteButton({ i, questionId })}
+          </Box>
           <Box key={i} className="questionBoxWrapper">
             <Box>
               <FormikTextField
@@ -89,22 +121,28 @@ export const AddQuestionsBox = ({ formikProps }: Props, ref) => {
                 variant="outlined"
                 multiline
                 rows={5}
-                autoComplete="off"
               />
             </Box>
-
-            <Box className="selectChooseAnswerTypeWrapper">
-              <FormikSelectDropdown
-                id={`questions.${i}.questionType`}
-                labelId={`questions.${i}.questionType`}
-                name={`questions.${i}.questionType`}
-                showDefaultSelectOption={false}
-                label="Choose answer type"
-                options={questionTypes}
-                mappingKeys={["id", "value"]}
-                size="small"
-                extraProps={{ "data-testid": `questions.${i}.questionType` }}
-              />
+            <Box>
+              <Box className="selectChooseAnswerTypeWrapper">
+                <FormikSelectDropdown
+                  onChange={(e) => onChangeQuestionType(e, i, questionOption)}
+                  id={`questions.${i}.questionType`}
+                  labelId={`questions.${i}.questionType`}
+                  name={`questions.${i}.questionType`}
+                  showDefaultSelectOption={false}
+                  label="Choose answer type"
+                  options={questionTypes}
+                  mappingKeys={["id", "value"]}
+                  size="small"
+                  extraProps={{ "data-testid": `questions.${i}.questionType` }}
+                />
+              </Box>
+              {questionType == "2" && (
+                <Box className="autoCompleteWrapper">
+                  <AutoCompleteList i={i} formikProps={formikProps} />
+                </Box>
+              )}
             </Box>
           </Box>
         </CardContent>

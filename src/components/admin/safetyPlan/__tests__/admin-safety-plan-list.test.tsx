@@ -12,7 +12,7 @@ import { SnackbarProvider } from "notistack";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import {
   GET_SAFETY_PLAN_LIST,
-  UPDATE_SAFETY_PLAN_BY_ID,
+  UPDATE_SAFETY_PLAN,
 } from "../../../../graphql/SafetyPlan/graphql";
 
 import SafetyPlanPage from "../../../../pages/admin/safetyPlan";
@@ -235,7 +235,7 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: UPDATE_SAFETY_PLAN_BY_ID,
+    query: UPDATE_SAFETY_PLAN,
     variables: {
       planId: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
       updatePlan: {

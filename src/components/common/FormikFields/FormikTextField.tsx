@@ -1,19 +1,17 @@
 import { Stack } from "@mui/material";
 import { ErrorMessage, useField } from "formik";
-import TextFieldComponent from "../TextField/TextFieldComponent";
+import TextFieldCustom from "../TextField/TextFieldCustom";
 
 const ResponseTextArea = (props) => {
   const [field, touched] = useField(props);
 
   return (
     <Stack>
-      <TextFieldComponent
+      <TextFieldCustom
         {...field}
         {...props}
-        extraProps={{
-          spellCheck: "false",
-          error: touched.touched && touched.error != undefined,
-        }}
+        spellCheck="false"
+        error={touched.touched && Boolean(touched.error)}
       />
       <ErrorMessage
         name={props.name}

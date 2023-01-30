@@ -32,7 +32,7 @@ export const GET_SAFETY_PLAN_LIST = gql`
     }
   }
 `;
-// mutation (
+
 export const CREATE_SAFETY_PLAN = gql`
   mutation createSafetyPlan(
     $planType: String!
@@ -53,9 +53,39 @@ export const CREATE_SAFETY_PLAN = gql`
   }
 `;
 
-export const UPDATE_SAFETY_PLAN_BY_ID = gql`
+export const GET_SAFETY_PLAN_BY_ID = gql`
+  query viewSafetyPlanById($planId: ID!) {
+    viewSafetyPlanById(planId: $planId) {
+      _id
+      created_date
+      description
+      name
+      org_id
+      status
+      plan_type
+      updated_date
+      user_id
+      user_type
+      questions {
+        _id
+        created_date
+        plan_id
+        safety_additional_details
+        safety_ques
+        safety_ques_status
+        safety_ques_type
+        safety_ques_typeoption
+        updated_date
+        user_id
+        user_type
+      }
+    }
+  }
+`;
+
+export const UPDATE_SAFETY_PLAN = gql`
   mutation updateSafetyPlanById(
-    $planId: ID = ""
+    $planId: ID!
     $questions: String
     $updatePlan: UpdateSafetyPlanInput
   ) {
@@ -65,6 +95,66 @@ export const UPDATE_SAFETY_PLAN_BY_ID = gql`
       updatePlan: $updatePlan
     ) {
       _id
+    }
+  }
+`;
+
+export const DELETE_SAFETY_PLAN_QUESTION = gql`
+  mutation adminDeleteSafetyPlanQs($questionId: ID!) {
+    adminDeleteSafetyPlanQs(questionId: $questionId) {
+      _id
+    }
+  }
+`;
+
+export const GET_SAFETY_PLAN_LIST_FOR_THERAPIST = gql`
+  query getSafetyPlanListByPatientId(
+    $patientId: String
+    $planType: String
+    $searchText: String
+  ) {
+    getSafetyPlanListByPatientId(
+      patientId: $patientId
+      planType: $planType
+      searchText: $searchText
+    ) {
+      _id
+      created_date
+      description
+      plan_owner
+      name
+      patient_id
+      plan_type
+    }
+  }
+`;
+
+export const VIEW_SAFETY_BY_PATIENT_ID = gql`
+  query viewSafetyPlanById($planId: ID!) {
+    viewSafetyPlanById(planId: $planId) {
+      _id
+      created_date
+      description
+      name
+      org_id
+      plan_type
+      status
+      updated_date
+      user_id
+      user_type
+      questions {
+        _id
+        created_date
+        plan_id
+        safety_ques
+        safety_additional_details
+        safety_ques_typeoption
+        safety_ques_type
+        safety_ques_status
+        updated_date
+        user_id
+        user_type
+      }
     }
   }
 `;

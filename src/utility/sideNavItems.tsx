@@ -285,7 +285,7 @@ export const patient_routes: RoutesType[] = [
   {
     key: 3,
     label: "Appointments",
-    path: "/patient/appointments",
+    path: Link + "/patient/appointments",
     icon: <CalendarMonthIcon />,
   },
   {

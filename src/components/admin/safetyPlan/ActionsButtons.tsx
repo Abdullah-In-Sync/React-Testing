@@ -13,7 +13,7 @@ const iconButtonsData = [
     icon: require("@mui/icons-material/Visibility").default,
   },
   {
-    id: "cust",
+    id: "edit",
     icon: require("@mui/icons-material/Edit").default,
   },
   {
