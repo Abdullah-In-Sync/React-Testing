@@ -59,7 +59,7 @@ export default function viewSafetyPlan(props: propTypes) {
                 textAlign: "center",
               }}
             >
-              My Help Default Safety Plan
+              {safetyPlanData?.viewSafetyPlanById?.name}
             </Typography>
           </div>
         </Box>
@@ -172,7 +172,7 @@ export default function viewSafetyPlan(props: propTypes) {
                                 }}
                               >
                                 <Typography style={{ paddingLeft: "20px" }}>
-                                  Patient to add response here...
+                                  {data?.safety_additional_details}
                                 </Typography>
                               </Box>
                             </Box>
@@ -194,6 +194,16 @@ export default function viewSafetyPlan(props: propTypes) {
                                   display: "flex",
                                 }}
                               >
+                                <Box
+                                  style={{
+                                    paddingRight: "25px",
+                                    color: "#000000DE",
+                                  }}
+                                >
+                                  <Typography>
+                                    {data.safety_additional_details}
+                                  </Typography>
+                                </Box>
                                 {data.safety_ques_typeoption
                                   .split(",")
                                   .map((data) => (
