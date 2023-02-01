@@ -189,7 +189,7 @@ const EditSafetyPlanPage: NextPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
         <ContentHeader title="Edit plan" />
         {safetyPlan && (

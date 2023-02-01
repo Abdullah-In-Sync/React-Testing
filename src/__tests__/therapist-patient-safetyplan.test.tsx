@@ -12,6 +12,7 @@ import { SnackbarProvider } from "notistack";
 import {
   CREATE_THERAPIST_SAFETY_PLAN,
   GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+  UPDATE_THERAPIST_SAFETY_PLAN,
 } from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 import theme from "../styles/theme/theme";
@@ -41,7 +42,7 @@ mocksData.push({
           plan_owner: "admin",
           name: "Test Plan Data",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_type: "fixed",
+          plan_type: "custom",
           __typename: "patientSafetyPlans",
         },
         {
@@ -139,6 +140,45 @@ mocksData.push({
           result: true,
           __typename: "result",
         },
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_SAFETY_PLAN,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+      updatePlan: {
+        description: "Test New Data Text",
+        name: "Test Plan Data",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistSafetyPlanById: {
+        result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_SAFETY_PLAN,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+      updatePlan: {
+        share_status: 1,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistSafetyPlanById: {
+        result: true,
       },
     },
   },
@@ -273,4 +313,44 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(crossButton);
     expect(crossButton).toBeInTheDocument();
   });
+
+  it("should submit edit safety form", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const updatePlanButton = await screen.findByTestId("button-edit-icon_0");
+    expect(updatePlanButton).toBeInTheDocument();
+    fireEvent.click(updatePlanButton);
+    const submitFormButton = await screen.findByTestId("submitForm");
+    fireEvent.click(submitFormButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
+
+  it("should share safety plan", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const sharePlanButton = await screen.findByTestId("button-share-icon_0");
+    expect(sharePlanButton).toBeInTheDocument();
+    fireEvent.click(sharePlanButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
 });
+
+//button-edit-icon_0

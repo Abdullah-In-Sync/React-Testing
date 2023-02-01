@@ -8,7 +8,9 @@ import { Box } from "@mui/material";
 import {
   GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
   CREATE_THERAPIST_SAFETY_PLAN,
+  UPDATE_THERAPIST_SAFETY_PLAN,
 } from "../../../../../../graphql/SafetyPlan/graphql";
+import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
@@ -22,26 +24,33 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
-  const handleOpenCreatePlanModal = useCallback(
-    () => modalRef.current?.open(),
-    []
-  );
-  const handleCloseCreatePlanModal = useCallback(() => {
-    modalRef.current?.close();
+  const handleOpenCreatePlanModal = useCallback((_, v) => {
+    setCurrentSafetyPlan(v);
+    return modalRef.current?.open();
   }, []);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
+  const handleCloseCreatePlanModal = useCallback(() => {
+    // setCurrentSafetyPlan(undefined)
+    return modalRef.current?.close();
+  }, []);
+  const [successModal, setSuccessModal] = useState<any>();
   /* istanbul ignore next */
   const patId = router?.query.id as string;
 
   const [searchInputValue, setSearchInputValue] = useState();
+  const [currentSafetyPlan, setCurrentSafetyPlan] =
+    useState<ViewSafetyPlanById>();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
   const [createTherapistSafetyPlan] = useMutation(CREATE_THERAPIST_SAFETY_PLAN);
+  const [updateTherapistSafetyPlan] = useMutation(UPDATE_THERAPIST_SAFETY_PLAN);
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
     storedFunction: null,
     setSubmitting: null,
     cancelStatus: false,
+    confirmObject: {
+      description: "",
+    },
   });
 
   useEffect(() => {
@@ -62,6 +71,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   });
 
   const submitForm = async (formFields, doneCallback) => {
+    setLoader(true);
     const { planDesc, planName } = formFields;
 
     const variables = {
@@ -77,7 +87,51 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         onCompleted: (data) => {
           if (data) {
             /* istanbul ignore next */
-            setSuccessModal(true);
+            setSuccessModal({
+              description: "Your plan has been created Successfully",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      doneCallback();
+    } finally {
+      setLoader(false);
+      doneCallback();
+    }
+  };
+
+  const submitUpdateSafetyPlan = async (formFields, doneCallback) => {
+    setLoader(true);
+    const { planDesc, planName, share_status, shareObject } = formFields;
+    const { _id } = shareObject ? shareObject : currentSafetyPlan;
+    const variables = {
+      planId: _id,
+      updatePlan: share_status
+        ? { share_status }
+        : {
+            description: planDesc,
+            name: planName,
+          },
+    };
+
+    try {
+      updateTherapistSafetyPlan({
+        variables,
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            /* istanbul ignore next */
+            setSuccessModal({
+              description: share_status
+                ? "Your plan has been shared Successfully"
+                : "Your plan has been updated Successfully",
+            });
           }
         },
       });
@@ -97,8 +151,28 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const handleSavePress = (formFields, { setSubmitting }) => {
     setIsConfirm({
       status: true,
-      storedFunction: (callback) => submitForm(formFields, callback),
+      confirmObject: {
+        description: currentSafetyPlan
+          ? "You want to update safety Plan"
+          : "You want to create safety Plan",
+      },
+      storedFunction: (callback) =>
+        currentSafetyPlan
+          ? submitUpdateSafetyPlan(formFields, callback)
+          : submitForm(formFields, callback),
       setSubmitting: setSubmitting,
+    });
+  };
+
+  const onPressSharePlan = (v) => {
+    // setCurrentSafetyPlan(v)
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "You want to share safety Plan",
+      },
+      storedFunction: (callback) =>
+        submitUpdateSafetyPlan({ share_status: 1, shareObject: v }, callback),
     });
   };
 
@@ -140,7 +214,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
       setLoader(true);
-      isConfirm.setSubmitting(false);
+      if (isConfirm.setSubmitting instanceof Function)
+        isConfirm.setSubmitting(false);
+
       setIsConfirm({
         status: false,
         storedFunction: null,
@@ -150,7 +226,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   const clearIsConfirm = () => {
-    isConfirm.setSubmitting(false);
+    if (isConfirm.setSubmitting instanceof Function)
+      isConfirm.setSubmitting(false);
+
     setIsConfirm({
       status: false,
       storedFunction: null,
@@ -165,7 +243,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       variables: { patientId: patId },
     });
     handleCloseCreatePlanModal();
-    setSuccessModal(false);
+    setSuccessModal(undefined);
   };
 
   return (
@@ -182,27 +260,33 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             onChangeFilterDropdown={onChangeFilterDropdown}
             loadingSafetyPlanList={loadingSafetyPlanList}
             onPressCreatePlan={handleOpenCreatePlanModal}
+            onPressSharePlan={onPressSharePlan}
           />
         </Box>
       </Box>
       {isConfirm.status && (
         <ConfirmationModal
           label="Are you sure?"
-          description="You want to create safety plan"
+          description={isConfirm.confirmObject.description}
           onCancel={clearIsConfirm}
           onConfirm={onConfirmSubmit}
         />
       )}
       {successModal && (
         <SuccessModal
-          isOpen={successModal}
+          isOpen={Boolean(successModal)}
           title="Successfull"
-          description={"Your plan has been created Successfully"}
+          description={successModal.description}
           onOk={handleOk}
         />
       )}
-      <CommonModal ref={modalRef} headerTitle="Create Plan" maxWidth="sm">
+      <CommonModal
+        ref={modalRef}
+        headerTitleText={currentSafetyPlan ? "Edit Plan" : "Create Plan"}
+        maxWidth="sm"
+      >
         <CreateSafetyPlan
+          currentSafetyPlan={currentSafetyPlan}
           submitForm={handleSavePress}
           onPressCancel={handleCloseCreatePlanModal}
         />

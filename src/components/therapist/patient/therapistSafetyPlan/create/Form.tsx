@@ -7,9 +7,10 @@ import { useStyles } from "./therapistSafetyPlanStyles";
 interface ViewProps {
   buttonClick?: (value) => void;
   onPressCancel?: () => void;
+  submitButtonText?: string;
 }
 
-const FormBox: React.FC<ViewProps> = ({ onPressCancel }) => {
+const FormBox: React.FC<ViewProps> = ({ onPressCancel, submitButtonText }) => {
   const styles = useStyles();
 
   const formBox = () => {
@@ -53,7 +54,7 @@ const FormBox: React.FC<ViewProps> = ({ onPressCancel }) => {
                 data-testid="submitForm"
                 variant="contained"
               >
-                Save
+                {submitButtonText}
               </Button>
             </Box>
             <Box>

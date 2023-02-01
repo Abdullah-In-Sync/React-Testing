@@ -13,7 +13,7 @@ import { useStyles } from "./commonModalStyles";
 export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
   (props, ref): JSX.Element => {
     const styles = useStyles();
-    const { onClose, children, ...other } = props;
+    const { onClose, children, headerTitleText, ...other } = props;
     const [state, setState] = React.useState<State>({ open: false });
     const handleClose = useHandleClose(setState, onClose);
 
@@ -35,8 +35,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
         fullWidth
       >
         <DialogTitle>
-          {props.headerTitle}
-
+          {headerTitleText}
           <Box>
             <IconButton
               aria-label="close"
@@ -71,5 +70,5 @@ type CloseHandler = NonNullable<DialogProps["onClose"]>;
 export type ModalElement = { open: () => void; close: () => void };
 
 export type CommonModalProps = Omit<DialogProps, "open"> & {
-  headerTitle?: string;
+  headerTitleText?: string;
 };
