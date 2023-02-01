@@ -9,6 +9,7 @@ interface ViewProps {
   handleClearSearchInput?: () => void;
   onChangeSearchInput?: (e) => void;
   onPressCreatePlan?: () => void;
+  onPressAddPlan?: () => void;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
 }
@@ -35,6 +36,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
   selectFilterOptions = {},
   onChangeFilterDropdown,
   onPressCreatePlan,
+  onPressAddPlan,
 }) => {
   const styles = useStyles();
   const iconButtons = () => {
@@ -85,6 +87,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
                 data-testid="addPlanButton"
                 variant="contained"
                 style={{ paddingRight: "20px" }}
+                onClick={onPressAddPlan}
               >
                 Add Plan
               </Button>
