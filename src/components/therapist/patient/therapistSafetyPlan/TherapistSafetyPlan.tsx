@@ -16,6 +16,11 @@ import ShareIcon from "@mui/icons-material/Share";
 import NextLink from "next/link";
 
 const TherapistSafetyPlanList = (safetyPlanList) => {
+  const isEditable = (v) => {
+    const { plan_owner, plan_type } = v;
+    if (plan_type !== "fixed" || plan_owner === "therapist") return true;
+    else return false;
+  };
   return (
     <>
       <Box>
@@ -23,18 +28,20 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId.map(
             (v, k) => {
-              console.log("Koca: value ", v);
+              const checkIsEditable = isEditable(v);
               const p = k + 1;
               const panelName = "panel" + p;
               return (
                 <>
                   <Accordion
+                    key={`safetyPlanListItem_${k}`}
                     sx={{ marginTop: "4px", borderRadius: "4px" }}
                     style={{ borderRadius: "14px" }}
                     // expanded={sessionPanelExpanded === panelName}
                     // onChange={handleSessionPanelChange(panelName)}
                     // onClick={() => setSessionNo(p)}
                     // key={v._id}
+                    expanded={false}
                     data-testid="SessionPanelItem"
                   >
                     <AccordionSummary
@@ -73,23 +80,28 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                             flexShrink: 1,
                           }}
                         >
-                          <IconButton
-                            size="small"
-                            data-testid="edit-icon-button"
-                            style={{
-                              backgroundColor: "#fff",
-                            }}
-                          >
-                            <NextLink href={""} passHref>
+                          {checkIsEditable && (
+                            <IconButton
+                              size="small"
+                              data-testid={`button-edit-icon_${k}`}
+                              style={{
+                                backgroundColor: "#fff",
+                                width: "unset",
+                              }}
+                              onClick={(e) =>
+                                safetyPlanList.onPressEditPlan(e, v)
+                              }
+                            >
                               <CreateIcon />
-                            </NextLink>
-                          </IconButton>
+                            </IconButton>
+                          )}
 
                           <IconButton
                             size="small"
                             data-testid="edit-icon-button"
                             style={{
                               backgroundColor: "#fff",
+                              width: "unset",
                             }}
                           >
                             <NextLink href={""} passHref>
@@ -97,17 +109,19 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                             </NextLink>
                           </IconButton>
 
-                          <IconButton
-                            size="small"
-                            data-testid="edit-icon-button"
-                            style={{
-                              backgroundColor: "#fff",
-                            }}
-                          >
-                            <NextLink href={""} passHref>
+                          {checkIsEditable && (
+                            <IconButton
+                              size="small"
+                              data-testid={`button-share-icon_${k}`}
+                              style={{
+                                backgroundColor: "#fff",
+                                width: "unset",
+                              }}
+                              onClick={() => safetyPlanList.onPressSharePlan(v)}
+                            >
                               <ShareIcon />
-                            </NextLink>
-                          </IconButton>
+                            </IconButton>
+                          )}
                         </Box>
                       </>
                     </AccordionSummary>
