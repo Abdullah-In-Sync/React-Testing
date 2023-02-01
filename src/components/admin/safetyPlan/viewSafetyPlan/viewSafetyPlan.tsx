@@ -93,7 +93,7 @@ export default function viewSafetyPlan(props: propTypes) {
                 }}
               >
                 <Typography style={{ fontSize: "16px", marginRight: 10 }}>
-                  {safetyPlanData?.viewSafetyPlanById?.name}
+                  {safetyPlanData?.viewSafetyPlanById?.organization_name}
                 </Typography>
               </Grid>
 

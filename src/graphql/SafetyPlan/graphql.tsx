@@ -152,6 +152,7 @@ export const VIEW_SAFETY_BY_PATIENT_ID = gql`
       created_date
       description
       name
+      organization_name
       org_id
       plan_type
       status
