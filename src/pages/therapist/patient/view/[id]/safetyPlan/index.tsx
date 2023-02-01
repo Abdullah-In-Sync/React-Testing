@@ -88,7 +88,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           if (data) {
             /* istanbul ignore next */
             setSuccessModal({
-              description: "Your plan has been created Successfully",
+              description: "Your plan has been created successfully",
             });
           }
         },
@@ -129,8 +129,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             /* istanbul ignore next */
             setSuccessModal({
               description: share_status
-                ? "Your plan has been shared Successfully"
-                : "Your plan has been updated Successfully",
+                ? "Your plan has been shared successfully"
+                : "Your plan has been updated successfully",
             });
           }
         },
