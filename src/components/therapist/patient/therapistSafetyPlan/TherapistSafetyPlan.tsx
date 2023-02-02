@@ -108,20 +108,17 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                               <DeleteIcon />
                             </NextLink>
                           </IconButton>
-
-                          {checkIsEditable && (
-                            <IconButton
-                              size="small"
-                              data-testid={`button-share-icon_${k}`}
-                              style={{
-                                backgroundColor: "#fff",
-                                width: "unset",
-                              }}
-                              onClick={() => safetyPlanList.onPressSharePlan(v)}
-                            >
-                              <ShareIcon />
-                            </IconButton>
-                          )}
+                          <IconButton
+                            size="small"
+                            data-testid={`button-share-icon_${k}`}
+                            style={{
+                              backgroundColor: "#fff",
+                              width: "unset",
+                            }}
+                            onClick={() => safetyPlanList.onPressSharePlan(v)}
+                          >
+                            <ShareIcon />
+                          </IconButton>
                         </Box>
                       </>
                     </AccordionSummary>
