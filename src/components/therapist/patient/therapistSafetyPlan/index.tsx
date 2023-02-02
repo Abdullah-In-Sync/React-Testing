@@ -25,6 +25,7 @@ interface ViewProps {
   onPressCreatePlan?: (e?: any, v?: any) => void;
   onPressSharePlan?: (v) => void;
   onPressAddPlan?: () => void;
+  onPressDeletePlan?: (v) => void;
 }
 
 const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
@@ -36,6 +37,7 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
   onPressCreatePlan,
   onPressSharePlan,
   onPressAddPlan,
+  onPressDeletePlan,
 }) => {
   return (
     <>
@@ -51,6 +53,7 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
         safetyPlanList={safetyPlanList}
         onPressEditPlan={onPressCreatePlan}
         onPressSharePlan={onPressSharePlan}
+        onPressDeletePlan={onPressDeletePlan}
       />
     </>
   );

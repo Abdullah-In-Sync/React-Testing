@@ -15,6 +15,7 @@ import {
   GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
   UPDATE_THERAPIST_SAFETY_PLAN,
   GET_THERAPIST_SAFETY_PLAN_LIST,
+  DELETE_THERAPIST_SAFETY_PLAN,
 } from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 import theme from "../styles/theme/theme";
@@ -181,6 +182,24 @@ mocksData.push({
     data: {
       updateTherapistSafetyPlanById: {
         result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_SAFETY_PLAN,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+      updatePlan: { status: 0 },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistSafetyPlan: {
+        share_status: 0,
+        __typename: "patientSafetyPlans",
       },
     },
   },
@@ -633,11 +652,31 @@ describe("Therapist patient safety plan", () => {
       });
       fireEvent.click(screen.queryByTestId("addSubmitForm"));
 
-      // await waitFor(async () => {
-      //   expect(screen.getByText("Plan added Successfully")).toBeInTheDocument();
-      // });
+      await waitFor(async () => {
+        expect(screen.getByText("Plan added Successfully")).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("should delete safety plan", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    await waitFor(async () => {
+      const deletePlanButton = await screen.findByTestId(
+        "button-delete-icon_0"
+      );
+      expect(deletePlanButton).toBeInTheDocument();
+      fireEvent.click(deletePlanButton);
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+      expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
     });
   });
 });
-
-//button-edit-icon_0

@@ -37,10 +37,6 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                     key={`safetyPlanListItem_${k}`}
                     sx={{ marginTop: "4px", borderRadius: "4px" }}
                     style={{ borderRadius: "14px" }}
-                    // expanded={sessionPanelExpanded === panelName}
-                    // onChange={handleSessionPanelChange(panelName)}
-                    // onClick={() => setSessionNo(p)}
-                    // key={v._id}
                     expanded={false}
                     data-testid="SessionPanelItem"
                   >
@@ -70,11 +66,6 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                       </>
                       <>
                         <Box
-                          // style={{
-                          //   display: "flex",
-                          //   paddingLeft: "630px",
-                          // }}
-
                           sx={{
                             justifyContent: "flex-end",
                             flexShrink: 1,
@@ -98,15 +89,14 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
 
                           <IconButton
                             size="small"
-                            data-testid="edit-icon-button"
+                            data-testid={`button-delete-icon_${k}`}
                             style={{
                               backgroundColor: "#fff",
                               width: "unset",
                             }}
+                            onClick={() => safetyPlanList.onPressDeletePlan(v)}
                           >
-                            <NextLink href={""} passHref>
-                              <DeleteIcon />
-                            </NextLink>
+                            <DeleteIcon />
                           </IconButton>
                           <IconButton
                             size="small"
@@ -124,42 +114,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography mt={3} mb={5}>
-                        <Stack spacing={2} direction="row">
-                          <Button
-                            // className={`text-white ${
-                            //   feedbackType == "session" ? "bg-themegreen" : ""
-                            // }`}
-                            // onClick={() => {
-                            //   setLoader(true);
-                            //   setFeedbackType("session");
-                            //   setSessionNo(p);
-                            // }}
-                            variant="contained"
-                            sx={{ textTransform: "none" }}
-                            data-testid={
-                              panelName + "bh-content-session-button"
-                            }
-                          >
-                            Session Feedback
-                          </Button>
-                          <Button
-                            // className={`text-white ${
-                            //   feedbackType == "quality" ? "bg-themegreen" : ""
-                            // }`}
-                            // onClick={() => {
-                            //   setLoader(true);
-                            //   setFeedbackType("quality");
-                            //   setSessionNo(p);
-                            // }}
-                            variant="contained"
-                            sx={{ textTransform: "none" }}
-                            data-testid={
-                              panelName + "bh-content-quality-button"
-                            }
-                          >
-                            Quality Feedback
-                          </Button>
-                        </Stack>
+                        <Stack spacing={2} direction="row"></Stack>
                       </Typography>
                     </AccordionDetails>
                   </Accordion>
