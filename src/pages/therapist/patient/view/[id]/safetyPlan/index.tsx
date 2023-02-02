@@ -11,6 +11,7 @@ import {
   UPDATE_THERAPIST_SAFETY_PLAN,
   ADD_THERAPIST_SAFETY_PLAN,
   GET_THERAPIST_SAFETY_PLAN_LIST,
+  DELETE_THERAPIST_SAFETY_PLAN,
 } from "../../../../../../graphql/SafetyPlan/graphql";
 import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
@@ -63,6 +64,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [createTherapistSafetyPlan] = useMutation(CREATE_THERAPIST_SAFETY_PLAN);
   const [updateTherapistSafetyPlan] = useMutation(UPDATE_THERAPIST_SAFETY_PLAN);
   const [addTherapistSafetyPlan] = useMutation(ADD_THERAPIST_SAFETY_PLAN);
+  const [deletePlane] = useMutation(DELETE_THERAPIST_SAFETY_PLAN);
 
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
@@ -94,6 +96,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       setLoader(false);
     },
   });
+
   const [getSafetyTherapistPlanList, { data: therapistListData }] =
     useLazyQuery(GET_THERAPIST_SAFETY_PLAN_LIST, {
       fetchPolicy: "network-only",
@@ -166,6 +169,35 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       setLoader(false);
       /* istanbul ignore next */
       enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
+  const handleDeletesafetyPlan = async (v) => {
+    console.debug("inside delete function");
+    console.debug("variable", {
+      planId: v._id,
+      updatePlan: { status: 0 },
+    });
+
+    try {
+      await deletePlane({
+        variables: {
+          planId: v._id,
+          updatePlan: { status: 0 },
+        },
+        onCompleted: () => {
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan have been deleted sucessfully.",
+          });
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
     }
   };
 
@@ -242,6 +274,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     });
   };
 
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "You want to delete safety Plan",
+      },
+      storedFunction: () => handleDeletesafetyPlan(v),
+    });
+  };
   const onChangeSearchInput = (e) => {
     setSearchInputValue(() => {
       getSafetyPlanList({
@@ -336,6 +377,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             onPressCreatePlan={handleOpenCreatePlanModal}
             onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
+            onPressDeletePlan={onPressDeletePlan}
           />
         </Box>
       </Box>
