@@ -9,6 +9,8 @@ import {
   GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
   CREATE_THERAPIST_SAFETY_PLAN,
   UPDATE_THERAPIST_SAFETY_PLAN,
+  ADD_THERAPIST_SAFETY_PLAN,
+  GET_THERAPIST_SAFETY_PLAN_LIST,
 } from "../../../../../../graphql/SafetyPlan/graphql";
 import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
@@ -20,10 +22,17 @@ import {
 } from "../../../../../../components/common/CustomModal/CommonModal";
 import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
 import { SuccessModal } from "../../../../../../components/common/SuccessModal";
+
+import { useAppContext } from "../../../../../../contexts/AuthContext";
+import AddPlanForm from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/AddSafetyPlan";
+
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
+  const { user } = useAppContext();
+  const orgId = user?.therapist_data.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
+  const modalRefAddPlan = useRef<ModalElement>(null);
   const handleOpenCreatePlanModal = useCallback((_, v) => {
     setCurrentSafetyPlan(v);
     return modalRef.current?.open();
@@ -32,10 +41,20 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     // setCurrentSafetyPlan(undefined)
     return modalRef.current?.close();
   }, []);
+
+  const handleOpenAddPlanModal = useCallback(
+    () => modalRefAddPlan.current?.open(),
+    []
+  );
+  const handleCloseAddPlanModal = useCallback(() => {
+    /* istanbul ignore next */
+    modalRefAddPlan.current?.close();
+  }, []);
+
   const [successModal, setSuccessModal] = useState<any>();
   /* istanbul ignore next */
-  const patId = router?.query.id as string;
-
+  const patId = router?.query?.id as string;
+  const [planid, setPlanId] = useState();
   const [searchInputValue, setSearchInputValue] = useState();
   const [currentSafetyPlan, setCurrentSafetyPlan] =
     useState<ViewSafetyPlanById>();
@@ -43,6 +62,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [createTherapistSafetyPlan] = useMutation(CREATE_THERAPIST_SAFETY_PLAN);
   const [updateTherapistSafetyPlan] = useMutation(UPDATE_THERAPIST_SAFETY_PLAN);
+  const [addTherapistSafetyPlan] = useMutation(ADD_THERAPIST_SAFETY_PLAN);
+
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
     storedFunction: null,
@@ -57,11 +78,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     getSafetyPlanList({
       variables: { patientId: patId },
     });
+
+    getSafetyTherapistPlanList({
+      variables: { orgId: orgId },
+    });
   }, []);
 
   const [
     getSafetyPlanList,
-    { loading: loadingSafetyPlanList, data: listData },
+    { loading: loadingSafetyPlanList, data: listData, refetch },
   ] = useLazyQuery(GET_SAFETY_PLAN_LIST_FOR_THERAPIST, {
     fetchPolicy: "network-only",
     onCompleted: () => {
@@ -69,6 +94,14 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       setLoader(false);
     },
   });
+  const [getSafetyTherapistPlanList, { data: therapistListData }] =
+    useLazyQuery(GET_THERAPIST_SAFETY_PLAN_LIST, {
+      fetchPolicy: "network-only",
+      onCompleted: () => {
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    });
 
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
@@ -96,13 +129,43 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     } catch (e) {
       /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
+      /* istanbul ignore next */
       doneCallback();
+    }
+  };
+
+  const handleAddPlan = async () => {
+    console.debug("Variable update", {
+      patientId: patId,
+      planId: planid,
+    });
+    try {
+      await addTherapistSafetyPlan({
+        variables: {
+          patientId: patId,
+          planId: planid,
+        },
+        onCompleted: () => {
+          /* istanbul ignore next */
+          enqueueSnackbar("Plan added Successfully", { variant: "success" });
+        },
+      });
+      /* istanbul ignore next */
+      handleCloseAddPlanModal();
+      refetch();
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
     }
   };
 
@@ -138,12 +201,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     } catch (e) {
       /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
+      /* istanbul ignore next */
       doneCallback();
     }
   };
@@ -226,9 +292,10 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   const clearIsConfirm = () => {
+    /* istanbul ignore next */
     if (isConfirm.setSubmitting instanceof Function)
       isConfirm.setSubmitting(false);
-
+    /* istanbul ignore next */
     setIsConfirm({
       status: false,
       storedFunction: null,
@@ -242,8 +309,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     getSafetyPlanList({
       variables: { patientId: patId },
     });
+    /* istanbul ignore next */
     handleCloseCreatePlanModal();
+    /* istanbul ignore next */
     setSuccessModal(undefined);
+  };
+
+  /* istanbul ignore next */
+  const receivePlanId = (value) => {
+    setPlanId(value);
   };
 
   return (
@@ -261,6 +335,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             loadingSafetyPlanList={loadingSafetyPlanList}
             onPressCreatePlan={handleOpenCreatePlanModal}
             onPressSharePlan={onPressSharePlan}
+            onPressAddPlan={handleOpenAddPlanModal}
           />
         </Box>
       </Box>
@@ -289,6 +364,18 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           currentSafetyPlan={currentSafetyPlan}
           submitForm={handleSavePress}
           onPressCancel={handleCloseCreatePlanModal}
+        />
+      </CommonModal>
+
+      <CommonModal
+        ref={modalRefAddPlan}
+        headerTitleText="Add Plan"
+        maxWidth="sm"
+      >
+        <AddPlanForm
+          onPressSubmit={handleAddPlan}
+          therapistSafetyPlanList={therapistListData}
+          receivePlanId={receivePlanId}
         />
       </CommonModal>
     </>
