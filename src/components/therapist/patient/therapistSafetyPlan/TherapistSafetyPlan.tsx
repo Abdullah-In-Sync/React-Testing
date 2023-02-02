@@ -5,7 +5,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   IconButton,
   Stack,
   Typography,
@@ -13,7 +12,6 @@ import {
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShareIcon from "@mui/icons-material/Share";
-import NextLink from "next/link";
 
 const TherapistSafetyPlanList = (safetyPlanList) => {
   const isEditable = (v) => {

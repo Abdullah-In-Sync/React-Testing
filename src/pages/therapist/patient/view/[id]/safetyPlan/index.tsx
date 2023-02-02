@@ -185,14 +185,12 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           planId: v._id,
           updatePlan: { status: 0 },
         },
-        onCompleted: (data) => {
-          // if (data) {
+        onCompleted: () => {
           setIsConfirm(false);
           /* istanbul ignore next */
           setSuccessModal({
             description: "Your plan have been deleted sucessfully.",
           });
-          // }
         },
       });
     } catch (e) {
