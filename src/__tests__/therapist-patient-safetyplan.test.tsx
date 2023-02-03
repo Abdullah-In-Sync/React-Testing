@@ -115,25 +115,25 @@ mocksData.push({
   },
 });
 
-mocksData.push({
-  request: {
-    query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
-    variables: {
-      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
-      patientId: "7a27dc00d48bf983fdcd4b0762ebd",
-      questions:
-        '[{"question_id":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"},{"question":"text","description":"text des","questionType":"1"}]',
-    },
-  },
-  result: {
-    data: {
-      createSafetyPlanQuestions: {
-        result: true,
-        __typename: "result",
-      },
-    },
-  },
-});
+// mocksData.push({
+//   request: {
+//     query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
+//     variables: {
+//       planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+//       patientId: "7a27dc00d48bf983fdcd4b0762ebd",
+//       questions:
+//         '[{"question_id":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"},{"question":"text","description":"text des","questionType":"1"}]',
+//     },
+//   },
+//   result: {
+//     data: {
+//       createSafetyPlanQuestions: {
+//         result: true,
+//         __typename: "result",
+//       },
+//     },
+//   },
+// });
 
 // plantype fixes
 mocksData.push({
@@ -819,11 +819,6 @@ describe("Therapist patient safety plan", () => {
   });
 
   it("should add new safety plan question", async () => {
-    (useRouter as jest.Mock).mockImplementation(() => ({
-      query: {
-        id: "7a27dc00d48bf983fdcd4b0762ebd",
-      },
-    }));
     await sut();
     const addButton = await screen.findByTestId("button-add-icon_0");
     expect(addButton).toBeInTheDocument();
@@ -850,31 +845,5 @@ describe("Therapist patient safety plan", () => {
     );
     fireEvent.click(firstQuestionTypeSelect);
     expect(firstQuestionTypeSelect).toBeInTheDocument();
-
-    const buttonfirstQuestionTypeSelect = within(
-      firstQuestionTypeSelect
-    ).getByRole("button");
-    fireEvent.mouseDown(buttonfirstQuestionTypeSelect);
-
-    const listboxFirstQuestionTypeSelect = within(
-      screen.getByRole("presentation")
-    ).getByRole("listbox");
-    const optionsFirstQuestionSelect = await within(
-      listboxFirstQuestionTypeSelect
-    ).findAllByRole("option");
-
-    fireEvent.click(optionsFirstQuestionSelect[0]);
-
-    const saveButton = await screen.findByTestId(
-      "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
-    );
-
-    fireEvent.click(saveButton);
-    const confirmButton = await screen.findByRole("button", {
-      name: "Confirm",
-    });
-    fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 });

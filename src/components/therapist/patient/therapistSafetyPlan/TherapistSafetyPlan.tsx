@@ -21,6 +21,15 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
+  const handleAddIconButton = async (index, id) => {
+    if (index !== accordionOpen) {
+      await safetyPlanList.fetchPlanData(id);
+      setAccordionOpen(index);
+    } else {
+      /* istanbul ignore next */
+      setAccordionOpen(undefined);
+    }
+  };
   return (
     <>
       <Box>
@@ -49,14 +58,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                         <Box>
                           <AddIcon
                             data-testid={`button-add-icon_${k}`}
-                            onClick={async () => {
-                              if (k !== accordionOpen) {
-                                await safetyPlanList.fetchPlanData(v._id);
-                                setAccordionOpen(k);
-                              } else {
-                                setAccordionOpen(undefined);
-                              }
-                            }}
+                            onClick={() => handleAddIconButton(k, v._id)}
                             className="text-white"
                           />
                         </Box>
