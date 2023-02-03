@@ -11,7 +11,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import NextLink from "next/link";
 
 import ViewResponse from "./viewResponse/ViewResponse";
 
@@ -82,11 +81,6 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                       </>
                       <>
                         <Box
-                          // style={{
-                          //   display: "flex",
-                          //   paddingLeft: "630px",
-                          // }}
-
                           sx={{
                             justifyContent: "flex-end",
                             flexShrink: 1,
@@ -110,15 +104,14 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
 
                           <IconButton
                             size="small"
-                            data-testid="edit-icon-button"
+                            data-testid={`button-delete-icon_${k}`}
                             style={{
                               backgroundColor: "#fff",
                               width: "unset",
                             }}
+                            onClick={() => safetyPlanList.onPressDeletePlan(v)}
                           >
-                            <NextLink href={""} passHref>
-                              <DeleteIcon />
-                            </NextLink>
+                            <DeleteIcon />
                           </IconButton>
                           <IconButton
                             size="small"

@@ -227,6 +227,56 @@ export const ADD_THERAPIST_SAFETY_PLAN = gql`
   }
 `;
 
+export const DELETE_THERAPIST_SAFETY_PLAN = gql`
+  mutation ($planId: ID!, $updatePlan: UpdatePatientSafetyPlanInput!) {
+    updateTherapistSafetyPlan(planId: $planId, updatePlan: $updatePlan) {
+      share_status
+    }
+  }
+`;
+
+export const UPDATE_FEEDBACK = gql`
+  mutation ($feedbackId: ID!, $update: UpdateFeedbackInput!) {
+    updateFeedbackQuestionById(feedbackId: $feedbackId, update: $update) {
+      _id
+      answer_options
+      answer_type
+      created_date
+      feedback_type
+      org_id
+    }
+  }
+`;
+
+export const GET_PATIENT_SAFETY_PlANS = gql`
+  query getPatientSafetyPlans {
+    getPatientSafetyPlans {
+      name
+      description
+      questions {
+        _id
+        patient_answer
+        patient_id
+        safety_ques
+        safety_ques_type
+        safety_ques_status
+        safety_additional_details
+        safety_ques_typeoption
+      }
+      _id
+      share_status
+    }
+  }
+`;
+
+export const ANSWER_SAFETY_PLAN_BY_PATIENT_ID = gql`
+  mutation answerSafetyPlanByPatientId($quesData: String!) {
+    answerSafetyPlanByPatientId(quesData: $quesData) {
+      _id
+    }
+  }
+`;
+
 export const UPDATE_THERAPIST_SAFETY_PLAN_QUESTION = gql`
   mutation createSafetyPlanQuestions(
     $planId: String!

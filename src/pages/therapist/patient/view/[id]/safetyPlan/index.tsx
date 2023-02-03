@@ -14,6 +14,7 @@ import {
   UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
   VIEW_PATIENT_SAFETY_PLAN_BY_ID,
   DELETE_SAFETY_PLAN_QUESTION,
+  DELETE_THERAPIST_SAFETY_PLAN,
 } from "../../../../../../graphql/SafetyPlan/graphql";
 import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
@@ -70,6 +71,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     UPDATE_THERAPIST_SAFETY_PLAN_QUESTION
   );
   const [deleteSafetyPlan] = useMutation(DELETE_SAFETY_PLAN_QUESTION);
+  const [deletePlane] = useMutation(DELETE_THERAPIST_SAFETY_PLAN);
 
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
@@ -195,6 +197,34 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   //patientId: patId,
+  const handleDeletesafetyPlan = async (v) => {
+    console.debug("inside delete function");
+    console.debug("variable", {
+      planId: v._id,
+      updatePlan: { status: 0 },
+    });
+
+    try {
+      await deletePlane({
+        variables: {
+          planId: v._id,
+          updatePlan: { status: 0 },
+        },
+        onCompleted: () => {
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan have been deleted sucessfully.",
+          });
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
 
   const submitUpdateSafetyPlan = async (formFields, doneCallback) => {
     setLoader(true);
@@ -272,6 +302,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     });
   };
 
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "You want to delete safety Plan",
+      },
+      storedFunction: () => handleDeletesafetyPlan(v),
+    });
+  };
   const onChangeSearchInput = (e) => {
     setSearchInputValue(() => {
       getSafetyPlanList({
@@ -467,6 +506,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             fetchPlanData={fetchPlanData}
             planData={planData}
             handleDeleteQuestion={handleDeleteQuestion}
+            onPressDeletePlan={onPressDeletePlan}
           />
         </Box>
       </Box>

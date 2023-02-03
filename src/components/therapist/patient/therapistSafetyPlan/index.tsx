@@ -28,6 +28,7 @@ interface ViewProps {
   fetchPlanData?: (v) => void;
   planData?: object[];
   handleDeleteQuestion?: (v) => void;
+  onPressDeletePlan?: (v) => void;
 }
 
 const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
@@ -43,6 +44,7 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
   fetchPlanData,
   planData,
   handleDeleteQuestion,
+  onPressDeletePlan,
 }) => {
   return (
     <>
@@ -62,6 +64,7 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
         fetchPlanData={fetchPlanData}
         planData={planData}
         handleDeleteQuestion={handleDeleteQuestion}
+        onPressDeletePlan={onPressDeletePlan}
       />
     </>
   );
