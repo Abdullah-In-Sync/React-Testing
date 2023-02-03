@@ -59,7 +59,7 @@ const CreateSafetyPlanPage: NextPage = () => {
     };
 
     try {
-      createSafetyPlan({
+      await createSafetyPlan({
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {

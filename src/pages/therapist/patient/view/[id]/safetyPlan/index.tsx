@@ -238,7 +238,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     };
 
     try {
-      updateTherapistSafetyPlan({
+      await updateTherapistSafetyPlan({
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
@@ -394,7 +394,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     };
 
     try {
-      updateTherapistSafetyPlanQuestions({
+      await updateTherapistSafetyPlanQuestions({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
@@ -433,9 +433,13 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     });
   };
 
-  const callDeleteApi = (questionId, successDeleteCallback, doneCallback) => {
+  const callDeleteApi = async (
+    questionId,
+    successDeleteCallback,
+    doneCallback
+  ) => {
     try {
-      deleteSafetyPlan({
+      await deleteSafetyPlan({
         variables: { questionId },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
