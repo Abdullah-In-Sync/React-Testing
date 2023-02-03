@@ -1,16 +1,8 @@
-import {
-  screen,
-  render,
-  fireEvent,
-  waitFor,
-  within,
-} from "@testing-library/react";
+import { screen, render, fireEvent, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID } from "../graphql/query/resource";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
-import { UPDATE_SAFETY_PLAN_QUESTION_DATA } from "../graphql/mutation/patient";
 import SafetyPlan from "../pages/patient/safetyPlan";
 import {
   ANSWER_SAFETY_PLAN_BY_PATIENT_ID,
@@ -503,5 +495,5 @@ describe("Patient Safety plans", () => {
     fireEvent.click(confirmButton);
 
     expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
-  }); 
+  });
 });
