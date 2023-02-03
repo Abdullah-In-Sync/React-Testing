@@ -1,9 +1,8 @@
 import { Box, Button } from "@mui/material";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Measure } from "../../../graphql/Measure/types";
 import { useStyles } from "./measureStyle";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import { Accordion } from "../../common/Accordion";
 
 interface MeasureTileProps {
   measure: Measure;
@@ -15,37 +14,13 @@ export const MeasureTile: FC<MeasureTileProps> = ({
   onClickTest,
   onClickScore,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const classes = useStyles();
 
-  const toggleContent = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
-    <Box className={classes.wrapper} data-testid={`list-tile`}>
-      <Box
-        className={classes.tileHeader}
-        display="flex"
-        justifyContent={"space-between"}
-      >
-        <span data-testid="name">{measure.measure_cat_name}</span>
-        {!isOpen ? (
-          <AddIcon
-            data-testid="toggleContent"
-            className={classes.iconButton}
-            onClick={toggleContent}
-          />
-        ) : (
-          <RemoveIcon
-            data-testid="toggleContent"
-            className={classes.iconButton}
-            onClick={toggleContent}
-          />
-        )}
-      </Box>
-      {isOpen && (
-        <Box className={classes.contentWrapper}>
+    <Accordion
+      title={measure.measure_cat_name}
+      detail={
+        <>
           <Box data-testid="score" className={classes.scoreDiv}>
             Current Score: {measure?.current_score}
           </Box>
@@ -66,8 +41,8 @@ export const MeasureTile: FC<MeasureTileProps> = ({
               Take test
             </Button>
           </Box>
-        </Box>
-      )}
-    </Box>
+        </>
+      }
+    />
   );
 };

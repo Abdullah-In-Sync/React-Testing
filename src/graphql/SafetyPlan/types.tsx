@@ -57,6 +57,7 @@ export interface QuestionsEntity {
   _id: string;
   created_date: string;
   plan_id: string;
+  patient_answer?: string;
   safety_additional_details: string;
   safety_ques: string;
   safety_ques_status: number;
@@ -66,4 +67,8 @@ export interface QuestionsEntity {
   user_id: string;
   user_type: string;
   __typename: string;
+}
+
+export interface GetPatientSafetyPlansRes {
+  getPatientSafetyPlans: ViewSafetyPlanById[];
 }
