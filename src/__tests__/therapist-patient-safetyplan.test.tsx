@@ -15,6 +15,8 @@ import {
   GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
   UPDATE_THERAPIST_SAFETY_PLAN,
   GET_THERAPIST_SAFETY_PLAN_LIST,
+  VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+  UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
 } from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 import theme from "../styles/theme/theme";
@@ -58,6 +60,56 @@ mocksData.push({
           __typename: "patientSafetyPlans",
         },
       ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: null,
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd",
+      questions:
+        '[{"question_id":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+    },
+  },
+  result: {
+    data: {
+      createSafetyPlanQuestions: {
+        result: true,
+        __typename: "result",
+      },
     },
   },
 });
@@ -638,6 +690,70 @@ describe("Therapist patient safety plan", () => {
       // });
     });
   });
-});
 
-//button-edit-icon_0
+  it("should update plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const saveButton = await screen.findByTestId(
+      "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
+    );
+
+    fireEvent.click(saveButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
+
+  it("should cancel plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const cancelButton = await screen.findByTestId(
+      "cancelForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
+    );
+
+    fireEvent.click(cancelButton);
+    expect(descTextDetail).not.toBeInTheDocument();
+  });
+
+  it("should delete question question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
+
+    fireEvent.click(deleteButton);
+    expect(descTextDetail).not.toBeInTheDocument();
+  });
+});

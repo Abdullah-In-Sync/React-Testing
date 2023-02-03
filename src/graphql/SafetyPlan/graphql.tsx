@@ -118,13 +118,29 @@ export const GET_SAFETY_PLAN_LIST_FOR_THERAPIST = gql`
       planType: $planType
       searchText: $searchText
     ) {
-      _id
-      created_date
-      description
-      plan_owner
-      name
-      patient_id
+      questions {
+        _id
+        created_date
+        patient_answer
+        patient_id
+        plan_id
+        safety_ques
+        safety_additional_details
+        safety_ques_status
+        safety_ques_type
+        safety_ques_typeoption
+        updated_date
+      }
+      share_status
+      therapist_id
+      updated_date
       plan_type
+      plan_owner
+      patient_id
+      name
+      description
+      created_date
+      _id
     }
   }
 `;
@@ -207,6 +223,40 @@ export const ADD_THERAPIST_SAFETY_PLAN = gql`
   mutation addTherapistSafetyPlan($patientId: String!, $planId: String!) {
     addTherapistSafetyPlan(patientId: $patientId, planId: $planId) {
       result
+    }
+  }
+`;
+
+export const UPDATE_THERAPIST_SAFETY_PLAN_QUESTION = gql`
+  mutation createSafetyPlanQuestions(
+    $planId: String!
+    $patientId: String
+    $questions: String
+  ) {
+    createSafetyPlanQuestions(
+      planId: $planId
+      patientId: $patientId
+      questions: $questions
+    ) {
+      result
+    }
+  }
+`;
+
+export const VIEW_PATIENT_SAFETY_PLAN_BY_ID = gql`
+  query viewPatientSafetyPlanById($planId: String!, $patientId: String!) {
+    viewPatientSafetyPlanById(planId: $planId, patientId: $patientId) {
+      _id
+      created_date
+      patient_answer
+      patient_id
+      plan_id
+      safety_additional_details
+      safety_ques
+      safety_ques_status
+      safety_ques_type
+      safety_ques_typeoption
+      updated_date
     }
   }
 `;
