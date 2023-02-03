@@ -128,7 +128,23 @@ export const GET_SAFETY_PLAN_LIST_FOR_THERAPIST = gql`
     }
   }
 `;
-
+export const GET_THERAPIST_SAFETY_PLAN_LIST = gql`
+  query getTherapistSafetyPlanList($orgId: String!) {
+    getTherapistSafetyPlanList(orgId: $orgId) {
+      _id
+      description
+      name
+      org_id
+      organization_name
+      plan_type
+      status
+      updated_date
+      user_id
+      user_type
+      created_date
+    }
+  }
+`;
 export const VIEW_SAFETY_BY_PATIENT_ID = gql`
   query viewSafetyPlanById($planId: ID!) {
     viewSafetyPlanById(planId: $planId) {
@@ -136,6 +152,7 @@ export const VIEW_SAFETY_BY_PATIENT_ID = gql`
       created_date
       description
       name
+      organization_name
       org_id
       plan_type
       status
@@ -171,6 +188,46 @@ export const CREATE_THERAPIST_SAFETY_PLAN = gql`
       planDesc: $planDesc
     ) {
       result
+    }
+  }
+`;
+
+export const UPDATE_THERAPIST_SAFETY_PLAN = gql`
+  mutation updateTherapistSafetyPlan(
+    $planId: ID!
+    $updatePlan: UpdatePatientSafetyPlanInput
+  ) {
+    updateTherapistSafetyPlan(planId: $planId, updatePlan: $updatePlan) {
+      _id
+    }
+  }
+`;
+
+export const ADD_THERAPIST_SAFETY_PLAN = gql`
+  mutation addTherapistSafetyPlan($patientId: String!, $planId: String!) {
+    addTherapistSafetyPlan(patientId: $patientId, planId: $planId) {
+      result
+    }
+  }
+`;
+
+export const DELETE_THERAPIST_SAFETY_PLAN = gql`
+  mutation ($planId: ID!, $updatePlan: UpdatePatientSafetyPlanInput!) {
+    updateTherapistSafetyPlan(planId: $planId, updatePlan: $updatePlan) {
+      share_status
+    }
+  }
+`;
+
+export const UPDATE_FEEDBACK = gql`
+  mutation ($feedbackId: ID!, $update: UpdateFeedbackInput!) {
+    updateFeedbackQuestionById(feedbackId: $feedbackId, update: $update) {
+      _id
+      answer_options
+      answer_type
+      created_date
+      feedback_type
+      org_id
     }
   }
 `;

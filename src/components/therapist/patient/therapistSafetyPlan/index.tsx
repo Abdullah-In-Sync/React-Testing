@@ -22,7 +22,10 @@ interface ViewProps {
   ) => void;
   closeModal?: () => void;
   onPressCancel?: () => void;
-  onPressCreatePlan?: () => void;
+  onPressCreatePlan?: (e?: any, v?: any) => void;
+  onPressSharePlan?: (v) => void;
+  onPressAddPlan?: () => void;
+  onPressDeletePlan?: (v) => void;
 }
 
 const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
@@ -32,6 +35,9 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
   selectFilterOptions,
   onChangeFilterDropdown,
   onPressCreatePlan,
+  onPressSharePlan,
+  onPressAddPlan,
+  onPressDeletePlan,
 }) => {
   return (
     <>
@@ -41,8 +47,14 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
         selectFilterOptions={selectFilterOptions}
         onChangeFilterDropdown={onChangeFilterDropdown}
         onPressCreatePlan={onPressCreatePlan}
+        onPressAddPlan={onPressAddPlan}
       />
-      <TherapistSafetyPlanList safetyPlanList={safetyPlanList} />
+      <TherapistSafetyPlanList
+        safetyPlanList={safetyPlanList}
+        onPressEditPlan={onPressCreatePlan}
+        onPressSharePlan={onPressSharePlan}
+        onPressDeletePlan={onPressDeletePlan}
+      />
     </>
   );
 };

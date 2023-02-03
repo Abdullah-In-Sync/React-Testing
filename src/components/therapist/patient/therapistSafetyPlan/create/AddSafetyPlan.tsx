@@ -1,18 +1,19 @@
 import { InitialFormValues } from "../types";
 import { Formik, FormikProps } from "formik";
-import { ViewSafetyPlanById } from "../../../../../graphql/SafetyPlan/types";
 import React from "react";
-import Form from "./Form";
 import * as Yup from "yup";
+import FormAdd from "./FormAdd";
 
 interface ViewProps {
   submitForm?: (
     formData: InitialFormValues,
     formikHelper: FormikProps<InitialFormValues>
   ) => void;
-  organizationList?: object[];
-  onPressCancel?: () => void;
-  currentSafetyPlan?: ViewSafetyPlanById;
+
+  onPressSubmit?: () => void;
+  setPlanId?: any;
+  therapistSafetyPlanList?: any;
+  receivePlanId: any;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -20,29 +21,34 @@ export const safetyPlanValidationSchema = Yup.object().shape({
   // planDesc: Yup.string().required("Description is required"),
 });
 
-const CreatePlanForm: React.FC<ViewProps> = ({
+const AddPlanForm: React.FC<ViewProps> = ({
   submitForm,
-  onPressCancel,
-  currentSafetyPlan,
+  onPressSubmit,
+  setPlanId,
+  therapistSafetyPlanList,
+  receivePlanId,
 }) => {
-  const { name: planName = "", description: planDesc = "" } =
-    currentSafetyPlan || {};
   const initialValues = {
-    planDesc,
-    planName,
+    planDesc: "",
+    planName: "",
+  };
+
+  const onChangePlanId = (value) => {
+    receivePlanId(value);
   };
 
   const commonform = () => {
     return (
       <Formik
-        enableReinitialize
         validationSchema={safetyPlanValidationSchema}
         initialValues={initialValues}
         onSubmit={submitForm}
         children={() => (
-          <Form
-            onPressCancel={onPressCancel}
-            submitButtonText={currentSafetyPlan ? "Update" : "Save"}
+          <FormAdd
+            therapistSafetyPlanList={therapistSafetyPlanList}
+            setPlanId={setPlanId}
+            onChangePlanId={onChangePlanId}
+            onPressSubmit={onPressSubmit}
           />
         )}
       />
@@ -51,4 +57,4 @@ const CreatePlanForm: React.FC<ViewProps> = ({
   return <>{commonform()}</>;
 };
 
-export default CreatePlanForm;
+export default AddPlanForm;

@@ -93,7 +93,7 @@ export default function viewSafetyPlan(props: propTypes) {
                 }}
               >
                 <Typography style={{ fontSize: "16px", marginRight: 10 }}>
-                  {safetyPlanData?.viewSafetyPlanById?.name}
+                  {safetyPlanData?.viewSafetyPlanById?.organization_name}
                 </Typography>
               </Grid>
 
@@ -195,31 +195,42 @@ export default function viewSafetyPlan(props: propTypes) {
                                 }}
                               >
                                 <Box
-                                  style={{
-                                    paddingRight: "25px",
-                                    color: "#000000DE",
+                                  sx={{
+                                    flexGrow: 1,
+                                    border: "1px solid #cecece",
+                                    display: "grid",
                                   }}
+                                  p={2}
+                                  // marginBottom={"25px"}
+                                  borderRadius={"7px"}
                                 >
-                                  <Typography>
-                                    {data.safety_additional_details}
-                                  </Typography>
+                                  <Box
+                                    style={{
+                                      paddingRight: "25px",
+                                      color: "#000000DE",
+                                    }}
+                                  >
+                                    <Typography>
+                                      {data.safety_additional_details}
+                                    </Typography>
+                                  </Box>
+                                  {data.safety_ques_typeoption
+                                    .split(",")
+                                    .map((data) => (
+                                      <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        defaultValue="female"
+                                        name="radio-buttons-group"
+                                      >
+                                        <FormControlLabel
+                                          value=""
+                                          control={<Radio />}
+                                          label={data}
+                                          disabled
+                                        />
+                                      </RadioGroup>
+                                    ))}
                                 </Box>
-                                {data.safety_ques_typeoption
-                                  .split(",")
-                                  .map((data) => (
-                                    <RadioGroup
-                                      aria-labelledby="demo-radio-buttons-group-label"
-                                      defaultValue="female"
-                                      name="radio-buttons-group"
-                                    >
-                                      <FormControlLabel
-                                        value=""
-                                        control={<Radio />}
-                                        label={data}
-                                        disabled
-                                      />
-                                    </RadioGroup>
-                                  ))}
                               </FormControl>
                             </Box>
                           )}
