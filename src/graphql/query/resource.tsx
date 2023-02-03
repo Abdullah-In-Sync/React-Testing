@@ -187,6 +187,26 @@ export const GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID = gql`
   }
 `;
 
+export const GET_PATIENT_SAFETY_PlANS = gql`
+  query getPatientSafetyPlans {
+    getPatientSafetyPlans {
+      name
+      description
+      questions {
+        _id
+        patient_answer
+        patient_id
+        safety_ques
+        safety_ques_type
+        safety_ques_status
+        safety_additional_details
+      }
+      _id
+      share_status
+    }
+  }
+`;
+
 export const GET_PATIENT_RELAPSE_DETAIL_BY_ID = gql`
   query getPatientRelapseList {
     getPatientRelapseList {
