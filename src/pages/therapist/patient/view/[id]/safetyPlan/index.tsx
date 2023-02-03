@@ -198,12 +198,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   //patientId: patId,
   const handleDeletesafetyPlan = async (v) => {
-    console.debug("inside delete function");
-    console.debug("variable", {
-      planId: v._id,
-      updatePlan: { status: 0 },
-    });
-
     try {
       await deletePlane({
         variables: {
@@ -212,6 +206,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
         onCompleted: () => {
           setIsConfirm(false);
+          getSafetyPlanList({
+            variables: { patientId: patId },
+          });
           /* istanbul ignore next */
           setSuccessModal({
             description: "Your plan have been deleted sucessfully.",
@@ -375,10 +372,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   const handleOk = () => {
     /* istanbul ignore next */
-    // getSafetyPlanList({
-    //   variables: { patientId: patId },
-    // });
-    /* istanbul ignore next */
     handleCloseCreatePlanModal();
     /* istanbul ignore next */
     setSuccessModal(undefined);
@@ -433,9 +426,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: currentSafetyPlan
-          ? "You want to update safety Plan"
-          : "You want to create safety Plan",
+        description: "You want to update safety plan",
       },
       storedFunction: (callback) => submitQuestionForm(formFields, callback),
       setSubmitting: setSubmitting,
@@ -451,6 +442,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           if (data) {
             successDeleteCallback();
             doneCallback();
+            setSuccessModal({
+              description: "Your question has been deleted successfully",
+            });
             enqueueSnackbar("Question successfully deleted.", {
               variant: "success",
             });
