@@ -36,6 +36,10 @@ const CommonForm: React.FC<ViewProps> = ({
     );
   };
 
+  const handleAddQuestion = () => {
+    questionFieldscRef.current.onAddQuesionBox();
+  };
+
   return (
     <Stack className={styles.formWrapper}>
       <Form className={!isEditable ? "disbledFields" : ""}>
@@ -43,8 +47,8 @@ const CommonForm: React.FC<ViewProps> = ({
           {isEditable && (
             <Box className="fieldBox second">
               <Button
-                onClick={() => questionFieldscRef.current.onAddQuesionBox()}
-                data-testid="addNewQuestionBox"
+                onClick={handleAddQuestion}
+                data-testid={`addNewQuestion_${planId}`}
                 variant="outlined"
               >
                 Add Question
