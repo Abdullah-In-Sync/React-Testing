@@ -33,6 +33,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .fieldsBoxWrapperFirst": {
+      "& .fieldBox": {
+        textAlign: "right",
+      },
       marginBottom: "1rem",
       "& .MuiBox-root": {
         marginBottom: "1rem",

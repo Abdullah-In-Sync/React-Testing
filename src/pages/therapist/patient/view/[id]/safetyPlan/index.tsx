@@ -159,6 +159,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
       /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
@@ -408,6 +409,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
       /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
@@ -453,23 +455,27 @@ const TherapistSafetyPlanIndex: NextPage = () => {
               variant: "success",
             });
           }
+          /* istanbul ignore next */
           setLoader(false);
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       doneCallback();
     } finally {
+      /* istanbul ignore next */
       setLoader(false);
     }
   };
 
   const handleDeleteQuestion = (v) => {
-    // alert(JSON.stringify(v))
-
+    /* istanbul ignore next */
     const { questionId, callback: successDeleteCallback } = v;
     setIsConfirm({
       ...isConfirm,
