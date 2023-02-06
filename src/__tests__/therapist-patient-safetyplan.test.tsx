@@ -824,7 +824,7 @@ describe("Therapist patient safety plan", () => {
     expect(descTextDetail).not.toBeInTheDocument();
   });
 
-  it("should add new safety plan question", async () => {
+  it("should add and delete new safety plan question", async () => {
     await sut();
     const addButton = await screen.findByTestId("button-add-icon_0");
     expect(addButton).toBeInTheDocument();
@@ -851,5 +851,10 @@ describe("Therapist patient safety plan", () => {
     );
     fireEvent.click(firstQuestionTypeSelect);
     expect(firstQuestionTypeSelect).toBeInTheDocument();
+
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_1");
+
+    fireEvent.click(deleteButton);
+    expect(firstQuestionTypeSelect).not.toBeInTheDocument();
   });
 });
