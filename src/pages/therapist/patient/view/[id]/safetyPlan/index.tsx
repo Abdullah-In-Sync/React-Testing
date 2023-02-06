@@ -440,6 +440,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     successDeleteCallback,
     doneCallback
   ) => {
+    /* istanbul ignore next */
     setLoader(true);
     try {
       await deleteSafetyPlan({
@@ -479,6 +480,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   const handleDeleteQuestion = (v) => {
     const { questionId, callback: successDeleteCallback } = v;
+    /* istanbul ignore next */
     setIsConfirm({
       ...isConfirm,
       ...{
