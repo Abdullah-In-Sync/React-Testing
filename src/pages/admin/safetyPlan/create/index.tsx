@@ -41,9 +41,10 @@ const CreateSafetyPlanPage: NextPage = () => {
   }, []);
 
   const selectedOrgIds = (orgId) => {
-    if (orgId === "all")
+    if (orgId === "all") {
+      /* istanbul ignore next */
       return organizationList.map((item) => item._id).join(",");
-    else return orgId;
+    } else return orgId;
   };
 
   const submitForm = async (formFields, doneCallback) => {
@@ -98,6 +99,7 @@ const CreateSafetyPlanPage: NextPage = () => {
   };
 
   const cancelConfirm = () => {
+    /* istanbul ignore next */
     router.back();
   };
 

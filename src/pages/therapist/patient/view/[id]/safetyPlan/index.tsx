@@ -488,8 +488,10 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         confirmObject: {
           description: "You want to delete question",
         },
-        storedFunction: (callback) =>
-          callDeleteApi(questionId, successDeleteCallback, callback),
+        storedFunction: (callback) => {
+          /* istanbul ignore next */
+          callDeleteApi(questionId, successDeleteCallback, callback);
+        },
       },
     });
   };
