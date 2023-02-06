@@ -33,7 +33,6 @@ import { useAppContext } from "../../../../../../contexts/AuthContext";
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
   const { user } = useAppContext();
-  /* istanbul ignore next */
   const orgId = user?.therapist_data.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
@@ -448,13 +447,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables: { questionId },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          /* istanbul ignore next */
           if (data) {
-            /* istanbul ignore next */
             successDeleteCallback();
-            /* istanbul ignore next */
             doneCallback();
-            /* istanbul ignore next */
             setSuccessModal({
               description: "Your question has been deleted successfully",
             });
@@ -472,7 +467,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       });
       /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
       doneCallback();
     } finally {
       /* istanbul ignore next */
@@ -492,7 +486,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           description: "You want to delete question",
         },
         storedFunction: (callback) => {
-          /* istanbul ignore next */
           callDeleteApi(questionId, successDeleteCallback, callback);
         },
       },
