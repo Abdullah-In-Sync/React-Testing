@@ -23,6 +23,7 @@ import {
   UPDATE_THERAPIST_SAFETY_PLAN,
   UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
   VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+  DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
 } from "../../../../../../graphql/SafetyPlan/graphql";
 import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 
@@ -69,7 +70,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [updateTherapistSafetyPlanQuestions] = useMutation(
     UPDATE_THERAPIST_SAFETY_PLAN_QUESTION
   );
-  // const [deleteSafetyPlan] = useMutation(DELETE_SAFETY_PLAN_QUESTION);
+  const [deleteSafetyPlan] = useMutation(DELETE_THERAPIST_SAFETY_PLAN_QUESTION);
   const [deletePlane] = useMutation(DELETE_THERAPIST_SAFETY_PLAN);
 
   const [isConfirm, setIsConfirm] = useState<any>({
@@ -434,60 +435,60 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     });
   };
 
-  // const callDeleteApi = async (
-  //   questionId,
-  //   successDeleteCallback,
-  //   doneCallback
-  // ) => {
-  //   try {
-  //     await deleteSafetyPlan({
-  //       variables: { questionId },
-  //       fetchPolicy: "network-only",
-  //       onCompleted: (data) => {
-  //         if (data) {
-  //           successDeleteCallback();
-  //           doneCallback();
-  //           setSuccessModal({
-  //             description: "Your question has been deleted successfully",
-  //           });
-  //           enqueueSnackbar("Question successfully deleted.", {
-  //             variant: "success",
-  //           });
-  //         }
-  //         /* istanbul ignore next */
-  //         setLoader(false);
-  //       },
-  //     });
-  //   } catch (e) {
-  //     /* istanbul ignore next */
-  //     enqueueSnackbar("Server error please try later.", {
-  //       variant: "error",
-  //     });
-  //     /* istanbul ignore next */
-  //     setLoader(false);
-  //     /* istanbul ignore next */
-  //     doneCallback();
-  //   } finally {
-  //     /* istanbul ignore next */
-  //     setLoader(false);
-  //   }
-  // };
+  const callDeleteApi = async (
+    questionId,
+    successDeleteCallback,
+    doneCallback
+  ) => {
+    try {
+      await deleteSafetyPlan({
+        variables: { questionId },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            successDeleteCallback();
+            doneCallback();
+            setSuccessModal({
+              description: "Your question has been deleted successfully",
+            });
+            enqueueSnackbar("Question successfully deleted.", {
+              variant: "success",
+            });
+          }
+          /* istanbul ignore next */
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      doneCallback();
+    } finally {
+      /* istanbul ignore next */
+      setLoader(false);
+    }
+  };
 
-  // const handleDeleteQuestion = (v) => {
-  //   /* istanbul ignore next */
-  //   const { questionId, callback: successDeleteCallback } = v;
-  //   setIsConfirm({
-  //     ...isConfirm,
-  //     ...{
-  //       status: true,
-  //       confirmObject: {
-  //         description: "You want to delete question",
-  //       },
-  //       storedFunction: (callback) =>
-  //         callDeleteApi(questionId, successDeleteCallback, callback),
-  //     },
-  //   });
-  // };
+  const handleDeleteQuestion = (v) => {
+    /* istanbul ignore next */
+    const { questionId, callback: successDeleteCallback } = v;
+    setIsConfirm({
+      ...isConfirm,
+      ...{
+        status: true,
+        confirmObject: {
+          description: "You want to delete question",
+        },
+        storedFunction: (callback) =>
+          callDeleteApi(questionId, successDeleteCallback, callback),
+      },
+    });
+  };
 
   return (
     <>
@@ -508,7 +509,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             submitQustionForm={handleSubmitQustionForm}
             fetchPlanData={fetchPlanData}
             planData={planData}
-            handleDeleteQuestion={null}
+            handleDeleteQuestion={handleDeleteQuestion}
             onPressDeletePlan={onPressDeletePlan}
           />
         </Box>

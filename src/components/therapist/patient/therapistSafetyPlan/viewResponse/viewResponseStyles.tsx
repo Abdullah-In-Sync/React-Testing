@@ -33,6 +33,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .fieldsBoxWrapperFirst": {
+      "& .fieldBox": {
+        textAlign: "right",
+      },
       marginBottom: "1rem",
       "& .MuiBox-root": {
         marginBottom: "1rem",
@@ -62,6 +65,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
         fonSize: "0.8rem",
         color: theme.palette.custom.contrastText,
       },
+    },
+  },
+
+  safetyPlanListWrapper: {
+    "& .Mui-expanded": {
+      borderRadius: "16px 16px 0px 0px",
+    },
+    "& .MuiCollapse-entered": {
+      border: `1px solid #ccc`,
     },
   },
 }));

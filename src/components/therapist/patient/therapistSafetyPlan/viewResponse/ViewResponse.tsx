@@ -58,7 +58,7 @@ const CreatePlanForm: React.FC<ViewProps> = ({
   const modifyQuestions =
     questions !== null
       ? questions.map((item) => ({
-          question_id: item._id,
+          questionId: item._id,
           question: item.safety_ques,
           description: item.safety_additional_details,
           questionType: item.safety_ques_type,

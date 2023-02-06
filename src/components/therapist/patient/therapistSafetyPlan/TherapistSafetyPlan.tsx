@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShareIcon from "@mui/icons-material/Share";
+import { useStyles } from "./viewResponse/viewResponseStyles";
 import {
   Accordion,
   AccordionDetails,
@@ -15,6 +16,7 @@ import {
 import ViewResponse from "./viewResponse/ViewResponse";
 
 const TherapistSafetyPlanList = (safetyPlanList) => {
+  const styles = useStyles();
   const [accordionOpen, setAccordionOpen] = useState();
   const isEditable = (v) => {
     const { plan_owner, plan_type } = v;
@@ -32,7 +34,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
   };
   return (
     <>
-      <Box>
+      <Box className={styles.safetyPlanListWrapper}>
         {safetyPlanList &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId.map(

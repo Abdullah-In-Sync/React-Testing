@@ -18,6 +18,7 @@ import {
   VIEW_PATIENT_SAFETY_PLAN_BY_ID,
   UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
   DELETE_THERAPIST_SAFETY_PLAN,
+  DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
 } from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 import theme from "../styles/theme/theme";
@@ -102,7 +103,7 @@ mocksData.push({
       planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
       patientId: "7a27dc00d48bf983fdcd4b0762ebd",
       questions:
-        '[{"question_id":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
     },
   },
   result: {
@@ -114,26 +115,6 @@ mocksData.push({
     },
   },
 });
-
-// mocksData.push({
-//   request: {
-//     query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
-//     variables: {
-//       planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
-//       patientId: "7a27dc00d48bf983fdcd4b0762ebd",
-//       questions:
-//         '[{"question_id":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"},{"question":"text","description":"text des","questionType":"1"}]',
-//     },
-//   },
-//   result: {
-//     data: {
-//       createSafetyPlanQuestions: {
-//         result: true,
-//         __typename: "result",
-//       },
-//     },
-//   },
-// });
 
 // plantype fixes
 mocksData.push({
@@ -517,6 +498,24 @@ mocksData.push({
     },
   },
 });
+
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      questionId: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e",
+    },
+  },
+  result: {
+    data: {
+      deleteTherapistSafetyPlanQs: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -815,6 +814,13 @@ describe("Therapist patient safety plan", () => {
     const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
 
     fireEvent.click(deleteButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
     expect(descTextDetail).not.toBeInTheDocument();
   });
 

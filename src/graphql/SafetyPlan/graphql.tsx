@@ -288,7 +288,10 @@ export const UPDATE_THERAPIST_SAFETY_PLAN_QUESTION = gql`
       patientId: $patientId
       questions: $questions
     ) {
-      result
+      safety_additional_details
+      safety_ques_typeoption
+      patient_answer
+      updated_date
     }
   }
 `;
@@ -307,6 +310,14 @@ export const VIEW_PATIENT_SAFETY_PLAN_BY_ID = gql`
       safety_ques_type
       safety_ques_typeoption
       updated_date
+    }
+  }
+`;
+
+export const DELETE_THERAPIST_SAFETY_PLAN_QUESTION = gql`
+  mutation deleteTherapistSafetyPlanQs($questionId: String!) {
+    deleteTherapistSafetyPlanQs(questionId: $questionId) {
+      result
     }
   }
 `;

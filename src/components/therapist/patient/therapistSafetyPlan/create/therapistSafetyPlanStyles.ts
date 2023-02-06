@@ -34,6 +34,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& .fieldsBoxWrapperFirst": {
       "& .fieldBox": {
+        background: "red",
         textAlign: "right",
       },
       marginBottom: "1rem",
