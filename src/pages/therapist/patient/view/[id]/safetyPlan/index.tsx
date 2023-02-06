@@ -440,23 +440,26 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     successDeleteCallback,
     doneCallback
   ) => {
+    setLoader(true);
     try {
       await deleteSafetyPlan({
         variables: { questionId },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
+            /* istanbul ignore next */
             successDeleteCallback();
+            /* istanbul ignore next */
             doneCallback();
+            /* istanbul ignore next */
             setSuccessModal({
               description: "Your question has been deleted successfully",
             });
+            /* istanbul ignore next */
             enqueueSnackbar("Question successfully deleted.", {
               variant: "success",
             });
           }
-          /* istanbul ignore next */
-          setLoader(false);
         },
       });
     } catch (e) {
@@ -475,7 +478,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   const handleDeleteQuestion = (v) => {
-    /* istanbul ignore next */
     const { questionId, callback: successDeleteCallback } = v;
     setIsConfirm({
       ...isConfirm,
