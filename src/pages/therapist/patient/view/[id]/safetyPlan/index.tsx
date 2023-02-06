@@ -435,7 +435,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     successDeleteCallback,
     doneCallback
   ) => {
-    /* istanbul ignore next */
     setLoader(true);
     try {
       await deleteSafetyPlan({
@@ -448,7 +447,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             setSuccessModal({
               description: "Your question has been deleted successfully",
             });
-            /* istanbul ignore next */
             enqueueSnackbar("Question successfully deleted.", {
               variant: "success",
             });
@@ -456,23 +454,18 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
-      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      /* istanbul ignore next */
       setLoader(false);
       doneCallback();
     } finally {
-      /* istanbul ignore next */
       setLoader(false);
     }
   };
 
   const handleDeleteQuestion = (v) => {
-    /* istanbul ignore next */
     const { questionId, callback: successDeleteCallback } = v;
-    /* istanbul ignore next */
     setIsConfirm({
       ...isConfirm,
       ...{
