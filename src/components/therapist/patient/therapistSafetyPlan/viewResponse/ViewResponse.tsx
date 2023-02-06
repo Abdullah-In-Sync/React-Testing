@@ -52,7 +52,7 @@ const CreatePlanForm: React.FC<ViewProps> = ({
     description: planDescription = "",
     _id: planId = "",
     plan_type: planType = "",
-    questions: questions = [],
+    questions = [],
   } = safetyPlan || {};
 
   const modifyQuestions =
@@ -86,6 +86,7 @@ const CreatePlanForm: React.FC<ViewProps> = ({
             planDescription={planDescription}
             onPressCancel={onPressCancel}
             handleDeleteQuestion={handleDeleteQuestion}
+            questions={questions}
           />
         )}
       />
