@@ -400,7 +400,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
-            /* istanbul ignore next */
             setSuccessModal({
               description: "Your question has been created successfully",
             });
@@ -409,17 +408,13 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
-      /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
-      /* istanbul ignore next */
       doneCallback();
     }
   };

@@ -201,6 +201,26 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      questions:
+        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+    },
+  },
+  result: {
+    data: {
+      createSafetyPlanQuestions: {
+        result: false,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 // plantype fixes
 mocksData.push({
   request: {
@@ -862,6 +882,34 @@ describe("Therapist patient safety plan", () => {
     expect(okButton).toBeInTheDocument();
   });
 
+  it("should update plan fail", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    // const descTextDetail = await screen.findByText(/Description text detail/i);
+    // expect(descTextDetail).toBeInTheDocument();
+    const saveButton = await screen.findByTestId(
+      "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail"
+    );
+
+    fireEvent.click(saveButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const serverError = await screen.findByText(
+      /Server error please try later./i
+    );
+    expect(serverError).toBeInTheDocument();
+  });
+
   it("should cancel plan question", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
@@ -943,7 +991,7 @@ describe("Therapist patient safety plan", () => {
     expect(firstQuestionTypeSelect).not.toBeInTheDocument();
   });
 
-  it("should delete safety plan question make fail", async () => {
+  it("should delete safety plan question fail", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
