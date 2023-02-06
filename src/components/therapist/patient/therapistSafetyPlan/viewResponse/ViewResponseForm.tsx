@@ -78,7 +78,7 @@ const CommonForm: React.FC<ViewProps> = ({
 
   return (
     <Stack className={styles.formWrapper}>
-      <Form className={!isEditable ? "disbledFields" : ""}>
+      <Form className={!isEditable || isPatientResponse ? "disbledFields" : ""}>
         <Box className="fieldsBoxWrapperFirst">
           {isEditable && !isPatientResponse && (
             <Box className="fieldBox second">
