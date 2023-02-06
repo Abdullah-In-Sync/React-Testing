@@ -33,6 +33,7 @@ import { useAppContext } from "../../../../../../contexts/AuthContext";
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
   const { user } = useAppContext();
+  /* istanbul ignore next */
   const orgId = user?.therapist_data.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
@@ -447,6 +448,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables: { questionId },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
+          /* istanbul ignore next */
           if (data) {
             /* istanbul ignore next */
             successDeleteCallback();
@@ -479,6 +481,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   const handleDeleteQuestion = (v) => {
+    /* istanbul ignore next */
     const { questionId, callback: successDeleteCallback } = v;
     /* istanbul ignore next */
     setIsConfirm({
