@@ -93,6 +93,31 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+    },
+  },
+  result: {
+    data: {
+      getSafetyPlanListByPatientId: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-patient-answer",
+          created_date: "2023-01-23T05:24:08.166Z",
+          description: "Test New Data Text",
+          plan_owner: "admin",
+          name: "Test Plan Data",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_type: "custom",
+          __typename: "patientSafetyPlans",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
     variables: {
       patientId: "7a27dc00d48bf983fdcd4b0762ebd",
@@ -136,6 +161,36 @@ mocksData.push({
           _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-fail",
           created_date: "2023-02-03T05:22:57.823Z",
           patient_answer: null,
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-patient-answer",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-patient-answer",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: "patient response text",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
           safety_additional_details: "Description text detail",
@@ -892,9 +947,6 @@ describe("Therapist patient safety plan", () => {
     const addButton = await screen.findByTestId("button-add-icon_0");
     expect(addButton).toBeInTheDocument();
     fireEvent.click(addButton);
-
-    // const descTextDetail = await screen.findByText(/Description text detail/i);
-    // expect(descTextDetail).toBeInTheDocument();
     const saveButton = await screen.findByTestId(
       "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail"
     );
@@ -1010,5 +1062,19 @@ describe("Therapist patient safety plan", () => {
       /Server error please try later./i
     );
     expect(serverError).toBeInTheDocument();
+  });
+
+  it("should load patient reponse", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+
+    const patientResponse = await screen.findByText(/patient response text/i);
+    expect(patientResponse).toBeInTheDocument();
   });
 });
