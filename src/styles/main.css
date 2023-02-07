@@ -97,3 +97,11 @@
   margin-bottom: 0;
   margin-left: 14px;
 }
+
+.disbledFields {
+  border: unset !important;
+  pointer-events: none;
+}
+.disbledFields input :focus-visible {
+  outline: unset !important;
+}

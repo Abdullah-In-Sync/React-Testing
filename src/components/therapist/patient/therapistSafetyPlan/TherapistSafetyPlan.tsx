@@ -1,27 +1,40 @@
-import React from "react";
 import AddIcon from "@mui/icons-material/Add";
+import React, { useState } from "react";
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ShareIcon from "@mui/icons-material/Share";
+import { useStyles } from "./viewResponse/viewResponseStyles";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
   IconButton,
-  Stack,
   Typography,
 } from "@mui/material";
-import CreateIcon from "@mui/icons-material/Create";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ShareIcon from "@mui/icons-material/Share";
+
+import ViewResponse from "./viewResponse/ViewResponse";
 
 const TherapistSafetyPlanList = (safetyPlanList) => {
+  const styles = useStyles();
+  const [accordionOpen, setAccordionOpen] = useState();
   const isEditable = (v) => {
     const { plan_owner, plan_type } = v;
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
+  const handleAddIconButton = async (index, id) => {
+    if (index !== accordionOpen) {
+      await safetyPlanList.fetchPlanData(id);
+      setAccordionOpen(index);
+    } else {
+      /* istanbul ignore next */
+      setAccordionOpen(undefined);
+    }
+  };
   return (
     <>
-      <Box>
+      <Box className={styles.safetyPlanListWrapper}>
         {safetyPlanList &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId.map(
@@ -35,13 +48,21 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                     key={`safetyPlanListItem_${k}`}
                     sx={{ marginTop: "4px", borderRadius: "4px" }}
                     style={{ borderRadius: "14px" }}
-                    expanded={false}
+                    // expanded={sessionPanelExpanded === panelName}
+                    // onChange={handleSessionPanelChange(panelName)}
+                    // onClick={() => setSessionNo(p)}
+                    // key={v._id}
+                    expanded={accordionOpen === k}
                     data-testid="SessionPanelItem"
                   >
                     <AccordionSummary
                       expandIcon={
                         <Box>
-                          <AddIcon className="text-white" />
+                          <AddIcon
+                            data-testid={`button-add-icon_${k}`}
+                            onClick={() => handleAddIconButton(k, v._id)}
+                            className="text-white"
+                          />
                         </Box>
                       }
                       aria-controls={panelName + "bh-content"}
@@ -110,11 +131,22 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                         </Box>
                       </>
                     </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography mt={3} mb={5}>
-                        <Stack spacing={2} direction="row"></Stack>
-                      </Typography>
-                    </AccordionDetails>
+                    {accordionOpen === k && (
+                      <AccordionDetails>
+                        <ViewResponse
+                          isEditable={checkIsEditable}
+                          submitQustionForm={safetyPlanList.submitQustionForm}
+                          safetyPlan={{
+                            ...v,
+                            ...{ questions: safetyPlanList.planData },
+                          }}
+                          handleDeleteQuestion={
+                            safetyPlanList.handleDeleteQuestion
+                          }
+                          onPressCancel={() => setAccordionOpen(undefined)}
+                        />
+                      </AccordionDetails>
+                    )}
                   </Accordion>
                 </>
               );

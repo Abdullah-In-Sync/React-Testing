@@ -18,6 +18,7 @@ type Props = React.PropsWithChildren<{
       questionOption?: string;
     }[];
   }>;
+  isEditable?: boolean;
   handleDeleteQuestion: (v) => void;
 }>;
 
@@ -32,7 +33,10 @@ const questionTypes = [
   },
 ];
 
-const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
+const AddQuestionsBox = (
+  { formikProps, isEditable, handleDeleteQuestion }: Props,
+  ref
+) => {
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { values, setFieldValue } = formikProps;
@@ -72,7 +76,7 @@ const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
       <Fab
         key={`deleteIconButton_${i}`}
         aria-label={`deleteIconButton_${i}`}
-        data-testid={`iconButton_${i}`}
+        data-testid={`iconButtonQuestion_${i}`}
         onClick={() => onClickDelete({ i, questionId })}
       >
         <DeleteSharp />
@@ -93,9 +97,11 @@ const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
     return (
       <Card key={`questionCard_${i}`} className="questionCard">
         <CardContent>
-          <Box className="deleteButtonWrapper">
-            {deleteButton({ i, questionId })}
-          </Box>
+          {isEditable && (
+            <Box className="deleteButtonWrapper">
+              {deleteButton({ i, questionId })}
+            </Box>
+          )}
           <Box key={i} className="questionBoxWrapper">
             <Box>
               <FormikTextField
