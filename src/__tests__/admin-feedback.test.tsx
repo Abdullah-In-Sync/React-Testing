@@ -1,21 +1,23 @@
+import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { ThemeProvider } from "@mui/styles";
 import {
-  screen,
-  render,
-  waitForElementToBeRemoved,
   fireEvent,
+  render,
+  screen,
   waitFor,
+  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import Feedback from "../pages/admin/feedback";
-import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
-import { GET_FEEDBACK_DATA, GET_ORG_DATA } from "../graphql/query";
+import { useAppContext } from "../contexts/AuthContext";
 import {
   ADD_FEEDBACK,
   DELETE_FEEDBACK,
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
-import { useAppContext } from "../contexts/AuthContext";
+import { GET_ADMIN_FEEDBACK_LIST, GET_ORG_DATA } from "../graphql/query";
+import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
+import Feedback from "../pages/admin/feedback";
+import theme from "../styles/theme/theme";
 
 jest.mock("../contexts/AuthContext");
 
@@ -28,16 +30,15 @@ const buildMocks = (): {
   // fetch patient feedback list query
   _mocks.push({
     request: {
-      query: GET_FEEDBACK_DATA,
+      query: GET_ADMIN_FEEDBACK_LIST,
       variables: {
-        status: "active",
         pageNo: 1,
         limit: 25,
       },
     },
     result: {
       data: {
-        getAdminFeedbackList: {
+        getFeedbackListByAdmin: {
           totalcount: 2,
           feedbackdata: [
             {
@@ -50,6 +51,13 @@ const buildMocks = (): {
               status: 1,
               updated_date: "2022-06-23T08:26:33.663Z",
               user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+              description: "updated desc",
+              feedback_type: "client",
+              name: "Updated name",
+              organization_name: "",
+              user_type: "admin",
+              visibility: 1,
+              __typename: "Feedback",
             },
             {
               _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
@@ -61,6 +69,13 @@ const buildMocks = (): {
               status: 1,
               updated_date: "2022-06-23T08:32:44.547Z",
               user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+              description: "updated desc",
+              feedback_type: "client",
+              name: "Updated name",
+              organization_name: "",
+              user_type: "admin",
+              visibility: 1,
+              __typename: "Feedback",
             },
           ],
         },
@@ -217,9 +232,11 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <SnackbarProvider>
-        <Feedback />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider>
+          <Feedback />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>
@@ -252,7 +269,7 @@ describe("Admin feedback page", () => {
     expect(
       screen.queryByTestId("tableColumn_organization_name")
     ).toBeInTheDocument();
-    expect(screen.queryByTestId("tableColumn_question")).toBeInTheDocument();
+    // expect(screen.queryByTestId("tableColumn_question")).toBeInTheDocument();
     expect(
       screen.queryByTestId("tableColumn_feedback_type")
     ).toBeInTheDocument();

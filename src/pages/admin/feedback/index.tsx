@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import type { NextPage } from "next";
 import moment from "moment";
-import Loader from "../../../components/common/Loader";
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  GET_FEEDBACK_DATA,
-  GET_ORG_DATA,
-  // GET_FEEDBACK_BY_ID,
-} from "../../../graphql/query";
 import {
   ADD_FEEDBACK,
   DELETE_FEEDBACK,
   UPDATE_FEEDBACK,
 } from "../../../graphql/mutation";
+import { GET_ADMIN_FEEDBACK_LIST, GET_ORG_DATA } from "../../../graphql/query";
 
 // MUI COMPONENTS
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ReplyIcon from "@mui/icons-material/Reply";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Box, IconButton, Tooltip } from "@mui/material";
+import DynamicForm from "../../../components/admin/feedback/DynamicForm";
+import { useStyles } from "../../../components/admin/feedback/feedbackStyles";
+import { AddButton } from "../../../components/common/Buttons";
+import ContentHeader from "../../../components/common/ContentHeader";
+import CrudDialog from "../../../components/common/CrudDialog";
 import Layout from "../../../components/layout";
+import withAuthentication from "../../../hoc/auth";
 const TableGenerator = dynamic(
   import("../../../components/common/TableGenerator"),
   { ssr: false }
 );
-import ContentHeader from "../../../components/common/ContentHeader";
-import DynamicForm from "../../../components/admin/feedback/DynamicForm";
-import { IconButton, Tooltip, Box } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CreateIcon from "@mui/icons-material/Create";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { AddButton } from "../../../components/common/Buttons";
-import CrudDialog from "../../../components/common/CrudDialog";
-import withAuthentication from "../../../hoc/auth";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -44,6 +42,7 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
+  const styles = useStyles();
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
@@ -73,8 +72,8 @@ const Feedback: NextPage = () => {
     error: dataListError,
     data: dataListData,
     refetch,
-  } = useQuery(GET_FEEDBACK_DATA, {
-    variables: { status: "active", pageNo: page + 1, limit: rowsPerPage },
+  } = useQuery(GET_ADMIN_FEEDBACK_LIST, {
+    variables: { pageNo: page + 1, limit: rowsPerPage },
   });
 
   // const [
@@ -92,7 +91,7 @@ const Feedback: NextPage = () => {
     /* istanbul ignore next */
     if (dataListData || dataListError) {
       /* istanbul ignore next */
-      setDataList(dataListData?.getAdminFeedbackList?.feedbackdata);
+      setDataList(dataListData?.getFeedbackListByAdmin?.feedbackdata);
       setLoader(false);
     }
   }, [dataListData, dataListError]);
@@ -110,7 +109,7 @@ const Feedback: NextPage = () => {
   const fields = [
     {
       key: "session_no",
-      columnName: "Session No.",
+      columnName: "Session Name",
       visible: true,
       render: (val) => val ?? "---",
     },
@@ -128,8 +127,8 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "question",
-      columnName: "Questions",
+      key: "feedback_type",
+      columnName: "Feedback Name",
       visible: true,
       render: (val) =>
         val.length > 50 ? (
@@ -141,10 +140,17 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "feedback_type",
-      columnName: "Type",
+      key: "user_type",
+      columnName: "User Type",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) =>
+        val.length > 50 ? (
+          <Tooltip title={val} arrow>
+            <p>{val.substring(0, 50) + "..."}</p>
+          </Tooltip>
+        ) : (
+          val ?? "---"
+        ),
     },
     {
       key: "created_date",
@@ -185,11 +191,14 @@ const Feedback: NextPage = () => {
           >
             <DeleteIcon data-testid={"deleteIcon_" + value._id} />
           </IconButton>
+          <IconButton size="small" onClick={() => null}>
+            <ReplyIcon data-testid={"resplyIcon_" + value._id} />
+          </IconButton>
         </>
       ),
     },
   ];
-
+  //ReplyIcon
   // ADD DIALOG FIELDS
   const dialogFields = [
     [
@@ -373,10 +382,10 @@ const Feedback: NextPage = () => {
             onClick={() => setAddModal(true)}
           />
         </Box>
-        <Box>
+        <Box className={styles.adminFeedbackTable}>
           <TableGenerator
             fields={fields}
-            data={dataListData?.getAdminFeedbackList?.feedbackdata}
+            data={dataListData?.getFeedbackListByAdmin?.feedbackdata}
             currentPage={page}
             onPageChange={(page, direction) => {
               /* istanbul ignore next */
@@ -396,7 +405,7 @@ const Feedback: NextPage = () => {
             onRowPerPageChange={(rows) => {
               setRowsPerPage(rows);
             }}
-            dataCount={dataListData?.getAdminFeedbackList?.totalcount}
+            dataCount={dataListData?.getFeedbackListByAdmin?.totalcount}
             selectedRecords={[]}
             rowOnePage={rowsPerPage}
           />
