@@ -34,6 +34,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& .fieldsBoxWrapperFirst": {
       "& .fieldBox": {
+        "& button": {
+          width: "unset",
+        },
         textAlign: "right",
       },
       marginBottom: "1rem",
@@ -74,6 +77,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& .MuiCollapse-entered": {
       border: `1px solid #ccc`,
+      borderRadius: "0px 0px 16px 16px",
     },
   },
 }));
