@@ -27,6 +27,8 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import CrudDialog from "../../../components/common/CrudDialog";
 import Layout from "../../../components/layout";
 import withAuthentication from "../../../hoc/auth";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { SuccessModal } from "../../../components/common/SuccessModal";
 const TableGenerator = dynamic(
   import("../../../components/common/TableGenerator"),
   { ssr: false }
@@ -47,14 +49,22 @@ const Feedback: NextPage = () => {
   const [addModal, setAddModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [viewModal, setViewModal] = useState<boolean>(false);
-  const [deletConfirmationModal, setDeletConfirmationModal] =
-    useState<boolean>(false);
   const [isMutating, setIsMutation] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<any>([]);
   const [sessionList, setSessionList] = useState<any>([]);
   const [dataList, setDataList] = useState<any>([]);
   const [selectedId, setSelectedId] = useState<any>("");
   const [selectedUserData, setSelectedUserData] = useState<any>([]);
+  const [successModal, setSuccessModal] = useState<any>();
+  const [isConfirm, setIsConfirm] = useState<any>({
+    status: false,
+    storedFunction: null,
+    setSubmitting: null,
+    cancelStatus: false,
+    confirmObject: {
+      description: "",
+    },
+  });
 
   // TABLE PROPS
   const [rowsPerPage, setRowsPerPage] = useState<number>(25);
@@ -182,14 +192,12 @@ const Feedback: NextPage = () => {
             <CreateIcon />
           </IconButton>
           <IconButton
+            data-testid={"deleteIcon_" + value._id}
             size="small"
             // onClick={() => handleDelete(value._id)}
-            onClick={() => {
-              setDeletConfirmationModal(true);
-              setSelectedId(value._id);
-            }}
+            onClick={() => onPressDeletePlan(value._id)}
           >
-            <DeleteIcon data-testid={"deleteIcon_" + value._id} />
+            <DeleteIcon />
           </IconButton>
           <IconButton size="small" onClick={() => null}>
             <ReplyIcon data-testid={"resplyIcon_" + value._id} />
@@ -342,19 +350,22 @@ const Feedback: NextPage = () => {
   };
 
   /* istanbul ignore next */
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, callback) => {
     /* istanbul ignore else */
-    setIsMutation(true);
+    // setIsMutation(true);
+    setLoader(true);
     deleteFeedback({
       variables: {
         feedbackId: id,
-        update: { status: "deleted" },
       },
       onCompleted: () => {
-        setDeletConfirmationModal(false);
-        setIsMutation(false);
+        callback();
+        setLoader(false);
         refetch();
-        enqueueSnackbar("Data deleted successfully!", { variant: "error" });
+        setSuccessModal({
+          description: "Feedback has been deleted sucessfully.",
+        });
+        enqueueSnackbar("Feedback deleted successfully!", { variant: "info" });
       },
     });
   };
@@ -368,6 +379,47 @@ const Feedback: NextPage = () => {
   const changePage = (url: any) => {
     /* istanbul ignore next */
     console.log("CHANGE PAGE", url);
+  };
+
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "You want to delete feedback",
+      },
+      storedFunction: (callback) => handleDelete(v, callback),
+    });
+  };
+
+  const onConfirmSubmit = () => {
+    isConfirm.storedFunction(() => {
+      setLoader(true);
+      if (isConfirm.setSubmitting instanceof Function)
+        isConfirm.setSubmitting(false);
+
+      setIsConfirm({
+        status: false,
+        storedFunction: null,
+        setSubmitting: null,
+      });
+    });
+  };
+
+  const clearIsConfirm = () => {
+    /* istanbul ignore next */
+    if (isConfirm.setSubmitting instanceof Function)
+      isConfirm.setSubmitting(false);
+    /* istanbul ignore next */
+    setIsConfirm({
+      status: false,
+      storedFunction: null,
+      setSubmitting: null,
+      cancelStatus: false,
+    });
+  };
+
+  const handleOk = () => {
+    setSuccessModal(undefined);
   };
 
   return (
@@ -465,17 +517,23 @@ const Feedback: NextPage = () => {
             open={viewModal}
             onClose={() => setViewModal(false)}
           />
-
-          <CrudDialog
-            title="Delete Question"
-            description="Are you sure you want to delete this question? You will not be able to restore this again."
-            okText="Delete"
-            submitButtonDisabled={isMutating}
-            onsubmit={() => handleDelete(selectedId)}
-            open={deletConfirmationModal}
-            onClose={() => setDeletConfirmationModal(false)}
-          />
         </Box>
+        {isConfirm.status && (
+          <ConfirmationModal
+            label="Are you sure?"
+            description={isConfirm.confirmObject.description}
+            onCancel={clearIsConfirm}
+            onConfirm={onConfirmSubmit}
+          />
+        )}
+        {successModal && (
+          <SuccessModal
+            isOpen={Boolean(successModal)}
+            title="Successfull"
+            description={successModal.description}
+            onOk={handleOk}
+          />
+        )}
       </Layout>
     </>
   );

@@ -30,14 +30,9 @@ export const UPDATE_FEEDBACK = gql`
 `;
 
 export const DELETE_FEEDBACK = gql`
-  mutation ($feedbackId: ID!, $update: UpdateFeedbackInput!) {
-    updateFeedbackQuestionById(feedbackId: $feedbackId, update: $update) {
-      _id
-      answer_options
-      answer_type
-      created_date
-      feedback_type
-      org_id
+  mutation ($feedbackId: String!) {
+    deleteFeedbackByAdmin(feedbackId: $feedbackId) {
+      result
     }
   }
 `;
