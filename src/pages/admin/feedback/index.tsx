@@ -67,7 +67,7 @@ const Feedback: NextPage = () => {
   });
 
   // TABLE PROPS
-  const [rowsPerPage, setRowsPerPage] = useState<number>(25);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
   const [nextPage] = useState<string>(null);

@@ -27,22 +27,223 @@ const buildMocks = (): {
 } => {
   const _mocks: MockedResponse[] = [];
 
+  const feedbackData = [
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-3",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd18-4",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-5",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181-6",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-7",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181-8",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-9",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181-10",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+  ];
+
   // fetch patient feedback list query
   _mocks.push({
     request: {
       query: GET_ADMIN_FEEDBACK_LIST,
       variables: {
         pageNo: 1,
-        limit: 25,
+        limit: 10,
       },
     },
     result: {
       data: {
         getFeedbackListByAdmin: {
-          totalcount: 2,
+          totalcount: 12,
+          feedbackdata: feedbackData,
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: GET_ADMIN_FEEDBACK_LIST,
+      variables: {
+        pageNo: 2,
+        limit: 10,
+      },
+    },
+    result: {
+      data: {
+        getFeedbackListByAdmin: {
+          totalcount: 12,
           feedbackdata: [
             {
-              _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+              _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-next",
               answer_type: "list",
               created_date: "2022-06-23T08:26:33.663Z",
               org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
@@ -60,7 +261,7 @@ const buildMocks = (): {
               __typename: "Feedback",
             },
             {
-              _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
+              _id: "8521b35e-9bbc-4f72-b054-c10935afd181-next",
               answer_type: "list",
               created_date: "2022-06-23T08:32:44.547Z",
               org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
@@ -278,7 +479,7 @@ describe("Admin feedback page", () => {
     await sut();
     expect(screen.queryByTestId("tableId")).toBeInTheDocument();
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
     expect(
       screen.queryByTestId("tableColumn_organization_name")
@@ -329,7 +530,7 @@ describe("Admin feedback page", () => {
     });
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
   });
 
@@ -349,15 +550,6 @@ describe("Admin feedback page", () => {
     expect(okButton).not.toBeInTheDocument();
   });
 
-  // test("Click Delete button should delete data and load list", async () => {
-  //   await sut();
-  //   fireEvent.click(
-  //     screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-  //   );
-  //   fireEvent.submit(screen.queryByTestId("saveButton"));
-  //   expect(screen.queryAllByTestId("table-row").length).toBe(2);
-  // });
-
   test("Click add feedback button with cancel button", async () => {
     await sut();
     fireEvent.click(screen.queryByTestId("createQuestion"));
@@ -372,7 +564,7 @@ describe("Admin feedback page", () => {
     fireEvent.click(screen.queryByTestId("addField"));
     fireEvent.click(screen.queryByTestId("CancelIcon"));
     fireEvent.click(screen.queryByTestId("cancelButton"));
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    expect(screen.queryAllByTestId("table-row").length).toBe(10);
   });
 
   test("Click edit feedback button with saveButton", async () => {
@@ -383,7 +575,7 @@ describe("Admin feedback page", () => {
     expect(screen.getByText("Edit Question")).toBeInTheDocument();
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
   });
 
@@ -397,18 +589,6 @@ describe("Admin feedback page", () => {
     await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
   });
 
-  // test("Click delete feedback button with saveButton", async () => {
-  //   await sut();
-  //   fireEvent.click(
-  //     screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-  //   );
-  //   expect(screen.getByText("Delete Question")).toBeInTheDocument();
-  //   fireEvent.submit(screen.queryByTestId("saveButton"));
-  //   await waitFor(() =>
-  //     expect(screen.queryAllByTestId("table-row").length).toBe(2)
-  //   );
-  // });
-
   test("Click edit feedback button with cancelButton", async () => {
     await sut();
     fireEvent.click(
@@ -421,12 +601,6 @@ describe("Admin feedback page", () => {
 
   test("Click delete feedback button with cancelButton", async () => {
     await sut();
-    // fireEvent.click(
-    //   screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    // );
-    // expect(screen.getByText("Delete Question")).toBeInTheDocument();
-    // fireEvent.click(screen.queryByTestId("cancelButton"));
-    // await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
 
     const deleteButton = screen.queryByTestId(
       "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
@@ -467,7 +641,30 @@ describe("Admin feedback page", () => {
     });
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
+  });
+
+  test("Click table next and previous button", async () => {
+    await sut();
+
+    const tableNextButton = screen.getByRole("button", {
+      name: /Next Page/i,
+    });
+    fireEvent.click(tableNextButton);
+    expect(
+      await screen.findByTestId(
+        "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d-next"
+      )
+    ).toBeInTheDocument();
+    const previousNextButton = screen.getByRole("button", {
+      name: /Previous Page/i,
+    });
+    fireEvent.click(previousNextButton);
+    expect(
+      await screen.findByTestId(
+        "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
+      )
+    ).toBeInTheDocument();
   });
 });

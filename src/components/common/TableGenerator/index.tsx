@@ -275,6 +275,12 @@ const TableGenerator = ({
                   }}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
+                  backIconButtonProps={{
+                    "aria-label": "Previous Page",
+                  }}
+                  nextIconButtonProps={{
+                    "aria-label": "Next Page",
+                  }}
                 />
               </TableRow>
             </TableFooter>
