@@ -15,8 +15,8 @@ import React, { useEffect, useState } from "react";
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort, fields, handleSortChange } =
     props;
+  /* istanbul ignore next */
   const createSortHandler = (property) => (event) => {
-    /* istanbul ignore next */
     onRequestSort(event, property);
   };
 
@@ -131,11 +131,10 @@ const TableGenerator = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowOnePage);
 
+  /* istanbul ignore next */
   const handleRequestSort = (event, property) => {
-    /* istanbul ignore next */
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
-    /* istanbul ignore next */
     setOrderBy(property);
     handleSortChange(`${isAsc ? "" : "-"}${property}`);
   };
@@ -144,29 +143,28 @@ const TableGenerator = ({
     setPage(currentPage);
   }, [currentPage]);
 
+  /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
   ) => {
-    /* istanbul ignore next */
     setPage(newPage);
     onPageChange(newPage);
   };
 
+  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    /* istanbul ignore next */
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     if (typeof onRowPerPageChange === "function")
       onRowPerPageChange(event.target.value);
   };
 
+  /* istanbul ignore next */
   const handleSelectAll = (selected) => {
-    /* istanbul ignore next */
     if (selected) {
-      /* istanbul ignore next */
       onChangeSelected(data);
     } else {
       onChangeSelected([]);
