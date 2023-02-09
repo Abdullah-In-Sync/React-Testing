@@ -1,21 +1,23 @@
+import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { ThemeProvider } from "@mui/styles";
 import {
-  screen,
-  render,
-  waitForElementToBeRemoved,
   fireEvent,
+  render,
+  screen,
   waitFor,
+  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import Feedback from "../pages/admin/feedback";
-import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
-import { GET_FEEDBACK_DATA, GET_ORG_DATA } from "../graphql/query";
+import { useAppContext } from "../contexts/AuthContext";
 import {
   ADD_FEEDBACK,
   DELETE_FEEDBACK,
   UPDATE_FEEDBACK,
 } from "../graphql/mutation";
-import { useAppContext } from "../contexts/AuthContext";
+import { GET_ADMIN_FEEDBACK_LIST, GET_ORG_DATA } from "../graphql/query";
+import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
+import Feedback from "../pages/admin/feedback";
+import theme from "../styles/theme/theme";
 
 jest.mock("../contexts/AuthContext");
 
@@ -25,23 +27,223 @@ const buildMocks = (): {
 } => {
   const _mocks: MockedResponse[] = [];
 
+  const feedbackData = [
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-3",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd18-4",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-5",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181-6",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-7",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181-8",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-9",
+      answer_type: "list",
+      created_date: "2022-06-23T08:26:33.663Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test1",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:26:33.663Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+    {
+      _id: "8521b35e-9bbc-4f72-b054-c10935afd181-10",
+      answer_type: "list",
+      created_date: "2022-06-23T08:32:44.547Z",
+      org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      question: "test2",
+      session_no: 1,
+      status: 1,
+      updated_date: "2022-06-23T08:32:44.547Z",
+      user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+      description: "updated desc",
+      feedback_type: "client",
+      name: "Updated name",
+      organization_name: "",
+      user_type: "admin",
+      visibility: 1,
+      __typename: "Feedback",
+    },
+  ];
+
   // fetch patient feedback list query
   _mocks.push({
     request: {
-      query: GET_FEEDBACK_DATA,
+      query: GET_ADMIN_FEEDBACK_LIST,
       variables: {
-        status: "active",
         pageNo: 1,
-        limit: 25,
+        limit: 10,
       },
     },
     result: {
       data: {
-        getAdminFeedbackList: {
-          totalcount: 2,
+        getFeedbackListByAdmin: {
+          totalcount: 12,
+          feedbackdata: feedbackData,
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: GET_ADMIN_FEEDBACK_LIST,
+      variables: {
+        pageNo: 2,
+        limit: 10,
+      },
+    },
+    result: {
+      data: {
+        getFeedbackListByAdmin: {
+          totalcount: 12,
           feedbackdata: [
             {
-              _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
+              _id: "12274a23-4932-49b6-9eec-ae7f9f6b804d-next",
               answer_type: "list",
               created_date: "2022-06-23T08:26:33.663Z",
               org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
@@ -50,9 +252,16 @@ const buildMocks = (): {
               status: 1,
               updated_date: "2022-06-23T08:26:33.663Z",
               user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+              description: "updated desc",
+              feedback_type: "client",
+              name: "Updated name",
+              organization_name: "",
+              user_type: "admin",
+              visibility: 1,
+              __typename: "Feedback",
             },
             {
-              _id: "8521b35e-9bbc-4f72-b054-c10935afd181",
+              _id: "8521b35e-9bbc-4f72-b054-c10935afd181-next",
               answer_type: "list",
               created_date: "2022-06-23T08:32:44.547Z",
               org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
@@ -61,6 +270,13 @@ const buildMocks = (): {
               status: 1,
               updated_date: "2022-06-23T08:32:44.547Z",
               user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+              description: "updated desc",
+              feedback_type: "client",
+              name: "Updated name",
+              organization_name: "",
+              user_type: "admin",
+              visibility: 1,
+              __typename: "Feedback",
             },
           ],
         },
@@ -140,30 +356,44 @@ const buildMocks = (): {
   });
 
   //Delete feedback
+  // _mocks.push({
+  //   request: {
+  //     query: DELETE_FEEDBACK,
+  //     variables: {
+  //       feedbackId: "12274a23-4932-49b6-9eec-ae7f9f6b804d"
+  //     },
+  //   },
+  //   result: {
+  //     data: {
+  //       updateFeedbackQuestionById: {
+  //         _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+  //         user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
+  //         org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+  //         session_no: 1,
+  //         question: "test1",
+  //         answer_type: "list",
+  //         status: "deleted",
+  //         created_date: "2022-07-09T15:39:07.173Z",
+  //         answer_options: ["a", "b", "c", "d"],
+  //         feedback_type: "session",
+  //         organization_name: "dev-myhelp",
+  //       },
+  //     },
+  //   },
+  // });
+
   _mocks.push({
     request: {
       query: DELETE_FEEDBACK,
       variables: {
         feedbackId: "12274a23-4932-49b6-9eec-ae7f9f6b804d",
-        update: {
-          status: "deleted",
-        },
       },
     },
     result: {
       data: {
-        updateFeedbackQuestionById: {
-          _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
-          user_id: "e36871a1-9628-4e31-ad44-dd918ee84d83",
-          org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
-          session_no: 1,
-          question: "test1",
-          answer_type: "list",
-          status: "deleted",
-          created_date: "2022-07-09T15:39:07.173Z",
-          answer_options: ["a", "b", "c", "d"],
-          feedback_type: "session",
-          organization_name: "dev-myhelp",
+        deleteTherapistSafetyPlanQs: {
+          result: true,
+          __typename: "result",
         },
       },
     },
@@ -217,9 +447,11 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <SnackbarProvider>
-        <Feedback />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme}>
+        <SnackbarProvider>
+          <Feedback />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>
@@ -247,12 +479,12 @@ describe("Admin feedback page", () => {
     await sut();
     expect(screen.queryByTestId("tableId")).toBeInTheDocument();
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
     expect(
       screen.queryByTestId("tableColumn_organization_name")
     ).toBeInTheDocument();
-    expect(screen.queryByTestId("tableColumn_question")).toBeInTheDocument();
+    // expect(screen.queryByTestId("tableColumn_question")).toBeInTheDocument();
     expect(
       screen.queryByTestId("tableColumn_feedback_type")
     ).toBeInTheDocument();
@@ -298,25 +530,24 @@ describe("Admin feedback page", () => {
     });
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
   });
 
   test("Click Delete icon should open Delete feedback popup", async () => {
     await sut();
-    fireEvent.click(
-      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+    const deleteButton = screen.queryByTestId(
+      "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
     );
-    expect(screen.getByText("Delete Question")).toBeInTheDocument();
-  });
-
-  test("Click Delete button should delete data and load list", async () => {
-    await sut();
-    fireEvent.click(
-      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    );
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    fireEvent.click(deleteButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
+    expect(okButton).not.toBeInTheDocument();
   });
 
   test("Click add feedback button with cancel button", async () => {
@@ -333,7 +564,7 @@ describe("Admin feedback page", () => {
     fireEvent.click(screen.queryByTestId("addField"));
     fireEvent.click(screen.queryByTestId("CancelIcon"));
     fireEvent.click(screen.queryByTestId("cancelButton"));
-    expect(screen.queryAllByTestId("table-row").length).toBe(2);
+    expect(screen.queryAllByTestId("table-row").length).toBe(10);
   });
 
   test("Click edit feedback button with saveButton", async () => {
@@ -344,7 +575,7 @@ describe("Admin feedback page", () => {
     expect(screen.getByText("Edit Question")).toBeInTheDocument();
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
   });
 
@@ -356,18 +587,6 @@ describe("Admin feedback page", () => {
     expect(screen.getByText("View Question")).toBeInTheDocument();
     fireEvent.click(screen.queryByTestId("cancelButton"));
     await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
-  });
-
-  test("Click delete feedback button with saveButton", async () => {
-    await sut();
-    fireEvent.click(
-      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    );
-    expect(screen.getByText("Delete Question")).toBeInTheDocument();
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
-    );
   });
 
   test("Click edit feedback button with cancelButton", async () => {
@@ -382,12 +601,16 @@ describe("Admin feedback page", () => {
 
   test("Click delete feedback button with cancelButton", async () => {
     await sut();
-    fireEvent.click(
-      screen.queryByTestId("deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+
+    const deleteButton = screen.queryByTestId(
+      "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
     );
-    expect(screen.getByText("Delete Question")).toBeInTheDocument();
-    fireEvent.click(screen.queryByTestId("cancelButton"));
-    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
+    fireEvent.click(deleteButton);
+    const cancelButton = await screen.findByRole("button", {
+      name: "Cancel",
+    });
+    fireEvent.click(cancelButton);
+    expect(cancelButton).not.toBeInTheDocument();
   });
 
   test("Click add feedback button with data", async () => {
@@ -418,7 +641,30 @@ describe("Admin feedback page", () => {
     });
     fireEvent.submit(screen.queryByTestId("saveButton"));
     await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(2)
+      expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
+  });
+
+  test("Click table next and previous button", async () => {
+    await sut();
+
+    const tableNextButton = screen.getByRole("button", {
+      name: /Next Page/i,
+    });
+    fireEvent.click(tableNextButton);
+    expect(
+      await screen.findByTestId(
+        "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d-next"
+      )
+    ).toBeInTheDocument();
+    const previousNextButton = screen.getByRole("button", {
+      name: /Previous Page/i,
+    });
+    fireEvent.click(previousNextButton);
+    expect(
+      await screen.findByTestId(
+        "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
+      )
+    ).toBeInTheDocument();
   });
 });
