@@ -45,8 +45,8 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
-  const styles = useStyles();
   const router = useRouter();
+  const styles = useStyles();
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
