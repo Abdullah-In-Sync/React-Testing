@@ -65,6 +65,30 @@ mocksData.push({
             answer: null,
             __typename: "FeedbackQuestions",
           },
+          {
+            _id: "f7a7d060-869c-4da8-acd3-1318a82dffb5-text",
+            answer_options: null,
+            answer_type: "text",
+            created_date: "2023-02-02T10:19:22.637Z",
+            feedback_id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
+            question: "test1",
+            status: "active",
+            updated_date: "2023-02-02T10:19:22.637Z",
+            answer: "answer text string",
+            __typename: "FeedbackQuestions",
+          },
+          {
+            _id: "3f58209d-2bf4-4bf7-a260-da64da8d23f3-list",
+            answer_options: "Test-list1,test-list2",
+            answer_type: "list",
+            created_date: "2023-02-10T05:16:44.425Z",
+            feedback_id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
+            question: "sdfdsf",
+            status: "active",
+            updated_date: "2023-02-10T05:16:44.425Z",
+            answer: null,
+            __typename: "FeedbackQuestions",
+          },
         ],
         __typename: "Feedback",
       },
@@ -85,7 +109,7 @@ const sut = async () => {
 };
 
 describe("Admin safety plan list", () => {
-  it("should render admin safety plan list with filter data", async () => {
+  it("should render admin feedback list data", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
@@ -93,7 +117,7 @@ describe("Admin safety plan list", () => {
       push: pushMock,
     });
     await sut();
-    const test2Text = await screen.findByText(/test2/i);
+    const test2Text = await screen.findByText(/test-list2/i);
     expect(test2Text).toBeInTheDocument();
   });
 });
