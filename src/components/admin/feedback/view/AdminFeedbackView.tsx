@@ -14,9 +14,14 @@ import * as feedbackInterface from "./types";
 interface ViewProps {
   data?: feedbackInterface.ViewFeedbackByAdmin;
   handleGoBack?: () => void;
+  loadingView?: any;
 }
 
-const AdminFeedbackView: React.FC<ViewProps> = ({ data, handleGoBack }) => {
+const AdminFeedbackView: React.FC<ViewProps> = ({
+  data,
+  handleGoBack,
+  loadingView,
+}) => {
   const styles = useStyles();
   const {
     organization_name,
@@ -146,16 +151,31 @@ const AdminFeedbackView: React.FC<ViewProps> = ({ data, handleGoBack }) => {
     );
   };
 
-  if (!data) return null;
+  const infoBox = (message) => {
+    return (
+      <Box className="infoMessageBoxWrapper">
+        <Typography>{message}</Typography>
+      </Box>
+    );
+  };
 
-  return (
-    <Stack className={styles.adminFeedbackViewWrapper}>
-      <BreadCrumbsWithBackButton heading={name} backButtonClick={handleGoBack}>
+  const viewSection = () => {
+    if (loadingView) return infoBox("Loading...");
+    else if (data)
+      return (
         <Stack className="sectionsWrapper disbledFields">
           {headerSection()}
           {instructionSection()}
           {questionsSection()}
         </Stack>
+      );
+    else return infoBox("No data found.");
+  };
+
+  return (
+    <Stack className={styles.adminFeedbackViewWrapper}>
+      <BreadCrumbsWithBackButton heading={name} backButtonClick={handleGoBack}>
+        {viewSection()}
       </BreadCrumbsWithBackButton>
     </Stack>
   );

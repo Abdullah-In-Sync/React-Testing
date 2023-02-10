@@ -3,6 +3,9 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   adminFeedbackViewWrapper: {
+    "& .infoMessageBoxWrapper": {
+      textAlign: "center",
+    },
     "& .sectionsWrapper": {
       padding: "1rem",
     },

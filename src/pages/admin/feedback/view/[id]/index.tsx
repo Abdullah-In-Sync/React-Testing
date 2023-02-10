@@ -1,5 +1,3 @@
-//import { GET_ADMIN_FEEDBACK_LIST, GET_ORG_DATA, VIEW_FEEDBACK_BY_ID } from "../../../graphql/query";
-
 import { useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -50,11 +48,11 @@ const FeedbackView = () => {
         <Loader visible={loader} />
         <ContentHeader title="View Feedback" />
         {/* <ViewSafetyPlan viewData={viewData} /> */}
-        {loadingView ? (
-          "Loading..."
-        ) : (
-          <AdminFeedbackView data={viewData} handleGoBack={handleGoBack} />
-        )}
+        <AdminFeedbackView
+          data={viewData}
+          handleGoBack={handleGoBack}
+          loadingView={loadingView}
+        />
       </Layout>
     </>
   );
