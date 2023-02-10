@@ -49,7 +49,11 @@ const CardWithHeader = (props: propTypes) => {
           )}
         </Toolbar>
       </AppBar>
-      <Box className={activeBoxBorder ? `active-border` : ""}>{children}</Box>
+      <Box
+        className={activeBoxBorder ? `header-box active-border` : "header-box"}
+      >
+        {children}
+      </Box>
     </div>
   );
 };
