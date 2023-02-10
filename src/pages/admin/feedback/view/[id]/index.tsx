@@ -37,7 +37,6 @@ const FeedbackView = () => {
     setLoader(false);
   }, []);
 
-  /* istanbul ignore next */
   const handleGoBack = () => {
     router.back();
   };

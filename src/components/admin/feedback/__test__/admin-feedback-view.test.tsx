@@ -1,6 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import { useRouter } from "next/router";
@@ -89,6 +89,18 @@ mocksData.push({
             answer: null,
             __typename: "FeedbackQuestions",
           },
+          {
+            _id: "3f58209d-2bf4-4bf7-a260-da64da8d23f3-list",
+            answer_options: "Test-list1,test-list2",
+            answer_type: "",
+            created_date: "2023-02-10T05:16:44.425Z",
+            feedback_id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
+            question: "sdfdsf",
+            status: "active",
+            updated_date: "2023-02-10T05:16:44.425Z",
+            answer: null,
+            __typename: "FeedbackQuestions",
+          },
         ],
         __typename: "Feedback",
       },
@@ -109,15 +121,21 @@ const sut = async () => {
 };
 
 describe("Admin safety plan list", () => {
+  (useRouter as jest.Mock).mockReturnValue({
+    query: {
+      id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
+    },
+    back: pushMock,
+  });
   it("should render admin feedback list data", async () => {
-    (useRouter as jest.Mock).mockReturnValue({
-      query: {
-        id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
-      },
-      push: pushMock,
-    });
     await sut();
     const test2Text = await screen.findByText(/test-list2/i);
     expect(test2Text).toBeInTheDocument();
+  });
+  it("should back button click", async () => {
+    await sut();
+    const backButton = await screen.findByTestId("backButton");
+    fireEvent.click(backButton);
+    expect(pushMock).toHaveBeenCalled();
   });
 });
