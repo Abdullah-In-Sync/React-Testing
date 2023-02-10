@@ -373,6 +373,7 @@ const Feedback: NextPage = () => {
   };
   /* istanbul ignore next */
   const handleView = (id) => {
+    /* istanbul ignore next */
     router.push(`/admin/feedback/view/${id}`);
   };
   const changePage = (url: any) => {
