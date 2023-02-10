@@ -502,15 +502,6 @@ describe("Admin feedback page", () => {
     expect(screen.queryByTestId("bootstrapModal")).toBeVisible();
   });
 
-  test("Click view icon should open view feedback popup", async () => {
-    await sut();
-    fireEvent.click(
-      screen.queryByTestId("viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    );
-    // Check that the dialog is open.
-    expect(screen.getByText("View Question")).toBeInTheDocument();
-  });
-
   test("Click Edit icon should open Edit feedback popup", async () => {
     await sut();
     fireEvent.click(
@@ -577,16 +568,6 @@ describe("Admin feedback page", () => {
     await waitFor(() =>
       expect(screen.queryAllByTestId("table-row").length).toBe(10)
     );
-  });
-
-  test("Click view feedback button with cancelButton", async () => {
-    await sut();
-    fireEvent.click(
-      screen.queryByTestId("viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    );
-    expect(screen.getByText("View Question")).toBeInTheDocument();
-    fireEvent.click(screen.queryByTestId("cancelButton"));
-    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
   });
 
   test("Click edit feedback button with cancelButton", async () => {

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import Loader from "../../../components/common/Loader";
+import { useRouter } from "next/router";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
@@ -44,6 +45,7 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
+  const router = useRouter();
   const styles = useStyles();
   // COMPONENT STATE
   const [addModal, setAddModal] = useState<boolean>(false);
@@ -371,10 +373,7 @@ const Feedback: NextPage = () => {
   };
   /* istanbul ignore next */
   const handleView = (id) => {
-    /* istanbul ignore else */
-    const val = dataList.filter((x) => x._id === id);
-    setSelectedUserData(val);
-    setViewModal(true);
+    router.push(`/admin/feedback/view/${id}`);
   };
   const changePage = (url: any) => {
     /* istanbul ignore next */
