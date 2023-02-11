@@ -43,9 +43,10 @@ const CreateFeedbackPage: NextPage = () => {
     getOrgList,
     { data: { getOrganizationData: organizationList = [] } = {} },
   ] = useLazyQuery(GET_ORGANIZATION_LIST, {
-    onCompleted: () => {
+    onCompleted: (data) => {
       /* istanbul ignore next */
       setLoader(false);
+      console.debug(data,'data');
     },
   });
 

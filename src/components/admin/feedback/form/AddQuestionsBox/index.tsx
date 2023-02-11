@@ -62,7 +62,7 @@ const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
     else removeBox(i);
   };
 
-  const deleteButton = ({ i, questionId }) => {
+  const deleteButton = ({ i, questionId = undefined }) => {
     return (
       <Fab
         key={`deleteIconButton_${i}`}
@@ -88,7 +88,9 @@ const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
     return (
       <Card key={`questionCard_${i}`} className="questionCard">
         <CardContent>
-          <Box className="deleteButtonWrapper">{deleteButton({ i, _id })}</Box>
+          <Box className="deleteButtonWrapper">
+            {deleteButton({ i, questionId: _id })}
+          </Box>
           <Box key={i} className="questionBoxWrapper">
             <Box>
               <FormikTextField
