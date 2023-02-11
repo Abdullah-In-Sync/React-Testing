@@ -23,16 +23,6 @@ export const useStyles = makeStyles({
   contentWrapper: {
     padding: "15px",
   },
-  scoreDiv: {
-    fontSize: "20px",
-    border: "1px solid #6a9e8c",
-    padding: "10px",
-    color: "#6a9e8c",
-    marginBottom: "15px",
-    fontWeight: "bold",
-    borderRadius: "7px",
-    textAlign: "center",
-  },
   actionButton: {
     backgroundColor: "#d8ecf0",
     color: "#3cacbf",
