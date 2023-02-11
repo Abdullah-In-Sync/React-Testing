@@ -189,7 +189,7 @@ const submitForm = async () => {
   );
   fireEvent.click(arrowButtonUserType);
   const listboxUserType = document.querySelector("#menu-userType");
-  console.debug(listboxUserType.innerHTML);
+  console.debug(listboxUserType);
   
 
   const selectSessionNo = screen.getByTestId("sessionNo");
