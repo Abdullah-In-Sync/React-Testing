@@ -179,31 +179,54 @@ const fillQuestionForm = async () => {
   await fillUpperForm();
 };
 
+const selectDropdownByTestid = async (dropdonwTestid) => {
+  const selectDropdownSelect = await screen.findByTestId(dropdonwTestid);
+  fireEvent.click(selectDropdownSelect);
+  expect(selectDropdownSelect).toBeInTheDocument();
+
+  const buttonSelectDropdown = await within(selectDropdownSelect).findByRole("button");
+  fireEvent.mouseDown(buttonSelectDropdown);
+
+  const listboxSelect = await within(
+    await screen.findByRole("presentation")
+  ).findByRole("listbox");
+  const optionsSelect = await within(
+    listboxSelect
+  ).findAllByRole("option");
+
+  fireEvent.click(optionsSelect[0]);
+
+}
+
 const submitForm = async () => {
   await sut();
 
-  const selectUserType = screen.getByTestId("userType");
-  expect(selectUserType).toBeInTheDocument();
-  const arrowButtonUserType = await within(selectUserType).findByTestId(
-    "ArrowDropDownIcon"
-  );
-  fireEvent.click(arrowButtonUserType);
-  const listboxUserType = document.querySelector("#menu-userType");
-  console.debug(listboxUserType);
+  await selectDropdownByTestid("userType")
+  await fillUpperForm();
+  await selectDropdownByTestid("sessionNo")
+
+  // const selectUserType = screen.getByTestId("userType");
+  // expect(selectUserType).toBeInTheDocument();
+  // const arrowButtonUserType = await within(selectUserType).findByTestId(
+  //   "ArrowDropDownIcon"
+  // );
+  // fireEvent.click(arrowButtonUserType);
+  // const listboxUserType = document.querySelector("#menu-userType");
+  // console.debug(listboxUserType);
   
 
-  const selectSessionNo = screen.getByTestId("sessionNo");
-  expect(selectSessionNo).toBeInTheDocument();
-  const arrowButton = await within(selectSessionNo).findByTestId(
-    "ArrowDropDownIcon"
-  );
-  fireEvent.click(arrowButton);
-  const listboxsection = await screen.findAllByRole("presentation");
-  const listboxSessionNo = within(listboxsection[1]).getByRole("listbox");
-  const optionsSessionNo = within(listboxSessionNo).getAllByRole("option");
-  fireEvent.click(optionsSessionNo[1]);
+  // const selectSessionNo = screen.getByTestId("sessionNo");
+  // expect(selectSessionNo).toBeInTheDocument();
+  // const arrowButton = await within(selectSessionNo).findByTestId(
+  //   "ArrowDropDownIcon"
+  // );
+  // fireEvent.click(arrowButton);
+  // const listboxsection = await screen.findAllByRole("presentation");
+  // const listboxSessionNo = within(listboxsection[1]).getByRole("listbox");
+  // const optionsSessionNo = within(listboxSessionNo).getAllByRole("option");
+  // fireEvent.click(optionsSessionNo[1]);
 
-  await fillUpperForm();
+
   // const submitFormButton = await screen.findByTestId("submitForm");
   // fireEvent.click(submitFormButton);
 };
