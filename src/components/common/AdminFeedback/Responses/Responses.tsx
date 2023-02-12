@@ -192,7 +192,7 @@ export default function FeedbackResponses(props: propTypes) {
               placeItems: "center",
             }}
           >
-            {filterFeedbackData[0]?.name}
+            {filterFeedbackData && filterFeedbackData[0]?.name}
           </Typography>
 
           <IconButton
@@ -238,7 +238,8 @@ export default function FeedbackResponses(props: propTypes) {
               }}
             >
               <Typography style={{ fontSize: "16px", marginRight: 10 }}>
-                Session {filterFeedbackData[0]?.session_no}
+                Session{" "}
+                {filterFeedbackData && filterFeedbackData[0]?.session_no}
               </Typography>
             </Grid>
 
@@ -257,7 +258,7 @@ export default function FeedbackResponses(props: propTypes) {
               }}
             >
               <Typography style={{ fontSize: "16px", marginRight: 10 }}>
-                {filterFeedbackData[0]?.org_detail.name}
+                {filterFeedbackData && filterFeedbackData[0]?.org_detail.name}
               </Typography>
             </Grid>
             <Grid item xs={4}>
@@ -275,7 +276,7 @@ export default function FeedbackResponses(props: propTypes) {
               }}
             >
               <Typography style={{ fontSize: "16px", marginRight: 10 }}>
-                {filterFeedbackData[0]?.user_type}
+                {filterFeedbackData && filterFeedbackData[0]?.user_type}
               </Typography>
             </Grid>
           </Grid>

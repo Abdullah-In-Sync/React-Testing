@@ -54,6 +54,7 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
         name
         feedback_type
         description
+        session_no
         org_detail {
           _id
           name
