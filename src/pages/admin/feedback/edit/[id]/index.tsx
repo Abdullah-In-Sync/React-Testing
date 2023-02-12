@@ -72,7 +72,6 @@ const EditFeedbackPage: NextPage = () => {
   }, []);
 
   const submitForm = async (formFields: FeedbackFormData, doneCallback) => {
-    console.log(formFields, "formFields");
     const variables: EditFeedbackByAdminVars = {
       feedbackId: viewFeedbackByAdmin?._id,
       feedBackName: formFields.feedBackName,
