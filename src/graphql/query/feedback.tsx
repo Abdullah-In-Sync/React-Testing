@@ -32,6 +32,64 @@ export const GET_ADMIN_FEEDBACK_LIST = gql`
   }
 `;
 
+export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
+  query adminViewResponseByFeedbackId(
+    $feedbackId: String!
+    $endDate: String
+    $startDate: String
+    $pageNo: Int!
+    $limit: Int!
+  ) {
+    adminViewResponseByFeedbackId(
+      feedbackId: $feedbackId
+      endDate: $endDate
+      startDate: $startDate
+      pageNo: $pageNo
+      limit: $limit
+    ) {
+      feedbackdata {
+        _id
+        user_type
+        created_date
+        name
+        feedback_type
+        description
+        org_detail {
+          _id
+          name
+        }
+      }
+      feedbackresponse {
+        _id
+        answer
+        feedbackquestion {
+          _id
+          answer_type
+        }
+        patient_detail {
+          _id
+          created_date
+          hos_id
+          org_id
+          patient_firstname
+          patient_gender
+          patient_lastname
+        }
+        therapist_detail {
+          org_id
+          therapist_name
+        }
+        therapist_id
+        therapy_detail {
+          _id
+          created_date
+          therapy_name
+        }
+      }
+    }
+  }
+`;
+
 export const GET_FEEDBACK_BY_ID = gql`
   query GetAdminFeedbackById($feedbackId: String!) {
     getFeedbackQuestionById(feedbackId: $feedbackId) {

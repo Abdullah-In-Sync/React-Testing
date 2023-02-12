@@ -97,12 +97,13 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                               style={{
                                 backgroundColor: "#fff",
                                 width: "unset",
+                                marginRight: "10px",
                               }}
                               onClick={(e) =>
                                 safetyPlanList.onPressEditPlan(e, v)
                               }
                             >
-                              <CreateIcon />
+                              <CreateIcon style={{ fontSize: "15px" }} />
                             </IconButton>
                           )}
 
@@ -112,10 +113,11 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                             style={{
                               backgroundColor: "#fff",
                               width: "unset",
+                              marginRight: "10px",
                             }}
                             onClick={() => safetyPlanList.onPressDeletePlan(v)}
                           >
-                            <DeleteIcon />
+                            <DeleteIcon style={{ fontSize: "15px" }} />
                           </IconButton>
                           <IconButton
                             size="small"
@@ -123,10 +125,11 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                             style={{
                               backgroundColor: "#fff",
                               width: "unset",
+                              marginRight: "10px",
                             }}
                             onClick={() => safetyPlanList.onPressSharePlan(v)}
                           >
-                            <ShareIcon />
+                            <ShareIcon style={{ fontSize: "15px" }} />
                           </IconButton>
                         </Box>
                       </>
