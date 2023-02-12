@@ -46,7 +46,7 @@ const CreateFeedbackPage: NextPage = () => {
     onCompleted: (data) => {
       /* istanbul ignore next */
       setLoader(false);
-      console.debug(data,'data');
+      console.debug(data, "data");
     },
   });
 
@@ -54,10 +54,7 @@ const CreateFeedbackPage: NextPage = () => {
     getOrgList();
   }, []);
 
-  const submitForm = async (
-    formFields: FeedbackFormData,
-    doneCallback
-  ) => {
+  const submitForm = async (formFields: FeedbackFormData, doneCallback) => {
     const variables = {
       ...formFields,
       feedQuesData: JSON.stringify(formFields.questions),

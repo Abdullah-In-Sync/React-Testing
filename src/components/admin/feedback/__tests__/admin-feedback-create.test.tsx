@@ -1,12 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
@@ -188,9 +182,6 @@ const submitForm = async () => {
     "ArrowDropDownIcon"
   );
   fireEvent.click(arrowButtonUserType);
-  const listboxUserType = document.querySelector("#menu-userType");
-  console.debug(listboxUserType);
-  
 
   const selectSessionNo = screen.getByTestId("sessionNo");
   expect(selectSessionNo).toBeInTheDocument();

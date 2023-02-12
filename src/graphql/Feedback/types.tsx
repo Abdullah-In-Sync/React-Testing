@@ -65,4 +65,3 @@ export interface EditFeedbackByAdminVars {
 export interface EditFeedbackByAdminRes {
   editFeedbackByAdmin: ViewFeedbackByAdmin;
 }
-

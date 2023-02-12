@@ -95,4 +95,3 @@ export const GET_THERAPISTFEEDBACKLIST_DATA = gql`
     }
   }
 `;
-

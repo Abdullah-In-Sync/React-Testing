@@ -9,14 +9,8 @@ import {
 } from "../../../../graphql/Feedback/graphql";
 
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import {
-  DELETE_SAFETY_PLAN_QUESTION,
-  GET_SAFETY_PLAN_BY_ID,
-  UPDATE_SAFETY_PLAN,
-} from "../../../../graphql/SafetyPlan/graphql";
+import { DELETE_SAFETY_PLAN_QUESTION } from "../../../../graphql/SafetyPlan/graphql";
 import EditFeedbackPage from "../../../../pages/admin/feedback/edit/[id]";
-
-import EditSafetyPlanPage from "../../../../pages/admin/safetyPlan/edit/[id]";
 
 import theme from "../../../../styles/theme/theme";
 const pushMock = jest.fn();

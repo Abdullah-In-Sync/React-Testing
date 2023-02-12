@@ -77,7 +77,7 @@ export const EDIT_FEEDBACK_BY_ADMIN = gql`
       feedbackId: $feedbackId
       feedBackName: $feedBackName
       feedQuesData: $feedQuesData
-    ){
+    ) {
       _id
     }
   }
