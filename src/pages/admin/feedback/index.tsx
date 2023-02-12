@@ -8,12 +8,8 @@ import { useRouter } from "next/router";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  ADD_FEEDBACK,
-  DELETE_FEEDBACK,
-  UPDATE_FEEDBACK,
-} from "../../../graphql/mutation";
-import { GET_ADMIN_FEEDBACK_LIST, GET_ORG_DATA } from "../../../graphql/query";
+import { DELETE_FEEDBACK } from "../../../graphql/mutation";
+import { GET_ADMIN_FEEDBACK_LIST } from "../../../graphql/query";
 
 // MUI COMPONENTS
 import CreateIcon from "@mui/icons-material/Create";
@@ -21,11 +17,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ReplyIcon from "@mui/icons-material/Reply";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, IconButton, Tooltip } from "@mui/material";
-import DynamicForm from "../../../components/admin/feedback/DynamicForm";
 import { useStyles } from "../../../components/admin/feedback/feedbackStyles";
 import { AddButton } from "../../../components/common/Buttons";
 import ContentHeader from "../../../components/common/ContentHeader";
-import CrudDialog from "../../../components/common/CrudDialog";
 import Layout from "../../../components/layout";
 import withAuthentication from "../../../hoc/auth";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
@@ -47,16 +41,6 @@ const crudButtons = {
 const Feedback: NextPage = () => {
   const router = useRouter();
   const styles = useStyles();
-  // COMPONENT STATE
-  const [addModal, setAddModal] = useState<boolean>(false);
-  const [editModal, setEditModal] = useState<boolean>(false);
-  const [viewModal, setViewModal] = useState<boolean>(false);
-  const [isMutating, setIsMutation] = useState<boolean>(false);
-  const [formValues, setFormValues] = useState<any>([]);
-  const [sessionList, setSessionList] = useState<any>([]);
-  const [dataList, setDataList] = useState<any>([]);
-  const [selectedId, setSelectedId] = useState<any>("");
-  const [selectedUserData, setSelectedUserData] = useState<any>([]);
   const [successModal, setSuccessModal] = useState<any>();
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
@@ -77,9 +61,6 @@ const Feedback: NextPage = () => {
   const [firstPage] = useState<any>(null);
   const [lastPage] = useState<any>(null);
 
-  // GRAPHQL
-  const [addFeedback] = useMutation(ADD_FEEDBACK);
-  const { data: orgData } = useQuery(GET_ORG_DATA);
   const {
     error: dataListError,
     data: dataListData,
@@ -93,28 +74,15 @@ const Feedback: NextPage = () => {
   //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
 
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
-  const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
 
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    // do some checking here to ensure data exist
     setLoader(true);
-    /* istanbul ignore next */
     if (dataListData || dataListError) {
-      /* istanbul ignore next */
-      setDataList(dataListData?.getFeedbackListByAdmin?.feedbackdata);
       setLoader(false);
     }
   }, [dataListData, dataListError]);
-
-  useEffect(() => {
-    const session = [];
-    for (let i = 1; i <= 50; i++) {
-      session.push({ label: `Session-${i}`, value: i });
-    }
-    setSessionList(session);
-  }, []);
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -208,148 +176,6 @@ const Feedback: NextPage = () => {
     },
   ];
   //ReplyIcon
-  // ADD DIALOG FIELDS
-  const dialogFields = [
-    [
-      {
-        key: "org_id",
-        label: "Organization Name",
-        visible: true,
-        freeSolo: false,
-        show: true,
-        required: true,
-        disabled: viewModal ? true : false,
-        type: "autocomplete",
-        options:
-          orgData?.getOrganizationData?.length > 0
-            ? [
-                ...orgData.getOrganizationData.map((val) => ({
-                  label: val.name,
-                  value: val._id,
-                })),
-              ]
-            : [],
-      },
-      {
-        key: "session_no",
-        label: "Session Name",
-        visible: true,
-        show: true,
-        required: true,
-        disabled: viewModal ? true : false,
-        type: addModal ? "select" : "autocomplete",
-        multiple: true,
-        options: sessionList.length > 0 ? sessionList : [],
-      },
-      {
-        key: "feedback_type",
-        label: "Feedback Type",
-        visible: true,
-        freeSolo: false,
-        show: true,
-        disabled: viewModal || editModal ? true : false,
-        required: true,
-        type: "autocomplete",
-        options: [
-          { label: "Quality", value: "quality" },
-          { label: "Session", value: "session" },
-        ],
-      },
-    ],
-  ];
-  // if (loading) return 'Submitting...';
-  // if (error) return `Submission error! ${error.message}`;
-
-  /* istanbul ignore next */
-  const handleAdd = (val) => {
-    let valid = false;
-    /* istanbul ignore else */
-    if (formValues.length === 0) {
-      enqueueSnackbar("Please fill the all fields", { variant: "error" });
-      return null;
-    } else {
-      formValues.map((x) => {
-        if (!x.question || !x.answer_type) {
-          enqueueSnackbar("Please fill the all fields", { variant: "error" });
-          return (valid = false);
-        } else if (x.answer_type == "list" && x.answer_options.length < 2) {
-          enqueueSnackbar("Please enter a minimum of 2 values for the list", {
-            variant: "error",
-          });
-          return (valid = false);
-        } else {
-          return (valid = true);
-        }
-      });
-    }
-    /* istanbul ignore next */
-    if (valid) {
-      setLoader(true);
-      setIsMutation(true);
-      /* istanbul ignore next */
-      const data = formValues.map((x) => ({
-        ...x,
-        ...val,
-      }));
-
-      const dataJson = JSON.stringify(data);
-      /* istanbul ignore else */
-      addFeedback({
-        variables: { feedQuesData: dataJson },
-        onCompleted: () => {
-          refetch();
-          setLoader(false);
-          setAddModal(false);
-          setIsMutation(false);
-          enqueueSnackbar("Feedback added successfully", {
-            variant: "success",
-          });
-        },
-      });
-    }
-  };
-
-  const handleFormValues = (val) => {
-    setFormValues(val);
-  };
-
-  /* istanbul ignore next */
-  const handleEdit = async (val) => {
-    /* istanbul ignore else */
-    setIsMutation(true);
-    const data = formValues.map((x) => ({
-      question: x.question,
-      answer_type: x.answer_type,
-      answer_options: JSON.stringify(x.answer_options),
-      ...val,
-    }));
-
-    try {
-      await updateFeedback({
-        variables: {
-          feedbackId: selectedId,
-          update: data[0],
-        },
-        onCompleted: () => {
-          refetch();
-          setEditModal(false);
-          setIsMutation(false);
-          enqueueSnackbar("Updated data successfully!", { variant: "success" });
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  /* istanbul ignore next */
-  const handleViewEdit = (id) => {
-    /* istanbul ignore else */
-    const val = dataList.filter((x) => x._id === id);
-    setSelectedUserData(val);
-    setEditModal(true);
-  };
-
   /* istanbul ignore next */
   const handleDelete = async (id, callback) => {
     /* istanbul ignore else */
@@ -458,62 +284,6 @@ const Feedback: NextPage = () => {
             dataCount={dataListData?.getFeedbackListByAdmin?.totalcount}
             selectedRecords={[]}
             rowOnePage={rowsPerPage}
-          />
-          <CrudDialog
-            title="Create Questionnaire"
-            okText="Save"
-            fields={dialogFields}
-            submitButtonDisabled={isMutating}
-            description="Please fill in the details below."
-            onsubmit={(values) => {
-              handleAdd(values);
-            }}
-            dynamicForm={
-              <DynamicForm
-                buttonText="Add Question"
-                callBackFormValues={handleFormValues}
-              />
-            }
-            open={addModal}
-            onClose={() => {
-              setAddModal(false);
-              setFormValues([]);
-            }}
-          />
-
-          <CrudDialog
-            title="Edit Question"
-            okText="Update"
-            fields={dialogFields}
-            values={selectedUserData[0]}
-            submitButtonDisabled={isMutating}
-            // onFieldChange={(_, images) => {
-            //     debugger
-            //     //   handlUploadImages(images);
-            // }}
-            onsubmit={(values) => {
-              handleEdit(values);
-            }}
-            dynamicForm={
-              <DynamicForm
-                callBackFormValues={handleFormValues}
-                values={selectedUserData[0]}
-              />
-            }
-            open={editModal}
-            onClose={() => setEditModal(false)}
-          />
-
-          <CrudDialog
-            title="View Question"
-            viewData={true}
-            fields={dialogFields}
-            values={selectedUserData[0]}
-            dynamicForm={
-              <DynamicForm type="view" values={selectedUserData[0]} />
-            }
-            open={viewModal}
-            onClose={() => setViewModal(false)}
           />
         </Box>
         {isConfirm.status && (
