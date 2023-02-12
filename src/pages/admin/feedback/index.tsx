@@ -187,8 +187,7 @@ const Feedback: NextPage = () => {
             size="small"
             data-testid={"editIcon_" + value._id}
             onClick={() => {
-              handleViewEdit(value._id);
-              setSelectedId(value._id);
+              router.push("/admin/feedback/edit/" + value._id);
             }}
           >
             <CreateIcon />
@@ -429,8 +428,8 @@ const Feedback: NextPage = () => {
         <Box sx={crudButtons}>
           <AddButton
             className="mr-3"
-            label="Create Questionnaire"
-            onClick={() => setAddModal(true)}
+            label="Create Feedback"
+            onClick={() => router.push("/admin/feedback/create")}
           />
         </Box>
         <Box className={styles.adminFeedbackTable}>

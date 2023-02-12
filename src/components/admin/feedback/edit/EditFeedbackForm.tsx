@@ -31,7 +31,7 @@ const EditFeedbackForm: React.FC<ViewProps> = ({
       feedQuesData: "",
       questions: feedback?.questions,
       visiBility: feedback?.visibility,
-      userType: feedback?.user_type,
+      userType: feedback?.feedback_type,
       sessionNo: feedback?.session_no,
       orgId: feedback?.org_id,
     };
