@@ -1,4 +1,5 @@
-export interface CreateFeedbackFormData {
+export interface FeedbackFormData {
+  _id?: string;
   feedBackName: string;
   orgId: string;
   userType: string;
@@ -13,6 +14,6 @@ export interface FeedbackQuestion {
   _id?: string;
   question: string;
   answer_type: string;
-  answer_options?: Array<any>;
+  answer_options?: string;
   status?: string;
 }

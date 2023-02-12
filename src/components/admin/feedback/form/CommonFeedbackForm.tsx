@@ -13,13 +13,13 @@ import AddQuestionsBox from "./AddQuestionsBox";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { useStyles } from "./CreateFeedbackSyles";
-import { CreateFeedbackFormData } from "./types";
+import { FeedbackFormData } from "./types";
 
 interface ViewProps {
   organizationList?: Array<{
     [key: string]: any;
   }>;
-  formikProps: FormikProps<CreateFeedbackFormData>;
+  formikProps: FormikProps<FeedbackFormData>;
   onPressCancel?: () => void;
   handleDeleteQuestion?: (v) => void;
 }
@@ -121,7 +121,10 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
                     mappingKeys={["_id", "name"]}
                     size="small"
                     className="form-control-bg multiSelect"
-                    extraProps={{ "data-testid": "organizationSelect" }}
+                    extraProps={{
+                      "data-testid": "organizationSelect",
+                      disabled: values?._id != undefined,
+                    }}
                     multiSelect={csvDecode(values.orgId)}
                   />
                 </Box>
@@ -136,7 +139,10 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
                     mappingKeys={["id", "value"]}
                     size="small"
                     className="form-control-bg"
-                    extraProps={{ "data-testid": "userType" }}
+                    extraProps={{
+                      "data-testid": "userType",
+                      disabled: values?._id != undefined,
+                    }}
                   />
                 </Box>
                 <Box>
@@ -155,7 +161,10 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
                     mappingKeys={["id", "value"]}
                     size="small"
                     className="form-control-bg multiSelect"
-                    extraProps={{ "data-testid": "sessionNo" }}
+                    extraProps={{
+                      "data-testid": "sessionNo",
+                      disabled: values?._id != undefined,
+                    }}
                     multiSelect={csvDecode(values.sessionNo)}
                   />
                 </Box>
@@ -165,6 +174,7 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
               {formikProps?.values?.userType === "therapist" && (
                 <Box>
                   <FormControlLabel
+                    disabled={values?._id != undefined}
                     control={
                       <Switch
                         value={formikProps.values?.visiBility}
@@ -208,7 +218,7 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
                   variant="contained"
                   disabled={isSubmitting}
                 >
-                  Save
+                  {values?._id ? "Update" : "Save"}
                 </Button>
               </Box>
               <Box>
