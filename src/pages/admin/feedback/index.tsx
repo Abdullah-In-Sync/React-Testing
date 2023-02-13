@@ -254,6 +254,7 @@ const Feedback: NextPage = () => {
         <Box sx={crudButtons}>
           <AddButton
             className="mr-3"
+            data-testid={"create-feedback"}
             label="Create Feedback"
             onClick={() => router.push("/admin/feedback/create")}
           />
