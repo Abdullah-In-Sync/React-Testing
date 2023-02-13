@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import Loader from "../../../components/common/Loader";
 import { useRouter } from "next/router";
+import NextLink from "next/link";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
@@ -201,9 +202,12 @@ const Feedback: NextPage = () => {
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton size="small" onClick={() => null}>
-            <ReplyIcon data-testid={"resplyIcon_" + value._id} />
-          </IconButton>
+
+          <NextLink href={"/admin/feedback/responses/" + value._id} passHref>
+            <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+              <ReplyIcon />
+            </IconButton>
+          </NextLink>
         </>
       ),
     },
