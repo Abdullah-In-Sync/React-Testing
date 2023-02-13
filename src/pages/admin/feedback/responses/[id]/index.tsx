@@ -71,7 +71,7 @@ const AdminFeedbackResponses = () => {
   };
 
   const userType =
-    resData?.adminViewResponseByFeedbackId?.feedbackdata[0]?.user_type;
+    resData?.adminViewResponseByFeedbackId?.feedbackdata[0]?.feedback_type;
 
   return (
     <>
@@ -82,7 +82,7 @@ const AdminFeedbackResponses = () => {
           data-testid="config-setting-header"
           title={`${
             userType?.charAt(0).toUpperCase() + userType?.slice(1)
-          } Responses`}
+          } Response`}
         />
 
         <FeedbackResponses
