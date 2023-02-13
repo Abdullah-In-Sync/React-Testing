@@ -16,13 +16,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
       "& .MuiBox-root": {
         paddingRight: "1.5rem",
         display: "flex",
+        alignItems: "center",
       },
       "& label": {
         paddingRight: 10,
       },
       "& label p": {
         fontWeight: 600,
-        fontSize: "1.2em",
+        fontSize: "1.1em",
       },
     },
 
