@@ -56,6 +56,7 @@ export default function MultiSelectComponent(props: propTypes) {
       <Select
         labelId={props.labelId}
         id={props.id}
+        data-testid={props.id}
         name={props.name}
         value={props.multiSelect}
         label={props.label}
