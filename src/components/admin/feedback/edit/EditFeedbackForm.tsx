@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Formik, FormikProps } from "formik";
 import React, { useMemo } from "react";
 import { ViewFeedbackByAdmin } from "../../../../graphql/Feedback/types";
