@@ -518,7 +518,9 @@ describe("Admin feedback page", () => {
   test("Click view icon should open view feedback page", async () => {
     await sut();
     fireEvent.click(
-      screen.queryByTestId("viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+      screen.queryAllByTestId(
+        "viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
+      )[0]
     );
     expect(mockRouter.push).toBeCalledWith(
       "/admin/feedback/view/12274a23-4932-49b6-9eec-ae7f9f6b804d"
