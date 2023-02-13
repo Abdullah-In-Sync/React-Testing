@@ -1,6 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
@@ -149,14 +149,7 @@ const fillUpperForm = async () => {
 //     target: { value: "test" },
 //   });
 
-//   const firstDescriptionInput = screen.getByTestId("questions.0.description");
-//   fireEvent.change(firstDescriptionInput, {
-//     target: { value: "test des" },
-//   });
-
-//   const firstQuestionTypeSelect = screen.getByTestId(
-//     "questions.0.questionType"
-//   );
+//   const firstQuestionTypeSelect = screen.getByTestId("questions.0.answer_type");
 //   fireEvent.click(firstQuestionTypeSelect);
 //   expect(firstQuestionTypeSelect).toBeInTheDocument();
 
@@ -177,8 +170,29 @@ const fillUpperForm = async () => {
 //   await fillUpperForm();
 // };
 
+const selectDropdownByTestid = async (dropdonwTestid) => {
+  const selectDropdownSelect = await screen.findByTestId(dropdonwTestid);
+  fireEvent.click(selectDropdownSelect);
+  expect(selectDropdownSelect).toBeInTheDocument();
+
+  const buttonSelectDropdown = await within(selectDropdownSelect).findByRole(
+    "button"
+  );
+  fireEvent.mouseDown(buttonSelectDropdown);
+
+  const listboxSelect = await within(
+    await screen.findByRole("presentation")
+  ).findByRole("listbox");
+  const optionsSelect = await within(listboxSelect).findAllByRole("option");
+
+  fireEvent.click(optionsSelect[0]);
+};
+
 const submitForm = async () => {
   await sut();
+  await selectDropdownByTestid("userType");
+  await fillUpperForm();
+  await selectDropdownByTestid("sessionNo");
 
   // const selectUserType = screen.getByTestId("userType");
   // expect(selectUserType).toBeInTheDocument();
@@ -186,10 +200,22 @@ const submitForm = async () => {
   //   "ArrowDropDownIcon"
   // );
   // fireEvent.click(arrowButtonUserType);
+  // const listboxUserType = document.querySelector("#menu-userType");
+  // console.debug(listboxUserType);
 
-  await fillUpperForm();
-  // const submitFormButton = await screen.findByTestId("submitForm");
-  // fireEvent.click(submitFormButton);
+  // const selectSessionNo = screen.getByTestId("sessionNo");
+  // expect(selectSessionNo).toBeInTheDocument();
+  // const arrowButton = await within(selectSessionNo).findByTestId(
+  //   "ArrowDropDownIcon"
+  // );
+  // fireEvent.click(arrowButton);
+  // const listboxsection = await screen.findAllByRole("presentation");
+  // const listboxSessionNo = within(listboxsection[1]).getByRole("listbox");
+  // const optionsSessionNo = within(listboxSessionNo).getAllByRole("option");
+  // fireEvent.click(optionsSessionNo[1]);
+
+  const submitFormButton = await screen.findByTestId("submitForm");
+  fireEvent.click(submitFormButton);
 };
 
 // const submitFullForm = async () => {
@@ -204,9 +230,7 @@ describe("Admin safety plan list", () => {
   it("should render admin create safety plan page and submit the form", async () => {
     await submitForm();
 
-    // const confirmButton = await screen.findByRole("button", {
-    //   name: "Confirm",
-    // });
+    // const confirmButton = await screen.findByTestId("confirmButton");
     // fireEvent.click(confirmButton);
     // const okButton = await screen.findByTestId("SuccessOkBtn");
     // expect(okButton).toBeInTheDocument();
@@ -225,6 +249,16 @@ describe("Admin safety plan list", () => {
 
     expect(confirmButton).toBeInTheDocument();
   });
+
+  // it("should submit full form data", async () => {
+  //   await submitFullForm();
+  //   const confirmButton = await screen.findByRole("button", {
+  //     name: "Confirm",
+  //   });
+  //   fireEvent.click(confirmButton);
+  //   const okButton = await screen.findByTestId("SuccessOkBtn");
+  //   expect(okButton).toBeInTheDocument();
+  // });
 
   // it("should render admin cancel the submition", async () => {
   //   await submitForm();
