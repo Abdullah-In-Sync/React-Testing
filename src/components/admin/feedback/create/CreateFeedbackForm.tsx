@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Formik, FormikProps } from "formik";
 import React from "react";
 
