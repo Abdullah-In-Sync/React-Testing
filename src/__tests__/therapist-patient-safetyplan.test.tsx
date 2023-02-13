@@ -15,7 +15,10 @@ import {
   GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
   UPDATE_THERAPIST_SAFETY_PLAN,
   GET_THERAPIST_SAFETY_PLAN_LIST,
+  VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+  UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
   DELETE_THERAPIST_SAFETY_PLAN,
+  DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
 } from "../graphql/SafetyPlan/graphql";
 import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 import theme from "../styles/theme/theme";
@@ -59,6 +62,216 @@ mocksData.push({
           __typename: "patientSafetyPlans",
         },
       ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+    },
+  },
+  result: {
+    data: {
+      getSafetyPlanListByPatientId: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+          created_date: "2023-01-23T05:24:08.166Z",
+          description: "Test New Data Text",
+          plan_owner: "admin",
+          name: "Test Plan Data",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_type: "custom",
+          __typename: "patientSafetyPlans",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+    },
+  },
+  result: {
+    data: {
+      getSafetyPlanListByPatientId: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-patient-answer",
+          created_date: "2023-01-23T05:24:08.166Z",
+          description: "Test New Data Text",
+          plan_owner: "admin",
+          name: "Test Plan Data",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_type: "custom",
+          __typename: "patientSafetyPlans",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: null,
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-fail",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: null,
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-patient-answer",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-patient-answer",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: "patient response text",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-fail",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: null,
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd",
+      questions:
+        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+    },
+  },
+  result: {
+    data: {
+      createSafetyPlanQuestions: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      questions:
+        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+    },
+  },
+  result: {
+    data: {
+      createSafetyPlanQuestions: {
+        result: false,
+        __typename: "result",
+      },
     },
   },
 });
@@ -445,6 +658,24 @@ mocksData.push({
     },
   },
 });
+
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      questionId: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e",
+    },
+  },
+  result: {
+    data: {
+      deleteTherapistSafetyPlanQs: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -678,5 +909,172 @@ describe("Therapist patient safety plan", () => {
       });
       expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
     });
+  });
+
+  it("should update plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const saveButton = await screen.findByTestId(
+      "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
+    );
+
+    fireEvent.click(saveButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
+
+  it("should update plan fail", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+    const saveButton = await screen.findByTestId(
+      "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail"
+    );
+
+    fireEvent.click(saveButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const serverError = await screen.findByText(
+      /Server error please try later./i
+    );
+    expect(serverError).toBeInTheDocument();
+  });
+
+  it("should cancel plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const cancelButton = await screen.findByTestId(
+      "cancelForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
+    );
+
+    fireEvent.click(cancelButton);
+    expect(descTextDetail).not.toBeInTheDocument();
+  });
+
+  it("should delete safety plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
+
+    fireEvent.click(deleteButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
+    expect(descTextDetail).not.toBeInTheDocument();
+  });
+
+  it("should add and delete new safety plan question", async () => {
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const addQuestionButton = await screen.findByTestId(
+      "addNewQuestion_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
+    );
+
+    fireEvent.click(addQuestionButton);
+
+    const firstQuestionInput = screen.getByTestId("questions.1.question");
+    fireEvent.change(firstQuestionInput, {
+      target: { value: "text" },
+    });
+
+    const firstDescriptionInput = screen.getByTestId("questions.1.description");
+    fireEvent.change(firstDescriptionInput, {
+      target: { value: "text des" },
+    });
+
+    const firstQuestionTypeSelect = screen.getByTestId(
+      "questions.1.questionType"
+    );
+    fireEvent.click(firstQuestionTypeSelect);
+    expect(firstQuestionTypeSelect).toBeInTheDocument();
+
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_1");
+
+    fireEvent.click(deleteButton);
+    expect(firstQuestionTypeSelect).not.toBeInTheDocument();
+  });
+
+  it("should delete safety plan question fail", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
+    fireEvent.click(deleteButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const serverError = await screen.findByText(
+      /Server error please try later./i
+    );
+    expect(serverError).toBeInTheDocument();
+  });
+
+  it("should load patient reponse", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+
+    const patientResponse = await screen.findByText(/patient response text/i);
+    expect(patientResponse).toBeInTheDocument();
   });
 });

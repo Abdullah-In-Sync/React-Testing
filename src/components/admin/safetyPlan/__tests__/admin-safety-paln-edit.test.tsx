@@ -231,7 +231,7 @@ describe("Admin safety plan list", () => {
     await sut();
     const loadedText = await screen.findByText(/test some/i);
     expect(loadedText).toBeInTheDocument();
-    const deleteIconButton = await screen.findByTestId("iconButton_0");
+    const deleteIconButton = await screen.findByTestId("iconButtonQuestion_0");
     fireEvent.click(deleteIconButton);
     const confirmButton = await screen.findByRole("button", {
       name: "Confirm",

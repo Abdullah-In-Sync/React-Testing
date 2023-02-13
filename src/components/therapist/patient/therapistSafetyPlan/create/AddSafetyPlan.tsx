@@ -34,6 +34,7 @@ const AddPlanForm: React.FC<ViewProps> = ({
   };
 
   const onChangePlanId = (value) => {
+    /* istanbul ignore next */
     receivePlanId(value);
   };
 

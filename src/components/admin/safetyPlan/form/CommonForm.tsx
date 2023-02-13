@@ -129,6 +129,7 @@ const CommonForm: React.FC<ViewProps> = ({
               </Box>
             </Box>
             <AddQuestionsBox
+              isEditable={true}
               formikProps={formikProps}
               handleDeleteQuestion={handleDeleteQuestion}
               ref={questionFieldscRef}
