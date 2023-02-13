@@ -122,7 +122,7 @@ export default function FeedbackResponses(props: propTypes) {
     <>
       <Box data-testid="abcd">
         <Grid container spacing={2} marginBottom={5} paddingTop={2}>
-          <Grid style={{ alignSelf: "stretch" }} item xs={4}>
+          <Grid style={{ alignSelf: "stretch" }} item xs={6}>
             <Button
               className="nextButton"
               data-testid="backButton"
@@ -133,7 +133,7 @@ export default function FeedbackResponses(props: propTypes) {
               Back
             </Button>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Stack spacing={1}>
                 <DatePicker
@@ -152,7 +152,7 @@ export default function FeedbackResponses(props: propTypes) {
               </Stack>
             </LocalizationProvider>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Stack spacing={1}>
                 <DatePicker
