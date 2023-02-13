@@ -16,7 +16,7 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
-  submitForm?: (
+  submitQustionForm?: (
     formData: InitialFormValues,
     formikHelper: FormikProps<InitialFormValues>
   ) => void;
@@ -25,6 +25,9 @@ interface ViewProps {
   onPressCreatePlan?: (e?: any, v?: any) => void;
   onPressSharePlan?: (v) => void;
   onPressAddPlan?: () => void;
+  fetchPlanData?: (v) => void;
+  planData?: object[];
+  handleDeleteQuestion?: (v) => void;
   onPressDeletePlan?: (v) => void;
 }
 
@@ -37,6 +40,10 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
   onPressCreatePlan,
   onPressSharePlan,
   onPressAddPlan,
+  submitQustionForm,
+  fetchPlanData,
+  planData,
+  handleDeleteQuestion,
   onPressDeletePlan,
 }) => {
   return (
@@ -50,9 +57,13 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
         onPressAddPlan={onPressAddPlan}
       />
       <TherapistSafetyPlanList
+        submitQustionForm={submitQustionForm}
         safetyPlanList={safetyPlanList}
         onPressEditPlan={onPressCreatePlan}
         onPressSharePlan={onPressSharePlan}
+        fetchPlanData={fetchPlanData}
+        planData={planData}
+        handleDeleteQuestion={handleDeleteQuestion}
         onPressDeletePlan={onPressDeletePlan}
       />
     </>

@@ -82,7 +82,7 @@ const EditSafetyPlanPage: NextPage = () => {
     };
 
     try {
-      updateSafetyPlan({
+      await updateSafetyPlan({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
@@ -148,9 +148,13 @@ const EditSafetyPlanPage: NextPage = () => {
     setSuccessModal(false);
   };
 
-  const callDeleteApi = (questionId, successDeleteCallback, doneCallback) => {
+  const callDeleteApi = async (
+    questionId,
+    successDeleteCallback,
+    doneCallback
+  ) => {
     try {
-      deleteSafetyPlan({
+      await deleteSafetyPlan({
         variables: { questionId },
         fetchPolicy: "network-only",
         onCompleted: (data) => {

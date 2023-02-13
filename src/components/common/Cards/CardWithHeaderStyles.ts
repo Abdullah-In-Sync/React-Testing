@@ -13,7 +13,7 @@ export const useStyles = makeStyles(() => ({
     "& .MuiTypography-root": {
       marginRight: 2,
     },
-    "& .MuiBox-root": {
+    "& .header-box": {
       padding: 2,
       border: `1px solid #ccc`,
       borderRadius: "0px 0px 10px 10px",
@@ -31,7 +31,7 @@ export const useStyles = makeStyles(() => ({
       padding: "0px 10px",
       borderRadius: 0,
     },
-    "& .MuiBox-root": {
+    "& .header-box": {
       padding: 2,
     },
     "& .MuiToolbar-root": {

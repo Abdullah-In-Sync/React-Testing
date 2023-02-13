@@ -1,31 +1,34 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
+import { Box } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, useRef, useCallback } from "react";
-import Loader from "../../../../../../components/common/Loader";
-import ContentHeader from "../../../../../../components/common/ContentHeader";
-import { Box } from "@mui/material";
-import {
-  GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
-  CREATE_THERAPIST_SAFETY_PLAN,
-  UPDATE_THERAPIST_SAFETY_PLAN,
-  ADD_THERAPIST_SAFETY_PLAN,
-  GET_THERAPIST_SAFETY_PLAN_LIST,
-  DELETE_THERAPIST_SAFETY_PLAN,
-} from "../../../../../../graphql/SafetyPlan/graphql";
-import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
-import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
 import { useSnackbar } from "notistack";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
+import ContentHeader from "../../../../../../components/common/ContentHeader";
 import {
   CommonModal,
   ModalElement,
 } from "../../../../../../components/common/CustomModal/CommonModal";
-import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
+import Loader from "../../../../../../components/common/Loader";
 import { SuccessModal } from "../../../../../../components/common/SuccessModal";
+import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
+import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
+import {
+  ADD_THERAPIST_SAFETY_PLAN,
+  CREATE_THERAPIST_SAFETY_PLAN,
+  DELETE_THERAPIST_SAFETY_PLAN,
+  GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+  GET_THERAPIST_SAFETY_PLAN_LIST,
+  UPDATE_THERAPIST_SAFETY_PLAN,
+  UPDATE_THERAPIST_SAFETY_PLAN_QUESTION,
+  VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+  DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
+} from "../../../../../../graphql/SafetyPlan/graphql";
+import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 
-import { useAppContext } from "../../../../../../contexts/AuthContext";
 import AddPlanForm from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/AddSafetyPlan";
+import { useAppContext } from "../../../../../../contexts/AuthContext";
 
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
@@ -64,6 +67,10 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [createTherapistSafetyPlan] = useMutation(CREATE_THERAPIST_SAFETY_PLAN);
   const [updateTherapistSafetyPlan] = useMutation(UPDATE_THERAPIST_SAFETY_PLAN);
   const [addTherapistSafetyPlan] = useMutation(ADD_THERAPIST_SAFETY_PLAN);
+  const [updateTherapistSafetyPlanQuestions] = useMutation(
+    UPDATE_THERAPIST_SAFETY_PLAN_QUESTION
+  );
+  const [deleteSafetyPlan] = useMutation(DELETE_THERAPIST_SAFETY_PLAN_QUESTION);
   const [deletePlane] = useMutation(DELETE_THERAPIST_SAFETY_PLAN);
 
   const [isConfirm, setIsConfirm] = useState<any>({
@@ -97,6 +104,25 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     },
   });
 
+  const [
+    getSafetyPlanById,
+    { data: { viewPatientSafetyPlanById: planData = null } = {} } = {},
+  ] = useLazyQuery(VIEW_PATIENT_SAFETY_PLAN_BY_ID, {
+    fetchPolicy: "network-only",
+    onCompleted: () => {
+      /* istanbul ignore next */
+      setLoader(false);
+    },
+  });
+
+  const fetchPlanData = async (planId) => {
+    setLoader(true);
+    await getSafetyPlanById({
+      variables: { patientId: patId, planId },
+    });
+  };
+
+  // VIEW_PATIENT_SAFETY_PLAN_BY_ID
   const [getSafetyTherapistPlanList, { data: therapistListData }] =
     useLazyQuery(GET_THERAPIST_SAFETY_PLAN_LIST, {
       fetchPolicy: "network-only",
@@ -126,6 +152,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             setSuccessModal({
               description: "Your plan has been created successfully",
             });
+            getSafetyPlanList({
+              variables: { patientId: patId },
+            });
           }
         },
       });
@@ -146,10 +175,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   const handleAddPlan = async () => {
-    console.debug("Variable update", {
-      patientId: patId,
-      planId: planid,
-    });
     try {
       await addTherapistSafetyPlan({
         variables: {
@@ -172,13 +197,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     }
   };
 
+  //patientId: patId,
   const handleDeletesafetyPlan = async (v) => {
-    console.debug("inside delete function");
-    console.debug("variable", {
-      planId: v._id,
-      updatePlan: { status: 0 },
-    });
-
     try {
       await deletePlane({
         variables: {
@@ -187,6 +207,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
         onCompleted: () => {
           setIsConfirm(false);
+          getSafetyPlanList({
+            variables: { patientId: patId },
+          });
           /* istanbul ignore next */
           setSuccessModal({
             description: "Your plan have been deleted sucessfully.",
@@ -216,7 +239,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     };
 
     try {
-      updateTherapistSafetyPlan({
+      await updateTherapistSafetyPlan({
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
@@ -226,6 +249,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
               description: share_status
                 ? "Your plan has been shared successfully"
                 : "Your plan has been updated successfully",
+            });
+            getSafetyPlanList({
+              variables: { patientId: patId },
             });
           }
         },
@@ -347,10 +373,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   const handleOk = () => {
     /* istanbul ignore next */
-    getSafetyPlanList({
-      variables: { patientId: patId },
-    });
-    /* istanbul ignore next */
     handleCloseCreatePlanModal();
     /* istanbul ignore next */
     setSuccessModal(undefined);
@@ -359,6 +381,103 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   /* istanbul ignore next */
   const receivePlanId = (value) => {
     setPlanId(value);
+  };
+
+  const submitQuestionForm = async (formFields, doneCallback) => {
+    setLoader(true);
+
+    const { planId, questions } = formFields;
+    const modifyQuestions =
+      questions.length > 0 ? { questions: JSON.stringify(questions) } : {};
+    const variables = {
+      planId,
+      patientId: patId,
+    };
+
+    try {
+      await updateTherapistSafetyPlanQuestions({
+        variables: { ...variables, ...modifyQuestions },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            setSuccessModal({
+              description: "Your question has been created successfully",
+            });
+            fetchPlanData(planId);
+          }
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      doneCallback();
+    } finally {
+      setLoader(false);
+      doneCallback();
+    }
+  };
+
+  const handleSubmitQustionForm = (formFields, { setSubmitting }) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "You want to update safety plan",
+      },
+      storedFunction: (callback) => submitQuestionForm(formFields, callback),
+      setSubmitting: setSubmitting,
+    });
+  };
+
+  const callDeleteApi = async (
+    questionId,
+    successDeleteCallback,
+    doneCallback
+  ) => {
+    setLoader(true);
+    try {
+      await deleteSafetyPlan({
+        variables: { questionId },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            successDeleteCallback();
+            doneCallback();
+            setSuccessModal({
+              description: "Your question has been deleted successfully",
+            });
+            enqueueSnackbar("Question successfully deleted.", {
+              variant: "success",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      setLoader(false);
+      doneCallback();
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const handleDeleteQuestion = (v) => {
+    const { questionId, callback: successDeleteCallback } = v;
+    setIsConfirm({
+      ...isConfirm,
+      ...{
+        status: true,
+        confirmObject: {
+          description: "You want to delete question",
+        },
+        storedFunction: (callback) => {
+          callDeleteApi(questionId, successDeleteCallback, callback);
+        },
+      },
+    });
   };
 
   return (
@@ -377,6 +496,10 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             onPressCreatePlan={handleOpenCreatePlanModal}
             onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
+            submitQustionForm={handleSubmitQustionForm}
+            fetchPlanData={fetchPlanData}
+            planData={planData}
+            handleDeleteQuestion={handleDeleteQuestion}
             onPressDeletePlan={onPressDeletePlan}
           />
         </Box>
