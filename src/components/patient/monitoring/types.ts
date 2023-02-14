@@ -10,6 +10,7 @@ export interface MonitoringProps {
   onGoButton?: (v) => void;
   initialDate?: string;
   view?: string;
+  currentMonitoring?: ApiMonitoringListData;
 }
 
 export interface ApiMonitoringListData {
