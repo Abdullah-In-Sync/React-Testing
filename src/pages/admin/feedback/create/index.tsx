@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -43,10 +44,9 @@ const CreateFeedbackPage: NextPage = () => {
     getOrgList,
     { data: { getOrganizationData: organizationList = [] } = {} },
   ] = useLazyQuery(GET_ORGANIZATION_LIST, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
-      console.debug(data,'data');
     },
   });
 

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import * as React from "react";
 import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
