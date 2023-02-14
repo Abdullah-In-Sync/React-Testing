@@ -4,11 +4,11 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import { useRouter } from "next/router";
-import { VIEW_FEEDBACK_BY_ID } from "../../../../graphql/query";
 
 import FeedbackView from "../../../../pages/admin/feedback/view/[id]";
 
 import theme from "../../../../styles/theme/theme";
+import { VIEW_FEEDBACK_BY_ID } from "../../../../graphql/Feedback/graphql";
 const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
