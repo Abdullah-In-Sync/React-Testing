@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import ContentHeader from "../../../../../components/common/ContentHeader";
 import Layout from "../../../../../components/layout";
 import Loader from "../../../../../components/common/Loader";
-import { VIEW_FEEDBACK_BY_ID } from "../../../../../graphql/query";
 import AdminFeedbackView from "../../../../../components/admin/feedback/view/AdminFeedbackView";
+import { VIEW_FEEDBACK_BY_ID } from "../../../../../graphql/Feedback/graphql";
 
 const FeedbackView = () => {
   const router = useRouter();
