@@ -21,10 +21,12 @@ import { useStyles } from "./monitoringStyles";
 
 const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
   completeData,
+  currentMonitoring,
   onSubmit,
   backPress,
   nextPress,
 }) => {
+  const { ptmon_name = "" } = currentMonitoring || {};
   const [selectedListTypeArray, setSelectedListTypeArray] = useState([]);
   const styles = useStyles();
 
@@ -251,10 +253,7 @@ const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
 
   return (
     <Stack className={`${styles.completeWrapper} disable-text-selection`}>
-      <CardWithHeader
-        label={"Complete Monitoring Module (therapist mon)"}
-        simpleHeader
-      >
+      <CardWithHeader label={ptmon_name} simpleHeader>
         <Stack className={styles.completeListWrapper}>{commonform()}</Stack>
       </CardWithHeader>
     </Stack>
