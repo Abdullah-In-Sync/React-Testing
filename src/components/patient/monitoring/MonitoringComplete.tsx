@@ -55,7 +55,7 @@ const MonitoringComplete: React.FC<monitoringTypes.MonitoringProps> = ({
         </Box>
         <Box>
           <Button variant="contained" color="secondary" onClick={backPress}>
-            Back
+            Cancel
           </Button>
         </Box>
         <Box>
