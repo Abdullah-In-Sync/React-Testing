@@ -2,14 +2,14 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
 
-import { CreateFeedbackFormData } from "../form/types";
+import { FeedbackFormData } from "../form/types";
 import { feedbackValidationSchema } from "../form/CreateFeedbackValidationSchema";
 import CommonFeedbackForm from "../form/CommonFeedbackForm";
 
 interface ViewProps {
   submitForm?: (
-    formData: CreateFeedbackFormData,
-    formikHelper: FormikProps<CreateFeedbackFormData>
+    formData: FeedbackFormData,
+    formikHelper: FormikProps<FeedbackFormData>
   ) => void;
   organizationList?: object[];
   onPressCancel?: () => void;
@@ -33,7 +33,7 @@ const CreateFeedbackForm: React.FC<ViewProps> = ({
 
   const commonform = () => {
     return (
-      <Formik<CreateFeedbackFormData>
+      <Formik<FeedbackFormData>
         validationSchema={feedbackValidationSchema}
         initialValues={initialValues}
         onSubmit={submitForm}

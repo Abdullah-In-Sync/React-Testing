@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/system";
 

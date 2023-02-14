@@ -195,3 +195,56 @@ export const VIEW_FEEDBACK_BY_ID = gql`
     }
   }
 `;
+
+export const VIEW_ADMIN_FEEDBACK_BY_ID = gql`
+  query AdminViewResponseDetailById(
+    $feedbackId: String!
+    $pttherapyId: String!
+    $userId: String!
+  ) {
+    adminViewResponseDetailById(
+      feedbackId: $feedbackId
+      pttherapyId: $pttherapyId
+      userId: $userId
+    ) {
+      _id
+      created_date
+      description
+      feedback_type
+      name
+      org_id
+      organization_name
+      patient_name
+      questions {
+        _id
+        answer_options
+        answer_type
+        answer {
+          _id
+          answer
+          created_date
+          patient_id
+          pttherapy_id
+          question_id
+          status
+          therapist_id
+          updated_date
+        }
+        created_date
+        feedback_id
+        question
+        status
+        updated_date
+      }
+      session_no
+      status
+      therapist_name
+      therapy_name
+      updated_date
+      user_id
+      user_type
+      visibility
+      visibility
+    }
+  }
+`;

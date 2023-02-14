@@ -1,7 +1,6 @@
 import { makeStyles } from "@mui/styles";
-import { Theme } from "@mui/system";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+export const useStyles = makeStyles(() => ({
   adminFeedbackViewWrapper: {
     "& .infoMessageBoxWrapper": {
       textAlign: "center",
@@ -42,10 +41,18 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .questionsSection": {
+      "& .questionBox": {
+        background: "#f5f5f5",
+        padding: 10,
+        borderRadius: 7,
+        border: "1px solid #c4c4c4",
+      },
+      "& .answerBox": {
+        padding: "0px 10px",
+      },
       "& label p": {
-        fontWeight: 800,
-        fontSize: "1.2em",
-        color: theme.palette.primary.main,
+        fontSize: "1em",
+        // color: theme.palette.primary.main,
       },
       "& .radioAnswerWrapper": {
         display: "flex",
@@ -63,7 +70,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .csection": {
-      paddingBottom: "1.3rem",
+      paddingBottom: "1.3em",
+    },
+    "& .hcsection": {
+      paddingBottom: "1em",
     },
     "& .muteText": {
       color: "#ccc",
