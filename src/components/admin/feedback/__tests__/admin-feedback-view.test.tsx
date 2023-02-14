@@ -120,14 +120,14 @@ const sut = async () => {
   );
 };
 
-describe("Admin safety plan list", () => {
+describe("Admin feedback view", () => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
       id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
     },
     back: pushMock,
   });
-  it("should render admin feedback list data", async () => {
+  it("should render admin feedback view data", async () => {
     await sut();
     const test2Text = await screen.findByText(/test-list2/i);
     expect(test2Text).toBeInTheDocument();
