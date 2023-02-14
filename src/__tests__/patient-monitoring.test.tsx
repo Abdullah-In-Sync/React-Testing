@@ -300,7 +300,7 @@ describe("Patient monitoring page", () => {
     const okButton = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(okButton);
     expect(okButton).not.toBeInTheDocument();
-    const backButton = await screen.findByRole("button", { name: "Back" });
+    const backButton = await screen.findByRole("button", { name: "Cancel" });
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     const monitoringToolsText = await screen.findByText(/Monitoring Tools/i);

@@ -240,6 +240,7 @@ const Monitoring: NextPage = () => {
           viewResponseButtonClick={viewResponseButtonClick}
           onGoButton={handleRangeGoButton}
           initialDate={initialDate}
+          currentMonitoring={currentMonitoring}
           view={view}
         />
         {isConfirm.status && (
