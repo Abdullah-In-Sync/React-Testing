@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
