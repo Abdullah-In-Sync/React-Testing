@@ -5,9 +5,13 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_PATIENTFEEDBACKLIST_DATA,
+  GET_PATIENT_FEEDBACKLIST_DATA_NEW,
 } from "../../../graphql/query/common";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
-import { POST_PATIENT_FEEDBACK } from "../../../graphql/mutation";
+import {
+  POST_PATIENT_FEEDBACK,
+  POST_PATIENT_FEEDBACK_NEW,
+} from "../../../graphql/mutation";
 
 // MUI COMPONENTS
 import Box from "@mui/material/Box";
@@ -35,14 +39,21 @@ import {
   RadioGroup,
   TextareaAutosize,
   Snackbar,
+  Grid,
 } from "@mui/material";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
+import TextFieldComponent from "../../../components/common/TextField/TextFieldComponent";
+import { SuccessModal } from "../../../components/common/SuccessModal";
+import SureModal from "../../../components/admin/resource/SureModal";
 
 const Feedback: NextPage = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
+  const [successModal, setSuccessModal] = useState<boolean>(false);
   const [therapy, setTherapy] = useState<string>("");
   const [feedbackType, setFeedbackType] = useState<string>(null);
-  const [formValues, setFormValues] = useState([]);
+  const [formValues, setFormValues] = useState<any>([]);
   const [sessionNo, setSessionNo] = useState(null);
   const [loader, setLoader] = useState<boolean>(false);
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
@@ -78,23 +89,36 @@ const Feedback: NextPage = () => {
     { loading: sessionLoading, data: patientSessionData },
   ] = useLazyQuery(GET_PATIENTSESSION_DATA, {
     onCompleted: (data) => {
+      console.log("session: data ", data);
       /* istanbul ignore else */
       if (data!.getPatientSessionList) {
         setFeedbackType("session");
-        setSessionNo(1);
+        setSessionNo("1");
       }
     },
     onError: (error) => {
       console.log(error, "error");
     },
   });
-  console.log("Koca: patientSessionData ", patientSessionData);
+  // console.log("Koca: patientSessionData ", patientSessionData);
+
+  // const [
+  //   getPatientFeedbackListData,
+  //   { loading: feedbackLoading, data: patientFeedbackData },
+  // ] = useLazyQuery(GET_PATIENTFEEDBACKLIST_DATA);
+  // /* istanbul ignore else */
+  // console.log("Koca: dsdsdpatientFeedbackData ", patientFeedbackData);
 
   const [
-    getPatientFeedbackListData,
-    { loading: feedbackLoading, data: patientFeedbackData },
-  ] = useLazyQuery(GET_PATIENTFEEDBACKLIST_DATA);
-  /* istanbul ignore else */
+    getPatientFeedbackListDataNew,
+    { loading: newFeedbackLoading, data: patientNewFeedbackData },
+  ] = useLazyQuery(GET_PATIENT_FEEDBACKLIST_DATA_NEW, {
+    onCompleted: (data) => {
+      console.debug("list: data ", data);
+    },
+  });
+
+  console.log("Koca: patientNewFeedbackData ", patientNewFeedbackData);
 
   const setDefaultStateExcludingLoader = () => {
     /* istanbul ignore else */
@@ -116,30 +140,48 @@ const Feedback: NextPage = () => {
     console.log("therapy-changed", therapy);
   }, [therapy]);
 
+  // useEffect(() => {
+  //   setLoader(true);
+  //   getPatientFeedbackListData({
+  //     variables: {
+  //       sessionNo: sessionNo,
+  //       feedbackType: feedbackType,
+  //       pttherapyId: therapy,
+  //     },
+  //   });
+  // }, [sessionNo, feedbackType]);
+
   useEffect(() => {
+    console.debug("variable question list", {
+      session: sessionNo,
+      pttherapyId: therapy,
+    });
     setLoader(true);
-    getPatientFeedbackListData({
+    getPatientFeedbackListDataNew({
+      // variables: {
+      //   session: 1,
+      //   pttherapyId: "fadb3fc55d1d4c698d0826a6767a7cd8",
+      // },
       variables: {
-        sessionNo: sessionNo,
-        feedbackType: feedbackType,
+        session: sessionNo,
         pttherapyId: therapy,
       },
     });
-  }, [sessionNo, feedbackType]);
+  }, [sessionNo]);
 
   useEffect(() => {
     /* istanbul ignore else */
     if (
       !therapyLoading &&
-      !feedbackLoading &&
+      // !feedbackLoading &&
       !sessionLoading &&
       therapistId &&
       therapy &&
       sessionNo &&
       feedbackType &&
       patientTherapryData &&
-      patientSessionData &&
-      patientFeedbackData
+      patientSessionData
+      // patientFeedbackData
     ) {
       setLoader(false);
     }
@@ -149,7 +191,7 @@ const Feedback: NextPage = () => {
     feedbackType,
     patientTherapryData,
     patientSessionData,
-    patientFeedbackData,
+    // patientFeedbackData,
   ]);
 
   /* istanbul ignore next */
@@ -167,33 +209,96 @@ const Feedback: NextPage = () => {
       );
     };
 
-  const handleInputChange = (i, e) => {
-    let val = e.target.name;
-    /* istanbul ignore next */
-    if (e.target.id && e.target.id != "undefined") {
-      val = e.target.id;
-    }
+  // const handleInputChange = (e, index) => {
+  //   console.log("handleInputChange: ", e, index, e.target.value, e.target.id);
+  //   let val = e.target.name;
+  //   console.log("Koca: val ", val);
 
+  //   // /* istanbul ignore next */
+  //   // if (e.target.id && e.target.id != "undefined") {
+  //   //   val = e.target.id;
+  //   // }
+  //   // const p = val.split("_");
+  //   // if (p[0]) {
+  //   //   setFormValues([
+  //   //     ...formValues,
+  //   //     {
+  //   //       therapist_id: therapistId,
+  //   //       session_no: sessionNo,
+  //   //       questionId: p[1],
+  //   //       answer: e.target.value,
+  //   //     },
+  //   //   ]);
+  //   // }
+  // };
+
+  // const handleOptionChange = (e) => {
+  //   let val = e.target.name;
+  //   console.log("Koca: e ", e);
+  //   /* istanbul ignore next */
+
+  //   const p = val.split("_");
+  //   console.log("Koca: p ", p);
+  //   if (p[0]) {
+  //     setFormValues([
+  //       ...formValues,
+  //       {
+  //         therapist_id: therapistId,
+  //         session_no: sessionNo,
+  //         questionId: p[1],
+  //         answer: e.target.value,
+  //       },
+  //     ]);
+  //   }
+  // };
+  const handleOptionChange = (e) => {
+    let val = e.target.name;
     const p = val.split("_");
-    if (p[0]) {
-      setFormValues([
-        ...formValues,
-        {
-          therapist_id: therapistId,
-          session_no: sessionNo,
-          question_id: p[1],
-          answer: e.target.value,
-        },
-      ]);
+    const answer = e.target.value;
+    const updatedFormValues = formValues.map((item) => {
+      if (item.questionId === p[1]) {
+        return { ...item, answer: item.answer + answer };
+      }
+      return item;
+    });
+    if (!updatedFormValues.some((item) => item.questionId === p[1])) {
+      updatedFormValues.push({
+        therapist_id: therapistId,
+        session_no: sessionNo,
+        questionId: p[1],
+        answer: answer,
+      });
     }
+    setFormValues(updatedFormValues);
   };
+
+  // const handleOptionChange = (e) => {
+  //   let val = e.target.name;
+  //   const p = val.split("_");
+  //   if (p[0]) {
+  //     setFormValues((prevFormValues) => [
+  //       ...prevFormValues.filter((item) => item.questionId !== p[1]), // remove previous item with same questionId
+  //       {
+  //         therapist_id: therapistId,
+  //         session_no: sessionNo,
+  //         questionId: p[1],
+  //         answer: e.target.value,
+  //       },
+  //     ]);
+  //   }
+  // };
+
   const [postPatientFeedback] = useMutation(POST_PATIENT_FEEDBACK);
+
+  const [postPatientFeedbackNew] = useMutation(POST_PATIENT_FEEDBACK_NEW);
+
   const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref
   ) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
+
   const handleAdd = (event) => {
     event.preventDefault();
     if (formValues.length == 0) {
@@ -202,18 +307,18 @@ const Feedback: NextPage = () => {
       });
     } else {
       setBtndiabled(true);
-      postPatientFeedback({
+      postPatientFeedbackNew({
         variables: {
           feedQuesAnsData: JSON.stringify(formValues),
-          sessionNo: sessionNo,
-          feedbackType: feedbackType,
+          session: sessionNo,
           pttherapyId: therapy,
         },
         onCompleted: () => {
-          enqueueSnackbar("Feedback submitted successfully", {
-            variant: "success",
-          });
-          window.location.reload();
+          setSuccessModal(true);
+          // enqueueSnackbar("Feedback submitted successfully", {
+          //   variant: "success",
+          // });
+          // window.location.reload();
         },
       });
     }
@@ -229,12 +334,40 @@ const Feedback: NextPage = () => {
     setErrorOpen(false);
   };
 
+  const questionnaireList =
+    patientNewFeedbackData?.patientGetFeedbackList?.length > 0
+      ? patientNewFeedbackData?.patientGetFeedbackList[0]?.questions
+      : [];
+
+  console.log("questionnaireList: ", questionnaireList);
+
+  const handleOk = () => {
+    /* istanbul ignore next */
+    // router.push("/admin/safetyPlan");
+    setSuccessModal(false);
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formValues.length == 0) {
+      enqueueSnackbar("Field can not be left blank", {
+        variant: "error",
+      });
+    } else {
+      setModalOpen(true);
+    }
+    setModalOpen(true);
+    /* istanbul ignore next */
+    if (!confirmSubmission) return;
+  };
+
+  console.log("form-text: ", formValues);
   return (
     <>
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Feedback" />
-        <Box style={{ textAlign: "right" }}>
+        <Box style={{ textAlign: "right" }} data-testid="123456">
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
             <Select
@@ -297,10 +430,174 @@ const Feedback: NextPage = () => {
           </Snackbar>
         </Box>
         <Box>
+          <Accordion
+            sx={{ marginTop: "4px", borderRadius: "4px" }}
+            style={{ borderRadius: "14px" }}
+            expanded={sessionPanelExpanded === "before_therapy"}
+            onChange={handleSessionPanelChange("before_therapy")}
+            onClick={() => {
+              setSessionNo("before_therapy");
+              btnvalue = 0;
+            }}
+            // key={v._id}
+            data-testid="SessionPanelItem"
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon className="text-white" />}
+              style={{ minHeight: "0px", height: "45px" }}
+              aria-controls={"before_session" + "bh-content"}
+              id={"before_session" + "bh-header"}
+              data-testid={"before_session" + "bh-header"}
+              sx={{
+                backgroundColor: "#6ba08e",
+                borderRadius: "12px",
+                border: "none",
+                marginTop: "10px",
+              }}
+            >
+              <Typography
+                className="text-white"
+                sx={{ width: "33%", flexShrink: 0 }}
+              >
+                Before Therapy
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box>
+                <Typography style={{ fontWeight: "bold" }}>
+                  Instruction
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  border: "1px solid #cecece",
+                  display: "grid",
+                }}
+                p={2}
+                marginBottom={"25px"}
+                borderRadius={"7px"}
+              >
+                <Grid>
+                  <Typography>
+                    {
+                      patientNewFeedbackData?.patientGetFeedbackList[0]
+                        ?.description
+                    }
+                  </Typography>
+                </Grid>
+              </Box>
+              {questionnaireList?.map((fv, fk) => {
+                console.log("Koca: fv ", fv);
+                return (
+                  <Typography
+                    key={fk + ""}
+                    gutterBottom
+                    component="div"
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <Typography
+                      sx={{
+                        backgroundColor: "#dadada52 !important",
+                        border: "1px solid #dadada52 !important",
+                        color: "#3f4040b0 !important",
+                        fontSize: "15px",
+                        paddingLeft: "5px",
+                        fontWeight: "1px !important",
+                      }}
+                    >
+                      {fk + 1}. {fv.question}
+                    </Typography>
+
+                    <Typography>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        defaultValue={
+                          fv.feedback_ans && fv.feedback_ans.answer
+                            ? fv.feedback_ans.answer
+                            : ""
+                        }
+                      >
+                        {fv.answer_type == "2" &&
+                          fv.answer_options &&
+                          fv.answer_options.split(",").map((av, ak) => {
+                            console.log({ av, ak }, "[av, ak]");
+                            const j = ak + 1;
+                            return (
+                              <FormControlLabel
+                                key={j}
+                                // disabled={fv.answer ? true : false}
+                                sx={{
+                                  fontSize: "15px",
+                                  color: "#3f4040b0 !important",
+                                  marginRight: "300px",
+                                }}
+                                name={"question_" + fv._id}
+                                onChange={(e) => handleOptionChange(e)}
+                                value={av}
+                                control={<Radio size="small" />}
+                                label={av}
+                              />
+                            );
+                          })}
+
+                        {fv.answer_type == "1" && (
+                          <Grid
+                            container
+                            spacing={2}
+                            marginBottom={0}
+                            paddingTop={1}
+                          >
+                            <Grid item xs={12}>
+                              <TextFieldComponent
+                                name="ptgoal_achievementgoal"
+                                id="ptgoal_achievementgoal"
+                                value={""}
+                                multiline
+                                rows={4}
+                                // onChange={(e) => handleInputChange(fk, e)}
+                                inputProps={{
+                                  "data-testid": "ptgoal_achievementgoal",
+                                }}
+                                fullWidth={true}
+                                className="form-control-bg"
+                              />
+                            </Grid>
+                          </Grid>
+                        )}
+                      </RadioGroup>
+                    </Typography>
+                  </Typography>
+                );
+              })}
+              {questionnaireList?.length > 0 && (
+                <Typography sx={{ textAlign: "center" }}>
+                  <Button
+                    type="submit"
+                    // disabled={
+                    //   btndiabled == true || btnvalue == ansvalue ? true : false
+                    // }
+                    onClick={(values) => {
+                      handleAdd(values);
+                    }}
+                    variant="contained"
+                    data-testid="submitFeedback"
+                  >
+                    Submit
+                  </Button>
+                </Typography>
+              )}
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+        <Box>
           {patientSessionData?.getPatientSessionList != null &&
             patientSessionData?.getPatientSessionList.map((v, k) => {
               const p = k + 1;
               const panelName = "panel" + p;
+              console.log("Koca: panelName ", panelName);
               return (
                 <form
                   key={p}
@@ -342,166 +639,141 @@ const Feedback: NextPage = () => {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Typography sx={{ marginBottom: "40px" }}>
-                        <Stack spacing={2} direction="row">
-                          <Button
-                            className={`text-white ${
-                              feedbackType == "session" ? "bg-themegreen" : ""
-                            }`}
-                            onClick={() => {
-                              setLoader(true);
-                              setFeedbackType("session");
-                              setSessionNo(p);
-                            }}
-                            variant="contained"
-                            sx={{ textTransform: "none" }}
-                            data-testid={
-                              panelName + "bh-content-session-button"
-                            }
+                      <Box>
+                        <Typography style={{ fontWeight: "bold" }}>
+                          Instruction
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          border: "1px solid #cecece",
+                          display: "grid",
+                        }}
+                        p={2}
+                        marginBottom={"25px"}
+                        borderRadius={"7px"}
+                      >
+                        <Grid>
+                          {/* <Typography>
+                            {patientNewFeedbackData &&
+                              patientNewFeedbackData?.patientGetFeedbackList[0]
+                                ?.description}
+                          </Typography> */}
+                        </Grid>
+                      </Box>
+                      {questionnaireList?.map((fv, fk) => {
+                        console.log("Koca: fv ", fv);
+                        return (
+                          <Typography
+                            key={fk + ""}
+                            gutterBottom
+                            component="div"
+                            style={{ marginBottom: "10px" }}
                           >
-                            Session Feedback
-                          </Button>
-                          <Button
-                            className={`text-white ${
-                              feedbackType == "quality" ? "bg-themegreen" : ""
-                            }`}
-                            onClick={() => {
-                              setLoader(true);
-                              setFeedbackType("quality");
-                              setSessionNo(p);
-                            }}
-                            variant="contained"
-                            sx={{ textTransform: "none" }}
-                            data-testid={
-                              panelName + "bh-content-quality-button"
-                            }
-                          >
-                            Quality Feedback
-                          </Button>
-                        </Stack>
-                      </Typography>
-                      {patientFeedbackData?.getPatientFeedbackList != null &&
-                        patientFeedbackData?.getPatientFeedbackList.map(
-                          (fv, fk) => {
-                            if (fk == 0) {
-                              btnvalue = 0;
-                            }
+                            <Typography
+                              sx={{
+                                backgroundColor: "#dadada52 !important",
+                                border: "1px solid #dadada52 !important",
+                                color: "#3f4040b0 !important",
+                                fontSize: "15px",
+                                paddingLeft: "5px",
+                                fontWeight: "1px !important",
+                              }}
+                            >
+                              {fk + 1}. {fv.question}
+                            </Typography>
 
-                            if (
-                              fv.feedback_ans &&
-                              fv.feedback_ans != null &&
-                              fv.feedback_ans.answer
-                            ) {
-                              btnvalue = btnvalue + 1;
-                            }
-
-                            ansvalue = fk + 1;
-                            return (
-                              <Typography
-                                key={fk + ""}
-                                gutterBottom
-                                component="div"
-                                style={{ marginBottom: "10px" }}
+                            <Typography>
+                              <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                defaultValue={
+                                  fv?.answer?.answer ? fv.answer.answer : ""
+                                }
                               >
-                                {fv.answer_type == "list" && (
-                                  <Typography
-                                    sx={{
-                                      backgroundColor: "#dadada52 !important",
-                                      border: "1px solid #dadada52 !important",
-                                      color: "#3f4040b0 !important",
-                                      fontSize: "15px",
-                                      paddingLeft: "5px",
-                                      fontWeight: "1px !important",
-                                    }}
-                                  >
-                                    {fk + 1}. {fv.question}
-                                  </Typography>
-                                )}
-                                {fv.answer_type == "text" && (
-                                  <Typography
-                                    sx={{
-                                      color: "#6EC9DB !important",
-                                      fontSize: "15px",
-                                      paddingLeft: "5px",
-                                      fontWeight: "700 !important",
-                                    }}
-                                  >
-                                    {fk + 1}. {fv.question}
-                                  </Typography>
-                                )}
-                                <Typography>
-                                  <RadioGroup
-                                    row
-                                    aria-labelledby="demo-row-radio-buttons-group-label"
-                                    name="row-radio-buttons-group"
-                                    defaultValue={
-                                      fv.feedback_ans && fv.feedback_ans.answer
-                                        ? fv.feedback_ans.answer
-                                        : ""
-                                    }
-                                  >
-                                    {fv.answer_type == "list" &&
-                                      fv.answer_options &&
-                                      fv.answer_options.map((av, ak) => {
-                                        const j = ak + 1;
-                                        return (
-                                          <FormControlLabel
-                                            key={j}
-                                            disabled={
-                                              fv.feedback_ans &&
-                                              fv.feedback_ans.answer
-                                                ? true
-                                                : false
-                                            }
-                                            sx={{
-                                              fontSize: "15px",
-                                              color: "#3f4040b0 !important",
-                                            }}
-                                            name={"question_" + fv._id}
-                                            onChange={(e) =>
-                                              handleInputChange(fk, e)
-                                            }
-                                            value={av}
-                                            control={<Radio size="small" />}
-                                            label={av}
-                                          />
-                                        );
-                                      })}
-                                    {fv.answer_type == "text" && (
-                                      <TextareaAutosize
-                                        aria-label="empty textarea"
-                                        id={fv.answer_type + "_" + fv._id}
-                                        onBlur={(e) => handleInputChange(fk, e)}
-                                        disabled={
-                                          fv.feedback_ans &&
-                                          fv.feedback_ans.answer
-                                            ? true
-                                            : false
-                                        }
-                                        defaultValue={
-                                          fv.feedback_ans &&
-                                          fv.feedback_ans.answer
-                                            ? fv.feedback_ans.answer
-                                            : ""
-                                        }
-                                        style={{
-                                          width: 982.5,
-                                          height: 216,
-                                          left: 454.32,
-                                          top: 1044,
-                                          backgroundColor: "#dadada52",
-                                          borderRadius: "12px",
-                                          border: "none",
+                                {fv.answer_type === "2" &&
+                                  fv.answer_options &&
+                                  fv.answer_options.split(",").map((av, ak) => {
+                                    const j = ak + 1;
+                                    return (
+                                      <FormControlLabel
+                                        key={j}
+                                        // disabled={
+                                        //   fv?.answer?.answer ? true : false
+                                        // }
+                                        sx={{
+                                          fontSize: "15px",
+                                          color: "#3f4040b0 !important",
+                                          marginRight: "300px",
                                         }}
+                                        name={"question_" + fv._id}
+                                        onChange={(e) => handleOptionChange(e)}
+                                        value={av}
+                                        control={<Radio size="small" />}
+                                        label={av}
                                       />
-                                    )}
-                                  </RadioGroup>
-                                </Typography>
-                              </Typography>
-                            );
-                          }
-                        )}
-                      {patientFeedbackData?.getPatientFeedbackList != null &&
+                                    );
+                                  })}
+
+                                {fv.answer_type == "1" && (
+                                  <Grid
+                                    container
+                                    spacing={2}
+                                    marginBottom={0}
+                                    paddingTop={1}
+                                  >
+                                    <Grid item xs={12}>
+                                      <TextFieldComponent
+                                        name="ptgoal_achievementgoal"
+                                        // id="ptgoal_achievementgoal"
+                                        id={fv.answer_type + "_" + fv._id}
+                                        value={formValues?.answer}
+                                        multiline
+                                        rows={4}
+                                        onChange={(e) => handleOptionChange(e)}
+                                        inputProps={{
+                                          "data-testid":
+                                            "ptgoal_achievementgoal",
+                                        }}
+                                        fullWidth={true}
+                                        className="form-control-bg"
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                )}
+                              </RadioGroup>
+                              {/* <TextareaAutosize
+                                aria-label="empty textarea"
+                                id={fv.answer_type + "_" + fv._id}
+                                onBlur={(e) => handleInputChange(fk, e)}
+                                disabled={
+                                  fv.feedback_ans && fv.feedback_ans.answer
+                                    ? true
+                                    : false
+                                }
+                                defaultValue={
+                                  fv.feedback_ans && fv.feedback_ans.answer
+                                    ? fv.feedback_ans.answer
+                                    : ""
+                                }
+                                style={{
+                                  width: 982.5,
+                                  height: 216,
+                                  left: 454.32,
+                                  top: 1044,
+                                  backgroundColor: "#dadada52",
+                                  borderRadius: "12px",
+                                  border: "none",
+                                }}
+                              /> */}
+                            </Typography>
+                          </Typography>
+                        );
+                      })}
+
+                      {/* {patientFeedbackData?.getPatientFeedbackList != null &&
                         patientFeedbackData?.getPatientFeedbackList.length !=
                           0 && (
                           <Typography sx={{ textAlign: "center" }}>
@@ -518,18 +790,81 @@ const Feedback: NextPage = () => {
                               Submit
                             </Button>
                           </Typography>
-                        )}
-                      {patientFeedbackData?.getPatientFeedbackList == null ||
-                        (patientFeedbackData?.getPatientFeedbackList.length ==
-                          0 && (
-                          <Typography
-                            gutterBottom
-                            component="div"
-                            data-testid="no-data-found-patient-feedback-list"
-                          >
-                            No Data Found
-                          </Typography>
-                        ))}
+                        )} */}
+
+                      {questionnaireList?.length > 0 && (
+                        // <Typography sx={{ textAlign: "center" }}>
+                        //   <Button
+                        //     type="submit"
+                        //     // disabled={
+                        //     //   btndiabled == true || btnvalue == ansvalue ? true : false
+                        //     // }
+                        //     // onClick={(values) => {
+                        //     //   handleAdd(values);
+                        //     // }}
+                        //     // onClick={(e, values) => {
+                        //     //   handleSubmit(e, values);
+                        //     // }}
+                        //     onClick={(e) => {
+                        //       handleSubmit(e);
+                        //     }}
+                        //     variant="contained"
+                        //     data-testid="submitFeedback"
+                        //   >
+                        //     Submit
+                        //   </Button>
+                        // </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            p: 1,
+                            m: 1,
+                            bgcolor: "background.paper",
+                            borderRadius: 1,
+                            // paddingTop: "50px",
+                          }}
+                        >
+                          <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                            <Button
+                              type="submit"
+                              // disabled={
+                              //   btndiabled == true || btnvalue == ansvalue
+                              //     ? true
+                              //     : false
+                              // }
+                              style={{
+                                textTransform: "none",
+                              }}
+                              // disabled={questionnaireList?.some(
+                              //   (item) => item.answer !== null
+                              // )}
+                              onClick={(e) => {
+                                handleSubmit(e);
+                              }}
+                              variant="contained"
+                              data-testid="submitFeedback"
+                            >
+                              Submit
+                            </Button>
+                          </Grid>
+                          <Grid item xs={6} textAlign="center">
+                            <Button
+                              data-testid="cancleFeedbackButton"
+                              variant="contained"
+                              style={{
+                                backgroundColor: "#6BA08E",
+                                textTransform: "none",
+                              }}
+                              onClick={() => {
+                                setSessionPanelExpanded(false);
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </Grid>
+                        </Box>
+                      )}
                     </AccordionDetails>
                   </Accordion>
                 </form>
@@ -537,6 +872,58 @@ const Feedback: NextPage = () => {
             })}
         </Box>
       </Layout>
+      <>
+        <SureModal
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          setConfirmSubmission={setConfirmSubmission}
+        >
+          <Typography
+            sx={{
+              fontWeight: "600",
+              textAlign: "center",
+              fontSize: "27px",
+            }}
+          >
+            Are you sure you want to submit the feedback?
+          </Typography>
+          <Box marginTop="20px" display="flex" justifyContent="end">
+            <Button
+              variant="contained"
+              color="inherit"
+              size="small"
+              data-testid="editGoalCancelButton"
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              sx={{ marginLeft: "5px" }}
+              size="small"
+              data-testid="editGoalConfirmButton"
+              onClick={(value) => {
+                setModalOpen(false);
+                handleAdd(value);
+              }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </SureModal>
+
+        {successModal && (
+          <SuccessModal
+            isOpen={successModal}
+            title="Successfull"
+            description={"Your feedback has been submited Successfully"}
+            onOk={handleOk}
+          />
+        )}
+      </>
     </>
   );
 };
