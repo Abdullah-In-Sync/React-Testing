@@ -16,7 +16,7 @@ import {
   CreateFeedbackRes,
   CreateFeedbackVars,
 } from "../../../../graphql/Feedback/types";
-import { CreateFeedbackFormData } from "../../../../components/admin/feedback/form/types";
+import { FeedbackFormData } from "../../../../components/admin/feedback/form/types";
 
 const CreateFeedbackPage: NextPage = () => {
   const router = useRouter();
@@ -54,10 +54,7 @@ const CreateFeedbackPage: NextPage = () => {
     getOrgList();
   }, []);
 
-  const submitForm = async (
-    formFields: CreateFeedbackFormData,
-    doneCallback
-  ) => {
+  const submitForm = async (formFields: FeedbackFormData, doneCallback) => {
     const variables = {
       ...formFields,
       feedQuesData: JSON.stringify(formFields.questions),

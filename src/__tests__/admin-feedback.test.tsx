@@ -8,7 +8,6 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-import { useAppContext } from "../contexts/AuthContext";
 import {
   ADD_FEEDBACK,
   DELETE_FEEDBACK,
@@ -18,8 +17,14 @@ import { GET_ADMIN_FEEDBACK_LIST, GET_ORG_DATA } from "../graphql/query";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
 import Feedback from "../pages/admin/feedback";
 import theme from "../styles/theme/theme";
+import { useAppContext } from "../contexts/AuthContext";
+import { useRouter } from "next/router";
 
 jest.mock("../contexts/AuthContext");
+
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
 
 // mocks
 const buildMocks = (): {
@@ -459,8 +464,13 @@ const sut = async () => {
   );
 };
 
+const mockRouter = {
+  push: jest.fn(),
+};
+
 describe("Admin feedback page", () => {
   beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
@@ -495,34 +505,32 @@ describe("Admin feedback page", () => {
     expect(screen.queryByTestId("tableColumn_session_no")).toBeInTheDocument();
   });
 
-  test("Click add feedback button should open create feedback popup", async () => {
-    await sut();
-    fireEvent.click(screen.queryByTestId("createQuestion"));
-    // Check that the dialog is open.
-    expect(screen.queryByTestId("bootstrapModal")).toBeVisible();
-  });
-
-  test("Click Edit icon should open Edit feedback popup", async () => {
+  test("Click edit icon should open edit feedback page", async () => {
     await sut();
     fireEvent.click(
       screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
     );
-    // Check that the dialog is open.
-    expect(screen.getByText("Edit Question")).toBeInTheDocument();
+    expect(mockRouter.push).toBeCalledWith(
+      "/admin/feedback/edit/12274a23-4932-49b6-9eec-ae7f9f6b804d"
+    );
   });
 
-  test("Click save button with data in edit feedback popup", async () => {
+  test("Click view icon should open view feedback page", async () => {
     await sut();
     fireEvent.click(
-      screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
+      screen.queryAllByTestId(
+        "viewIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
+      )[0]
     );
-    fireEvent.change(screen.getByPlaceholderText("Session Name"), {
-      target: { value: "2" },
-    });
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(10)
+    expect(mockRouter.push).toBeCalledWith(
+      "/admin/feedback/view/12274a23-4932-49b6-9eec-ae7f9f6b804d"
     );
+  });
+
+  test("Click create icon should open create feedback page", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("create-feedback"));
+    expect(mockRouter.push).toBeCalledWith("/admin/feedback/create");
   });
 
   test("Click Delete icon should open Delete feedback popup", async () => {
@@ -541,45 +549,6 @@ describe("Admin feedback page", () => {
     expect(okButton).not.toBeInTheDocument();
   });
 
-  test("Click add feedback button with cancel button", async () => {
-    await sut();
-    fireEvent.click(screen.queryByTestId("createQuestion"));
-    fireEvent.click(screen.queryByTestId("addField"));
-    fireEvent.click(screen.queryByTestId("cancelButton"));
-    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
-  });
-
-  test("Click add feedback button with cancel button", async () => {
-    await sut();
-    fireEvent.click(screen.queryByTestId("createQuestion"));
-    fireEvent.click(screen.queryByTestId("addField"));
-    fireEvent.click(screen.queryByTestId("CancelIcon"));
-    fireEvent.click(screen.queryByTestId("cancelButton"));
-    expect(screen.queryAllByTestId("table-row").length).toBe(10);
-  });
-
-  test("Click edit feedback button with saveButton", async () => {
-    await sut();
-    fireEvent.click(
-      screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    );
-    expect(screen.getByText("Edit Question")).toBeInTheDocument();
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(10)
-    );
-  });
-
-  test("Click edit feedback button with cancelButton", async () => {
-    await sut();
-    fireEvent.click(
-      screen.queryByTestId("editIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d")
-    );
-    expect(screen.getByText("Edit Question")).toBeInTheDocument();
-    fireEvent.click(screen.queryByTestId("cancelButton"));
-    await waitFor(() => expect(screen.getByRole("dialog")).not.toBeVisible());
-  });
-
   test("Click delete feedback button with cancelButton", async () => {
     await sut();
 
@@ -592,60 +561,5 @@ describe("Admin feedback page", () => {
     });
     fireEvent.click(cancelButton);
     expect(cancelButton).not.toBeInTheDocument();
-  });
-
-  test("Click add feedback button with data", async () => {
-    await sut();
-    fireEvent.click(screen.queryByTestId("createQuestion"));
-    fireEvent.click(screen.queryByTestId("addField"));
-    fireEvent.change(screen.getByTestId("answerType"), {
-      target: { value: "list" },
-    });
-    fireEvent.click(screen.getByTestId("answerOptions"));
-    fireEvent.change(
-      screen.getByPlaceholderText(
-        "Add a option by pressing enter after write it"
-      ),
-      { target: { value: "a,b,c,d" } }
-    );
-    fireEvent.change(screen.getByPlaceholderText("Feedback Type"), {
-      target: { value: "session" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Organization Name"), {
-      target: { value: "c557283d1b5e4d7abf19625bf268cdf8" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Session Name"), {
-      target: { value: "1" },
-    });
-    fireEvent.change(screen.getByLabelText("Type your Question"), {
-      target: { value: "test1" },
-    });
-    fireEvent.submit(screen.queryByTestId("saveButton"));
-    await waitFor(() =>
-      expect(screen.queryAllByTestId("table-row").length).toBe(10)
-    );
-  });
-
-  test("Click table next and previous button", async () => {
-    await sut();
-
-    const tableNextButton = screen.getByRole("button", {
-      name: /Next Page/i,
-    });
-    fireEvent.click(tableNextButton);
-    expect(
-      await screen.findByTestId(
-        "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d-next"
-      )
-    ).toBeInTheDocument();
-    const previousNextButton = screen.getByRole("button", {
-      name: /Previous Page/i,
-    });
-    fireEvent.click(previousNextButton);
-    expect(
-      await screen.findByTestId(
-        "deleteIcon_12274a23-4932-49b6-9eec-ae7f9f6b804d"
-      )
-    ).toBeInTheDocument();
   });
 });

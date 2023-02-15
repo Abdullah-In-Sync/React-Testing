@@ -30,6 +30,7 @@ const BreadCrumbsWithBackButton = ({
   return (
     <>
       <Grid
+        item
         xs={6}
         display="flex"
         flex-direction="row-reverse"
