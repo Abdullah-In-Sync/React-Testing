@@ -2,6 +2,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AdminFeedbackView from "../../../../../../components/admin/feedback/responses/Response";
+import ContentHeader from "../../../../../../components/common/ContentHeader";
 import Loader from "../../../../../../components/common/Loader";
 import Layout from "../../../../../../components/layout";
 import { useAppContext } from "../../../../../../contexts/AuthContext";
@@ -49,6 +50,7 @@ const AdminFeedbackResponse = () => {
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
+        <ContentHeader title="View Response" />
         <AdminFeedbackView
           data={viewData}
           handleGoBack={handleGoBack}
