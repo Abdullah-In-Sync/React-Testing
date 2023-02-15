@@ -1,9 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import ErrorModel from "../common/ErrorModal";
 
 describe("when rendered with a `testid` prop", () => {
   it("should display modal", () => {
-    render(<ErrorModel isOpen={true} title={"Error model test"} />);
+    render(
+      <ErrorModel
+        isOpen={true}
+        title={"Error model test"}
+        onCancel={() => null}
+        onOK={() => null}
+      />
+    );
     expect(screen.getByText("Error model test")).toBeInTheDocument();
   });
 });
