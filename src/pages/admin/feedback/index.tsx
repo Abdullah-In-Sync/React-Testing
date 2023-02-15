@@ -70,10 +70,6 @@ const Feedback: NextPage = () => {
     variables: { pageNo: page + 1, limit: rowsPerPage },
   });
 
-  // const [
-  //   viewFeedback,
-  //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
-
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -86,7 +82,6 @@ const Feedback: NextPage = () => {
   }, [dataListData, dataListError]);
 
   //**  TABLE DATA COLUMNS **//
-  /* istanbul ignore next */
   const fields = [
     {
       key: "session_no",
@@ -179,7 +174,7 @@ const Feedback: NextPage = () => {
       ),
     },
   ];
-  //ReplyIcon
+
   /* istanbul ignore next */
   const handleDelete = async (id, callback) => {
     /* istanbul ignore else */
