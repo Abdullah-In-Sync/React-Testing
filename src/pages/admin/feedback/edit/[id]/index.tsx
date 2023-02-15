@@ -54,7 +54,7 @@ const EditFeedbackPage: NextPage = () => {
   >(DELETE_FEEDBACK_QUESTION_BY_ADMIN, {
     onCompleted: () => {
       setLoader(false);
-      selectedQuestion?.current?.callback();
+      (selectedQuestion?.current as any)?.callback();
     },
   });
 
@@ -169,7 +169,6 @@ const EditFeedbackPage: NextPage = () => {
   };
 
   const handleDeleteQuestion = (v) => {
-    console.log(v, "om delte question");
     selectedQuestion.current = v;
     setDeleteModal(true);
   };
@@ -219,14 +218,6 @@ const EditFeedbackPage: NextPage = () => {
             description="You are canceling the feedback without saving"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
-          />
-        )}
-        {isConfirm.questionDeleteStatus && (
-          <ConfirmationModal
-            label="Are you sure?"
-            description="You want to delete feedback"
-            onCancel={clearIsConfirm}
-            onConfirm={onConfirmSubmit}
           />
         )}
         {successModal && (
