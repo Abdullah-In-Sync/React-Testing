@@ -4,7 +4,6 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { useRouter } from "next/router";
