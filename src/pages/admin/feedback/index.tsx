@@ -68,6 +68,7 @@ const Feedback: NextPage = () => {
     refetch,
   } = useQuery(GET_ADMIN_FEEDBACK_LIST, {
     variables: { pageNo: page + 1, limit: rowsPerPage },
+    fetchPolicy: "network-only",
   });
 
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
@@ -103,7 +104,7 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "feedback_type",
+      key: "name",
       columnName: "Feedback Name",
       visible: true,
       render: (val) =>
@@ -116,7 +117,7 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "user_type",
+      key: "feedback_type",
       columnName: "User Type",
       visible: true,
       render: (val) =>
