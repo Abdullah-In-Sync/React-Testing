@@ -65,3 +65,14 @@ export interface EditFeedbackByAdminVars {
 export interface EditFeedbackByAdminRes {
   editFeedbackByAdmin: ViewFeedbackByAdmin;
 }
+export interface DeleteFeedbackQuestionByAdminVars {
+  questionId: string;
+}
+
+export interface DeleteFeedbackQuestionByAdminRes {
+  deleteFeedbackQuesByAdmin: DeleteFeedbackQuesByAdmin;
+}
+
+export interface DeleteFeedbackQuesByAdmin {
+  result: boolean;
+}
