@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import ErrorModel from "../common/ErrorModal";
 
 describe("when rendered with a `testid` prop", () => {
