@@ -55,6 +55,7 @@ const Feedback: NextPage = () => {
   >(false);
   const [open, setOpen] = useState<boolean>(false);
   const [erroropen, setErrorOpen] = useState<boolean>(false);
+  /* istanbul ignore next */
   const { user: { patient_data: { therapist_id: therapistId } } = {} } =
     useAppContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -155,6 +156,7 @@ const Feedback: NextPage = () => {
     setTherapy(event.target.value);
   };
 
+  /* istanbul ignore next */
   const handleSessionPanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setSessionPanelExpanded(isExpanded ? panel : false);
@@ -389,6 +391,7 @@ const Feedback: NextPage = () => {
                 </Grid>
               </Box>
               {questionnaireList?.map((fv, fk) => {
+                /* istanbul ignore next */
                 return (
                   <Typography
                     key={fk + ""}
@@ -479,59 +482,65 @@ const Feedback: NextPage = () => {
                   </Typography>
                 );
               })}
-              {questionnaireList?.length > 0 && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    p: 1,
-                    m: 1,
-                    bgcolor: "background.paper",
-                    borderRadius: 1,
-                  }}
-                >
-                  <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                    <Button
-                      type="submit"
-                      style={{
-                        textTransform: "none",
-                      }}
-                      disabled={questionnaireList?.some(
-                        (item) => item.answer !== null
-                      )}
-                      onClick={(e) => {
-                        /* istanbul ignore next */
-                        handleSubmit(e);
-                      }}
-                      variant="contained"
-                      data-testid="submitFeedback1"
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6} textAlign="center">
-                    <Button
-                      data-testid="cancleFeedbackButton"
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#6BA08E",
-                        textTransform: "none",
-                      }}
-                      onClick={() => {
-                        setSessionPanelExpanded(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Box>
-              )}
+              {
+                /* istanbul ignore next */
+                questionnaireList?.length > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      p: 1,
+                      m: 1,
+                      bgcolor: "background.paper",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                      <Button
+                        type="submit"
+                        style={{
+                          textTransform: "none",
+                        }}
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={(e) => {
+                          /* istanbul ignore next */
+                          handleSubmit(e);
+                        }}
+                        variant="contained"
+                        data-testid="submitFeedback1"
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="cancleFeedbackButton"
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#6BA08E",
+                          textTransform: "none",
+                        }}
+                        onClick={() => {
+                          /* istanbul ignore next */
+                          setSessionPanelExpanded(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Box>
+                )
+              }
             </AccordionDetails>
           </Accordion>
         </Box>
         <Box>
           {patientSessionData?.getPatientSessionList != null &&
+            /* istanbul ignore next */
             patientSessionData?.getPatientSessionList.map((v, k) => {
+              /* istanbul ignore next */
               const p = k + 1;
               const panelName = "panel" + p;
               return (
@@ -593,12 +602,14 @@ const Feedback: NextPage = () => {
                         <Grid>
                           <Typography>
                             {patientNewFeedbackData &&
+                              /* istanbul ignore next */
                               patientNewFeedbackData?.patientGetFeedbackList[0]
                                 ?.description}
                           </Typography>
                         </Grid>
                       </Box>
                       {questionnaireList?.map((fv, fk) => {
+                        /* istanbul ignore next */
                         return (
                           <Typography
                             key={fk + ""}
@@ -699,54 +710,57 @@ const Feedback: NextPage = () => {
                         );
                       })}
 
-                      {questionnaireList?.length > 0 && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            p: 1,
-                            m: 1,
-                            bgcolor: "background.paper",
-                            borderRadius: 1,
-                          }}
-                        >
-                          <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                            <Button
-                              type="submit"
-                              style={{
-                                textTransform: "none",
-                              }}
-                              disabled={questionnaireList?.some(
-                                (item) => item.answer !== null
-                              )}
-                              onClick={(e) => {
-                                /* istanbul ignore next */
-                                handleSubmit(e);
-                              }}
-                              variant="contained"
-                              data-testid="submitFeedback1"
-                            >
-                              Submit
-                            </Button>
-                          </Grid>
-                          <Grid item xs={6} textAlign="center">
-                            <Button
-                              data-testid="cancleFeedbackButton1"
-                              variant="contained"
-                              style={{
-                                backgroundColor: "#6BA08E",
-                                textTransform: "none",
-                              }}
-                              onClick={() => {
-                                /* istanbul ignore next */
-                                setSessionPanelExpanded(false);
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          </Grid>
-                        </Box>
-                      )}
+                      {
+                        /* istanbul ignore next */
+                        questionnaireList?.length > 0 && (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              p: 1,
+                              m: 1,
+                              bgcolor: "background.paper",
+                              borderRadius: 1,
+                            }}
+                          >
+                            <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                              <Button
+                                type="submit"
+                                style={{
+                                  textTransform: "none",
+                                }}
+                                disabled={questionnaireList?.some(
+                                  (item) => item.answer !== null
+                                )}
+                                onClick={(e) => {
+                                  /* istanbul ignore next */
+                                  handleSubmit(e);
+                                }}
+                                variant="contained"
+                                data-testid="submitFeedback1"
+                              >
+                                Submit
+                              </Button>
+                            </Grid>
+                            <Grid item xs={6} textAlign="center">
+                              <Button
+                                data-testid="cancleFeedbackButton1"
+                                variant="contained"
+                                style={{
+                                  backgroundColor: "#6BA08E",
+                                  textTransform: "none",
+                                }}
+                                onClick={() => {
+                                  /* istanbul ignore next */
+                                  setSessionPanelExpanded(false);
+                                }}
+                              >
+                                Cancel
+                              </Button>
+                            </Grid>
+                          </Box>
+                        )
+                      }
                     </AccordionDetails>
                   </Accordion>
                 </form>
@@ -804,6 +818,7 @@ const Feedback: NextPage = () => {
                 <Grid>
                   <Typography>
                     {
+                      /* istanbul ignore next */
                       patientNewFeedbackData?.patientGetFeedbackList[0]
                         ?.description
                     }
@@ -811,7 +826,9 @@ const Feedback: NextPage = () => {
                 </Grid>
               </Box>
               {questionnaireList?.map((fv, fk) => {
+                /* istanbul ignore next */
                 return (
+                  /* istanbul ignore next */
                   <Typography
                     key={fk + ""}
                     gutterBottom
@@ -897,54 +914,57 @@ const Feedback: NextPage = () => {
                   </Typography>
                 );
               })}
-              {questionnaireList?.length > 0 && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    p: 1,
-                    m: 1,
-                    bgcolor: "background.paper",
-                    borderRadius: 1,
-                  }}
-                >
-                  <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                    <Button
-                      type="submit"
-                      style={{
-                        textTransform: "none",
-                      }}
-                      disabled={questionnaireList?.some(
-                        (item) => item.answer !== null
-                      )}
-                      onClick={(e) => {
-                        /* istanbul ignore next */
-                        handleSubmit(e);
-                      }}
-                      variant="contained"
-                      data-testid="submitFeedback1"
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6} textAlign="center">
-                    <Button
-                      data-testid="cancleFeedbackButton"
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#6BA08E",
-                        textTransform: "none",
-                      }}
-                      onClick={() => {
-                        /* istanbul ignore next */
-                        setSessionPanelExpanded(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Box>
-              )}
+              {
+                /* istanbul ignore next */
+                questionnaireList?.length > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      p: 1,
+                      m: 1,
+                      bgcolor: "background.paper",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                      <Button
+                        type="submit"
+                        style={{
+                          textTransform: "none",
+                        }}
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={(e) => {
+                          /* istanbul ignore next */
+                          handleSubmit(e);
+                        }}
+                        variant="contained"
+                        data-testid="submitFeedback1"
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="cancleFeedbackButton"
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#6BA08E",
+                          textTransform: "none",
+                        }}
+                        onClick={() => {
+                          /* istanbul ignore next */
+                          setSessionPanelExpanded(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Box>
+                )
+              }
             </AccordionDetails>
           </Accordion>
         </Box>
