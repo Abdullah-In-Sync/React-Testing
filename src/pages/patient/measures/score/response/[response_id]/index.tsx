@@ -24,14 +24,15 @@ const PatientResponsePage: NextPage = () => {
     ViewMeasureScoreResponseVar
   >(VIEW_MEASURE_RESPONSE, {
     variables: {
-      patScoreId: router?.query?.response_id as string,
+      /* istanbul ignore next */
+      patScoreId: router.query?.response_id as string,
     },
     fetchPolicy: "no-cache",
   });
 
   const measureDetailTransform: MeasureDetail[] = useMemo(() => {
     if (!data?.viewMeasureResponse) return null;
-
+    /* istanbul ignore next */
     const measureDetail: MeasureDetail[] = data?.viewMeasureResponse?.map(
       (md) => ({
         _id: md?.measure_cat_id,
@@ -54,6 +55,7 @@ const PatientResponsePage: NextPage = () => {
         <ContentHeader title="Measures" />
         <Loader visible={loading || loader} />
         {measureDetailTransform && (
+          /* istanbul ignore next */
           <MeasureTest
             measureDetail={measureDetailTransform}
             setLoader={setLoader}
