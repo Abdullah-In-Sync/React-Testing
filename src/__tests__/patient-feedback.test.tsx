@@ -411,14 +411,6 @@ describe("Patient feedback list", () => {
     });
   });
 
-  // test("Feedback form should get data", async () => {
-  //   const patient_id = mockDataMap["first_patient_id"];
-  //   await sut(patient_id);
-
-  //   fireEvent.click(screen.queryByTestId("panel1bh-header"));
-  //   expect(await screen.findByText(/Answer/i)).toBeInTheDocument();
-  // });
-
   test("Feedback form should submit with valid data", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
