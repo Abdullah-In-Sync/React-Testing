@@ -454,40 +454,4 @@ describe("Patient feedback list", () => {
       );
     });
   });
-
-  // test("Feedback form click cancle button", async () => {
-  //   const patient_id = mockDataMap["first_patient_id"];
-  //   await sut(patient_id);
-
-  //   await waitFor(async () => {
-  //     fireEvent.click(screen.queryByTestId("panel1bh-header"));
-
-  //     expect(screen.getByTestId("instruction")).toBeInTheDocument();
-  //     expect(screen.getByTestId("texBoxInput")).toBeInTheDocument();
-  //     fireEvent.change(screen.queryByTestId("texBoxInput"), {
-  //       target: { value: "abcd" },
-  //     });
-
-  //     expect(screen.getByTestId("cancleFeedbackButton1")).toBeInTheDocument();
-
-  //     fireEvent.submit(screen.queryByTestId("cancleFeedbackButton1"));
-  //   });
-  // });
-
-  // test("Feedback form have befor and after or not", async () => {
-  //   const patient_id = mockDataMap["first_patient_id"];
-  //   await sut(patient_id);
-
-  //   await waitFor(async () => {
-  //     // fireEvent.click(screen.queryByTestId("before_therapybh-header"));
-  //     // fireEvent.click(screen.queryByTestId("after_therapybh-header"));
-  //     expect(
-  //       screen.queryByTestId("before_therapybh-header")
-  //     ).toBeInTheDocument();
-
-  //     expect(
-  //       screen.queryByTestId("after_therapybh-header")
-  //     ).toBeInTheDocument();
-  //   });
-  // });
 });
