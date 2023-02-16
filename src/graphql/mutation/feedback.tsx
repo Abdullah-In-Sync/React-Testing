@@ -76,3 +76,52 @@ export const POST_PATIENT_FEEDBACK = gql`
     }
   }
 `;
+
+export const POST_PATIENT_FEEDBACK_NEW = gql`
+  mutation (
+    $feedQuesAnsData: String!
+    $session: String!
+    $pttherapyId: String!
+  ) {
+    answerFeedbackByPatient(
+      feedQuesAnsData: $feedQuesAnsData
+      session: $session
+      pttherapyId: $pttherapyId
+    ) {
+      questions {
+        answer {
+          _id
+          answer
+          created_date
+          patient_id
+          pttherapy_id
+          question_id
+          status
+          therapist_id
+          updated_date
+        }
+        _id
+        answer_options
+        answer_type
+        created_date
+        feedback_id
+        question
+        status
+        updated_date
+      }
+      _id
+      created_date
+      description
+      feedback_type
+      name
+      org_id
+      organization_name
+      session_no
+      status
+      updated_date
+      user_id
+      user_type
+      visibility
+    }
+  }
+`;
