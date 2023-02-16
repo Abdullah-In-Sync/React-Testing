@@ -31,7 +31,7 @@ const Index = () => {
           update: {
             resource_name: formFields.resource_name,
             resource_type: formFields.resource_type,
-            resource_issmartdraw: formFields?.resource_issmartdraw || "0",
+            resource_issmartdraw: formFields?.resource_issmartdraw,
             resource_isformualation: "0",
             disorder_id: formFields.disorder_id,
             model_id: formFields.model_id,

@@ -1,4 +1,10 @@
-import { screen, render, fireEvent, within } from "@testing-library/react";
+import {
+  screen,
+  render,
+  fireEvent,
+  within,
+  waitFor,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useRouter } from "next/router";
@@ -495,5 +501,9 @@ describe("Patient Safety plans", () => {
     fireEvent.click(confirmButton);
 
     expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
+
+    await screen.findByText("Your plan has been created successfully.");
+
+    fireEvent.click(screen.getByTestId("SuccessOkBtn"));
   });
 });
