@@ -68,11 +68,8 @@ const Feedback: NextPage = () => {
     refetch,
   } = useQuery(GET_ADMIN_FEEDBACK_LIST, {
     variables: { pageNo: page + 1, limit: rowsPerPage },
+    fetchPolicy: "network-only",
   });
-
-  // const [
-  //   viewFeedback,
-  //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
 
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
 
@@ -86,7 +83,6 @@ const Feedback: NextPage = () => {
   }, [dataListData, dataListError]);
 
   //**  TABLE DATA COLUMNS **//
-  /* istanbul ignore next */
   const fields = [
     {
       key: "session_no",
@@ -108,7 +104,7 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "feedback_type",
+      key: "name",
       columnName: "Feedback Name",
       visible: true,
       render: (val) =>
@@ -121,7 +117,7 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "user_type",
+      key: "feedback_type",
       columnName: "User Type",
       visible: true,
       render: (val) =>
@@ -179,7 +175,7 @@ const Feedback: NextPage = () => {
       ),
     },
   ];
-  //ReplyIcon
+
   /* istanbul ignore next */
   const handleDelete = async (id, callback) => {
     /* istanbul ignore else */

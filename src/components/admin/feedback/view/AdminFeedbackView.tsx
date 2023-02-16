@@ -117,7 +117,7 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
         <Box key={`questionBox_${i}`} className="questionsSection csection">
           <Box>
             <label>
-              <Typography>{`${i + 1} ${question}`}</Typography>
+              <Typography>{`${i + 1}. ${question}`}</Typography>
             </label>
           </Box>
           <Box className="instructionBox">{answers(item)}</Box>

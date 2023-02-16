@@ -82,3 +82,11 @@ export const EDIT_FEEDBACK_BY_ADMIN = gql`
     }
   }
 `;
+
+export const DELETE_FEEDBACK_QUESTION_BY_ADMIN = gql`
+  mutation deleteFeedbackQuesByAdmin($questionId: String!) {
+    deleteFeedbackQuesByAdmin(questionId: $questionId) {
+      result
+    }
+  }
+`;

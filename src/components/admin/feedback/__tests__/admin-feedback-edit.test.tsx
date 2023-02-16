@@ -1,9 +1,15 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import {
+  DELETE_FEEDBACK_QUESTION_BY_ADMIN,
   EDIT_FEEDBACK_BY_ADMIN,
   VIEW_FEEDBACK_BY_ID,
 } from "../../../../graphql/Feedback/graphql";
@@ -123,6 +129,20 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: DELETE_FEEDBACK_QUESTION_BY_ADMIN,
+    variables: { questionId: "5ebf36c1-2010-4f3c-bebe-e7c406a08d7a" },
+  },
+  result: {
+    data: {
+      deleteFeedbackQuesByAdmin: {
+        result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: EDIT_FEEDBACK_BY_ADMIN,
     variables: {
       feedbackId: "36f94dd4-8d52-42ad-b502-a0b23e66f5b0",
@@ -219,21 +239,23 @@ describe("Admin feedback edit", () => {
     expect(cancelButton).not.toBeInTheDocument();
   });
 
-  // it("should remove question box on press of delete confirm", async () => {
-  //   await sut();
-  //   const loadedText = await screen.findByText(/test some/i);
-  //   expect(loadedText).toBeInTheDocument();
-  //   const deleteIconButton = await screen.findByTestId("iconButtonQuestion_0");
-  //   fireEvent.click(deleteIconButton);
-  //   const confirmButton = await screen.findByRole("button", {
-  //     name: "Confirm",
-  //   });
+  it("should remove question box on press of delete confirm", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "36f94dd4-8d52-42ad-b502-a0b23e66f5b0",
+      },
+      push: pushMock,
+    });
+    await sut();
+    const deleteIconButton = await screen.findByTestId("iconButton_0");
+    fireEvent.click(deleteIconButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
 
-  //   expect(confirmButton).toBeInTheDocument();
-  //   fireEvent.click(confirmButton);
-  //   const aloadedText = await screen.findByText(
-  //     /Question successfully deleted./i
-  //   );
-  //   expect(aloadedText).toBeInTheDocument();
-  // });
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+
+    waitForElementToBeRemoved(async () => screen.queryByTestId("iconButton_0"));
+  });
 });
