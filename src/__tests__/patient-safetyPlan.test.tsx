@@ -1,10 +1,4 @@
-import {
-  screen,
-  render,
-  fireEvent,
-  within,
-  waitFor,
-} from "@testing-library/react";
+import { screen, render, fireEvent, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useRouter } from "next/router";
