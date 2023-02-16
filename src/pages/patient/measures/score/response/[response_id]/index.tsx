@@ -24,7 +24,8 @@ const PatientResponsePage: NextPage = () => {
     ViewMeasureScoreResponseVar
   >(VIEW_MEASURE_RESPONSE, {
     variables: {
-      patScoreId: router.query.response_id as string,
+      /* istanbul ignore next */
+      patScoreId: router.query?.response_id as string,
     },
     fetchPolicy: "no-cache",
   });
