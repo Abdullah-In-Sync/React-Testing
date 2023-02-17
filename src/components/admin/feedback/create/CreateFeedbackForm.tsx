@@ -13,12 +13,14 @@ interface ViewProps {
   ) => void;
   organizationList?: object[];
   onPressCancel?: () => void;
+  setLoader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateFeedbackForm: React.FC<ViewProps> = ({
   submitForm,
   organizationList,
   onPressCancel,
+  setLoader,
 }) => {
   const initialValues = {
     feedBackName: "",
@@ -42,6 +44,7 @@ const CreateFeedbackForm: React.FC<ViewProps> = ({
             formikProps={props}
             organizationList={organizationList}
             onPressCancel={onPressCancel}
+            setLoader={setLoader}
           />
         )}
       />

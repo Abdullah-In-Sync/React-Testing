@@ -9,12 +9,19 @@ import {
   Switch,
 } from "@mui/material";
 import { ErrorMessage, Form, FormikProps } from "formik";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddQuestionsBox from "./AddQuestionsBox";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { useStyles } from "./CreateFeedbackSyles";
 import { FeedbackFormData } from "./types";
+import { useLazyQuery } from "@apollo/client";
+import { CHECK_FEEDBACK_NAME } from "../../../../graphql/Feedback/graphql";
+import {
+  CheckFeedbackNameRes,
+  CheckFeedbackNameVars,
+} from "../../../../graphql/Feedback/types";
+import CheckFeedbackModel from "./CheckFeedModel/CheckFeedbackNameModel";
 
 interface ViewProps {
   organizationList?: Array<{
@@ -23,6 +30,7 @@ interface ViewProps {
   formikProps: FormikProps<FeedbackFormData>;
   onPressCancel?: () => void;
   handleDeleteQuestion?: (v) => void;
+  setLoader: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const userTypes = [
@@ -56,13 +64,29 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
   onPressCancel,
   formikProps,
   handleDeleteQuestion,
+  setLoader,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const questionFieldscRef = useRef(null);
+  const [showCheckFeedbackModal, setShowCheckFeedbackModal] =
+    useState<boolean>(false);
   const styles = useStyles();
   const csvDecode = (csvString) => {
     return csvString ? csvString.split(",") : [];
   };
+
+  const [checkFeedbackName, { data: checkFeedbackNameRes }] = useLazyQuery<
+    CheckFeedbackNameRes,
+    CheckFeedbackNameVars
+  >(CHECK_FEEDBACK_NAME, {
+    onCompleted: (data) => {
+      setLoader(false);
+      if (data?.checkFeedbackName != null) {
+        setShowCheckFeedbackModal(true);
+      }
+    },
+  });
+
   const handleChange = (event, name) => {
     const {
       target: { value },
@@ -70,6 +94,26 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
     if (value.indexOf("all") > -1) setFieldValue(name, "all");
     else setFieldValue(name, value.join(","));
   };
+
+  const onCheckFeedbackModelOk = () => setShowCheckFeedbackModal(false);
+
+  useEffect(() => {
+    if (
+      values?.orgId != "" &&
+      values?.sessionNo != "" &&
+      values?.userType != "" &&
+      !values?._id
+    ) {
+      setLoader(true);
+      checkFeedbackName({
+        variables: {
+          orgId: values?.orgId,
+          sessionNo: values?.sessionNo,
+          userType: values?.userType,
+        },
+      });
+    }
+  }, [values?.orgId, values?.sessionNo, values?.userType]);
   return (
     <Card>
       <CardContent>
@@ -236,6 +280,11 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
           </Form>
         </Stack>
       </CardContent>
+      <CheckFeedbackModel
+        isOpen={showCheckFeedbackModal}
+        validationFailList={checkFeedbackNameRes}
+        onOK={onCheckFeedbackModelOk}
+      />
     </Card>
   );
 };
