@@ -119,7 +119,7 @@ const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
                   extraProps={{ "data-testid": `questions.${i}.answer_type` }}
                 />
               </Box>
-              {answer_type == "2" && (
+              {answer_type == "list" && (
                 <Box className="autoCompleteWrapper">
                   <AutoCompleteList i={i} formikProps={formikProps} />
                 </Box>
