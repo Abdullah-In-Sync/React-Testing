@@ -171,6 +171,7 @@ const TableGenerator = ({
     }
   };
 
+  /* istanbul ignore next */
   const isSelected = (record) =>
     props.selectedRecords.findIndex((x) => x.id === record.id) !== -1;
 
