@@ -141,6 +141,7 @@ describe("Admin feedback Client/Therapist response view", () => {
       query: {
         id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
         pttherapyId: "4937a27dc00d48bf983fdcd4b0762ebd",
+        patientId: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946"
       },
       back: pushMock,
     });
