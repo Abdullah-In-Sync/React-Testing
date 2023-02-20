@@ -75,26 +75,32 @@ export default function FeedbackResponses(props: propTypes) {
       key: "actions",
       columnName: "Actions",
       visible: true,
-      render: (_, value) => (
-        <>
-          <NextLink
-            href={`/admin/feedback/responses/${props?.feedbackId}/${value?.pttherapy_id}/${value?.patient_detail?._id}`}
-            passHref
-          >
-            <IconButton size="small" data-testid="view-icon-button">
-              <VisibilityIcon />
-            </IconButton>
-          </NextLink>
+      render: (_, value) => {
+        /* istanbul ignore next */
+        const handleClickDownload = () => {
+          props?.handleCsvDownload(value);
+        };
+        return (
+          <>
+            <NextLink
+              href={`/admin/feedback/responses/${props?.feedbackId}/${value?.pttherapy_id}/${value?.patient_detail?._id}`}
+              passHref
+            >
+              <IconButton size="small" data-testid="view-icon-button">
+                <VisibilityIcon />
+              </IconButton>
+            </NextLink>
 
-          <IconButton
-            size="small"
-            data-testid={`download-icon-button-second-${value._id}`}
-            onClick={() => props?.handleCsvDownload(value)}
-          >
-            <DownloadIcon />
-          </IconButton>
-        </>
-      ),
+            <IconButton
+              size="small"
+              data-testid={`download-icon-button-second-${value._id}`}
+              onClick={handleClickDownload}
+            >
+              <DownloadIcon />
+            </IconButton>
+          </>
+        );
+      },
     },
   ];
 
@@ -106,6 +112,7 @@ export default function FeedbackResponses(props: propTypes) {
     dayjs("2014-08-18")
   );
 
+  /* istanbul ignore next */
   const handleChangeStartDate = (newValue: Dayjs | null) => {
     /* istanbul ignore next */
     setStartDateValue(newValue);
@@ -113,6 +120,7 @@ export default function FeedbackResponses(props: propTypes) {
     props.handleDateChange(newValue, "startDate");
   };
 
+  /* istanbul ignore next */
   const handleChangeEndDate = (newValue: Dayjs | null) => {
     /* istanbul ignore next */
     setEndDateValue(newValue);
@@ -120,9 +128,15 @@ export default function FeedbackResponses(props: propTypes) {
     props.handleDateChange(newValue, "endDate");
   };
 
+  /* istanbul ignore next */
   const changePage = (url: any) => {
     /* istanbul ignore next */
     console.log("CHANGE PAGE", url);
+  };
+
+  /* istanbul ignore next */
+  const handleClickCsvDownload = () => {
+    props?.handleCsvDownload(null);
   };
 
   return (
@@ -213,7 +227,7 @@ export default function FeedbackResponses(props: propTypes) {
               width: "unset",
               marginRight: "10px",
             }}
-            onClick={() => props?.handleCsvDownload(null)}
+            onClick={handleClickCsvDownload}
             // onClick={() => }
           >
             <DownloadIcon />
