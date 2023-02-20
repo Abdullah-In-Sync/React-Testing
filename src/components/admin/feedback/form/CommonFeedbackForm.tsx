@@ -67,7 +67,7 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
   checkFeedbackName,
-  setLoader
+  setLoader,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const questionFieldscRef = useRef(null);
