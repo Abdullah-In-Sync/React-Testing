@@ -141,6 +141,7 @@ const CreateFeedbackPage: NextPage = () => {
           organizationList={organizationList}
           submitForm={handleSavePress}
           onPressCancel={onPressCancel}
+          setLoader={setLoader}
         />
         {isConfirm.status && (
           <ConfirmationModal

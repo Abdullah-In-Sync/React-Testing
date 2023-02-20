@@ -54,8 +54,6 @@ const EditFeedbackForm: React.FC<ViewProps> = ({
       />
     );
   };
-  // validateOnChange = {false}
-  // validateOnBlur ={false} <CommonForm organizationList={organizationList}/>
   return <>{commonForm()}</>;
 };
 
