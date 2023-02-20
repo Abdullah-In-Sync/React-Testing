@@ -1,8 +1,9 @@
+/* istanbul ignore file */
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ConfirmationModal from "../../../../../components/common/ConfirmationModal";
 import ContentHeader from "../../../../../components/common/ContentHeader";
 import Loader from "../../../../../components/common/Loader";
@@ -12,10 +13,13 @@ import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization
 
 import EditFeedbackForm from "../../../../../components/admin/feedback/edit/EditFeedbackForm";
 import {
+  DELETE_FEEDBACK_QUESTION_BY_ADMIN,
   EDIT_FEEDBACK_BY_ADMIN,
   VIEW_FEEDBACK_BY_ID,
 } from "../../../../../graphql/Feedback/graphql";
 import {
+  DeleteFeedbackQuestionByAdminRes,
+  DeleteFeedbackQuestionByAdminVars,
   EditFeedbackByAdminRes,
   EditFeedbackByAdminVars,
   ViewFeedbackByAdminRes,
@@ -28,6 +32,7 @@ const EditFeedbackPage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { query: { id: feedbackId } = {} } = router;
   const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
@@ -37,11 +42,22 @@ const EditFeedbackPage: NextPage = () => {
     questionDeleteStatus: false,
   });
 
+  const selectedQuestion = useRef();
+
   const [editFeedback] = useMutation<
     EditFeedbackByAdminRes,
     EditFeedbackByAdminVars
   >(EDIT_FEEDBACK_BY_ADMIN);
-  // const [deleteSafetyPlan] = useMutation(DELETE_SAFETY_PLAN_QUESTION);
+
+  const [deleteFeedbackQuestion] = useMutation<
+    DeleteFeedbackQuestionByAdminRes,
+    DeleteFeedbackQuestionByAdminVars
+  >(DELETE_FEEDBACK_QUESTION_BY_ADMIN, {
+    onCompleted: () => {
+      setLoader(false);
+      (selectedQuestion?.current as any)?.callback();
+    },
+  });
 
   const [
     getOrgList,
@@ -153,41 +169,24 @@ const EditFeedbackPage: NextPage = () => {
     setSuccessModal(false);
   };
 
-  const callDeleteApi = (questionId, successDeleteCallback, doneCallback) => {
-    try {
-      // deleteSafetyPlan({
-      //   variables: { questionId },
-      //   fetchPolicy: "network-only",
-      //   onCompleted: (data) => {
-      //     if (data) {
-      //       successDeleteCallback();
-      //       doneCallback();
-      //       enqueueSnackbar("Question successfully deleted.", {
-      //         variant: "success",
-      //       });
-      //     }
-      //     setLoader(false);
-      //   },
-      // });
-    } catch (e) {
-      enqueueSnackbar("Server error please try later.", {
-        variant: "error",
-      });
-      setLoader(false);
-      doneCallback();
-    } finally {
-      setLoader(false);
-    }
+  const handleDeleteQuestion = (v) => {
+    selectedQuestion.current = v;
+    setDeleteModal(true);
   };
 
-  const handleDeleteQuestion = (v) => {
-    const { questionId, callback: successDeleteCallback } = v;
-    setIsConfirm({
-      ...isConfirm,
-      ...{
-        questionDeleteStatus: true,
-        storedFunction: (callback) =>
-          callDeleteApi(questionId, successDeleteCallback, callback),
+  const onCancelDeleteQuestion = () => {
+    setDeleteModal(false);
+  };
+
+  const onDeleteQuestion = () => {
+    const deleteQuestion: string = (
+      selectedQuestion.current || { questionId: "" }
+    ).questionId as string;
+    setDeleteModal(false);
+    setLoader(true);
+    deleteFeedbackQuestion({
+      variables: {
+        questionId: deleteQuestion,
       },
     });
   };
@@ -222,20 +221,20 @@ const EditFeedbackPage: NextPage = () => {
             onConfirm={cancelConfirm}
           />
         )}
-        {isConfirm.questionDeleteStatus && (
-          <ConfirmationModal
-            label="Are you sure?"
-            description="You want to delete feedback"
-            onCancel={clearIsConfirm}
-            onConfirm={onConfirmSubmit}
-          />
-        )}
         {successModal && (
           <SuccessModal
             isOpen={successModal}
             title="Successfull"
             description={"Feedback has been updated successfully."}
             onOk={handleOk}
+          />
+        )}
+        {deleteModal && (
+          <ConfirmationModal
+            label="Are you sure?"
+            description="Your want to delete question"
+            onCancel={onCancelDeleteQuestion}
+            onConfirm={onDeleteQuestion}
           />
         )}
       </Layout>

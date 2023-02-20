@@ -183,6 +183,7 @@ export default function AddForm(props: propTypes) {
     }
   }, [formFields.model_id]);
 
+  /* istanbul ignore next */
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {

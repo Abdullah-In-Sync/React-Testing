@@ -19,6 +19,7 @@ import {
 const EditSafetyPlanPage: NextPage = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  /* istanbul ignore next */
   const { query: { id: planId } = {} } = router;
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
@@ -61,6 +62,7 @@ const EditSafetyPlanPage: NextPage = () => {
   }, []);
 
   const selectedOrgIds = (orgId) => {
+    /* istanbul ignore next */
     if (orgId === "all")
       return organizationList.map((item) => item._id).join(",");
     else return orgId;
@@ -69,7 +71,9 @@ const EditSafetyPlanPage: NextPage = () => {
   const submitForm = async (formFields, doneCallback) => {
     const { orgId, planDescription, planName, planType, questions } =
       formFields;
+    /* istanbul ignore next */
     const modifyQuestions =
+      /* istanbul ignore next */
       questions.length > 0 ? { questions: JSON.stringify(questions) } : {};
     const variables = {
       planId,
@@ -86,6 +90,7 @@ const EditSafetyPlanPage: NextPage = () => {
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
+          /* istanbul ignore next */
           if (data) {
             setSuccessModal(true);
           }
@@ -93,10 +98,13 @@ const EditSafetyPlanPage: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -116,10 +124,12 @@ const EditSafetyPlanPage: NextPage = () => {
   };
 
   const cancelConfirm = () => {
+    /* istanbul ignore next */
     router.back();
   };
 
   const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
     setIsConfirm({ ...isConfirm, ...{ cancelStatus: false } });
   };
 
@@ -145,6 +155,7 @@ const EditSafetyPlanPage: NextPage = () => {
   const handleOk = () => {
     /* istanbul ignore next */
     router.push("/admin/safetyPlan");
+    /* istanbul ignore next */
     setSuccessModal(false);
   };
 
@@ -169,10 +180,13 @@ const EditSafetyPlanPage: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);

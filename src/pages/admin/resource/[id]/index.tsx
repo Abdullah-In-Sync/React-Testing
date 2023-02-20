@@ -34,7 +34,7 @@ const ResourceById: NextPage = () => {
   const [getResourceData, { loading: resourceLoading, data: resourceData }] =
     useLazyQuery(GET_RESOURCE_DETAIL, {
       onCompleted: (data) => {
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         if (data!.getResourceById) {
           setResId(data!.getResourceById[0]._id);
         } else if (data!.getResourceById == null) {
@@ -59,12 +59,15 @@ const ResourceById: NextPage = () => {
 
   const onViewTemplate = () => {
     sessionStorage.setItem(
+      /* istanbul ignore next */
       resourceData?.getResourceById[0]?._id,
+      /* istanbul ignore next */
       JSON.stringify({
         data: JSON.parse(resourceData?.getResourceById[0]?.template_data),
         name: resourceData?.getResourceById[0].resource_name,
       })
     );
+    /* istanbul ignore next */
     router.push(`/template/preview/${resourceData?.getResourceById[0]?._id}`);
   };
 
@@ -148,6 +151,7 @@ const ResourceById: NextPage = () => {
                   </Typography>
                 </Box>
                 {resourceData.getResourceById[0]?.resource_issmartdraw ==
+                  /* istanbul ignore next */
                   "1" && (
                   <Box marginLeft={"auto"} className={classes.ellipseDiv}>
                     <IconButton

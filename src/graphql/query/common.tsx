@@ -81,6 +81,46 @@ export const GET_PATIENTFEEDBACKLIST_DATA = gql`
   }
 `;
 
+export const GET_PATIENT_FEEDBACKLIST_DATA_NEW = gql`
+  query patientGetFeedbackList($session: String!, $pttherapyId: String!) {
+    patientGetFeedbackList(session: $session, pttherapyId: $pttherapyId) {
+      _id
+      created_date
+      description
+      feedback_type
+      name
+      org_id
+      questions {
+        _id
+        answer {
+          _id
+          answer
+          created_date
+          patient_id
+          pttherapy_id
+          question_id
+          status
+          therapist_id
+          updated_date
+        }
+        answer_options
+        answer_type
+        created_date
+        feedback_id
+        question
+        status
+        updated_date
+      }
+      session_no
+      status
+      updated_date
+      user_id
+      user_type
+      visibility
+    }
+  }
+`;
+
 export const GET_PATIENT_GOAL_DATA = gql`
   query GetPatientGoalList($pttherapyId: String!) {
     getPatientGoalList(pttherapyId: $pttherapyId) {

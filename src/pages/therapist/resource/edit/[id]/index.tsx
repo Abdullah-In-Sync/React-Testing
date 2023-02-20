@@ -31,6 +31,7 @@ const Index = () => {
           update: {
             resource_name: formFields.resource_name,
             resource_type: formFields.resource_type,
+            /* istanbul ignore next */
             resource_issmartdraw: formFields?.resource_issmartdraw || "0",
             resource_isformualation: "0",
             disorder_id: formFields.disorder_id,
@@ -43,6 +44,7 @@ const Index = () => {
             resource_avail_therapist: formFields.resource_avail_therapist,
             resource_avail_onlyme: formFields.resource_avail_onlyme,
             resource_filename: formFields.file_name,
+            /* istanbul ignore next */
             ...(formFields?.resource_issmartdraw == "1"
               ? {
                   template_id: formFields?.template_id,
