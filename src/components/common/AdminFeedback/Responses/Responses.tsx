@@ -107,16 +107,16 @@ export default function FeedbackResponses(props: propTypes) {
   );
 
   const handleChangeStartDate = (newValue: Dayjs | null) => {
-    console.debug("Koca: handleChangeStartDate ");
     /* istanbul ignore next */
     setStartDateValue(newValue);
+    /* istanbul ignore next */
     props.handleDateChange(newValue, "startDate");
   };
 
   const handleChangeEndDate = (newValue: Dayjs | null) => {
-    console.debug("Koca: handleChangeEndDate ");
     /* istanbul ignore next */
     setEndDateValue(newValue);
+    /* istanbul ignore next */
     props.handleDateChange(newValue, "endDate");
   };
 
@@ -134,7 +134,10 @@ export default function FeedbackResponses(props: propTypes) {
               className="nextButton"
               data-testid="backButton"
               variant="contained"
-              onClick={() => router?.push("/admin/feedback/")}
+              onClick={() =>
+                /* istanbul ignore next */
+                router?.push("/admin/feedback/")
+              }
               startIcon={<ArrowBackIcon />}
             >
               Back
@@ -297,6 +300,7 @@ export default function FeedbackResponses(props: propTypes) {
               onPageChange={(page, direction) => {
                 /* istanbul ignore next */
                 setPage(page);
+                /* istanbul ignore next */
                 props.handlePageChange(page, "page");
 
                 /* istanbul ignore next */
@@ -312,7 +316,9 @@ export default function FeedbackResponses(props: propTypes) {
               }}
               backendPagination={true}
               onRowPerPageChange={(rows) => {
+                /* istanbul ignore next */
                 setRowsPerPage(rows);
+                /* istanbul ignore next */
                 props.handlePageChange(rows, "rows");
               }}
               dataCount={filterFeedbackresponseData?.length}

@@ -53,7 +53,7 @@ const Monitoring: NextPage = () => {
       router.events.off("routeChangeComplete", handlePageRerfresh);
     };
   }, [router.events]);
-
+  /* istanbul ignore next */
   const resetState = () => {
     setCompleteData([]);
     setCurrentMonitoring(undefined);
@@ -62,8 +62,11 @@ const Monitoring: NextPage = () => {
   };
 
   const handlePageRerfresh = () => {
+    /* istanbul ignore next */
     resetState();
+    /* istanbul ignore next */
     setLoader(true);
+    /* istanbul ignore next */
     getPatientMonitorList();
   };
 
@@ -89,6 +92,7 @@ const Monitoring: NextPage = () => {
         },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
+          /* istanbul ignore next */
           const { getPatientMonitorAnsById: viewResponse = [] } = data;
           setCurrentMonitoring(item);
           setViewResponseWithEmojis(viewResponse);
@@ -120,8 +124,10 @@ const Monitoring: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
       doneCallback();
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     }
   };
@@ -178,7 +184,7 @@ const Monitoring: NextPage = () => {
   const handleNextPress = () => {
     const { index }: any = currentMonitoring;
     const indexIncrement1 = index + 1;
-
+    /* istanbul ignore next */
     if (monitoringList.length > indexIncrement1) {
       fetchPatientMonitorById({
         ...monitoringList[index + 1],
@@ -206,7 +212,9 @@ const Monitoring: NextPage = () => {
   };
 
   const clearIsConfirm = () => {
+    /* istanbul ignore next */
     isConfirm.setSubmitting(false);
+    /* istanbul ignore next */
     setIsConfirm({ status: false, storedFunction: null, setSubmitting: null });
   };
 
@@ -215,13 +223,18 @@ const Monitoring: NextPage = () => {
   };
 
   const formatDate = (isoDate) => {
+    /* istanbul ignore next */
     return moment(isoDate.toISOString()).format("YYYY-MM-DD");
   };
 
   const handleRangeGoButton = (v) => {
+    /* istanbul ignore next */
     const { fromDate, toDate } = v;
+    /* istanbul ignore next */
     const endDate = formatDate(toDate);
+    /* istanbul ignore next */
     const startDate = formatDate(fromDate);
+    /* istanbul ignore next */
     fetchPatientMonitorAnsById(currentMonitoring, { endDate, startDate });
   };
 

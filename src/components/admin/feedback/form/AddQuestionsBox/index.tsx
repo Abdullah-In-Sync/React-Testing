@@ -19,11 +19,11 @@ type Props = React.PropsWithChildren<{
 
 const answer_types = [
   {
-    id: "1",
+    id: "text",
     value: "Text",
   },
   {
-    id: "2",
+    id: "list",
     value: "List",
   },
 ];

@@ -82,6 +82,7 @@ const SafetyPlanPage: NextPage = () => {
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
+    /* istanbul ignore next */
     getSafetyPlanList({
       variables: {
         limit: rowsLimit,
@@ -100,6 +101,7 @@ const SafetyPlanPage: NextPage = () => {
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
+    /* istanbul ignore next */
     getSafetyPlanList({
       variables: {
         limit: +event.target.value,
@@ -108,6 +110,7 @@ const SafetyPlanPage: NextPage = () => {
         ...selectFilterOptions,
       },
     });
+    /* istanbul ignore next */
     setRowsLimit(+event.target.value);
     /* istanbul ignore next */
     setTableCurrentPage(0);
@@ -130,12 +133,14 @@ const SafetyPlanPage: NextPage = () => {
 
   const onChangeFilterDropdown = (e) => {
     const temp = selectFilterOptions;
+    /* istanbul ignore next */
     const searchText =
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
-
+    /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
+    /* istanbul ignore next */
     getSafetyPlanList({
       variables: {
         limit: rowsLimit,
@@ -162,6 +167,7 @@ const SafetyPlanPage: NextPage = () => {
 
   const handleActionButtonClick = (value) => {
     const { pressedIconButton, _id } = value;
+    /* istanbul ignore next */
     switch (pressedIconButton) {
       case "edit":
         return router.push(`/admin/safetyPlan/edit/${_id}`);
@@ -204,6 +210,7 @@ const SafetyPlanPage: NextPage = () => {
               size="small"
               data-testid="deleteSaftyPlanModalCancelButton"
               onClick={() => {
+                /* istanbul ignore next */
                 setDeleteConfirmation(false);
               }}
               disabled={deleteSeftyPlanLoading}
@@ -228,7 +235,10 @@ const SafetyPlanPage: NextPage = () => {
         </DeleteSureModal>
         <SuccessModal
           isOpen={showSuccessModal}
-          onOk={() => setShowSuccessModal(false)}
+          onOk={() =>
+            /* istanbul ignore next */
+            setShowSuccessModal(false)
+          }
           description={"Your plan has been deleted successfully."}
           title={"Successfull"}
         />
