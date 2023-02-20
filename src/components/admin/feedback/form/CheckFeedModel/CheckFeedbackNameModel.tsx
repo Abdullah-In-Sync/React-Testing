@@ -77,7 +77,10 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
             proceed
           </Typography>
         </Box>
-        <Box style={{ marginTop: "20px" }}>
+        <Box
+          style={{ marginTop: "20px" }}
+          className={classes.adminFeedbackValidationTable}
+        >
           <TableGenerator
             fields={fields}
             data={validationFailList?.checkFeedbackName}
@@ -86,7 +89,6 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
             dataCount={10}
             selectedRecords={[]}
             showPagination={false}
-            classes={classes.adminFeedbackValidationTable}
           />
         </Box>
         <Box marginTop="20px" display="flex" justifyContent="center">
