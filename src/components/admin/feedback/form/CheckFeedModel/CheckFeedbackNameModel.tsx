@@ -3,6 +3,8 @@ import React from "react";
 import { CheckFeedbackNameRes } from "../../../../../graphql/Feedback/types";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
+import TableGenerator from "../../../../common/TableGenerator";
+import { useStyles } from "./CheckFeedbackNameModelStyle";
 
 interface ViewProps {
   validationFailList: CheckFeedbackNameRes;
@@ -30,6 +32,29 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
   isOpen,
   validationFailList,
 }) => {
+  const classes = useStyles();
+
+  const fields = [
+    {
+      key: "organization_name",
+      columnName: "Organization",
+      visible: true,
+      render: (val) => val,
+    },
+    {
+      key: "User",
+      columnName: "User",
+      visible: true,
+      render: () => "Client",
+    },
+    {
+      key: "session_no",
+      columnName: "Session",
+      visible: true,
+      render: (val) => val,
+    },
+  ];
+
   return (
     <Modal open={isOpen} data-testid="checkFeedbackModel">
       <Box sx={style}>
@@ -51,6 +76,18 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
             Following Sessions are already exists! Kindly uncheck existed to
             proceed
           </Typography>
+        </Box>
+        <Box style={{ marginTop: "20px" }}>
+          <TableGenerator
+            fields={fields}
+            data={validationFailList?.checkFeedbackName}
+            pagination={false}
+            loader={false}
+            dataCount={10}
+            selectedRecords={[]}
+            showPagination={false}
+            classes={classes.adminFeedbackValidationTable}
+          />
         </Box>
         <Box marginTop="20px" display="flex" justifyContent="center">
           {onOK && (
