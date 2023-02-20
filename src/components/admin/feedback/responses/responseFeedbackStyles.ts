@@ -46,6 +46,7 @@ export const useStyles = makeStyles(() => ({
         padding: 10,
         borderRadius: 7,
         border: "1px solid #c4c4c4",
+        marginBottom: "1em",
       },
       "& .answerBox": {
         padding: "0px 10px",

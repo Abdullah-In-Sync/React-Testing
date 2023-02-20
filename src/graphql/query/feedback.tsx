@@ -66,6 +66,7 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
         feedbackquestion {
           _id
           answer_type
+          question
         }
         patient_detail {
           _id
@@ -76,6 +77,7 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
           patient_gender
           patient_lastname
         }
+        pttherapy_id
         therapist_detail {
           org_id
           therapist_name
@@ -87,6 +89,7 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
           therapy_name
         }
       }
+      totalcount
     }
   }
 `;
