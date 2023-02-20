@@ -90,3 +90,21 @@ export const DELETE_FEEDBACK_QUESTION_BY_ADMIN = gql`
     }
   }
 `;
+
+export const CHECK_FEEDBACK_NAME = gql`
+  query checkFeedbackName(
+    $orgId: String!
+    $sessionNo: String!
+    $userType: String!
+  ) {
+    checkFeedbackName(
+      orgId: $orgId
+      sessionNo: $sessionNo
+      userType: $userType
+    ) {
+      org_id
+      organization_name
+      session_no
+    }
+  }
+`;

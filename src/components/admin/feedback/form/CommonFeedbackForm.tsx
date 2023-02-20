@@ -9,12 +9,17 @@ import {
   Switch,
 } from "@mui/material";
 import { ErrorMessage, Form, FormikProps } from "formik";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import AddQuestionsBox from "./AddQuestionsBox";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { useStyles } from "./CreateFeedbackSyles";
 import { FeedbackFormData } from "./types";
+import { LazyQueryExecFunction } from "@apollo/client";
+import {
+  CheckFeedbackNameRes,
+  CheckFeedbackNameVars,
+} from "../../../../graphql/Feedback/types";
 
 interface ViewProps {
   organizationList?: Array<{
@@ -23,6 +28,11 @@ interface ViewProps {
   formikProps: FormikProps<FeedbackFormData>;
   onPressCancel?: () => void;
   handleDeleteQuestion?: (v) => void;
+  setLoader?: React.Dispatch<React.SetStateAction<boolean>>;
+  checkFeedbackName?: LazyQueryExecFunction<
+    CheckFeedbackNameRes,
+    CheckFeedbackNameVars
+  >;
 }
 
 const userTypes = [
@@ -56,13 +66,17 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
   onPressCancel,
   formikProps,
   handleDeleteQuestion,
+  checkFeedbackName,
+  setLoader,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const questionFieldscRef = useRef(null);
+
   const styles = useStyles();
   const csvDecode = (csvString) => {
     return csvString ? csvString.split(",") : [];
   };
+
   const handleChange = (event, name) => {
     const {
       target: { value },
@@ -70,6 +84,24 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
     if (value.indexOf("all") > -1) setFieldValue(name, "all");
     else setFieldValue(name, value.join(","));
   };
+
+  useEffect(() => {
+    if (
+      values?.orgId != "" &&
+      values?.sessionNo != "" &&
+      values?.userType != "" &&
+      !values?._id
+    ) {
+      setLoader?.(true);
+      checkFeedbackName?.({
+        variables: {
+          orgId: values?.orgId,
+          sessionNo: values?.sessionNo,
+          userType: values?.userType,
+        },
+      });
+    }
+  }, [values?.orgId, values?.sessionNo, values?.userType]);
   return (
     <Card>
       <CardContent>
