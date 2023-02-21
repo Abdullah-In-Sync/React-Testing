@@ -79,5 +79,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
       border: `1px solid #ccc`,
       borderRadius: "0px 0px 16px 16px",
     },
+    "& .active": {
+      background: `${theme.palette.primary.main} !important`,
+    },
   },
 }));

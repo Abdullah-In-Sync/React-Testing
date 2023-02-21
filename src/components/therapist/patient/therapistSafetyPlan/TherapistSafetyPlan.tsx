@@ -121,6 +121,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                           </IconButton>
                           <IconButton
                             size="small"
+                            className={`${v.share_status ? "active" : ""}`}
                             data-testid={`button-share-icon_${k}`}
                             style={{
                               backgroundColor: "#fff",
