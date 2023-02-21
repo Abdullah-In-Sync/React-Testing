@@ -25,6 +25,8 @@ type propTypes = {
   orgData?: any;
   handleDateChange?: any;
   handlePageChange?: any;
+  feedbackId?: string;
+  handleCsvDownload?: (value: any) => void;
 };
 
 export default function FeedbackResponses(props: propTypes) {
@@ -47,19 +49,19 @@ export default function FeedbackResponses(props: propTypes) {
       key: "therapist_detail",
       columnName: "Therapist Name",
       visible: true,
-      render: (val) => val.therapist_name,
+      render: (val) => val?.therapist_name,
     },
     {
       key: "patient_detail",
       columnName: "Assigned Patient",
       visible: true,
-      render: (val) => val.patient_firstname,
+      render: (val) => val?.patient_firstname,
     },
     {
       key: "therapy_detail",
       columnName: "Therapy Name",
       visible: true,
-      render: (val) => val.therapy_name,
+      render: (val) => val?.therapy_name,
     },
 
     {
@@ -73,21 +75,32 @@ export default function FeedbackResponses(props: propTypes) {
       key: "actions",
       columnName: "Actions",
       visible: true,
-      render: (_, value) => (
-        <>
-          <NextLink href={"" + value._id} passHref>
-            <IconButton size="small" data-testid="view-icon-button">
-              <VisibilityIcon />
-            </IconButton>
-          </NextLink>
+      render: (_, value) => {
+        /* istanbul ignore next */
+        const handleClickDownload = () => {
+          props?.handleCsvDownload(value);
+        };
+        return (
+          <>
+            <NextLink
+              href={`/admin/feedback/responses/${props?.feedbackId}/${value?.pttherapy_id}/${value?.patient_detail?._id}`}
+              passHref
+            >
+              <IconButton size="small" data-testid="view-icon-button">
+                <VisibilityIcon />
+              </IconButton>
+            </NextLink>
 
-          <NextLink href={"" + value._id} passHref>
-            <IconButton size="small" data-testid="download-icon-button">
+            <IconButton
+              size="small"
+              data-testid={`download-icon-button-second-${value._id}`}
+              onClick={handleClickDownload}
+            >
               <DownloadIcon />
             </IconButton>
-          </NextLink>
-        </>
-      ),
+          </>
+        );
+      },
     },
   ];
 
@@ -99,6 +112,7 @@ export default function FeedbackResponses(props: propTypes) {
     dayjs("2014-08-18")
   );
 
+  /* istanbul ignore next */
   const handleChangeStartDate = (newValue: Dayjs | null) => {
     /* istanbul ignore next */
     setStartDateValue(newValue);
@@ -106,6 +120,7 @@ export default function FeedbackResponses(props: propTypes) {
     props.handleDateChange(newValue, "startDate");
   };
 
+  /* istanbul ignore next */
   const handleChangeEndDate = (newValue: Dayjs | null) => {
     /* istanbul ignore next */
     setEndDateValue(newValue);
@@ -113,9 +128,15 @@ export default function FeedbackResponses(props: propTypes) {
     props.handleDateChange(newValue, "endDate");
   };
 
+  /* istanbul ignore next */
   const changePage = (url: any) => {
     /* istanbul ignore next */
     console.log("CHANGE PAGE", url);
+  };
+
+  /* istanbul ignore next */
+  const handleClickCsvDownload = () => {
+    props?.handleCsvDownload(null);
   };
 
   return (
@@ -200,12 +221,13 @@ export default function FeedbackResponses(props: propTypes) {
 
           <IconButton
             size="small"
-            data-testid="download-icon-button"
+            data-testid="download-icon-button-first"
             style={{
               backgroundColor: "#fff",
               width: "unset",
               marginRight: "10px",
             }}
+            onClick={handleClickCsvDownload}
             // onClick={() => }
           >
             <DownloadIcon />

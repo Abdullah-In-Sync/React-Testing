@@ -209,7 +209,7 @@ const Feedback: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "You want to delete feedback",
+        description: "You want to delete feedback plan",
       },
       storedFunction: (callback) => handleDelete(v, callback),
     });

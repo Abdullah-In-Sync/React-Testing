@@ -77,15 +77,21 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
 
     switch (answer_type) {
       case "2":
-        return booleanAnswerType({
-          options: answer_options.replace(/[\]']+/g, "").split(/,+|"[^"]+"/g),
-          answer,
-        });
+        return (
+          answer_options &&
+          booleanAnswerType({
+            options: answer_options.replace(/[\]']+/g, "").split(/,+|"[^"]+"/g),
+            answer,
+          })
+        );
       case "list":
-        return booleanAnswerType({
-          options: answer_options.replace(/[\]']+/g, "").split(/,+|"[^"]+"/g),
-          answer,
-        });
+        return (
+          answer_options &&
+          booleanAnswerType({
+            options: answer_options.replace(/[\]']+/g, "").split(/,+|"[^"]+"/g),
+            answer,
+          })
+        );
       case "1":
         return textAnswerType({ answer });
       case "text":

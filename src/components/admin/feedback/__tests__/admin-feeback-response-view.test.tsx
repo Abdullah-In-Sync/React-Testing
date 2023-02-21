@@ -6,7 +6,7 @@ import { SnackbarProvider } from "notistack";
 import { useRouter } from "next/router";
 import { VIEW_ADMIN_FEEDBACK_BY_ID } from "../../../../graphql/query";
 
-import ResponseView from "../../../../pages/admin/feedback/responses/[id]/[pttherapyId]";
+import ResponseView from "../../../../pages/admin/feedback/responses/[id]/[pttherapyId]/[patientId]";
 
 import theme from "../../../../styles/theme/theme";
 
@@ -141,6 +141,7 @@ describe("Admin feedback Client/Therapist response view", () => {
       query: {
         id: "3b1a1dad-1d55-4ecd-add6-2b428bb74dcf",
         pttherapyId: "4937a27dc00d48bf983fdcd4b0762ebd",
+        patientId: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
       },
       back: pushMock,
     });
