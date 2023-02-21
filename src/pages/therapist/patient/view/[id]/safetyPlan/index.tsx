@@ -212,7 +212,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           });
           /* istanbul ignore next */
           setSuccessModal({
-            description: "Your plan have been deleted sucessfully.",
+            description: "Your plan has been deleted successfully!",
           });
         },
       });
@@ -515,7 +515,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       {successModal && (
         <SuccessModal
           isOpen={Boolean(successModal)}
-          title="Successfull"
+          title="Successful"
           description={successModal.description}
           onOk={handleOk}
         />
