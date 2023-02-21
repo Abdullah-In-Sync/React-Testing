@@ -1,12 +1,12 @@
 /* istanbul ignore file */
 import React from "react";
 import TherapyTabsGenerator from "../../../../../../components/common/TabsGenerator/TherapyTabGenerator";
-import TherapyPatientFeedback from "../../../../feedback";
 import { Box } from "@material-ui/core";
 import PatientEditTemplatePage2 from "../resources";
 import { useRouter } from "next/router";
 import { Link } from "../../../../../../lib/helpers/common";
 import TherapistSafetyPlanIndex from "../safetyPlan";
+import TherapistFeedbackTabs from "../../../../feedback/FeedbackTabs";
 
 type propTypes = {
   setTherapy: any;
@@ -67,7 +67,7 @@ export default function TherapyMainComponent(props: propTypes) {
     {
       label: "Feedback",
       value: "feedback",
-      component: <TherapyPatientFeedback setTherapy={setTherapy} />,
+      component: <TherapistFeedbackTabs setTherapy={setTherapy} />,
     },
   ];
   return (
