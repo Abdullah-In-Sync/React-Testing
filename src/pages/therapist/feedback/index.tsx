@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   Accordion,
@@ -21,6 +21,7 @@ import SureModal from "../../../components/admin/resource/SureModal";
 import TextFieldComponent from "../../../components/common/TextField/TextFieldComponent";
 import { useSnackbar } from "notistack";
 import { POST_THERAPIST_FEEDBACK_NEW } from "../../../graphql/mutation";
+import AddIcon from "@mui/icons-material/Add";
 
 const TherapyPatientFeedback: any = (props) => {
   const [successModal, setSuccessModal] = useState<boolean>(false);
@@ -38,8 +39,7 @@ const TherapyPatientFeedback: any = (props) => {
     patient_name: string;
   }>({ patient_id: "", patient_name: "" });
   const { enqueueSnackbar } = useSnackbar();
-
-  // Mutation
+  // Update Mutation
   const [postTherapistFeedbackNew] = useMutation(POST_THERAPIST_FEEDBACK_NEW);
 
   // Session Queries
@@ -219,7 +219,7 @@ const TherapyPatientFeedback: any = (props) => {
             data-testid="SessionPanelItem"
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white" />}
+              expandIcon={<AddIcon className="text-white" />}
               style={{ minHeight: "0px", height: "45px" }}
               aria-controls={"before_therapy" + "bh-content"}
               id={"before_therapy" + "bh-header"}
@@ -431,7 +431,7 @@ const TherapyPatientFeedback: any = (props) => {
                     data-testid="SessionPanelItem"
                   >
                     <AccordionSummary
-                      expandIcon={<ExpandMoreIcon className="text-white" />}
+                      expandIcon={<AddIcon className="text-white" />}
                       aria-controls={panelName + "bh-content"}
                       id={panelName + "bh-header"}
                       data-testid={panelName + "bh-header"}
@@ -644,7 +644,7 @@ const TherapyPatientFeedback: any = (props) => {
             data-testid="SessionPanelItem"
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon className="text-white" />}
+              expandIcon={<AddIcon className="text-white" />}
               style={{ minHeight: "0px", height: "45px" }}
               aria-controls={"after_therapy" + "bh-content"}
               id={"after_therapy" + "bh-header"}
