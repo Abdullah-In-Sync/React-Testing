@@ -39,8 +39,7 @@ const TherapyPatientFeedback: any = (props) => {
     patient_name: string;
   }>({ patient_id: "", patient_name: "" });
   const { enqueueSnackbar } = useSnackbar();
-
-  // Mutation
+  // Update Mutation
   const [postTherapistFeedbackNew] = useMutation(POST_THERAPIST_FEEDBACK_NEW);
 
   // Session Queries
