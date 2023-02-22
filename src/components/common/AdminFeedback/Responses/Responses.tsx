@@ -76,6 +76,10 @@ export default function FeedbackResponses(props: propTypes) {
       columnName: "Actions",
       visible: true,
       render: (_, value) => {
+        const feedbackType =
+          filterFeedbackData[0]["feedback_type"] === "client"
+            ? "patient"
+            : filterFeedbackData[0]["feedback_type"];
         /* istanbul ignore next */
         const handleClickDownload = () => {
           props?.handleCsvDownload(value);
@@ -83,7 +87,9 @@ export default function FeedbackResponses(props: propTypes) {
         return (
           <>
             <NextLink
-              href={`/admin/feedback/responses/${props?.feedbackId}/${value?.pttherapy_id}/${value?.patient_detail?._id}`}
+              href={`/admin/feedback/responses/${props?.feedbackId}/${
+                value?.pttherapy_id
+              }/${value[`${feedbackType}_detail`]["_id"]}`}
               passHref
             >
               <IconButton size="small" data-testid="view-icon-button">
