@@ -6,7 +6,7 @@ import { SnackbarProvider } from "notistack";
 import { useRouter } from "next/router";
 import { VIEW_ADMIN_FEEDBACK_BY_ID } from "../../../../graphql/query";
 
-import ResponseView from "../../../../pages/admin/feedback/responses/[id]/[pttherapyId]/[patientId]";
+import ResponseView from "../../../../pages/admin/feedback/responses/[id]/[pttherapyId]/[userId]";
 
 import theme from "../../../../styles/theme/theme";
 

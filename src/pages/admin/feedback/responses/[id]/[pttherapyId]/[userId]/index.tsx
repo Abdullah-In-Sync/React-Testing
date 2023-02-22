@@ -11,7 +11,7 @@ import { VIEW_ADMIN_FEEDBACK_BY_ID } from "../../../../../../../graphql/query";
 
 const AdminFeedbackResponse = () => {
   const router = useRouter();
-  const { id, pttherapyId, patientId } = router.query || {};
+  const { id, pttherapyId, userId } = router.query || {};
 
   const [loader, setLoader] = useState<boolean>(true);
 
@@ -33,7 +33,7 @@ const AdminFeedbackResponse = () => {
       variables: {
         feedbackId: id,
         pttherapyId: pttherapyId,
-        userId: patientId,
+        userId,
       },
     });
 

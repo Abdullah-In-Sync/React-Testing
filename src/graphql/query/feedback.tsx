@@ -79,6 +79,7 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
         }
         pttherapy_id
         therapist_detail {
+          _id
           org_id
           therapist_name
         }
