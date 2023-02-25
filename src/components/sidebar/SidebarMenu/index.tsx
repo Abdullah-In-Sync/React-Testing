@@ -10,7 +10,6 @@ import {
   superadmin_routes,
   patient_routes,
   therapistRoutes,
-  default_patient_routes,
 } from "../../../utility/sideNavItems";
 import { useAppContext } from "../../../contexts/AuthContext";
 
@@ -150,6 +149,7 @@ const SidebarMenu = () => {
   const [test, setTest] = useState(0);
 
   const { user } = useAppContext();
+  const { module_data = [] } = user || {};
 
   useEffect(() => {
     setTest(
@@ -159,8 +159,12 @@ const SidebarMenu = () => {
     );
   }, [user]);
 
+  const modifyPatientRoutes = patient_routes.filter((elem: any) =>
+    module_data.find(({ name }) => elem.type === name)
+  );
+
   const userRoute = {
-    patient: test ? patient_routes : default_patient_routes,
+    patient: test ? patient_routes : modifyPatientRoutes, //module_data.map(item=>item.name === patient_routes) //test ? patient_routes : default_patient_routes,
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };

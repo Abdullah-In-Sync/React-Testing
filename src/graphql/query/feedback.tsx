@@ -84,11 +84,7 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
           therapist_name
         }
         therapist_id
-        therapy_detail {
-          _id
-          created_date
-          therapy_name
-        }
+        therapy_name
       }
       totalcount
     }

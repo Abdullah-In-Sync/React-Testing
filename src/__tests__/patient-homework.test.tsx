@@ -210,7 +210,7 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme()}>
         <SnackbarProvider>
           <Homework />
         </SnackbarProvider>
