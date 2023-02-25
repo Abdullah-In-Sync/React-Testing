@@ -114,7 +114,7 @@ export default function ProfileForm(props: propTypes) {
   };
 
   //Queries GraphQl
-  // Gender
+  // Gender queries
   const [getDropdownGenderData, { data: dropdownDataGender }] = useLazyQuery(
     GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API,
     {
