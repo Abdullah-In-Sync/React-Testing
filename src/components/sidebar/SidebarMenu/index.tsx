@@ -164,7 +164,7 @@ const SidebarMenu = () => {
   // );
 
   const modifyPatientRoutes = [];
-  patient_routes.filter((elem: any) => {
+  patient_routes.forEach((elem: any) => {
     return module_data.forEach(({ name }) => {
       if (!Array.isArray(elem)) {
         if (elem.type === name) modifyPatientRoutes.push(elem);
