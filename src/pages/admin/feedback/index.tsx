@@ -190,7 +190,7 @@ const Feedback: NextPage = () => {
         setLoader(false);
         refetch();
         setSuccessModal({
-          description: "Feedback has been deleted sucessfully.",
+          description: "Feedback has been deleted Successful.",
         });
         enqueueSnackbar("Feedback deleted successfully!", { variant: "info" });
       },
