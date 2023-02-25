@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
-
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Grid,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 import { useLazyQuery } from "@apollo/client";
 import TextFieldComponent from "../../common/TextField/TextFieldComponent";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
-
 import { patientProfileFormFeild } from "../../../utility/types/resource_types";
-import { GET_PROFILE_DATA } from "../../../graphql/query/patient";
+import {
+  GET_PROFILE_DATA,
+  GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API,
+} from "../../../graphql/query/patient";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -58,6 +68,10 @@ const defaultFormValue = {
   phone_number: "",
   postal_code: "",
   patient_agree: 0,
+  patient_education: "",
+  patient_ethnic_group: "",
+  patient_physical_health: "",
+  patient_illness_ability: "",
 };
 
 type propTypes = {
@@ -67,19 +81,6 @@ type propTypes = {
   userType?: any;
   setEditable: any;
 };
-//STYLE
-
-const genderOptions = [
-  { id: "Male", value: "Male" },
-  { id: "Female", value: "Female" },
-];
-
-const sexualityOptions = [
-  { id: "Asexual", value: "Asexual" },
-  { id: "Bisexual", value: "Bisexual" },
-  { id: "Hetrosexual", value: "Hetrosexual" },
-  { id: "Homosexual", value: "Homosexual" },
-];
 
 const maritalStausOption = [
   { id: "Married", value: "Married" },
@@ -99,15 +100,11 @@ const relationshipStausOption = [
   { id: "other", value: "other" },
 ];
 
-const employmentOption = [
-  { id: "FullTime", value: "FullTime" },
-  { id: "PartTime", value: "PartTime" },
-  { id: "Student", value: "Student" },
-];
-
 export default function ProfileForm(props: propTypes) {
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
+  const [healthValue, setHealthValue] = useState("");
+  const [illnessValue, setIlnessValue] = useState("");
 
   const changeDate = (date: string) => {
     setFormFields((prev) => ({
@@ -117,31 +114,124 @@ export default function ProfileForm(props: propTypes) {
   };
 
   //Queries GraphQl
+  // Gender
+  const [getDropdownGenderData, { data: dropdownDataGender }] = useLazyQuery(
+    GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API,
+    {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    }
+  );
 
+  // Sexuality
+  const [getDropdownSexualityData, { data: dropdownDataSexuality }] =
+    useLazyQuery(GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API, {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    });
+
+  // Religion
+  const [getDropdownReligionData, { data: dropdownDataReligion }] =
+    useLazyQuery(GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API, {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    });
+
+  // Eductation
+  const [getDropdownEductationData, { data: dropdownDataEductation }] =
+    useLazyQuery(GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API, {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    });
+
+  // Employmnet
+  const [getDropdownEmploymentData, { data: dropdownDataEmploymnet }] =
+    useLazyQuery(GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API, {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    });
+
+  // Ethanic
+  const [getDropdownEthanicData, { data: dropdownDataEthanic }] = useLazyQuery(
+    GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API,
+    {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    }
+  );
   const [getPatientData, { loading: profileLoading, data: profileData }] =
     useLazyQuery(GET_PROFILE_DATA, {
       onCompleted: (data) => {
         if (data!.getProfileById) {
           setFormFields(data.getProfileById);
+          setHealthValue(data?.getProfileById?.patient_physical_health);
+          setIlnessValue(data?.getProfileById?.patient_illness_ability);
         }
       },
     });
 
   useEffect(() => {
     props.setLoader(true);
-    getPatientData({ variables: { groupName: props.userType } });
+    getPatientData();
     props.setLoader(false);
   }, [props.userType]);
 
   useEffect(() => {
-    /* istanbul ignore else */
+    props.setLoader(true);
+    getDropdownGenderData({ variables: { name: "gender" } });
+    props.setLoader(false);
+  }, [props.userType]);
+
+  useEffect(() => {
+    props.setLoader(true);
+    getDropdownSexualityData({ variables: { name: "sexuality" } });
+    props.setLoader(false);
+  }, [props.userType]);
+
+  useEffect(() => {
+    props.setLoader(true);
+    getDropdownReligionData({ variables: { name: "religion" } });
+    props.setLoader(false);
+  }, [props.userType]);
+
+  useEffect(() => {
+    props.setLoader(true);
+    getDropdownEductationData({ variables: { name: "education" } });
+    props.setLoader(false);
+  }, [props.userType]);
+
+  useEffect(() => {
+    props.setLoader(true);
+    getDropdownEmploymentData({ variables: { name: "employment" } });
+    props.setLoader(false);
+  }, [props.userType]);
+
+  useEffect(() => {
+    props.setLoader(true);
+    getDropdownEthanicData({ variables: { name: "ethnic" } });
+    props.setLoader(false);
+  }, [props.userType]);
+
+  useEffect(() => {
+    /* istanbul ignore next */
     if (!profileLoading) {
       props.setLoader(false);
     }
   }, [profileData]);
 
   //Function and handler.
-
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -149,6 +239,26 @@ export default function ProfileForm(props: propTypes) {
     const value = e.target.value;
 
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
+  };
+
+  /* istanbul ignore next */
+  const handleOptionChangeHealth = (e) => {
+    const val = e.target.value;
+    setFormFields((prevState) => ({
+      ...prevState,
+      patient_physical_health: val,
+    }));
+    setHealthValue(val);
+  };
+
+  /* istanbul ignore next */
+  const handleOptionChangeAbility = (e) => {
+    const val = e.target.value;
+    setFormFields((prevState) => ({
+      ...prevState,
+      patient_illness_ability: val,
+    }));
+    setIlnessValue(val);
   };
 
   return (
@@ -261,8 +371,12 @@ export default function ProfileForm(props: propTypes) {
                       label="Gender"
                       onChange={handleChange}
                       inputProps={{ "data-testid": "patient_gender" }}
-                      options={genderOptions}
-                      mappingKeys={["id", "value"]}
+                      options={
+                        (dropdownDataGender &&
+                          dropdownDataGender?.getMasterData) ||
+                        []
+                      }
+                      mappingKeys={["name", "display_name"]}
                       size="small"
                       className="form-control-bg"
                       disabled={props.disabled}
@@ -279,8 +393,12 @@ export default function ProfileForm(props: propTypes) {
                       label="Sexuality"
                       onChange={handleChange}
                       inputProps={{ "data-testid": "patient_sexuality" }}
-                      options={sexualityOptions}
-                      mappingKeys={["id", "value"]}
+                      options={
+                        (dropdownDataSexuality &&
+                          dropdownDataSexuality?.getMasterData) ||
+                        []
+                      }
+                      mappingKeys={["name", "display_name"]}
                       size="small"
                       className="form-control-bg"
                       disabled={props.disabled}
@@ -341,24 +459,52 @@ export default function ProfileForm(props: propTypes) {
                     />
                   </Grid>
                   <Grid item xs={4}>
-                    <TextFieldComponent
-                      required={true}
-                      name="religion"
-                      id="region"
-                      label="Religion"
-                      value={formFields?.religion}
-                      onChange={handleChange}
+                    <SingleSelectComponent
                       fullWidth={true}
+                      required={true}
+                      id="region"
+                      labelId="region"
+                      name="religion"
+                      value={formFields?.religion}
+                      label="Education"
+                      onChange={handleChange}
                       inputProps={{ "data-testid": "region" }}
-                      variant="outlined"
-                      className="form-control-bg"
+                      options={
+                        (dropdownDataReligion &&
+                          dropdownDataReligion?.getMasterData) ||
+                        []
+                      }
+                      mappingKeys={["name", "display_name"]}
                       size="small"
+                      className="form-control-bg"
                       disabled={props.disabled}
                     />
                   </Grid>
                 </Grid>
 
                 <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={4}>
+                    <SingleSelectComponent
+                      fullWidth={true}
+                      required={true}
+                      id="education"
+                      labelId="education"
+                      name="patient_education"
+                      value={formFields?.patient_education}
+                      label="Education"
+                      onChange={handleChange}
+                      inputProps={{ "data-testid": "patient_education" }}
+                      options={
+                        (dropdownDataEductation &&
+                          dropdownDataEductation?.getMasterData) ||
+                        []
+                      }
+                      mappingKeys={["name", "display_name"]}
+                      size="small"
+                      className="form-control-bg"
+                      disabled={props.disabled}
+                    />
+                  </Grid>
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
@@ -370,15 +516,40 @@ export default function ProfileForm(props: propTypes) {
                       label="Employment"
                       onChange={handleChange}
                       inputProps={{ "data-testid": "patient_employment" }}
-                      options={employmentOption}
-                      mappingKeys={["id", "value"]}
+                      options={
+                        (dropdownDataEmploymnet &&
+                          dropdownDataEmploymnet?.getMasterData) ||
+                        []
+                      }
+                      mappingKeys={["name", "display_name"]}
                       size="small"
                       className="form-control-bg"
                       disabled={props.disabled}
                     />
                   </Grid>
-                  <Grid item xs={4}></Grid>
-                  <Grid item xs={4}></Grid>
+
+                  <Grid item xs={4}>
+                    <SingleSelectComponent
+                      fullWidth={true}
+                      required={true}
+                      id="employment"
+                      labelId="employment"
+                      name="patient_ethnic_group"
+                      value={formFields?.patient_ethnic_group}
+                      label="Describes your ethnic group:"
+                      onChange={handleChange}
+                      inputProps={{ "data-testid": "patient_ethnic_group" }}
+                      options={
+                        (dropdownDataEthanic &&
+                          dropdownDataEthanic?.getMasterData) ||
+                        []
+                      }
+                      mappingKeys={["name", "display_name"]}
+                      size="small"
+                      className="form-control-bg"
+                      disabled={props.disabled}
+                    />
+                  </Grid>
                 </Grid>
               </Box>
             </div>
@@ -721,6 +892,141 @@ export default function ProfileForm(props: propTypes) {
 
                     <Grid item xs={4}></Grid>
                   </Grid>
+                </Box>
+              </div>
+            </div>
+
+            <div style={{ paddingBottom: "30px" }}>
+              <div
+                style={{
+                  padding: "30px",
+                  border: "2px ",
+                  borderStyle: "solid",
+                  borderColor: "#2593A9",
+                  borderRadius: "5px ",
+                  overflow: "visible",
+                  zIndex: 0,
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    marginTop: -45,
+                    left: 50,
+                    backgroundColor: "white",
+                    zIndex: 1,
+                    height: 20,
+                    // width: 150,
+                    color: "#2593A9",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Health Details
+                </div>
+
+                <Box
+                  className="App"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Box
+                    style={{
+                      paddingRight: "15px",
+                      width: "50%",
+                    }}
+                  >
+                    <Box
+                      sx={{ flexGrow: 1, border: "1px solid #cecece" }}
+                      p={2}
+                      borderRadius="7px"
+                    >
+                      <Typography
+                        style={{
+                          color: "#6BA08E",
+                          fontWeight: "700",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Do you have any physical or mental health conditions or
+                        illness lasting or expected to last 12 months or more?
+                      </Typography>
+                      <Box sx={{ display: "flex", flexDirection: "row" }}>
+                        <Box sx={{ display: "flex", flexDirection: "row" }}>
+                          <RadioGroup
+                            row
+                            value={healthValue}
+                            name="radio-buttons-group"
+                            onChange={(e) => handleOptionChangeHealth(e)}
+                          >
+                            <FormControlLabel
+                              value="1"
+                              control={<Radio />}
+                              label="Yes"
+                              disabled={props.disabled}
+                            />
+                            <FormControlLabel
+                              value="0"
+                              control={<Radio />}
+                              label="No"
+                              disabled={props.disabled}
+                            />
+                          </RadioGroup>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    style={{
+                      paddingLeft: "15px",
+                      width: "50%",
+                    }}
+                  >
+                    <Box
+                      sx={{ flexGrow: 1, border: "1px solid #cecece" }}
+                      p={2}
+                      borderRadius="7px"
+                    >
+                      <Typography
+                        style={{
+                          color: "#6BA08E",
+                          fontWeight: "700",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Do any of your conditions or illnesses reduce your
+                        ability to carry out day to day activities?
+                      </Typography>
+                      <Box sx={{ display: "flex", flexDirection: "row" }}>
+                        <RadioGroup
+                          row
+                          value={illnessValue}
+                          name="radio-buttons-group"
+                          onChange={(e) => handleOptionChangeAbility(e)}
+                        >
+                          <FormControlLabel
+                            value="1"
+                            control={<Radio />}
+                            label={"Yes, a lot"}
+                            disabled={props.disabled}
+                          />
+                          <FormControlLabel
+                            value="2"
+                            control={<Radio />}
+                            label={"Yes, a little"}
+                            disabled={props.disabled}
+                          />
+                          <FormControlLabel
+                            value="3"
+                            control={<Radio />}
+                            label={"Not at all"}
+                            disabled={props.disabled}
+                          />
+                        </RadioGroup>
+                      </Box>
+                    </Box>
+                  </Box>
                 </Box>
               </div>
             </div>

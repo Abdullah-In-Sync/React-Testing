@@ -67,6 +67,10 @@ const defaultFormValue = {
   phone_number: "",
   postal_code: "",
   patient_agree: 0,
+  patient_education: "",
+  patient_ethnic_group: "",
+  patient_physical_health: "",
+  patient_illness_ability: "",
 };
 
 const Agreement = () => {
