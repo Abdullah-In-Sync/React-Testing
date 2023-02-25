@@ -358,6 +358,7 @@ export const patient_routes: RoutesType[] = [
       label: "Communication",
       path: "/communication",
       icon: <ChatIcon />,
+      type: "COMMUNICATION",
     },
     {
       key: 14,

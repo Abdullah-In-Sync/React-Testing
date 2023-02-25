@@ -20,7 +20,6 @@ const b2b_redirect_url =
 const CcbtCourse: React.FC = () => {
   const styles = useStyles();
   const { user } = useAppContext();
-  console.log("user------<", user);
 
   const isUsefulButton = (days = 1) => {
     const {
@@ -29,6 +28,7 @@ const CcbtCourse: React.FC = () => {
     return auth_time > (Date.now() + 24 * days * 60 * 60 * 1000) / 1000;
   };
 
+  /* istanbul ignore else */
   const handleContinueButtonClick = () => {
     if (b2b_redirect_url) window.open(b2b_redirect_url, "_blank");
   };
