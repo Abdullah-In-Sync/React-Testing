@@ -14,7 +14,6 @@ import {
   Typography,
 } from "@mui/material";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
-import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/query";
 import Loader from "../../../components/common/Loader";
 import { SuccessModal } from "../../../components/common/SuccessModal";
 import SureModal from "../../../components/admin/resource/SureModal";
@@ -23,6 +22,7 @@ import { useSnackbar } from "notistack";
 import { POST_THERAPIST_FEEDBACK_NEW } from "../../../graphql/mutation";
 import AddIcon from "@mui/icons-material/Add";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/Feedback/graphql";
 
 const TherapyPatientFeedback: any = (props) => {
   const [successModal, setSuccessModal] = useState<boolean>(false);
