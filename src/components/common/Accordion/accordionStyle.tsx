@@ -4,7 +4,7 @@ export const useStyles = makeStyles({
   wrapper: {
     marginBottom: "10px",
     borderRadius: "10px",
-    border: "1px solid rgb(107 160 142)",
+    border: "1px solid rgba(37, 40, 43, 0.1)",
   },
   tileHeader: {
     backgroundColor: "#6ba08e",
@@ -14,6 +14,7 @@ export const useStyles = makeStyles({
     padding: "12px 20px",
     borderRadius: "7px",
     lineHeight: "20px",
+    fontSize: "14px",
   },
   iconButton: {
     color: "#fff",
