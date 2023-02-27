@@ -11,7 +11,7 @@ export const useStyles = makeStyles({
     color: "#fff",
     textTransform: "capitalize",
     fontWeight: 700,
-    padding: "12px 20px",
+    padding: "17px 20px",
     borderRadius: "7px",
     lineHeight: "20px",
     fontSize: "14px",
