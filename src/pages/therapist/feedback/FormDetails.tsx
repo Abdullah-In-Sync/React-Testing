@@ -12,7 +12,7 @@ type Props = {
   therapyId: string;
 };
 
-export const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
+const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
   const {
     data: { therapistGetFeedbackList: feedbackDetail = {} } = {},
     loading,
@@ -136,3 +136,5 @@ export const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
     </Box>
   );
 };
+
+export default AccordionDetail;
