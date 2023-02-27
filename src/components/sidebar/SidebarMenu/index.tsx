@@ -84,7 +84,7 @@ const SubMenuWrapper = styled(Box)(
           }
           &.active,
           &:hover {
-            background-color: ${theme.palette.custom.light};
+            background-color: ${theme.palette.primary.light};
             color: ${theme.palette.primary.main};
             .MuiButton-startIcon,
             .MuiButton-endIcon {

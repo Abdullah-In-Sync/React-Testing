@@ -3,6 +3,7 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   container: {
+    marginBottom: 15,
     "& .headerWrapper": {
       padding: "20px 10px",
       alignItems: "center",
