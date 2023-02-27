@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="theme-color" content={theme().palette.primary.main} />
           <link rel="shortcut icon" href="/static/favicon.ico" />
           <link
             href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
