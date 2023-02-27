@@ -34,14 +34,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
           padding: "20px 10px",
         },
         "& .secondRow": {
-          paddingBottom: 20,
           background: theme.palette.custom.light,
           borderRadius: 10,
           color: theme.palette.primary.main,
-          padding: 10,
+          padding: 15,
           margin: "20px 10px",
           "& p": {
             fontSize: "0.8em",
+            fontWeight: 600,
           },
         },
         "& .thirdRow": {
@@ -66,6 +66,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
       "& .secondSectionTextWrapper": {
         color: theme.palette.primary.main,
         padding: 10,
+        "& p": {
+          fontSize: "0.7em",
+          fontWeight: 600,
+        },
       },
       "& .secondSectionButtonWrapper": {
         display: "flex",
