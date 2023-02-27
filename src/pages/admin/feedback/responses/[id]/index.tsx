@@ -123,9 +123,8 @@ const AdminFeedbackResponses = () => {
       patient_detail: { patient_firstname = "", patient_lastname = "" } = "",
       feedbackquestion: { question = "" } = {},
       answer,
-      therapy_detail,
+      therapy_name = "",
     } = item || {};
-    const { therapy_name = "" } = therapy_detail || {};
     return {
       "Therapist Name": therapist_name,
       "Assigned Paitent Name": `${patient_firstname} ${patient_lastname}`,

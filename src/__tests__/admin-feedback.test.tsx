@@ -452,7 +452,7 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme()}>
         <SnackbarProvider>
           <Feedback />
         </SnackbarProvider>

@@ -84,7 +84,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
       <FormControl>
         <RadioGroup
           {...props?.row}
-          aria-labelledby="demo-radio-buttons-group-label"
+          aria-labelledby="list-answer-radio"
           className="radio-buttons"
           defaultValue={cellData?.patientAns}
           name="radio-buttons-group"
@@ -108,13 +108,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
   const booleanAnswerType = () => {
     return (
       <div className={styles.yesNoRadioButtonsWrapper}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column"
-          sx={{ flex: 1 }}
-        >
+        <Box>
           <ListAnswerType
             row
             onClickRadio={(option) => onChangeRadioAnswerType(option)}
@@ -132,9 +126,11 @@ const AnswerType: FC<AnswerTypeProps> = ({
         return booleanAnswerType();
       case "list":
         return (
-          <ListAnswerType
-            onClickRadio={(option) => onChangeRadioAnswerType(option)}
-          />
+          <Box>
+            <ListAnswerType
+              onClickRadio={(option) => onChangeRadioAnswerType(option)}
+            />
+          </Box>
         );
       case "text":
         return mode === "patientView" ? textInputView() : textInputAnswerType();
