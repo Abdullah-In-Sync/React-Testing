@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
-import { FC } from "react";
+import React, { FC } from "react";
 import TextFieldComponent from "../../../components/common/TextField/TextFieldComponent";
 import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/Feedback/graphql";
 import {
