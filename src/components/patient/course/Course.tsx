@@ -32,6 +32,20 @@ const CcbtCourse: React.FC = () => {
     if (b2b_redirect_url) window.open(b2b_redirect_url, "_blank");
   };
 
+  const logoImage = (imageUrl) => {
+    return (
+      <ImageListItem>
+        <Image
+          alt="My Help"
+          src={imageUrl}
+          loading="lazy"
+          height="100vh"
+          width="329"
+        />
+      </ImageListItem>
+    );
+  };
+
   return (
     <Stack className={styles.container}>
       <Stack className="headerWrapper">
@@ -61,42 +75,10 @@ const CcbtCourse: React.FC = () => {
           </Box>
           <Box className="thirdRow">
             <ImageList cols={4}>
-              <ImageListItem>
-                <Image
-                  alt="My Help"
-                  src="/images/beatingthebyteslogo.png"
-                  loading="lazy"
-                  height="113"
-                  width="329"
-                />
-              </ImageListItem>
-              <ImageListItem>
-                <Image
-                  alt="My Help"
-                  src="/images/maximus_logo.png"
-                  loading="lazy"
-                  height="113"
-                  width="329"
-                />
-              </ImageListItem>
-              <ImageListItem>
-                <Image
-                  alt="My Help"
-                  src="/images/heath_solution.png"
-                  loading="lazy"
-                  height="113"
-                  width="329"
-                />
-              </ImageListItem>
-              <ImageListItem>
-                <Image
-                  alt="My Help"
-                  src="/images/logo.png"
-                  loading="lazy"
-                  height="113"
-                  width="329"
-                />
-              </ImageListItem>
+              {logoImage("/images/beatingthebyteslogo.png")}
+              {logoImage("/images/maximus_logo.png")}
+              {logoImage("/images/heath_solution.png")}
+              {logoImage("/images/logo.png")}
             </ImageList>
           </Box>
         </Box>
