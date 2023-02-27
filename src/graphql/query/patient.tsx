@@ -16,50 +16,67 @@ export const GET_PATIENTSESSION_DATA = gql`
 `;
 
 export const GET_PROFILE_DATA = gql`
-  query GetProfileById($groupName: String!) {
-    getProfileById(groupName: $groupName) {
+  query MyQuery {
+    getProfileById {
       _id
-      patient_sexuality
-      patient_lastname
-      patient_marrital
-      patient_gender
-      patient_firstname
-      patient_lang
-      patient_employment
-      patient_contract
-      patient_gpemailaddress
-      patient_no
-      patient_gppostalcode
-      patient_gpsurgeryname
-      patient_gpname
-      patient_gpcontactno
-      patient_gpcity
-      patient_gpaddressline2
-      patient_gpaddress
       addressline2
       addressline1
       birthdate
       city
       created_date
       email
+      family_name
       home_no
       hos_id
       kin_addressline1
+      user_id
+      therapist_id
+      religion
+      postal_code
+      phone_number
+      patient_sexuality
+      patient_status
+      patient_physical_health
+      patient_no
+      patient_marrital
+      patient_lastname
+      patient_lang
+      patient_illness_ability
+      patient_gpsurgeryname
+      patient_gppostalcode
+      patient_gpname
+      patient_gpemailaddress
+      patient_gpcontactno
+      patient_gpcity
+      patient_gpaddressline2
+      patient_gpaddress
+      patient_gender
+      patient_firstname
       kin_addressline2
       kin_city
       kin_contact_no
       kin_email_address
-      kin_postal
       kin_name
+      kin_postal
       kin_relationship
       nhsno
-      patient_contract
-      patient_consent
-      patient_availability
       org_id
-      religion
-      phone_number
-      postal_code
+      patient_availability
+      patient_consent
+      patient_contract
+      patient_education
+      patient_employment
+      patient_ethnic_group
+    }
+  }
+`;
+
+export const GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API = gql`
+  query getMasterData($name: String!) {
+    getMasterData(name: $name) {
+      _id
+      display_name
+      name
     }
   }
 `;

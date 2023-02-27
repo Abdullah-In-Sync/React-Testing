@@ -170,6 +170,10 @@ export type patientProfileFormFeild = {
   patient_status: string;
   phone_number: string;
   postal_code: string;
+  patient_education: string;
+  patient_ethnic_group: string;
+  patient_physical_health: string;
+  patient_illness_ability: string;
 };
 
 export type patientEditProfileFormFeild = {
@@ -215,4 +219,9 @@ export type patientEditProfileFormFeild = {
   kin_name: string;
   city: string;
   religion: string;
+
+  patient_education: string;
+  patient_ethnic_group: string;
+  patient_physical_health: string;
+  patient_illness_ability: string;
 };
