@@ -9,8 +9,8 @@ import {
   GetClientTherapySessionListRes,
   GetClientTherapySessionListVars,
 } from "../../../graphql/Feedback/types";
-import { AccordionDetail } from "./FormDetails";
 import { Typography } from "@material-ui/core";
+import AccordionDetail from "./FormDetails";
 
 type Props = {
   therapyId: string;
