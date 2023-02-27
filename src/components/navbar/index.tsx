@@ -79,13 +79,14 @@ const NavBar = () => {
               />
             ) : (
               <img
-                src={`https://actions.myhelp.co.uk/account/openFile?type=logo&file=${logo}`}
+                src={`/account/openFile?type=logo&file=${logo}`}
                 height="40"
                 width="150"
+                alt="logo"
+                loading="lazy"
               />
             )}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton
