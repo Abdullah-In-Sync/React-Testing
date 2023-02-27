@@ -10,6 +10,7 @@ import {
   GetClientTherapySessionListVars,
 } from "../../../graphql/Feedback/types";
 import { AccordionDetail } from "./FormDetails";
+import { Typography } from "@material-ui/core";
 
 type Props = {
   therapyId: string;
@@ -52,7 +53,8 @@ const ClientFeedback: FC<Props> = ({ therapyId }) => {
       <Loader visible={loader} />
       <Box marginTop={"20px"} marginBottom={"60px"}>
         {!loader &&
-          patientSessionData.getClientTherapysessionList &&
+        patientSessionData.getClientTherapysessionList &&
+        patientSessionData.getClientTherapysessionList.length > 0 ? (
           patientSessionData.getClientTherapysessionList.map((v) => {
             return (
               <Accordion
@@ -66,7 +68,12 @@ const ClientFeedback: FC<Props> = ({ therapyId }) => {
                 }
               />
             );
-          })}
+          })
+        ) : (
+          <Box display={"flex"} justifyContent="center">
+            <Typography>No client feedback found!</Typography>
+          </Box>
+        )}
       </Box>
     </>
   );
