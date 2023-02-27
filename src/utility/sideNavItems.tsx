@@ -44,6 +44,7 @@ type RoutesType =
       path: string;
       icon: JSX.Element;
       showNow?: number;
+      type?: string;
     }
   | {
       key: number;
@@ -51,6 +52,7 @@ type RoutesType =
       path: string;
       icon: JSX.Element;
       showNow?: number;
+      type?: string;
     }[];
 
 //** SUPER ADMIN ROUTES **//
@@ -275,44 +277,57 @@ export const patient_routes: RoutesType[] = [
     path: "/patient/home",
     icon: <HomeIcon />,
     showNow: 1,
+    type: "HOME",
   },
   {
     key: 2,
     label: "My Profile",
     path: "/patient/view/",
     icon: <PersonIcon />,
+    type: "MY_PROFILE",
   },
   {
     key: 3,
     label: "Appointments",
     path: Link + "/patient/appointments",
     icon: <CalendarMonthIcon />,
+    type: "APPOINTMENT",
   },
   {
     key: 4,
     label: "Goals",
     path: "/patient/goals/",
     icon: <StarsIcon />,
+    type: "GOALS",
   },
   {
     key: 5,
     label: "Safety Plan",
     path: "/patient/safetyPlan/",
     icon: <BadgeIcon />,
+    type: "SAFETY_PLAN",
   },
   [
-    { key: 6, label: "Therapy", path: "/therapies", icon: <NewspaperIcon /> },
+    {
+      key: 6,
+      label: "Therapy",
+      path: "/therapies",
+      icon: <NewspaperIcon />,
+      type: "THERAPY",
+    },
     {
       key: 7,
       label: "Homework",
       path: "/patient/homework",
       icon: <HomeWorkIcon />,
+      type: "HOMEWORK",
     },
     {
       key: 8,
       label: "Relapse",
       path: "/patient/relapse",
       icon: <HomeWorkIcon />,
+      type: "RELAPSE",
     },
   ],
   [
@@ -335,6 +350,7 @@ export const patient_routes: RoutesType[] = [
     label: "Resources",
     path: "/patient/resource",
     icon: <CrisisAlertIcon />,
+    type: "RESOURCES",
   },
   [
     {
@@ -342,6 +358,7 @@ export const patient_routes: RoutesType[] = [
       label: "Communication",
       path: "/communication",
       icon: <ChatIcon />,
+      type: "COMMUNICATION",
     },
     {
       key: 14,
@@ -367,6 +384,13 @@ export const patient_routes: RoutesType[] = [
     label: "Feedback",
     path: "/patient/feedback",
     icon: <StyleIcon />,
+  },
+  {
+    key: 18,
+    label: "cCBT Course",
+    path: "/patient/course",
+    icon: <StyleIcon />,
+    type: "CBT_COURSE",
   },
 ];
 

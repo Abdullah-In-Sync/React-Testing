@@ -58,10 +58,10 @@ export default function FeedbackResponses(props: propTypes) {
       render: (val) => val?.patient_firstname,
     },
     {
-      key: "therapy_detail",
+      key: "therapy_name",
       columnName: "Therapy Name",
       visible: true,
-      render: (val) => val?.therapy_name,
+      render: (val) => val,
     },
 
     {

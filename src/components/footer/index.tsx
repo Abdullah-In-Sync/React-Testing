@@ -1,6 +1,6 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import { Box, useTheme } from "@mui/material";
 
 const footerStyle = {
   paddin: 2,
@@ -17,8 +17,13 @@ const footerStyle = {
 };
 
 const Footer = () => {
+  const theme = useTheme();
+
   return (
-    <Box sx={footerStyle} data-testid="footerLinks">
+    <Box
+      sx={{ ...footerStyle, ...{ background: theme.palette.primary.main } }}
+      data-testid="footerLinks"
+    >
       <Grid item md={12}>
         <Grid container pt={0.5}>
           <Grid item xs={12} md={12} style={{ textAlign: "center" }}>

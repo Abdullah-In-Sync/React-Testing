@@ -15,6 +15,8 @@ import { SidebarContext } from "../../contexts/SidebarContext";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 import Cookies from "js-cookie";
 
+import { useAppContext } from "../../contexts/AuthContext";
+
 import {
   superadmin_routes,
   patient_routes,
@@ -24,6 +26,8 @@ import {
 const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [userType, setUserType] = useState<string>("admin");
+  const { user: { organization_settings: { logo = null } = {} } = {} } =
+    useAppContext();
 
   useEffect(() => setUserType(Cookies.get("user_type")), []);
 
@@ -66,12 +70,20 @@ const NavBar = () => {
               textDecoration: "none",
             }}
           >
-            <Image
-              alt="My Help"
-              src="/images/logo.png"
-              height="40"
-              width="150"
-            />
+            {!logo ? (
+              <Image
+                alt="My Help"
+                src="/images/logo.png"
+                height="40"
+                width="150"
+              />
+            ) : (
+              <img
+                src={`https://actions.myhelp.co.uk/account/openFile?type=logo&file=${logo}`}
+                height="40"
+                width="150"
+              />
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
