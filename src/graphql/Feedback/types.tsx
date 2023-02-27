@@ -110,7 +110,6 @@ export interface TherapistGetFeedbackListVars {
   feedbackType: string;
 }
 
-
 export interface TherapistGetFeedbackListRes {
   therapistGetFeedbackList: TherapistGetFeedbackList[];
 }

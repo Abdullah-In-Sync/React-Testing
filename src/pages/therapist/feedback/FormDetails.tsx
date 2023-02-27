@@ -1,13 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { Radio } from "@material-ui/core";
-import {
-  Box,
-  CircularProgress,
-  FormControlLabel,
-  Grid,
-  RadioGroup,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { FC } from "react";
 import TextFieldComponent from "../../../components/common/TextField/TextFieldComponent";
 import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/Feedback/graphql";
@@ -97,7 +89,7 @@ export const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
                   justifyContent="space-between"
                   padding={"0px 12px"}
                 >
-                  {fv.answer_options.split(",").map((av, ak) => {
+                  {fv.answer_options.split(",").map((av) => {
                     return (
                       <Box
                         display={"flex"}
