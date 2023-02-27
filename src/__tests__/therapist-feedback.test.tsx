@@ -6,11 +6,11 @@ import {
   GET_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
-import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../graphql/query";
 import { Guid } from "guid-typescript";
 import { useAppContext } from "../contexts/AuthContext";
 import { SnackbarProvider } from "notistack";
 import { POST_THERAPIST_FEEDBACK_NEW } from "../graphql/mutation";
+import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../graphql/Feedback/graphql";
 
 jest.mock("../contexts/AuthContext");
 

@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 
 import { useLazyQuery } from "@apollo/client";
-import { Typography } from "@mui/material";
 import Loader from "../../../components/common/Loader";
 import { Accordion } from "../../../components/common/Accordion";
 import { GET_CLIENT_THERAPY_SESSION_LIST } from "../../../graphql/Feedback/graphql";
@@ -31,8 +30,6 @@ const ClientFeedback: FC<Props> = ({ therapyId }) => {
 
   // PatientSessionData
   useEffect(() => {
-    /* istanbul ignore next */
-    setLoader(true);
     getPatientSessionData({
       variables: {
         pttherapyId: therapyId,
