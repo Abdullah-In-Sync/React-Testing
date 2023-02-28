@@ -177,7 +177,7 @@ const SidebarMenu = () => {
   });
 
   const userRoute = {
-    patient: test ? patient_routes : modifyPatientRoutes, //test ? patient_routes : default_patient_routes,
+    patient: modifyPatientRoutes, //test ? patient_routes : default_patient_routes,
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };
