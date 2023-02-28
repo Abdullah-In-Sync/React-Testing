@@ -58,6 +58,7 @@ const ClientFeedback: FC<Props> = ({ therapyId }) => {
           ? patientSessionData.getClientTherapysessionList.map((v) => {
               return (
                 <Accordion
+                  key={`according-${v.session_no}`}
                   title={getSessionName(v.session_no)}
                   marginBottom={"20px !important"}
                   detail={

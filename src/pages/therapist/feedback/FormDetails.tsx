@@ -88,6 +88,7 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
                   {fv.answer_options.split(",").map((av) => {
                     return (
                       <Box
+                        key={av}
                         display={"flex"}
                         alignItems={"center"}
                         gap={"7px"}
