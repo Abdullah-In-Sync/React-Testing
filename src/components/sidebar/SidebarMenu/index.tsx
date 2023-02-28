@@ -1,17 +1,17 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
 
-import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Box, Button, Collapse, List, ListItem, styled } from "@mui/material";
 
+import { useAppContext } from "../../../contexts/AuthContext";
 import { SidebarContext } from "../../../contexts/SidebarContext";
 import {
-  superadmin_routes,
   patient_routes,
+  superadmin_routes,
   therapistRoutes,
 } from "../../../utility/sideNavItems";
-import { useAppContext } from "../../../contexts/AuthContext";
 
 const listItem = {
   paddingTop: "0px",
@@ -146,18 +146,18 @@ const SidebarMenu = () => {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [test, setTest] = useState(0);
+  // const [test, setTest] = useState(0);
 
   const { user } = useAppContext();
   const { module_data = [] } = user || {};
 
-  useEffect(() => {
-    setTest(
-      user?.user_type == "patient" &&
-        user?.patient_data?.patient_consent &&
-        user?.patient_data?.patient_contract
-    );
-  }, [user]);
+  // useEffect(() => {
+  //   setTest(
+  //     user?.user_type == "patient" &&
+  //       user?.patient_data?.patient_consent &&
+  //       user?.patient_data?.patient_contract
+  //   );
+  // }, [user]);
 
   // const modifyPatientRoutes = patient_routes.filter((elem: any) =>
   //   module_data.find(({ name }) => elem.type === name)
