@@ -55,11 +55,11 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
           {
             /* istanbul ignore next */
 
-            feedbackDetail[0]?.description
+            feedbackDetail[0].description
           }
         </Grid>
       </Box>
-      {feedbackDetail[0]?.questions?.map((fv, fk) => {
+      {feedbackDetail[0].questions.map((fv, fk) => {
         /* istanbul ignore next */
         return (
           <Typography
@@ -103,7 +103,7 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
                             width: "15px",
                             border: "2px solid #6DA08F",
                             backgroundColor:
-                              av == fv?.answer?.answer ? "#6EC9DB" : "#fff",
+                              av == fv.answer.answer ? "#6EC9DB" : "#fff",
                             borderRadius: "50%",
                           }}
                         ></Box>
@@ -119,7 +119,7 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
                     <TextFieldComponent
                       name={fv.answer_type + "_" + fv._id}
                       id={fv.answer_type + "_" + fv._id}
-                      value={fv?.answer?.answer}
+                      value={fv.answer.answer}
                       multiline
                       rows={4}
                       disabled
