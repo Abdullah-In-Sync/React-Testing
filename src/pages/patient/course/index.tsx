@@ -13,7 +13,9 @@ const PatientById: NextPage = () => {
     router.push("/patient/resource");
   };
   const handleContinueButtonClick = () => {
-    if (b2b_redirect_url) window.open(b2b_redirect_url, "_blank");
+    const newTab = window.open();
+    newTab.opener = null;
+    newTab.location = b2b_redirect_url;
   };
   return (
     <>
