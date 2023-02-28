@@ -15,7 +15,7 @@ const PatientById: NextPage = () => {
   };
   /* istanbul ignore next */
   const handleContinueButtonClick = () => {
-    window.open(b2b_redirect_url, "_blank", 'noopener,resizable,scrollbars');
+    window.open(b2b_redirect_url, "_blank", "noopener,resizable,scrollbars");
   };
   return (
     <>
