@@ -298,7 +298,7 @@ const Feedback: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={Boolean(successModal)}
-            title="Successfull"
+            title="Successful"
             description={successModal.description}
             onOk={handleOk}
           />
