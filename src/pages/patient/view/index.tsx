@@ -190,7 +190,7 @@ const PatientById: NextPage = () => {
         onCompleted: (data) => {
           console.log("data: ", data);
           if (data && data.updateProfileById) {
-            enqueueSnackbar("Profile edit successfully", {
+            enqueueSnackbar("Patient details saved successfully", {
               variant: "success",
             });
             setEditable(false);
