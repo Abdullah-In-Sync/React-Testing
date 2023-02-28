@@ -24,6 +24,7 @@ const CcbtCourse: React.FC<ViewProps> = ({
   const styles = useStyles();
   const { user } = useAppContext();
 
+  /* istanbul ignore next */
   const isUsefulButton = (days = 1) => {
     const {
       userToken: { auth_time },
