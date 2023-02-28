@@ -54,26 +54,27 @@ const ClientFeedback: FC<Props> = ({ therapyId }) => {
       <Box marginTop={"20px"} marginBottom={"60px"}>
         {!loader &&
         patientSessionData.getClientTherapysessionList &&
-        patientSessionData.getClientTherapysessionList.length > 0 ? (
-          patientSessionData.getClientTherapysessionList.map((v) => {
-            return (
-              <Accordion
-                title={getSessionName(v.session_no)}
-                marginBottom={"20px !important"}
-                detail={
-                  <AccordionDetail
-                    sessionNo={v.session_no}
-                    therapyId={therapyId}
-                  />
-                }
-              />
-            );
-          })
-        ) : (
-          <Box display={"flex"} justifyContent="center">
-            <Typography>No client feedback found!</Typography>
-          </Box>
-        )}
+        patientSessionData.getClientTherapysessionList.length > 0
+          ? patientSessionData.getClientTherapysessionList.map((v) => {
+              return (
+                <Accordion
+                  key={`according-${v.session_no}`}
+                  title={getSessionName(v.session_no)}
+                  marginBottom={"20px !important"}
+                  detail={
+                    <AccordionDetail
+                      sessionNo={v.session_no}
+                      therapyId={therapyId}
+                    />
+                  }
+                />
+              );
+            })
+          : patientSessionData?.getClientTherapysessionList?.length == 0 && (
+              <Box display={"flex"} justifyContent="center">
+                <Typography>No client feedback found!</Typography>
+              </Box>
+            )}
       </Box>
     </>
   );
