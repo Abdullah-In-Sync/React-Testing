@@ -387,7 +387,7 @@ export const patient_routes: RoutesType[] = [
   },
   {
     key: 18,
-    label: "Home",
+    label: "Myhelp Home",
     path: "/patient/home",
     icon: <HomeIcon />,
     type: "MYHELP_HOME",
