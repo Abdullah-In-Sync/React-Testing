@@ -274,15 +274,15 @@ export const patient_routes: RoutesType[] = [
   {
     key: 1,
     label: "Home",
-    path: "/patient/home",
+    path: "/patient/course",
     icon: <HomeIcon />,
     showNow: 1,
-    type: "HOME",
+    type: "CBT_COURSE",
   },
   {
     key: 2,
     label: "My Profile",
-    path: "/patient/view/",
+    path: "/patient/view",
     icon: <PersonIcon />,
     type: "MY_PROFILE",
   },
@@ -387,10 +387,10 @@ export const patient_routes: RoutesType[] = [
   },
   {
     key: 18,
-    label: "cCBT Course",
-    path: "/patient/course",
-    icon: <StyleIcon />,
-    type: "CBT_COURSE",
+    label: "Myhelp Home",
+    path: "/patient/home",
+    icon: <HomeIcon />,
+    type: "MYHELP_HOME",
   },
 ];
 
