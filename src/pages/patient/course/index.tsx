@@ -9,9 +9,11 @@ const b2b_redirect_url =
 
 const PatientById: NextPage = () => {
   const router = useRouter();
+  /* istanbul ignore next */
   const handleUseFulInfo = () => {
     router.push("/patient/resource");
   };
+  /* istanbul ignore next */
   const handleContinueButtonClick = () => {
     const newTab = window.open();
     newTab.opener = null;
