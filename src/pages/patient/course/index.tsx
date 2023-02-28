@@ -13,9 +13,16 @@ const PatientById: NextPage = () => {
   const handleUseFulInfo = () => {
     router.push("/patient/resource");
   };
+
+  /* istanbul ignore next */
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    if (newWindow) newWindow.opener = null;
+  };
+
   /* istanbul ignore next */
   const handleContinueButtonClick = () => {
-    window.open(b2b_redirect_url, "_blank", "noopener,resizable,scrollbars");
+    openInNewTab(b2b_redirect_url);
   };
   return (
     <>
