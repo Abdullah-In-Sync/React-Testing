@@ -84,7 +84,7 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
             </Box>
             <Typography component={"div"} style={{ marginTop: "17px" }}>
               {(fv.answer_type == "2" || fv.answer_type == "list") && (
-                <Box display={"flex"} padding={"0px 12px"} >
+                <Box display={"flex"} padding={"0px 12px"}>
                   {fv.answer_options.split(",").map((av) => {
                     return (
                       <Box
