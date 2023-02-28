@@ -73,8 +73,7 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
               fontSize: "18px",
             }}
           >
-            Following Sessions are already exists! Kindly uncheck existed to
-            proceed
+            Following sessions already exist! Kindly uncheck to proceed
           </Typography>
         </Box>
         <Box
