@@ -70,20 +70,20 @@ const NavBar = () => {
               textDecoration: "none",
             }}
           >
-            {!logo ? (
-              <Image
-                alt="My Help"
-                src="/images/logo.png"
-                height="40"
-                width="150"
-              />
-            ) : (
+            {logo && logo != "" ? (
               <img
                 src={`/account/openFile?type=logo&file=${logo}`}
                 height="40"
                 width="150"
                 alt="logo"
                 loading="lazy"
+              />
+            ) : (
+              <Image
+                alt="My Help"
+                src="/images/logo.png"
+                height="40"
+                width="150"
               />
             )}
           </Box>

@@ -12,24 +12,29 @@ import * as React from "react";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { useStyles } from "./courseStyles";
 
-const b2b_redirect_url =
-  process.env.NEXT_PUBLIC_ENVIRONMENT == "dev"
-    ? null
-    : "https://actions.learning.dev/learner/browse/56b3982f-49e1-362f-b02c-9aec72e33d4c";
+interface ViewProps {
+  handleUseFulInfo?: () => void;
+  handleContinueButtonClick?: () => void;
+}
 
-const CcbtCourse: React.FC = () => {
+const CcbtCourse: React.FC<ViewProps> = ({
+  handleUseFulInfo,
+  handleContinueButtonClick,
+}) => {
   const styles = useStyles();
   const { user } = useAppContext();
 
+  /* istanbul ignore next */
   const isUsefulButton = (days = 1) => {
     const {
       userToken: { auth_time },
+      created_date,
     } = user;
-    return auth_time > (Date.now() + 24 * days * 60 * 60 * 1000) / 1000;
-  };
-
-  const handleContinueButtonClick = () => {
-    if (b2b_redirect_url) window.open(b2b_redirect_url, "_blank");
+    const patientCreateDate = new Date(created_date);
+    return (
+      auth_time >
+      (patientCreateDate.getTime() + 24 * days * 60 * 60 * 1000) / 1000
+    );
   };
 
   const logoImage = (imageUrl) => {
@@ -102,6 +107,7 @@ const CcbtCourse: React.FC = () => {
               <Button
                 data-testid="useful-information-button"
                 variant="contained"
+                onClick={handleUseFulInfo}
               >
                 Useful information
               </Button>

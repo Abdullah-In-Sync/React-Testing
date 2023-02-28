@@ -3,6 +3,7 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   container: {
+    marginBottom: 15,
     "& .headerWrapper": {
       padding: "20px 10px",
       alignItems: "center",
@@ -75,9 +76,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
         display: "flex",
         padding: 10,
         "& .MuiBox-root:nth-child(2)": {
-          paddingLeft: 10,
+          [theme.breakpoints.up("md")]: {
+            paddingLeft: 10,
+          },
           "& button": {
-            background: theme.palette.secondary.main,
+            background: theme.palette.custom.light,
             color: theme.palette.primary.main,
           },
         },
@@ -86,7 +89,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
           // padding: "10px 50px"
           width: "200px",
           textTransform: "capitalize",
+          fontWeight: 600,
+
+          [theme.breakpoints.down("md")]: {
+            width: "90vw",
+            marginBottom: 10,
+          },
         },
+        flexWrap: "wrap",
       },
     },
   },

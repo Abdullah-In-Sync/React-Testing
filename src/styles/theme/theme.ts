@@ -23,6 +23,7 @@ const theme = (props?: any) => {
       primary: {
         main: panel_color ? panel_color : "#6EC9DB",
         contrastText: "#ffffff",
+        light: "#eaf3ff",
       },
       secondary: {
         main: panel_color ? panel_color : "#6ba08e",
