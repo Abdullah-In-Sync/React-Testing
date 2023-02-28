@@ -3,6 +3,7 @@ import React from "react";
 import TherapyPatientFeedback from ".";
 import { Box, Typography } from "@mui/material";
 import TherapyTabsGenerator from "../../../components/common/TabsGenerator/TherapyTabGenerator";
+import ClientFeedback from "./ClientFeedback";
 
 type propTypes = {
   setTherapy: any;
@@ -21,7 +22,7 @@ export default function TherapistFeedbackTabs(props: propTypes) {
     {
       label: "Client Feedback",
       value: "resources",
-      //   component: <PatientEditTemplatePage2 />,
+      component: <ClientFeedback therapyId={setTherapy} />,
     },
   ];
   return (
