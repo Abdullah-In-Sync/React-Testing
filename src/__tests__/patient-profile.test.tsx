@@ -1,9 +1,12 @@
 import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import PatientById from "../pages/patient/view/[id]";
+import PatientById from "../pages/patient/view";
 
-import { GET_PROFILE_DATA } from "../graphql/query/patient";
+import {
+  GET_PROFILE_DATA,
+  GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API,
+} from "../graphql/query/patient";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { UPDATE_PROFILE_DATA } from "../graphql/mutation/patient";
 import { useAppContext } from "../contexts/AuthContext";
@@ -38,8 +41,58 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API,
+    variables: {
+      name: "gender",
+    },
+  },
+  result: {
+    data: {
+      getMasterData: [
+        {
+          _id: "63ee494c21d01c7b3e23fa2b",
+          display_name: "Male",
+          name: "male",
+          __typename: "masterData",
+        },
+        {
+          _id: "63ee49a321d01c7b3e23fa2d",
+          display_name: "Female",
+          name: "female",
+          __typename: "masterData",
+        },
+        {
+          _id: "63ee49bc21d01c7b3e23fa2e",
+          display_name: "Transgender",
+          name: "transgender",
+          __typename: "masterData",
+        },
+        {
+          _id: "63ee4a0621d01c7b3e23fa2f",
+          display_name: "Non-Binary",
+          name: "non_binary",
+          __typename: "masterData",
+        },
+        {
+          _id: "63ee4a2e21d01c7b3e23fa30",
+          display_name: "Prefer not to say",
+          name: "prefer_not_say",
+          __typename: "masterData",
+        },
+        {
+          _id: "63ee4a7f21d01c7b3e23fa31",
+          display_name: "Other",
+          name: "other",
+          __typename: "masterData",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: GET_PROFILE_DATA,
-    variables: { groupName: "patient" },
   },
   result: {
     data: {
@@ -89,7 +142,6 @@ mocksData.push({
   request: {
     query: UPDATE_PROFILE_DATA,
     variables: {
-      groupName: "patient",
       firstName: "first_name",
       dob: "",
       city: "",
@@ -109,13 +161,13 @@ mocksData.push({
       postalCode: "",
       religion: "",
       update: {
-        patient_sexuality: "Asexual",
+        patient_sexuality: "",
         patient_lastname: "Last Name",
         patient_marrital: "Married",
-        patient_gender: "Male",
+        patient_gender: "",
         patient_firstname: "first_name",
         patient_lang: "English",
-        patient_employment: "PartTime",
+        patient_employment: "",
         patient_gpemailaddress: "gp@gmail.com",
         patient_gppostalcode: "123456",
         patient_gpsurgeryname: "Surgery",
@@ -124,6 +176,10 @@ mocksData.push({
         patient_gpcity: "Gp_City",
         patient_gpaddressline2: "GP patient address line 2",
         patient_gpaddress: "Gp_Address",
+        patient_education: "",
+        patient_ethnic_group: "",
+        patient_physical_health: "",
+        patient_illness_ability: "",
       },
     },
   },
@@ -250,7 +306,9 @@ describe("Patient profile page", () => {
       fireEvent.submit(screen.queryByTestId("patient-profile-form"));
     });
     await waitFor(async () => {
-      expect(screen.getByText("Profile edit successfully")).toBeInTheDocument();
+      expect(
+        screen.getByText("Patient details saved successfully")
+      ).toBeInTheDocument();
     });
   });
   it("should render complete patient form", async () => {
@@ -405,6 +463,7 @@ describe("Patient profile page", () => {
 
     await waitFor(async () => {
       expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
+
       fireEvent.click(screen.queryByTestId("edit-icon-button"));
       expect(screen.getByTestId("editCancleSubmitButton")).toBeInTheDocument();
 
@@ -413,5 +472,29 @@ describe("Patient profile page", () => {
       });
       expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
     });
+  });
+
+  it("should click gender dropdown", async () => {
+    await sut();
+    expect(screen.getByTestId("patient_gender")).toBeInTheDocument();
+
+    fireEvent.change(screen.queryByTestId("patient_gender"), {
+      target: { name: "male" },
+    });
+    expect(screen.queryByTestId("patient_gender").getAttribute("name")).toBe(
+      "male"
+    );
+  });
+
+  it("should click radio button for paitent illness", async () => {
+    await sut();
+    expect(screen.getByText("Not at all")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText("Not at all"));
+
+    const checkboxTherapist = screen.getByLabelText(
+      "Not at all"
+    ) as HTMLInputElement;
+    expect(checkboxTherapist).toBeChecked();
   });
 });

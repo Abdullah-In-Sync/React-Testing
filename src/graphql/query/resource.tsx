@@ -8,6 +8,14 @@ export const GET_UPLOAD_RESOURCE_URL = gql`
   }
 `;
 
+export const GET_UPLOAD_LOGO_URL = gql`
+  query MyQuery($fileName: String!, $imageFolder: String) {
+    getFileUploadUrl(fileName: $fileName, imageFolder: $imageFolder) {
+      upload_file_url
+    }
+  }
+`;
+
 export const GET_CATEGORY = gql`
   query GetCategoryByModelId($modelId: String) {
     getCategoryByModelId(modelId: $modelId) {
@@ -175,6 +183,26 @@ export const GET_PATIENT_SAFETYPLAN_DETAIL_BY_ID = gql`
       safety_ques_typeoption
       therapist_id
       updated_date
+    }
+  }
+`;
+
+export const GET_PATIENT_SAFETY_PlANS = gql`
+  query getPatientSafetyPlans {
+    getPatientSafetyPlans {
+      name
+      description
+      questions {
+        _id
+        patient_answer
+        patient_id
+        safety_ques
+        safety_ques_type
+        safety_ques_status
+        safety_additional_details
+      }
+      _id
+      share_status
     }
   }
 `;
@@ -356,11 +384,67 @@ export const GET_PATH_RESOURCE_BY_ID = gql`
         template_id
         resource_name
         resource_issmartdraw
+        resource_url
+        download_resource_url
+        resource_desc
+        resource_instruction
+        resource_references
       }
       template_detail {
         _id
         category
         component_name
+      }
+    }
+  }
+`;
+
+export const GET_PATH_RESOURCE_LIST = gql`
+  query getPatResourceList($patientId: String!) {
+    getPatResourceList(patientId: $patientId) {
+      _id
+      created_date
+      patient_id
+      patient_share_filename
+      ptsharres_from
+      ptsharres_status
+      ptsharres_session
+      ptsharres_subfrom
+      resource_id
+      share_from
+      resource_upload
+      template_id
+      template_response
+      updated_date
+      download_patient_filename_url
+      resource_data {
+        _id
+        created_date
+        disorder_id
+        download_resource_url
+        template_data
+        model_id
+        agenda_id
+        category_id
+        org_id
+        resource_avail_onlyme
+        resource_avail_therapist
+        resource_desc
+        resource_filename
+        resource_instruction
+        resource_isformualation
+        resource_issmartdraw
+        resource_name
+        resource_references
+        resource_returnurl
+        resource_session_no
+        resource_status
+        resource_type
+        resource_url
+        template_id
+        updated_date
+        user_id
+        user_type
       }
     }
   }

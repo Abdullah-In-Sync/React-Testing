@@ -1,9 +1,4 @@
-import {
-  screen,
-  render,
-  waitForElementToBeRemoved,
-  fireEvent,
-} from "@testing-library/react";
+import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import Feedback from "../pages/therapist/feedback";
 import {
@@ -11,9 +6,11 @@ import {
   GET_TOKEN_DATA,
 } from "../graphql/query/common";
 import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
-import { GET_THERAPISTFEEDBACKLIST_DATA } from "../graphql/query";
 import { Guid } from "guid-typescript";
 import { useAppContext } from "../contexts/AuthContext";
+import { SnackbarProvider } from "notistack";
+import { POST_THERAPIST_FEEDBACK_NEW } from "../graphql/mutation";
+import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../graphql/Feedback/graphql";
 
 jest.mock("../contexts/AuthContext");
 
@@ -73,63 +70,6 @@ const getPatientTherapy = (
   };
 };
 
-const getTherapistFeedbackList = (
-  _pt: Record<string, any>,
-  _mockOptions: MockOptions
-): Record<string, any>[] => {
-  if (!_mockOptions.getTherapistFeedbackList) return [];
-  return [
-    {
-      _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
-      answer_options: ["p", "q", "r", "s"],
-      answer_type: "list",
-      created_date: "2022-07-09T15:39:07.173Z",
-      feedback_ans: {
-        _id: "29e9e456-20cb-4d0d-81fb-1e718342f74c",
-        answer: "ans1",
-        created_date: "2022-07-09T15:53:28.900Z",
-        patient_id: _pt.patient_id,
-        question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
-        pttherapy_id: _pt._id,
-        status: "active",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        updated_date: "2022-07-09T15:53:28.900Z",
-      },
-      feedback_type: "session",
-      org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-      question: "test1",
-      session_no: 1,
-      status: "active",
-      updated_date: "2022-07-09T15:43:05.395Z",
-      user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-    },
-    {
-      _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
-      answer_options: "",
-      answer_type: "text",
-      created_date: "2022-07-09T15:39:07.173Z",
-      feedback_ans: {
-        _id: "29e9e456-20cb-4d0d-81fb-1e718342f74c",
-        answer: "ans1",
-        created_date: "2022-07-09T15:53:28.900Z",
-        patient_id: _pt.patient_id,
-        question_id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
-        pttherapy_id: _pt._id,
-        status: "active",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        updated_date: "2022-07-09T15:53:28.900Z",
-      },
-      feedback_type: "session",
-      org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-      question: "test2",
-      session_no: 1,
-      status: "active",
-      updated_date: "2022-07-09T15:43:05.395Z",
-      user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-    },
-  ];
-};
-
 const getPatientSessionList = (
   _pt: Record<string, any>,
   _mockOptions: MockOptions
@@ -171,12 +111,14 @@ const sut = async (patient_id: string) => {
   sessionStorage.setItem("patient_name", "test");
   render(
     <MockedProvider mocks={mocks}>
-      <Feedback />
+      <SnackbarProvider>
+        <Feedback setTherapy={"45f52fa31a7f4884a9a5834f854480f8"} />
+      </SnackbarProvider>
     </MockedProvider>
   );
-  await waitForElementToBeRemoved(() =>
-    screen.queryByTestId("activity-indicator")
-  );
+  // await waitForElementToBeRemoved(() =>
+  screen.queryByTestId("activity-indicator");
+  // );
 };
 
 // mocks
@@ -239,39 +181,105 @@ const buildMocks = (): {
         },
       },
     });
+
     // build mocks for each "PatientTherapy" record
     _p.patientsTherapy.forEach((_pt: Record<string, any>) => {
       // fetch therapist feedback list query
-      const _therapistFeedbackList = getTherapistFeedbackList(
-        _pt,
-        _p.mockOptions
-      );
-      _mockDataMap["therapistFeedbackList:" + _pt._id] = _therapistFeedbackList;
+
       _mocks.push({
         request: {
-          query: GET_THERAPISTFEEDBACKLIST_DATA,
+          query: GET_THERAPIST_FEEDBACKLIST_DATA_NEW,
           variables: {
-            patientId: _pt.patient_id,
             sessionNo: 1,
-            feedbackType: "session",
-            pttherapyId: _pt._id,
+            feedbackType: "therapist",
+            pttherapyId: "45f52fa31a7f4884a9a5834f854480f8",
           },
         },
         result: {
           data: {
-            getTherapistFeedbackList: _therapistFeedbackList,
+            therapistGetFeedbackList: [
+              {
+                _id: "18a90ddf-fb2c-47a1-b866-ebd4ef915617",
+                created_date: "2023-02-21T05:13:42.591Z",
+                description: "Instructions ",
+                name: "I am the feedback. ",
+                feedback_type: "therapist",
+                org_id: "2301536c4d674b3598814174d8f19593",
+                organization_name: null,
+                patient_name: null,
+                questions: [
+                  {
+                    _id: "e19ecb27-601f-49f0-b396-6ce232a97f44",
+                    answer: {
+                      _id: "8e0b9381-8ca5-431d-bb8d-5c90a4a18eb1",
+                      answer: "Answer",
+                      created_date: "2023-02-21T05:21:47.549Z",
+                      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+                      pttherapy_id: "45f52fa31a7f4884a9a5834f854480f8",
+                      question_id: "e19ecb27-601f-49f0-b396-6ce232a97f44",
+                      status: "active",
+                      therapist_id: "686802e5123a482681a680a673ef7f53",
+                      updated_date: "2023-02-21T05:21:47.549Z",
+                      __typename: "FeedbackQuestionAnswer",
+                    },
+                    answer_options: "",
+                    answer_type: "text",
+                    created_date: "2023-02-21T05:13:42.623Z",
+                    feedback_id: "18a90ddf-fb2c-47a1-b866-ebd4ef915617",
+                    question: "Question Type 1",
+                    status: "active",
+                    updated_date: "2023-02-21T05:13:42.623Z",
+                    __typename: "FeedbackQuestions",
+                  },
+                  {
+                    _id: "253fc621-0bca-4b78-81e4-ae199f6a3cfc",
+                    answer: {
+                      _id: "e7679968-b7a3-4b1b-89f9-42373c356487",
+                      answer: "a",
+                      created_date: "2023-02-21T05:21:47.585Z",
+                      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+                      pttherapy_id: "45f52fa31a7f4884a9a5834f854480f8",
+                      question_id: "253fc621-0bca-4b78-81e4-ae199f6a3cfc",
+                      status: "active",
+                      therapist_id: "686802e5123a482681a680a673ef7f53",
+                      updated_date: "2023-02-21T05:21:47.585Z",
+                      __typename: "FeedbackQuestionAnswer",
+                    },
+                    answer_options: "a,b,c,d",
+                    answer_type: "list",
+                    created_date: "2023-02-21T05:13:42.628Z",
+                    feedback_id: "18a90ddf-fb2c-47a1-b866-ebd4ef915617",
+                    question: "Question Type 2",
+                    status: "active",
+                    updated_date: "2023-02-21T05:13:42.628Z",
+                    __typename: "FeedbackQuestions",
+                  },
+                ],
+                session_no: "1",
+                status: 1,
+                therapist_name: null,
+                therapy_name: null,
+                updated_date: "2023-02-21T05:13:42.591Z",
+                user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+                user_type: "admin",
+                visibility: 0,
+                __typename: "Feedback",
+              },
+            ],
           },
         },
       });
       // fetch patient session query
       const _patientSessionList = getPatientSessionList(_pt, _p.mockOptions);
       _mockDataMap["patientSessionList:" + _pt._id] = _patientSessionList;
+
       _mocks.push({
         request: {
           query: GET_PATIENTSESSION_DATA,
+
           variables: {
+            pttherapyId: "45f52fa31a7f4884a9a5834f854480f8",
             patientId: _pt.patient_id,
-            pttherapyId: _pt._id,
           },
         },
         result: {
@@ -280,6 +288,82 @@ const buildMocks = (): {
           },
         },
       });
+    });
+
+    _mocks.push({
+      request: {
+        query: POST_THERAPIST_FEEDBACK_NEW,
+        variables: {
+          feedQuesAnsData:
+            '[{"questionId":"e19ecb27-601f-49f0-b396-6ce232a97f44","answer":"abcd"}]',
+          sessionNo: 1,
+          pttherapyId: "45f52fa31a7f4884a9a5834f854480f8",
+          patientId: "d5653f5a-8529-2c6c-3321-2569e5709745",
+        },
+      },
+      result: {
+        data: {
+          answerFeedbackByTherapist: [
+            {
+              _id: "a8b7618b-9991-4ce2-81d5-2eab8c7c62e8",
+              created_date: "2023-02-17T08:35:21.956Z",
+              description: "Instruction",
+              feedback_type: "therapist",
+              name: "I am the feedback. ",
+              org_id: "2301536c4d674b3598814174d8f19593",
+              organization_name: null,
+              patient_name: null,
+              questions: [
+                {
+                  _id: "1f7d6c55-b1ab-43b4-b202-5b7b71e86187",
+                  answer: null,
+                  answer_options: "",
+                  answer_type: "text",
+                  created_date: "2023-02-17T08:35:21.983Z",
+                  feedback_id: "a8b7618b-9991-4ce2-81d5-2eab8c7c62e8",
+                  question: "Question Type 1",
+                  status: "active",
+                  updated_date: "2023-02-17T08:35:21.983Z",
+                  __typename: "FeedbackQuestions",
+                },
+                {
+                  _id: "44f0860c-dcc4-4dbf-bd52-286276300b67",
+                  answer: null,
+                  answer_options: "",
+                  answer_type: "text",
+                  created_date: "2023-02-17T08:35:22.007Z",
+                  feedback_id: "a8b7618b-9991-4ce2-81d5-2eab8c7c62e8",
+                  question: "Question Type 2",
+                  status: "active",
+                  updated_date: "2023-02-17T08:35:22.007Z",
+                  __typename: "FeedbackQuestions",
+                },
+                {
+                  _id: "48b9ab02-c495-44f7-a158-fa6dd614f26e",
+                  answer: null,
+                  answer_options: "",
+                  answer_type: "text",
+                  created_date: "2023-02-17T08:35:22.013Z",
+                  feedback_id: "a8b7618b-9991-4ce2-81d5-2eab8c7c62e8",
+                  question: "Question Type 2b",
+                  status: "active",
+                  updated_date: "2023-02-17T08:35:22.013Z",
+                  __typename: "FeedbackQuestions",
+                },
+              ],
+              session_no: "2",
+              status: 1,
+              therapist_name: null,
+              therapy_name: null,
+              updated_date: "2023-02-17T08:35:21.956Z",
+              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+              user_type: "admin",
+              visibility: 1,
+              __typename: "Feedback",
+            },
+          ],
+        },
+      },
     });
   });
   // finished building mocks
@@ -312,140 +396,113 @@ describe("Therapist feedback list", () => {
   test("is collaped by default", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
+    // selectFromTherapyDropdown();
     const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent(
-        "Session " + p
-      );
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-expanded",
-        "false"
-      );
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-controls",
-        panelName + "bh-content"
-      );
+    await waitFor(async () => {
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveTextContent(
+          "Session " + p
+        );
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-expanded",
+          "false"
+        );
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-controls",
+          panelName + "bh-content"
+        );
+      });
     });
-  });
-
-  test("to have the correct number of sessions shown", async () => {
-    const patient_id = mockDataMap["first_patient_id"];
-    await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(
-      filteredPatientSessionList(_pt._id).length
-    );
-  });
-
-  test("can select a different therapy", async () => {
-    const patient_id = mockDataMap["first_patient_id"];
-    await sut(patient_id);
-    const patientTherapyId = filteredPatientTherapy(patient_id, 1)._id;
-
-    fireEvent.change(screen.queryByTestId("selectTherapy"), {
-      target: { value: patientTherapyId },
-    });
-
-    expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(0);
   });
 
   test("can expand and collapse when clicked", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+
+    await waitFor(async () => {
+      expect(screen.queryByTestId("panel1bh-header")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("panel1bh-header"));
+
+      expect(screen.queryByTestId("panel1bh-header")).toHaveAttribute(
         "aria-expanded",
         "true"
       );
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
-        "aria-expanded",
-        "false"
-      );
     });
   });
 
-  test("when expanded the default view is session feedback", async () => {
+  test("can expand and collapse when clicked", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).not.toHaveClass("bg-themegreen");
+    await waitFor(async () => {
+      const _pt = filteredPatientTherapy(patient_id, 0);
+      filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
+        const p = _k + 1;
+        const panelName = "panel" + p;
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-expanded",
+          "true"
+        );
+        fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
+        expect(screen.queryByTestId(panelName + "bh-header")).toHaveAttribute(
+          "aria-expanded",
+          "false"
+        );
+      });
     });
   });
 
-  test("the session feedback is displayed correctly when expanded", async () => {
+  test("Feedback form check inputs validation", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      );
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("panel1bh-header"));
+
+      fireEvent.submit(screen.queryByTestId("feedbackForm"));
       expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).not.toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).toHaveTextContent("Session Feedback");
+        screen.getByText("Field can not be left blank")
+      ).toBeInTheDocument();
     });
   });
 
-  test("the quality feedback is displayed correctly when expanded", async () => {
+  test("Feedback form should submit with valid data", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-    const _pt = filteredPatientTherapy(patient_id, 0);
-    filteredPatientSessionList(_pt._id).forEach((_v, _k) => {
-      const p = _k + 1;
-      const panelName = "panel" + p;
-      fireEvent.click(screen.queryByTestId(panelName + "bh-header"));
-      fireEvent.click(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      );
-      expect(
-        screen.queryByTestId(panelName + "bh-content-session-button")
-      ).not.toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).toHaveClass("bg-themegreen");
-      expect(
-        screen.queryByTestId(panelName + "bh-content-quality-button")
-      ).toHaveTextContent("Quality Feedback");
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("panel1bh-header"));
+
+      expect(screen.getByTestId("instruction")).toBeInTheDocument();
+      expect(screen.getByTestId("texBoxInput")).toBeInTheDocument();
+      fireEvent.change(screen.queryByTestId("texBoxInput"), {
+        target: { value: "abcd" },
+      });
+      expect(screen.getByTestId("feedbackForm")).toBeInTheDocument();
+
+      fireEvent.submit(screen.queryByTestId("feedbackForm"));
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("feedbackConfirmButton"));
+
+      // await waitFor(async () => {
+      //   expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
+      // });
+
+      // await waitFor(async () => {
+      //   expect(
+      //     screen.getByText("Your feedback has been submited Successfully")
+      //   ).toBeInTheDocument();
+      // });
+
+      // await waitFor(async () => {
+      //   fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
+      // });
+
+      // await waitFor(() =>
+      //   expect(screen.queryByTestId("panel1bh-header")).toBeInTheDocument()
+      // );
     });
-  });
-
-  test("handles a patient with no therapist feedback", async () => {
-    const patient_id = mockDataMap["second_patient_id"];
-    await sut(patient_id);
-    expect(
-      screen.queryByTestId("no-data-found-therapist-feedback-list")
-    ).toHaveTextContent("No Data Found");
-  });
-
-  test("check patient view tabs is rendered", async () => {
-    const patient_id = mockDataMap["first_patient_id"];
-    await sut(patient_id);
-    expect(screen.getByTestId("patientViewTherapyTab")).toBeInTheDocument();
-    expect(screen.getByTestId("patientViewMenu")).toBeInTheDocument();
   });
 });

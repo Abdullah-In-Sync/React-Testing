@@ -14,6 +14,13 @@ import dummyData from "../components/patient/monitoring/data";
 import theme from "../styles/theme/theme";
 
 import { SnackbarProvider } from "notistack";
+import moment from "moment";
+import { useRouter } from "next/router";
+
+jest.mock("next/router", () => ({
+  __esModule: true,
+  useRouter: jest.fn(),
+}));
 
 const mocksData = [];
 
@@ -205,7 +212,7 @@ mocksData.push({
     query: GET_PATIENT_MONITOR_ANS_BY_ID,
     variables: {
       monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
-      endDate: "2023-01-09",
+      endDate: moment().format("YYYY-MM-DD"),
       startDate: "2022-03-02",
       dateSort: "asc",
     },
@@ -220,7 +227,7 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme()}>
         <SnackbarProvider>
           <Monitoring />
         </SnackbarProvider>
@@ -271,6 +278,16 @@ const listCsvClick = async () => {
 };
 
 describe("Patient monitoring page", () => {
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockClear();
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+    }));
+  });
+
   it("should render monitoring list screen", async () => {
     await sut();
     expect(await screen.findByText(/Dummt Moniter/i)).toBeInTheDocument();
@@ -283,7 +300,7 @@ describe("Patient monitoring page", () => {
     const okButton = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(okButton);
     expect(okButton).not.toBeInTheDocument();
-    const backButton = await screen.findByRole("button", { name: "Back" });
+    const backButton = await screen.findByRole("button", { name: "Cancel" });
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     const monitoringToolsText = await screen.findByText(/Monitoring Tools/i);
@@ -317,15 +334,14 @@ describe("Patient monitoring page", () => {
 
   it("should render monitoring view response screen", async () => {
     // const mockClick = jest.fn();
+
     await sut();
     const viewButtonFirst = await screen.findByTestId(
       "monitoringViewReponse_0"
     );
     fireEvent.click(viewButtonFirst);
 
-    expect(
-      await screen.findByText(/sfsdfdsfsfsdf sdf sdf sd f sdf sd f dsf/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByTestId("completedON_24")).toBeInTheDocument();
 
     // const goButton = await screen.findByTestId("goButton");
     // expect(goButton).toBeInTheDocument();

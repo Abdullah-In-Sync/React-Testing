@@ -36,11 +36,12 @@ export const useStyles = makeStyles({
   yesNoRadioButtonsWrapper: {
     display: "flex",
     flex: 1,
+    alignItems: "center",
     "& .radio-buttons": {
       flexDirection: "row",
     },
-    "& .radio-buttons label": {
-      margin: "0px 10px",
-    },
+    // "& .radio-buttons label": {
+    //   margin: "0px 10px",
+    // },
   },
 });

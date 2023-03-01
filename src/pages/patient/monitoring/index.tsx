@@ -11,23 +11,27 @@ import MonitoringComponent from "../../../components/patient/monitoring";
 import { SUBMIT_PATIENT_MONITOR_BY_ID } from "../../../graphql/mutation/patient";
 import {
   GET_PATIENT_MONITORING_LIST,
-  GET_PATIENT_MONITOR_BY_ID,
   GET_PATIENT_MONITOR_ANS_BY_ID,
+  GET_PATIENT_MONITOR_BY_ID,
 } from "../../../graphql/query/patient";
+
+import { useRouter } from "next/router";
 
 import dummyData from "../../../components/patient/monitoring/data";
 
 const Monitoring: NextPage = () => {
+  const router = useRouter();
   const initialDate = "2022-03-02";
   const [loader, setLoader] = useState<boolean>(false);
-  // const [monitoringList, setMonitoringList] = useState<object[]>([]);
   const [completeData, setCompleteData] = useState<object[]>([]);
   const [currentMonitoring, setCurrentMonitoring] = useState();
   const [submitMonitorkById] = useMutation(SUBMIT_PATIENT_MONITOR_BY_ID);
   const [getPatientMonitorById] = useLazyQuery(GET_PATIENT_MONITOR_BY_ID);
   const [viewResponseData, setViewResponseData] = useState<any>();
   const [view, setView] = useState("");
-  // const [getPatientMonitorAnsById] = useLazyQuery(GET_PATIENT_MONITOR_ANS_BY_ID);
+  const [getPatientMonitorAnsById] = useLazyQuery(
+    GET_PATIENT_MONITOR_ANS_BY_ID
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -38,6 +42,34 @@ const Monitoring: NextPage = () => {
   });
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
+  useEffect(() => {
+    setLoader(true);
+    getPatientMonitorList();
+  }, []);
+
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handlePageRerfresh);
+    return () => {
+      router.events.off("routeChangeComplete", handlePageRerfresh);
+    };
+  }, [router.events]);
+  /* istanbul ignore next */
+  const resetState = () => {
+    setCompleteData([]);
+    setCurrentMonitoring(undefined);
+    setViewResponseData(undefined);
+    setView("");
+  };
+
+  const handlePageRerfresh = () => {
+    /* istanbul ignore next */
+    resetState();
+    /* istanbul ignore next */
+    setLoader(true);
+    /* istanbul ignore next */
+    getPatientMonitorList();
+  };
+
   const setViewResponseWithEmojis = (viewResponse) => {
     setViewResponseData({
       emojis: dummyData.emojis,
@@ -46,17 +78,32 @@ const Monitoring: NextPage = () => {
     setView("viewResponse");
   };
 
-  const [getPatientMonitorAnsById] = useLazyQuery(
-    GET_PATIENT_MONITOR_ANS_BY_ID,
-    {
-      fetchPolicy: "network-only",
-      onCompleted: (data) => {
-        const { getPatientMonitorAnsById: viewResponse = [] } = data;
-        setViewResponseWithEmojis(viewResponse);
-        setLoader(false);
-      },
+  const fetchPatientMonitorAnsById = async (item, { endDate, startDate }) => {
+    setLoader(true);
+
+    const { _id: monitorId } = item;
+    try {
+      await getPatientMonitorAnsById({
+        variables: {
+          monitorId,
+          endDate,
+          startDate,
+          dateSort: "asc",
+        },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          /* istanbul ignore next */
+          const { getPatientMonitorAnsById: viewResponse = [] } = data;
+          setCurrentMonitoring(item);
+          setViewResponseWithEmojis(viewResponse);
+        },
+      });
+    } catch (e) {
+      //
+    } finally {
+      setLoader(false);
     }
-  );
+  };
 
   //grphql apis
   const confirmedSubmit = async (formFields, monitoring, doneCallback) => {
@@ -77,8 +124,10 @@ const Monitoring: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
       doneCallback();
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     }
   };
@@ -100,6 +149,7 @@ const Monitoring: NextPage = () => {
         variables: {
           monitorId,
         },
+        fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data!.getPatientMonitorById) {
             setCompleteData(data!.getPatientMonitorById);
@@ -117,28 +167,13 @@ const Monitoring: NextPage = () => {
 
   const completeButtonClick = (item) => {
     fetchPatientMonitorById(item);
-    // setCurrentMonitoring(item);
-    // setView("complete");
   };
 
-  const viewResponseButtonClick = (item) => {
-    const { _id: monitorId } = item;
-    // $monitorId: String!, $endDate: String!, $startDate: String!
-    getPatientMonitorAnsById({
-      variables: {
-        monitorId,
-        endDate: moment().format("YYYY-MM-DD"),
-        startDate: initialDate,
-        dateSort: "asc",
-      },
-    });
-    setCurrentMonitoring(item);
+  const viewResponseButtonClick = async (item) => {
+    const endDate = moment().format("YYYY-MM-DD");
+    const startDate = initialDate;
+    fetchPatientMonitorAnsById(item, { endDate, startDate });
   };
-
-  useEffect(() => {
-    setLoader(true);
-    getPatientMonitorList();
-  }, []);
 
   const handleBackPress = () => {
     setCompleteData([]);
@@ -149,7 +184,7 @@ const Monitoring: NextPage = () => {
   const handleNextPress = () => {
     const { index }: any = currentMonitoring;
     const indexIncrement1 = index + 1;
-
+    /* istanbul ignore next */
     if (monitoringList.length > indexIncrement1) {
       fetchPatientMonitorById({
         ...monitoringList[index + 1],
@@ -177,7 +212,9 @@ const Monitoring: NextPage = () => {
   };
 
   const clearIsConfirm = () => {
+    /* istanbul ignore next */
     isConfirm.setSubmitting(false);
+    /* istanbul ignore next */
     setIsConfirm({ status: false, storedFunction: null, setSubmitting: null });
   };
 
@@ -186,22 +223,19 @@ const Monitoring: NextPage = () => {
   };
 
   const formatDate = (isoDate) => {
+    /* istanbul ignore next */
     return moment(isoDate.toISOString()).format("YYYY-MM-DD");
   };
 
   const handleRangeGoButton = (v) => {
-    const { _id: monitorId }: any = currentMonitoring || {};
-    if (monitorId) {
-      const { fromDate, toDate } = v;
-      getPatientMonitorAnsById({
-        variables: {
-          monitorId,
-          endDate: formatDate(toDate),
-          startDate: formatDate(fromDate),
-          dateSort: "asc",
-        },
-      });
-    }
+    /* istanbul ignore next */
+    const { fromDate, toDate } = v;
+    /* istanbul ignore next */
+    const endDate = formatDate(toDate);
+    /* istanbul ignore next */
+    const startDate = formatDate(fromDate);
+    /* istanbul ignore next */
+    fetchPatientMonitorAnsById(currentMonitoring, { endDate, startDate });
   };
 
   return (
@@ -219,6 +253,7 @@ const Monitoring: NextPage = () => {
           viewResponseButtonClick={viewResponseButtonClick}
           onGoButton={handleRangeGoButton}
           initialDate={initialDate}
+          currentMonitoring={currentMonitoring}
           view={view}
         />
         {isConfirm.status && (

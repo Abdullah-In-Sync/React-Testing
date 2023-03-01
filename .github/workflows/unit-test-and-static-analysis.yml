@@ -9,8 +9,6 @@ on:
       - SECURITY.md
       - docs/**
       - .github/**
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
@@ -38,9 +36,9 @@ jobs:
         id: cache-settings
         run: |
           hashSrcYarnLock=($(md5sum src/yarn.lock | awk '{ print $1 }'))
-          echo "::set-output name=hash::$hashSrcYarnLock"
-          echo "::set-output name=dir::$(yarn cache dir)"
-          echo "::set-output name=version::$(yarn -v)"
+          echo "hash=$hashSrcYarnLock" >> $GITHUB_OUTPUT
+          echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+          echo "version=$(yarn -v)" >> $GITHUB_OUTPUT
 
       - name: Cache Packages
         id: yarn-cache
@@ -93,6 +91,7 @@ jobs:
         envkey_NEXT_PUBLIC_ENVIRONMENT: dev
         envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.DEV_APPSYNC_URL }}
         envkey_NEXT_PUBLIC_V1_ROOT_URL: https://portal.dev-myhelp.co.uk
+        envkey_NEXT_PUBLIC_BTB_COURSE_1_URL: ${{ vars.DEV_BTB_COURSE_1_URL }}
         directory: src
         file_name: .env.local
         fail_on_empty: true

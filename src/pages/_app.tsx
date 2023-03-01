@@ -1,8 +1,8 @@
 /* istanbul ignore file */
-import * as React from "react";
-import type { AppProps } from "next/app";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
+import type { AppProps } from "next/app";
+import * as React from "react";
 
 import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apollo-client";
@@ -12,12 +12,11 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import createEmotionCache from "../utility/createEmotionCache";
-import { SidebarProvider } from "../contexts/SidebarContext";
 import { SnackbarProvider } from "notistack";
-import theme from "../styles/theme/theme";
-import "../styles/main.css";
 import { AuthProvider } from "../contexts/AuthContext";
+import { SidebarProvider } from "../contexts/SidebarContext";
+import "../styles/main.css";
+import createEmotionCache from "../utility/createEmotionCache";
 
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
@@ -40,10 +39,8 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
         >
           <SidebarProvider>
             <CacheProvider value={emotionCache}>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Component {...pageProps} />
-              </ThemeProvider>
+              <CssBaseline />
+              <Component {...pageProps} />
             </CacheProvider>
           </SidebarProvider>
         </SnackbarProvider>

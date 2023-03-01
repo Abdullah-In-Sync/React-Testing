@@ -20,9 +20,9 @@ const MonitoringComponent: React.FC<monitoringTypes.MonitoringProps> = ({
   onGoButton,
   initialDate,
   view,
+  currentMonitoring,
 }) => {
   const styles = useStyles();
-
   return (
     <Stack className={styles.monitoringMain}>
       <Stack className="headerWrapper">
@@ -47,6 +47,7 @@ const MonitoringComponent: React.FC<monitoringTypes.MonitoringProps> = ({
       )}
       {view === "complete" && (
         <MonitoringComplete
+          currentMonitoring={currentMonitoring}
           completeData={completeData}
           onSubmit={onSubmit}
           backPress={backPress}

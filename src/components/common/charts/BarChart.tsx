@@ -31,6 +31,9 @@ const barOptions = {
       ticks: {
         display: true,
         beginAtZero: true,
+        callback: (yValue) => {
+          if (Number.isInteger(yValue)) return Math.floor(yValue);
+        },
       },
     },
     x: {

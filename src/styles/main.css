@@ -57,14 +57,51 @@
   user-select: none;
   /* Standard syntax */
 }
+
 .canvas-container {
   height: 60vh !important;
   width: 60vw !important;
   position: relative;
 }
 
-.canvas-bar-container{
+.canvas-bar-container {
   height: 60vh !important;
   width: 40vw !important;
   position: relative;
+}
+
+.canvas-pie-container {
+  height: 45vh !important;
+  width: 45vw !important;
+  position: relative;
+}
+
+.layoutCard {
+  height: 80vh;
+}
+
+@media screen and (max-height: 700px) {
+  .layoutCard {
+    height: 100vh;
+  }
+}
+
+.invalid-input-message{
+  color: #ff1744;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.66;
+  text-align: left;
+  margin-top: 3px;
+  margin-right: 14px;
+  margin-bottom: 0;
+  margin-left: 14px;
+}
+
+.disbledFields {
+  border: unset !important;
+  pointer-events: none;
+}
+.disbledFields input :focus-visible {
+  outline: unset !important;
 }

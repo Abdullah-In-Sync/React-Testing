@@ -33,6 +33,11 @@ export interface MeasureDetail {
   measure_cat_id: string;
   measure_cat_ques: string;
   measure_cat_ques_type: number;
+  measure_cat_name: string;
+  notatall?: number;
+  severaldays?: number;
+  halfthedays?: number;
+  everyday?: number;
 }
 
 export interface UpdateMeasureScoreByPatientVars {
@@ -48,4 +53,58 @@ export interface UpdateMeasureScoreByPatientVars {
 
 export interface UpdateMeasureScoreByPatientRes {
   updateMeasureScoreByPatient: MeasureDetail[];
+}
+
+export interface ViewMeasureScoreByPatientVars {
+  measureCatId: string;
+}
+
+export interface ViewMeasureScoreByPatientRes {
+  viewMeasureScoreByPatient: ViewMeasureScoreByPatient;
+}
+
+export interface ViewMeasureScoreByPatient {
+  scale_data: string[];
+  score_data: ScoreDatum[];
+  measure_cat_name: string;
+}
+
+export interface ScoreDatum {
+  created_date: string;
+  _id: string;
+  patmscore_value: string;
+}
+
+// viewMeasureResponse
+export interface ViewMeasureScoreResponseVar {
+  patScoreId: string;
+}
+
+export interface ViewMeasureScoreResponse {
+  viewMeasureResponse: ViewMeasureResponse[];
+}
+
+export interface ViewMeasureResponse {
+  created_date: string;
+  measure_cat_id: string;
+  patient_id: string;
+  patmscore_difficult: string;
+  patmscore_everyday_value: string;
+  patmscore_halfthedays_value: string;
+  patmscore_severaldays_value: string;
+  patmscore_notatall_value: string;
+  patmscore_status: number;
+  patmscore_value: string;
+  _id: string;
+  patientmeasurequestion: Patientmeasurequestion;
+}
+
+export interface Patientmeasurequestion {
+  measure_cat_ques_id: string;
+  patmques_everyday: number;
+  measure_cat_id: string;
+  patmques_ques: string;
+  patmques_halfthedays: number;
+  patmques_severaldays: number;
+  patmques_notatall: number;
 }
