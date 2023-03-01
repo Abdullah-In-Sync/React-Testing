@@ -14,7 +14,6 @@ import {
   Typography,
 } from "@mui/material";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
-import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/query";
 import Loader from "../../../components/common/Loader";
 import { SuccessModal } from "../../../components/common/SuccessModal";
 import SureModal from "../../../components/admin/resource/SureModal";
@@ -22,6 +21,8 @@ import TextFieldComponent from "../../../components/common/TextField/TextFieldCo
 import { useSnackbar } from "notistack";
 import { POST_THERAPIST_FEEDBACK_NEW } from "../../../graphql/mutation";
 import AddIcon from "@mui/icons-material/Add";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/Feedback/graphql";
 
 const TherapyPatientFeedback: any = (props) => {
   const [successModal, setSuccessModal] = useState<boolean>(false);
@@ -41,6 +42,7 @@ const TherapyPatientFeedback: any = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   // Update Mutation
   const [postTherapistFeedbackNew] = useMutation(POST_THERAPIST_FEEDBACK_NEW);
+  const [isConfirm, setIsConfirm] = useState(false);
 
   // Session Queries
   const [
@@ -150,6 +152,22 @@ const TherapyPatientFeedback: any = (props) => {
     }
   };
 
+  const cancelConfirm = () => {
+    /* istanbul ignore next */
+    setFormValues([]);
+    /* istanbul ignore next */
+    setIsConfirm(false);
+    /* istanbul ignore next */
+    enqueueSnackbar("Feedback cancel successfully", {
+      variant: "success",
+    });
+  };
+
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
+
   const handleTextChange = (questionId: any, newAnswer: any) => {
     const tempSubmitData = [...formValues]; // create a copy of formValues array
     const existingIndex = tempSubmitData.findIndex(
@@ -202,10 +220,16 @@ const TherapyPatientFeedback: any = (props) => {
     if (!confirmSubmission) return;
   };
 
+  const cancleFunction = () => {
+    /* istanbul ignore next */
+    if (formValues.length) {
+      setIsConfirm(true);
+    }
+  };
   return (
     <>
       <Loader visible={loader} />
-      <Box>
+      <Box style={{ paddingBottom: "30px" }}>
         <Box>
           <Accordion
             sx={{ marginTop: "4px", borderRadius: "4px" }}
@@ -334,7 +358,9 @@ const TherapyPatientFeedback: any = (props) => {
                                 value={
                                   fv?.answer?.answer
                                     ? fv.answer.answer
-                                    : formValues.answer
+                                    : formValues.length
+                                    ? formValues.answer
+                                    : ""
                                 }
                                 multiline
                                 rows={4}
@@ -393,10 +419,13 @@ const TherapyPatientFeedback: any = (props) => {
                           backgroundColor: "#6BA08E",
                           textTransform: "none",
                         }}
-                        onClick={() => {
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={
                           /* istanbul ignore next */
-                          setSessionPanelExpanded(false);
-                        }}
+                          cancleFunction
+                        }
                       >
                         Cancel
                       </Button>
@@ -548,7 +577,9 @@ const TherapyPatientFeedback: any = (props) => {
                                         value={
                                           fv?.answer?.answer
                                             ? fv.answer.answer
-                                            : formValues.answer
+                                            : formValues.length
+                                            ? formValues.answer
+                                            : ""
                                         }
                                         multiline
                                         rows={4}
@@ -614,10 +645,13 @@ const TherapyPatientFeedback: any = (props) => {
                                   backgroundColor: "#6BA08E",
                                   textTransform: "none",
                                 }}
-                                onClick={() => {
+                                disabled={questionnaireList?.some(
+                                  (item) => item.answer !== null
+                                )}
+                                onClick={
                                   /* istanbul ignore next */
-                                  setSessionPanelExpanded(false);
-                                }}
+                                  cancleFunction
+                                }
                               >
                                 Cancel
                               </Button>
@@ -755,7 +789,9 @@ const TherapyPatientFeedback: any = (props) => {
                                 value={
                                   fv?.answer?.answer
                                     ? fv.answer.answer
-                                    : formValues.answer
+                                    : formValues.length
+                                    ? formValues.answer
+                                    : ""
                                 }
                                 multiline
                                 rows={4}
@@ -814,10 +850,13 @@ const TherapyPatientFeedback: any = (props) => {
                           backgroundColor: "#6BA08E",
                           textTransform: "none",
                         }}
-                        onClick={() => {
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={
                           /* istanbul ignore next */
-                          setSessionPanelExpanded(false);
-                        }}
+                          cancleFunction
+                        }
                       >
                         Cancel
                       </Button>
@@ -872,6 +911,15 @@ const TherapyPatientFeedback: any = (props) => {
             </Button>
           </Box>
         </SureModal>
+
+        {isConfirm && (
+          <ConfirmationModal
+            label="Are you sure?"
+            description="You want to cancel the feedback?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={cancelConfirm}
+          />
+        )}
 
         {successModal && (
           <SuccessModal

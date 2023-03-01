@@ -466,7 +466,7 @@ export default function ProfileForm(props: propTypes) {
                       labelId="region"
                       name="religion"
                       value={formFields?.religion}
-                      label="Education"
+                      label="Religion"
                       onChange={handleChange}
                       inputProps={{ "data-testid": "region" }}
                       options={
