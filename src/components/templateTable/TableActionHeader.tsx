@@ -2,7 +2,7 @@ import { MoreHoriz } from "@mui/icons-material";
 import { Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { FormikProps } from "formik";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { ActionMenu } from "../common/Menu";
 import { TableCell, TemplateFormData } from "./table.model";
 
@@ -16,12 +16,15 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
   formikHelper,
 }) => {
   const classis = useStyles();
+  const resizerRef = useRef();
+  const divRef = useRef();
 
   const onMenuClick = (menu) => {
     if (menu.key == "ICL" || menu.key == "ICR") {
       const values = formikHelper.values.rows.map((row) => {
         row.cells.splice(menu.key == "ICL" ? index : index + 1, 0, {
           type: "",
+          width: "600px",
         });
         return row;
       });
@@ -35,21 +38,67 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
     }
   };
 
+  const onMouseDown = (e) => {
+    e.preventDefault();
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  };
+
+  const onMouseMove = (e) => {
+    e.preventDefault();
+    const resizer: any | undefined = resizerRef.current;
+    const div: any | undefined = divRef.current;
+    const clientX = e.clientX;
+    const deltaX = clientX - (resizer?._clientX || clientX);
+    resizer._clientX = clientX;
+    const t = divRef.current;
+    // const b = resizer?.nextElementSibling;
+    // UP
+    let w =
+      (div._width || Math.round(parseInt(getComputedStyle(t).width))) + deltaX;
+
+    w = w < 193 ? 193 : w;
+
+    div._width = w;
+
+    const width = `${w}px`;
+
+    console.log(width);
+
+    const rows = formikHelper.values.rows.map((r) => {
+      r.cells[index].width = width;
+      return r;
+    });
+    formikHelper.setFieldValue(`rows`, rows);
+  };
+
+  const onMouseUp = (e) => {
+    e.preventDefault();
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+    (resizerRef.current as any)._clientX = null;
+  };
+
   return (
     <Grid
       item
       container
       flex={1}
       className={classis.actionColumn}
-      style={{ minWidth: "33.33%" }}
+      ref={divRef}
       data-testid={`action-menu-column-${index}`}
+      style={{
+        minWidth: formikHelper.values.rows[0].cells[index].width,
+        width: formikHelper.values.rows[0].cells[index].width,
+        maxWidth: formikHelper.values.rows[0].cells[index].width,
+      }}
     >
       <Grid
         item
-        flex={1}
         justifyContent="center"
         alignItems={"center"}
         display={"flex"}
+        style={{ flex: "1" }}
       >
         <span className={classis.actionColumnText}>Column - {index + 1}</span>
       </Grid>
@@ -80,6 +129,13 @@ export const ColumnActionTitle: FC<ColumnActionTitleProps> = ({
           ]}
         />
       </Grid>
+      <div
+        ref={resizerRef}
+        className={classis.resizerY}
+        data-testid={"resizer-col"}
+        data-currentWidth={formikHelper.values.rows[0].cells[index].width}
+        onMouseDown={onMouseDown}
+      ></div>
     </Grid>
   );
 };
@@ -94,22 +150,53 @@ export const RawActionTitle: FC<RowActionTitleProps> = ({
   formikHelper,
 }) => {
   const classis = useStyles();
+  const resizerRef = useRef();
+  const divRef = useRef();
 
   const onMenuClick = (menu) => {
     if (menu.key == "IRL" || menu.key == "IRR") {
-      const values: TableCell[] = formikHelper.values.rows[0].cells.map(() => {
+      const values: TableCell[] = formikHelper.values.rows[0].cells.map((c) => {
         return {
           type: "",
+          width: c.width,
         };
       });
       const rows = formikHelper.values.rows;
-      rows.splice(menu.key == "IRL" ? index : index + 1, 0, { cells: values });
+      rows.splice(menu.key == "IRL" ? index : index + 1, 0, {
+        cells: values,
+        height: "200px",
+      });
       formikHelper.setFieldValue("rows", rows);
     } else if (menu.key == "DR") {
       const rows = formikHelper.values.rows;
       rows.splice(index, 1);
       formikHelper.setFieldValue("rows", rows);
     }
+  };
+
+  const onMouseDown = (e) => {
+    e.preventDefault();
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  };
+
+  const onMouseMove = (e) => {
+    e.preventDefault();
+    const resizer: any | undefined = resizerRef.current;
+    const clientY = e.clientY;
+    const deltaY = clientY - (resizer?._clientY || clientY);
+    resizer._clientY = clientY;
+    const t = divRef.current;
+    let h = Math.round(parseInt(getComputedStyle(t).height) + deltaY);
+    h = h < 143 ? 143 : h;
+    formikHelper.setFieldValue(`rows[${index}].height`, `${h < 10 ? 0 : h}px`);
+  };
+
+  const onMouseUp = (e) => {
+    e.preventDefault();
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+    (resizerRef.current as any)._clientY = null;
   };
 
   return (
@@ -120,6 +207,8 @@ export const RawActionTitle: FC<RowActionTitleProps> = ({
       alignItems={"center"}
       flexDirection="column"
       data-testid={`action-menu-row-${index}`}
+      style={{ minHeight: formikHelper.values.rows[index].height }}
+      ref={divRef}
     >
       <Grid item justifySelf={"end"}>
         <ActionMenu
@@ -158,6 +247,12 @@ export const RawActionTitle: FC<RowActionTitleProps> = ({
       >
         <div className={classis.actionRowText}> Row - {index + 1} </div>
       </Grid>
+      <div
+        ref={resizerRef}
+        className={classis.resizerX}
+        data-testid={"resizer-row"}
+        onMouseDown={onMouseDown}
+      ></div>
     </Grid>
   );
 };
@@ -192,5 +287,19 @@ const useStyles = makeStyles({
     color: "#30B4CE",
     minWidth: "max-content",
     transform: " rotate(-89.34deg)",
+  },
+  resizerX: {
+    zIndex: 2,
+    cursor: "row-resize",
+    height: "10px",
+    width: "100%",
+    backgroundColor: "#6EC9DB",
+  },
+  resizerY: {
+    zIndex: 2,
+    cursor: "col-resize",
+    height: "100%",
+    width: "10px",
+    backgroundColor: "#7EBCA7",
   },
 });

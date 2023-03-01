@@ -5,13 +5,22 @@ import { ThemeProvider } from "@mui/material";
 import { SUBMIT_PATIENT_MONITOR_BY_ID } from "../graphql/mutation/patient";
 import {
   GET_PATIENT_MONITORING_LIST,
+  GET_PATIENT_MONITOR_ANS_BY_ID,
   GET_PATIENT_MONITOR_BY_ID,
 } from "../graphql/query/patient";
 
 import Monitoring from "../pages/patient/monitoring";
+import dummyData from "../components/patient/monitoring/data";
 import theme from "../styles/theme/theme";
 
 import { SnackbarProvider } from "notistack";
+import moment from "moment";
+import { useRouter } from "next/router";
+
+jest.mock("next/router", () => ({
+  __esModule: true,
+  useRouter: jest.fn(),
+}));
 
 const mocksData = [];
 
@@ -198,10 +207,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_PATIENT_MONITOR_ANS_BY_ID,
+    variables: {
+      monitorId: "e5dcf99163fb48438947a7e64bbf56ea",
+      endDate: moment().format("YYYY-MM-DD"),
+      startDate: "2022-03-02",
+      dateSort: "asc",
+    },
+  },
+  result: {
+    data: {
+      getPatientMonitorAnsById: dummyData.ansResponseData,
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme()}>
         <SnackbarProvider>
           <Monitoring />
         </SnackbarProvider>
@@ -215,7 +241,7 @@ const clickBox = async () => {
   const completeButtonFirst = await screen.findByTestId(
     "monitoringCompleteReponse_0"
   );
-  fireEvent.click(completeButtonFirst);
+  await fireEvent.click(completeButtonFirst);
   emojiClick();
   listCsvClick();
 };
@@ -233,8 +259,6 @@ const saveClickFlowFail = async () => {
   const saveButton = await screen.findByRole("button", { name: "Save" });
   fireEvent.click(saveButton);
 };
-//61e596189a57eb27735c4791
-//hoursInput
 
 const hoursInputChange = async (value) => {
   const hourInput = await screen.findByTestId("hoursInput");
@@ -250,15 +274,20 @@ const emojiClick = async () => {
 const listCsvClick = async () => {
   const csvButton = await screen.findByTestId("csvElement_0");
   fireEvent.click(csvButton);
-  // expect(csvButton).toBeInTheDocument();
-  // expect(mockCallBack.mock.calls.length).toEqual(1);
-  // fireEvent.click(incrementButton)
-  // expect(csvButton).toHaveBeenCalled()
   expect(csvButton).toHaveClass("active");
-  // expect(csvButton.firstChild.classList.contains('active')).toBe(true)
 };
 
 describe("Patient monitoring page", () => {
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockClear();
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+    }));
+  });
+
   it("should render monitoring list screen", async () => {
     await sut();
     expect(await screen.findByText(/Dummt Moniter/i)).toBeInTheDocument();
@@ -271,7 +300,7 @@ describe("Patient monitoring page", () => {
     const okButton = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(okButton);
     expect(okButton).not.toBeInTheDocument();
-    const backButton = await screen.findByRole("button", { name: "Back" });
+    const backButton = await screen.findByRole("button", { name: "Cancel" });
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     const monitoringToolsText = await screen.findByText(/Monitoring Tools/i);
@@ -301,5 +330,21 @@ describe("Patient monitoring page", () => {
     expect(
       await screen.findByText(/Server error please try later./i)
     ).toBeInTheDocument();
+  });
+
+  it("should render monitoring view response screen", async () => {
+    // const mockClick = jest.fn();
+
+    await sut();
+    const viewButtonFirst = await screen.findByTestId(
+      "monitoringViewReponse_0"
+    );
+    fireEvent.click(viewButtonFirst);
+
+    expect(await screen.findByTestId("completedON_24")).toBeInTheDocument();
+
+    // const goButton = await screen.findByTestId("goButton");
+    // expect(goButton).toBeInTheDocument();
+    // fireEvent.click(goButton);
   });
 });

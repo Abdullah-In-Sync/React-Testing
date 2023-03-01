@@ -66,7 +66,7 @@ export default function CreateResource(props: propTypes) {
     resourceAvailTherapist: "1",
     resourceFilename: "",
     resourceName: "",
-    resourceType: 1,
+    resourceType: null,
     agendaId: "",
     categoryId: "",
     orgId: orgId,
@@ -290,8 +290,10 @@ export default function CreateResource(props: propTypes) {
 
     for (let j = 0; j < values.rows; j++) {
       initialData.rows.push({
+        height: "200px",
         cells: Array.from({ length: values.cols }, () => ({
           type: "",
+          width: "600px",
         })),
       });
     }
@@ -303,6 +305,7 @@ export default function CreateResource(props: propTypes) {
     });
 
     setDimensionModal(false);
+    window.scrollBy(0, 300);
   };
 
   const onTemplateSave = (

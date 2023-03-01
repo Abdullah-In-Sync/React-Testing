@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Link, Typography } from "@mui/material";
+import { Box, Button, Grid, Link, Typography, useTheme } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
 import StarsIcon from "@mui/icons-material/Stars";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
@@ -30,6 +30,7 @@ const defaultFormValue = {
 };
 const PatientHome = (props: propTypes) => {
   const { user } = useAppContext();
+  const theme = useTheme();
   const therapistName = user?.therapist_data?.therapist_name;
   const username = user?.patient_data;
   const cookies = env.corpWebsite.cookies;
@@ -42,7 +43,7 @@ const PatientHome = (props: propTypes) => {
   const [getHomeData, { loading: homeDataLoading, data: homeDataData }] =
     useLazyQuery(GET_PATIENT_HOME_DATA, {
       onCompleted: (data) => {
-        setFormFields(data?.getPatientHomeData[0]?.appointment[0]._id);
+        setFormFields(data?.getPatientHomeData[0]?.appointment[0]?._id);
       },
     });
 
@@ -183,7 +184,7 @@ const PatientHome = (props: propTypes) => {
         <Box data-testid="Main" style={{ padding: "25px" }}>
           <h4
             style={{
-              color: "#6EC9DB",
+              color: theme.palette.primary.main,
               fontSize: "20px",
               fontFamily: "Montserrat",
               fontWeight: "700",
@@ -213,7 +214,7 @@ const PatientHome = (props: propTypes) => {
             style={{
               border: "2px ",
               borderStyle: "solid",
-              borderColor: "#6EC9DB",
+              borderColor: theme.palette.primary.main,
               overflow: "visible",
               backgroundColor: "white",
               zIndex: 0,
@@ -235,7 +236,7 @@ const PatientHome = (props: propTypes) => {
                 </p>
                 <h2
                   style={{
-                    color: "#6EC9DB",
+                    color: theme.palette.primary.main,
                     fontSize: "30px",
                     fontFamily: "Montserrat",
                   }}
@@ -312,14 +313,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="goals_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <StarsIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}
@@ -353,14 +357,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="homework_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <HomeWorkIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}
@@ -395,14 +402,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="resource_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <CrisisAlertIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}
@@ -438,14 +448,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="review_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <PreviewIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}
@@ -479,14 +492,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="monitor_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <StackedBarChartIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}
@@ -520,14 +536,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="relapse_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <TungstenIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}
@@ -565,14 +584,17 @@ const PatientHome = (props: propTypes) => {
                   <CardHeader
                     data-testid="communication_card"
                     avatar={
-                      <Avatar sx={{ bgcolor: "#6EC9DB" }} aria-label="recipe">
+                      <Avatar
+                        sx={{ bgcolor: theme.palette.primary.main }}
+                        aria-label="recipe"
+                      >
                         <ChatIcon />
                       </Avatar>
                     }
                     title={
                       <Typography
                         style={{
-                          color: "#6EC9DB",
+                          color: theme.palette.primary.main,
                           fontWeight: 700,
                           fontFamily: "Montserrat",
                         }}

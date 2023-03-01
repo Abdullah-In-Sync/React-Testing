@@ -1,4 +1,5 @@
 import ArrowBackAlt from "@mui/icons-material/ArrowBack";
+import ArrowForwardAlt from "@mui/icons-material/ArrowForward";
 import { Button, Grid } from "@mui/material";
 import React from "react";
 import { CustomBreadcrumbs } from "../Breadcrumbs";
@@ -9,7 +10,9 @@ type Props = React.PropsWithChildren<{
   breadCrumbsLabels?: Array<string>;
   heading?: string;
   backButtonClick?: () => void;
+  nexButtonClick?: () => void;
   onClickView?: () => void;
+  activeBoxBorder?: boolean;
 }>;
 
 /* istanbul ignore next */
@@ -19,12 +22,15 @@ const BreadCrumbsWithBackButton = ({
   heading = "",
   backButtonClick,
   onClickView,
+  activeBoxBorder,
+  nexButtonClick,
 }: Props) => {
   const styles = useStyles();
 
   return (
     <>
       <Grid
+        item
         xs={6}
         display="flex"
         flex-direction="row-reverse"
@@ -33,19 +39,36 @@ const BreadCrumbsWithBackButton = ({
         }}
         className={styles.backButtonBreadcrumbsWrapper}
       >
-        {backButtonClick && (
-          <Button
-            data-testid="backButton"
-            variant="contained"
-            onClick={backButtonClick}
-            startIcon={<ArrowBackAlt />}
-          >
-            Back
-          </Button>
-        )}
+        <div>
+          {backButtonClick && (
+            <Button
+              data-testid="backButton"
+              variant="contained"
+              onClick={backButtonClick}
+              startIcon={<ArrowBackAlt />}
+            >
+              Back
+            </Button>
+          )}
+          {nexButtonClick && (
+            <Button
+              className="nextButton"
+              data-testid="nextButton"
+              variant="contained"
+              onClick={nexButtonClick}
+              endIcon={<ArrowForwardAlt />}
+            >
+              Next
+            </Button>
+          )}
+        </div>
         <CustomBreadcrumbs labels={breadCrumbsLabels} />
       </Grid>
-      <CardWithHeader label={heading} onClickView={onClickView}>
+      <CardWithHeader
+        label={heading}
+        onClickView={onClickView}
+        activeBoxBorder={activeBoxBorder}
+      >
         {children}
       </CardWithHeader>
     </>

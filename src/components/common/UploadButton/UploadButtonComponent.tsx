@@ -11,6 +11,7 @@ type propsType = {
   inputProps?: any;
   extraProps?: any;
   fileName?: string;
+  buttonText?: string;
 };
 
 export default function UploadButtonComponent(props: propsType) {
@@ -21,7 +22,7 @@ export default function UploadButtonComponent(props: propsType) {
         component="label"
         startIcon={<SendIcon />}
       >
-        Upload
+        {props.buttonText || "Upload"}
         <input
           hidden
           name={props.name}
