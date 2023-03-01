@@ -24,10 +24,7 @@ const ResourceList: React.FC<ViewProps> = ({
   const styles = useStyles();
 
   return (
-    <Stack
-      sx={{ width: "100%", overflow: "hidden" }}
-      className={styles.tablePaper}
-    >
+    <Stack className={styles.tablePaper}>
       <Typography
         variant="h4"
         mt={4}
@@ -37,7 +34,7 @@ const ResourceList: React.FC<ViewProps> = ({
       >
         Resources
       </Typography>
-      <TableContainer>
+      <TableContainer className="tableContainer">
         {patientResourceList.length > 0 ? (
           <Table stickyHeader aria-label="sticky table">
             <TableHead className={styles.root}>
