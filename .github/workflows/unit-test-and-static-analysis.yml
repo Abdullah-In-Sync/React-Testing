@@ -9,8 +9,6 @@ on:
       - SECURITY.md
       - docs/**
       - .github/**
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
