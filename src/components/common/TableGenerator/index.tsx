@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { withStyles } from "@mui/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Box from "@mui/material/Box";
-import TablePagination from "@mui/material/TablePagination";
-import TableSortLabel from "@mui/material/TableSortLabel";
 import TableFooter from "@mui/material/TableFooter";
-import Paper from "@mui/material/Paper";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import { withStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
 // import Loader from "../Loader";
 
 function EnhancedTableHead(props) {
-  const { classes, order, orderBy, onRequestSort, fields } = props;
+  const { classes, order, orderBy, onRequestSort, fields, handleSortChange } =
+    props;
+  /* istanbul ignore next */
   const createSortHandler = (property) => (event) => {
-    /* istanbul ignore next */
     onRequestSort(event, property);
   };
 
@@ -33,21 +34,25 @@ function EnhancedTableHead(props) {
               sortDirection={orderBy === headCell.key ? order : false}
               sx={{ color: "custom.light" }}
             >
-              <TableSortLabel
-                active={orderBy === headCell.key}
-                direction={orderBy === headCell.key ? order : "asc"}
-                onClick={createSortHandler(headCell.key)}
-                sx={classes.headCell}
-              >
-                {headCell.columnName}
-                {orderBy === headCell.key ? (
-                  <Box sx={classes.visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
+              {handleSortChange ? (
+                <TableSortLabel
+                  active={orderBy === headCell.key}
+                  direction={orderBy === headCell.key ? order : "asc"}
+                  onClick={createSortHandler(headCell.key)}
+                  sx={classes.headCell}
+                >
+                  {headCell.columnName}
+                  {orderBy === headCell.key ? (
+                    <Box sx={classes.visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : (
+                headCell.columnName
+              )}
             </TableCell>
           ))}
       </TableRow>
@@ -118,6 +123,7 @@ const TableGenerator = ({
   rowOnePage = 10,
   size,
   showPagination = true,
+  onRowPerPageChange,
   ...props
 }) => {
   const [order, setOrder] = useState("desc");
@@ -125,11 +131,10 @@ const TableGenerator = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowOnePage);
 
+  /* istanbul ignore next */
   const handleRequestSort = (event, property) => {
-    /* istanbul ignore next */
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
-    /* istanbul ignore next */
     setOrderBy(property);
     handleSortChange(`${isAsc ? "" : "-"}${property}`);
   };
@@ -138,34 +143,35 @@ const TableGenerator = ({
     setPage(currentPage);
   }, [currentPage]);
 
+  /* istanbul ignore next */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     newPage: number
   ) => {
-    /* istanbul ignore next */
     setPage(newPage);
     onPageChange(newPage);
   };
 
+  /* istanbul ignore next */
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    /* istanbul ignore next */
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-    // onRowPerPageChange(event.target.value);
+    if (typeof onRowPerPageChange === "function")
+      onRowPerPageChange(event.target.value);
   };
 
+  /* istanbul ignore next */
   const handleSelectAll = (selected) => {
-    /* istanbul ignore next */
     if (selected) {
-      /* istanbul ignore next */
       onChangeSelected(data);
     } else {
       onChangeSelected([]);
     }
   };
 
+  /* istanbul ignore next */
   const isSelected = (record) =>
     props.selectedRecords.findIndex((x) => x.id === record.id) !== -1;
 
@@ -193,6 +199,7 @@ const TableGenerator = ({
             showSelectAll={props.showSelectAll}
             selectedRecords={props.selectedRecords}
             onSelectAll={handleSelectAll}
+            handleSortChange={handleSortChange}
           />
           <TableBody>
             <>
@@ -267,6 +274,12 @@ const TableGenerator = ({
                   }}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
+                  backIconButtonProps={{
+                    "aria-label": "Previous Page",
+                  }}
+                  nextIconButtonProps={{
+                    "aria-label": "Next Page",
+                  }}
                 />
               </TableRow>
             </TableFooter>

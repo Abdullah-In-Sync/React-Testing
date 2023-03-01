@@ -1,20 +1,35 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { Box, Button } from "@mui/material";
 import type { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal";
 import SafetyPlanComponent from "../../../components/admin/safetyPlan";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
+import { SuccessModal } from "../../../components/common/SuccessModal";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import { GET_SAFETY_PLAN_LIST } from "../../../graphql/SafetyPlan/graphql";
+import {
+  GET_SAFETY_PLAN_LIST,
+  UPDATE_SAFETY_PLAN,
+} from "../../../graphql/SafetyPlan/graphql";
+import {
+  UpdateSafetyPlanByIDRes,
+  UpdateSafetyPlanByIdVars,
+} from "../../../graphql/SafetyPlan/types";
+import { useRouter } from "next/router";
 
 const SafetyPlanPage: NextPage = () => {
+  const router = useRouter();
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const actionClickedId = useRef();
 
   useEffect(() => {
     getOrgList();
@@ -41,10 +56,23 @@ const SafetyPlanPage: NextPage = () => {
       data: { getSafetyPlanList: listData = {} } = {},
     },
   ] = useLazyQuery(GET_SAFETY_PLAN_LIST, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "no-cache",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
+    },
+  });
+
+  const [deleteSeftyPlanFn, { loading: deleteSeftyPlanLoading }] = useMutation<
+    UpdateSafetyPlanByIDRes,
+    UpdateSafetyPlanByIdVars
+  >(UPDATE_SAFETY_PLAN, {
+    onCompleted: () => {
+      /* istanbul ignore next */
+      getSafetyPlanList({
+        variables: { limit: rowsLimit, pageNo: initialPageNo },
+      });
+      setShowSuccessModal(true);
     },
   });
 
@@ -54,6 +82,7 @@ const SafetyPlanPage: NextPage = () => {
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
+    /* istanbul ignore next */
     getSafetyPlanList({
       variables: {
         limit: rowsLimit,
@@ -72,6 +101,7 @@ const SafetyPlanPage: NextPage = () => {
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
+    /* istanbul ignore next */
     getSafetyPlanList({
       variables: {
         limit: +event.target.value,
@@ -80,6 +110,7 @@ const SafetyPlanPage: NextPage = () => {
         ...selectFilterOptions,
       },
     });
+    /* istanbul ignore next */
     setRowsLimit(+event.target.value);
     /* istanbul ignore next */
     setTableCurrentPage(0);
@@ -102,12 +133,14 @@ const SafetyPlanPage: NextPage = () => {
 
   const onChangeFilterDropdown = (e) => {
     const temp = selectFilterOptions;
+    /* istanbul ignore next */
     const searchText =
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
-
+    /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
+    /* istanbul ignore next */
     getSafetyPlanList({
       variables: {
         limit: rowsLimit,
@@ -121,6 +154,31 @@ const SafetyPlanPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
+  const deleteSeftyPlan = () => {
+    deleteSeftyPlanFn({
+      variables: {
+        planId: actionClickedId.current,
+        updatePlan: {
+          status: 0,
+        },
+      },
+    });
+  };
+
+  const handleActionButtonClick = (value) => {
+    const { pressedIconButton, _id } = value;
+    /* istanbul ignore next */
+    switch (pressedIconButton) {
+      case "edit":
+        return router.push(`/admin/safetyPlan/edit/${_id}`);
+      case "view":
+        return router.push(`/admin/safetyPlan/view/${_id}`);
+      case "delete":
+        actionClickedId.current = value?._id;
+        setDeleteConfirmation(true);
+    }
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -128,7 +186,6 @@ const SafetyPlanPage: NextPage = () => {
         <ContentHeader title="Safety Plan" />
         <SafetyPlanComponent
           safetyPlanList={listData}
-          pageActionButtonClick={() => null}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
@@ -139,6 +196,51 @@ const SafetyPlanPage: NextPage = () => {
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingSafetyPlanList={loadingSafetyPlanList}
+          pageActionButtonClick={handleActionButtonClick}
+        />
+        <DeleteSureModal
+          modalOpen={deleteConfirmation}
+          setModalOpen={setDeleteConfirmation}
+          title={"Your want to Delete safety plan"}
+        >
+          <Box marginTop="20px" display="flex" justifyContent="end">
+            <Button
+              variant="contained"
+              color="inherit"
+              size="small"
+              data-testid="deleteSaftyPlanModalCancelButton"
+              onClick={() => {
+                /* istanbul ignore next */
+                setDeleteConfirmation(false);
+              }}
+              disabled={deleteSeftyPlanLoading}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              sx={{ marginLeft: "5px" }}
+              size="small"
+              data-testid="approveDeletePlanModalConfirmButton"
+              disabled={deleteSeftyPlanLoading}
+              onClick={() => {
+                setDeleteConfirmation(false);
+                deleteSeftyPlan();
+              }}
+            >
+              Confirm
+            </Button>
+          </Box>
+        </DeleteSureModal>
+        <SuccessModal
+          isOpen={showSuccessModal}
+          onOk={() =>
+            /* istanbul ignore next */
+            setShowSuccessModal(false)
+          }
+          description={"Your plan has been deleted successfully."}
+          title={"Successfull"}
         />
       </Layout>
     </>

@@ -13,6 +13,7 @@ interface ViewProps {
   }>;
   formikProps: FormikProps<InitialFormValues>;
   onPressCancel?: () => void;
+  handleDeleteQuestion?: (v) => void;
 }
 
 const planTypes = [
@@ -30,6 +31,7 @@ const CommonForm: React.FC<ViewProps> = ({
   organizationList = [],
   onPressCancel,
   formikProps,
+  handleDeleteQuestion,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const questionFieldscRef = useRef(null);
@@ -127,7 +129,9 @@ const CommonForm: React.FC<ViewProps> = ({
               </Box>
             </Box>
             <AddQuestionsBox
+              isEditable={true}
               formikProps={formikProps}
+              handleDeleteQuestion={handleDeleteQuestion}
               ref={questionFieldscRef}
             />
             <Box className="bottomActionButtonsWrapper">

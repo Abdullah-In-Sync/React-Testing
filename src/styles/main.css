@@ -87,5 +87,21 @@
 }
 
 .invalid-input-message{
-  color: #d32f2f;
+  color: #ff1744;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.66;
+  text-align: left;
+  margin-top: 3px;
+  margin-right: 14px;
+  margin-bottom: 0;
+  margin-left: 14px;
+}
+
+.disbledFields {
+  border: unset !important;
+  pointer-events: none;
+}
+.disbledFields input :focus-visible {
+  outline: unset !important;
 }

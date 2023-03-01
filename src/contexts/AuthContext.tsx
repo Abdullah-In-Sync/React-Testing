@@ -12,6 +12,8 @@ import {
 
 import { localTokenValidation } from "../lib/helpers/auth";
 import Cookies from "js-cookie";
+import theme from "../styles/theme/theme";
+import { ThemeProvider } from "@mui/material";
 
 type AuthContext = {
   user: any;
@@ -52,13 +54,20 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (tokenData && tokenData?.getTokenData?.user_type == userType) {
-      setUser(tokenData?.getTokenData);
+      setUser({
+        ...tokenData?.getTokenData,
+        ...{ userToken: parseJwt(token) },
+      });
       setIsAuthenticated(true);
     } else if (tokenError) {
       setUser(undefined);
       setIsAuthenticated(false);
     }
   }, [tokenLoading]);
+
+  const parseJwt = (token) => {
+    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+  };
 
   return (
     <AuthContext.Provider
@@ -71,7 +80,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         isLoading: tokenLoading,
       }}
     >
-      {isAuthenticated != undefined && children}
+      <ThemeProvider theme={theme(user?.organization_settings)}>
+        {isAuthenticated != undefined && children}
+      </ThemeProvider>
     </AuthContext.Provider>
   );
 };

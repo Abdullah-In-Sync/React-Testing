@@ -1,18 +1,17 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
 
-import { Box, List, styled, Button, ListItem, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Box, Button, Collapse, List, ListItem, styled } from "@mui/material";
 
+import { useAppContext } from "../../../contexts/AuthContext";
 import { SidebarContext } from "../../../contexts/SidebarContext";
 import {
-  superadmin_routes,
   patient_routes,
+  superadmin_routes,
   therapistRoutes,
-  default_patient_routes,
 } from "../../../utility/sideNavItems";
-import { useAppContext } from "../../../contexts/AuthContext";
 
 const listItem = {
   paddingTop: "0px",
@@ -85,11 +84,11 @@ const SubMenuWrapper = styled(Box)(
           }
           &.active,
           &:hover {
-            background-color: ${theme.palette.secondary.main};
-            color: ${theme.palette.primary.contrastText};
+            background-color: ${theme.palette.primary.light};
+            color: ${theme.palette.primary.main};
             .MuiButton-startIcon,
             .MuiButton-endIcon {
-              color: ${theme.palette.primary.contrastText};
+              color: ${theme.palette.primary.main};
             }
           }
         }
@@ -147,20 +146,38 @@ const SidebarMenu = () => {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [test, setTest] = useState(0);
+  // const [test, setTest] = useState(0);
 
   const { user } = useAppContext();
+  const { module_data = [] } = user || {};
 
-  useEffect(() => {
-    setTest(
-      user?.user_type == "patient" &&
-        user?.patient_data?.patient_consent &&
-        user?.patient_data?.patient_contract
-    );
-  }, [user]);
+  // useEffect(() => {
+  //   setTest(
+  //     user?.user_type == "patient" &&
+  //       user?.patient_data?.patient_consent &&
+  //       user?.patient_data?.patient_contract
+  //   );
+  // }, [user]);
+
+  // const modifyPatientRoutes = patient_routes.filter((elem: any) =>
+  //   module_data.find(({ name }) => elem.type === name)
+  // );
+
+  const modifyPatientRoutes = [];
+  patient_routes.forEach((elem: any) => {
+    return module_data.forEach(({ name }) => {
+      if (!Array.isArray(elem)) {
+        if (elem.type === name) modifyPatientRoutes.push(elem);
+      } else {
+        return elem.forEach((item) => {
+          if (item.type === name) modifyPatientRoutes.push(item);
+        });
+      }
+    });
+  });
 
   const userRoute = {
-    patient: test ? patient_routes : default_patient_routes,
+    patient: modifyPatientRoutes, //test ? patient_routes : default_patient_routes,
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };

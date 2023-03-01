@@ -22,8 +22,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
     "& .questionCard": {
       margin: "15px 0px",
       border: "1px solid #ccc",
+      "& .autoCompleteWrapper .MuiAutocomplete-tag": {
+        border: "1px solid #ccc",
+        background: "#fff",
+      },
     },
-
     "& .questionBoxWrapper": {
       padding: 10,
       "& .MuiBox-root": {

@@ -1,9 +1,9 @@
 import { Formik, FormikProps } from "formik";
 import React from "react";
-import CommonForm from "./CommonForm";
-import * as Yup from "yup";
+import CommonForm from "../form/CommonForm";
 
-import { InitialFormValues } from "./types";
+import { InitialFormValues } from "../form/types";
+import { safetyPlanValidationSchema } from "../form/safetyPlanValidationSchema";
 
 interface ViewProps {
   submitForm?: (
@@ -27,18 +27,11 @@ const CreatePlanForm: React.FC<ViewProps> = ({
     questions: [],
   };
 
-  const validationSchema = Yup.object().shape({
-    planName: Yup.string().required("Plan name is required"),
-    orgId: Yup.string().required("Organization is required"),
-    planType: Yup.string().required("Plan type is required"),
-  });
-
   const commonform = () => {
     return (
       <Formik
-        validationSchema={validationSchema}
+        validationSchema={safetyPlanValidationSchema}
         initialValues={initialValues}
-        key={`createPlanForm`}
         onSubmit={submitForm}
         children={(props: any) => (
           <CommonForm

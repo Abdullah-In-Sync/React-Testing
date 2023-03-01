@@ -1,38 +1,34 @@
-import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import type { NextPage } from "next";
 import moment from "moment";
-import Loader from "../../../components/common/Loader";
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
 import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import Loader from "../../../components/common/Loader";
+import { useRouter } from "next/router";
+import NextLink from "next/link";
 
 // GRAPHQL
 import { useMutation, useQuery } from "@apollo/client";
-import {
-  GET_FEEDBACK_DATA,
-  GET_ORG_DATA,
-  // GET_FEEDBACK_BY_ID,
-} from "../../../graphql/query";
-import {
-  ADD_FEEDBACK,
-  DELETE_FEEDBACK,
-  UPDATE_FEEDBACK,
-} from "../../../graphql/mutation";
+import { DELETE_FEEDBACK } from "../../../graphql/mutation";
+import { GET_ADMIN_FEEDBACK_LIST } from "../../../graphql/query";
 
 // MUI COMPONENTS
+import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ReplyIcon from "@mui/icons-material/Reply";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Box, IconButton, Tooltip } from "@mui/material";
+import { useStyles } from "../../../components/admin/feedback/feedbackStyles";
+import { AddButton } from "../../../components/common/Buttons";
+import ContentHeader from "../../../components/common/ContentHeader";
 import Layout from "../../../components/layout";
+import withAuthentication from "../../../hoc/auth";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { SuccessModal } from "../../../components/common/SuccessModal";
 const TableGenerator = dynamic(
   import("../../../components/common/TableGenerator"),
   { ssr: false }
 );
-import ContentHeader from "../../../components/common/ContentHeader";
-import DynamicForm from "../../../components/admin/feedback/DynamicForm";
-import { IconButton, Tooltip, Box } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CreateIcon from "@mui/icons-material/Create";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { AddButton } from "../../../components/common/Buttons";
-import CrudDialog from "../../../components/common/CrudDialog";
-import withAuthentication from "../../../hoc/auth";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -44,21 +40,21 @@ const crudButtons = {
 };
 
 const Feedback: NextPage = () => {
-  // COMPONENT STATE
-  const [addModal, setAddModal] = useState<boolean>(false);
-  const [editModal, setEditModal] = useState<boolean>(false);
-  const [viewModal, setViewModal] = useState<boolean>(false);
-  const [deletConfirmationModal, setDeletConfirmationModal] =
-    useState<boolean>(false);
-  const [isMutating, setIsMutation] = useState<boolean>(false);
-  const [formValues, setFormValues] = useState<any>([]);
-  const [sessionList, setSessionList] = useState<any>([]);
-  const [dataList, setDataList] = useState<any>([]);
-  const [selectedId, setSelectedId] = useState<any>("");
-  const [selectedUserData, setSelectedUserData] = useState<any>([]);
+  const router = useRouter();
+  const styles = useStyles();
+  const [successModal, setSuccessModal] = useState<any>();
+  const [isConfirm, setIsConfirm] = useState<any>({
+    status: false,
+    storedFunction: null,
+    setSubmitting: null,
+    cancelStatus: false,
+    confirmObject: {
+      description: "",
+    },
+  });
 
   // TABLE PROPS
-  const [rowsPerPage, setRowsPerPage] = useState<number>(25);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
   const [nextPage] = useState<string>(null);
@@ -66,51 +62,31 @@ const Feedback: NextPage = () => {
   const [firstPage] = useState<any>(null);
   const [lastPage] = useState<any>(null);
 
-  // GRAPHQL
-  const [addFeedback] = useMutation(ADD_FEEDBACK);
-  const { data: orgData } = useQuery(GET_ORG_DATA);
   const {
     error: dataListError,
     data: dataListData,
     refetch,
-  } = useQuery(GET_FEEDBACK_DATA, {
-    variables: { status: "active", pageNo: page + 1, limit: rowsPerPage },
+  } = useQuery(GET_ADMIN_FEEDBACK_LIST, {
+    variables: { pageNo: page + 1, limit: rowsPerPage },
+    fetchPolicy: "network-only",
   });
 
-  // const [
-  //   viewFeedback,
-  //   { loading: feedbackLoader, error: feedbackError, data: feedbackDat(GET_FEEDBACK_BY_ID);
-
   const [deleteFeedback] = useMutation(DELETE_FEEDBACK);
-  const [updateFeedback] = useMutation(UPDATE_FEEDBACK);
 
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    // do some checking here to ensure data exist
     setLoader(true);
-    /* istanbul ignore next */
     if (dataListData || dataListError) {
-      /* istanbul ignore next */
-      setDataList(dataListData?.getAdminFeedbackList?.feedbackdata);
       setLoader(false);
     }
   }, [dataListData, dataListError]);
 
-  useEffect(() => {
-    const session = [];
-    for (let i = 1; i <= 50; i++) {
-      session.push({ label: `Session-${i}`, value: i });
-    }
-    setSessionList(session);
-  }, []);
-
   //**  TABLE DATA COLUMNS **//
-  /* istanbul ignore next */
   const fields = [
     {
       key: "session_no",
-      columnName: "Session No.",
+      columnName: "Session Name",
       visible: true,
       render: (val) => val ?? "---",
     },
@@ -128,8 +104,8 @@ const Feedback: NextPage = () => {
         ),
     },
     {
-      key: "question",
-      columnName: "Questions",
+      key: "name",
+      columnName: "Feedback Name",
       visible: true,
       render: (val) =>
         val.length > 50 ? (
@@ -142,9 +118,16 @@ const Feedback: NextPage = () => {
     },
     {
       key: "feedback_type",
-      columnName: "Type",
+      columnName: "User Type",
       visible: true,
-      render: (val) => val ?? "---",
+      render: (val) =>
+        val.length > 50 ? (
+          <Tooltip title={val} arrow>
+            <p>{val.substring(0, 50) + "..."}</p>
+          </Tooltip>
+        ) : (
+          val ?? "---"
+        ),
     },
     {
       key: "created_date",
@@ -169,196 +152,98 @@ const Feedback: NextPage = () => {
             size="small"
             data-testid={"editIcon_" + value._id}
             onClick={() => {
-              handleViewEdit(value._id);
-              setSelectedId(value._id);
+              router.push("/admin/feedback/edit/" + value._id);
             }}
           >
             <CreateIcon />
           </IconButton>
           <IconButton
+            data-testid={"deleteIcon_" + value._id}
             size="small"
             // onClick={() => handleDelete(value._id)}
-            onClick={() => {
-              setDeletConfirmationModal(true);
-              setSelectedId(value._id);
-            }}
+            onClick={() => onPressDeletePlan(value._id)}
           >
-            <DeleteIcon data-testid={"deleteIcon_" + value._id} />
+            <DeleteIcon />
           </IconButton>
+
+          <NextLink href={"/admin/feedback/responses/" + value._id} passHref>
+            <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+              <ReplyIcon />
+            </IconButton>
+          </NextLink>
         </>
       ),
     },
   ];
 
-  // ADD DIALOG FIELDS
-  const dialogFields = [
-    [
-      {
-        key: "org_id",
-        label: "Organization Name",
-        visible: true,
-        freeSolo: false,
-        show: true,
-        required: true,
-        disabled: viewModal ? true : false,
-        type: "autocomplete",
-        options:
-          orgData?.getOrganizationData?.length > 0
-            ? [
-                ...orgData.getOrganizationData.map((val) => ({
-                  label: val.name,
-                  value: val._id,
-                })),
-              ]
-            : [],
-      },
-      {
-        key: "session_no",
-        label: "Session Name",
-        visible: true,
-        show: true,
-        required: true,
-        disabled: viewModal ? true : false,
-        type: addModal ? "select" : "autocomplete",
-        multiple: true,
-        options: sessionList.length > 0 ? sessionList : [],
-      },
-      {
-        key: "feedback_type",
-        label: "Feedback Type",
-        visible: true,
-        freeSolo: false,
-        show: true,
-        disabled: viewModal || editModal ? true : false,
-        required: true,
-        type: "autocomplete",
-        options: [
-          { label: "Quality", value: "quality" },
-          { label: "Session", value: "session" },
-        ],
-      },
-    ],
-  ];
-  // if (loading) return 'Submitting...';
-  // if (error) return `Submission error! ${error.message}`;
-
   /* istanbul ignore next */
-  const handleAdd = (val) => {
-    let valid = false;
+  const handleDelete = async (id, callback) => {
     /* istanbul ignore else */
-    if (formValues.length === 0) {
-      enqueueSnackbar("Please fill the all fields", { variant: "error" });
-      return null;
-    } else {
-      formValues.map((x) => {
-        if (!x.question || !x.answer_type) {
-          enqueueSnackbar("Please fill the all fields", { variant: "error" });
-          return (valid = false);
-        } else if (x.answer_type == "list" && x.answer_options.length < 2) {
-          enqueueSnackbar("Please enter a minimum of 2 values for the list", {
-            variant: "error",
-          });
-          return (valid = false);
-        } else {
-          return (valid = true);
-        }
-      });
-    }
-    /* istanbul ignore next */
-    if (valid) {
-      setLoader(true);
-      setIsMutation(true);
-      /* istanbul ignore next */
-      const data = formValues.map((x) => ({
-        ...x,
-        ...val,
-      }));
-
-      const dataJson = JSON.stringify(data);
-      /* istanbul ignore else */
-      addFeedback({
-        variables: { feedQuesData: dataJson },
-        onCompleted: () => {
-          refetch();
-          setLoader(false);
-          setAddModal(false);
-          setIsMutation(false);
-          enqueueSnackbar("Feedback added successfully", {
-            variant: "success",
-          });
-        },
-      });
-    }
-  };
-
-  const handleFormValues = (val) => {
-    setFormValues(val);
-  };
-
-  /* istanbul ignore next */
-  const handleEdit = async (val) => {
-    /* istanbul ignore else */
-    setIsMutation(true);
-    const data = formValues.map((x) => ({
-      question: x.question,
-      answer_type: x.answer_type,
-      answer_options: JSON.stringify(x.answer_options),
-      ...val,
-    }));
-
-    try {
-      await updateFeedback({
-        variables: {
-          feedbackId: selectedId,
-          update: data[0],
-        },
-        onCompleted: () => {
-          refetch();
-          setEditModal(false);
-          setIsMutation(false);
-          enqueueSnackbar("Updated data successfully!", { variant: "success" });
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  /* istanbul ignore next */
-  const handleViewEdit = (id) => {
-    /* istanbul ignore else */
-    const val = dataList.filter((x) => x._id === id);
-    setSelectedUserData(val);
-    setEditModal(true);
-  };
-
-  /* istanbul ignore next */
-  const handleDelete = async (id) => {
-    /* istanbul ignore else */
-    setIsMutation(true);
+    // setIsMutation(true);
+    setLoader(true);
     deleteFeedback({
       variables: {
         feedbackId: id,
-        update: { status: "deleted" },
       },
       onCompleted: () => {
-        setDeletConfirmationModal(false);
-        setIsMutation(false);
+        callback();
+        setLoader(false);
         refetch();
-        enqueueSnackbar("Data deleted successfully!", { variant: "error" });
+        setSuccessModal({
+          description: "Feedback has been deleted Successful.",
+        });
+        enqueueSnackbar("Feedback deleted successfully!", { variant: "info" });
       },
     });
   };
   /* istanbul ignore next */
   const handleView = (id) => {
-    /* istanbul ignore else */
-    const val = dataList.filter((x) => x._id === id);
-    setSelectedUserData(val);
-    setViewModal(true);
+    router.push(`/admin/feedback/view/${id}`);
   };
   const changePage = (url: any) => {
     /* istanbul ignore next */
     console.log("CHANGE PAGE", url);
+  };
+
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "You want to delete feedback plan",
+      },
+      storedFunction: (callback) => handleDelete(v, callback),
+    });
+  };
+
+  const onConfirmSubmit = () => {
+    isConfirm.storedFunction(() => {
+      setLoader(true);
+      if (isConfirm.setSubmitting instanceof Function)
+        isConfirm.setSubmitting(false);
+
+      setIsConfirm({
+        status: false,
+        storedFunction: null,
+        setSubmitting: null,
+      });
+    });
+  };
+
+  const clearIsConfirm = () => {
+    /* istanbul ignore next */
+    if (isConfirm.setSubmitting instanceof Function)
+      isConfirm.setSubmitting(false);
+    /* istanbul ignore next */
+    setIsConfirm({
+      status: false,
+      storedFunction: null,
+      setSubmitting: null,
+      cancelStatus: false,
+    });
+  };
+
+  const handleOk = () => {
+    setSuccessModal(undefined);
   };
 
   return (
@@ -369,14 +254,15 @@ const Feedback: NextPage = () => {
         <Box sx={crudButtons}>
           <AddButton
             className="mr-3"
-            label="Create Questionnaire"
-            onClick={() => setAddModal(true)}
+            data-testid={"create-feedback"}
+            label="Create Feedback"
+            onClick={() => router.push("/admin/feedback/create")}
           />
         </Box>
-        <Box>
+        <Box className={styles.adminFeedbackTable}>
           <TableGenerator
             fields={fields}
-            data={dataListData?.getAdminFeedbackList?.feedbackdata}
+            data={dataListData?.getFeedbackListByAdmin?.feedbackdata}
             currentPage={page}
             onPageChange={(page, direction) => {
               /* istanbul ignore next */
@@ -396,77 +282,27 @@ const Feedback: NextPage = () => {
             onRowPerPageChange={(rows) => {
               setRowsPerPage(rows);
             }}
-            dataCount={dataListData?.getAdminFeedbackList?.totalcount}
+            dataCount={dataListData?.getFeedbackListByAdmin?.totalcount}
             selectedRecords={[]}
             rowOnePage={rowsPerPage}
           />
-          <CrudDialog
-            title="Create Questionnaire"
-            okText="Save"
-            fields={dialogFields}
-            submitButtonDisabled={isMutating}
-            description="Please fill in the details below."
-            onsubmit={(values) => {
-              handleAdd(values);
-            }}
-            dynamicForm={
-              <DynamicForm
-                buttonText="Add Question"
-                callBackFormValues={handleFormValues}
-              />
-            }
-            open={addModal}
-            onClose={() => {
-              setAddModal(false);
-              setFormValues([]);
-            }}
-          />
-
-          <CrudDialog
-            title="Edit Question"
-            okText="Update"
-            fields={dialogFields}
-            values={selectedUserData[0]}
-            submitButtonDisabled={isMutating}
-            // onFieldChange={(_, images) => {
-            //     debugger
-            //     //   handlUploadImages(images);
-            // }}
-            onsubmit={(values) => {
-              handleEdit(values);
-            }}
-            dynamicForm={
-              <DynamicForm
-                callBackFormValues={handleFormValues}
-                values={selectedUserData[0]}
-              />
-            }
-            open={editModal}
-            onClose={() => setEditModal(false)}
-          />
-
-          <CrudDialog
-            title="View Question"
-            viewData={true}
-            fields={dialogFields}
-            values={selectedUserData[0]}
-            dynamicForm={
-              <DynamicForm type="view" values={selectedUserData[0]} />
-            }
-            open={viewModal}
-            onClose={() => setViewModal(false)}
-          />
-
-          <CrudDialog
-            title="Delete Question"
-            description="Are you sure you want to delete this question? You will not be able to restore this again."
-            okText="Delete"
-            submitButtonDisabled={isMutating}
-            onsubmit={() => handleDelete(selectedId)}
-            open={deletConfirmationModal}
-            onClose={() => setDeletConfirmationModal(false)}
-          />
         </Box>
+        {isConfirm.status && (
+          <ConfirmationModal
+            label="Are you sure?"
+            description={isConfirm.confirmObject.description}
+            onCancel={clearIsConfirm}
+            onConfirm={onConfirmSubmit}
+          />
+        )}
+        {successModal && (
+          <SuccessModal
+            isOpen={Boolean(successModal)}
+            title="Successful"
+            description={successModal.description}
+            onOk={handleOk}
+          />
+        )}
       </Layout>
     </>
   );
