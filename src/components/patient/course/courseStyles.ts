@@ -53,7 +53,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
           justifyContent: "center",
           padding: "10px 10px",
           "& ul": {
-            padding: 10,
+            // padding: 10,
             "& li": {
               padding: "0px 20px",
             },

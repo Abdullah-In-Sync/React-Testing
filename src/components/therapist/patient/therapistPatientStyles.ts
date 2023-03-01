@@ -3,6 +3,7 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   tablePaper: {
+    "& .tableContainer": {},
     padding: 10,
     "& table": {
       width: "100%",
@@ -19,6 +20,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       position: "relative",
       zIndex: 1,
       display: "flex",
+      justifyContent: "center",
     },
     "& .actionsWrapper button": {
       marginRight: 10,

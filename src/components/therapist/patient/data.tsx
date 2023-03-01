@@ -40,7 +40,6 @@ export const columns: readonly Column[] = [
   {
     id: "date",
     label: "Date",
-    minWidth: 170,
     align: "center",
     format: (value) => (
       <Typography>{moment(value.created_date).format("DD-MM-YYYY")}</Typography>
@@ -49,7 +48,6 @@ export const columns: readonly Column[] = [
   {
     id: "source",
     label: "Source",
-    minWidth: 100,
     align: "center",
     format: (value) => (
       <Typography>{sourceLabel(value.ptsharres_subfrom)}</Typography>
@@ -58,7 +56,6 @@ export const columns: readonly Column[] = [
   {
     id: "resourceName",
     label: "Resource Name",
-    minWidth: 170,
     align: "center",
     format: (value) => {
       const { resource_name } = value.resource_data[0] || {};
@@ -68,14 +65,13 @@ export const columns: readonly Column[] = [
   {
     id: "session",
     label: "Session",
-    minWidth: 170,
+
     align: "center",
     format: (value) => <Typography>{value.ptsharres_session}</Typography>,
   },
   {
     id: "status",
     label: "Status",
-    minWidth: 170,
     align: "center",
     format: (value) => (
       <Typography>{statusLabel(value.ptsharres_status)}</Typography>
@@ -84,7 +80,6 @@ export const columns: readonly Column[] = [
   {
     id: "actions",
     label: "Actions",
-    minWidth: 170,
     align: "center",
     format: (value, buttonClick) => (
       <ActionsButtons data={value} buttonClick={buttonClick} />
