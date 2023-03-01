@@ -44,8 +44,8 @@ const CcbtCourse: React.FC<ViewProps> = ({
           alt="My Help"
           src={imageUrl}
           loading="lazy"
-          height="100vh"
-          width="329"
+          height="80"
+          width="300"
         />
       </ImageListItem>
     );
