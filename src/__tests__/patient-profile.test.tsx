@@ -306,7 +306,9 @@ describe("Patient profile page", () => {
       fireEvent.submit(screen.queryByTestId("patient-profile-form"));
     });
     await waitFor(async () => {
-      expect(screen.getByText("Profile edit successfully")).toBeInTheDocument();
+      expect(
+        screen.getByText("Patient details saved successfully")
+      ).toBeInTheDocument();
     });
   });
   it("should render complete patient form", async () => {

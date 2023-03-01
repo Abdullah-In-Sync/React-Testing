@@ -91,6 +91,7 @@ jobs:
         envkey_NEXT_PUBLIC_ENVIRONMENT: prod
         envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.PROD_APPSYNC_URL }}
         envkey_NEXT_PUBLIC_V1_ROOT_URL: https://portal.myhelp.co.uk
+        envkey_NEXT_PUBLIC_BTB_COURSE_1_URL: ${{ vars.PROD_BTB_COURSE_1_URL }}
         directory: src
         file_name: .env.local
         fail_on_empty: true

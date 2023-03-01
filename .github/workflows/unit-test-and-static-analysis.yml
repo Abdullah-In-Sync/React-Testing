@@ -3,14 +3,6 @@ name: Unit Test and Static Analysis
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    paths-ignore:
-      - README.md
-      - SECURITY.md
-      - docs/**
-      - .github/**
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
@@ -93,6 +85,7 @@ jobs:
         envkey_NEXT_PUBLIC_ENVIRONMENT: dev
         envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.DEV_APPSYNC_URL }}
         envkey_NEXT_PUBLIC_V1_ROOT_URL: https://portal.dev-myhelp.co.uk
+        envkey_NEXT_PUBLIC_BTB_COURSE_1_URL: ${{ vars.DEV_BTB_COURSE_1_URL }}
         directory: src
         file_name: .env.local
         fail_on_empty: true
@@ -166,13 +159,13 @@ jobs:
       working-directory: src
     
     - name: Archive coverage report results
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: coverage-report
         path: src/coverage/lcov.info
 
     - name: Archive tests report results
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: tests-report
         path: src/test-report.xml

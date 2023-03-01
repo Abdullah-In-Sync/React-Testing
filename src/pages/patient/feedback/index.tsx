@@ -40,6 +40,7 @@ import { useAppContext } from "../../../contexts/AuthContext";
 import TextFieldComponent from "../../../components/common/TextField/TextFieldComponent";
 import { SuccessModal } from "../../../components/common/SuccessModal";
 import SureModal from "../../../components/admin/resource/SureModal";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
 
 const Feedback: NextPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -53,6 +54,7 @@ const Feedback: NextPage = () => {
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
     string | false
   >(false);
+  const [isConfirm, setIsConfirm] = useState(false);
   const [open, setOpen] = useState<boolean>(false);
   const [erroropen, setErrorOpen] = useState<boolean>(false);
   /* istanbul ignore next */
@@ -65,9 +67,12 @@ const Feedback: NextPage = () => {
     { loading: therapyLoading, data: patientTherapryData },
   ] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
     onCompleted: (data) => {
-      if (data!.getPatientTherapy) {
-        const pttherapyId = data!.getPatientTherapy[0]._id;
+      /* istanbul ignore next */
 
+      if (data!.getPatientTherapy) {
+        /* istanbul ignore next */
+        const pttherapyId = data!.getPatientTherapy[0]?._id;
+        /* istanbul ignore next */
         if (pttherapyId) {
           setTherapy(pttherapyId);
         }
@@ -266,6 +271,28 @@ const Feedback: NextPage = () => {
     if (!confirmSubmission) return;
   };
 
+  const cancelConfirm = () => {
+    /* istanbul ignore next */
+    setFormValues([]);
+    /* istanbul ignore next */
+    setIsConfirm(false);
+    /* istanbul ignore next */
+    enqueueSnackbar("Feedback cancel successfully", {
+      variant: "success",
+    });
+  };
+
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
+
+  const cancleFunction = () => {
+    /* istanbul ignore next */
+    if (formValues.length) {
+      setIsConfirm(true);
+    }
+  };
   return (
     <>
       <Layout>
@@ -463,7 +490,9 @@ const Feedback: NextPage = () => {
                                 value={
                                   fv?.answer?.answer
                                     ? fv.answer.answer
-                                    : formValues.answer
+                                    : formValues.length
+                                    ? formValues.answer
+                                    : ""
                                 }
                                 multiline
                                 rows={4}
@@ -522,10 +551,13 @@ const Feedback: NextPage = () => {
                           backgroundColor: "#6BA08E",
                           textTransform: "none",
                         }}
-                        onClick={() => {
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={
                           /* istanbul ignore next */
-                          setSessionPanelExpanded(false);
-                        }}
+                          cancleFunction
+                        }
                       >
                         Cancel
                       </Button>
@@ -684,7 +716,9 @@ const Feedback: NextPage = () => {
                                         value={
                                           fv?.answer?.answer
                                             ? fv.answer.answer
-                                            : formValues.answer
+                                            : formValues.length
+                                            ? formValues.answer
+                                            : ""
                                         }
                                         multiline
                                         rows={4}
@@ -750,10 +784,13 @@ const Feedback: NextPage = () => {
                                   backgroundColor: "#6BA08E",
                                   textTransform: "none",
                                 }}
-                                onClick={() => {
+                                disabled={questionnaireList?.some(
+                                  (item) => item.answer !== null
+                                )}
+                                onClick={
                                   /* istanbul ignore next */
-                                  setSessionPanelExpanded(false);
-                                }}
+                                  cancleFunction
+                                }
                               >
                                 Cancel
                               </Button>
@@ -895,7 +932,9 @@ const Feedback: NextPage = () => {
                                 value={
                                   fv?.answer?.answer
                                     ? fv.answer.answer
-                                    : formValues.answer
+                                    : formValues.length
+                                    ? formValues.answer
+                                    : ""
                                 }
                                 multiline
                                 rows={4}
@@ -954,10 +993,13 @@ const Feedback: NextPage = () => {
                           backgroundColor: "#6BA08E",
                           textTransform: "none",
                         }}
-                        onClick={() => {
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={
                           /* istanbul ignore next */
-                          setSessionPanelExpanded(false);
-                        }}
+                          cancleFunction
+                        }
                       >
                         Cancel
                       </Button>
@@ -1013,10 +1055,18 @@ const Feedback: NextPage = () => {
           </Box>
         </SureModal>
 
+        {isConfirm && (
+          <ConfirmationModal
+            label="Are you sure?"
+            description="You want to cancel the feedback?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={cancelConfirm}
+          />
+        )}
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="Successfull"
+            title="Successful"
             description={"Your feedback has been submited Successfully"}
             onOk={handleOk}
           />
