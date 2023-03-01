@@ -3,12 +3,6 @@ name: Unit Test and Static Analysis
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    paths-ignore:
-      - README.md
-      - SECURITY.md
-      - docs/**
-      - .github/**
   workflow_dispatch:
 
 jobs:
