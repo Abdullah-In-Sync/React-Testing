@@ -12,6 +12,9 @@ export const env = {
       url: process.env.NEXT_PUBLIC_BTB_COURSE_1_URL,
     },
   },
+  rollbar: {
+    accessToken: "4f3a122536834cf18716cbf016d2f837",
+  },
   corpWebsite: {
     terms: "https://myhelp.co.uk/terms-of-use.html",
     cookies: "https://myhelp.co.uk/cookies-policy.html",
