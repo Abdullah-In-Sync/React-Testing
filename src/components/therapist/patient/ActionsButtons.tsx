@@ -17,10 +17,6 @@ const iconButtonsData = [
     icon: require("@mui/icons-material/ShareSharp").default,
   },
   {
-    id: "cust",
-    icon: require("@mui/icons-material/KeyboardReturnOutlined").default,
-  },
-  {
     id: "delete",
     icon: require("@mui/icons-material/DeleteSharp").default,
   },
