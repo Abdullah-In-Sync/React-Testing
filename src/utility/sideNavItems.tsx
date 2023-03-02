@@ -280,7 +280,7 @@ export const btb_actions_patient_routes: RoutesType[] = [
   },
   {
     key: 2,
-    label: "My Profile",
+    label: "Service Agreement",
     path: "/patient/view",
     icon: <PersonIcon />,
     type: "MY_PROFILE",
