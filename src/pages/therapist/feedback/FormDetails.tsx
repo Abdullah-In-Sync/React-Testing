@@ -132,7 +132,14 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
       })}
     </Box>
   ) : (
-    <Box> Response information not available</Box>
+    <Box
+      style={{
+        fontSize: "14px",
+        padding: "10px 0",
+      }}
+    >
+      Response information not available
+    </Box>
   );
 };
 
