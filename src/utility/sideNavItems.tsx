@@ -269,8 +269,7 @@ export const therapistRoutes: RoutesType[] = [
   },
 ];
 
-//** PATIENT ROUTES **//
-export const patient_routes: RoutesType[] = [
+export const btb_actions_patient_routes: RoutesType[] = [
   {
     key: 1,
     label: "Home",
@@ -278,6 +277,25 @@ export const patient_routes: RoutesType[] = [
     icon: <HomeIcon />,
     showNow: 1,
     type: "CBT_COURSE",
+  },
+  {
+    key: 2,
+    label: "Service Agreement",
+    path: "/patient/view",
+    icon: <PersonIcon />,
+    type: "MY_PROFILE",
+  },
+];
+
+//** PATIENT ROUTES **//
+export const patient_routes: RoutesType[] = [
+  {
+    key: 1,
+    label: "Home",
+    path: "/patient/home",
+    icon: <HomeIcon />,
+    showNow: 1,
+    type: "MYHELP_HOME",
   },
   {
     key: 2,
@@ -384,13 +402,6 @@ export const patient_routes: RoutesType[] = [
     label: "Feedback",
     path: "/patient/feedback",
     icon: <StyleIcon />,
-  },
-  {
-    key: 18,
-    label: "Myhelp Home",
-    path: "/patient/home",
-    icon: <HomeIcon />,
-    type: "MYHELP_HOME",
   },
 ];
 
