@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Box, Button, Collapse, List, ListItem, styled } from "@mui/material";
@@ -11,6 +11,8 @@ import {
   patient_routes,
   superadmin_routes,
   therapistRoutes,
+  default_patient_routes,
+  btb_actions_patient_routes,
 } from "../../../utility/sideNavItems";
 
 const listItem = {
@@ -146,38 +148,25 @@ const SidebarMenu = () => {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  // const [test, setTest] = useState(0);
+  const [test, setTest] = useState(0);
 
   const { user } = useAppContext();
-  const { module_data = [] } = user || {};
 
-  // useEffect(() => {
-  //   setTest(
-  //     user?.user_type == "patient" &&
-  //       user?.patient_data?.patient_consent &&
-  //       user?.patient_data?.patient_contract
-  //   );
-  // }, [user]);
+  useEffect(() => {
+    setTest(
+      user?.user_type == "patient" &&
+        user?.patient_data?.patient_consent &&
+        user?.patient_data?.patient_contract
+    );
+  }, [user]);
 
-  // const modifyPatientRoutes = patient_routes.filter((elem: any) =>
-  //   module_data.find(({ name }) => elem.type === name)
-  // );
-
-  const modifyPatientRoutes = [];
-  patient_routes.forEach((elem: any) => {
-    return module_data.forEach(({ name }) => {
-      if (!Array.isArray(elem)) {
-        if (elem.type === name) modifyPatientRoutes.push(elem);
-      } else {
-        return elem.forEach((item) => {
-          if (item.type === name) modifyPatientRoutes.push(item);
-        });
-      }
-    });
-  });
+  const patientLinks = () => {
+    if (location.host.includes("actions")) return btb_actions_patient_routes;
+    else return test ? patient_routes : default_patient_routes;
+  };
 
   const userRoute = {
-    patient: modifyPatientRoutes, //test ? patient_routes : default_patient_routes,
+    patient: patientLinks(),
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };
