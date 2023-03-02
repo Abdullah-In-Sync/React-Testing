@@ -55,6 +55,7 @@ export const SafetyPlanForm: FC<Props> = ({
                 )}
                 {formikHelper?.values.questions.map((question, index) => (
                   <SafetyPlanQuestion
+                    key={question?._id}
                     question={question}
                     index={index}
                     formikHelper={formikHelper}
