@@ -31,7 +31,7 @@ export default function TherapistFeedbackTabs(props: propTypes) {
         variant="h4"
         mt={4}
         mb={2}
-        sx={{ fontWeight: "bold" }}
+        sx={{ fontWeight: "bold", fontSize: "20px" }}
         className="text-blue"
       >
         Feedback
