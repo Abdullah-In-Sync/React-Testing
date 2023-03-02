@@ -40,6 +40,7 @@ const SafetyPlan = (props: propTypes) => {
     <>
       {safetyPlanData?.getPatientSafetyPlans?.map((s) => (
         <Accordion
+          key={s._id}
           title={s.name}
           detail={(toggleAccordion) => (
             <SafetyPlanForm
