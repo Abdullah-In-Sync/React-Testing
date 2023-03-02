@@ -40,6 +40,7 @@ const SafetyPlan = (props: propTypes) => {
     <>
       {safetyPlanData?.getPatientSafetyPlans?.map((s) => (
         <Accordion
+          key={s._id}
           title={s.name}
           detail={(toggleAccordion) => (
             <SafetyPlanForm
@@ -58,7 +59,7 @@ const SafetyPlan = (props: propTypes) => {
             fontSize: "27px",
           }}
         >
-          Are you sure you want to save these details
+          Are you sure, you want to submit the response?
         </Typography>
         <Box marginTop="20px" display="flex" justifyContent="end">
           <Button

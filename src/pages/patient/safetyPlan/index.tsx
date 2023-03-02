@@ -51,7 +51,7 @@ const PatientById: NextPage = () => {
         <SuccessModal
           isOpen={showSuccessModal}
           title={"Successfull"}
-          description={"Your plan has been created successfully."}
+          description={"Your response has been submitted successfully."}
           onOk={() => setShowSuccessModal(false)}
         />
       </Layout>
