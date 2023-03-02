@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   container: {
     marginBottom: 15,
     "& .headerWrapper": {
-      padding: "20px 10px",
+      padding: "10px 10px",
       alignItems: "center",
       "& h4": {
         color: theme.palette.primary.main,
@@ -17,7 +17,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       justifyContent: "center",
       border: `1px solid ${theme.palette.primary.main}`,
       borderRadius: 10,
-      padding: 20,
+      padding: 10,
       "& .box": {
         [theme.breakpoints.down("sm")]: {
           width: "100%",
@@ -32,14 +32,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          padding: "20px 10px",
+          padding: "10px",
         },
         "& .secondRow": {
           background: theme.palette.custom.light,
           borderRadius: 10,
           color: theme.palette.primary.main,
           padding: 15,
-          margin: "20px 10px",
+          margin: "10px",
           "& p": {
             fontSize: "0.8em",
             fontWeight: 600,
@@ -51,9 +51,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          padding: "20px 10px",
+          padding: "10px 10px",
           "& ul": {
-            padding: 10,
+            // padding: 10,
             "& li": {
               padding: "0px 20px",
             },

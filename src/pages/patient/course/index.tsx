@@ -26,7 +26,7 @@ const PatientById: NextPage = () => {
   };
   return (
     <>
-      <Layout boxStyle={{ height: "100vh" }}>
+      <Layout>
         <Course
           handleUseFulInfo={handleUseFulInfo}
           handleContinueButtonClick={handleContinueButtonClick}

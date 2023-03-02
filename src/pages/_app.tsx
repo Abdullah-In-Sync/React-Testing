@@ -3,9 +3,16 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import type { AppProps } from "next/app";
 import * as React from "react";
+import { env } from "./../lib/env";
 
 import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apollo-client";
+
+import { Provider, ErrorBoundary } from "@rollbar/react";
+const rollbarConfig = {
+  accessToken: env.rollbar.accessToken,
+  environment: env.which,
+};
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -27,25 +34,29 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
-    <ApolloProvider client={client}>
-      <AuthProvider>
-        <SnackbarProvider
-          maxSnack={3}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
-          autoHideDuration={6000}
-        >
-          <SidebarProvider>
-            <CacheProvider value={emotionCache}>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </CacheProvider>
-          </SidebarProvider>
-        </SnackbarProvider>
-      </AuthProvider>
-    </ApolloProvider>
+    <Provider config={rollbarConfig}>
+      <ErrorBoundary>
+        <ApolloProvider client={client}>
+          <AuthProvider>
+            <SnackbarProvider
+              maxSnack={3}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "center",
+              }}
+              autoHideDuration={6000}
+            >
+              <SidebarProvider>
+                <CacheProvider value={emotionCache}>
+                  <CssBaseline />
+                  <Component {...pageProps} />
+                </CacheProvider>
+              </SidebarProvider>
+            </SnackbarProvider>
+          </AuthProvider>
+        </ApolloProvider>
+      </ErrorBoundary>
+    </Provider>
   );
 };
 
