@@ -14,7 +14,7 @@ type Props = {
 
 const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
   const {
-    data: { therapistGetFeedbackList: feedbackDetail = {} } = {},
+    data: { therapistGetFeedbackList: feedbackDetail = [] } = {},
     loading,
   } = useQuery<TherapistGetFeedbackListRes, TherapistGetFeedbackListVars>(
     GET_THERAPIST_FEEDBACKLIST_DATA_NEW,
@@ -36,7 +36,7 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
     >
       <CircularProgress size={30} />
     </Box>
-  ) : (
+  ) : feedbackDetail && feedbackDetail.length > 0 ? (
     <Box paddingBottom={"50px"}>
       <Box marginTop={"13px"}>
         <Typography style={{ fontWeight: "bold" }}>Instruction</Typography>
@@ -131,6 +131,8 @@ const AccordionDetail: FC<Props> = ({ sessionNo, therapyId }) => {
         );
       })}
     </Box>
+  ) : (
+    <Box> Response information not available</Box>
   );
 };
 

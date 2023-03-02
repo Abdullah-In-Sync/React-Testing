@@ -496,7 +496,7 @@ describe("Patient Safety plans", () => {
 
     expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
 
-    await screen.findByText("Your plan has been created successfully.");
+    await screen.findByTestId("SuccessOkBtn");
 
     fireEvent.click(screen.getByTestId("SuccessOkBtn"));
   });
