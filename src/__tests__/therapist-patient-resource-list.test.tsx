@@ -8,6 +8,7 @@ import { GET_PATH_RESOURCE_LIST } from "../graphql/query/resource";
 import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
 import theme from "../styles/theme/theme";
 import ResourceList from "../pages/therapist/patient/view/[id]/resources";
+import { DELETE_RESOURCE_BY_ID } from "../graphql/mutation/patient";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -217,6 +218,13 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: DELETE_RESOURCE_BY_ID,
+    variables: { ptsharresId: "ce465fdd296b46afac0192630c0ee34a" },
+  },
+  result: {},
+});
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -261,5 +269,53 @@ describe("Therapist patient resource detail page", () => {
     });
 
     //
+  });
+
+  it("should delete therapist patient", async () => {
+    (useRouter as jest.Mock).mockClear();
+    const mockRouter = {
+      back: jest.fn(),
+      push: jest.fn(),
+    };
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "d0f32c9e662745d5b60b8165eb8bdb55",
+      },
+      ...mockRouter,
+    }));
+    await sut();
+
+    await waitFor(async () => {
+      const viewButton = await screen.findByTestId(
+        "iconButton_delete_ce465fdd296b46afac0192630c0ee34a"
+      );
+      expect(viewButton).toBeInTheDocument();
+      fireEvent.click(viewButton);
+      await waitFor(() =>
+        expect(screen.queryByTestId("confirmButton")).toBeInTheDocument()
+      );
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+
+      await (async () => {
+        expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Resource Deleted Successful")
+        ).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
+      });
+
+      await waitFor(() =>
+        expect(screen.queryByText("Resource Name")).toBeInTheDocument()
+      );
+    });
   });
 });

@@ -236,6 +236,14 @@ export const DELETE_ORG_BY_ID = gql`
   }
 `;
 
+export const DELETE_RESOURCE_BY_ID = gql`
+  mutation ($ptsharresId: String!) {
+    deleteShareResource(ptsharresId: $ptsharresId) {
+      deleted
+    }
+  }
+`;
+
 export const UPDATE_SAFETY_PLAN_QUESTION_DATA = gql`
   mutation ($quesData: String!) {
     updateSafetyPlanByPatient(quesData: $quesData) {
