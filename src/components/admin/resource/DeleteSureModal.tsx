@@ -9,6 +9,7 @@ const DeleteSureModal = (props) => {
     modalOpen,
     setModalOpen,
     title = "Are you sure want to delete this resource?",
+    description,
   } = props;
   return (
     <div>
@@ -45,6 +46,7 @@ const DeleteSureModal = (props) => {
               >
                 {title}
               </Typography>
+              <Typography>{description}</Typography>
             </Box>
             {props.children}
           </Grid>

@@ -201,7 +201,8 @@ const SafetyPlanPage: NextPage = () => {
         <DeleteSureModal
           modalOpen={deleteConfirmation}
           setModalOpen={setDeleteConfirmation}
-          title={"Your want to Delete safety plan"}
+          title={"Are you sure,"}
+          description={"Your want to delete safety plan?"}
         >
           <Box marginTop="20px" display="flex" justifyContent="end">
             <Button
@@ -218,9 +219,8 @@ const SafetyPlanPage: NextPage = () => {
               Cancel
             </Button>
             <Button
-              color="primary"
               variant="contained"
-              sx={{ marginLeft: "5px" }}
+              sx={{ marginLeft: "5px", backgroundColor: "#FF1744" }}
               size="small"
               data-testid="approveDeletePlanModalConfirmButton"
               disabled={deleteSeftyPlanLoading}
@@ -240,7 +240,7 @@ const SafetyPlanPage: NextPage = () => {
             setShowSuccessModal(false)
           }
           description={"Your plan has been deleted successfully."}
-          title={"Successfull"}
+          title={"Successful"}
         />
       </Layout>
     </>
