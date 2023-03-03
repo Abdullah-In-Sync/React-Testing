@@ -73,7 +73,7 @@ const defaultFormValue = {
   patient_illness_ability: "",
 };
 
-const Agreement = () => {
+const Agreement = ({ isPersonallInfoEnabled }) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
@@ -166,7 +166,8 @@ const Agreement = () => {
             enqueueSnackbar("Agreement successfull", {
               variant: "success",
             });
-            router.reload();
+            if (!isPersonallInfoEnabled) router.back();
+            else router.reload();
           }
         },
         onError: (error) => {
