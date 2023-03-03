@@ -79,9 +79,8 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
   const [loader, setLoader] = useState<boolean>(false);
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
-  const {
-    user: { user_type: userType },
-  } = useAppContext();
+  const { user, setUser } = useAppContext();
+  const { user_type: userType } = user;
   const terms = env.corpWebsite.terms;
   const privacy = env.corpWebsite.privacy;
   const cookies = env.corpWebsite.cookies;
@@ -163,11 +162,18 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
         onCompleted: (data) => {
           console.log("data: ", data);
           if (data && data.updateProfileById) {
+            const { patient_consent, patient_contract } = formFields || {};
             enqueueSnackbar("Agreement successfull", {
               variant: "success",
             });
-            if (!isPersonallInfoEnabled) router.back();
-            else router.reload();
+            if (!isPersonallInfoEnabled) {
+              const patient_data = {
+                patient_consent,
+                patient_contract,
+              };
+              setUser({ ...user, ...{ patient_data } });
+              router.back();
+            } else router.reload();
           }
         },
         onError: (error) => {
