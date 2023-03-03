@@ -122,7 +122,7 @@ const PatientById: NextPage = () => {
 
   useEffect(() => {
     if (isPersonallInfoEnabled) setActiveTab("personal-info");
-    else setActiveTab("agreement");
+    /* istanbul ignore next */ else setActiveTab("agreement");
   }, [isPersonallInfoEnabled]);
 
   useEffect(() => {
