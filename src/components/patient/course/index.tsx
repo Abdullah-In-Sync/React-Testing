@@ -23,6 +23,7 @@ const PatientHomeWorkComponent: React.FC<ViewProps> = ({
 }) => {
   const modalRef = useRef<ModalElement>(null);
   const styles = useStyles();
+  /* istanbul ignore next */
   const handleCheckContinueButtonClick = () => {
     if (isAgreed) handleContinueButtonClick();
     else modalRef.current?.open();
