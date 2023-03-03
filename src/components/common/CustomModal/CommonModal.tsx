@@ -13,7 +13,7 @@ import { useStyles } from "./commonModalStyles";
 export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
   (props, ref): JSX.Element => {
     const styles = useStyles();
-    const { onClose, children, headerTitleText, ...other } = props;
+    const { onClose, children, headerTitleText, className, ...other } = props;
     const [state, setState] = React.useState<State>({ open: false });
     const handleClose = useHandleClose(setState, onClose);
 
@@ -30,7 +30,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
       <Dialog
         open={state.open}
         onClose={handleClose}
-        className={styles.commonModalWrapper}
+        className={className ? className : styles.commonModalWrapper}
         {...other}
         fullWidth
       >
@@ -71,4 +71,5 @@ export type ModalElement = { open: () => void; close: () => void };
 
 export type CommonModalProps = Omit<DialogProps, "open"> & {
   headerTitleText?: string;
+  className?: string;
 };

@@ -24,16 +24,11 @@ const CcbtCourse: React.FC<ViewProps> = ({
   const styles = useStyles();
   const { user } = useAppContext();
 
-  /* istanbul ignore next */
   const isUsefulButton = (days = 1) => {
-    const {
-      userToken: { auth_time },
-      created_date,
-    } = user;
+    const { created_date } = user;
     const patientCreateDate = new Date(created_date);
     return (
-      auth_time >
-      (patientCreateDate.getTime() + 24 * days * 60 * 60 * 1000) / 1000
+      Date.now() > patientCreateDate.getTime() + 24 * days * 60 * 60 * 1000
     );
   };
 

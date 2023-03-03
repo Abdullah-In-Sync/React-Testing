@@ -1,15 +1,20 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../../components/layout";
-import Course from "../../../components/patient/course/Course";
+import Course from "../../../components/patient/course";
+import { useAppContext } from "../../../contexts/AuthContext";
 import withAuthentication from "../../../hoc/auth";
+import { env } from "../../../lib/env";
 
-const b2b_redirect_url =
-  "https://actions.learning.dev/learner/browse/56b3982f-49e1-362f-b02c-9aec72e33d4c";
+const b2b_redirect_url = env.btb.course1.url;
 
 const PatientById: NextPage = () => {
   const router = useRouter();
-  /* istanbul ignore next */
+  const { user } = useAppContext();
+  const {
+    patient_data: { patient_consent, patient_contract },
+  } = user || {};
+
   const handleUseFulInfo = () => {
     router.push("/patient/resource");
   };
@@ -24,12 +29,19 @@ const PatientById: NextPage = () => {
   const handleContinueButtonClick = () => {
     openInNewTab(b2b_redirect_url);
   };
+
+  const handleOk = () => {
+    if (patient_consent && patient_contract) handleContinueButtonClick();
+    else router.push("/patient/view/");
+  };
   return (
     <>
       <Layout>
         <Course
           handleUseFulInfo={handleUseFulInfo}
           handleContinueButtonClick={handleContinueButtonClick}
+          handleOk={handleOk}
+          isAgreed={patient_consent && patient_contract}
         />
       </Layout>
     </>
