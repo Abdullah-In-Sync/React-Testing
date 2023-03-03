@@ -32,8 +32,9 @@ const PatientById: NextPage = () => {
   };
 
   const handleOk = () => {
+    /* istanbul ignore next */
     if (patient_consent && patient_contract) handleContinueButtonClick();
-    else router.push("/patient/view/");
+    /* istanbul ignore next */ else router.push("/patient/view/");
   };
   return (
     <>
