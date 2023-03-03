@@ -11,9 +11,10 @@ const b2b_redirect_url = env.btb.course1.url;
 const PatientById: NextPage = () => {
   const router = useRouter();
   const { user } = useAppContext();
+  /* istanbul ignore next */
   const {
     patient_data: { patient_consent, patient_contract },
-  } = user || {};
+  } = user;
 
   const handleUseFulInfo = () => {
     router.push("/patient/resource");

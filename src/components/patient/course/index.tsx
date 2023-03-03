@@ -15,7 +15,7 @@ interface ViewProps {
   isAgreed?: boolean;
 }
 
-const PatientHomeWorkComponent: React.FC<ViewProps> = ({
+const CourseComponent: React.FC<ViewProps> = ({
   handleUseFulInfo,
   handleContinueButtonClick,
   handleOk,
@@ -46,4 +46,4 @@ const PatientHomeWorkComponent: React.FC<ViewProps> = ({
   );
 };
 
-export default PatientHomeWorkComponent;
+export default CourseComponent;
