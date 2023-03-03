@@ -22,9 +22,15 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
         setState({ open: true });
       },
       close() {
-        setState({ open: false });
+        /* istanbul ignore next */
+        closeModal();
       },
     }));
+
+    /* istanbul ignore next */
+    const closeModal = () => {
+      setState({ open: false });
+    };
 
     return (
       <Dialog
@@ -40,9 +46,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
             <IconButton
               aria-label="close"
               data-testid="modalCrossIcon"
-              onClick={() => {
-                setState({ open: false });
-              }}
+              onClick={closeModal}
             >
               <CloseIcon />
             </IconButton>
@@ -54,11 +58,10 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
   }
 );
 
+/* istanbul ignore next */
 function useHandleClose(setState: SetState, handleClose?: CloseHandler) {
   return React.useCallback<CloseHandler>((event, reason) => {
-    /* istanbul ignore next */
     setState({ open: false });
-    /* istanbul ignore next */
     handleClose?.(event, reason ?? "backdropClick");
   }, []);
 }

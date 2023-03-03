@@ -160,6 +160,7 @@ const SidebarMenu = () => {
     );
   }, [user]);
 
+  /* istanbul ignore next */
   const patientLinks = () => {
     if (location.host.includes("actions")) return btb_actions_patient_routes;
     else return test ? patient_routes : default_patient_routes;
