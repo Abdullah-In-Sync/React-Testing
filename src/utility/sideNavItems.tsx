@@ -416,7 +416,7 @@ export const default_patient_routes: RoutesType[] = [
   {
     key: 2,
     label: "My Profile",
-    path: "/patient/view/" + patientId,
+    path: "/patient/view",
     icon: <PersonIcon />,
   },
 ];
