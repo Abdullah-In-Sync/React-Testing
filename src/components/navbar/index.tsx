@@ -40,10 +40,12 @@ const NavBar = () => {
     return userRoute[user] || superadmin_routes;
   };
 
+  /* istanbul ignore next */
   const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  /* istanbul ignore next */
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };

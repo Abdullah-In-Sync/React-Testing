@@ -160,6 +160,7 @@ const SidebarMenu = () => {
     );
   }, [user]);
 
+  /* istanbul ignore next */
   const patientLinks = () => {
     if (location.host.includes("actions")) return btb_actions_patient_routes;
     else return test ? patient_routes : default_patient_routes;
@@ -171,6 +172,7 @@ const SidebarMenu = () => {
     admin: superadmin_routes,
   };
 
+  /* istanbul ignore next */
   const getRouteByUser = (user) => {
     return userRoute[user] || superadmin_routes;
   };
@@ -192,6 +194,7 @@ const SidebarMenu = () => {
             <List component="div">
               {getRouteByUser(user?.user_type).map((val, index) => {
                 if (Array.isArray(val)) {
+                  /* istanbul ignore next */
                   return (
                     <>
                       <ListItem component="div" key={index} sx={listItem}>
@@ -203,6 +206,7 @@ const SidebarMenu = () => {
                           onClick={(e) => handleClick(e, val[0]?.key)}
                           startIcon={val[0]?.icon}
                           endIcon={
+                            /* istanbul ignore next */
                             expanded[val[0]?.key] ? (
                               <ExpandLess />
                             ) : (

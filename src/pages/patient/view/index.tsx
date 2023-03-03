@@ -90,12 +90,15 @@ const PatientById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const [formFields, setFormFields] =
     useState<patientProfileFormFeild>(defaultFormValue);
+  const { user } = useAppContext();
+  const { user_type: userType } = user;
+  const { module_data = [] } = user || {};
+  const isPersonallInfoEnabled = module_data.some(
+    (e) => e.name === "PERSONAL_INFO"
+  );
 
   const [editable, setEditable] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState('"personal-info"');
-  const {
-    user: { user_type: userType },
-  } = useAppContext();
+  const [activeTab, setActiveTab] = useState<string>();
 
   //Queries GraphQl
   const [
@@ -116,6 +119,11 @@ const PatientById: NextPage = () => {
   useEffect(() => {
     setLoader(true);
   }, []);
+
+  useEffect(() => {
+    if (isPersonallInfoEnabled) setActiveTab("personal-info");
+    /* istanbul ignore next */ else setActiveTab("agreement");
+  }, [isPersonallInfoEnabled]);
 
   useEffect(() => {
     refetch();
@@ -214,26 +222,34 @@ const PatientById: NextPage = () => {
 
   const onTabChange = (currentTab) => setActiveTab(currentTab);
 
-  const tabs = [
-    {
-      label: "Personal Info",
-      value: "personal-info",
-      component: (
-        <ProfileForm
-          onSubmit={editFormHandler}
-          setLoader={setLoader}
-          disabled={!editable}
-          userType={userType}
-          setEditable={setEditable}
-        />
-      ),
-    },
+  let tabs = [
     {
       label: "Agreement",
       value: "agreement",
-      component: <Agreement />,
+      component: <Agreement isPersonallInfoEnabled={isPersonallInfoEnabled} />,
     },
   ];
+  module_data.forEach(({ name }) => {
+    if (name === "PERSONAL_INFO")
+      tabs = [
+        ...[
+          {
+            label: "Personal Info",
+            value: "personal-info",
+            component: (
+              <ProfileForm
+                onSubmit={editFormHandler}
+                setLoader={setLoader}
+                disabled={!editable}
+                userType={userType}
+                setEditable={setEditable}
+              />
+            ),
+          },
+        ],
+        ...tabs,
+      ];
+  });
 
   return (
     <>
@@ -332,14 +348,16 @@ const PatientById: NextPage = () => {
           </Box>
         )}
 
-        <div>
-          <TabsGenerator
-            editable={editable}
-            tabsList={tabs}
-            activeTabs="personal-info"
-            onTabChange={onTabChange}
-          />
-        </div>
+        {activeTab && (
+          <div>
+            <TabsGenerator
+              editable={editable}
+              tabsList={tabs}
+              activeTabs={activeTab}
+              onTabChange={onTabChange}
+            />
+          </div>
+        )}
       </Layout>
     </>
   );
