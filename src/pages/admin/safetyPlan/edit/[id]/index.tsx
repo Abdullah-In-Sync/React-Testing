@@ -172,7 +172,7 @@ const EditSafetyPlanPage: NextPage = () => {
           if (data) {
             successDeleteCallback();
             doneCallback();
-            enqueueSnackbar("Question successfully deleted.", {
+            enqueueSnackbar("Your plan has been deleted successfully.", {
               variant: "success",
             });
           }
@@ -222,7 +222,7 @@ const EditSafetyPlanPage: NextPage = () => {
         {isConfirm.status && (
           <ConfirmationModal
             label="Are you sure?"
-            description="You want to create safety plan"
+            description="You want to update safety plan?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
@@ -237,8 +237,8 @@ const EditSafetyPlanPage: NextPage = () => {
         )}
         {isConfirm.questionDeleteStatus && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You want to delete safety plan"
+            label="Are you sure,"
+            description="You want to delete the question?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
@@ -246,7 +246,7 @@ const EditSafetyPlanPage: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="Successfull"
+            title="Successful"
             description={"Your plan has been created Successfully"}
             onOk={handleOk}
           />

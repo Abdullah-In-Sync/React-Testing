@@ -240,7 +240,7 @@ describe("Admin safety plan list", () => {
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
     const aloadedText = await screen.findByText(
-      /Question successfully deleted./i
+      /Your plan has been deleted successfully./i
     );
     expect(aloadedText).toBeInTheDocument();
   });
