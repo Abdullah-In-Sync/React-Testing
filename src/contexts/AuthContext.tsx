@@ -56,7 +56,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     if (tokenData && tokenData?.getTokenData?.user_type == userType) {
       setUser({
         ...tokenData?.getTokenData,
-        ...{ userToken: parseJwt(token) },
       });
       setIsAuthenticated(true);
     } else if (tokenError) {
@@ -64,10 +63,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       setIsAuthenticated(false);
     }
   }, [tokenLoading]);
-
-  const parseJwt = (token) => {
-    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-  };
 
   return (
     <AuthContext.Provider

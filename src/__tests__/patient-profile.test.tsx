@@ -239,6 +239,19 @@ describe("Patient profile page", () => {
         user_status: "1",
         created_date: "2021-12-20 16:20:55",
         updated_date: "2021-12-20 16:20:55",
+        patient_data: {
+          patient_consent: 0,
+          patient_contract: 0,
+        },
+        module_data: [
+          {
+            _id: "b3e454bc-5f06-4957-9e8e-d05bfab20fcb",
+            name: "PERSONAL_INFO",
+            org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+            status: 1,
+            __typename: "ModuleData",
+          },
+        ],
       },
     });
   });

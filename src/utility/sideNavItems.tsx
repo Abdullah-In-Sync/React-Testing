@@ -31,11 +31,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
 
-import useStorage from "../components/common/hooks/useStorage";
 import { Link } from "../lib/helpers/common";
-
-const { getItem } = useStorage();
-const patientId = getItem("patient_id");
 
 type RoutesType =
   | {
@@ -416,7 +412,7 @@ export const default_patient_routes: RoutesType[] = [
   {
     key: 2,
     label: "My Profile",
-    path: "/patient/view/" + patientId,
+    path: "/patient/view",
     icon: <PersonIcon />,
   },
 ];

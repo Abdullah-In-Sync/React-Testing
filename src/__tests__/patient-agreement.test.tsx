@@ -150,7 +150,7 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
-        <Agreement />
+        <Agreement isPersonallInfoEnabled={false} />
       </SnackbarProvider>
     </MockedProvider>
   );
