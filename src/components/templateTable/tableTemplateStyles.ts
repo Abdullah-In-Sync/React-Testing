@@ -30,8 +30,8 @@ export const useStyles = makeStyles({
     },
   },
   tableCellView: {
-    overflow: "hidden",
-    overflowX: "scroll",
+    overflowX: "auto",
+    paddingBottom: "20px",
   },
   yesNoRadioButtonsWrapper: {
     display: "flex",
