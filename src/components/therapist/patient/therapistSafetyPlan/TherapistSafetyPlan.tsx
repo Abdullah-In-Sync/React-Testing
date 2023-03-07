@@ -34,7 +34,10 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
   };
   return (
     <>
-      <Box className={styles.safetyPlanListWrapper}>
+      <Box
+        style={{ paddingBottom: "20px" }}
+        className={styles.safetyPlanListWrapper}
+      >
         {safetyPlanList &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId.map(
@@ -78,7 +81,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                       <>
                         <Typography
                           className="text-white"
-                          sx={{ width: "90%", flexShrink: 0 }}
+                          sx={{ width: "90%", flexShrink: 1 }}
                         >
                           {v.name}
                         </Typography>
@@ -88,7 +91,12 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                           sx={{
                             justifyContent: "flex-end",
                             flexShrink: 1,
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: "0px",
                           }}
+                          className="icon-container"
                         >
                           {checkIsEditable && (
                             <IconButton
