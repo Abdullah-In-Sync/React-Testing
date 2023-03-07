@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import React from "react";
 import TherapyPatientFeedback from ".";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import TherapyTabsGenerator from "../../../components/common/TabsGenerator/TherapyTabGenerator";
 import ClientFeedback from "./ClientFeedback";
 import MYHelpHeading from "../../../components/common/Heading";

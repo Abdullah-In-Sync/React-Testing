@@ -1074,7 +1074,7 @@ const TherapyPatientFeedback: any = (props) => {
           <SuccessModal
             isOpen={successModal}
             title="Successfull"
-            description={"Your feedback has been submited Successfully."}
+            description={"Your feedback has been submitted Successfully."}
             onOk={handleOk}
           />
         )}
