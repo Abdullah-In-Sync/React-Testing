@@ -22,6 +22,30 @@ export interface DataEntity {
   user_type: string;
 }
 
+export interface GetAdminRelapse {
+  data: GetAdminRelapseData;
+}
+export interface GetAdminRelapseData {
+  adminRelapsePlanList: GetRelapseList;
+}
+export interface GetRelapseList {
+  total: number;
+  data?: RelapseDataEntity[] | null;
+}
+export interface RelapseDataEntity {
+  _id: string;
+  created_date: string;
+  description: string;
+  name: string;
+  organization_name: string;
+  org_id: string;
+  plan_type: string;
+  status: number;
+  updated_date: string;
+  user_id: string;
+  user_type: string;
+}
+
 export interface UpdateSafetyPlanByIDRes {
   updateSafetyPlanById: null;
 }

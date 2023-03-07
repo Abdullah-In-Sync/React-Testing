@@ -82,7 +82,38 @@ export const GET_SAFETY_PLAN_BY_ID = gql`
     }
   }
 `;
-
+export const GET_RELAPSE_PLAN_LIST = gql`
+  query adminRelapsePlanList(
+    $limit: Int
+    $planType: String
+    $pageNo: Int
+    $orgId: String
+    $searchText: String
+  ) {
+    adminRelapsePlanList(
+      limit: $limit
+      planType: $planType
+      pageNo: $pageNo
+      orgId: $orgId
+      searchText: $searchText
+    ) {
+      data {
+        _id
+        created_date
+        description
+        name
+        org_id
+        organization_name
+        plan_type
+        status
+        updated_date
+        user_id
+        user_type
+      }
+      total
+    }
+  }
+`;
 export const UPDATE_SAFETY_PLAN = gql`
   mutation updateSafetyPlanById(
     $planId: ID!
