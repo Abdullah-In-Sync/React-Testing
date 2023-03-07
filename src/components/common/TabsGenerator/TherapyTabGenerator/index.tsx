@@ -77,6 +77,12 @@ const TherapyTabsGenerator = (props: propTypes) => {
             style: {
               height: 0,
             },
+            sx: { display: "none" },
+          }}
+          sx={{
+            "& .MuiTabs-flexContainer": {
+              flexWrap: "wrap",
+            },
           }}
           aria-label="dashboard"
         >
@@ -88,10 +94,9 @@ const TherapyTabsGenerator = (props: propTypes) => {
                   textTransform: "none",
                   paddingLeft: "20px",
                   paddingRight: "20px",
-                  margin: "0px 5px",
+                  margin: "3px 5px",
                   color: "white",
                   backgroundColor: isActive ? "#689c8b" : "#6EC9DB",
-                  font: "16px",
                   fontWeight: 600,
                   borderRadius: "5px ",
                 }}
