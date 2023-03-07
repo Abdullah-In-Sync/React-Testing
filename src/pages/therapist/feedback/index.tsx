@@ -288,30 +288,35 @@ const TherapyPatientFeedback: any = (props) => {
               </Box>
             ) : (
               <AccordionDetails>
-                <Box>
-                  <Typography style={{ fontWeight: "bold" }}>
-                    Instruction
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    border: "1px solid #cecece",
-                    display: "grid",
-                  }}
-                  p={2}
-                  marginBottom={"25px"}
-                  borderRadius={"7px"}
-                >
-                  <Grid>
-                    {
-                      /* istanbul ignore next */
+                {therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                  ?.description && (
+                  <>
+                    <Box>
+                      <Typography style={{ fontWeight: "bold" }}>
+                        Instruction
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        border: "1px solid #cecece",
+                        display: "grid",
+                      }}
+                      p={2}
+                      marginBottom={"25px"}
+                      borderRadius={"7px"}
+                    >
+                      <Grid>
+                        {
+                          /* istanbul ignore next */
 
-                      therapistFeedbackNewData?.therapistGetFeedbackList[0]
-                        ?.description
-                    }
-                  </Grid>
-                </Box>
+                          therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                            ?.description
+                        }
+                      </Grid>
+                    </Box>
+                  </>
+                )}
                 {questionnaireList?.map((fv, fk) => {
                   /* istanbul ignore next */
                   return (
@@ -536,30 +541,35 @@ const TherapyPatientFeedback: any = (props) => {
                       </Box>
                     ) : (
                       <AccordionDetails>
-                        <Box>
-                          <Typography style={{ fontWeight: "bold" }}>
-                            Instruction
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            flexGrow: 1,
-                            border: "1px solid #cecece",
-                            display: "grid",
-                          }}
-                          p={2}
-                          marginBottom={"25px"}
-                          borderRadius={"7px"}
-                          data-testid="instruction"
-                        >
-                          <Grid>
-                            {
-                              /* istanbul ignore next */
-                              therapistFeedbackNewData
-                                ?.therapistGetFeedbackList[0]?.description
-                            }
-                          </Grid>
-                        </Box>
+                        {therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                          ?.description && (
+                          <>
+                            <Box>
+                              <Typography style={{ fontWeight: "bold" }}>
+                                Instruction
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                flexGrow: 1,
+                                border: "1px solid #cecece",
+                                display: "grid",
+                              }}
+                              p={2}
+                              marginBottom={"25px"}
+                              borderRadius={"7px"}
+                              data-testid="instruction"
+                            >
+                              <Grid>
+                                {
+                                  /* istanbul ignore next */
+                                  therapistFeedbackNewData
+                                    ?.therapistGetFeedbackList[0]?.description
+                                }
+                              </Grid>
+                            </Box>{" "}
+                          </>
+                        )}
                         {questionnaireList?.map((fv, fk) => {
                           /* istanbul ignore next */
                           return (
@@ -791,29 +801,34 @@ const TherapyPatientFeedback: any = (props) => {
               </Box>
             ) : (
               <AccordionDetails>
-                <Box>
-                  <Typography style={{ fontWeight: "bold" }}>
-                    Instruction
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    border: "1px solid #cecece",
-                    display: "grid",
-                  }}
-                  p={2}
-                  marginBottom={"25px"}
-                  borderRadius={"7px"}
-                >
-                  <Grid>
-                    {
-                      /* istanbul ignore next */
-                      therapistFeedbackNewData?.therapistGetFeedbackList[0]
-                        ?.description
-                    }
-                  </Grid>
-                </Box>
+                {therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                  ?.description && (
+                  <>
+                    <Box>
+                      <Typography style={{ fontWeight: "bold" }}>
+                        Instruction
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        border: "1px solid #cecece",
+                        display: "grid",
+                      }}
+                      p={2}
+                      marginBottom={"25px"}
+                      borderRadius={"7px"}
+                    >
+                      <Grid>
+                        {
+                          /* istanbul ignore next */
+                          therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                            ?.description
+                        }
+                      </Grid>
+                    </Box>
+                  </>
+                )}
                 {questionnaireList?.map((fv, fk) => {
                   /* istanbul ignore next */
                   return (
