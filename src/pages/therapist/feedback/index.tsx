@@ -1063,7 +1063,6 @@ const TherapyPatientFeedback: any = (props) => {
             </Button>
           </Box>
         </SureModal>
-
         {isConfirm && (
           <ConfirmationModal
             label="Are you sure you want to cancel the feedback?"
@@ -1071,7 +1070,6 @@ const TherapyPatientFeedback: any = (props) => {
             onConfirm={cancelConfirm}
           />
         )}
-
         {successModal && (
           <SuccessModal
             isOpen={successModal}
