@@ -125,7 +125,7 @@ const Homework: NextPage = () => {
         />
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure want to save the homework"
+            label="Are you sure want to save the homework?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
@@ -134,7 +134,7 @@ const Homework: NextPage = () => {
           <SuccessModal
             isOpen={successModal}
             title="HOMEWORK TASK"
-            description={"Task saved successfully"}
+            description={"Task saved successfully."}
             onOk={handleOk}
           />
         )}

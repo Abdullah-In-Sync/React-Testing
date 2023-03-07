@@ -53,30 +53,19 @@ const SafetyPlan = (props: propTypes) => {
       ))}
       <SureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
         <Typography
+          variant="subtitle1"
           sx={{
             fontWeight: "600",
             textAlign: "center",
-            fontSize: "27px",
           }}
         >
           Are you sure, you want to submit the response?
         </Typography>
-        <Box marginTop="20px" display="flex" justifyContent="end">
+        <Box marginTop="20px" display="flex" justifyContent="center">
           <Button
+            color="primary"
             variant="contained"
-            color="inherit"
-            size="small"
-            data-testid="editSafetyPlanCancelButton"
-            onClick={() => {
-              setModalOpen(false);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            color="error"
-            variant="contained"
-            sx={{ marginLeft: "5px" }}
+            sx={{ marginRight: "10px" }}
             size="small"
             data-testid="editSafetyPlanConfirmButton"
             onClick={() => {
@@ -86,6 +75,17 @@ const SafetyPlan = (props: propTypes) => {
             }}
           >
             Confirm
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            data-testid="editSafetyPlanCancelButton"
+            onClick={() => {
+              setModalOpen(false);
+            }}
+          >
+            Cancel
           </Button>
         </Box>
       </SureModal>

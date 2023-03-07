@@ -7,7 +7,10 @@ type MyHelpHeadingProps = {
 
 const MYHelpHeading: FC<MyHelpHeadingProps> = ({ children }) => {
   return (
-    <Typography style={{ margin: "20px 0" }} variant={"subtitle1"}>
+    <Typography
+      style={{ margin: "20px 0", color: "#6EC9DB" }}
+      variant={"subtitle2"}
+    >
       {children}
     </Typography>
   );

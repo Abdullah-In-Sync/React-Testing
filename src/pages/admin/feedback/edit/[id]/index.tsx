@@ -207,16 +207,14 @@ const EditFeedbackPage: NextPage = () => {
         )}
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="Your want to update feedback"
+            label="Are you sure you want to update feedback?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
         )}
         {isConfirm.cancelStatus && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You are canceling the feedback without saving"
+            label="Are you sure you are canceling the feedback without saving?"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
           />
@@ -231,8 +229,7 @@ const EditFeedbackPage: NextPage = () => {
         )}
         {deleteModal && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="Your want to delete question"
+            label="Are you sure you want to delete question?"
             onCancel={onCancelDeleteQuestion}
             onConfirm={onDeleteQuestion}
           />

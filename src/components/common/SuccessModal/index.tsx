@@ -33,8 +33,8 @@ export const SuccessModal: FC<SuccessModalProps> = ({
               <Image
                 alt="My Help"
                 src="/images/rightmark.png"
-                height="67"
-                width="67"
+                height="80"
+                width="80"
               />
             )}
           </Grid>
@@ -47,8 +47,8 @@ export const SuccessModal: FC<SuccessModalProps> = ({
                   textAlign: "center",
                   paddingBottom: "5px",
                   font: "500",
-                  fontSize: "16px",
                 }}
+                variant="subtitle1"
                 data-testid="title"
               >
                 {title}
@@ -63,7 +63,6 @@ export const SuccessModal: FC<SuccessModalProps> = ({
                   textAlign: "center",
                   fontWeight: "400",
                   paddingBottom: "20px",
-                  fontSize: "16px",
                 }}
                 data-testid="description"
               >

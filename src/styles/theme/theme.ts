@@ -18,21 +18,24 @@ const theme = (props?: any) => {
   return createTheme({
     typography: {
       fontFamily: "Montserrat",
-      subtitle1: {
-        fontFamily: "Montserrat",
+      subtitle2: {
         fontStyle: "normal",
         fontWeight: 700,
         fontSize: "22px",
         lineHeight: "110%",
-        color: "#6EC9DB",
       },
-      h3: {
-        fontFamily: "Montserrat",
-        fontStyle: "normal",
-        fontWeight: 700,
-        fontSize: "22px",
-        lineHeight: "110%",
-        color: "#6EC9DB",
+      subtitle1: {
+        fontSize: 20,
+      },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            fontSize: "14px",
+            textTransform: "capitalize",
+          },
+        },
       },
     },
     palette: {
@@ -42,7 +45,7 @@ const theme = (props?: any) => {
         light: "#eaf3ff",
       },
       secondary: {
-        main: panel_color ? panel_color : "#6ba08e",
+        main: "#7EBCA7",
         contrastText: "#ffffff",
       },
       error: {

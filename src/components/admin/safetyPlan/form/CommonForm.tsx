@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, Stack } from "@mui/material";
 import { Form, FormikProps } from "formik";
 import React, { useRef } from "react";
 import AddQuestionsBox from "../../../common/AddQuestionsBox";
+import CommonButton from "../../../common/Buttons/CommonButton";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { useStyles } from "./createSafetyPlanStyles";
@@ -136,24 +137,24 @@ const CommonForm: React.FC<ViewProps> = ({
             />
             <Box className="bottomActionButtonsWrapper">
               <Box>
-                <Button
+                <CommonButton
                   type="submit"
                   data-testid="submitForm"
                   variant="contained"
                   disabled={isSubmitting}
                 >
                   Save
-                </Button>
+                </CommonButton>
               </Box>
               <Box>
-                <Button
+                <CommonButton
                   variant="contained"
                   className="cancelButton"
                   data-testid="cancelForm"
                   onClick={onPressCancel}
                 >
                   Cancel
-                </Button>
+                </CommonButton>
               </Box>
             </Box>
           </Form>

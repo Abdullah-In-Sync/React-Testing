@@ -258,7 +258,7 @@ const Monitoring: NextPage = () => {
         />
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure want to save the answer"
+            label="Are you sure you want to save the answer?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
@@ -267,7 +267,7 @@ const Monitoring: NextPage = () => {
           <SuccessModal
             isOpen={successModal}
             title="PATIENTS"
-            description={"Response Submitted Successfully"}
+            description={"Response Submitted Successfully."}
             onOk={handleOk}
           />
         )}

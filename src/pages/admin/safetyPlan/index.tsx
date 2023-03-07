@@ -201,26 +201,12 @@ const SafetyPlanPage: NextPage = () => {
         <DeleteSureModal
           modalOpen={deleteConfirmation}
           setModalOpen={setDeleteConfirmation}
-          title={"Are you sure,"}
-          description={"Your want to delete safety plan?"}
+          title={"Are you sure you want to delete safety plan?"}
         >
-          <Box marginTop="20px" display="flex" justifyContent="end">
+          <Box marginTop="20px" display="flex" justifyContent="center">
             <Button
               variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="deleteSaftyPlanModalCancelButton"
-              onClick={() => {
-                /* istanbul ignore next */
-                setDeleteConfirmation(false);
-              }}
-              disabled={deleteSeftyPlanLoading}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ marginLeft: "5px", backgroundColor: "#FF1744" }}
+              sx={{ marginRight: "10px" }}
               size="small"
               data-testid="approveDeletePlanModalConfirmButton"
               disabled={deleteSeftyPlanLoading}
@@ -230,6 +216,19 @@ const SafetyPlanPage: NextPage = () => {
               }}
             >
               Confirm
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              data-testid="deleteSaftyPlanModalCancelButton"
+              onClick={() => {
+                /* istanbul ignore next */
+                setDeleteConfirmation(false);
+              }}
+              disabled={deleteSeftyPlanLoading}
+            >
+              Cancel
             </Button>
           </Box>
         </DeleteSureModal>

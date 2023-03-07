@@ -221,24 +221,21 @@ const EditSafetyPlanPage: NextPage = () => {
         )}
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You want to update safety plan?"
+            label="Are you sure you want to create safety plan?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
         )}
         {isConfirm.cancelStatus && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You are canceling the plan without saving"
+            label="Are you sure you are canceling the plan without saving?"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
           />
         )}
         {isConfirm.questionDeleteStatus && (
           <ConfirmationModal
-            label="Are you sure,"
-            description="You want to delete the question?"
+            label="Are you sure you want to delete safety plan?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
@@ -246,8 +243,8 @@ const EditSafetyPlanPage: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="Successful"
-            description={"Your plan has been created Successfully"}
+            title="Successfull"
+            description={"Your plan has been created Successfully."}
             onOk={handleOk}
           />
         )}
