@@ -7,6 +7,6 @@ describe("MYHelpHeading", () => {
     render(<MYHelpHeading> {title} </MYHelpHeading>);
     const titleElement = screen.getByText(title);
     expect(titleElement).toBeInTheDocument();
-    expect(titleElement.tagName).toEqual("H3");
+    expect(titleElement.tagName).toEqual("H6");
   });
 });
