@@ -18,12 +18,21 @@ const theme = (props?: any) => {
   return createTheme({
     typography: {
       fontFamily: "Montserrat",
-      h3: {
+      subtitle1: {
+        fontFamily: "Montserrat",
         fontStyle: "normal",
         fontWeight: 700,
         fontSize: "22px",
         lineHeight: "110%",
-        /* or 24px */
+        color: "#6EC9DB",
+        margin: "20px 0",
+      },
+      h3: {
+        fontFamily: "Montserrat",
+        fontStyle: "normal",
+        fontWeight: 700,
+        fontSize: "22px",
+        lineHeight: "110%",
         color: "#6EC9DB",
       },
     },

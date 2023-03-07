@@ -4,6 +4,7 @@ import TherapyPatientFeedback from ".";
 import { Box, Typography } from "@mui/material";
 import TherapyTabsGenerator from "../../../components/common/TabsGenerator/TherapyTabGenerator";
 import ClientFeedback from "./ClientFeedback";
+import MYHelpHeading from "../../../components/common/Heading";
 
 type propTypes = {
   setTherapy: any;
@@ -27,15 +28,7 @@ export default function TherapistFeedbackTabs(props: propTypes) {
   ];
   return (
     <Box>
-      <Typography
-        variant="h4"
-        mt={4}
-        mb={2}
-        sx={{ fontWeight: "bold", fontSize: "20px" }}
-        className="text-blue"
-      >
-        Feedback
-      </Typography>
+      <MYHelpHeading>Feedback</MYHelpHeading>
       <Box data-testid="patientViewTherapyTab">
         <TherapyTabsGenerator tabsList={tabs} activeTabs="" />
       </Box>

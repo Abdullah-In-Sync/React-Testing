@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import { FC } from "react";
 
 type MyHelpHeadingProps = {
@@ -6,7 +6,7 @@ type MyHelpHeadingProps = {
 };
 
 const MYHelpHeading: FC<MyHelpHeadingProps> = ({ children }) => {
-  return <Typography component={"h3"}>{children}</Typography>;
+  return <Typography variant={"subtitle1"}>{children}</Typography>;
 };
 
 export default MYHelpHeading;
