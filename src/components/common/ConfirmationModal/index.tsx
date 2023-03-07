@@ -20,10 +20,10 @@ const ConfirmationModal: React.FC<ViewProps> = ({
       <>
         <SureModal modalOpen={true}>
           <Typography
+            variant="subtitle1"
             sx={{
               fontWeight: "600",
               textAlign: "center",
-              fontSize: "27px",
             }}
           >
             {label}
@@ -37,25 +37,25 @@ const ConfirmationModal: React.FC<ViewProps> = ({
               {description}
             </Typography>
           )}
-          <Box marginTop="20px" display="flex" justifyContent="end">
+          <Box marginTop="20px" display="flex" justifyContent="center">
             <Button
+              color="primary"
               variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="cancelButton"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ marginLeft: "5px" }}
+              sx={{ marginRight: "10px" }}
               size="small"
               data-testid="confirmButton"
               onClick={onConfirm}
             >
               Confirm
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="small"
+              data-testid="cancelButton"
+              onClick={onCancel}
+            >
+              Cancel
             </Button>
           </Box>
         </SureModal>

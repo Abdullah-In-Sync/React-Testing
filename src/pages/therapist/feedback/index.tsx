@@ -1018,8 +1018,7 @@ const TherapyPatientFeedback: any = (props) => {
 
         {isConfirm && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You want to cancel the feedback?"
+            label="Are you sure you want to cancel the feedback?"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
           />
@@ -1029,7 +1028,7 @@ const TherapyPatientFeedback: any = (props) => {
           <SuccessModal
             isOpen={successModal}
             title="Successfull"
-            description={"Your feedback has been submited Successfully"}
+            description={"Your feedback has been submited Successfully."}
             onOk={handleOk}
           />
         )}
