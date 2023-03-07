@@ -25,7 +25,6 @@ const theme = (props?: any) => {
         fontSize: "22px",
         lineHeight: "110%",
         color: "#6EC9DB",
-        margin: "20px 0",
       },
       h3: {
         fontFamily: "Montserrat",

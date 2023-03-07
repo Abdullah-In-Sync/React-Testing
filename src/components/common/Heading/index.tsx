@@ -6,7 +6,11 @@ type MyHelpHeadingProps = {
 };
 
 const MYHelpHeading: FC<MyHelpHeadingProps> = ({ children }) => {
-  return <Typography variant={"subtitle1"}>{children}</Typography>;
+  return (
+    <Typography style={{ margin: "20px 0" }} variant={"subtitle1"}>
+      {children}
+    </Typography>
+  );
 };
 
 export default MYHelpHeading;
