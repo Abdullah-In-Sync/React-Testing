@@ -172,7 +172,7 @@ const EditSafetyPlanPage: NextPage = () => {
           if (data) {
             successDeleteCallback();
             doneCallback();
-            enqueueSnackbar("Question successfully deleted.", {
+            enqueueSnackbar("Your plan has been deleted successfully.", {
               variant: "success",
             });
           }

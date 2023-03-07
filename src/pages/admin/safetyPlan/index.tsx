@@ -205,7 +205,6 @@ const SafetyPlanPage: NextPage = () => {
         >
           <Box marginTop="20px" display="flex" justifyContent="center">
             <Button
-              color="primary"
               variant="contained"
               sx={{ marginRight: "10px" }}
               size="small"
@@ -240,7 +239,7 @@ const SafetyPlanPage: NextPage = () => {
             setShowSuccessModal(false)
           }
           description={"Your plan has been deleted successfully."}
-          title={"Successfull"}
+          title={"Successful"}
         />
       </Layout>
     </>
