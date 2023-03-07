@@ -784,7 +784,7 @@ describe("Therapist patient safety plan", () => {
       const listboxPlanTypeSelect = within(
         screen.getByRole("presentation")
       ).getByRole("listbox");
-      ("Confirm");
+
       const optionsPlanTypeSelect = within(listboxPlanTypeSelect).getAllByRole(
         "option"
       );
