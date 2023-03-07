@@ -1,10 +1,11 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, useTheme } from "@mui/material";
 import Modal from "../../common/Modal";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
 
 const DeleteSureModal = (props) => {
+  const theme = useTheme();
   const {
     modalOpen,
     setModalOpen,
@@ -30,18 +31,16 @@ const DeleteSureModal = (props) => {
               <ErrorOutlineIcon
                 fontSize="large"
                 sx={{
-                  width: "100px",
-                  height: "100px",
-                  color: "#f8bb86",
-                  fontWeight: "light",
+                  fontSize: "80px",
+                  color: theme.palette.error.main,
                   marginBottom: "10px",
                 }}
               />
               <Typography
+                variant="subtitle1"
                 sx={{
                   fontWeight: "600",
                   textAlign: "center",
-                  fontSize: "27px",
                 }}
               >
                 {title}

@@ -149,16 +149,14 @@ const CreateSafetyPlanPage: NextPage = () => {
         />
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You want to create safety plan"
+            label="Are you sure you want to create safety plan?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
         )}
         {isConfirm.cancelStatus && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You are canceling the plan without saving"
+            label="Are you sure you are canceling the plan without saving?"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
           />
@@ -167,7 +165,7 @@ const CreateSafetyPlanPage: NextPage = () => {
           <SuccessModal
             isOpen={successModal}
             title="Successfull"
-            description={"Your plan has been created Successfully"}
+            description={"Your plan has been created Successfully."}
             onOk={handleOk}
           />
         )}

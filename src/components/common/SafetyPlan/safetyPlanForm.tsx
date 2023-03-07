@@ -72,8 +72,7 @@ export const SafetyPlanForm: FC<Props> = ({
                       variant="contained"
                       type="submit"
                       style={{
-                        padding: "5px 79px 5px 79px",
-                        fontSize: "20px",
+                        padding: "5px 20px 5px 20px",
                       }}
                       disabled={!formikHelper.isValid}
                     >
@@ -86,8 +85,7 @@ export const SafetyPlanForm: FC<Props> = ({
                     variant="contained"
                     style={{
                       margin: "0px 27px 0px 27px",
-                      padding: "5px 79px 5px 79px",
-                      fontSize: "20px",
+                      padding: "5px 20px 5px 20px",
                     }}
                     onClick={() => onCancel?.(formikHelper)}
                   >

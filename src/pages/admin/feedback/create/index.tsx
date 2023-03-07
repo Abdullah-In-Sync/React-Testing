@@ -145,16 +145,14 @@ const CreateFeedbackPage: NextPage = () => {
         />
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You want to save Feedback"
+            label="Are you sure you want to save Feedback?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
         )}
         {isConfirm.cancelStatus && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You are canceling the feedback without saving"
+            label="Are you sure you are canceling the feedback without saving?"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
           />

@@ -26,7 +26,7 @@ const ResourceList: React.FC<ViewProps> = ({
   return (
     <Stack className={styles.tablePaper}>
       <Typography
-        variant="h4"
+        variant="subtitle1"
         mt={4}
         mb={2}
         sx={{ fontWeight: "bold" }}

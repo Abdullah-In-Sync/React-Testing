@@ -150,7 +150,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           if (data) {
             /* istanbul ignore next */
             setSuccessModal({
-              description: "Your plan has been created successfully",
+              description: "Your plan has been created successfully.",
             });
             getSafetyPlanList({
               variables: { patientId: patId },
@@ -212,7 +212,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           });
           /* istanbul ignore next */
           setSuccessModal({
-            description: "Your plan has been deleted successfully!",
+            description: "Your plan has been deleted successfully.",
           });
         },
       });
@@ -247,8 +247,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             /* istanbul ignore next */
             setSuccessModal({
               description: share_status
-                ? "Your plan has been shared successfully"
-                : "Your plan has been updated successfully",
+                ? "Your plan has been shared successfully."
+                : "Your plan has been updated successfully.",
             });
             getSafetyPlanList({
               variables: { patientId: patId },
@@ -277,8 +277,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       status: true,
       confirmObject: {
         description: currentSafetyPlan
-          ? "You want to update safety Plan"
-          : "You want to create safety Plan",
+          ? "Are you sure you want to update safety plan?"
+          : "Are you sure you want to create safety plan?",
       },
       storedFunction: (callback) =>
         currentSafetyPlan
@@ -293,7 +293,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "You want to share safety Plan",
+        description: "Are you sure you want to share safety plan?",
       },
       storedFunction: (callback) =>
         submitUpdateSafetyPlan({ share_status: 1, shareObject: v }, callback),
@@ -304,7 +304,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "You want to delete safety Plan",
+        description: "Are you sure you want to delete safety plan?",
       },
       storedFunction: () => handleDeletesafetyPlan(v),
     });
@@ -401,7 +401,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         onCompleted: (data) => {
           if (data) {
             setSuccessModal({
-              description: "Your question has been created successfully",
+              description: "Your question has been created successfully.",
             });
             fetchPlanData(planId);
           }
@@ -423,7 +423,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "You want to update safety plan",
+        description: "Are you sure you want to update safety plan?",
       },
       storedFunction: (callback) => submitQuestionForm(formFields, callback),
       setSubmitting: setSubmitting,
@@ -445,7 +445,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             successDeleteCallback();
             doneCallback();
             setSuccessModal({
-              description: "Your question has been deleted successfully",
+              description: "Your question has been deleted successfully.",
             });
             enqueueSnackbar("Question successfully deleted.", {
               variant: "success",
@@ -471,7 +471,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       ...{
         status: true,
         confirmObject: {
-          description: "You want to delete question",
+          description: "Are you sure you want to delete question?",
         },
         storedFunction: (callback) => {
           callDeleteApi(questionId, successDeleteCallback, callback);
@@ -506,8 +506,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       </Box>
       {isConfirm.status && (
         <ConfirmationModal
-          label="Are you sure?"
-          description={isConfirm.confirmObject.description}
+          label={isConfirm.confirmObject.description}
           onCancel={clearIsConfirm}
           onConfirm={onConfirmSubmit}
         />

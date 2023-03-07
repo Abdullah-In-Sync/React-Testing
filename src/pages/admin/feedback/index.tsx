@@ -209,7 +209,7 @@ const Feedback: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "You want to delete feedback plan",
+        description: "Are you sure you want to delete feedback plan?",
       },
       storedFunction: (callback) => handleDelete(v, callback),
     });
@@ -289,8 +289,7 @@ const Feedback: NextPage = () => {
         </Box>
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure?"
-            description={isConfirm.confirmObject.description}
+            label={isConfirm.confirmObject.description}
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />

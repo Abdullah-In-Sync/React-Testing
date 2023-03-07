@@ -1147,8 +1147,7 @@ const Feedback: NextPage = () => {
 
         {isConfirm && (
           <ConfirmationModal
-            label="Are you sure?"
-            description="You want to cancel the feedback?"
+            label="Are you sure you want to cancel the feedback?"
             onCancel={clearIsConfirmCancel}
             onConfirm={cancelConfirm}
           />

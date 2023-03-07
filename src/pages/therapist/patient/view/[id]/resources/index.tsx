@@ -90,8 +90,7 @@ const PatientEditTemplatePage2: NextPage = () => {
       )}
       {isConfirm && (
         <ConfirmationModal
-          label="Are you sure?"
-          description="You want to delete resource?"
+          label="Are you sure you want to delete resource?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handleDeleteOrg}
         />
@@ -100,7 +99,7 @@ const PatientEditTemplatePage2: NextPage = () => {
         <SuccessModal
           isOpen={successModal}
           title="Successful"
-          description={"Resource Deleted Successful"}
+          description={"Resource deleted Successfully."}
           onOk={handleOk}
         />
       )}

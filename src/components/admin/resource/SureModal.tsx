@@ -1,10 +1,11 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Grid, useTheme } from "@mui/material";
 import Modal from "../../common/Modal";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
 
 const SureModal = (props) => {
+  const theme = useTheme();
   const { modalOpen, setModalOpen } = props;
   return (
     <div>
@@ -25,10 +26,8 @@ const SureModal = (props) => {
               <ErrorOutlineIcon
                 fontSize="large"
                 sx={{
-                  width: "100px",
-                  height: "100px",
-                  color: "#f8bb86",
-                  fontWeight: "light",
+                  fontSize: "80px",
+                  color: theme.palette.error.main,
                   marginBottom: "10px",
                 }}
               />

@@ -18,6 +18,20 @@ const theme = (props?: any) => {
   return createTheme({
     typography: {
       fontFamily: "Montserrat",
+      fontSize: 12,
+      subtitle1: {
+        fontSize: 20,
+      },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            fontSize: "14px",
+            textTransform: "capitalize",
+          },
+        },
+      },
     },
     palette: {
       primary: {
@@ -26,7 +40,7 @@ const theme = (props?: any) => {
         light: "#eaf3ff",
       },
       secondary: {
-        main: panel_color ? panel_color : "#6ba08e",
+        main: "#7EBCA7",
         contrastText: "#ffffff",
       },
       error: {

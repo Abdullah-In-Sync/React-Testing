@@ -11,7 +11,7 @@ export const safetyPlanValidationSchema = Yup.object().shape({
   questions: Yup.array().of(
     Yup.object().shape({
       question: Yup.string().required("Question is required"),
-      description: Yup.string().required("Description is required"),
+      // description: Yup.string().required("Description is required"),
       questionType: Yup.string().required("Question type is required"),
       questionOption: Yup.string().when("questionType", {
         is: "2",

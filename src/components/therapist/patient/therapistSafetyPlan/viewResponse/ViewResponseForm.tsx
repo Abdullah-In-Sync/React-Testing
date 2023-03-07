@@ -103,12 +103,14 @@ const CommonForm: React.FC<ViewProps> = ({
           )}
           {paitentResponse()}
         </Box>
-        <AddQuestionsBox
-          isEditable={isEditable && !isPatientResponse}
-          formikProps={formikProps}
-          handleDeleteQuestion={handleDeleteQuestion}
-          ref={questionFieldscRef}
-        />
+        {isEditable && !isPatientResponse && (
+          <AddQuestionsBox
+            isEditable={isEditable && !isPatientResponse}
+            formikProps={formikProps}
+            handleDeleteQuestion={handleDeleteQuestion}
+            ref={questionFieldscRef}
+          />
+        )}
         {isEditable && !isPatientResponse && (
           <Box className="bottomActionButtonsWrapper">
             <Box>
