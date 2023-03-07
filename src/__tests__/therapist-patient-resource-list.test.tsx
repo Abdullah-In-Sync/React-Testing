@@ -237,7 +237,7 @@ const sut = async () => {
   );
 };
 
-describe("Therapist patient resource detail page", () => {
+describe("Therapist patient resource list page", () => {
   it("should render therapist patient resource detail", async () => {
     (useRouter as jest.Mock).mockClear();
     const mockRouter = {
@@ -285,7 +285,7 @@ describe("Therapist patient resource detail page", () => {
     }));
     await sut();
 
-    await waitFor(async () => {
+    waitFor(async () => {
       const viewButton = await screen.findByTestId(
         "iconButton_delete_ce465fdd296b46afac0192630c0ee34a"
       );
