@@ -18,7 +18,12 @@ const theme = (props?: any) => {
   return createTheme({
     typography: {
       fontFamily: "Montserrat",
-      fontSize: 12,
+      subtitle2: {
+        fontStyle: "normal",
+        fontWeight: 700,
+        fontSize: "22px",
+        lineHeight: "110%",
+      },
       subtitle1: {
         fontSize: 20,
       },
