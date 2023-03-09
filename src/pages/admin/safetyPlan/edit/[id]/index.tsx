@@ -243,8 +243,8 @@ const EditSafetyPlanPage: NextPage = () => {
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="Successfull"
-            description={"Your plan has been created Successfully."}
+            title="Successful"
+            description={"Your plan has been updated successfully"}
             onOk={handleOk}
           />
         )}
