@@ -22,7 +22,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.primary.main,
     },
     "& table td p": {
-      fontWeight: 600,
+      fontWeight: 400,
     },
     "& table th p": {
       fontWeight: "bold",

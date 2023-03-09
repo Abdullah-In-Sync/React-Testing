@@ -25,7 +25,7 @@ const planTypes = [
   },
   {
     id: "custom",
-    value: "Custom",
+    value: "Customisable",
   },
 ];
 
