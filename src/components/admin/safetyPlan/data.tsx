@@ -30,7 +30,7 @@ export const columns: readonly Column[] = [
     minWidth: 170,
     align: "center",
     format: (value) => {
-      return <Typography>{value.plan_type}</Typography>;
+      return <Typography className="planType">{value.plan_type}</Typography>;
     },
   },
   {
