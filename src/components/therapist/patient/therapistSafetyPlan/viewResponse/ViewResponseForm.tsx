@@ -111,7 +111,7 @@ const CommonForm: React.FC<ViewProps> = ({
             ref={questionFieldscRef}
           />
         )}
-        {isEditable && !isPatientResponse && (
+        {isEditable && !isPatientResponse && values.questions.length > 0 && (
           <Box className="bottomActionButtonsWrapper">
             <Box>
               <Button
