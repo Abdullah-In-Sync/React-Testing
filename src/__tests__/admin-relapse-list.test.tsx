@@ -10,6 +10,7 @@ import {
 import { SnackbarProvider } from "notistack";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
 import { GET_RELAPSE_PLAN_LIST } from "../graphql/SafetyPlan/graphql";
+import { UPDATE_RELAPSE_PLAN } from "../graphql/Relapse/graphql";
 import theme from "../styles/theme/theme";
 import RelapsePlanPage from "../pages/admin/relapsePlan";
 
@@ -19,6 +20,26 @@ jest.mock("next/router", () => ({
 }));
 
 const mocksData = [];
+
+mocksData.push({
+  request: {
+    query: UPDATE_RELAPSE_PLAN,
+    variables: {
+      planId: "a91adf1f-2bdc-4725-857b-3e690a3b6333",
+      updatePlan: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateRelapseById: {
+        _id: "a91adf1f-2bdc-4725-857b-3e690a3b6333",
+        __typename: "viewMasterSafetyPlan",
+      },
+    },
+  },
+});
 
 mocksData.push({
   request: {
@@ -187,6 +208,41 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_RELAPSE_PLAN_LIST,
+    variables: {
+      limit: 10,
+      pageNo: 1,
+      planType: "fixed",
+    },
+  },
+  result: {
+    data: {
+      adminRelapsePlanList: {
+        data: [
+          {
+            _id: "a91adf1f-2bdc-4725-857b-3e690a3b6333",
+            created_date: "2023-03-01T11:48:30.945Z",
+            description: "testing plan",
+            name: "Dev Relapse plan",
+            org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
+            organization_name: "portal.dev-myhelp",
+            plan_type: "fixed",
+            status: 1,
+            updated_date: "2023-03-01T11:48:30.945Z",
+            user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+            user_type: "admin",
+            __typename: "MasterRelapsePlans",
+          },
+        ],
+        total: 1,
+        __typename: "AdminRelapsePlansList",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -199,53 +255,79 @@ const sut = async () => {
   );
 };
 
-it("should render relapse plan data", async () => {
-  await sut();
-  await waitFor(async () => {
-    expect(screen.getByText("Dev Relapse plan")).toBeInTheDocument();
+describe("Render admin relapse list screen", () => {
+  it("should render relapse plan data", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByText("Dev Relapse plan")).toBeInTheDocument();
+    });
   });
-});
 
-it("should search base on the search", async () => {
-  await sut();
-  await waitFor(async () => {
-    const searchInput = screen.getByTestId("searchInput");
-    expect(searchInput).toBeInTheDocument();
+  it("should search base on the search", async () => {
+    await sut();
+    await waitFor(async () => {
+      const searchInput = screen.getByTestId("searchInput");
+      expect(searchInput).toBeInTheDocument();
 
-    fireEvent.change(searchInput, {
-      target: { value: "plan" },
+      fireEvent.change(searchInput, {
+        target: { value: "plan" },
+      });
+
+      expect(screen.getByText("Plan Name")).toBeInTheDocument();
+    });
+  });
+
+  it("should change the plane type", async () => {
+    await sut();
+    await waitFor(async () => {
+      const planTypeSelect = screen.getByTestId("planTypeSelect");
+
+      const buttonPlanTypeSelect = within(planTypeSelect).getByRole("button");
+      fireEvent.mouseDown(buttonPlanTypeSelect);
+
+      const listboxPlanTypeSelect = within(
+        screen.getByRole("presentation")
+      ).getByRole("listbox");
+
+      const optionsPlanTypeSelect = within(listboxPlanTypeSelect).getAllByRole(
+        "option"
+      );
+
+      fireEvent.click(optionsPlanTypeSelect[1]);
+
+      expect(screen.getByText("Plan Name")).toBeInTheDocument();
+    });
+  });
+
+  it("should organization dropdown in the document type", async () => {
+    await sut();
+    await waitFor(async () => {
+      const selectOrganization = screen.getByTestId("organizationSelect");
+      expect(selectOrganization).toBeInTheDocument();
+    });
+  });
+
+  it("should delete admin relapse", async () => {
+    await sut();
+    const deleteIconButton = await screen.findByTestId(
+      "iconButton_delete_a91adf1f-2bdc-4725-857b-3e690a3b6333"
+    );
+    fireEvent.click(deleteIconButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
     });
 
-    expect(screen.getByText("Plan Name")).toBeInTheDocument();
-  });
-});
-
-it("should change the plane type", async () => {
-  await sut();
-  await waitFor(async () => {
-    const planTypeSelect = screen.getByTestId("planTypeSelect");
-
-    const buttonPlanTypeSelect = within(planTypeSelect).getByRole("button");
-    fireEvent.mouseDown(buttonPlanTypeSelect);
-
-    const listboxPlanTypeSelect = within(
-      screen.getByRole("presentation")
-    ).getByRole("listbox");
-
-    const optionsPlanTypeSelect = within(listboxPlanTypeSelect).getAllByRole(
-      "option"
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    const successMessage = await screen.findByText(
+      /Your plan has been deleted successfully./i
     );
 
-    fireEvent.click(optionsPlanTypeSelect[1]);
+    expect(successMessage).toBeInTheDocument();
 
-    expect(screen.getByText("Plan Name")).toBeInTheDocument();
-  });
-});
-
-it("should organization dropdown in the document type", async () => {
-  await sut();
-  await waitFor(async () => {
-    const selectOrganization = screen.getByTestId("organizationSelect");
-    expect(selectOrganization).toBeInTheDocument();
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
+    expect(successMessage).not.toBeInTheDocument();
   });
 });

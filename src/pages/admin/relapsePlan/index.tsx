@@ -1,21 +1,39 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
+import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
+import { UPDATE_RELAPSE_PLAN } from "../../../graphql/Relapse/graphql";
 import { GET_RELAPSE_PLAN_LIST } from "../../../graphql/SafetyPlan/graphql";
 
+import { UpdatePlan } from "../../../graphql/Relapse/types";
+
 import RelapsePlanComponent from "../../../components/admin/relapsePlan";
+import { SuccessModal } from "../../../components/common/SuccessModal";
 
 const RelapsePlanPage: NextPage = () => {
   const initialPageNo = 1;
+  const { enqueueSnackbar } = useSnackbar();
+  const [successModal, setSuccessModal] = useState<any>();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
+  const [isConfirm, setIsConfirm] = useState<any>({
+    status: false,
+    storedFunction: null,
+    setSubmitting: null,
+    cancelStatus: false,
+    confirmObject: {
+      description: "",
+    },
+  });
+  const [updateRelapsePlanFn] = useMutation<UpdatePlan>(UPDATE_RELAPSE_PLAN);
 
   useEffect(() => {
     getOrgList();
@@ -51,7 +69,6 @@ const RelapsePlanPage: NextPage = () => {
       setLoader(false);
     },
   });
-  console.log("New: listData ", listData);
 
   /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
@@ -146,6 +163,85 @@ const RelapsePlanPage: NextPage = () => {
   //   //Handler
   // };
 
+  const deleteRelapse = async (planId, doneCallback) => {
+    setLoader(true);
+    const variables = {
+      planId,
+      updatePlan: {
+        status: 0,
+      },
+    };
+    try {
+      await updateRelapsePlanFn({
+        variables,
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            getRelapsePlanList({
+              variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
+            });
+            doneCallback();
+            setSuccessModal({
+              description: "Your plan has been deleted successfully.",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    } finally {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+    }
+  };
+
+  const handleDeleteRelapse = (planId) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to delete relapse plan?",
+      },
+      storedFunction: (callback) => deleteRelapse(planId, callback),
+    });
+  };
+
+  const handleActionButtonClick = (v) => {
+    const { pressedIconButton, _id: planId } = v;
+    switch (pressedIconButton) {
+      case "delete":
+        return handleDeleteRelapse(planId);
+      default:
+        return;
+    }
+  };
+
+  const clearIsConfirm = () => {
+    /* istanbul ignore next */
+    setIsConfirm({
+      status: false,
+      storedFunction: null,
+      setSubmitting: null,
+      cancelStatus: false,
+    });
+  };
+
+  const onConfirmSubmit = () => {
+    isConfirm.storedFunction(() => {
+      setLoader(true);
+      clearIsConfirm();
+    });
+  };
+
+  const handleOk = () => {
+    setSuccessModal(undefined);
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -163,8 +259,23 @@ const RelapsePlanPage: NextPage = () => {
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingSafetyPlanList={loadingSafetyPlanList}
-          // pageActionButtonClick={handleActionButtonClick}
+          pageActionButtonClick={handleActionButtonClick}
         />
+        {isConfirm.status && (
+          <ConfirmationModal
+            label={isConfirm.confirmObject.description}
+            onCancel={clearIsConfirm}
+            onConfirm={onConfirmSubmit}
+          />
+        )}
+        {successModal && (
+          <SuccessModal
+            isOpen={Boolean(successModal)}
+            title="Successful"
+            description={successModal.description}
+            onOk={handleOk}
+          />
+        )}
       </Layout>
     </>
   );
