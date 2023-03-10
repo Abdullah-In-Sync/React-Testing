@@ -27,6 +27,7 @@ const theme = (props?: any) => {
       subtitle1: {
         fontSize: 20,
       },
+      fontSize: 12
     },
     components: {
       MuiButton: {
