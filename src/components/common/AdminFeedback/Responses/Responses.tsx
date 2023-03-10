@@ -46,16 +46,16 @@ export default function FeedbackResponses(props: propTypes) {
 
   const fields = [
     {
-      key: "therapist_detail",
+      key: "therapist_name",
       columnName: "Therapist Name",
       visible: true,
-      render: (val) => val?.therapist_name,
+      render: (val) => val,
     },
     {
-      key: "patient_detail",
+      key: "patient_name",
       columnName: "Assigned Patient",
       visible: true,
-      render: (val) => val?.patient_firstname,
+      render: (val) => val,
     },
     {
       key: "therapy_name",
@@ -89,7 +89,7 @@ export default function FeedbackResponses(props: propTypes) {
             <NextLink
               href={`/admin/feedback/responses/${props?.feedbackId}/${
                 value?.pttherapy_id
-              }/${value[`${feedbackType}_detail`]["_id"]}`}
+              }/${value[`${feedbackType}_id`]}`}
               passHref
             >
               <IconButton size="small" data-testid="view-icon-button">

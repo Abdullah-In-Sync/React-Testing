@@ -68,21 +68,11 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
           answer_type
           question
         }
-        patient_detail {
-          _id
-          created_date
-          hos_id
-          org_id
-          patient_firstname
-          patient_gender
-          patient_lastname
-        }
+        patient_id
+        patient_name
+        question_id
         pttherapy_id
-        therapist_detail {
-          _id
-          org_id
-          therapist_name
-        }
+        therapist_name
         therapist_id
         therapy_name
       }

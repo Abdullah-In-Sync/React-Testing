@@ -5,7 +5,7 @@ import RelapsePlanTable from "./RelapsePlanTable";
 
 interface ViewProps {
   safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
-  // pageActionButtonClick: (value) => void;
+  pageActionButtonClick: (value) => void;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
   tableCurentPage?: number;
@@ -20,7 +20,7 @@ interface ViewProps {
 
 const RelapsePlanComponent: React.FC<ViewProps> = ({
   safetyPlanList,
-  // pageActionButtonClick,
+  pageActionButtonClick,
   onPageChange,
   onSelectPageDropdown,
   tableCurentPage,
@@ -43,7 +43,7 @@ const RelapsePlanComponent: React.FC<ViewProps> = ({
       />
       <RelapsePlanTable
         safetyPlanList={safetyPlanList}
-        // pageActionButtonClick={pageActionButtonClick}
+        pageActionButtonClick={pageActionButtonClick}
         onPageChange={onPageChange}
         onSelectPageDropdown={onSelectPageDropdown}
         tableCurentPage={tableCurentPage}
