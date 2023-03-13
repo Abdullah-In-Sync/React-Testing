@@ -21,16 +21,15 @@ const AdminFeedbackResponses = () => {
   const router = useRouter();
   /* istanbul ignore next */
   const id = router?.query.id as string;
-  console.log("Koca: id ", id);
 
   const [getTemplateData, { data: resData }] = useLazyQuery(
     GET_ADMIN_FEEDBACK_RESPONSE_LIST,
     {
       onCompleted: (data) => {
+        /* istanbul ignore next */
         const {
           adminViewResponseByFeedbackId: { totalcount },
         } = data || {};
-        console.debug("Koca: data ", data);
         if (totalcount && !totalCount) setTotalCount(totalcount);
         setLoader(false);
       },
@@ -41,6 +40,7 @@ const AdminFeedbackResponses = () => {
     GET_ADMIN_FEEDBACK_RESPONSE_LIST,
     {
       onCompleted: () => {
+        /* istanbul ignore next */
         setLoader(false);
       },
       fetchPolicy: "network-only",
