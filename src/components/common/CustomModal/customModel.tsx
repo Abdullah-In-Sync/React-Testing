@@ -4,7 +4,12 @@ import Modal from "../../common/Modal";
 import { Box } from "@mui/system";
 
 const CustomModal = (props) => {
-  const { modalOpen, setModalOpen, shouldCloseOnBackgroundClick } = props;
+  const {
+    modalOpen,
+    setModalOpen,
+    shouldCloseOnBackgroundClick,
+    closeOnEscape,
+  } = props;
 
   return (
     <div>
@@ -12,7 +17,7 @@ const CustomModal = (props) => {
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
         testid="sureModal"
-        {...{ shouldCloseOnBackgroundClick }}
+        {...{ shouldCloseOnBackgroundClick, closeOnEscape }}
       >
         <Grid container>
           <Grid item md={12}>
