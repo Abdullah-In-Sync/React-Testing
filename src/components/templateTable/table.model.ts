@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import { ViewModel } from "../../hoc/withModal";
 import * as Yup from "yup";
-import { useAppContext } from "../../contexts/AuthContext";
 
 type TableCellType = "header" | "answer" | "";
 type TableCellAnswerType = "list" | "boolean" | "text";
@@ -83,16 +82,6 @@ class TemplateTableViewModel implements ViewModel<TemplateTableViewModelState> {
  * Business logic of the screen: EventsScreen
  */
 function useTemplateTable(): TemplateTableViewModelState {
-  const { user: { user_type: userType = "admin" } = {} } = useAppContext();
-  const paitentAns =
-    userType === "patient"
-      ? {
-          patientAns: Yup.string().when("type", {
-            is: "answer",
-            then: Yup.string().required("Title is required"),
-          }),
-        }
-      : {};
   const validationSchema = Yup.object().shape({
     rows: Yup.array().of(
       Yup.object().shape({
@@ -116,7 +105,6 @@ function useTemplateTable(): TemplateTableViewModelState {
               }),
               // patientAns: Yup.string().required("Response is required")
             },
-            ...paitentAns,
           })
         ),
       })
