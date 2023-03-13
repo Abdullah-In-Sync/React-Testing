@@ -194,9 +194,7 @@ const TherapyPatientFeedback: any = (props) => {
     setFormValues(tempSubmitData);
   };
 
-  const handleAdd = (event) => {
-    event.preventDefault();
-
+  const handleAdd = () => {
     postTherapistFeedbackNew({
       variables: {
         feedQuesAnsData: JSON.stringify(formValues),
@@ -450,7 +448,7 @@ const TherapyPatientFeedback: any = (props) => {
                               variant="contained"
                               data-testid="submitFeedback1"
                             >
-                              submit
+                              Submit
                             </Button>
                           </Grid>
                           <Grid item xs={6} textAlign="center">
@@ -737,7 +735,7 @@ const TherapyPatientFeedback: any = (props) => {
                                           textTransform: "none",
                                         }}
                                       >
-                                        submit
+                                        Submit
                                       </Button>
                                     </Grid>
                                     <Grid item xs={6} textAlign="center">
@@ -761,7 +759,7 @@ const TherapyPatientFeedback: any = (props) => {
                                           cancleFunction
                                         }
                                       >
-                                        cancel
+                                        Cancel
                                       </Button>
                                     </Grid>
                                   </Box>
@@ -982,7 +980,7 @@ const TherapyPatientFeedback: any = (props) => {
                           variant="contained"
                           data-testid="submitFeedback1"
                         >
-                          submit
+                          Submit
                         </Button>
                       </Grid>
                       <Grid item xs={6} textAlign="center">
@@ -1005,7 +1003,7 @@ const TherapyPatientFeedback: any = (props) => {
                             cancleFunction
                           }
                         >
-                          cancel
+                          Cancel
                         </Button>
                       </Grid>
                     </Box>
@@ -1021,48 +1019,19 @@ const TherapyPatientFeedback: any = (props) => {
         </Box>
       </Box>
       <>
-        <SureModal
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-          setConfirmSubmission={setConfirmSubmission}
-        >
-          <Typography
-            sx={{
-              fontWeight: "600",
-              textAlign: "center",
-              fontSize: "27px",
+        {modalOpen && (
+          <ConfirmationModal
+            label="Are you sure you want to submit the feedback?"
+            onCancel={() => {
+              /* istanbul ignore next */
+              setModalOpen(false);
             }}
-          >
-            Are you sure you want to submit the feedback?
-          </Typography>
-          <Box marginTop="20px" display="flex" justifyContent="end">
-            <Button
-              variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="feedbackCancelButton"
-              onClick={() => {
-                /* istanbul ignore next */
-                setModalOpen(false);
-              }}
-            >
-              cancel
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ marginLeft: "5px" }}
-              size="small"
-              data-testid="feedbackConfirmButton"
-              onClick={(value) => {
-                setModalOpen(false);
-                handleAdd(value);
-              }}
-            >
-              confirm
-            </Button>
-          </Box>
-        </SureModal>
+            onConfirm={() => {
+              setModalOpen(false);
+              handleAdd();
+            }}
+          />
+        )}
         {isConfirm && (
           <ConfirmationModal
             label="Are you sure you want to cancel the feedback?"
