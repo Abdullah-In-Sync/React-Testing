@@ -119,28 +119,32 @@ export default function viewSafetyPlan(props: propTypes) {
 
             <Box data-testid="boxId">
               <div>
-                <Box
-                  style={{
-                    color: "#6EC9DB",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Description
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    border: "1px solid #cecece",
-                    display: "grid",
-                  }}
-                  p={2}
-                  marginBottom={"25px"}
-                  borderRadius={"7px"}
-                >
-                  <Typography>
-                    {safetyPlanData?.viewSafetyPlanById.description}
-                  </Typography>
-                </Box>
+                {safetyPlanData?.viewSafetyPlanById?.description && (
+                  <Box
+                    style={{
+                      color: "#6EC9DB",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Description
+                  </Box>
+                )}
+                {safetyPlanData?.viewSafetyPlanById?.description && (
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      border: "1px solid #cecece",
+                      display: "grid",
+                    }}
+                    p={2}
+                    marginBottom={"25px"}
+                    borderRadius={"7px"}
+                  >
+                    <Typography>
+                      {safetyPlanData?.viewSafetyPlanById.description}
+                    </Typography>
+                  </Box>
+                )}
                 {safetyPlanData == 0 ? (
                   <Box>No data found.</Box>
                 ) : (

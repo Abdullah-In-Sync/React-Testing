@@ -2,8 +2,9 @@ import { Box, Button, Stack } from "@mui/material";
 import * as React from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
-import { useStyles } from "./safetyPlanStyles";
+
 import { useRouter } from "next/router";
+import { useStyles } from "../safetyPlan/safetyPlanStyles";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -25,11 +26,11 @@ const planTypes = [
   },
   {
     id: "custom",
-    value: "Customisable",
+    value: "Customizable",
   },
 ];
 
-const Filter: React.FC<ViewProps> = ({
+const RelapseFilter: React.FC<ViewProps> = ({
   searchInputValue,
   handleClearSearchInput,
   onChangeSearchInput,
@@ -54,7 +55,7 @@ const Filter: React.FC<ViewProps> = ({
               labelId="organizationSelect"
               name="orgId"
               value={selectFilterOptions["orgId"] || "all"}
-              label="Select Organization"
+              label="Select Organizationr"
               onChange={onChangeFilterDropdown}
               options={[...[{ _id: "all", name: "All" }], ...organizationList]}
               mappingKeys={["_id", "name"]}
@@ -99,4 +100,4 @@ const Filter: React.FC<ViewProps> = ({
   return <Box className="actionsWrapper">{iconButtons()}</Box>;
 };
 
-export default Filter;
+export default RelapseFilter;

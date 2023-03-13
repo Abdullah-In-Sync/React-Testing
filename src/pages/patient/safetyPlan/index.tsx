@@ -51,7 +51,7 @@ const PatientById: NextPage = () => {
         <SafetyPlan setLoader={setLoader} onSubmit={handleEdit} />
         <SuccessModal
           isOpen={showSuccessModal}
-          title={"Successfull"}
+          title={"Successful"}
           description={"Your response has been submitted successfully."}
           onOk={() => setShowSuccessModal(false)}
         />

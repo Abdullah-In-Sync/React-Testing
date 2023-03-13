@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import ActionsButtons from "./ActionsButtons";
+import RelapseActionsButtons from "./RelapseActionsButtons";
 
 interface Column {
   id: string;
@@ -9,7 +9,7 @@ interface Column {
   format?: (value, callback: any, i?: number) => string | JSX.Element;
 }
 
-export const columns: readonly Column[] = [
+export const Relapsecolumns: readonly Column[] = [
   {
     id: "sNo",
     label: "S. No.",
@@ -30,7 +30,7 @@ export const columns: readonly Column[] = [
     minWidth: 170,
     align: "center",
     format: (value) => {
-      return <Typography className="planType">{value.plan_type}</Typography>;
+      return <Typography>{value.plan_type}</Typography>;
     },
   },
   {
@@ -46,7 +46,7 @@ export const columns: readonly Column[] = [
     minWidth: 170,
     align: "center",
     format: (value, buttonClick) => (
-      <ActionsButtons data={value} buttonClick={buttonClick} />
+      <RelapseActionsButtons data={value} buttonClick={buttonClick} />
     ),
   },
 ];
