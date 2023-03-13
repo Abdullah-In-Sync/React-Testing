@@ -307,7 +307,7 @@ export default function FeedbackResponses(props: propTypes) {
               }}
             >
               <Typography style={{ fontSize: "16px", marginRight: 10 }}>
-                {filterFeedbackData && filterFeedbackData[0]?.user_type}
+                {filterFeedbackData && filterFeedbackData[0]?.feedback_type}
               </Typography>
             </Grid>
           </Grid>
