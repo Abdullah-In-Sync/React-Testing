@@ -25,7 +25,7 @@ const planTypes = [
   },
   {
     id: "custom",
-    value: "Custom",
+    value: "Customisable",
   },
 ];
 
@@ -77,6 +77,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
                 data-testid="createPlanButton"
                 variant="contained"
                 onClick={onPressCreatePlan}
+                style={{ textTransform: "none" }}
               >
                 Create Plan
               </Button>
@@ -86,7 +87,7 @@ const FilterForTherapist: React.FC<ViewProps> = ({
               <Button
                 data-testid="addPlanButton"
                 variant="contained"
-                style={{ paddingRight: "20px" }}
+                style={{ paddingRight: "20px", textTransform: "none" }}
                 onClick={onPressAddPlan}
               >
                 Add Plan

@@ -49,42 +49,60 @@ export const GET_ADMIN_FEEDBACK_RESPONSE_LIST = gql`
     ) {
       feedbackdata {
         _id
-        user_type
         created_date
-        name
-        feedback_type
         description
-        session_no
+        feedback_type
+        name
         org_detail {
           _id
+          contract
+          created_date
+          logo
+          logo_url
           name
+          panel_color
+          patient
+          patient_plural
+          patient_welcome_email
+          side_menu_color
+          therapist
+          therapy
         }
+        org_id
+        session_no
+        status
+        updated_date
+        user_id
+        user_type
+        visibility
       }
       feedbackresponse {
         _id
         answer
+        created_date
         feedbackquestion {
           _id
+          answer_options
           answer_type
-          question
-        }
-        patient_detail {
-          _id
           created_date
-          hos_id
+          feedback_type
           org_id
-          patient_firstname
-          patient_gender
-          patient_lastname
+          organization_name
+          question
+          session_no
+          status
+          updated_date
+          user_id
         }
+        patient_id
+        patient_name
         pttherapy_id
-        therapist_detail {
-          _id
-          org_id
-          therapist_name
-        }
+        question_id
+        status
         therapist_id
+        therapist_name
         therapy_name
+        updated_date
       }
       totalcount
     }

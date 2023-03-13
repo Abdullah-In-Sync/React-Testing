@@ -52,7 +52,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& .inputsWrapper": {},
     "& .descriptionBoxWrapper": {
-      "& label": {
+      "& .label": {
         color: theme.palette.primary.main,
         fontWeight: "bold",
         fontSize: "1rem",

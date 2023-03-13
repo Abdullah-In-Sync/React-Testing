@@ -195,7 +195,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 23,
       label: "Relapse",
-      path: Link + "/superadmin/relapse/list",
+      path: "/admin/relapsePlan",
       icon: <TungstenIcon />,
     },
   ],
