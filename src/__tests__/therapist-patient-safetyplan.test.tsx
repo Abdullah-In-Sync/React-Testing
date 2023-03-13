@@ -196,7 +196,7 @@ mocksData.push({
           safety_additional_details: "Description text detail",
           safety_ques: "Question text",
           safety_ques_status: "1",
-          safety_ques_type: "2",
+          safety_ques_type: "1",
           safety_ques_typeoption: "option1,option2",
           updated_date: "2023-02-03T05:22:57.823Z",
           __typename: "patientSafetyPlanQuestions",
