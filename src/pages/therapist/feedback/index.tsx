@@ -18,7 +18,6 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_PATIENTSESSION_DATA } from "../../../graphql/query/patient";
 import Loader from "../../../components/common/Loader";
 import { SuccessModal } from "../../../components/common/SuccessModal";
-import SureModal from "../../../components/admin/resource/SureModal";
 import TextFieldComponent from "../../../components/common/TextField/TextFieldComponent";
 import { useSnackbar } from "notistack";
 import { POST_THERAPIST_FEEDBACK_NEW } from "../../../graphql/mutation";
@@ -30,7 +29,6 @@ import RemoveIcon from "@mui/icons-material/Remove";
 const TherapyPatientFeedback: any = (props) => {
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
@@ -219,8 +217,6 @@ const TherapyPatientFeedback: any = (props) => {
     } else {
       setModalOpen(true);
     }
-    /* istanbul ignore next */
-    if (!confirmSubmission) return;
   };
 
   const cancleFunction = () => {
