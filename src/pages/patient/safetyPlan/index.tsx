@@ -16,7 +16,7 @@ const PatientById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
-  const handleEdit = async (safetyPlan: ViewSafetyPlanById) => {
+  const handleEdit = async (safetyPlan: ViewSafetyPlanById, callback: any) => {
     /* istanbul ignore else */
     const data = safetyPlan?.questions.map((x) => ({
       answer: x.patient_answer,
@@ -32,6 +32,7 @@ const PatientById: NextPage = () => {
         onCompleted: () => {
           setLoader(false);
           setShowSuccessModal(true);
+          callback?.();
         },
       });
     } catch (e) {
