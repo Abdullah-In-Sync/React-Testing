@@ -190,14 +190,14 @@ mocksData.push({
         {
           _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-patient-answer",
           created_date: "2023-02-03T05:22:57.823Z",
-          patient_answer: "patient response text",
+          patient_answer: "optionset2",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
           safety_additional_details: "Description text detail",
           safety_ques: "Question text",
           safety_ques_status: "1",
-          safety_ques_type: "1",
-          safety_ques_typeoption: "option1,option2",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,optionset2",
           updated_date: "2023-02-03T05:22:57.823Z",
           __typename: "patientSafetyPlanQuestions",
         },
@@ -1076,7 +1076,7 @@ describe("Therapist patient safety plan", () => {
     const addButton = await screen.findByTestId("button-add-icon_0");
     fireEvent.click(addButton);
 
-    const patientResponse = await screen.findByText(/patient response text/i);
+    const patientResponse = await screen.findByText(/optionset2/i);
     expect(patientResponse).toBeInTheDocument();
   });
 });
