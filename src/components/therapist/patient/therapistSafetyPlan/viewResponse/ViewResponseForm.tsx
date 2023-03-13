@@ -1,4 +1,12 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Form } from "formik";
 import React, { useRef, useState } from "react";
 import AddQuestionsBox from "../../../../common/AddQuestionsBox";
@@ -28,16 +36,52 @@ const CommonForm: React.FC<ViewProps> = ({
   const questionFieldscRef = useRef(null);
   const styles = useStyles();
 
-  const inputViewBox = ({ title, subTitle, description }: any) => {
+  const inputViewBox = ({ answer }: any) => {
+    return <Typography>{answer}</Typography>;
+  };
+
+  const ListAnswerType = (props?: any) => {
+    const { options: answerValues = [], answer, row } = props || {};
     return (
-      <Stack className="descriptionBoxWrapper">
-        <label>{title}</label>
-        {subTitle && <Typography pl={1.7} pb={0.7}>{`${subTitle}`}</Typography>}
-        <Box>
-          <Typography>{description}</Typography>
-        </Box>
-      </Stack>
+      <RadioGroup {...row} className="radio-buttons" defaultValue={answer}>
+        {(answerValues as Array<any>).map((option: string, index: number) => (
+          <FormControlLabel
+            key={`answerType_${index}`}
+            data-testid={`answer_${index}`}
+            value={option}
+            control={<Radio />}
+            label={option}
+          />
+        ))}
+      </RadioGroup>
     );
+  };
+
+  const booleanAnswerType = (props) => {
+    return <ListAnswerType row booleantype="true" {...props} />;
+  };
+
+  const answers = (item) => {
+    const { safety_ques_typeoption, safety_ques_type, patient_answer } = item;
+
+    switch (safety_ques_type) {
+      case "2":
+        return (
+          safety_ques_typeoption &&
+          booleanAnswerType({
+            options: safety_ques_typeoption
+              .replace(/[\]']+/g, "")
+              .split(/,+|"[^"]+"/g),
+            answer: patient_answer,
+          })
+        );
+      case "1":
+        return inputViewBox({
+          answer: patient_answer,
+        });
+      default:
+        return null;
+    }
   };
 
   const paitentResponse = () => {
@@ -59,11 +103,16 @@ const CommonForm: React.FC<ViewProps> = ({
           patient_answer && (
             <Stack className={styles.resouceDetailBoxWrapper}>
               <Stack className="inputsWrapper">
-                {inputViewBox({
-                  title: `${i + 1}. ${safety_ques}`,
-                  subTitle: safety_additional_details,
-                  description: patient_answer,
-                })}
+                <Stack className="descriptionBoxWrapper">
+                  <label className="label">{`${i + 1}. ${safety_ques}`}</label>
+                  {safety_additional_details && (
+                    <Typography
+                      pl={1.7}
+                      pb={0.7}
+                    >{`${safety_additional_details}`}</Typography>
+                  )}
+                  <Box>{answers(item)}</Box>
+                </Stack>
               </Stack>
             </Stack>
           )
@@ -103,7 +152,7 @@ const CommonForm: React.FC<ViewProps> = ({
           )}
           {paitentResponse()}
         </Box>
-        {isEditable && !isPatientResponse && (
+        {!isPatientResponse && (
           <AddQuestionsBox
             isEditable={isEditable && !isPatientResponse}
             formikProps={formikProps}
