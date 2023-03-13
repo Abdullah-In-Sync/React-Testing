@@ -99,6 +99,7 @@ const PatientHome = (props: propTypes) => {
         modalOpen={cookiesModalOpen}
         setModalOpen={setCookiesModalOpen}
         shouldCloseOnBackgroundClick={false}
+        closeOnEscape={false}
       >
         <Typography
           sx={{
@@ -122,10 +123,9 @@ const PatientHome = (props: propTypes) => {
             lineHeight: "20px",
           }}
         >
-          The MyHelp plateform uses "Cookies" to help give you the best
-          experience on our plateform. By continuing to use MyHelp plateform you
-          accept the "Cookies" may be stored in your device as outlined in our
-          privacy policy.
+          MyHelp uses "Cookies" to help give you the best experience on our
+          platform. By continuing to use MyHelp you accept that “Cookies" may be
+          stored in your device as outlined in our privacy policy.
         </Typography>
 
         <Box

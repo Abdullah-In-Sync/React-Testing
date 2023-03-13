@@ -288,7 +288,7 @@ const TherapyPatientFeedback: any = (props) => {
               </Box>
             ) : (
               <AccordionDetails>
-                {therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                {therapistFeedbackNewData?.therapistGetFeedbackList?.[0]
                   ?.description && (
                   <>
                     <Box>
@@ -549,7 +549,7 @@ const TherapyPatientFeedback: any = (props) => {
                       </Box>
                     ) : (
                       <AccordionDetails>
-                        {therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                        {therapistFeedbackNewData?.therapistGetFeedbackList?.[0]
                           ?.description && (
                           <>
                             <Box>
@@ -830,7 +830,7 @@ const TherapyPatientFeedback: any = (props) => {
               </Box>
             ) : (
               <AccordionDetails>
-                {therapistFeedbackNewData?.therapistGetFeedbackList[0]
+                {therapistFeedbackNewData?.therapistGetFeedbackList?.[0]
                   ?.description && (
                   <>
                     <Box>
