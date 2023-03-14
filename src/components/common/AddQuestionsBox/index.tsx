@@ -24,11 +24,11 @@ type Props = React.PropsWithChildren<{
 
 const questionTypes = [
   {
-    id: "1",
+    id: "text",
     value: "Text",
   },
   {
-    id: "2",
+    id: "list",
     value: "List",
   },
 ];
@@ -86,7 +86,7 @@ const AddQuestionsBox = (
 
   const onChangeQuestionType = (e, i, questionOption) => {
     const value = e.target.value;
-    if (value == "1" && questionOption)
+    if (value == "list" && questionOption)
       setFieldValue(`questions.${i}.questionOption`, "");
     setFieldValue(`questions.${i}.questionType`, value);
   };
@@ -141,7 +141,7 @@ const AddQuestionsBox = (
                   extraProps={{ "data-testid": `questions.${i}.questionType` }}
                 />
               </Box>
-              {questionType == "2" && (
+              {questionType == "list" && (
                 <Box className="autoCompleteWrapper">
                   <AutoCompleteList i={i} formikProps={formikProps} />
                 </Box>

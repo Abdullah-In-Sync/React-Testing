@@ -1,15 +1,21 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
-import { CheckFeedbackNameRes } from "../../../../../graphql/Feedback/types";
 import Modal from "@mui/material/Modal";
 import Image from "next/image";
 import TableGenerator from "../../../../common/TableGenerator";
 import { useStyles } from "./CheckFeedbackNameModelStyle";
 
 interface ViewProps {
-  validationFailList: CheckFeedbackNameRes;
+  validationFailList: Array<any>;
   isOpen: boolean;
   onOK?: () => void;
+  title: string;
+  fields: Array<{
+    key: string;
+    columnName: string;
+    visible: boolean;
+    render: (val: any) => any;
+  }>;
 }
 
 const style = {
@@ -31,29 +37,12 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
   onOK,
   isOpen,
   validationFailList,
+  fields,
+  title,
 }) => {
   const classes = useStyles();
 
-  const fields = [
-    {
-      key: "organization_name",
-      columnName: "Organization",
-      visible: true,
-      render: (val) => val,
-    },
-    {
-      key: "User",
-      columnName: "User",
-      visible: true,
-      render: () => "Client",
-    },
-    {
-      key: "session_no",
-      columnName: "Session",
-      visible: true,
-      render: (val) => val,
-    },
-  ];
+  console.log(validationFailList, "validationFailList");
 
   return (
     <Modal open={isOpen} data-testid="checkFeedbackModel">
@@ -73,7 +62,7 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
               fontSize: "18px",
             }}
           >
-            Following sessions already exist! Kindly uncheck to proceed
+            {title}
           </Typography>
         </Box>
         <Box
@@ -82,7 +71,7 @@ const CheckFeedbackModel: React.FC<ViewProps> = ({
         >
           <TableGenerator
             fields={fields}
-            data={validationFailList?.checkFeedbackName}
+            data={validationFailList}
             pagination={false}
             loader={false}
             dataCount={10}

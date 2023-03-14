@@ -3,6 +3,27 @@ import CheckFeedbackModel from "../form/CheckFeedModel/CheckFeedbackNameModel";
 
 describe("when rendered with a `title` prop", () => {
   it("should paste it into the header text", async () => {
+    const fields = [
+      {
+        key: "organization_name",
+        columnName: "Organization",
+        visible: true,
+        render: (val) => val,
+      },
+      {
+        key: "User",
+        columnName: "User",
+        visible: true,
+        render: () => "Client",
+      },
+      {
+        key: "session_no",
+        columnName: "Session",
+        visible: true,
+        render: (val) => val,
+      },
+    ];
+
     const validationList = {
       checkFeedbackName: [
         {
@@ -26,7 +47,12 @@ describe("when rendered with a `title` prop", () => {
       ],
     };
     render(
-      <CheckFeedbackModel isOpen={true} validationFailList={validationList} />
+      <CheckFeedbackModel
+        isOpen={true}
+        fields={fields}
+        validationFailList={validationList}
+        title={"hello"}
+      />
     );
 
     const elements = await screen.findAllByRole("checkbox");

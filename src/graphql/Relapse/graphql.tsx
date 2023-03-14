@@ -10,3 +10,27 @@ export const UPDATE_RELAPSE_PLAN = gql`
     }
   }
 `;
+
+export const ADMIN_CREATE_RELAPSE_PLAN = gql`
+  mutation adminCreateRelapsePlan(
+    $orgId: String = ""
+    $planName: String = ""
+    $planType: String = ""
+    $questions: String = ""
+    $planDesc: String = ""
+  ) {
+    adminCreateRelapsePlan(
+      orgId: $orgId
+      planName: $planName
+      planType: $planType
+      questions: $questions
+      planDesc: $planDesc
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
