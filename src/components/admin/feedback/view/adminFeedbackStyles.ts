@@ -37,7 +37,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       "& .instructionDescriptionBox": {
         border: "1px solid #ccc",
         padding: 10,
-        minHeight: "7rem",
+        // minHeight: "7rem",
         borderRadius: 10,
       },
     },

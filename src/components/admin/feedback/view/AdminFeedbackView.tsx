@@ -171,7 +171,7 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
       return (
         <Stack className="sectionsWrapper disbledFields">
           {headerSection()}
-          {instructionSection()}
+          {description && instructionSection()}
           {questionsSection()}
         </Stack>
       );

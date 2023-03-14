@@ -123,8 +123,8 @@ const AdminRelapseView: React.FC<ViewProps> = ({
     });
   };
 
-  const ListAnswerType = (props?: any) => {
-    const { options = [], answer, row } = props || {};
+  const listAnswerType = (data) => {
+    const { options = [], answer, row } = data || {};
     return (
       <RadioGroup {...row} className="radio-buttons" defaultValue={answer}>
         {(options as Array<any>).map((option: string, index: number) => (
@@ -140,13 +140,13 @@ const AdminRelapseView: React.FC<ViewProps> = ({
     );
   };
 
-  const booleanAnswerType = (props) => {
-    const { detail } = props;
+  const booleanAnswerType = (data) => {
+    const { detail } = data;
     return (
       <Box className="radioDescWrapper">
         <Typography>{detail}</Typography>
         <Box className="radioAnswerWrapper">
-          <ListAnswerType row booleantype="true" {...props} />
+          {listAnswerType({ row: true, booleantype: "true", ...data })}
         </Box>
       </Box>
     );
