@@ -9,7 +9,6 @@ import RelapseView from "../../../../pages/admin/relapsePlan/view/[id]";
 
 import { VIEW_RELAPSE_BY_PLAN_ID } from "../../../../graphql/Relapse/graphql";
 import theme from "../../../../styles/theme/theme";
-import { jest } from "@jest/globals";
 const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,

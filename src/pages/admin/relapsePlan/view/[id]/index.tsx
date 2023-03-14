@@ -20,7 +20,7 @@ const RelapsePlanPage = () => {
       data: { adminViewRelapseById: viewData = {} } = {},
     },
   ] = useLazyQuery(VIEW_RELAPSE_BY_PLAN_ID, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
     onCompleted: () => {
       setLoader(false);
     },
