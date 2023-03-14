@@ -28,6 +28,9 @@ const theme = (props?: any) => {
         fontSize: 20,
       },
       fontSize: 12,
+      h6: {
+        fontSize: "16px",
+      },
     },
     components: {
       MuiButton: {
