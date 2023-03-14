@@ -277,8 +277,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       status: true,
       confirmObject: {
         description: currentSafetyPlan
-          ? "Are you sure you want to update safety plan?"
-          : "Are you sure you want to create safety plan?",
+          ? "Are you sure you want to update the safety plan?"
+          : "Are you sure you want to create the safety plan?",
       },
       storedFunction: (callback) =>
         currentSafetyPlan
@@ -293,7 +293,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "Are you sure you want to share safety plan?",
+        description: "Are you sure you want to share the safety plan?",
       },
       storedFunction: (callback) =>
         submitUpdateSafetyPlan({ share_status: 1, shareObject: v }, callback),
@@ -304,7 +304,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "Are you sure you want to delete safety plan?",
+        description: "Are you sure you want to delete the safety plan?",
       },
       storedFunction: () => handleDeletesafetyPlan(v),
     });
@@ -401,7 +401,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         onCompleted: (data) => {
           if (data) {
             setSuccessModal({
-              description: "Your question has been created successfully.",
+              description: "Your question has been updated successfully.",
             });
             fetchPlanData(planId);
           }
@@ -423,7 +423,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "Are you sure you want to update safety plan?",
+        description: "Are you sure you want to update the question?",
       },
       storedFunction: (callback) => submitQuestionForm(formFields, callback),
       setSubmitting: setSubmitting,
@@ -471,7 +471,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       ...{
         status: true,
         confirmObject: {
-          description: "Are you sure you want to delete question?",
+          description: "Are you sure you want to delete the question?",
         },
         storedFunction: (callback) => {
           callDeleteApi(questionId, successDeleteCallback, callback);
