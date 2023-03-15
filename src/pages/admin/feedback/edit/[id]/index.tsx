@@ -229,7 +229,7 @@ const EditFeedbackPage: NextPage = () => {
         )}
         {deleteModal && (
           <ConfirmationModal
-            label="Are you sure you want to delete question?"
+            label="Are you sure you want to delete the question?"
             onCancel={onCancelDeleteQuestion}
             onConfirm={onDeleteQuestion}
           />

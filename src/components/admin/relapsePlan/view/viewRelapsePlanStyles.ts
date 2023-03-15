@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
-  adminFeedbackViewWrapper: {
+  adminRelapseViewWrapper: {
     "& .infoMessageBoxWrapper": {
       textAlign: "center",
     },
@@ -21,9 +21,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
       "& label": {
         paddingRight: 10,
       },
-      "& label p": {
+      "& label h6": {
         fontWeight: 600,
-        fontSize: "1.1em",
       },
     },
     "& .headerSection > *": {
@@ -32,34 +31,30 @@ export const useStyles = makeStyles((theme: Theme) => ({
     "& .instructionSection": {
       "& label p": {
         fontWeight: 800,
-        fontSize: "1.2em",
+        color: theme.palette.primary.main,
       },
       "& .instructionDescriptionBox": {
         border: "1px solid #ccc",
         padding: 10,
-        // minHeight: "7rem",
-        borderRadius: 10,
+        borderRadius: 7,
       },
     },
     "& .questionsSection": {
       "& label p": {
+        marginBottom: 5,
         fontWeight: 800,
-        fontSize: "1.2em",
         color: theme.palette.primary.main,
       },
       "& .radioAnswerWrapper": {
         display: "flex",
         alignItem: "center",
         flex: 1,
-        "& .radio-buttons": {
-          flexDirection: "row",
-        },
       },
       "& .textAnswerWrapper": {
         border: "1px solid #ccc",
         padding: 10,
         minHeight: "6rem",
-        borderRadius: 10,
+        borderRadius: 7,
       },
     },
     "& .csection": {

@@ -61,7 +61,7 @@ const SafetyPlan = (props: propTypes) => {
             textAlign: "center",
           }}
         >
-          Are you sure, you want to submit the response?
+          Are you sure you want to submit the response?
         </Typography>
         <Box marginTop="20px" display="flex" justifyContent="center">
           <Button
