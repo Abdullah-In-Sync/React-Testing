@@ -174,3 +174,32 @@ export const GET_THERAPIST_FEEDBACKLIST_DATA_NEW = gql`
     }
   }
 `;
+
+export const VIEW_RESPONSE_DOWNLOAD_CSV = gql`
+  query viewResponseDownloadCSV($feedbackId: String!) {
+    viewResponseDownloadCSV(feedbackId: $feedbackId) {
+      _id
+      answer_options
+      answer_type
+      created_date
+      feedback_id
+      question
+      responses {
+        _id
+        answer
+        created_date
+        patient_id
+        patient_name
+        pttherapy_id
+        question_id
+        status
+        therapist_name
+        therapist_id
+        therapy_name
+        updated_date
+      }
+      status
+      updated_date
+    }
+  }
+`;

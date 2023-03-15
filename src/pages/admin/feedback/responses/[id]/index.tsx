@@ -6,8 +6,10 @@ import Layout from "../../../../../components/layout";
 import Loader from "../../../../../components/common/Loader";
 import FeedbackResponses from "../../../../../components/common/AdminFeedback/Responses/Responses";
 import { GET_ADMIN_FEEDBACK_RESPONSE_LIST } from "../../../../../graphql/query";
+import { VIEW_RESPONSE_DOWNLOAD_CSV } from "../../../../../graphql/Feedback/graphql";
+//
 import { useSnackbar } from "notistack";
-
+const csvHeader = ["Therapist Name", "Assigned Paitent Name", "Therapy Name"];
 const AdminFeedbackResponses = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [selectedStartDate, setSelectedStartDate] = useState("");
@@ -36,6 +38,11 @@ const AdminFeedbackResponses = () => {
     }
   );
 
+  const [
+    viewResponseDownload,
+    { data: { viewResponseDownloadCSV: csvResData = [] } = {} },
+  ] = useLazyQuery(VIEW_RESPONSE_DOWNLOAD_CSV);
+
   const [getAllFeedbackResponse, { data: allFeedbackResponse }] = useLazyQuery(
     GET_ADMIN_FEEDBACK_RESPONSE_LIST,
     {
@@ -46,6 +53,14 @@ const AdminFeedbackResponses = () => {
       fetchPolicy: "network-only",
     }
   );
+
+  useEffect(() => {
+    viewResponseDownload({
+      variables: {
+        feedbackId: id,
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (totalCount) {
@@ -103,9 +118,9 @@ const AdminFeedbackResponses = () => {
   };
 
   /* istanbul ignore next */
-  const csvString = (data): string => {
+  const csvString = (item): string => {
+    const { data = {}, header } = item || {};
     const replacer = (_, value) => (value === null ? "" : value);
-    const header = Object.keys(data[0]);
     const csv = data.map((row) =>
       header
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))
@@ -119,35 +134,36 @@ const AdminFeedbackResponses = () => {
   /* istanbul ignore next */
   const csvDataFormat = (item) => {
     const {
-      therapist_detail: { therapist_name = "" } = {},
-      patient_detail: { patient_firstname = "", patient_lastname = "" } = "",
-      feedbackquestion: { question = "" } = {},
+      therapist_name = "",
+      question,
       answer,
       therapy_name = "",
+      patient_name = "",
     } = item || {};
+
     return {
-      "Therapist Name": therapist_name,
-      "Assigned Paitent Name": `${patient_firstname} ${patient_lastname}`,
-      "Therapy Name": therapy_name,
+      [csvHeader[0]]: therapist_name,
+      [csvHeader[1]]: `${patient_name}`,
+      [csvHeader[2]]: therapy_name,
       [question]: answer,
     };
   };
 
   /* istanbul ignore next */
-  const handleCsvDownload = (value) => {
-    if (value) {
-      window.location.href = `data:text/csv;charset=utf-8,${encodeURI(
-        csvString([csvDataFormat(value)])
-      )}`;
-    } else if (allFeedbackResponse) {
-      const {
-        adminViewResponseByFeedbackId: { feedbackresponse },
-      } = allFeedbackResponse;
-      const modifyCsvData = feedbackresponse.map((item) => {
-        return csvDataFormat(item);
+  const handleCsvDownload = () => {
+    if (allFeedbackResponse) {
+      const modifyCsvData = [];
+      csvResData.forEach((uitem) => {
+        uitem.responses.map((ditem) => {
+          const question = uitem.question.trim();
+          if (!csvHeader.includes(question)) csvHeader.push(question);
+
+          modifyCsvData.push(csvDataFormat({ question, ...ditem }));
+        });
       });
+
       window.location.href = `data:text/csv;charset=utf-8,${encodeURI(
-        csvString(modifyCsvData)
+        csvString({ header: csvHeader, data: modifyCsvData })
       )}`;
     } else {
       enqueueSnackbar("No data found.", {
@@ -163,14 +179,12 @@ const AdminFeedbackResponses = () => {
     <>
       <Layout>
         <Loader visible={loader} />
-
         <ContentHeader
           data-testid="config-setting-header"
           title={`${
             userType?.charAt(0).toUpperCase() + userType?.slice(1)
           } Response`}
         />
-
         <FeedbackResponses
           setLoader={setLoader}
           orgData={resData}
