@@ -109,7 +109,7 @@ export default function ProfileForm(props: propTypes) {
   const changeDate = (date: string) => {
     setFormFields((prev) => ({
       ...prev,
-      birthdate: dayjs(date).format("MM-DD-YYYY"),
+      birthdate: dayjs(date).format("DD-MM-YYYY"),
     }));
   };
 
@@ -261,6 +261,8 @@ export default function ProfileForm(props: propTypes) {
     setIlnessValue(val);
   };
 
+  console.log("Koca: formFields?.birthdate ", formFields?.birthdate);
+
   return (
     <>
       <form
@@ -344,7 +346,7 @@ export default function ProfileForm(props: propTypes) {
                             },
                           }}
                           disableFuture
-                          inputFormat="DD-MM-YYYY"
+                          // inputFormat="DD-MM-YYYY"
                           disabled={props.disabled}
                           label="Date of Birth"
                           openTo="year"
