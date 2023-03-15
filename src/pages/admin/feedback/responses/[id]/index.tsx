@@ -1,14 +1,14 @@
 import { useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import ContentHeader from "../../../../../components/common/ContentHeader";
-import Layout from "../../../../../components/layout";
-import Loader from "../../../../../components/common/Loader";
-import FeedbackResponses from "../../../../../components/common/AdminFeedback/Responses/Responses";
-import { GET_ADMIN_FEEDBACK_RESPONSE_LIST } from "../../../../../graphql/query";
-import { VIEW_RESPONSE_DOWNLOAD_CSV } from "../../../../../graphql/Feedback/graphql";
-//
 import { useSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import FeedbackResponses from "../../../../../components/common/AdminFeedback/Responses/Responses";
+import ContentHeader from "../../../../../components/common/ContentHeader";
+import Loader from "../../../../../components/common/Loader";
+import Layout from "../../../../../components/layout";
+import { VIEW_RESPONSE_DOWNLOAD_CSV } from "../../../../../graphql/Feedback/graphql";
+import { ViewResponseDownload } from "../../../../../graphql/Feedback/types";
+import { GET_ADMIN_FEEDBACK_RESPONSE_LIST } from "../../../../../graphql/query";
 const csvHeader = ["Therapist Name", "Assigned Paitent Name", "Therapy Name"];
 const AdminFeedbackResponses = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -21,6 +21,10 @@ const AdminFeedbackResponses = () => {
 
   const [loader, setLoader] = useState<boolean>(false);
   const router = useRouter();
+
+  const [viewResponseDownload] = useLazyQuery<ViewResponseDownload>(
+    VIEW_RESPONSE_DOWNLOAD_CSV
+  );
   /* istanbul ignore next */
   const id = router?.query.id as string;
 
@@ -38,44 +42,56 @@ const AdminFeedbackResponses = () => {
     }
   );
 
-  const [
-    viewResponseDownload,
-    { data: { viewResponseDownloadCSV: csvResData = [] } = {} },
-  ] = useLazyQuery(VIEW_RESPONSE_DOWNLOAD_CSV);
-
-  const [getAllFeedbackResponse, { data: allFeedbackResponse }] = useLazyQuery(
-    GET_ADMIN_FEEDBACK_RESPONSE_LIST,
-    {
-      onCompleted: () => {
-        /* istanbul ignore next */
-        setLoader(false);
-      },
-      fetchPolicy: "network-only",
-    }
-  );
-
-  useEffect(() => {
-    viewResponseDownload({
-      variables: {
-        feedbackId: id,
-      },
-    });
-  }, []);
-
-  useEffect(() => {
-    if (totalCount) {
-      setLoader(true);
-      getAllFeedbackResponse({
+  /* istanbul ignore next */
+  const downloadCsvApi = (callback) => {
+    try {
+      viewResponseDownload({
         variables: {
           feedbackId: id,
-          endDate: "",
-          limit: totalCount,
-          pageNo: 1,
-          startDate: "",
+        },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          const { viewResponseDownloadCSV: csvResData = [] } = data || {};
+          if (csvResData) {
+            callback(csvResData);
+          }
         },
       });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    } finally {
+      setLoader(false);
     }
-  }, [totalCount]);
+  };
+
+  /* istanbul ignore next */
+  const handleCsvDownload = () => {
+    setLoader(true);
+    downloadCsvApi((csvResData) => {
+      if (csvResData) {
+        const modifyCsvData = [];
+        csvResData.forEach((uitem) => {
+          uitem.responses.map((ditem) => {
+            const question = uitem.question.trim();
+            if (!csvHeader.includes(question)) csvHeader.push(question);
+
+            modifyCsvData.push(csvDataFormat({ question, ...ditem }));
+          });
+        });
+
+        window.location.href = `data:text/csv;charset=utf-8,${encodeURI(
+          csvString({ header: csvHeader, data: modifyCsvData })
+        )}`;
+      } else {
+        enqueueSnackbar("No data found.", {
+          variant: "info",
+        });
+      }
+    });
+  };
 
   useEffect(() => {
     /* istanbul ignore next */
@@ -147,29 +163,6 @@ const AdminFeedbackResponses = () => {
       [csvHeader[2]]: therapy_name,
       [question]: answer,
     };
-  };
-
-  /* istanbul ignore next */
-  const handleCsvDownload = () => {
-    if (allFeedbackResponse) {
-      const modifyCsvData = [];
-      csvResData.forEach((uitem) => {
-        uitem.responses.map((ditem) => {
-          const question = uitem.question.trim();
-          if (!csvHeader.includes(question)) csvHeader.push(question);
-
-          modifyCsvData.push(csvDataFormat({ question, ...ditem }));
-        });
-      });
-
-      window.location.href = `data:text/csv;charset=utf-8,${encodeURI(
-        csvString({ header: csvHeader, data: modifyCsvData })
-      )}`;
-    } else {
-      enqueueSnackbar("No data found.", {
-        variant: "info",
-      });
-    }
   };
 
   const userType =
