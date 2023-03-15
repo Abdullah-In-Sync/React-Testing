@@ -22,6 +22,9 @@ export const useStyles = makeStyles(() => ({
       padding: 2,
       border: "1px solid",
     },
+    "& .headerText": {
+      fontWeight: 600,
+    },
   },
   simpleHeaderAppBar: {
     color: "#fff",
@@ -39,6 +42,9 @@ export const useStyles = makeStyles(() => ({
     },
     "& .MuiTypography-root": {
       marginRight: 2,
+    },
+    "& .headerText": {
+      fontWeight: 600,
     },
   },
 }));

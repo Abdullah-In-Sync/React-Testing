@@ -23,12 +23,23 @@ export default function BasicModal(props) {
     modalOpen,
     setModalOpen,
     shouldCloseOnBackgroundClick = true,
+    closeOnEscape = false,
   } = props;
 
   const handleClose = (event, reason) => {
-    // Do not close Modal on background click.
-    if (!shouldCloseOnBackgroundClick && reason === "backdropClick") {
-      return;
+    switch (reason) {
+      case "backdropClick":
+        if (!shouldCloseOnBackgroundClick) {
+          return;
+        }
+        break;
+      case "escapeKeyDown":
+        if (!closeOnEscape) {
+          return;
+        }
+        break;
+      default:
+        break;
     }
     setModalOpen?.(false);
   };

@@ -2,6 +2,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
@@ -17,6 +18,7 @@ import { SuccessModal } from "../../../components/common/SuccessModal";
 
 const RelapsePlanPage: NextPage = () => {
   const initialPageNo = 1;
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [successModal, setSuccessModal] = useState<any>();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
@@ -216,6 +218,8 @@ const RelapsePlanPage: NextPage = () => {
     switch (pressedIconButton) {
       case "delete":
         return handleDeleteRelapse(planId);
+      case "view":
+        return router.push(`/admin/relapsePlan/view/${planId}`);
       default:
         return;
     }

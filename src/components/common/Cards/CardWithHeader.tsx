@@ -29,7 +29,7 @@ const CardWithHeader = (props: propTypes) => {
     >
       <AppBar color="secondary" position="static">
         <Toolbar disableGutters>
-          <Typography variant="h6" noWrap component="div">
+          <Typography noWrap component="div" className="headerText">
             {label}
           </Typography>
           {onClickView && (

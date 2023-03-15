@@ -7,17 +7,17 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { AdminViewRelapseById } from "../../../../graphql/Relapse/types";
 import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
-import { useStyles } from "./adminFeedbackStyles";
-import * as feedbackInterface from "./types";
+import { useStyles } from "./viewRelapsePlanStyles";
 
 interface ViewProps {
-  data?: feedbackInterface.ViewFeedbackByAdmin;
+  data?: AdminViewRelapseById;
   handleGoBack?: () => void;
   loadingView?: any;
 }
 
-const AdminFeedbackView: React.FC<ViewProps> = ({
+const AdminRelapseView: React.FC<ViewProps> = ({
   data,
   handleGoBack,
   loadingView,
@@ -26,7 +26,6 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
   const {
     organization_name,
     user_type,
-    session_no,
     name,
     description,
     questions = [],
@@ -37,21 +36,15 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
       <Box className="headerSection csection">
         <Box>
           <label>
-            <Typography>Organization Name:</Typography>
+            <Typography variant="h6">Organization Name:</Typography>
           </label>
-          <Typography>{organization_name}</Typography>
+          <Typography variant="h6">{organization_name}</Typography>
         </Box>
         <Box>
           <label>
-            <Typography>User Type:</Typography>
+            <Typography variant="h6">User Type:</Typography>
           </label>
-          <Typography>{user_type}</Typography>
-        </Box>
-        <Box>
-          <label>
-            <Typography>Session Name:</Typography>
-          </label>
-          <Typography>{session_no}</Typography>
+          <Typography variant="h6">{user_type}</Typography>
         </Box>
       </Box>
     );
@@ -62,7 +55,7 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
       <Box className="instructionSection csection">
         <Box>
           <label>
-            <Typography>Instruction</Typography>
+            <Typography>Description</Typography>
           </label>
         </Box>
         <Box className="instructionDescriptionBox">
@@ -73,27 +66,25 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
   };
 
   const answers = (item) => {
-    const { answer_options, answer_type, answer } = item;
+    const {
+      relapse_ques_typeoption,
+      relapse_ques_type,
+      relapse_additional_details,
+      answer,
+    } = item;
 
-    switch (answer_type) {
-      case "2":
-        return (
-          answer_options &&
-          booleanAnswerType({
-            options: answer_options.replace(/[\]']+/g, "").split(/,+|"[^"]+"/g),
-            answer,
-          })
-        );
+    switch (relapse_ques_type) {
       case "list":
         return (
-          answer_options &&
+          relapse_ques_typeoption &&
           booleanAnswerType({
-            options: answer_options.replace(/[\]']+/g, "").split(/,+|"[^"]+"/g),
+            options: relapse_ques_typeoption
+              .replace(/[\]']+/g, "")
+              .split(/,+|"[^"]+"/g),
             answer,
+            detail: relapse_additional_details,
           })
         );
-      case "1":
-        return textAnswerType({ answer });
       case "text":
         return textAnswerType({ answer });
       default:
@@ -117,13 +108,13 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
 
   const questionsSection = () => {
     return questions.map((item, i) => {
-      const { question } = item;
+      const { relapse_ques } = item;
 
       return (
         <Box key={`questionBox_${i}`} className="questionsSection csection">
           <Box>
             <label>
-              <Typography>{`${i + 1}. ${question}`}</Typography>
+              <Typography>{`${i + 1}. ${relapse_ques}`}</Typography>
             </label>
           </Box>
           <Box className="instructionBox">{answers(item)}</Box>
@@ -132,11 +123,11 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
     });
   };
 
-  const ListAnswerType = (props?: any) => {
-    const { options: answerValues = [], answer, row } = props || {};
+  const listAnswerType = (data) => {
+    const { options = [], answer, row } = data || {};
     return (
       <RadioGroup {...row} className="radio-buttons" defaultValue={answer}>
-        {(answerValues as Array<any>).map((option: string, index: number) => (
+        {(options as Array<any>).map((option: string, index: number) => (
           <FormControlLabel
             key={`answerType_${index}`}
             data-testid={`answer_${index}`}
@@ -149,10 +140,14 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
     );
   };
 
-  const booleanAnswerType = (props) => {
+  const booleanAnswerType = (data) => {
+    const { detail } = data;
     return (
-      <Box className="radioAnswerWrapper">
-        <ListAnswerType row booleantype="true" {...props} />
+      <Box className="radioDescWrapper">
+        <Typography>{detail}</Typography>
+        <Box className="radioAnswerWrapper">
+          {listAnswerType({ row: true, booleantype: "true", ...data })}
+        </Box>
       </Box>
     );
   };
@@ -179,7 +174,7 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
   };
 
   return (
-    <Stack className={styles.adminFeedbackViewWrapper}>
+    <Stack className={styles.adminRelapseViewWrapper}>
       <BreadCrumbsWithBackButton heading={name} backButtonClick={handleGoBack}>
         {viewSection()}
       </BreadCrumbsWithBackButton>
@@ -187,4 +182,4 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
   );
 };
 
-export default AdminFeedbackView;
+export default AdminRelapseView;

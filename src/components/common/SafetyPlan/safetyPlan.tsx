@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { useLazyQuery } from "@apollo/client";
 import SureModal from "../../admin/resource/SureModal";
 import { Accordion } from "../Accordion";
 import { GET_PATIENT_SAFETY_PlANS } from "../../../graphql/SafetyPlan/graphql";
@@ -11,7 +11,7 @@ import {
 import { SafetyPlanForm } from "./safetyPlanForm";
 
 type propTypes = {
-  onSubmit?: (safetyPlan: ViewSafetyPlanById) => void;
+  onSubmit?: (safetyPlan: ViewSafetyPlanById, callback: any) => void;
   setLoader: any;
 };
 
@@ -21,20 +21,22 @@ const SafetyPlan = (props: propTypes) => {
   const [modifiedSafetyPlan, setModifiedSafetyPlan] =
     useState<ViewSafetyPlanById>();
 
-  //GraphQL Queries
-  const { data: safetyPlanData } = useQuery<GetPatientSafetyPlansRes>(
-    GET_PATIENT_SAFETY_PlANS,
-    {
+  const [getPatientSafetyPlans, { data: safetyPlanData }] =
+    useLazyQuery<GetPatientSafetyPlansRes>(GET_PATIENT_SAFETY_PlANS, {
       onCompleted: () => {
         props.setLoader(false);
       },
-    }
-  );
+      fetchPolicy: "no-cache",
+    });
 
   const handleSubmit = (modifiedSafetyPlan: ViewSafetyPlanById) => {
     setModalOpen(true);
     setModifiedSafetyPlan(modifiedSafetyPlan);
   };
+
+  useEffect(() => {
+    getPatientSafetyPlans();
+  }, []);
 
   return (
     <>
@@ -59,7 +61,7 @@ const SafetyPlan = (props: propTypes) => {
             textAlign: "center",
           }}
         >
-          Are you sure, you want to submit the response?
+          Are you sure you want to submit the response?
         </Typography>
         <Box marginTop="20px" display="flex" justifyContent="center">
           <Button
@@ -70,7 +72,7 @@ const SafetyPlan = (props: propTypes) => {
             data-testid="editSafetyPlanConfirmButton"
             onClick={() => {
               setModalOpen(false);
-              props.onSubmit(modifiedSafetyPlan);
+              props.onSubmit(modifiedSafetyPlan, getPatientSafetyPlans);
               props.setLoader(false);
             }}
           >

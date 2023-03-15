@@ -201,7 +201,7 @@ const SafetyPlanPage: NextPage = () => {
         <DeleteSureModal
           modalOpen={deleteConfirmation}
           setModalOpen={setDeleteConfirmation}
-          title={"Are you sure you want to delete safety plan?"}
+          title={"Are you sure you want to delete the safety plan?"}
         >
           <Box marginTop="20px" display="flex" justifyContent="center">
             <Button

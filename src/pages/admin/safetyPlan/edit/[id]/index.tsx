@@ -221,7 +221,7 @@ const EditSafetyPlanPage: NextPage = () => {
         )}
         {isConfirm.status && (
           <ConfirmationModal
-            label="Are you sure you want to create safety plan?"
+            label="Are you sure you want to update the safety plan?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
@@ -235,7 +235,7 @@ const EditSafetyPlanPage: NextPage = () => {
         )}
         {isConfirm.questionDeleteStatus && (
           <ConfirmationModal
-            label="Are you sure you want to delete safety plan?"
+            label="Are you sure you want to delete the question?"
             onCancel={clearIsConfirm}
             onConfirm={onConfirmSubmit}
           />
