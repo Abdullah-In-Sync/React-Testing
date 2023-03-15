@@ -20,9 +20,10 @@ type Props = React.PropsWithChildren<{
   }>;
   isEditable?: boolean;
   handleDeleteQuestion: (v) => void;
+  questionTypes?: Array<any>;
 }>;
 
-const questionTypes = [
+const defaultQuestionTypes = [
   {
     id: "1",
     value: "Text",
@@ -34,7 +35,12 @@ const questionTypes = [
 ];
 
 const AddQuestionsBox = (
-  { formikProps, isEditable, handleDeleteQuestion }: Props,
+  {
+    formikProps,
+    isEditable,
+    handleDeleteQuestion,
+    questionTypes = defaultQuestionTypes,
+  }: Props,
   ref
 ) => {
   const styles = useStyles();
@@ -86,7 +92,7 @@ const AddQuestionsBox = (
 
   const onChangeQuestionType = (e, i, questionOption) => {
     const value = e.target.value;
-    if (value == "1" && questionOption)
+    if ((value == "text" || value == "1") && questionOption)
       setFieldValue(`questions.${i}.questionOption`, "");
     setFieldValue(`questions.${i}.questionType`, value);
   };
@@ -141,7 +147,7 @@ const AddQuestionsBox = (
                   extraProps={{ "data-testid": `questions.${i}.questionType` }}
                 />
               </Box>
-              {questionType == "2" && (
+              {(questionType == "list" || questionType == "2") && (
                 <Box className="autoCompleteWrapper">
                   <AutoCompleteList i={i} formikProps={formikProps} />
                 </Box>
