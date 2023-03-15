@@ -28,6 +28,17 @@ const planTypes = [
   },
 ];
 
+const questionTypes = [
+  {
+    id: "text",
+    value: "Text",
+  },
+  {
+    id: "list",
+    value: "List",
+  },
+];
+
 const CommonForm: React.FC<ViewProps> = ({
   organizationList = [],
   onPressCancel,
@@ -134,6 +145,7 @@ const CommonForm: React.FC<ViewProps> = ({
               formikProps={formikProps}
               handleDeleteQuestion={handleDeleteQuestion}
               ref={questionFieldscRef}
+              questionTypes={questionTypes}
             />
             <Box className="bottomActionButtonsWrapper">
               <Box>
