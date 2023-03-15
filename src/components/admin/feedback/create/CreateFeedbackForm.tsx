@@ -43,6 +43,27 @@ const CreateFeedbackForm: React.FC<ViewProps> = ({
     visiBility: 0,
   };
 
+  const fields = [
+    {
+      key: "organization_name",
+      columnName: "Organization",
+      visible: true,
+      render: (val) => val,
+    },
+    {
+      key: "User",
+      columnName: "User",
+      visible: true,
+      render: () => "Client",
+    },
+    {
+      key: "session_no",
+      columnName: "Session",
+      visible: true,
+      render: (val) => val,
+    },
+  ];
+
   const [checkFeedbackName, { data: checkFeedbackNameRes }] = useLazyQuery<
     CheckFeedbackNameRes,
     CheckFeedbackNameVars
@@ -91,8 +112,10 @@ const CreateFeedbackForm: React.FC<ViewProps> = ({
         />
         <CheckFeedbackModel
           isOpen={showCheckFeedbackModal}
-          validationFailList={checkFeedbackNameRes}
+          validationFailList={checkFeedbackNameRes?.checkFeedbackName}
           onOK={onCheckFeedbackModelOk}
+          fields={fields}
+          title="Following sessions already exist! Kindly uncheck to proceed"
         />
       </>
     );

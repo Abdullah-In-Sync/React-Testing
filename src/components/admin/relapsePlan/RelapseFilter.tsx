@@ -94,7 +94,7 @@ const RelapseFilter: React.FC<ViewProps> = ({
   };
 
   const onPressCreateButton = () => {
-    router.push("/admin/safetyPlan/create");
+    router.push("/admin/relapsePlan/create");
   };
 
   return <Box className="actionsWrapper">{iconButtons()}</Box>;
