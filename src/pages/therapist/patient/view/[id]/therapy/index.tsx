@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Link } from "../../../../../../lib/helpers/common";
 import TherapistSafetyPlanIndex from "../safetyPlan";
 import TherapistFeedbackTabs from "../../../../feedback/FeedbackTabs";
+import TherapistRelapseIndex from "../relapse";
 
 type propTypes = {
   setTherapy: any;
@@ -56,8 +57,8 @@ export default function TherapyMainComponent(props: propTypes) {
     {
       label: "Relapse",
       value: "relapse",
-      //  component: < />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=relapse`,
+      component: <TherapistRelapseIndex />,
+      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=relapse`,
     },
     {
       label: "Resources",
