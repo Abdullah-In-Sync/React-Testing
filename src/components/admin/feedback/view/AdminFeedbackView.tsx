@@ -132,8 +132,8 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
     });
   };
 
-  const ListAnswerType = (props?: any) => {
-    const { options: answerValues = [], answer, row } = props || {};
+  const listAnswerType = (data) => {
+    const { options: answerValues = [], answer, row } = data || {};
     return (
       <RadioGroup {...row} className="radio-buttons" defaultValue={answer}>
         {(answerValues as Array<any>).map((option: string, index: number) => (
@@ -149,10 +149,10 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
     );
   };
 
-  const booleanAnswerType = (props) => {
+  const booleanAnswerType = (data) => {
     return (
       <Box className="radioAnswerWrapper">
-        <ListAnswerType row booleantype="true" {...props} />
+        {listAnswerType({ row: true, booleantype: "true", ...data })}
       </Box>
     );
   };

@@ -927,16 +927,11 @@ describe("Therapist patient safety plan", () => {
     const saveButton = await screen.findByTestId(
       "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
     );
-
     fireEvent.click(saveButton);
-    const confirmButton = await screen.findByRole("button", {
-      name: "Confirm",
-    });
-    if (confirmButton) {
-      fireEvent.click(confirmButton);
-      const okButton = await screen.findByTestId("SuccessOkBtn");
-      expect(okButton).toBeInTheDocument();
-    }
+    const confirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
   });
 
   it("should update plan fail", async () => {
