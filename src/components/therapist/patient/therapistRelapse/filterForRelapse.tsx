@@ -1,16 +1,15 @@
 import { Box, Button, Stack } from "@mui/material";
 import * as React from "react";
-import SearchInput from "../../common/SearchInput";
-import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
-
-import { useRouter } from "next/router";
-import { useStyles } from "../safetyPlan/safetyPlanStyles";
+import SearchInput from "../../../common/SearchInput";
+import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
+import { useStyles } from "../../../admin/safetyPlan/safetyPlanStyles";
 
 interface ViewProps {
   searchInputValue?: string;
   handleClearSearchInput?: () => void;
   onChangeSearchInput?: (e) => void;
-  organizationList?: any;
+  onPressCreatePlan?: () => void;
+  onPressAddPlan?: () => void;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
 }
@@ -26,20 +25,20 @@ const planTypes = [
   },
   {
     id: "custom",
-    value: "Customizable",
+    value: "Customisable",
   },
 ];
 
-const RelapseFilter: React.FC<ViewProps> = ({
+const FilterForRelapseTherapist: React.FC<ViewProps> = ({
   searchInputValue,
   handleClearSearchInput,
   onChangeSearchInput,
-  organizationList,
   selectFilterOptions = {},
   onChangeFilterDropdown,
+  onPressCreatePlan,
+  onPressAddPlan,
 }) => {
   const styles = useStyles();
-  const router = useRouter();
   const iconButtons = () => {
     return (
       <Stack>
@@ -50,20 +49,7 @@ const RelapseFilter: React.FC<ViewProps> = ({
               handleClearInput={handleClearSearchInput}
               onChangeInput={onChangeSearchInput}
             />
-            <SingleSelectComponent
-              id="organizationSelect"
-              labelId="organizationSelect"
-              name="orgId"
-              value={selectFilterOptions["orgId"] || "all"}
-              label="Select Organizationr"
-              onChange={onChangeFilterDropdown}
-              options={[...[{ _id: "all", name: "All" }], ...organizationList]}
-              mappingKeys={["_id", "name"]}
-              size="small"
-              className="form-control-bg"
-              showDefaultSelectOption={false}
-              extraProps={{ "data-testid": "organizationSelect" }}
-            />
+
             <SingleSelectComponent
               id="planTypeSelect"
               labelId="planTypeSelect"
@@ -79,25 +65,41 @@ const RelapseFilter: React.FC<ViewProps> = ({
               extraProps={{ "data-testid": "planTypeSelect" }}
             />
           </Box>
-          <Box>
-            <Button
-              data-testid="createPlanButton"
-              onClick={onPressCreateButton}
-              variant="contained"
-            >
-              Create Plan
-            </Button>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Box style={{ paddingRight: "20px" }}>
+              <Button
+                data-testid="createPlanButton"
+                variant="contained"
+                onClick={onPressCreatePlan}
+                style={{ textTransform: "none" }}
+              >
+                Create Plan
+              </Button>
+            </Box>
+
+            <Box>
+              <Button
+                data-testid="addPlanButton"
+                variant="contained"
+                style={{ paddingRight: "20px", textTransform: "none" }}
+                onClick={onPressAddPlan}
+              >
+                Add Plan
+              </Button>
+            </Box>
           </Box>
         </Stack>
       </Stack>
     );
   };
 
-  const onPressCreateButton = () => {
-    router.push("/admin/relapsePlan/create");
-  };
-
-  return <Box className="actionsWrapper">{iconButtons()}</Box>;
+  return <Box>{iconButtons()}</Box>;
 };
 
-export default RelapseFilter;
+export default FilterForRelapseTherapist;
