@@ -42,7 +42,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
         </Box>
         <Box>
           <label>
-            <Typography variant="h6">User Type:</Typography>
+            <Typography variant="h6">Plan Type:</Typography>
           </label>
           <Typography variant="h6">{user_type}</Typography>
         </Box>
