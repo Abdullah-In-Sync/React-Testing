@@ -72,19 +72,17 @@ const AdminRelapseView: React.FC<ViewProps> = ({
       relapse_additional_details,
       answer,
     } = item;
-
     switch (relapse_ques_type) {
       case "list":
-        return (
-          relapse_ques_typeoption &&
-          booleanAnswerType({
-            options: relapse_ques_typeoption
-              .replace(/[\]']+/g, "")
-              .split(/,+|"[^"]+"/g),
-            answer,
-            detail: relapse_additional_details,
-          })
-        );
+        return booleanAnswerType({
+          options: relapse_ques_typeoption
+            ? relapse_ques_typeoption
+                .replace(/[\]']+/g, "")
+                .split(/,+|"[^"]+"/g)
+            : [],
+          answer,
+          detail: relapse_additional_details,
+        });
       case "text":
         return textAnswerType({ answer });
       default:
