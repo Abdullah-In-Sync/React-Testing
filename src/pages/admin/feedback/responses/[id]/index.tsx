@@ -71,7 +71,7 @@ const AdminFeedbackResponses = () => {
   const handleCsvDownload = () => {
     setLoader(true);
     downloadCsvApi((csvResData) => {
-      if (csvResData) {
+      if (csvResData.length > 0) {
         const modifyCsvData = [];
         csvResData.forEach((uitem) => {
           uitem.responses.map((ditem) => {
