@@ -619,7 +619,7 @@ const TherapyPatientFeedback: any = (props) => {
                                                   item
                                                   xs={10}
                                                   sm={5}
-                                                  md={av.length > 30 ? 6 : 2}
+                                                  md={av.length > 15 ? 6 : 2}
                                                   key={ak}
                                                 >
                                                   <FormControlLabel
