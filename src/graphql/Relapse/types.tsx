@@ -53,3 +53,22 @@ export interface QuestionsEntity {
   user_type: string;
   __typename: string;
 }
+
+export interface TherapistGetAdminRelapseListData {
+  therapistGetAdminRelapseList?: TherapistGetAdminRelapseListEntity[] | null;
+}
+
+export interface TherapistGetAdminRelapseListEntity {
+  _id: string;
+  created_date: string;
+  description: string;
+  name: string;
+  org_id: string;
+  organization_name?: null;
+  plan_type: string;
+  status: number;
+  updated_date: string;
+  user_id: string;
+  user_type: string;
+  __typename: string;
+}

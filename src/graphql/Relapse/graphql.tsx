@@ -65,3 +65,29 @@ export const VIEW_RELAPSE_BY_PLAN_ID = gql`
     }
   }
 `;
+
+export const ADD_THERAPIST_RELAPSE_PLAN = gql`
+  mutation therapistAddRelapsePlan($patientId: String!, $planId: String!) {
+    therapistAddRelapsePlan(patientId: $patientId, planId: $planId) {
+      result
+    }
+  }
+`;
+
+export const THERAPIST_GET_ADMIN_RELAPSE_LIST = gql`
+  query therapistGetAdminRelapseList($orgId: String!) {
+    therapistGetAdminRelapseList(orgId: $orgId) {
+      _id
+      created_date
+      description
+      name
+      org_id
+      organization_name
+      plan_type
+      status
+      updated_date
+      user_id
+      user_type
+    }
+  }
+`;

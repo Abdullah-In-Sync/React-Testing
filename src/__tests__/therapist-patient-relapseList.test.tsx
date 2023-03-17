@@ -16,6 +16,10 @@ import {
 import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
 import TherapistRelapsePlanIndex from "../pages/therapist/patient/view/[id]/relapse";
+import {
+  THERAPIST_GET_ADMIN_RELAPSE_LIST,
+  ADD_THERAPIST_RELAPSE_PLAN,
+} from "../graphql/Relapse/graphql";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -203,6 +207,112 @@ mocksData.push({
     },
   },
 });
+
+mocksData.push({
+  request: {
+    query: THERAPIST_GET_ADMIN_RELAPSE_LIST,
+    variables: {
+      orgId: "517fa21a82c0464a92aaae90ae0d5c59",
+    },
+  },
+  result: {
+    data: {
+      therapistGetAdminRelapseList: [
+        {
+          _id: "a91adf1f-2bdc-4725-857b-3e690a3b6333",
+          created_date: "2023-03-01T11:48:30.945Z",
+          description: "updated desc",
+          name: "updated plan",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          organization_name: null,
+          plan_type: "fixed",
+          status: 1,
+          updated_date: "2023-03-10T11:42:53.377Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "MasterRelapsePlans",
+        },
+        {
+          _id: "42680543-ee76-41d2-9b50-0042bdf4da56",
+          created_date: "2023-03-15T15:32:45.898Z",
+          description: "This is our plan",
+          name: "15th March Amar Relapse",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          organization_name: null,
+          plan_type: "fixed",
+          status: 1,
+          updated_date: "2023-03-15T15:32:45.898Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "MasterRelapsePlans",
+        },
+        {
+          _id: "3c2a4a65-521c-4429-bf53-cdcc1e26da8b",
+          created_date: "2023-03-15T15:34:44.095Z",
+          description: "descioprtionton again",
+          name: "15thMarch Amar2",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          organization_name: null,
+          plan_type: "custom",
+          status: 1,
+          updated_date: "2023-03-15T15:34:44.095Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "MasterRelapsePlans",
+        },
+        {
+          _id: "75cabb0d-3cf8-4270-bbac-64c894439965",
+          created_date: "2023-03-16T04:34:54.066Z",
+          description: "test",
+          name: "Test relapse first",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          organization_name: null,
+          plan_type: "fixed",
+          status: 1,
+          updated_date: "2023-03-16T04:34:54.066Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "MasterRelapsePlans",
+        },
+        {
+          _id: "576c2628-131a-4e29-a43f-98b6ff6959c8",
+          created_date: "2023-03-17T06:02:53.255Z",
+          description: "",
+          name: "Withou quest des",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          organization_name: null,
+          plan_type: "custom",
+          status: 1,
+          updated_date: "2023-03-17T06:02:53.255Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "MasterRelapsePlans",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADD_THERAPIST_RELAPSE_PLAN,
+    variables: {
+      patientId: "4937a27dc00d48bf98b0762ebd",
+      planId: "a91adf1f-2bdc-4725-857b-3e690a3b6333",
+    },
+  },
+  result: {
+    data: {
+      data: {
+        therapistAddRelapsePlan: {
+          result: true,
+          __typename: "result",
+        },
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -338,5 +448,40 @@ describe("Therapist patient safety plan", () => {
     const cancelButton = await screen.findByTestId("cancelForm");
     fireEvent.click(cancelButton);
     expect(cancelButton).toBeInTheDocument();
+  });
+
+  it("should add new relapse plan", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf98b0762ebd",
+      },
+    }));
+    await sut();
+
+    const addPlanButton = screen.getByTestId("addPlanButton");
+    fireEvent.click(addPlanButton);
+
+    const planTypeSelect = await screen.findByTestId("relapsePlanDropdown");
+    fireEvent.click(planTypeSelect);
+    expect(planTypeSelect).toBeInTheDocument();
+
+    const buttonPlanTypeSelect = within(planTypeSelect).getByRole("button");
+    fireEvent.mouseDown(buttonPlanTypeSelect);
+
+    const listboxPlanTypeSelect = within(
+      screen.getByRole("presentation")
+    ).getByRole("listbox");
+    const optionsPlanTypeSelect = await within(
+      listboxPlanTypeSelect
+    ).findAllByRole("option");
+
+    fireEvent.click(optionsPlanTypeSelect[0]);
+
+    const addRelapsePlanSubmit = screen.getByTestId("addRelapsePlanSubmit");
+    fireEvent.click(addRelapsePlanSubmit);
+
+    expect(
+      await screen.findByText(/Plan added Successfully/i)
+    ).toBeInTheDocument();
   });
 });

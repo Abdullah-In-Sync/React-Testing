@@ -2,27 +2,48 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { Box } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ContentHeader from "../../../../../../components/common/ContentHeader";
 import Loader from "../../../../../../components/common/Loader";
+import TherapistRelapsePlanComponent from "../../../../../../components/therapist/patient/therapistRelapse";
+import { useAppContext } from "../../../../../../contexts/AuthContext";
+import {
+  ADD_THERAPIST_RELAPSE_PLAN,
+  THERAPIST_GET_ADMIN_RELAPSE_LIST,
+} from "../../../../../../graphql/Relapse/graphql";
+
+import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Relapse/types";
+
 import {
   CREATE_THERAPIST_RELAPSE_PLAN,
   GET_RELAPSE_LIST_FOR_THERAPIST,
 } from "../../../../../../graphql/SafetyPlan/graphql";
-import TherapistRelapsePlanComponent from "../../../../../../components/therapist/patient/therapistRelapse";
+
 import {
   CommonModal,
   ModalElement,
 } from "../../../../../../components/common/CustomModal/CommonModal";
-import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
 import { SuccessModal } from "../../../../../../components/common/SuccessModal";
-import { useSnackbar } from "notistack";
+import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
+
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
 
 const TherapistRelapsePlanIndex: NextPage = () => {
   const router = useRouter();
-  /* istanbul ignore next */
+  const { user } = useAppContext();
+  const {
+    therapist_data: { org_id: orgId },
+  } = user;
   const { enqueueSnackbar } = useSnackbar();
+  const [addTherapistRelapsePlan] = useMutation(ADD_THERAPIST_RELAPSE_PLAN);
+  const modalRefAddPlan = useRef<ModalElement>(null);
+
+  const handleCloseAddPlanModal = useCallback(() => {
+    /* istanbul ignore next */
+    modalRefAddPlan.current?.close();
+  }, []);
+
   /* istanbul ignore next */
   const patId = router?.query?.id as string;
   const [searchInputValue, setSearchInputValue] = useState();
@@ -75,6 +96,31 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       setLoader(false);
     },
   });
+
+  const [
+    getAdminRelapseList,
+    {
+      loading: relapseDropdownListloading,
+      data: { therapistGetAdminRelapseList: relapsePlanList = [] } = {},
+    },
+  ] = useLazyQuery<TherapistGetAdminRelapseListData>(
+    THERAPIST_GET_ADMIN_RELAPSE_LIST,
+    {
+      fetchPolicy: "cache-and-network",
+      onCompleted: () => {
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    }
+  );
+
+  const handleOpenAddPlanModal = useCallback(() => {
+    setLoader(true);
+    getAdminRelapseList({
+      variables: { orgId },
+    });
+    if (!relapseDropdownListloading) modalRefAddPlan.current?.open();
+  }, []);
 
   /* istanbul ignore next */
   const onChangeSearchInput = (e) => {
@@ -214,6 +260,32 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     /* istanbul ignore next */
     refetch();
   };
+  const handleAddPlan = async (planId) => {
+    try {
+      await addTherapistRelapsePlan({
+        variables: {
+          patientId: patId,
+          planId,
+        },
+        onCompleted: () => {
+          enqueueSnackbar("Plan added Successfully", { variant: "success" });
+          refetch();
+          handleCloseAddPlanModal();
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", { variant: "error" });
+    }
+  };
+
+  const onPressAddRelapsePlan = (value) => {
+    const { planId } = value;
+    setLoader(true);
+    handleAddPlan(planId);
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -229,12 +301,15 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             loadingSafetyPlanList={loadingRelapsePlanList}
             onPressCreatePlan={handleOpenCreatePlanModal}
             // onPressSharePlan={onPressSharePlan}
-            // onPressAddPlan={handleOpenAddPlanModal}
+            onPressAddPlan={handleOpenAddPlanModal}
             // submitQustionForm={handleSubmitQustionForm}
             // fetchPlanData={fetchPlanData}
             // planData={planData}
             // handleDeleteQuestion={handleDeleteQuestion}
             // onPressDeletePlan={onPressDeletePlan}
+            modalRefAddPlan={modalRefAddPlan}
+            onPressAddRelapsePlan={onPressAddRelapsePlan}
+            relapsePlanList={relapsePlanList}
           />
         </Box>
       </Box>

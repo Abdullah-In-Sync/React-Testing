@@ -1,8 +1,12 @@
 import { FormikProps } from "formik";
 import React from "react";
+import { TherapistGetAdminRelapseListEntity } from "../../../../graphql/Relapse/types";
 import { InitialFormValues } from "../therapistSafetyPlan/types";
 import FilterForRelapseTherapist from "./filterForRelapse";
 import TherapistRelapseList from "./RelapsePlanList";
+import TherapistRelapseAddPlan, {
+  InitialFormValues as InitialFormValuesAddRelapse,
+} from "./TherapistRelapseAddPlan";
 
 interface ViewProps {
   safetyPlanList?: any;
@@ -29,6 +33,12 @@ interface ViewProps {
   planData?: object[];
   handleDeleteQuestion?: (v) => void;
   onPressDeletePlan?: (v) => void;
+  modalRefAddPlan?: any;
+  onPressAddRelapsePlan?: (
+    formData: InitialFormValuesAddRelapse,
+    formikHelper: FormikProps<InitialFormValuesAddRelapse>
+  ) => void;
+  relapsePlanList?: TherapistGetAdminRelapseListEntity[];
 }
 
 const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
@@ -45,6 +55,9 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
   planData,
   handleDeleteQuestion,
   onPressDeletePlan,
+  modalRefAddPlan,
+  onPressAddRelapsePlan,
+  relapsePlanList,
 }) => {
   return (
     <>
@@ -65,6 +78,11 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
         planData={planData}
         handleDeleteQuestion={handleDeleteQuestion}
         onPressDeletePlan={onPressDeletePlan}
+      />
+      <TherapistRelapseAddPlan
+        relapsePlanList={relapsePlanList}
+        modalRefAddPlan={modalRefAddPlan}
+        onPressAddRelapsePlan={onPressAddRelapsePlan}
       />
     </>
   );

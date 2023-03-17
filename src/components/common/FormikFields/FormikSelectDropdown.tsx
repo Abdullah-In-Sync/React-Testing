@@ -3,7 +3,7 @@ import { ErrorMessage, useField } from "formik";
 import MutiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
 import SingleSelectComponent from "../SelectBox/SingleSelect/SingleSelectComponent";
 
-const SelectDropdown = (props) => {
+const FormikSelectDropdown = (props) => {
   const [field, touched] = useField(props);
   return (
     <Stack>
@@ -35,4 +35,4 @@ const SelectDropdown = (props) => {
   );
 };
 
-export default SelectDropdown;
+export default FormikSelectDropdown;
