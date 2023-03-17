@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { AdminViewRelapseById } from "../../../../graphql/Relapse/types";
 import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
+import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
 import { useStyles } from "./viewRelapsePlanStyles";
 
 interface ViewProps {
@@ -84,23 +85,40 @@ const AdminRelapseView: React.FC<ViewProps> = ({
           detail: relapse_additional_details,
         });
       case "text":
-        return textAnswerType({ answer });
+        return textAnswerType({ answer, detail: relapse_additional_details });
       default:
         return null;
     }
   };
 
-  const textAnswerType = ({ answer }) => {
+  const textAnswerType = ({ answer, detail }) => {
     return (
-      <Box className="textAnswerWrapper">
-        {answer ? (
-          <Typography>{answer}</Typography>
-        ) : (
-          <Typography className="muteText">
-            Patient to add response here...
-          </Typography>
+      <Stack>
+        {detail && (
+          <Box mb={1} mt={0.7}>
+            <TextFieldComponent
+              name="relapsePlanView"
+              id="relapsePlanView"
+              label="Description"
+              value={detail}
+              onChange={null}
+              fullWidth={true}
+              variant="outlined"
+              multiline
+              size="small"
+            />
+          </Box>
         )}
-      </Box>
+        <Box className="textAnswerWrapper">
+          {answer ? (
+            <Typography>{answer}</Typography>
+          ) : (
+            <Typography className="muteText">
+              Patient to add response here...
+            </Typography>
+          )}
+        </Box>
+      </Stack>
     );
   };
 
@@ -142,7 +160,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
     const { detail } = data;
     return (
       <Box className="radioDescWrapper">
-        <Typography>{detail}</Typography>
+        {detail && <Typography>{detail}</Typography>}
         <Box className="radioAnswerWrapper">
           {listAnswerType({ row: true, booleantype: "true", ...data })}
         </Box>
