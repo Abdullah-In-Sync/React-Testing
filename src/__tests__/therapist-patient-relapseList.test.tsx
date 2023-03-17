@@ -9,7 +9,10 @@ import {
 } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
-import { GET_RELAPSE_LIST_FOR_THERAPIST } from "../graphql/SafetyPlan/graphql";
+import {
+  CREATE_THERAPIST_RELAPSE_PLAN,
+  GET_RELAPSE_LIST_FOR_THERAPIST,
+} from "../graphql/SafetyPlan/graphql";
 import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
 import TherapistRelapsePlanIndex from "../pages/therapist/patient/view/[id]/relapse";
@@ -182,6 +185,24 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: CREATE_THERAPIST_RELAPSE_PLAN,
+    variables: {
+      planName: "test",
+      planDesc: "test des",
+      patientId: "4937a27dc00d48bf98b0762ebd",
+    },
+  },
+  result: {
+    data: {
+      therapistCreateRelapsePlan: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -192,6 +213,31 @@ const sut = async () => {
       </ThemeProvider>
     </MockedProvider>
   );
+};
+
+const fillCreateRelapsePlanModalForm = async () => {
+  const createPlanButton = await screen.findByTestId("createPlanButton");
+  fireEvent.click(createPlanButton);
+  //createPlanButton
+  const planNameInput = await screen.findByTestId("planName");
+  fireEvent.change(planNameInput, {
+    target: { value: "test" },
+  });
+
+  const planDescriptionInput = await screen.findByTestId("planDescription");
+
+  fireEvent.change(planDescriptionInput, {
+    target: { value: "test des" },
+  });
+
+  expect(planDescriptionInput).toBeInTheDocument();
+};
+
+const submitForm = async () => {
+  await sut();
+  await fillCreateRelapsePlanModalForm();
+  const submitFormButton = await screen.findByTestId("submitForm");
+  fireEvent.click(submitFormButton);
 };
 
 describe("Therapist patient safety plan", () => {
@@ -274,5 +320,23 @@ describe("Therapist patient safety plan", () => {
 
       expect(screen.getByText("Relapse")).toBeInTheDocument();
     });
+  });
+
+  it("should render therapsit create relapse plan page and submit the form", async () => {
+    await submitForm();
+
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
+
+  it("should render therapist cancel the submition", async () => {
+    await submitForm();
+    const cancelButton = await screen.findByTestId("cancelForm");
+    fireEvent.click(cancelButton);
+    expect(cancelButton).toBeInTheDocument();
   });
 });
