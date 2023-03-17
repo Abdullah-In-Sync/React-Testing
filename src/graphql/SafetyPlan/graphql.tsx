@@ -277,6 +277,22 @@ export const CREATE_THERAPIST_SAFETY_PLAN = gql`
   }
 `;
 
+export const CREATE_THERAPIST_RELAPSE_PLAN = gql`
+  mutation therapistCreateRelapsePlan(
+    $patientId: String!
+    $planName: String!
+    $planDesc: String
+  ) {
+    therapistCreateRelapsePlan(
+      patientId: $patientId
+      planName: $planName
+      planDesc: $planDesc
+    ) {
+      result
+    }
+  }
+`;
+
 export const UPDATE_THERAPIST_SAFETY_PLAN = gql`
   mutation updateTherapistSafetyPlan(
     $planId: ID!

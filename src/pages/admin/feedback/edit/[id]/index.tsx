@@ -56,6 +56,9 @@ const EditFeedbackPage: NextPage = () => {
     onCompleted: () => {
       setLoader(false);
       (selectedQuestion?.current as any)?.callback();
+      enqueueSnackbar("The question has been deleted successfully.", {
+        variant: "success",
+      });
     },
   });
 
