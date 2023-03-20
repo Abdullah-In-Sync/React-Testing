@@ -256,7 +256,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
-            /* istanbul ignore next */
             setSuccessModal({
               description: "Your plan has been created successfully.",
             });
@@ -264,23 +263,29 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
-      /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
-      /* istanbul ignore next */
       doneCallback();
     }
   };
 
   /* istanbul ignore next */
   const handleSavePress = (formFields, { setSubmitting }) => {
+    const isDuplicate = listData?.getRelapsePlanListByPatientId?.some(
+      (item) => item.name === formFields.planName
+    );
+
+    if (isDuplicate) {
+      enqueueSnackbar("This plan already exists", {
+        variant: "error",
+      });
+      return;
+    }
     setIsConfirm({
       status: true,
       confirmObject: {
