@@ -304,6 +304,17 @@ export const UPDATE_THERAPIST_SAFETY_PLAN = gql`
   }
 `;
 
+export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
+  mutation updateTherapistRelapsePlan(
+    $planId: ID!
+    $updatePlan: UpdatePatientRelapsePlanInput
+  ) {
+    updateTherapistRelapsePlan(planId: $planId, updatePlan: $updatePlan) {
+      _id
+    }
+  }
+`;
+
 export const ADD_THERAPIST_SAFETY_PLAN = gql`
   mutation addTherapistSafetyPlan($patientId: String!, $planId: String!) {
     addTherapistSafetyPlan(patientId: $patientId, planId: $planId) {
