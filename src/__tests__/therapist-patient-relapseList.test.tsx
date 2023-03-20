@@ -12,7 +12,6 @@ import { SnackbarProvider } from "notistack";
 import {
   CREATE_THERAPIST_RELAPSE_PLAN,
   GET_RELAPSE_LIST_FOR_THERAPIST,
-  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../graphql/SafetyPlan/graphql";
 import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
@@ -20,6 +19,7 @@ import TherapistRelapsePlanIndex from "../pages/therapist/patient/view/[id]/rela
 import {
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   ADD_THERAPIST_RELAPSE_PLAN,
+  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../graphql/Relapse/graphql";
 
 jest.mock("next/router", () => ({
@@ -500,6 +500,25 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_RELAPSE_PLAN,
+    variables: {
+      planId: "1beebad4-4e88-404a-ac8b-8797a300d250",
+      updatePlan: {
+        share_status: 1,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistSafetyPlanById: {
+        result: true,
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -696,6 +715,24 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(updatePlanButton);
     const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+  });
+
+  it("should share relapse plan", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const sharePlanButton = await screen.findByTestId("button-share-icon_0");
+    expect(sharePlanButton).toBeInTheDocument();
+    fireEvent.click(sharePlanButton);
     const confirmButton = await screen.findByRole("button", {
       name: "Confirm",
     });

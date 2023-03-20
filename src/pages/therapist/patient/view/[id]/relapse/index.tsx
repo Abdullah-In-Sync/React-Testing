@@ -11,6 +11,7 @@ import { useAppContext } from "../../../../../../contexts/AuthContext";
 import {
   ADD_THERAPIST_RELAPSE_PLAN,
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
+  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../../../../../../graphql/Relapse/graphql";
 
 import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Relapse/types";
@@ -18,7 +19,6 @@ import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Rela
 import {
   CREATE_THERAPIST_RELAPSE_PLAN,
   GET_RELAPSE_LIST_FOR_THERAPIST,
-  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../../../../../../graphql/SafetyPlan/graphql";
 
 import {
@@ -38,6 +38,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   } = user;
   const { enqueueSnackbar } = useSnackbar();
   const [addTherapistRelapsePlan] = useMutation(ADD_THERAPIST_RELAPSE_PLAN);
+  const [updateTherapistRelapsePlan] = useMutation(
+    UPDATE_THERAPIST_RELAPSE_PLAN
+  );
   const modalRefAddPlan = useRef<ModalElement>(null);
 
   const handleCloseAddPlanModal = useCallback(() => {
@@ -78,9 +81,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   //Mutations
   const [createTherapistRelapsePlan] = useMutation(
     CREATE_THERAPIST_RELAPSE_PLAN
-  );
-  const [updateTherapistRelapsePlan] = useMutation(
-    UPDATE_THERAPIST_RELAPSE_PLAN
   );
 
   //UseEffects
@@ -199,15 +199,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     setLoader(true);
     const { planDesc, planName, share_status, shareObject } = formFields;
     const { _id } = shareObject ? shareObject : currentSafetyPlan;
-    console.debug("Update variable", {
-      planId: _id,
-      updatePlan: share_status
-        ? { share_status }
-        : {
-            description: planDesc,
-            name: planName,
-          },
-    });
     const variables = {
       planId: _id,
       updatePlan: share_status
@@ -223,7 +214,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          /* istanbul ignore next */
           if (data) {
             /* istanbul ignore next */
             setSuccessModal({
@@ -231,6 +221,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
                 ? "Your plan has been shared successfully."
                 : "Your plan has been updated successfully.",
             });
+            refetch();
           }
         },
       });
@@ -249,7 +240,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       doneCallback();
     }
   };
-
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
     const { planDesc, planName } = formFields;
@@ -342,6 +332,17 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     handleAddPlan(planId);
   };
 
+  const onPressSharePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to share the relapse plan?",
+      },
+      storedFunction: (callback) =>
+        submitUpdateSafetyPlan({ share_status: 1, shareObject: v }, callback),
+    });
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -356,7 +357,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             onChangeFilterDropdown={onChangeFilterDropdown}
             loadingSafetyPlanList={loadingRelapsePlanList}
             onPressCreatePlan={handleOpenCreatePlanModal}
-            // onPressSharePlan={onPressSharePlan}
+            onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
             // submitQustionForm={handleSubmitQustionForm}
             // fetchPlanData={fetchPlanData}
