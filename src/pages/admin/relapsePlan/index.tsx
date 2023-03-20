@@ -220,6 +220,8 @@ const RelapsePlanPage: NextPage = () => {
         return handleDeleteRelapse(planId);
       case "view":
         return router.push(`/admin/relapsePlan/view/${planId}`);
+      case "edit":
+        return router.push(`/admin/relapsePlan/edit/${planId}`);
       default:
         return;
     }
