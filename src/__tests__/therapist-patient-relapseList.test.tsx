@@ -487,7 +487,7 @@ mocksData.push({
     query: UPDATE_THERAPIST_RELAPSE_PLAN,
     variables: {
       planId: "649019c0-52df-41a1-9dfb-10bf8cacf339",
-      updatePlan: { description: "No", name: "abcd" },
+      updatePlan: { description: "No", name: "NEw value to be" },
     },
   },
   result: {
@@ -713,6 +713,10 @@ describe("Therapist patient safety plan", () => {
     const updatePlanButton = await screen.findByTestId("button-edit-icon_4");
     expect(updatePlanButton).toBeInTheDocument();
     fireEvent.click(updatePlanButton);
+    const planNameInput = await screen.findByTestId("planName");
+    fireEvent.change(planNameInput, {
+      target: { value: "NEw value to be" },
+    });
     const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
     const confirmButton = await screen.findByRole("button", {
