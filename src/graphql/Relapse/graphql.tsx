@@ -102,3 +102,28 @@ export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
     }
   }
 `;
+
+export const ADMIN_UPDATE_RELAPSE_BY_ID = gql`
+  mutation adminUpdateRelapseById(
+    $planId: ID = ""
+    $questions: String = ""
+    $updatePlan: UpdateRelapseInput = {}
+  ) {
+    adminUpdateRelapseById(
+      planId: $planId
+      questions: $questions
+      updatePlan: $updatePlan
+    ) {
+      _id
+    }
+  }
+`;
+
+export const ADMIN_DELETE_RELAPSE_PLAN_QS = gql`
+  mutation adminDeleteRelapsePlanQs($questionId: ID = "") {
+    adminDeleteRelapsePlanQs(questionId: $questionId) {
+      _id
+      status
+    }
+  }
+`;
