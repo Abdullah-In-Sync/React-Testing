@@ -12,6 +12,7 @@ import { SnackbarProvider } from "notistack";
 import {
   CREATE_THERAPIST_RELAPSE_PLAN,
   GET_RELAPSE_LIST_FOR_THERAPIST,
+  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../graphql/SafetyPlan/graphql";
 import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
@@ -45,14 +46,14 @@ mocksData.push({
           _id: "1beebad4-4e88-404a-ac8b-8797a300d250",
           created_date: "2023-03-13T14:57:35.491Z",
           description: "updated desc",
-          name: "updated plan",
+          name: "test name",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_owner: "admin",
           plan_type: "fixed",
           questions: null,
-          share_status: 0,
+          share_status: 2,
           therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-          updated_date: "2023-03-13T14:57:35.491Z",
+          updated_date: "2023-03-16T08:11:54.110Z",
           __typename: "patientRelapsePlans",
         },
         {
@@ -95,6 +96,174 @@ mocksData.push({
           share_status: 0,
           therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
           updated_date: "2023-03-13T14:57:35.491Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "649019c0-52df-41a1-9dfb-10bf8cacf339",
+          created_date: "2023-03-16T10:20:14.107Z",
+          description: "No",
+          name: "abcd",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-16T10:20:14.107Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "58faebd8-921f-48eb-8b15-9715433a78aa",
+          created_date: "2023-03-16T10:21:00.226Z",
+          description: "Nothing",
+          name: "abcd2",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-16T10:21:00.226Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "263f36ec-1ee9-4558-b63e-4d814fb1159c",
+          created_date: "2023-03-16T10:22:31.511Z",
+          description: "Description",
+          name: "New 1",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-16T10:22:31.511Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "5af0bff5-ad4b-471d-a96d-664b122fe7a5",
+          created_date: "2023-03-16T11:24:42.417Z",
+          description: "No ",
+          name: "Addition 1",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-16T11:24:42.417Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "8db22959-f9bf-449c-8bc2-f3f8ecd345d1",
+          created_date: "2023-03-16T11:35:29.794Z",
+          description: "test des",
+          name: "test",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-16T11:35:29.794Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "524db97c-fad0-46c3-9db8-855227d1ad9b",
+          created_date: "2023-03-17T05:23:08.518Z",
+          description: "No",
+          name: "Ninja 1",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-17T05:23:08.518Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "4e3988d4-e18e-401a-96ae-ea9df7a74c27",
+          created_date: "2023-03-17T06:13:41.801Z",
+          description: "No Every",
+          name: "Ninja 2 Ninja 2",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-20T05:25:48.767Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "a0b454c2-a0a8-4176-9277-5076a6ce3941",
+          created_date: "2023-03-17T06:49:18.510Z",
+          description: "Test New Data Text",
+          name: "Test Plan Data",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-20T05:52:39.116Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "012973f5-5385-4ed8-876f-dc57891f52ed",
+          created_date: "2023-03-17T06:51:06.352Z",
+          description: "ABCDEFGH",
+          name: "new shubham update 1234 1234 1234",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "therapist",
+          plan_type: null,
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-20T05:20:48.684Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "47343557-14e5-45b5-82f0-5cfafdf42f7c",
+          created_date: "2023-03-17T10:44:56.721Z",
+          description: "test",
+          name: "Test relapse first",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "admin",
+          plan_type: "fixed",
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-17T10:44:56.721Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "76b641f9-bf2d-4fd9-ab8b-4922deb99ba4",
+          created_date: "2023-03-17T10:45:08.405Z",
+          description: "updated desc",
+          name: "updated plan",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "admin",
+          plan_type: "fixed",
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-17T10:45:08.405Z",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "69fdcb0d-fb2e-441f-9b45-38c64fdb98db",
+          created_date: "2023-03-17T10:45:28.357Z",
+          description: "descioprtionton again",
+          name: "15thMarch Amar2",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_owner: "admin",
+          plan_type: "custom",
+          questions: null,
+          share_status: 0,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-17T10:45:28.357Z",
           __typename: "patientRelapsePlans",
         },
       ],
@@ -313,6 +482,24 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_RELAPSE_PLAN,
+    variables: {
+      planId: "649019c0-52df-41a1-9dfb-10bf8cacf339",
+      updatePlan: { description: "No", name: "abcd" },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistRelapsePlan: {
+        _id: "a0b454c2-a0a8-4176-9277-5076a6ce3941",
+        __typename: "patientRelapsePlans",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -483,5 +670,37 @@ describe("Therapist patient safety plan", () => {
     expect(
       await screen.findByText(/Plan added Successfully/i)
     ).toBeInTheDocument();
+  });
+
+  it("should close modal when cross icon press", async () => {
+    await sut();
+    const createPlanButton = await screen.findByTestId("createPlanButton");
+    fireEvent.click(createPlanButton);
+    // fireEvent.click(cancelButton);
+    const crossButton = await screen.findByTestId("modalCrossIcon");
+    expect(crossButton).toBeInTheDocument();
+
+    fireEvent.click(crossButton);
+    expect(crossButton).toBeInTheDocument();
+  });
+
+  it("should submit edit safety form", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const updatePlanButton = await screen.findByTestId("button-edit-icon_4");
+    expect(updatePlanButton).toBeInTheDocument();
+    fireEvent.click(updatePlanButton);
+    const submitFormButton = await screen.findByTestId("submitForm");
+    fireEvent.click(submitFormButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
   });
 });

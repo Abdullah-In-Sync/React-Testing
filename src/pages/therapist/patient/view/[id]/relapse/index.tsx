@@ -18,6 +18,7 @@ import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Rela
 import {
   CREATE_THERAPIST_RELAPSE_PLAN,
   GET_RELAPSE_LIST_FOR_THERAPIST,
+  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../../../../../../graphql/SafetyPlan/graphql";
 
 import {
@@ -78,6 +79,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [createTherapistRelapsePlan] = useMutation(
     CREATE_THERAPIST_RELAPSE_PLAN
   );
+  const [updateTherapistRelapsePlan] = useMutation(
+    UPDATE_THERAPIST_RELAPSE_PLAN
+  );
 
   //UseEffects
   useEffect(() => {
@@ -119,6 +123,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     getAdminRelapseList({
       variables: { orgId },
     });
+    /* istanbul ignore next */
     if (!relapseDropdownListloading) modalRefAddPlan.current?.open();
   }, []);
 
@@ -191,9 +196,58 @@ const TherapistRelapsePlanIndex: NextPage = () => {
 
   /* istanbul ignore next */
   const submitUpdateSafetyPlan = async (formFields, doneCallback) => {
-    console.log("Koca: doneCallback ", doneCallback);
-    console.log("Koca: formFields ", formFields);
-    //Edit plan function
+    setLoader(true);
+    const { planDesc, planName, share_status, shareObject } = formFields;
+    const { _id } = shareObject ? shareObject : currentSafetyPlan;
+    console.debug("Update variable", {
+      planId: _id,
+      updatePlan: share_status
+        ? { share_status }
+        : {
+            description: planDesc,
+            name: planName,
+          },
+    });
+    const variables = {
+      planId: _id,
+      updatePlan: share_status
+        ? { share_status }
+        : {
+            description: planDesc,
+            name: planName,
+          },
+    };
+
+    try {
+      await updateTherapistRelapsePlan({
+        variables,
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          /* istanbul ignore next */
+          if (data) {
+            /* istanbul ignore next */
+            setSuccessModal({
+              description: share_status
+                ? "Your plan has been shared successfully."
+                : "Your plan has been updated successfully.",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      /* istanbul ignore next */
+      doneCallback();
+    } finally {
+      setLoader(false);
+      /* istanbul ignore next */
+      doneCallback();
+    }
   };
 
   const submitForm = async (formFields, doneCallback) => {
@@ -275,7 +329,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     }
   };
