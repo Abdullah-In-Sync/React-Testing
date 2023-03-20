@@ -126,4 +126,4 @@ export const ADMIN_DELETE_RELAPSE_PLAN_QS = gql`
       status
     }
   }
-`
+`;
