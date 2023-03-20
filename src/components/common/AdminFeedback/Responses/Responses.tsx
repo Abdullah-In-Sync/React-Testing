@@ -81,9 +81,9 @@ export default function FeedbackResponses(props: propTypes) {
             ? "patient"
             : filterFeedbackData[0]["feedback_type"];
         /* istanbul ignore next */
-        const handleClickDownload = () => {
-          props?.handleCsvDownload(value);
-        };
+        // const handleClickDownload = () => {
+        //   props?.handleCsvDownload(value);
+        // };
         return (
           <>
             <NextLink
@@ -97,13 +97,13 @@ export default function FeedbackResponses(props: propTypes) {
               </IconButton>
             </NextLink>
 
-            <IconButton
+            {/* <IconButton
               size="small"
               data-testid={`download-icon-button-second-${value._id}`}
               onClick={handleClickDownload}
             >
               <DownloadIcon />
-            </IconButton>
+            </IconButton> */}
           </>
         );
       },

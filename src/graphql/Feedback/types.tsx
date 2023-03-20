@@ -147,3 +147,34 @@ export interface Answer {
   updated_date: string;
   __typename: string;
 }
+
+export interface ViewResponseDownload {
+  viewResponseDownloadCSV?: ViewResponseDownloadCSVEntity[] | null;
+}
+export interface ViewResponseDownloadCSVEntity {
+  __typename: string;
+  _id: string;
+  answer_options: string;
+  answer_type: string;
+  created_date: string;
+  feedback_id: string;
+  question: string;
+  responses?: ResponsesEntity[] | null;
+  status: string;
+  updated_date: string;
+}
+export interface ResponsesEntity {
+  __typename: string;
+  _id: string;
+  answer: string;
+  created_date: string;
+  patient_id: string;
+  patient_name: string;
+  pttherapy_id: string;
+  question_id: string;
+  status: string;
+  therapist_name: string;
+  therapist_id: string;
+  therapy_name: string;
+  updated_date: string;
+}

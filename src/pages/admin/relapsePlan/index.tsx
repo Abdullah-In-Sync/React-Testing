@@ -207,7 +207,7 @@ const RelapsePlanPage: NextPage = () => {
     setIsConfirm({
       status: true,
       confirmObject: {
-        description: "Are you sure you want to delete relapse plan?",
+        description: "Are you sure you want to delete the relapse plan?",
       },
       storedFunction: (callback) => deleteRelapse(planId, callback),
     });

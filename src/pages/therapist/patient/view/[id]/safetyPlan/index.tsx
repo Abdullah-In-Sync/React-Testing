@@ -447,9 +447,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             setSuccessModal({
               description: "Your question has been deleted successfully.",
             });
-            enqueueSnackbar("Question successfully deleted.", {
-              variant: "success",
-            });
           }
         },
       });

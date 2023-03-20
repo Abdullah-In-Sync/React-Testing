@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { AdminViewRelapseById } from "../../../../graphql/Relapse/types";
 import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
+import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
 import { useStyles } from "./viewRelapsePlanStyles";
 
 interface ViewProps {
@@ -25,7 +26,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
   const styles = useStyles();
   const {
     organization_name,
-    user_type,
+    plan_type,
     name,
     description,
     questions = [],
@@ -42,9 +43,9 @@ const AdminRelapseView: React.FC<ViewProps> = ({
         </Box>
         <Box>
           <label>
-            <Typography variant="h6">User Type:</Typography>
+            <Typography variant="h6">Plan Type:</Typography>
           </label>
-          <Typography variant="h6">{user_type}</Typography>
+          <Typography variant="h6">{plan_type}</Typography>
         </Box>
       </Box>
     );
@@ -72,37 +73,52 @@ const AdminRelapseView: React.FC<ViewProps> = ({
       relapse_additional_details,
       answer,
     } = item;
-
     switch (relapse_ques_type) {
       case "list":
-        return (
-          relapse_ques_typeoption &&
-          booleanAnswerType({
-            options: relapse_ques_typeoption
-              .replace(/[\]']+/g, "")
-              .split(/,+|"[^"]+"/g),
-            answer,
-            detail: relapse_additional_details,
-          })
-        );
+        return booleanAnswerType({
+          options: relapse_ques_typeoption
+            ? relapse_ques_typeoption
+                .replace(/[\]']+/g, "")
+                .split(/,+|"[^"]+"/g)
+            : [],
+          answer,
+          detail: relapse_additional_details,
+        });
       case "text":
-        return textAnswerType({ answer });
+        return textAnswerType({ answer, detail: relapse_additional_details });
       default:
         return null;
     }
   };
 
-  const textAnswerType = ({ answer }) => {
+  const textAnswerType = ({ answer, detail }) => {
     return (
-      <Box className="textAnswerWrapper">
-        {answer ? (
-          <Typography>{answer}</Typography>
-        ) : (
-          <Typography className="muteText">
-            Patient to add response here...
-          </Typography>
+      <Stack>
+        {detail && (
+          <Box mb={1} mt={0.7}>
+            <TextFieldComponent
+              name="relapsePlanView"
+              id="relapsePlanView"
+              label="Description"
+              value={detail}
+              onChange={null}
+              fullWidth={true}
+              variant="outlined"
+              multiline
+              size="small"
+            />
+          </Box>
         )}
-      </Box>
+        <Box className="textAnswerWrapper">
+          {answer ? (
+            <Typography>{answer}</Typography>
+          ) : (
+            <Typography className="muteText">
+              Patient to add response here...
+            </Typography>
+          )}
+        </Box>
+      </Stack>
     );
   };
 
@@ -144,7 +160,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
     const { detail } = data;
     return (
       <Box className="radioDescWrapper">
-        <Typography>{detail}</Typography>
+        {detail && <Typography>{detail}</Typography>}
         <Box className="radioAnswerWrapper">
           {listAnswerType({ row: true, booleantype: "true", ...data })}
         </Box>
