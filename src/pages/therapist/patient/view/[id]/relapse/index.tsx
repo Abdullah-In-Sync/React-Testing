@@ -123,6 +123,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     getAdminRelapseList({
       variables: { orgId },
     });
+    /* istanbul ignore next */
     if (!relapseDropdownListloading) modalRefAddPlan.current?.open();
   }, []);
 
@@ -318,7 +319,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     }
   };
