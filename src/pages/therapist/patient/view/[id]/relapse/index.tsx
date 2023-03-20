@@ -11,6 +11,7 @@ import { useAppContext } from "../../../../../../contexts/AuthContext";
 import {
   ADD_THERAPIST_RELAPSE_PLAN,
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
+  UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../../../../../../graphql/Relapse/graphql";
 
 import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Relapse/types";
@@ -37,6 +38,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   } = user;
   const { enqueueSnackbar } = useSnackbar();
   const [addTherapistRelapsePlan] = useMutation(ADD_THERAPIST_RELAPSE_PLAN);
+  const [updateTherapistRelapsePlan] = useMutation(
+    UPDATE_THERAPIST_RELAPSE_PLAN
+  );
   const modalRefAddPlan = useRef<ModalElement>(null);
 
   const handleCloseAddPlanModal = useCallback(() => {
@@ -191,11 +195,50 @@ const TherapistRelapsePlanIndex: NextPage = () => {
 
   /* istanbul ignore next */
   const submitUpdateSafetyPlan = async (formFields, doneCallback) => {
-    console.log("Koca: doneCallback ", doneCallback);
-    console.log("Koca: formFields ", formFields);
-    //Edit plan function
-  };
+    setLoader(true);
+    const { planDesc, planName, share_status, shareObject } = formFields;
+    const { _id } = shareObject ? shareObject : currentSafetyPlan;
+    const variables = {
+      planId: _id,
+      updatePlan: share_status
+        ? { share_status }
+        : {
+            description: planDesc,
+            name: planName,
+          },
+    };
 
+    try {
+      await updateTherapistRelapsePlan({
+        variables,
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            /* istanbul ignore next */
+            setSuccessModal({
+              description: share_status
+                ? "Your plan has been shared successfully."
+                : "Your plan has been updated successfully.",
+            });
+            refetch();
+          }
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      /* istanbul ignore next */
+      doneCallback();
+    } finally {
+      setLoader(false);
+      /* istanbul ignore next */
+      doneCallback();
+    }
+  };
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
     const { planDesc, planName } = formFields;
@@ -286,6 +329,17 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     handleAddPlan(planId);
   };
 
+  const onPressSharePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to share the relapse plan?",
+      },
+      storedFunction: (callback) =>
+        submitUpdateSafetyPlan({ share_status: 1, shareObject: v }, callback),
+    });
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -300,7 +354,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             onChangeFilterDropdown={onChangeFilterDropdown}
             loadingSafetyPlanList={loadingRelapsePlanList}
             onPressCreatePlan={handleOpenCreatePlanModal}
-            // onPressSharePlan={onPressSharePlan}
+            onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
             // submitQustionForm={handleSubmitQustionForm}
             // fetchPlanData={fetchPlanData}
