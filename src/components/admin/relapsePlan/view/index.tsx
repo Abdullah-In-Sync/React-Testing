@@ -26,7 +26,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
   const styles = useStyles();
   const {
     organization_name,
-    user_type,
+    plan_type,
     name,
     description,
     questions = [],
@@ -45,7 +45,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
           <label>
             <Typography variant="h6">Plan Type:</Typography>
           </label>
-          <Typography variant="h6">{user_type}</Typography>
+          <Typography variant="h6">{plan_type}</Typography>
         </Box>
       </Box>
     );
