@@ -14,6 +14,7 @@ type propTypes = {
   placement?: "start" | "end" | "top" | "bottom";
   checked: any;
   size?: "small" | "medium";
+  disabled?: any;
 };
 
 export default function CheckBoxLabelComponent(props: propTypes) {
@@ -21,6 +22,7 @@ export default function CheckBoxLabelComponent(props: propTypes) {
   return (
     <FormControlLabel
       value={props.value}
+      disabled={props.disabled}
       className={props.className}
       name={props.name}
       control={
