@@ -354,10 +354,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   };
 
   const handleDeletesafetyPlan = async (v) => {
-    console.debug("Delete variable", {
-      planId: v._id,
-      updatePlan: { status: 0 },
-    });
     try {
       await deletePlane({
         variables: {
