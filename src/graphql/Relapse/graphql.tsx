@@ -103,6 +103,14 @@ export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
   }
 `;
 
+export const DELETE_THERAPIST_RELAPSE_PLAN = gql`
+  mutation ($planId: ID!, $updatePlan: UpdatePatientRelapsePlanInput!) {
+    updateTherapistRelapsePlan(planId: $planId, updatePlan: $updatePlan) {
+      share_status
+    }
+  }
+`;
+
 export const ADMIN_UPDATE_RELAPSE_BY_ID = gql`
   mutation adminUpdateRelapseById(
     $planId: ID = ""

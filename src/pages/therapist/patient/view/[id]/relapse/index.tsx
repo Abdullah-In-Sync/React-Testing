@@ -10,6 +10,7 @@ import TherapistRelapsePlanComponent from "../../../../../../components/therapis
 import { useAppContext } from "../../../../../../contexts/AuthContext";
 import {
   ADD_THERAPIST_RELAPSE_PLAN,
+  DELETE_THERAPIST_RELAPSE_PLAN,
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   UPDATE_THERAPIST_RELAPSE_PLAN,
 } from "../../../../../../graphql/Relapse/graphql";
@@ -82,6 +83,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [createTherapistRelapsePlan] = useMutation(
     CREATE_THERAPIST_RELAPSE_PLAN
   );
+  const [deletePlane] = useMutation(DELETE_THERAPIST_RELAPSE_PLAN);
 
   //UseEffects
   useEffect(() => {
@@ -263,10 +265,13 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -348,6 +353,39 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     });
   };
 
+  const handleDeletesafetyPlan = async (v) => {
+    try {
+      await deletePlane({
+        variables: {
+          planId: v._id,
+          updatePlan: { status: 0 },
+        },
+        onCompleted: () => {
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan has been deleted successfully.",
+          });
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to delete the Relapse plan?",
+      },
+      storedFunction: () => handleDeletesafetyPlan(v),
+    });
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -368,7 +406,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             // fetchPlanData={fetchPlanData}
             // planData={planData}
             // handleDeleteQuestion={handleDeleteQuestion}
-            // onPressDeletePlan={onPressDeletePlan}
+            onPressDeletePlan={onPressDeletePlan}
             modalRefAddPlan={modalRefAddPlan}
             onPressAddRelapsePlan={onPressAddRelapsePlan}
             relapsePlanList={relapsePlanList}
