@@ -20,6 +20,7 @@ import {
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   ADD_THERAPIST_RELAPSE_PLAN,
   UPDATE_THERAPIST_RELAPSE_PLAN,
+  DELETE_THERAPIST_RELAPSE_PLAN,
 } from "../graphql/Relapse/graphql";
 
 jest.mock("next/router", () => ({
@@ -487,7 +488,7 @@ mocksData.push({
     query: UPDATE_THERAPIST_RELAPSE_PLAN,
     variables: {
       planId: "649019c0-52df-41a1-9dfb-10bf8cacf339",
-      updatePlan: { description: "No", name: "abcd" },
+      updatePlan: { description: "No", name: "NEw value to be" },
     },
   },
   result: {
@@ -514,6 +515,24 @@ mocksData.push({
     data: {
       updateTherapistSafetyPlanById: {
         result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_RELAPSE_PLAN,
+    variables: {
+      planId: "1beebad4-4e88-404a-ac8b-8797a300d250",
+      updatePlan: { status: 0 },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistRelapsePlan: {
+        share_status: 1,
+        __typename: "patientRelapsePlans",
       },
     },
   },
@@ -703,7 +722,7 @@ describe("Therapist patient safety plan", () => {
     expect(crossButton).toBeInTheDocument();
   });
 
-  it("should submit edit safety form", async () => {
+  it("should submit edit relapse form", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "4937a27dc00d48bf983fdcd4b0762ebd",
@@ -713,6 +732,10 @@ describe("Therapist patient safety plan", () => {
     const updatePlanButton = await screen.findByTestId("button-edit-icon_4");
     expect(updatePlanButton).toBeInTheDocument();
     fireEvent.click(updatePlanButton);
+    const planNameInput = await screen.findByTestId("planName");
+    fireEvent.change(planNameInput, {
+      target: { value: "NEw value to be" },
+    });
     const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
     const confirmButton = await screen.findByRole("button", {
@@ -739,5 +762,27 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(confirmButton);
     const okButton = await screen.findByTestId("SuccessOkBtn");
     expect(okButton).toBeInTheDocument();
+  });
+
+  it("should delete relapse plan", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    await waitFor(async () => {
+      const deletePlanButton = await screen.findByTestId(
+        "button-delete-icon_0"
+      );
+      expect(deletePlanButton).toBeInTheDocument();
+      fireEvent.click(deletePlanButton);
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+      expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
+    });
   });
 });
