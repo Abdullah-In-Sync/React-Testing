@@ -127,3 +127,12 @@ export const ADMIN_DELETE_RELAPSE_PLAN_QS = gql`
     }
   }
 `;
+
+export const GET_PATIENT_RELAPSE_PLANS = gql`
+  query getPatientRelapsePlans {
+    getPatientRelapsePlans {
+      _id
+      name
+    }
+  }
+`;
