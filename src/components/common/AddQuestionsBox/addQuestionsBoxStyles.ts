@@ -38,5 +38,22 @@ export const useStyles = makeStyles((theme: Theme) => ({
         },
       },
     },
+    "& .questionResponseSection": {
+      "& label p": {
+        marginBottom: 5,
+        fontWeight: 800,
+        color: theme.palette.primary.main,
+      },
+      "& .radioAnswerWrapper": {
+        "& .radios": {
+          border: "1px solid #ccc",
+          padding: "5px 15px",
+          borderRadius: 7,
+        }
+      },
+      "& .textAnswerWrapper": {
+
+      },
+    },
   },
 }));

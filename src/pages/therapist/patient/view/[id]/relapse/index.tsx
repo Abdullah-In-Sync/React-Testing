@@ -12,6 +12,9 @@ import {
   ADD_THERAPIST_RELAPSE_PLAN,
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   UPDATE_THERAPIST_RELAPSE_PLAN,
+  THERAPIST_VIEW_PATIENT_RELAPSE,
+  THERAPIST_CREATE_RELAPSE_QUES,
+  DELETE_THERAPIST_RELAPSE_PLAN_QUESTION,
 } from "../../../../../../graphql/Relapse/graphql";
 
 import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Relapse/types";
@@ -40,6 +43,12 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [addTherapistRelapsePlan] = useMutation(ADD_THERAPIST_RELAPSE_PLAN);
   const [updateTherapistRelapsePlan] = useMutation(
     UPDATE_THERAPIST_RELAPSE_PLAN
+  );
+  const [updateRelapseRelapsePlanQuestions] = useMutation(
+    THERAPIST_CREATE_RELAPSE_QUES
+  );
+  const [deleteRelapsePlan] = useMutation(
+    DELETE_THERAPIST_RELAPSE_PLAN_QUESTION
   );
   const modalRefAddPlan = useRef<ModalElement>(null);
 
@@ -343,6 +352,121 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     });
   };
 
+  const [
+    getRelapsePlanById,
+    {
+      data: { therapistViewPatientRelapse: planData = null } = {},
+      refetch: refetchRelapsePlan = null,
+    } = {},
+  ] = useLazyQuery(THERAPIST_VIEW_PATIENT_RELAPSE, {
+    fetchPolicy: "network-only",
+    onCompleted: () => {
+      /* istanbul ignore next */
+      setLoader(false);
+    },
+  });
+
+  const fetchPlanData = async (planId) => {
+    setLoader(true);
+    await getRelapsePlanById({
+      variables: { patientId: patId, planId },
+    });
+  };
+
+  const submitQuestionForm = async (formFields, doneCallback) => {
+    setLoader(true);
+
+    const { planId, questions } = formFields;
+    const modifyQuestions =
+      questions.length > 0 ? { questions: JSON.stringify(questions) } : {};
+    const variables = {
+      planId,
+      patientId: patId,
+    };
+
+    try {
+      await updateRelapseRelapsePlanQuestions({
+        variables: { ...variables, ...modifyQuestions },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            setSuccessModal({
+              description: "Your question has been updated successfully.",
+            });
+            refetchRelapsePlan();
+          }
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      doneCallback();
+    } finally {
+      setLoader(false);
+      doneCallback();
+    }
+  };
+
+  const handleSubmitQustionForm = (formFields, { setSubmitting }) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to update the question?",
+      },
+      storedFunction: (callback) => submitQuestionForm(formFields, callback),
+      setSubmitting: setSubmitting,
+    });
+  };
+
+  const callDeleteApi = async (
+    questionId,
+    successDeleteCallback,
+    doneCallback
+  ) => {
+    setLoader(true);
+    try {
+      await deleteRelapsePlan({
+        variables: { questionId },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            successDeleteCallback();
+            doneCallback();
+            setSuccessModal({
+              description: "Your question has been deleted successfully.",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      setLoader(false);
+      doneCallback();
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const handleDeleteQuestion = (v) => {
+    const { questionId, callback: successDeleteCallback } = v;
+    setIsConfirm({
+      ...isConfirm,
+      ...{
+        status: true,
+        confirmObject: {
+          description: "Are you sure you want to delete the question?",
+        },
+        storedFunction: (callback) => {
+          callDeleteApi(questionId, successDeleteCallback, callback);
+        },
+      },
+    });
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -359,10 +483,10 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             onPressCreatePlan={handleOpenCreatePlanModal}
             onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
-            // submitQustionForm={handleSubmitQustionForm}
-            // fetchPlanData={fetchPlanData}
-            // planData={planData}
-            // handleDeleteQuestion={handleDeleteQuestion}
+            submitQustionForm={handleSubmitQustionForm}
+            fetchPlanData={fetchPlanData}
+            planData={planData}
+            handleDeleteQuestion={handleDeleteQuestion}
             // onPressDeletePlan={onPressDeletePlan}
             modalRefAddPlan={modalRefAddPlan}
             onPressAddRelapsePlan={onPressAddRelapsePlan}

@@ -12,6 +12,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import ViewResponse from "./viewResponse/ViewResponse";
 import { useStyles } from "../therapistSafetyPlan/viewResponse/viewResponseStyles";
 
 const TherapistRelapseList = (safetyPlanList) => {
@@ -23,6 +24,7 @@ const TherapistRelapseList = (safetyPlanList) => {
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
+
   const handleAddIconButton = async (index, id) => {
     if (index !== accordionOpen) {
       await safetyPlanList.fetchPlanData(id);
@@ -145,18 +147,18 @@ const TherapistRelapseList = (safetyPlanList) => {
                     </AccordionSummary>
                     {accordionOpen === k && (
                       <AccordionDetails>
-                        {/* <ViewResponse
+                        <ViewResponse
                           isEditable={checkIsEditable}
                           submitQustionForm={safetyPlanList.submitQustionForm}
-                          safetyPlan={{
+                          planData={{
                             ...v,
-                            ...{ questions: safetyPlanList.planData },
+                            ...{ questions: safetyPlanList.planData, description:  v.description },
                           }}
                           handleDeleteQuestion={
                             safetyPlanList.handleDeleteQuestion
                           }
                           onPressCancel={() => setAccordionOpen(undefined)}
-                        /> */}
+                        />
                       </AccordionDetails>
                     )}
                   </Accordion>

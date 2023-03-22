@@ -36,7 +36,7 @@ const CourseComponent: React.FC<ViewProps> = ({
       />
       <CommonModal
         ref={modalRef}
-        headerTitleText={""}
+        headerTitleText
         maxWidth="xs"
         className={styles.modalC}
       >

@@ -42,7 +42,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
       >
         <DialogTitle>
           {headerTitleText}
-          <Box>
+          {headerTitleText&&<Box>
             <IconButton
               aria-label="close"
               data-testid="modalCrossIcon"
@@ -50,7 +50,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
             >
               <CloseIcon />
             </IconButton>
-          </Box>
+          </Box>}
         </DialogTitle>
         <DialogContent>{children}</DialogContent>
       </Dialog>
@@ -73,6 +73,6 @@ type CloseHandler = NonNullable<DialogProps["onClose"]>;
 export type ModalElement = { open: () => void; close: () => void };
 
 export type CommonModalProps = Omit<DialogProps, "open"> & {
-  headerTitleText?: string;
+  headerTitleText?: string | boolean;
   className?: string;
 };

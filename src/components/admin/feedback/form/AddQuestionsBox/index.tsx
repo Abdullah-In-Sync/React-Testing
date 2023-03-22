@@ -9,6 +9,7 @@ import DeleteSharp from "@mui/icons-material/DeleteSharp";
 import { useSnackbar } from "notistack";
 import AutoCompleteList from "./AutoCompleteList";
 import { FeedbackQuestion } from "../types";
+import { questionTypes } from "../../../../../lib/constants";
 
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
@@ -16,17 +17,6 @@ type Props = React.PropsWithChildren<{
   }>;
   handleDeleteQuestion: (v) => void;
 }>;
-
-const answer_types = [
-  {
-    id: "text",
-    value: "Text",
-  },
-  {
-    id: "list",
-    value: "List",
-  },
-];
 
 const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
   const styles = useStyles();
@@ -113,7 +103,7 @@ const AddQuestionsBox = ({ formikProps, handleDeleteQuestion }: Props, ref) => {
                   name={`questions.${i}.answer_type`}
                   showDefaultSelectOption={false}
                   label="Choose answer type"
-                  options={answer_types}
+                  options={questionTypes}
                   mappingKeys={["id", "value"]}
                   size="small"
                   extraProps={{ "data-testid": `questions.${i}.answer_type` }}

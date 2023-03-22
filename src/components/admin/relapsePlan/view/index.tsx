@@ -11,6 +11,7 @@ import { AdminViewRelapseById } from "../../../../graphql/Relapse/types";
 import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
 import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
 import { useStyles } from "./viewRelapsePlanStyles";
+import { planTypesName } from "../../../../lib/constants";
 
 interface ViewProps {
   data?: AdminViewRelapseById;
@@ -45,7 +46,7 @@ const AdminRelapseView: React.FC<ViewProps> = ({
           <label>
             <Typography variant="h6">Plan Type:</Typography>
           </label>
-          <Typography variant="h6">{plan_type}</Typography>
+          <Typography variant="h6">{planTypesName[plan_type]}</Typography>
         </Box>
       </Box>
     );

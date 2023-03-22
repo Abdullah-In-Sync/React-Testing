@@ -102,3 +102,48 @@ export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
     }
   }
 `;
+
+export const THERAPIST_VIEW_PATIENT_RELAPSE = gql`
+  query therapistViewPatientRelapse($planId: String!, $patientId: String!) {
+    therapistViewPatientRelapse(planId: $planId, patientId: $patientId) {
+      _id
+      patient_answer
+      created_date
+      patient_id
+      relapse_additional_details
+      plan_id
+      relapse_ques
+      relapse_ques_status
+      relapse_ques_type
+      relapse_ques_typeoption
+      updated_date
+    }
+  }
+`;
+
+export const THERAPIST_CREATE_RELAPSE_QUES = gql`
+  mutation therapistCreateRelapseQues(
+    $planId: String!
+    $patientId: String!
+    $questions: String!
+  ) {
+    therapistCreateRelapseQues(
+      planId: $planId
+      patientId: $patientId
+      questions: $questions
+    ) {
+      relapse_additional_details
+      relapse_ques_typeoption
+      patient_answer
+      updated_date
+    }
+  }
+`;
+
+export const DELETE_THERAPIST_RELAPSE_PLAN_QUESTION = gql`
+  mutation therapistDeleteRelapseQues($questionId: String!) {
+    therapistDeleteRelapseQues(questionId: $questionId) {
+      result
+    }
+  }
+`;
