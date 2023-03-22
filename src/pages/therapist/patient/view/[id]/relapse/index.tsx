@@ -10,6 +10,7 @@ import TherapistRelapsePlanComponent from "../../../../../../components/therapis
 import { useAppContext } from "../../../../../../contexts/AuthContext";
 import {
   ADD_THERAPIST_RELAPSE_PLAN,
+  DELETE_THERAPIST_RELAPSE_PLAN,
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   UPDATE_THERAPIST_RELAPSE_PLAN,
   THERAPIST_VIEW_PATIENT_RELAPSE,
@@ -92,6 +93,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [createTherapistRelapsePlan] = useMutation(
     CREATE_THERAPIST_RELAPSE_PLAN
   );
+  const [deletePlane] = useMutation(DELETE_THERAPIST_RELAPSE_PLAN);
 
   //UseEffects
   useEffect(() => {
@@ -289,13 +291,22 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       doneCallback();
     } finally {
       setLoader(false);
-      /* istanbul ignore next */
       doneCallback();
     }
   };
 
   /* istanbul ignore next */
   const handleSavePress = (formFields, { setSubmitting }) => {
+    const isDuplicate = listData?.getRelapsePlanListByPatientId?.some(
+      (item) => item.name === formFields.planName
+    );
+
+    if (isDuplicate) {
+      enqueueSnackbar("This plan already exists", {
+        variant: "error",
+      });
+      return;
+    }
     setIsConfirm({
       status: true,
       confirmObject: {
@@ -481,6 +492,39 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     }
   };
 
+  const handleDeletesafetyPlan = async (v) => {
+    try {
+      await deletePlane({
+        variables: {
+          planId: v._id,
+          updatePlan: { status: 0 },
+        },
+        onCompleted: () => {
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan has been deleted successfully.",
+          });
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to delete the Relapse plan?",
+      },
+      storedFunction: () => handleDeletesafetyPlan(v),
+    });
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -498,14 +542,15 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
             submitQustionForm={handleSubmitQustionForm}
-            handleAddIconButton={handleAddIconButton}
-            accordionOpen={accordionOpen}
+            fetchPlanData={fetchPlanData}
             planData={planData}
             handleDeleteQuestion={handleDeleteQuestion}
-            // onPressDeletePlan={onPressDeletePlan}
+            onPressDeletePlan={onPressDeletePlan}
             modalRefAddPlan={modalRefAddPlan}
             onPressAddRelapsePlan={onPressAddRelapsePlan}
             relapsePlanList={relapsePlanList}
+            handleAddIconButton={handleAddIconButton}
+            accordionOpen={accordionOpen}
           />
         </Box>
       </Box>

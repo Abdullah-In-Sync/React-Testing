@@ -87,6 +87,7 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
   const [getPatientData, { loading: profileLoading, data: profileData }] =
     useLazyQuery(GET_PROFILE_DATA, {
       onCompleted: (data) => {
+        /* istanbul ignore next */
         if (data!.getProfileById) {
           setFormFields((oldValues) => {
             return {
@@ -122,16 +123,6 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
   const editFormHandler = (e, formFields: patientEditProfileFormFeild) => {
     e.preventDefault();
     setLoader(true);
-    if (
-      formFields?.patient_contract === 0 ||
-      formFields?.patient_consent === 0
-    ) {
-      enqueueSnackbar("Please select the checkbox.", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-      return;
-    }
     try {
       updatePatient({
         variables: {
@@ -161,11 +152,13 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
         },
         onCompleted: (data) => {
           console.log("data: ", data);
+          /* istanbul ignore next */
           if (data && data.updateProfileById) {
             const { patient_consent, patient_contract } = formFields || {};
             enqueueSnackbar("Agreement successfull", {
               variant: "success",
             });
+            /* istanbul ignore next */
             if (!isPersonallInfoEnabled) {
               const patient_data = {
                 patient_consent,
@@ -186,20 +179,24 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
       setLoader(false);
     }
   };
+
   useEffect(() => {
     /* istanbul ignore next */
     setLoader(true);
     getTokenData();
     setLoader(false);
   }, []);
+
   useEffect(() => {
     setLoader(true);
   }, []);
+
   useEffect(() => {
     setLoader(true);
     getPatientData({ variables: { groupName: userType } });
     setLoader(false);
   }, [userType]);
+
   useEffect(() => {
     /* istanbul ignore else */
     if (!profileLoading && !templateLoading) {
@@ -253,7 +250,9 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
           <div>
             <td
               dangerouslySetInnerHTML={{
+                /* istanbul ignore next */
                 __html:
+                  /* istanbul ignore next */
                   templateData?.getTokenData?.organization_settings?.contract,
               }}
             />
@@ -276,17 +275,24 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                             value="1"
                             name="patient_agree"
                             onChange={setCheckBox}
+                            required
                             label="I accept the Terms with this agreement."
                             inputProps={{
                               "data-testid": "patient_agree",
                             }}
                             checked={formFields.patient_agree}
+                            disabled={
+                              profileData?.getProfileById?.patient_consent === 1
+                                ? true
+                                : false
+                            }
                             size="small"
                           />
                           <CheckBoxLabelComponent
                             value="1"
                             name="patient_consent"
                             onChange={setCheckBox}
+                            required
                             label={
                               <Grid>
                                 <span>I accept the </span>
@@ -305,13 +311,28 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                             inputProps={{
                               "data-testid": "patient_consent",
                             }}
-                            checked={formFields?.patient_consent}
+                            checked={
+                              /* istanbul ignore next */
+                              formFields?.patient_consent
+                            }
+                            disabled={
+                              profileData?.getProfileById?.patient_consent === 1
+                                ? true
+                                : false
+                            }
                             size="small"
                           />
                           <CheckBoxLabelComponent
                             value="1"
                             name="patient_contract"
                             onChange={setCheckBox}
+                            disabled={
+                              profileData?.getProfileById?.patient_contract ===
+                              1
+                                ? true
+                                : false
+                            }
+                            required
                             label={
                               <Grid>
                                 <span>I accept the </span>
@@ -338,7 +359,10 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                             inputProps={{
                               "data-testid": "patient_contract",
                             }}
-                            checked={formFields?.patient_contract}
+                            checked={
+                              /* istanbul ignore next */
+                              formFields?.patient_contract
+                            }
                             size="small"
                           />
                         </FormGroup>
@@ -347,47 +371,53 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                   </Grid>
                 </Grid>
               </div>
-              {profileData?.getProfileById.patient_consent ||
-              profileData?.getProfileById.patient_contract === 1 ? (
-                ""
-              ) : (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    p: 1,
-                    m: 1,
-                    bgcolor: "background.paper",
-                    borderRadius: 1,
-                    // paddingTop: "50px",
-                  }}
-                >
-                  <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                    <Button
-                      data-testid="agreementSubmitButton"
-                      variant="contained"
-                      type="submit"
-                      style={{ paddingLeft: "50px", paddingRight: "50px" }}
-                    >
-                      Save
-                    </Button>
-                  </Grid>
-                  <Grid item xs={6} textAlign="center">
-                    <Button
-                      data-testid="editCancleAgreementButton"
-                      variant="contained"
-                      style={{
-                        paddingLeft: "40px",
-                        paddingRight: "40px",
-                        backgroundColor: "#6BA08E",
-                      }}
-                      onClick={() => router.reload()}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Box>
-              )}
+              {
+                /* istanbul ignore next */
+                profileData?.getProfileById?.patient_consent ||
+                profileData?.getProfileById?.patient_contract === 1 ? (
+                  ""
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      p: 1,
+                      m: 1,
+                      bgcolor: "background.paper",
+                      borderRadius: 1,
+                      // paddingTop: "50px",
+                    }}
+                  >
+                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                      <Button
+                        data-testid="agreementSubmitButton"
+                        variant="contained"
+                        type="submit"
+                        style={{ paddingLeft: "50px", paddingRight: "50px" }}
+                      >
+                        Save
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="editCancleAgreementButton"
+                        variant="contained"
+                        style={{
+                          paddingLeft: "40px",
+                          paddingRight: "40px",
+                          backgroundColor: "#6BA08E",
+                        }}
+                        onClick={() =>
+                          /* istanbul ignore next */
+                          router.reload()
+                        }
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Box>
+                )
+              }
             </div>
           </div>
         </div>

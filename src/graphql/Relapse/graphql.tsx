@@ -103,6 +103,39 @@ export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
   }
 `;
 
+export const DELETE_THERAPIST_RELAPSE_PLAN = gql`
+  mutation ($planId: ID!, $updatePlan: UpdatePatientRelapsePlanInput!) {
+    updateTherapistRelapsePlan(planId: $planId, updatePlan: $updatePlan) {
+      share_status
+    }
+  }
+`;
+
+export const ADMIN_UPDATE_RELAPSE_BY_ID = gql`
+  mutation adminUpdateRelapseById(
+    $planId: ID = ""
+    $questions: String = ""
+    $updatePlan: UpdateRelapseInput = {}
+  ) {
+    adminUpdateRelapseById(
+      planId: $planId
+      questions: $questions
+      updatePlan: $updatePlan
+    ) {
+      _id
+    }
+  }
+`;
+
+export const ADMIN_DELETE_RELAPSE_PLAN_QS = gql`
+  mutation adminDeleteRelapsePlanQs($questionId: ID = "") {
+    adminDeleteRelapsePlanQs(questionId: $questionId) {
+      _id
+      status
+    }
+  }
+`;
+
 export const THERAPIST_VIEW_PATIENT_RELAPSE = gql`
   query therapistViewPatientRelapse($planId: String!, $patientId: String!) {
     therapistViewPatientRelapse(planId: $planId, patientId: $patientId) {
