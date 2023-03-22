@@ -76,7 +76,7 @@ const QuestionResponse: React.FC<ViewProps> = ({
             name={`questions.${i}.patientAnswer`}
             id={`therapy_response_${i + 1}`}
             placeholder={
-              (isEditView === i + 1) ? "Please type response here" : "No response"
+              isEditView === i + 1 ? "Please type response here" : "No response"
             }
             multiline
           />
