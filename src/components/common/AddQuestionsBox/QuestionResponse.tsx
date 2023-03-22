@@ -58,7 +58,7 @@ const QuestionResponse: React.FC<ViewProps> = ({
     return (
       <Box className="radioAnswerWrapper">
         <label>
-          <Typography>Patient Response:</Typography>
+          <Typography>Patient's Response</Typography>
         </label>
         <Box className="radios">{listAnswerType({ row: true, ...props })}</Box>
       </Box>
@@ -70,13 +70,13 @@ const QuestionResponse: React.FC<ViewProps> = ({
       <Box className="textAnswerWrapper">
         <Box>
           <label>
-            <Typography>Patient Response</Typography>
+            <Typography>Patient's Response</Typography>
           </label>
           <ResponseTextArea
             name={`questions.${i}.patientAnswer`}
             id={`therapy_response_${i + 1}`}
             placeholder={
-              isEditView !== i + i ? "Please type response here" : "No response"
+              (isEditView === i + 1) ? "Please type response here" : "No response"
             }
             multiline
           />
