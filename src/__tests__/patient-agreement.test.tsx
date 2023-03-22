@@ -182,9 +182,9 @@ describe("Agreement Page", () => {
     });
 
     await waitFor(async () => {
-      expect(
-        screen.getByText("Please select the checkbox.")
-      ).toBeInTheDocument();
+      await expect(
+        window.alert("Please tick this box if you want to proceed.")
+      );
     });
   });
 

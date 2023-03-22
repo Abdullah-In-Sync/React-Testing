@@ -36,11 +36,11 @@ const CcbtCourse: React.FC<ViewProps> = ({
     return (
       <ImageListItem>
         <Image
-          alt="My Help"
+          alt="Beating the blues"
           src={imageUrl}
           loading="lazy"
           height="80"
-          width="300"
+          width="275"
         />
       </ImageListItem>
     );
@@ -74,11 +74,11 @@ const CcbtCourse: React.FC<ViewProps> = ({
             </Typography>
           </Box>
           <Box className="thirdRow">
-            <ImageList cols={4}>
+            <ImageList cols={1}>
               {logoImage("/images/beatingthebyteslogo.png")}
-              {logoImage("/images/maximus_logo.png")}
+              {/* {logoImage("/images/maximus_logo.png")}
               {logoImage("/images/heath_solution.png")}
-              {logoImage("/images/logo.png")}
+              {logoImage("/images/logo.png")} */}
             </ImageList>
           </Box>
         </Box>
