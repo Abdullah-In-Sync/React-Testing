@@ -93,7 +93,7 @@ const AddQuestionsBox = (
   const onChangeQuestionType = (e, i, questionOption) => {
     const value = e.target.value;
     if ((value == "text" || value == "1") && questionOption)
-      setFieldValue(`questions.${i}.questionOption`, "");
+      setFieldValue(`questions.${i}.questionOption`, "", false);
     setFieldValue(`questions.${i}.questionType`, value);
   };
 
