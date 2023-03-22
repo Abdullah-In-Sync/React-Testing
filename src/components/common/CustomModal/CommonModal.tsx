@@ -42,15 +42,17 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
       >
         <DialogTitle>
           {headerTitleText}
-          {headerTitleText&&<Box>
-            <IconButton
-              aria-label="close"
-              data-testid="modalCrossIcon"
-              onClick={closeModal}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Box>}
+          {headerTitleText && (
+            <Box>
+              <IconButton
+                aria-label="close"
+                data-testid="modalCrossIcon"
+                onClick={closeModal}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          )}
         </DialogTitle>
         <DialogContent>{children}</DialogContent>
       </Dialog>

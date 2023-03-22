@@ -17,8 +17,8 @@ export const planTypes = [
 ];
 export const planTypesName = {
   fixed: "Fixed",
-  custom: "Customisable"
-}
+  custom: "Customisable",
+};
 
 export const defaultQuestionTypes = [
   {
@@ -41,5 +41,3 @@ export const questionTypes = [
     value: "List",
   },
 ];
-
-

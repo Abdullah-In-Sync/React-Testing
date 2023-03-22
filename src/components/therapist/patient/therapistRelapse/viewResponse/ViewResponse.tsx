@@ -63,7 +63,7 @@ const CreatePlanForm: React.FC<ViewProps> = ({
           description: item.relapse_additional_details,
           questionType: item.relapse_ques_type,
           questionOption: item.relapse_ques_typeoption,
-          patientAnswer: item.patient_answer
+          patientAnswer: item.patient_answer,
         }))
       : [];
 

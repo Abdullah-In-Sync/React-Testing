@@ -40,9 +40,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         textAlign: "right",
       },
       marginBottom: "0.5rem",
-      "& .MuiBox-root": {
-     
-      },
+      "& .MuiBox-root": {},
     },
     "& .inputDes": {
       "& label p": {
@@ -55,7 +53,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         borderRadius: 7,
         border: "1px solid",
         borderColor: "#ccc",
-      }
+      },
     },
   },
   resouceDetailBoxWrapper: {

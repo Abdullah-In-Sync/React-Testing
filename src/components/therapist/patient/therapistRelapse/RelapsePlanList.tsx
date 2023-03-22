@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShareIcon from "@mui/icons-material/Share";
@@ -12,28 +11,20 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import ViewResponse from "./viewResponse/ViewResponse";
 import { useStyles } from "../therapistSafetyPlan/viewResponse/viewResponseStyles";
+import ViewResponse from "./viewResponse/ViewResponse";
 
 const TherapistRelapseList = (safetyPlanList) => {
   console.log("second: safetyPlanList ", safetyPlanList);
+  const { accordionOpen, handleAddIconButton } = safetyPlanList || {};
   const styles = useStyles();
-  const [accordionOpen, setAccordionOpen] = useState();
+
   const isEditable = (v) => {
     const { plan_owner, plan_type } = v;
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
 
-  const handleAddIconButton = async (index, id) => {
-    if (index !== accordionOpen) {
-      await safetyPlanList.fetchPlanData(id);
-      setAccordionOpen(index);
-    } else {
-      /* istanbul ignore next */
-      setAccordionOpen(undefined);
-    }
-  };
   return (
     <>
       <Box
@@ -152,12 +143,15 @@ const TherapistRelapseList = (safetyPlanList) => {
                           submitQustionForm={safetyPlanList.submitQustionForm}
                           planData={{
                             ...v,
-                            ...{ questions: safetyPlanList.planData, description:  v.description },
+                            ...{
+                              questions: safetyPlanList.planData,
+                              description: v.description,
+                            },
                           }}
                           handleDeleteQuestion={
                             safetyPlanList.handleDeleteQuestion
                           }
-                          onPressCancel={() => setAccordionOpen(undefined)}
+                          onPressCancel={() => handleAddIconButton(undefined)}
                         />
                       </AccordionDetails>
                     )}

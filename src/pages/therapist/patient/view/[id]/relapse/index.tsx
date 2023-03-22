@@ -39,6 +39,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const {
     therapist_data: { org_id: orgId },
   } = user;
+  const [accordionOpen, setAccordionOpen] = useState();
   const { enqueueSnackbar } = useSnackbar();
   const [addTherapistRelapsePlan] = useMutation(ADD_THERAPIST_RELAPSE_PLAN);
   const [updateTherapistRelapsePlan] = useMutation(
@@ -265,6 +266,11 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
+            const {
+              therapistCreateRelapsePlan: { _id },
+            } = data;
+            refetch();
+            handleAddIconButton(0, _id);
             /* istanbul ignore next */
             setSuccessModal({
               description: "Your plan has been created successfully.",
@@ -311,7 +317,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     /* istanbul ignore next */
     setSuccessModal(false);
     /* istanbul ignore next */
-    refetch();
   };
   const handleAddPlan = async (planId) => {
     try {
@@ -467,6 +472,15 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     });
   };
 
+  const handleAddIconButton = async (index, id) => {
+    if (index !== accordionOpen) {
+      await fetchPlanData(id);
+      setAccordionOpen(index);
+    } else {
+      setAccordionOpen(undefined);
+    }
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -484,7 +498,8 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
             submitQustionForm={handleSubmitQustionForm}
-            fetchPlanData={fetchPlanData}
+            handleAddIconButton={handleAddIconButton}
+            accordionOpen={accordionOpen}
             planData={planData}
             handleDeleteQuestion={handleDeleteQuestion}
             // onPressDeletePlan={onPressDeletePlan}

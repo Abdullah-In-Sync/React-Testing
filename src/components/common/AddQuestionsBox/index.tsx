@@ -1,20 +1,17 @@
-import { Box, Card, CardContent, Fab, Stack, Typography } from "@mui/material";
+import DeleteSharp from "@mui/icons-material/DeleteSharp";
+import Edit from "@mui/icons-material/Edit";
+import Visibility from "@mui/icons-material/Visibility";
+import { Box, Card, CardContent, Fab, Stack } from "@mui/material";
 import { FieldArray, FormikProps } from "formik";
-import React, { forwardRef, useImperativeHandle, useState, useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { defaultQuestionTypes } from "../../../lib/constants";
+import { ModalElement } from "../../common/CustomModal/CommonModal";
+import ConfirmBoxModal from "../ConfirmBoxModal";
 import FormikSelectDropdown from "../FormikFields/FormikSelectDropdown";
 import FormikTextField from "../FormikFields/FormikTextField";
 import { useStyles } from "./addQuestionsBoxStyles";
-import DeleteSharp from "@mui/icons-material/DeleteSharp";
-import Edit from "@mui/icons-material/Edit";
-import Visibility from "@mui/icons-material/Visibility"
 import AutoCompleteList from "./AutoCompleteList";
-import QuestionResponse from "./QuestionResponse"
-import {
-  CommonModal,
-  ModalElement,
-} from "../../common/CustomModal/CommonModal";
-import ConfirmBoxModal from "../ConfirmBoxModal";
-import { defaultQuestionTypes } from "../../../lib/constants"
+import QuestionResponse from "./QuestionResponse";
 
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
@@ -30,8 +27,8 @@ type Props = React.PropsWithChildren<{
   handleDeleteQuestion: (v) => void;
   questionTypes?: Array<any>;
   handleEditQuestion?: boolean;
-  toggleEditView?:(v)=>void;
-  isEditView?: number
+  toggleEditView?: (v) => void;
+  isEditView?: number;
 }>;
 
 const AddQuestionsBox = (
@@ -42,7 +39,7 @@ const AddQuestionsBox = (
     questionTypes = defaultQuestionTypes,
     handleEditQuestion,
     isEditView,
-    toggleEditView
+    toggleEditView,
   }: Props,
   ref
 ) => {
@@ -100,8 +97,7 @@ const AddQuestionsBox = (
         data-testid={`iconEditButtonQuestion_${i}`}
         onClick={() => toggleEditView(i)}
       >
-        {isEditView !== i ? <Edit />:
-        <Visibility />}
+        {isEditView !== i ? <Edit /> : <Visibility />}
       </Fab>
     );
   };
@@ -114,67 +110,85 @@ const AddQuestionsBox = (
   };
 
   const isVisibleDescription = (isEdit, description) => {
-    if(isEdit && !description)
-      return false
-    else 
-      return true
-  }
-  
+    if (isEdit && !description) return false;
+    else return true;
+  };
+
   const questionBox = ({ i, item }) => {
     const { questions = [] } = values;
     const { questionType, questionOption, questionId } = questions[i] || {};
-    const isEdit = handleEditQuestion ? (isEditView !== i+1) && questionId : false;
+    const isEdit = handleEditQuestion
+      ? isEditView !== i + 1 && questionId
+      : false;
     return (
       <Card key={`questionCard_${i}`} className={`questionCard`}>
         <CardContent>
           {isEditable && (
             <Box className="deleteButtonWrapper">
-              {( handleEditQuestion && questionId) && editButton({ i: i+1 })}
+              {handleEditQuestion && questionId && editButton({ i: i + 1 })}
               {deleteButton({ i, questionId })}
             </Box>
           )}
-          <Box key={i} className={`questionBoxWrapper ${isEdit?"disbledFields":""}`}>
+          <Box
+            key={i}
+            className={`questionBoxWrapper ${isEdit ? "disbledFields" : ""}`}
+          >
             <Box>
               <FormikTextField
                 name={`questions.${i}.question`}
                 id={`questions.${i}.question`}
-              
                 fullWidth={true}
                 inputProps={{ "data-testid": `questions.${i}.question` }}
                 variant="outlined"
                 size="small"
-                {...isEdit ? {}: {label: "Type question here"}}
+                {...(isEdit ? {} : { label: "Type question here" })}
               />
             </Box>
             <Box>
-              {( isVisibleDescription(isEdit, questions[i].description) ) && <FormikTextField
-                name={`questions.${i}.description`}
-                id={`questions.${i}.description`}
-                label={`${isEdit?"Description" :"Type your question description here"}`}
-                fullWidth={true}
-                inputProps={{ "data-testid": `questions.${i}.description` }}
-                variant="outlined"
-                multiline
-                {...isEdit ? {}: {rows:5}}
-              />}
+              {isVisibleDescription(isEdit, questions[i].description) && (
+                <FormikTextField
+                  name={`questions.${i}.description`}
+                  id={`questions.${i}.description`}
+                  label={`${
+                    isEdit
+                      ? "Description"
+                      : "Type your question description here"
+                  }`}
+                  fullWidth={true}
+                  inputProps={{ "data-testid": `questions.${i}.description` }}
+                  variant="outlined"
+                  multiline
+                  {...(isEdit ? {} : { rows: 5 })}
+                />
+              )}
             </Box>
             <Box>
-            {( handleEditQuestion && questionId) && <QuestionResponse i={i} formikProps={formikProps} item={item} isEditView={isEditView}/>}
-             { !isEdit && <Box className="selectChooseAnswerTypeWrapper">
-                <FormikSelectDropdown
-                  onChange={(e) => onChangeQuestionType(e, i, questionOption)}
-                  id={`questions.${i}.questionType`}
-                  labelId={`questions.${i}.questionType`}
-                  name={`questions.${i}.questionType`}
-                  showDefaultSelectOption={false}
-                  label="Choose answer type"
-                  options={questionTypes}
-                  mappingKeys={["id", "value"]}
-                  size="small"
-                  extraProps={{ "data-testid": `questions.${i}.questionType` }}
+              {handleEditQuestion && questionId && (
+                <QuestionResponse
+                  i={i}
+                  formikProps={formikProps}
+                  item={item}
+                  isEditView={isEditView}
                 />
-              </Box>
-              }
+              )}
+              {!isEdit && (
+                <Box className="selectChooseAnswerTypeWrapper">
+                  <FormikSelectDropdown
+                    onChange={(e) => onChangeQuestionType(e, i, questionOption)}
+                    id={`questions.${i}.questionType`}
+                    labelId={`questions.${i}.questionType`}
+                    name={`questions.${i}.questionType`}
+                    showDefaultSelectOption={false}
+                    label="Choose answer type"
+                    options={questionTypes}
+                    mappingKeys={["id", "value"]}
+                    size="small"
+                    extraProps={{
+                      "data-testid": `questions.${i}.questionType`,
+                    }}
+                  />
+                </Box>
+              )}
 
               {!isEdit && (questionType == "list" || questionType == "2") && (
                 <Box className="autoCompleteWrapper">
@@ -198,7 +212,10 @@ const AddQuestionsBox = (
             })
           }
         </FieldArray>
-        <ConfirmBoxModal infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question" confirmModalRef={confirmModalRef}/>
+        <ConfirmBoxModal
+          infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question"
+          confirmModalRef={confirmModalRef}
+        />
       </Stack>
     );
   };

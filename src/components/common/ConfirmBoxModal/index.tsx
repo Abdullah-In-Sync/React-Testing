@@ -10,40 +10,38 @@ interface ViewProps {
   confirmModalRef?: any;
 }
 
-const ConfirmBoxModal: React.FC<ViewProps> = ({ handleOk, infoMessage, confirmModalRef }) => {
-    // const modalRef = useRef<ModalElement>(null);
-    const styles = useStyles();
+const ConfirmBoxModal: React.FC<ViewProps> = ({
+  handleOk,
+  infoMessage,
+  confirmModalRef,
+}) => {
+  // const modalRef = useRef<ModalElement>(null);
+  const styles = useStyles();
 
-    const closeModal = () => {
-      confirmModalRef.current?.close();
-    }
+  const closeModal = () => {
+    confirmModalRef.current?.close();
+  };
   return (
-    <CommonModal
-    ref={confirmModalRef}
-    maxWidth="xs"
-    className={styles.modalC}
-  >
-    <Stack className="confirmBox">
-      <Box className="confirmBoxFirst">
-        <ErrorOutlineIcon />
-      </Box>
-      <Box className="confirmBoxSecond">
-        <Typography>
-        {infoMessage}
-        </Typography>
-      </Box>
-      <Box className="confirmBoxThird">
-        <Button
-          variant="contained"
-          sx={{ marginLeft: "5px" }}
-          size="small"
-          data-testid="OkButton"
-          onClick={handleOk ? handleOk : closeModal}
-        >
-          Ok
-        </Button>
-      </Box>
-    </Stack>
+    <CommonModal ref={confirmModalRef} maxWidth="xs" className={styles.modalC}>
+      <Stack className="confirmBox">
+        <Box className="confirmBoxFirst">
+          <ErrorOutlineIcon />
+        </Box>
+        <Box className="confirmBoxSecond">
+          <Typography>{infoMessage}</Typography>
+        </Box>
+        <Box className="confirmBoxThird">
+          <Button
+            variant="contained"
+            sx={{ marginLeft: "5px" }}
+            size="small"
+            data-testid="OkButton"
+            onClick={handleOk ? handleOk : closeModal}
+          >
+            Ok
+          </Button>
+        </Box>
+      </Stack>
     </CommonModal>
   );
 };

@@ -49,11 +49,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
           border: "1px solid #ccc",
           padding: "5px 15px",
           borderRadius: 7,
-        }
+        },
       },
-      "& .textAnswerWrapper": {
-
-      },
+      "& .textAnswerWrapper": {},
     },
   },
 }));

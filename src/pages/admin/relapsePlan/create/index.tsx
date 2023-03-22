@@ -90,8 +90,6 @@ const CreateRelapsePlan: NextPage = () => {
       questions: JSON.stringify(questions),
     };
 
-    console.debug(variables, "variables");
-
     createDataRef.current = variables;
 
     try {

@@ -16,7 +16,6 @@ interface ViewProps {
   selectFilterOptions?: any;
 }
 
-
 const RelapseFilter: React.FC<ViewProps> = ({
   searchInputValue,
   handleClearSearchInput,
