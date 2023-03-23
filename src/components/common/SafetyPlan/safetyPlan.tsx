@@ -21,7 +21,7 @@ const SafetyPlan = (props: propTypes) => {
   const [modifiedSafetyPlan, setModifiedSafetyPlan] =
     useState<ViewSafetyPlanById>();
 
-  const [getPatientSafetyPlans, { data: safetyPlanData }] =
+  const [getPatientSafetyPlans, { data: safetyPlanData, loading }] =
     useLazyQuery<GetPatientSafetyPlansRes>(GET_PATIENT_SAFETY_PlANS, {
       onCompleted: () => {
         props.setLoader(false);
@@ -53,6 +53,9 @@ const SafetyPlan = (props: propTypes) => {
           )}
         />
       ))}
+      {!loading && !safetyPlanData?.getPatientSafetyPlans?.length && (
+        <Box marginTop={"10px"}>No data found</Box>
+      )}
       <SureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
         <Typography
           variant="subtitle1"

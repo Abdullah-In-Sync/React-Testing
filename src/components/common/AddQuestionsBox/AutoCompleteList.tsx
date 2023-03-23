@@ -48,7 +48,9 @@ const AutoCompleteList = ({ i, formikProps }: Props) => {
               error={
                 touched.questions && Boolean(questionsError[i]?.questionOption)
               }
-              helperText={questionsError[i]?.questionOption}
+              helperText={
+                touched.questions && questionsError[i]?.questionOption
+              }
             />
           )}
         />

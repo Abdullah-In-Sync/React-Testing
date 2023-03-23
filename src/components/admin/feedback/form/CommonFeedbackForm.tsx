@@ -204,13 +204,13 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
               </Box>
             </Box>
             <Box display={"flex"}>
-              {formikProps?.values?.userType === "therapist" && (
+              {formikProps?.values?.userType === "client" && (
                 <Box>
                   <FormControlLabel
                     disabled={values?._id != undefined}
+                    checked={formikProps.values?.visiBility == 1}
                     control={
                       <Switch
-                        value={formikProps.values?.visiBility}
                         onChange={(e, checked) =>
                           formikProps?.setFieldValue(
                             "visiBility",
@@ -219,7 +219,7 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
                         }
                       />
                     }
-                    label="Patient Response Visibility"
+                    label="Therapist View"
                   />
                   <ErrorMessage
                     name={"visiBility"}
