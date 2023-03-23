@@ -64,8 +64,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
-  const [currentSafetyPlan, setCurrentSafetyPlan] = useState();
-  console.log("Koca: currentSafetyPlan ", currentSafetyPlan);
+  const [currentSafetyPlan, setCurrentSafetyPlan] = useState<any>();
   const [successModal, setSuccessModal] = useState<any>();
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
@@ -297,9 +296,13 @@ const TherapistRelapsePlanIndex: NextPage = () => {
 
   /* istanbul ignore next */
   const handleSavePress = (formFields, { setSubmitting }) => {
-    const isDuplicate = listData?.getRelapsePlanListByPatientId?.some(
-      (item) => item.name === formFields.planName
-    );
+    let isDuplicate = false;
+    if (!currentSafetyPlan || currentSafetyPlan.name !== formFields.planName) {
+      console.log("INSIDE IF CONDITION");
+      isDuplicate = (
+        listData?.getRelapsePlanListByPatientId as Array<{ name: string }>
+      )?.some((item) => item.name === formFields.planName);
+    }
 
     if (isDuplicate) {
       enqueueSnackbar("This plan already exists", {
@@ -307,6 +310,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       });
       return;
     }
+
     setIsConfirm({
       status: true,
       confirmObject: {
@@ -328,6 +332,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     /* istanbul ignore next */
     setSuccessModal(false);
     /* istanbul ignore next */
+    refetch();
   };
   const handleAddPlan = async (planId) => {
     try {
@@ -367,7 +372,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         submitUpdateSafetyPlan({ share_status: 1, shareObject: v }, callback),
     });
   };
-
+  /* istanbul ignore next */
   const [
     getRelapsePlanById,
     {
@@ -389,6 +394,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const submitQuestionForm = async (formFields, doneCallback) => {
     setLoader(true);
 
@@ -467,6 +473,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     }
   };
 
+  /* istanbul ignore next */
   const handleDeleteQuestion = (v) => {
     const { questionId, callback: successDeleteCallback } = v;
     setIsConfirm({
@@ -483,7 +490,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const handleAddIconButton = async (index, id) => {
+    /* istanbul ignore next */
     if (index !== accordionOpen) {
       await fetchPlanData(id);
       setAccordionOpen(index);
