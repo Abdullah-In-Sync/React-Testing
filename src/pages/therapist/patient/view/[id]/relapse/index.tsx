@@ -500,7 +500,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
           updatePlan: { status: 0 },
         },
         onCompleted: () => {
+          refetch();
           setIsConfirm(false);
+
           /* istanbul ignore next */
           setSuccessModal({
             description: "Your plan has been deleted successfully.",
