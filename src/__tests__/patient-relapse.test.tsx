@@ -1,11 +1,11 @@
-import { screen, render, fireEvent, waitFor } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { GET_PATIENT_RELAPSE_DETAIL_BY_ID } from "../graphql/query/resource";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { UPDATE_RELAPSE_QUESTION_ANSWER_DATA } from "../graphql/mutation/patient";
 import Relapse from "../pages/patient/relapse";
+import { GET_PATIENT_RELAPSE_PLANS } from "../graphql/Relapse/graphql";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -17,35 +17,20 @@ const mocksData = [];
 
 mocksData.push({
   request: {
-    query: GET_PATIENT_RELAPSE_DETAIL_BY_ID,
+    query: GET_PATIENT_RELAPSE_PLANS,
   },
   result: {
     data: {
-      getPatientRelapseList: [
+      getPatientRelapsePlans: [
         {
-          _id: "3cf9e5e335674ebd855afff1067e7783",
-          created_date: "2022-12-27T06:55:25.000Z",
-          order_by: 2,
-          patient_id: "d8b2974bc1ce4540963851b118247a36",
-          relapse_additional_details: "more details now",
-          relapse_ans_detail: [
-            {
-              _id: "b2a5e0cdc2a846f3bc97eea684a1bff9",
-              created_date: "2022-12-27T06:55:25.000Z",
-              relapse_ans: "Give answer",
-              patient_id: "d8b2974bc1ce4540963851b118247a36",
-              relapse_ans_status: 1,
-              relapse_ques_id: "3cf9e5e335674ebd855afff1067e7783",
-              therapist_id: "686802e5123a482681a680a673ef7f53",
-              updated_date: "2022-12-27T06:56:02.000Z",
-              __typename: "RelapseAns",
-            },
-          ],
-          relapse_ques: "are you ok annie",
-          relapse_ques_status: "1",
-          updated_date: null,
-          user_type: "admin",
-          __typename: "MasterRelapseQuesPatient",
+          _id: "1beebad4-4e88-404a-ac8b-8797a300d250",
+          name: "test name",
+          __typename: "patientRelapsePlans",
+        },
+        {
+          _id: "58faebd8-921f-48eb-8b15-9715433a78aa",
+          name: "abcd2",
+          __typename: "patientRelapsePlans",
         },
       ],
     },
@@ -105,14 +90,14 @@ const sut = async () => {
   screen.queryByTestId("activity-indicator");
 };
 
-describe("Admin edit template page", () => {
+describe("Patient relapse page", () => {
   beforeEach(() => {
     (useRouter as jest.Mock).mockClear();
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
         _id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-        user_type: "admin",
+        user_type: "patient",
         parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
         perm_ids: "9,10,14,21,191,65,66",
         user_status: "1",
@@ -125,57 +110,8 @@ describe("Admin edit template page", () => {
   test("Renders relapse data", async () => {
     await sut();
     await waitFor(async () => {
-      expect(screen.getByTestId("relapse-form")).toBeInTheDocument();
-      expect(screen.getByTestId("relapse_ques")).toBeInTheDocument();
-
-      expect(screen.getByTestId("relapse_ans")).toBeInTheDocument();
-      expect(screen.getByTestId("relapse_ans")).toHaveValue("Give answer");
-    });
-  });
-
-  it("Update relapse data", async () => {
-    await sut();
-    await waitFor(async () => {
-      fireEvent.change(screen.queryByTestId("relapse_ans"), {
-        target: { value: "avbv" },
-      });
-
-      await waitFor(async () => {
-        fireEvent.submit(screen.queryByTestId("relapse-form"));
-      });
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-      expect(screen.getByTestId("relapseConfirmButton")).toBeVisible();
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("relapseConfirmButton"));
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Details Saved Successfully")
-        ).toBeInTheDocument();
-      });
-    });
-  });
-
-  it("Click on cancle button.", async () => {
-    await sut();
-    await waitFor(async () => {
-      fireEvent.change(screen.queryByTestId("relapse_ans"), {
-        target: { value: "avbv" },
-      });
-
-      await waitFor(async () => {
-        fireEvent.submit(screen.queryByTestId("relapse-form"));
-      });
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-      expect(screen.getByTestId("relapseCancelButton")).toBeVisible();
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("relapseCancelButton"));
-      });
-
-      expect(screen.getByTestId("relapse_ques")).toBeInTheDocument();
+      const tiles = await screen.findAllByTestId("list-tile");
+      expect(tiles.length).toEqual(2);
     });
   });
 });
