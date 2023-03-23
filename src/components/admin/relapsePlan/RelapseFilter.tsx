@@ -5,7 +5,7 @@ import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSel
 
 import { useRouter } from "next/router";
 import { useStyles } from "../safetyPlan/safetyPlanStyles";
-import { planTypes } from "../../../lib/constants";
+import { planTypesFilter as planTypes } from "../../../lib/constants";
 
 interface ViewProps {
   searchInputValue?: string;

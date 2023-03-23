@@ -3,7 +3,7 @@ import * as React from "react";
 import SearchInput from "../../../common/SearchInput";
 import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../../../admin/safetyPlan/safetyPlanStyles";
-import { planTypes } from "../../../../lib/constants";
+import { planTypesFilter as planTypes } from "../../../../lib/constants";
 
 interface ViewProps {
   searchInputValue?: string;

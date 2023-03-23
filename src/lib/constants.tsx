@@ -1,7 +1,7 @@
 export const IS_PATIENT = "patient";
 export const IS_ADMIN = "admin";
 export const IS_THERAPIST = "therapist";
-export const planTypes = [
+export const planTypesFilter = [
   {
     id: "all",
     value: "All",
@@ -15,6 +15,17 @@ export const planTypes = [
     value: "Customisable",
   },
 ];
+export const planTypes = [
+  {
+    id: "fixed",
+    value: "Fixed",
+  },
+  {
+    id: "custom",
+    value: "Customisable",
+  },
+];
+
 export const planTypesName = {
   fixed: "Fixed",
   custom: "Customisable",
