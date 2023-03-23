@@ -1,3 +1,4 @@
+import { Minimize } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -53,13 +54,23 @@ const TherapistRelapseList = (safetyPlanList) => {
                   >
                     <AccordionSummary
                       expandIcon={
-                        <Box>
-                          <AddIcon
-                            data-testid={`button-add-icon_${k}`}
-                            onClick={() => handleAddIconButton(k, v._id)}
-                            className="text-white"
-                          />
-                        </Box>
+                        accordionOpen !== k ? (
+                          <Box>
+                            <AddIcon
+                              data-testid={`button-add-icon_${k}`}
+                              onClick={() => handleAddIconButton(k, v._id)}
+                              className="text-white"
+                            />
+                          </Box>
+                        ) : (
+                          <Box>
+                            <Minimize
+                              data-testid={`button-minus-icon_${k}`}
+                              onClick={() => handleAddIconButton(k, v._id)}
+                              className="text-white"
+                            />
+                          </Box>
+                        )
                       }
                       aria-controls={panelName + "bh-content"}
                       id={panelName + "bh-header"}
