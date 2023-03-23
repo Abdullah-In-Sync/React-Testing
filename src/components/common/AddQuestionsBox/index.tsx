@@ -1,12 +1,17 @@
+import DeleteSharp from "@mui/icons-material/DeleteSharp";
+import Edit from "@mui/icons-material/Edit";
+import Visibility from "@mui/icons-material/Visibility";
 import { Box, Card, CardContent, Fab, Stack } from "@mui/material";
 import { FieldArray, FormikProps } from "formik";
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { defaultQuestionTypes } from "../../../lib/constants";
+import { ModalElement } from "../../common/CustomModal/CommonModal";
+import ConfirmBoxModal from "../ConfirmBoxModal";
 import FormikSelectDropdown from "../FormikFields/FormikSelectDropdown";
 import FormikTextField from "../FormikFields/FormikTextField";
 import { useStyles } from "./addQuestionsBoxStyles";
-import DeleteSharp from "@mui/icons-material/DeleteSharp";
-import { useSnackbar } from "notistack";
 import AutoCompleteList from "./AutoCompleteList";
+import QuestionResponse from "./QuestionResponse";
 
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
@@ -21,18 +26,10 @@ type Props = React.PropsWithChildren<{
   isEditable?: boolean;
   handleDeleteQuestion: (v) => void;
   questionTypes?: Array<any>;
+  handleEditQuestion?: boolean;
+  toggleEditView?: (v) => void;
+  isEditView?: number;
 }>;
-
-const defaultQuestionTypes = [
-  {
-    id: "1",
-    value: "Text",
-  },
-  {
-    id: "2",
-    value: "List",
-  },
-];
 
 const AddQuestionsBox = (
   {
@@ -40,22 +37,24 @@ const AddQuestionsBox = (
     isEditable,
     handleDeleteQuestion,
     questionTypes = defaultQuestionTypes,
+    handleEditQuestion,
+    isEditView,
+    toggleEditView,
   }: Props,
   ref
 ) => {
   const styles = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
+
   const { values, setFieldValue } = formikProps;
+  const confirmModalRef = useRef<ModalElement>(null);
   useImperativeHandle(ref, () => ({
     onAddQuesionBox() {
-      if (values.questions.length < 10) {
+      if (values.questions.length < 15) {
         const questions = [...values.questions];
         questions.push({ question: "", description: "", questionType: "" });
         setFieldValue("questions", questions);
       } else {
-        enqueueSnackbar("Adding more than 10 questions is not allowed.", {
-          variant: "info",
-        });
+        confirmModalRef.current?.open();
       }
     },
   }));
@@ -90,6 +89,19 @@ const AddQuestionsBox = (
     );
   };
 
+  const editButton = ({ i }) => {
+    return (
+      <Fab
+        key={`editIconButton_${i}`}
+        aria-label={`editIconButton_${i}`}
+        data-testid={`iconEditButtonQuestion_${i}`}
+        onClick={() => toggleEditView(i)}
+      >
+        {isEditView !== i ? <Edit /> : <Visibility />}
+      </Fab>
+    );
+  };
+
   const onChangeQuestionType = (e, i, questionOption) => {
     const value = e.target.value;
     if ((value == "text" || value == "1") && questionOption)
@@ -97,57 +109,88 @@ const AddQuestionsBox = (
     setFieldValue(`questions.${i}.questionType`, value);
   };
 
-  const questionBox = ({ i }) => {
+  const isVisibleDescription = (isEdit, description) => {
+    if (isEdit && !description) return false;
+    else return true;
+  };
+
+  const questionBox = ({ i, item }) => {
     const { questions = [] } = values;
     const { questionType, questionOption, questionId } = questions[i] || {};
+    const isEdit = handleEditQuestion
+      ? isEditView !== i + 1 && questionId
+      : false;
     return (
-      <Card key={`questionCard_${i}`} className="questionCard">
+      <Card key={`questionCard_${i}`} className={`questionCard`}>
         <CardContent>
           {isEditable && (
             <Box className="deleteButtonWrapper">
+              {handleEditQuestion && questionId && editButton({ i: i + 1 })}
               {deleteButton({ i, questionId })}
             </Box>
           )}
-          <Box key={i} className="questionBoxWrapper">
+          <Box
+            key={i}
+            className={`questionBoxWrapper ${isEdit ? "disbledFields" : ""}`}
+          >
             <Box>
               <FormikTextField
                 name={`questions.${i}.question`}
                 id={`questions.${i}.question`}
-                label="Type question here"
                 fullWidth={true}
                 inputProps={{ "data-testid": `questions.${i}.question` }}
                 variant="outlined"
                 size="small"
+                {...(isEdit ? {} : { label: "Type question here" })}
               />
             </Box>
             <Box>
-              <FormikTextField
-                name={`questions.${i}.description`}
-                id={`questions.${i}.description`}
-                label="Type your question description here"
-                fullWidth={true}
-                inputProps={{ "data-testid": `questions.${i}.description` }}
-                variant="outlined"
-                multiline
-                rows={5}
-              />
-            </Box>
-            <Box>
-              <Box className="selectChooseAnswerTypeWrapper">
-                <FormikSelectDropdown
-                  onChange={(e) => onChangeQuestionType(e, i, questionOption)}
-                  id={`questions.${i}.questionType`}
-                  labelId={`questions.${i}.questionType`}
-                  name={`questions.${i}.questionType`}
-                  showDefaultSelectOption={false}
-                  label="Choose answer type"
-                  options={questionTypes}
-                  mappingKeys={["id", "value"]}
-                  size="small"
-                  extraProps={{ "data-testid": `questions.${i}.questionType` }}
+              {isVisibleDescription(isEdit, questions[i].description) && (
+                <FormikTextField
+                  name={`questions.${i}.description`}
+                  id={`questions.${i}.description`}
+                  label={`${
+                    isEdit
+                      ? "Description"
+                      : "Type your question description here"
+                  }`}
+                  fullWidth={true}
+                  inputProps={{ "data-testid": `questions.${i}.description` }}
+                  variant="outlined"
+                  multiline
+                  {...(isEdit ? {} : { rows: 5 })}
                 />
-              </Box>
-              {(questionType == "list" || questionType == "2") && (
+              )}
+            </Box>
+            <Box>
+              {handleEditQuestion && questionId && (
+                <QuestionResponse
+                  i={i}
+                  formikProps={formikProps}
+                  item={item}
+                  isEditView={isEditView}
+                />
+              )}
+              {!isEdit && (
+                <Box className="selectChooseAnswerTypeWrapper">
+                  <FormikSelectDropdown
+                    onChange={(e) => onChangeQuestionType(e, i, questionOption)}
+                    id={`questions.${i}.questionType`}
+                    labelId={`questions.${i}.questionType`}
+                    name={`questions.${i}.questionType`}
+                    showDefaultSelectOption={false}
+                    label="Choose answer type"
+                    options={questionTypes}
+                    mappingKeys={["id", "value"]}
+                    size="small"
+                    extraProps={{
+                      "data-testid": `questions.${i}.questionType`,
+                    }}
+                  />
+                </Box>
+              )}
+
+              {!isEdit && (questionType == "list" || questionType == "2") && (
                 <Box className="autoCompleteWrapper">
                   <AutoCompleteList i={i} formikProps={formikProps} />
                 </Box>
@@ -165,10 +208,14 @@ const AddQuestionsBox = (
         <FieldArray name="questions">
           {() =>
             values.questions.map((item, i) => {
-              return questionBox({ i });
+              return questionBox({ i, item });
             })
           }
         </FieldArray>
+        <ConfirmBoxModal
+          infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question"
+          confirmModalRef={confirmModalRef}
+        />
       </Stack>
     );
   };

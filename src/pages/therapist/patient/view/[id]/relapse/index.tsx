@@ -10,8 +10,12 @@ import TherapistRelapsePlanComponent from "../../../../../../components/therapis
 import { useAppContext } from "../../../../../../contexts/AuthContext";
 import {
   ADD_THERAPIST_RELAPSE_PLAN,
+  DELETE_THERAPIST_RELAPSE_PLAN,
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   UPDATE_THERAPIST_RELAPSE_PLAN,
+  THERAPIST_VIEW_PATIENT_RELAPSE,
+  THERAPIST_CREATE_RELAPSE_QUES,
+  DELETE_THERAPIST_RELAPSE_PLAN_QUESTION,
 } from "../../../../../../graphql/Relapse/graphql";
 
 import { TherapistGetAdminRelapseListData } from "../../../../../../graphql/Relapse/types";
@@ -36,10 +40,17 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const {
     therapist_data: { org_id: orgId },
   } = user;
+  const [accordionOpen, setAccordionOpen] = useState();
   const { enqueueSnackbar } = useSnackbar();
   const [addTherapistRelapsePlan] = useMutation(ADD_THERAPIST_RELAPSE_PLAN);
   const [updateTherapistRelapsePlan] = useMutation(
     UPDATE_THERAPIST_RELAPSE_PLAN
+  );
+  const [updateRelapseRelapsePlanQuestions] = useMutation(
+    THERAPIST_CREATE_RELAPSE_QUES
+  );
+  const [deleteRelapsePlan] = useMutation(
+    DELETE_THERAPIST_RELAPSE_PLAN_QUESTION
   );
   const modalRefAddPlan = useRef<ModalElement>(null);
 
@@ -82,6 +93,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [createTherapistRelapsePlan] = useMutation(
     CREATE_THERAPIST_RELAPSE_PLAN
   );
+  const [deletePlane] = useMutation(DELETE_THERAPIST_RELAPSE_PLAN);
 
   //UseEffects
   useEffect(() => {
@@ -256,6 +268,12 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
+            const {
+              therapistCreateRelapsePlan: { _id },
+            } = data;
+            refetch();
+            handleAddIconButton(0, _id);
+            /* istanbul ignore next */
             setSuccessModal({
               description: "Your plan has been created successfully.",
             });
@@ -263,10 +281,13 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -307,7 +328,6 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     /* istanbul ignore next */
     setSuccessModal(false);
     /* istanbul ignore next */
-    refetch();
   };
   const handleAddPlan = async (planId) => {
     try {
@@ -348,6 +368,163 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     });
   };
 
+  const [
+    getRelapsePlanById,
+    {
+      data: { therapistViewPatientRelapse: planData = null } = {},
+      refetch: refetchRelapsePlan = null,
+    } = {},
+  ] = useLazyQuery(THERAPIST_VIEW_PATIENT_RELAPSE, {
+    fetchPolicy: "network-only",
+    onCompleted: () => {
+      /* istanbul ignore next */
+      setLoader(false);
+    },
+  });
+
+  const fetchPlanData = async (planId) => {
+    setLoader(true);
+    await getRelapsePlanById({
+      variables: { patientId: patId, planId },
+    });
+  };
+
+  const submitQuestionForm = async (formFields, doneCallback) => {
+    setLoader(true);
+
+    const { planId, questions } = formFields;
+    const modifyQuestions =
+      questions.length > 0 ? { questions: JSON.stringify(questions) } : {};
+    const variables = {
+      planId,
+      patientId: patId,
+    };
+
+    try {
+      await updateRelapseRelapsePlanQuestions({
+        variables: { ...variables, ...modifyQuestions },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            setSuccessModal({
+              description: "Your question has been updated successfully.",
+            });
+            refetchRelapsePlan();
+          }
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      doneCallback();
+    } finally {
+      setLoader(false);
+      doneCallback();
+    }
+  };
+
+  const handleSubmitQustionForm = (formFields, { setSubmitting }) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to update the question?",
+      },
+      storedFunction: (callback) => submitQuestionForm(formFields, callback),
+      setSubmitting: setSubmitting,
+    });
+  };
+
+  const callDeleteApi = async (
+    questionId,
+    successDeleteCallback,
+    doneCallback
+  ) => {
+    setLoader(true);
+    try {
+      await deleteRelapsePlan({
+        variables: { questionId },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          if (data) {
+            successDeleteCallback();
+            doneCallback();
+            setSuccessModal({
+              description: "Your question has been deleted successfully.",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      setLoader(false);
+      doneCallback();
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const handleDeleteQuestion = (v) => {
+    const { questionId, callback: successDeleteCallback } = v;
+    setIsConfirm({
+      ...isConfirm,
+      ...{
+        status: true,
+        confirmObject: {
+          description: "Are you sure you want to delete the question?",
+        },
+        storedFunction: (callback) => {
+          callDeleteApi(questionId, successDeleteCallback, callback);
+        },
+      },
+    });
+  };
+
+  const handleAddIconButton = async (index, id) => {
+    if (index !== accordionOpen) {
+      await fetchPlanData(id);
+      setAccordionOpen(index);
+    } else {
+      setAccordionOpen(undefined);
+    }
+  };
+
+  const handleDeletesafetyPlan = async (v) => {
+    try {
+      await deletePlane({
+        variables: {
+          planId: v._id,
+          updatePlan: { status: 0 },
+        },
+        onCompleted: () => {
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan has been deleted successfully.",
+          });
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const onPressDeletePlan = (v) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to delete the Relapse plan?",
+      },
+      storedFunction: () => handleDeletesafetyPlan(v),
+    });
+  };
+
   return (
     <>
       <Box style={{ paddingTop: "10px" }} data-testid="resource_name">
@@ -364,14 +541,16 @@ const TherapistRelapsePlanIndex: NextPage = () => {
             onPressCreatePlan={handleOpenCreatePlanModal}
             onPressSharePlan={onPressSharePlan}
             onPressAddPlan={handleOpenAddPlanModal}
-            // submitQustionForm={handleSubmitQustionForm}
-            // fetchPlanData={fetchPlanData}
-            // planData={planData}
-            // handleDeleteQuestion={handleDeleteQuestion}
-            // onPressDeletePlan={onPressDeletePlan}
+            submitQustionForm={handleSubmitQustionForm}
+            fetchPlanData={fetchPlanData}
+            planData={planData}
+            handleDeleteQuestion={handleDeleteQuestion}
+            onPressDeletePlan={onPressDeletePlan}
             modalRefAddPlan={modalRefAddPlan}
             onPressAddRelapsePlan={onPressAddRelapsePlan}
             relapsePlanList={relapsePlanList}
+            handleAddIconButton={handleAddIconButton}
+            accordionOpen={accordionOpen}
           />
         </Box>
       </Box>

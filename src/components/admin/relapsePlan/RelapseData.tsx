@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import RelapseActionsButtons from "./RelapseActionsButtons";
+import { planTypesName } from "../../../lib/constants";
 
 interface Column {
   id: string;
@@ -30,7 +31,7 @@ export const Relapsecolumns: readonly Column[] = [
     minWidth: 170,
     align: "center",
     format: (value) => {
-      return <Typography>{value.plan_type}</Typography>;
+      return <Typography>{planTypesName[value.plan_type]}</Typography>;
     },
   },
   {

@@ -5,6 +5,7 @@ import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSel
 
 import { useRouter } from "next/router";
 import { useStyles } from "../safetyPlan/safetyPlanStyles";
+import { planTypesFilter as planTypes } from "../../../lib/constants";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -14,21 +15,6 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
 }
-
-const planTypes = [
-  {
-    id: "all",
-    value: "All",
-  },
-  {
-    id: "fixed",
-    value: "Fixed",
-  },
-  {
-    id: "custom",
-    value: "Customizable",
-  },
-];
 
 const RelapseFilter: React.FC<ViewProps> = ({
   searchInputValue,
