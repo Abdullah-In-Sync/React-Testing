@@ -39,6 +39,8 @@ interface ViewProps {
     formikHelper: FormikProps<InitialFormValuesAddRelapse>
   ) => void;
   relapsePlanList?: TherapistGetAdminRelapseListEntity[];
+  accordionOpen?: number;
+  handleAddIconButton?: (index: number, id: string) => void;
 }
 
 const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
@@ -58,6 +60,8 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
   modalRefAddPlan,
   onPressAddRelapsePlan,
   relapsePlanList,
+  accordionOpen,
+  handleAddIconButton,
 }) => {
   return (
     <>
@@ -78,6 +82,8 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
         planData={planData}
         handleDeleteQuestion={handleDeleteQuestion}
         onPressDeletePlan={onPressDeletePlan}
+        accordionOpen={accordionOpen}
+        handleAddIconButton={handleAddIconButton}
       />
       <TherapistRelapseAddPlan
         relapsePlanList={relapsePlanList}

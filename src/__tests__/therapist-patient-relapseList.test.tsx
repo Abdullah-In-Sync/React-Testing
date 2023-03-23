@@ -20,6 +20,9 @@ import {
   THERAPIST_GET_ADMIN_RELAPSE_LIST,
   ADD_THERAPIST_RELAPSE_PLAN,
   UPDATE_THERAPIST_RELAPSE_PLAN,
+  THERAPIST_VIEW_PATIENT_RELAPSE,
+  THERAPIST_CREATE_RELAPSE_QUES,
+  DELETE_THERAPIST_RELAPSE_PLAN_QUESTION,
   DELETE_THERAPIST_RELAPSE_PLAN,
 } from "../graphql/Relapse/graphql";
 
@@ -46,10 +49,10 @@ mocksData.push({
         {
           _id: "1beebad4-4e88-404a-ac8b-8797a300d250",
           created_date: "2023-03-13T14:57:35.491Z",
-          description: "updated desc",
+          description: "Description text detail",
           name: "test name",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 2,
@@ -63,7 +66,7 @@ mocksData.push({
           description: "updated desc",
           name: "updated",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "admin",
+          plan_owner: "therapist",
           plan_type: "custom",
           questions: null,
           share_status: 0,
@@ -231,7 +234,7 @@ mocksData.push({
           description: "test",
           name: "Test relapse first",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 0,
@@ -245,7 +248,7 @@ mocksData.push({
           description: "updated desc",
           name: "updated plan",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 0,
@@ -259,7 +262,7 @@ mocksData.push({
           description: "descioprtionton again",
           name: "15thMarch Amar2",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "admin",
+          plan_owner: "therapist",
           plan_type: "custom",
           questions: null,
           share_status: 0,
@@ -287,10 +290,10 @@ mocksData.push({
         {
           _id: "1beebad4-4e88-404a-ac8b-8797a300d250",
           created_date: "2023-03-13T14:57:35.491Z",
-          description: "updated desc",
+          description: "Description text detail",
           name: "updated plan",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 0,
@@ -304,7 +307,7 @@ mocksData.push({
           description: "updated desc",
           name: "updated",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "abcd admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 0,
@@ -318,7 +321,7 @@ mocksData.push({
           description: "updated desc",
           name: "My Plan",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "abcd admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 0,
@@ -343,10 +346,10 @@ mocksData.push({
         {
           _id: "64104becceba90e4e27eea03",
           created_date: "2023-03-13T14:57:35.491Z",
-          description: "updated desc",
+          description: "Description text detail",
           name: "My Plan",
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_owner: "abcd admin",
+          plan_owner: "therapist",
           plan_type: "fixed",
           questions: null,
           share_status: 0,
@@ -520,6 +523,229 @@ mocksData.push({
   },
 });
 
+//form ******
+mocksData.push({
+  request: {
+    query: THERAPIST_VIEW_PATIENT_RELAPSE,
+    variables: {
+      patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
+      planId: "1beebad4-4e88-404a-ac8b-8797a300d250",
+    },
+  },
+  result: {
+    data: {
+      therapistViewPatientRelapse: [
+        {
+          _id: "8c7b42ab-069f-43bc-96bf-79e17c360c5c",
+          patient_answer: null,
+          created_date: "2023-03-21T06:44:26.774Z",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          relapse_additional_details: "new",
+          plan_id: "1beebad4-4e88-404a-ac8b-8797a300d250",
+          relapse_ques: "test as test",
+          relapse_ques_status: "1",
+          relapse_ques_type: "1",
+          relapse_ques_typeoption: "",
+          updated_date: "2023-03-21T17:23:04.413Z",
+          __typename: "patientRelapsePlanQuestions",
+        },
+        {
+          _id: "4cde17b8-715f-4a6c-8c6d-26ed5eaa402b",
+          patient_answer: null,
+          created_date: "2023-03-21T08:48:04.326Z",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          relapse_additional_details: "test",
+          plan_id: "1beebad4-4e88-404a-ac8b-8797a300d250",
+          relapse_ques: "there",
+          relapse_ques_status: "1",
+          relapse_ques_type: "2",
+          relapse_ques_typeoption: "option1,option3,option5",
+          updated_date: "2023-03-21T17:23:04.451Z",
+          __typename: "patientRelapsePlanQuestions",
+        },
+        {
+          _id: "938e2819-616f-4f34-86d7-053ef9cc4183",
+          patient_answer: null,
+          created_date: "2023-03-21T17:07:38.657Z",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          relapse_additional_details: "",
+          plan_id: "1beebad4-4e88-404a-ac8b-8797a300d250",
+          relapse_ques: "3rd",
+          relapse_ques_status: "1",
+          relapse_ques_type: "1",
+          relapse_ques_typeoption: "",
+          updated_date: "2023-03-21T17:23:04.461Z",
+          __typename: "patientRelapsePlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_RELAPSE_LIST_FOR_THERAPIST,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+    },
+  },
+  result: {
+    data: {
+      getRelapsePlanListByPatientId: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+          created_date: "2023-03-13T14:57:35.491Z",
+          description: "Description text detail",
+          name: "test name",
+          patient_id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+          plan_owner: "therapist",
+          plan_type: "fixed",
+          questions: null,
+          share_status: 2,
+          therapist_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          updated_date: "2023-03-16T08:11:54.110Z",
+          __typename: "patientRelapsePlans",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_VIEW_PATIENT_RELAPSE,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+    },
+  },
+  result: {
+    data: {
+      therapistViewPatientRelapse: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: null,
+          patient_id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+          plan_id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+          relapse_additional_details: "Description text detail",
+          relapse_ques: "Question text",
+          relapse_ques_status: "1",
+          relapse_ques_type: "2",
+          relapse_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_VIEW_PATIENT_RELAPSE,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-patient-answer",
+    },
+  },
+  result: {
+    data: {
+      therapistViewPatientRelapse: [
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-patient-answer",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: "optionset2",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          relapse_additional_details: "Description text detail",
+          relapse_ques: "Question text",
+          relapse_ques_status: "1",
+          relapse_ques_type: "2",
+          relapse_ques_typeoption: "option1,optionset2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_VIEW_PATIENT_RELAPSE,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+    },
+  },
+  result: {
+    data: {
+      therapistViewPatientRelapse: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: null,
+          patient_id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+          plan_id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
+          relapse_additional_details: "Description text detail",
+          relapse_ques: "Question text",
+          relapse_ques_status: "1",
+          relapse_ques_type: "2",
+          relapse_ques_typeoption: "option1,option2",
+          updated_date: "2023-02-03T05:22:57.823Z",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_CREATE_RELAPSE_QUES,
+    variables: {
+      planId: "1beebad4-4e88-404a-ac8b-8797a300d250",
+      patientId: "4937a27dc00d48bf983fdcd4b0762ebd",
+      questions: `[{"questionId":"8c7b42ab-069f-43bc-96bf-79e17c360c5c","question":"test as test","description":"new","questionType":"1","questionOption":"","patientAnswer":null},{"questionId":"4cde17b8-715f-4a6c-8c6d-26ed5eaa402b","question":"there","description":"test","questionType":"2","questionOption":"option1,option3,option5","patientAnswer":null},{"questionId":"938e2819-616f-4f34-86d7-053ef9cc4183","question":"3rd","description":"","questionType":"1","questionOption":"","patientAnswer":null}]`,
+    },
+  },
+  result: {
+    data: {
+      therapistCreateRelapseQues: [
+        {
+          relapse_additional_details: "test",
+          relapse_ques_typeoption: "",
+          patient_answer: "some",
+          updated_date: "2023-03-22T11:31:16.001Z",
+          __typename: "patientRelapsePlanQuestions",
+        },
+        {
+          relapse_additional_details: "",
+          relapse_ques_typeoption: "",
+          patient_answer: "",
+          updated_date: "2023-03-22T11:31:16.051Z",
+          __typename: "patientRelapsePlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_RELAPSE_PLAN_QUESTION,
+    variables: {
+      questionId: "8c7b42ab-069f-43bc-96bf-79e17c360c5c",
+    },
+  },
+  result: {
+    data: {
+      deleteTherapistSafetyPlanQs: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 mocksData.push({
   request: {
     query: DELETE_THERAPIST_RELAPSE_PLAN,
@@ -575,7 +801,7 @@ const submitForm = async () => {
   fireEvent.click(submitFormButton);
 };
 
-describe("Therapist patient safety plan", () => {
+describe("Therapist patient relapse plan", () => {
   beforeEach(() => {
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
@@ -595,7 +821,7 @@ describe("Therapist patient safety plan", () => {
     });
   });
 
-  it("should render safety plan data", async () => {
+  it("should render relapse plan data", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "4937a27dc00d48bf983fdcd4b0762ebd",
@@ -784,5 +1010,162 @@ describe("Therapist patient safety plan", () => {
       });
       expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
     });
+  });
+
+  it("should update plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const editButton = await screen.findByTestId("iconEditButtonQuestion_1");
+    fireEvent.click(editButton);
+    const saveButton = await screen.findByTestId(
+      "submitForm_1beebad4-4e88-404a-ac8b-8797a300d250"
+    );
+    fireEvent.click(saveButton);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
+    expect(okButton).not.toBeInTheDocument();
+  });
+
+  it("should update plan fail", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+    const editButton = await screen.findByTestId("iconEditButtonQuestion_1");
+    fireEvent.click(editButton);
+    const saveButton = await screen.findByTestId(
+      "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail"
+    );
+
+    fireEvent.click(saveButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const serverError = await screen.findByText(
+      /Server error please try later./i
+    );
+    expect(serverError).toBeInTheDocument();
+  });
+
+  it("should cancel plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const editButton = await screen.findByTestId("iconEditButtonQuestion_1");
+    fireEvent.click(editButton);
+
+    const descTextDetail = await screen.findByText(/Description text detail/i);
+    expect(descTextDetail).toBeInTheDocument();
+    const cancelButton = await screen.findByTestId(
+      "cancelForm_1beebad4-4e88-404a-ac8b-8797a300d250"
+    );
+
+    fireEvent.click(cancelButton);
+    expect(cancelButton).not.toBeInTheDocument();
+  });
+
+  it("should delete relapse plan question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
+
+    fireEvent.click(deleteButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("SuccessOkBtn");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
+    expect(okButton).not.toBeInTheDocument();
+  });
+
+  it("should add and delete new safety plan question", async () => {
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    expect(addButton).toBeInTheDocument();
+    fireEvent.click(addButton);
+
+    const addQuestionButton = await screen.findByTestId(
+      "addNewQuestion_1beebad4-4e88-404a-ac8b-8797a300d250"
+    );
+
+    fireEvent.click(addQuestionButton);
+
+    const firstQuestionInput = screen.getByTestId("questions.3.question");
+    fireEvent.change(firstQuestionInput, {
+      target: { value: "text" },
+    });
+
+    const firstDescriptionInput = screen.getByTestId("questions.3.description");
+    fireEvent.change(firstDescriptionInput, {
+      target: { value: "text des" },
+    });
+
+    const firstQuestionTypeSelect = screen.getByTestId(
+      "questions.3.questionType"
+    );
+    fireEvent.click(firstQuestionTypeSelect);
+    expect(firstQuestionTypeSelect).toBeInTheDocument();
+
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_3");
+
+    fireEvent.click(deleteButton);
+    expect(firstQuestionTypeSelect).not.toBeInTheDocument();
+  });
+
+  it("should delete relapse plan question fail", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+    const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
+    fireEvent.click(deleteButton);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    const serverError = await screen.findByText(
+      /Server error please try later./i
+    );
+    expect(serverError).toBeInTheDocument();
   });
 });

@@ -3,6 +3,7 @@ import * as React from "react";
 import SearchInput from "../../../common/SearchInput";
 import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../../../admin/safetyPlan/safetyPlanStyles";
+import { planTypesFilter as planTypes } from "../../../../lib/constants";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -13,21 +14,6 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
 }
-
-const planTypes = [
-  {
-    id: "all",
-    value: "All",
-  },
-  {
-    id: "fixed",
-    value: "Fixed",
-  },
-  {
-    id: "custom",
-    value: "Customisable",
-  },
-];
 
 const FilterForRelapseTherapist: React.FC<ViewProps> = ({
   searchInputValue,

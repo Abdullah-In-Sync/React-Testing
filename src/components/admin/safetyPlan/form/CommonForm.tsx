@@ -7,6 +7,7 @@ import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropd
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { useStyles } from "./createSafetyPlanStyles";
 import { InitialFormValues } from "./types";
+import { planTypes } from "../../../../lib/constants";
 
 interface ViewProps {
   organizationList?: Array<{
@@ -16,17 +17,6 @@ interface ViewProps {
   onPressCancel?: () => void;
   handleDeleteQuestion?: (v) => void;
 }
-
-const planTypes = [
-  {
-    id: "fixed",
-    value: "Fixed",
-  },
-  {
-    id: "custom",
-    value: "Customizable",
-  },
-];
 
 const CommonForm: React.FC<ViewProps> = ({
   organizationList = [],
