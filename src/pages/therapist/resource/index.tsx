@@ -21,7 +21,7 @@ import {
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
-import { IconButton, Box, Button, useTheme } from "@mui/material";
+import { IconButton, Box, Button, useTheme, Typography } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -45,6 +45,7 @@ import { Transition } from "../../../components/common/Transition";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import Tooltip from "@mui/material/Tooltip";
 
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
@@ -275,12 +276,13 @@ const Resource: NextPage = () => {
       visible: true,
       render: (_, value) => (
         <NextLink href={"/therapist/resource/" + value?._id} passHref>
-          <Button
-            variant="contained"
-            sx={{ width: "100%", height: "40px", textTransform: "none" }}
-          >
-            {value?.resource_name?.substring(0, 40)}
-          </Button>
+          <Tooltip title={`${value?.resource_name}`} placement="top">
+            <Button variant="contained" fullWidth>
+              <Typography className="ellipsisTextWrapper" textAlign={"center"}>
+                {`${value?.resource_name}`}
+              </Typography>
+            </Button>
+          </Tooltip>
         </NextLink>
       ),
     },
