@@ -105,7 +105,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     getRelapsePlanList,
     { loading: loadingRelapsePlanList, data: listData, refetch },
   ] = useLazyQuery(GET_RELAPSE_LIST_FOR_THERAPIST, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
@@ -380,7 +380,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       refetch: refetchRelapsePlan = null,
     } = {},
   ] = useLazyQuery(THERAPIST_VIEW_PATIENT_RELAPSE, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
@@ -509,7 +509,11 @@ const TherapistRelapsePlanIndex: NextPage = () => {
           updatePlan: { status: 0 },
         },
         onCompleted: () => {
+          refetch();
+          if (accordionOpen || accordionOpen === 0) setAccordionOpen(undefined);
+
           setIsConfirm(false);
+
           /* istanbul ignore next */
           setSuccessModal({
             description: "Your plan has been deleted successfully.",
