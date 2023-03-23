@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useMutation } from "@apollo/client";
 import Layout from "../../../components/layout";
 import { useSnackbar } from "notistack";
-import RelapsePlan from "../../../components/common/SafetyPlan/safetyPlan";
+import SafetyPlan from "../../../components/common/SafetyPlan/safetyPlan";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import { ViewSafetyPlanById } from "../../../graphql/SafetyPlan/types";
@@ -48,7 +48,7 @@ const PatientById: NextPage = () => {
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Safety Plan" />
-        <RelapsePlan setLoader={setLoader} onSubmit={handleEdit} />
+        <SafetyPlan setLoader={setLoader} onSubmit={handleEdit} />
         <SuccessModal
           isOpen={showSuccessModal}
           title={"Successful"}
