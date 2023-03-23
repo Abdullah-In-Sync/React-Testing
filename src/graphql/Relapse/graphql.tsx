@@ -180,3 +180,12 @@ export const DELETE_THERAPIST_RELAPSE_PLAN_QUESTION = gql`
     }
   }
 `;
+
+export const GET_PATIENT_RELAPSE_PLANS = gql`
+  query getPatientRelapsePlans {
+    getPatientRelapsePlans {
+      _id
+      name
+    }
+  }
+`;

@@ -93,3 +93,21 @@ export interface AdminDeleteRelapsePlanQs {
   _id: string;
   status: number;
 }
+
+export interface GetPatientRelapsePlansRes {
+  getPatientRelapsePlans: GetPatientRelapsePlan[];
+}
+
+export interface GetPatientRelapsePlan {
+  _id: string;
+  created_date: string;
+  description: string;
+  name: string;
+  patient_id: string;
+  plan_owner: string;
+  plan_type: string;
+  questions: any[];
+  share_status: number;
+  therapist_id: string;
+  updated_date: string;
+}

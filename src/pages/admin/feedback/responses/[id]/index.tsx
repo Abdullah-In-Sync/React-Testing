@@ -99,10 +99,10 @@ const AdminFeedbackResponses = () => {
     getTemplateData({
       variables: {
         feedbackId: id,
-        endDate: selectedStartDate,
+        endDate: selectedEndDate,
         limit: selectedRows,
         pageNo: selectedPage + 1,
-        startDate: selectedEndDate,
+        startDate: selectedStartDate,
       },
     });
 
