@@ -15,7 +15,6 @@ import { useStyles } from "../therapistSafetyPlan/viewResponse/viewResponseStyle
 import ViewResponse from "./viewResponse/ViewResponse";
 
 const TherapistRelapseList = (safetyPlanList) => {
-  console.log("second: safetyPlanList ", safetyPlanList);
   const { accordionOpen, handleAddIconButton } = safetyPlanList || {};
   const styles = useStyles();
 
