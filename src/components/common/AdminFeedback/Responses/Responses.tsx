@@ -16,7 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TableGenerator from "../../TableGenerator";
 import NextLink from "next/link";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import DownloadIcon from "@mui/icons-material/Download";
 import moment from "moment";
 /* istanbul ignore next */
