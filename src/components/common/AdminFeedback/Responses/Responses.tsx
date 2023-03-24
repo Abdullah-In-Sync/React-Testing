@@ -111,12 +111,9 @@ export default function FeedbackResponses(props: propTypes) {
   ];
 
   const [startDatevalue, setStartDateValue] = React.useState<Dayjs | null>(
-    dayjs("2014-08-18")
+    null
   );
-
-  const [endDatevalue, setEndDateValue] = React.useState<Dayjs | null>(
-    dayjs("2014-08-18")
-  );
+  const [endDatevalue, setEndDateValue] = React.useState<Dayjs | null>(null);
 
   /* istanbul ignore next */
   const handleChangeStartDate = (newValue: Dayjs | null) => {
