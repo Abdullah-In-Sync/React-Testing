@@ -106,8 +106,44 @@ export interface GetPatientRelapsePlan {
   patient_id: string;
   plan_owner: string;
   plan_type: string;
-  questions: any[];
+  // questions: any[];
+  questions?: RelapseQuestionsEntity[] | null;
   share_status: number;
   therapist_id: string;
   updated_date: string;
+  org_id: string;
+  status: number;
+  user_id: string;
+  __typename: string;
+  user_type: string;
+}
+
+export interface ViewRelapsePlanById {
+  _id: string;
+  created_date: string;
+  description: string;
+  name: string;
+  org_id: string;
+  plan_type: string;
+  questions?: RelapseQuestionsEntity[] | null;
+  status: number;
+  updated_date: string;
+  user_id: string;
+  user_type: string;
+  __typename: string;
+}
+export interface RelapseQuestionsEntity {
+  _id: string;
+  created_date: string;
+  plan_id: string;
+  patient_answer?: string;
+  relapse_additional_details: string;
+  relapse_ques: string;
+  relapse_ques_status: number;
+  relapse_ques_type: string;
+  relapse_ques_typeoption?: string;
+  updated_date: string;
+  user_id: string;
+  user_type: string;
+  __typename: string;
 }
