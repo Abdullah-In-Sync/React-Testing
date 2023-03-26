@@ -1,0 +1,105 @@
+import { Box, Button, Typography } from "@mui/material";
+import { FormikProps } from "formik";
+import { FC, useState } from "react";
+import InfoIcon from "@mui/icons-material/Info";
+import { useStyles } from "../SafetyPlan/safetyPlanStyle";
+import { RelapsePlanAnswer } from "./relapsePlanAnswer";
+import {
+  GetPatientRelapsePlan,
+  RelapseQuestionsEntity,
+} from "../../../graphql/Relapse/types";
+import RelapseInfoModal from "./infoModle";
+
+type Props = {
+  question: RelapseQuestionsEntity;
+  index: number;
+  formikHelper: FormikProps<GetPatientRelapsePlan>;
+};
+
+export const RelapsePlanQuestion: FC<Props> = ({
+  question,
+  index,
+  formikHelper,
+}) => {
+  const [isInfoModle, setIsInfoModle] = useState<boolean>(false);
+  const classis = useStyles();
+  return (
+    <Box marginTop={"24px"}>
+      <Typography className={classis.headingText}>
+        {index + 1}. {question?.relapse_ques}
+        {question?.relapse_additional_details && (
+          <InfoIcon
+            data-testid={`button-edit-icon_${question?.relapse_additional_details}`}
+            style={{ fontSize: "20px", marginRight: "10px" }}
+            onClick={() => setIsInfoModle(true)}
+          />
+        )}
+      </Typography>
+
+      <Box marginTop={"10px"}>
+        <RelapsePlanAnswer
+          question={question}
+          index={index}
+          formikHelper={formikHelper}
+        />
+      </Box>
+
+      <RelapseInfoModal
+        modalOpen={isInfoModle}
+        setModalOpen={setIsInfoModle}
+        shouldCloseOnBackgroundClick={false}
+        modalView={"appointment"}
+      >
+        <Box style={{ padding: "15px" }}>
+          <Box
+            sx={{
+              border: "1px solid #cecece",
+              display: "grid",
+              padding: "10px",
+            }}
+            borderRadius={"4px"}
+          >
+            <Typography> {question?.relapse_ques}</Typography>
+          </Box>
+          <Box style={{ paddingTop: "20px" }}>
+            <Box
+              sx={{
+                border: "1px solid #cecece",
+                display: "grid",
+                padding: "10px",
+              }}
+              borderRadius={"4px"}
+            >
+              <Typography style={{ paddingRight: "10px" }}>
+                {" "}
+                {question?.relapse_additional_details}
+              </Typography>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              p: 1,
+              m: 1,
+              bgcolor: "background.paper",
+            }}
+          >
+            <Button
+              data-testid="editTemplateCancelButton"
+              variant="contained"
+              style={{
+                paddingLeft: "50px",
+                paddingRight: "50px",
+                textTransform: "none",
+              }}
+              onClick={() => setIsInfoModle(false)}
+            >
+              Ok
+            </Button>
+          </Box>
+        </Box>
+      </RelapseInfoModal>
+    </Box>
+  );
+};
