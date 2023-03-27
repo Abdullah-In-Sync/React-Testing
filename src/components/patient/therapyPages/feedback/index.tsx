@@ -298,835 +298,829 @@ const Feedback: NextPage = () => {
   };
   return (
     <>
-        <Loader visible={loader} />
-        <ContentHeader title="Feedback" />
-        <Box style={{ textAlign: "right" }} data-testid="123456">
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
-            <Select
-              labelId="lblSelectTherapy"
-              id="selectTherapy"
-              inputProps={{ "data-testid": "selectTherapy" }}
-              value={therapy}
-              autoWidth
-              label="Select Therapy"
-              onChange={onTherapyChange}
-            >
-              {patientTherapryData &&
-                patientTherapryData.getPatientTherapy &&
-                patientTherapryData.getPatientTherapy.map((v: any) => {
-                  return (
-                    <MenuItem key={"therapy" + v._id} value={v._id}>
-                      {v.therapy_detail.therapy_name}/
-                      {v.disorder_detail.disorder_name}/
-                      {v.model_detail.model_name}
-                    </MenuItem>
-                  );
-                })}
-            </Select>
-          </FormControl>
-          <Snackbar
-            key="1"
-            open={open}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-            autoHideDuration={6000}
+      <Loader visible={loader} />
+      <ContentHeader title="Feedback" />
+      <Box style={{ textAlign: "right" }} data-testid="123456">
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
+          <Select
+            labelId="lblSelectTherapy"
+            id="selectTherapy"
+            inputProps={{ "data-testid": "selectTherapy" }}
+            value={therapy}
+            autoWidth
+            label="Select Therapy"
+            onChange={onTherapyChange}
+          >
+            {patientTherapryData &&
+              patientTherapryData.getPatientTherapy &&
+              patientTherapryData.getPatientTherapy.map((v: any) => {
+                return (
+                  <MenuItem key={"therapy" + v._id} value={v._id}>
+                    {v.therapy_detail.therapy_name}/
+                    {v.disorder_detail.disorder_name}/
+                    {v.model_detail.model_name}
+                  </MenuItem>
+                );
+              })}
+          </Select>
+        </FormControl>
+        <Snackbar
+          key="1"
+          open={open}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert
             onClose={handleClose}
+            severity="success"
+            sx={{ width: "100%" }}
           >
-            <Alert
-              onClose={handleClose}
-              severity="success"
-              sx={{ width: "100%" }}
-            >
-              Feedback submitted successfully
-            </Alert>
-          </Snackbar>
-          <Snackbar
-            key="2"
-            open={erroropen}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-            autoHideDuration={6000}
+            Feedback submitted successfully
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          key="2"
+          open={erroropen}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          autoHideDuration={6000}
+          onClose={handleCloseError}
+        >
+          <Alert
             onClose={handleCloseError}
+            severity="error"
+            sx={{ width: "100%" }}
           >
-            <Alert
-              onClose={handleCloseError}
-              severity="error"
-              sx={{ width: "100%" }}
-            >
-              Field can not be left blank
-            </Alert>
-          </Snackbar>
-        </Box>
-        <Box>
-          <Accordion
-            sx={{ marginTop: "4px", borderRadius: "4px" }}
-            style={{ borderRadius: "14px" }}
-            expanded={sessionPanelExpanded === "before_therapy"}
-            onChange={handleSessionPanelChange("before_therapy")}
-            onClick={() => {
-              /* istanbul ignore next */
-              setSessionNo("before_therapy");
+            Field can not be left blank
+          </Alert>
+        </Snackbar>
+      </Box>
+      <Box>
+        <Accordion
+          sx={{ marginTop: "4px", borderRadius: "4px" }}
+          style={{ borderRadius: "14px" }}
+          expanded={sessionPanelExpanded === "before_therapy"}
+          onChange={handleSessionPanelChange("before_therapy")}
+          onClick={() => {
+            /* istanbul ignore next */
+            setSessionNo("before_therapy");
+          }}
+          data-testid="SessionPanelItem"
+        >
+          <AccordionSummary
+            expandIcon={
+              sessionPanelExpanded === "before_therapy" ? (
+                <RemoveIcon className="text-white" />
+              ) : (
+                <AddIcon className="text-white" />
+              )
+            }
+            style={{ minHeight: "0px", height: "45px" }}
+            aria-controls={"before_therapy" + "bh-content"}
+            id={"before_therapy" + "bh-header"}
+            data-testid={"before_therapy" + "bh-header"}
+            sx={{
+              backgroundColor: "#6ba08e",
+              borderRadius: "12px",
+              border: "none",
+              marginTop: "10px",
             }}
-            data-testid="SessionPanelItem"
           >
-            <AccordionSummary
-              expandIcon={
-                sessionPanelExpanded === "before_therapy" ? (
-                  <RemoveIcon className="text-white" />
-                ) : (
-                  <AddIcon className="text-white" />
+            <Typography
+              className="text-white"
+              sx={{ width: "33%", flexShrink: 0 }}
+            >
+              Before Therapy
+            </Typography>
+          </AccordionSummary>
+          {loading ? (
+            <Box
+              height={"100px"}
+              display="flex"
+              justifyContent={"center"}
+              alignItems="center"
+            >
+              <CircularProgress size={30} />
+            </Box>
+          ) : (
+            <AccordionDetails>
+              {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                ?.description &&
+                !questionnaireList.length && <Box>Data Not Available</Box>}
+
+              {patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                ?.description && (
+                <>
+                  <Box>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Instruction
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      border: "1px solid #cecece",
+                      display: "grid",
+                    }}
+                    p={2}
+                    marginBottom={"25px"}
+                    borderRadius={"7px"}
+                  >
+                    <Grid>
+                      <Typography>
+                        {
+                          patientNewFeedbackData?.patientGetFeedbackList[0]
+                            ?.description
+                        }
+                      </Typography>
+                    </Grid>
+                  </Box>
+                </>
+              )}
+
+              {questionnaireList?.map((fv, fk) => {
+                /* istanbul ignore next */
+                return (
+                  <Typography
+                    key={fk + ""}
+                    gutterBottom
+                    component="div"
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <Typography
+                      sx={{
+                        backgroundColor: "#dadada52 !important",
+                        border: "1px solid #dadada52 !important",
+                        color: "#3f4040b0 !important",
+                        fontSize: "15px",
+                        paddingLeft: "5px",
+                        fontWeight: "1px !important",
+                      }}
+                    >
+                      {fk + 1}. {fv.question}
+                    </Typography>
+
+                    <Typography>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        defaultValue={
+                          fv?.answer?.answer ? fv.answer.answer : ""
+                        }
+                      >
+                        {(fv.answer_type == "2" || fv.answer_type == "list") &&
+                          fv.answer_options &&
+                          fv.answer_options.split(",").map((av, ak) => {
+                            /* istanbul ignore next */
+                            const j = ak + 1;
+                            /* istanbul ignore next */
+                            return (
+                              <FormControlLabel
+                                key={j}
+                                disabled={fv?.answer?.answer ? true : false}
+                                sx={{
+                                  fontSize: "15px",
+                                  color: "#3f4040b0 !important",
+                                  marginRight: "300px",
+                                }}
+                                name={"question_" + fv._id}
+                                onChange={(e) =>
+                                  /* istanbul ignore next */
+                                  handleOptionChange(e)
+                                }
+                                value={av}
+                                control={<Radio size="small" />}
+                                label={av}
+                              />
+                            );
+                          })}
+
+                        {(fv.answer_type == "1" ||
+                          fv.answer_type == "text") && (
+                          <Grid
+                            container
+                            spacing={2}
+                            marginBottom={0}
+                            paddingTop={1}
+                          >
+                            <Grid item xs={12}>
+                              <TextFieldComponent
+                                name={fv.answer_type + "_" + fv._id}
+                                id={fv.answer_type + "_" + fv._id}
+                                value={
+                                  fv?.answer?.answer
+                                    ? fv.answer.answer
+                                    : formValues.length
+                                    ? formValues.answer
+                                    : ""
+                                }
+                                multiline
+                                rows={4}
+                                onChange={(e) =>
+                                  /* istanbul ignore next */
+                                  handleTextChange(fv._id, e.target.value)
+                                }
+                                fullWidth={true}
+                                className="form-control-bg"
+                              />
+                            </Grid>
+                          </Grid>
+                        )}
+                      </RadioGroup>
+                    </Typography>
+                  </Typography>
+                );
+              })}
+              {
+                /* istanbul ignore next */
+                questionnaireList?.length > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      p: 1,
+                      m: 1,
+                      bgcolor: "background.paper",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                      <Button
+                        type="submit"
+                        style={{
+                          backgroundColor: questionnaireList?.some(
+                            (item) => item.answer !== null
+                          )
+                            ? "#a9a9a9a9"
+                            : "#6EC9DB",
+                          textTransform: "none",
+                        }}
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={(e) => {
+                          /* istanbul ignore next */
+                          handleSubmit(e);
+                        }}
+                        variant="contained"
+                        data-testid="submitFeedback1"
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="cancleFeedbackButton"
+                        variant="contained"
+                        style={{
+                          backgroundColor: questionnaireList?.some(
+                            (item) => item.answer !== null
+                          )
+                            ? "#a9a9a9a9"
+                            : "#6BA08E",
+                          textTransform: "none",
+                        }}
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={
+                          /* istanbul ignore next */
+                          cancleFunction
+                        }
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Box>
                 )
               }
-              style={{ minHeight: "0px", height: "45px" }}
-              aria-controls={"before_therapy" + "bh-content"}
-              id={"before_therapy" + "bh-header"}
-              data-testid={"before_therapy" + "bh-header"}
-              sx={{
-                backgroundColor: "#6ba08e",
-                borderRadius: "12px",
-                border: "none",
-                marginTop: "10px",
-              }}
-            >
-              <Typography
-                className="text-white"
-                sx={{ width: "33%", flexShrink: 0 }}
-              >
-                Before Therapy
-              </Typography>
-            </AccordionSummary>
-            {loading ? (
-              <Box
-                height={"100px"}
-                display="flex"
-                justifyContent={"center"}
-                alignItems="center"
-              >
-                <CircularProgress size={30} />
-              </Box>
-            ) : (
-              <AccordionDetails>
-                {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                  ?.description &&
-                  !questionnaireList.length && <Box>Data Not Available</Box>}
-
-                {patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                  ?.description && (
-                  <>
-                    <Box>
-                      <Typography style={{ fontWeight: "bold" }}>
-                        Instruction
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        flexGrow: 1,
-                        border: "1px solid #cecece",
-                        display: "grid",
-                      }}
-                      p={2}
-                      marginBottom={"25px"}
-                      borderRadius={"7px"}
-                    >
-                      <Grid>
-                        <Typography>
-                          {
-                            patientNewFeedbackData?.patientGetFeedbackList[0]
-                              ?.description
-                          }
-                        </Typography>
-                      </Grid>
-                    </Box>
-                  </>
-                )}
-
-                {questionnaireList?.map((fv, fk) => {
-                  /* istanbul ignore next */
-                  return (
-                    <Typography
-                      key={fk + ""}
-                      gutterBottom
-                      component="div"
-                      style={{ marginBottom: "10px" }}
-                    >
-                      <Typography
-                        sx={{
-                          backgroundColor: "#dadada52 !important",
-                          border: "1px solid #dadada52 !important",
-                          color: "#3f4040b0 !important",
-                          fontSize: "15px",
-                          paddingLeft: "5px",
-                          fontWeight: "1px !important",
-                        }}
-                      >
-                        {fk + 1}. {fv.question}
-                      </Typography>
-
-                      <Typography>
-                        <RadioGroup
-                          row
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name="row-radio-buttons-group"
-                          defaultValue={
-                            fv?.answer?.answer ? fv.answer.answer : ""
-                          }
-                        >
-                          {(fv.answer_type == "2" ||
-                            fv.answer_type == "list") &&
-                            fv.answer_options &&
-                            fv.answer_options.split(",").map((av, ak) => {
-                              /* istanbul ignore next */
-                              const j = ak + 1;
-                              /* istanbul ignore next */
-                              return (
-                                <FormControlLabel
-                                  key={j}
-                                  disabled={fv?.answer?.answer ? true : false}
-                                  sx={{
-                                    fontSize: "15px",
-                                    color: "#3f4040b0 !important",
-                                    marginRight: "300px",
-                                  }}
-                                  name={"question_" + fv._id}
-                                  onChange={(e) =>
-                                    /* istanbul ignore next */
-                                    handleOptionChange(e)
-                                  }
-                                  value={av}
-                                  control={<Radio size="small" />}
-                                  label={av}
-                                />
-                              );
-                            })}
-
-                          {(fv.answer_type == "1" ||
-                            fv.answer_type == "text") && (
-                            <Grid
-                              container
-                              spacing={2}
-                              marginBottom={0}
-                              paddingTop={1}
-                            >
-                              <Grid item xs={12}>
-                                <TextFieldComponent
-                                  name={fv.answer_type + "_" + fv._id}
-                                  id={fv.answer_type + "_" + fv._id}
-                                  value={
-                                    fv?.answer?.answer
-                                      ? fv.answer.answer
-                                      : formValues.length
-                                      ? formValues.answer
-                                      : ""
-                                  }
-                                  multiline
-                                  rows={4}
-                                  onChange={(e) =>
-                                    /* istanbul ignore next */
-                                    handleTextChange(fv._id, e.target.value)
-                                  }
-                                  fullWidth={true}
-                                  className="form-control-bg"
-                                />
-                              </Grid>
-                            </Grid>
-                          )}
-                        </RadioGroup>
-                      </Typography>
-                    </Typography>
-                  );
-                })}
-                {
-                  /* istanbul ignore next */
-                  questionnaireList?.length > 0 && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        p: 1,
-                        m: 1,
-                        bgcolor: "background.paper",
-                        borderRadius: 1,
-                      }}
-                    >
-                      <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                        <Button
-                          type="submit"
-                          style={{
-                            backgroundColor: questionnaireList?.some(
-                              (item) => item.answer !== null
-                            )
-                              ? "#a9a9a9a9"
-                              : "#6EC9DB",
-                            textTransform: "none",
-                          }}
-                          disabled={questionnaireList?.some(
-                            (item) => item.answer !== null
-                          )}
-                          onClick={(e) => {
-                            /* istanbul ignore next */
-                            handleSubmit(e);
-                          }}
-                          variant="contained"
-                          data-testid="submitFeedback1"
-                        >
-                          Submit
-                        </Button>
-                      </Grid>
-                      <Grid item xs={6} textAlign="center">
-                        <Button
-                          data-testid="cancleFeedbackButton"
-                          variant="contained"
-                          style={{
-                            backgroundColor: questionnaireList?.some(
-                              (item) => item.answer !== null
-                            )
-                              ? "#a9a9a9a9"
-                              : "#6BA08E",
-                            textTransform: "none",
-                          }}
-                          disabled={questionnaireList?.some(
-                            (item) => item.answer !== null
-                          )}
-                          onClick={
-                            /* istanbul ignore next */
-                            cancleFunction
-                          }
-                        >
-                          Cancel
-                        </Button>
-                      </Grid>
-                    </Box>
-                  )
-                }
-              </AccordionDetails>
-            )}
-          </Accordion>
-        </Box>
-        <Box>
-          {patientSessionData?.getPatientSessionList != null &&
+            </AccordionDetails>
+          )}
+        </Accordion>
+      </Box>
+      <Box>
+        {patientSessionData?.getPatientSessionList != null &&
+          /* istanbul ignore next */
+          patientSessionData?.getPatientSessionList.map((v, k) => {
             /* istanbul ignore next */
-            patientSessionData?.getPatientSessionList.map((v, k) => {
-              /* istanbul ignore next */
-              const p = k + 1;
-              const panelName = "panel" + p;
-              return (
-                <form
-                  key={p}
-                  onSubmit={(values) => {
-                    handleSubmit(values);
+            const p = k + 1;
+            const panelName = "panel" + p;
+            return (
+              <form
+                key={p}
+                onSubmit={(values) => {
+                  handleSubmit(values);
+                }}
+                data-testid="feedbackForm"
+              >
+                <Accordion
+                  sx={{ marginTop: "4px", borderRadius: "4px" }}
+                  style={{ borderRadius: "14px" }}
+                  expanded={sessionPanelExpanded === panelName}
+                  onChange={handleSessionPanelChange(panelName)}
+                  onClick={() => {
+                    setSessionNo(p);
                   }}
-                  data-testid="feedbackForm"
+                  key={v._id}
+                  data-testid="SessionPanelItem"
                 >
-                  <Accordion
-                    sx={{ marginTop: "4px", borderRadius: "4px" }}
-                    style={{ borderRadius: "14px" }}
-                    expanded={sessionPanelExpanded === panelName}
-                    onChange={handleSessionPanelChange(panelName)}
-                    onClick={() => {
-                      setSessionNo(p);
+                  <AccordionSummary
+                    expandIcon={
+                      sessionPanelExpanded === panelName ? (
+                        <RemoveIcon className="text-white" />
+                      ) : (
+                        <AddIcon className="text-white" />
+                      )
+                    }
+                    style={{ minHeight: "0px", height: "45px" }}
+                    aria-controls={panelName + "bh-content"}
+                    id={panelName + "bh-header"}
+                    data-testid={panelName + "bh-header"}
+                    sx={{
+                      backgroundColor: "#6ba08e",
+                      borderRadius: "12px",
+                      border: "none",
+                      marginTop: "10px",
                     }}
-                    key={v._id}
-                    data-testid="SessionPanelItem"
                   >
-                    <AccordionSummary
-                      expandIcon={
-                        sessionPanelExpanded === panelName ? (
-                          <RemoveIcon className="text-white" />
-                        ) : (
-                          <AddIcon className="text-white" />
+                    <Typography
+                      className="text-white"
+                      sx={{ width: "33%", flexShrink: 0 }}
+                    >
+                      Session {p}
+                    </Typography>
+                  </AccordionSummary>
+                  {loading ? (
+                    <Box
+                      height={"100px"}
+                      display="flex"
+                      justifyContent={"center"}
+                      alignItems="center"
+                    >
+                      <CircularProgress size={30} />
+                    </Box>
+                  ) : (
+                    <AccordionDetails>
+                      {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                        ?.description &&
+                        !questionnaireList.length && (
+                          <Box>Data Not Available</Box>
+                        )}
+
+                      {patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                        ?.description && (
+                        <>
+                          <Box>
+                            <Typography style={{ fontWeight: "bold" }}>
+                              Instruction
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              flexGrow: 1,
+                              border: "1px solid #cecece",
+                              display: "grid",
+                            }}
+                            p={2}
+                            marginBottom={"25px"}
+                            borderRadius={"7px"}
+                            data-testid="instruction"
+                          >
+                            <Grid>
+                              <Typography>
+                                {patientNewFeedbackData &&
+                                  /* istanbul ignore next */
+                                  patientNewFeedbackData
+                                    ?.patientGetFeedbackList[0]?.description}
+                              </Typography>
+                            </Grid>
+                          </Box>
+                        </>
+                      )}
+                      {questionnaireList?.map((fv, fk) => {
+                        /* istanbul ignore next */
+                        return (
+                          <Typography
+                            key={fk + ""}
+                            gutterBottom
+                            component="div"
+                            style={{ marginBottom: "10px" }}
+                          >
+                            <Typography
+                              sx={{
+                                backgroundColor: "#dadada52 !important",
+                                border: "1px solid #dadada52 !important",
+                                color: "#3f4040b0 !important",
+                                fontSize: "15px",
+                                paddingLeft: "5px",
+                                fontWeight: "1px !important",
+                              }}
+                            >
+                              {fk + 1}. {fv.question}
+                            </Typography>
+
+                            <Typography>
+                              <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                defaultValue={
+                                  fv?.answer?.answer ? fv.answer.answer : ""
+                                }
+                              >
+                                {fv.answer_type === "2" ||
+                                fv.answer_type === "list" ? (
+                                  <Grid container spacing={1}>
+                                    {fv.answer_options
+                                      .split(",")
+                                      .map((av, ak) => (
+                                        <Grid
+                                          item
+                                          xs={10}
+                                          sm={5}
+                                          md={av.length > 15 ? 6 : 2}
+                                          key={ak}
+                                        >
+                                          <FormControlLabel
+                                            disabled={!!fv.answer?.answer}
+                                            sx={{
+                                              fontSize: "15px",
+                                              color: "#3f4040b0 !important",
+                                            }}
+                                            name={"question_" + fv._id}
+                                            onChange={(e) =>
+                                              handleOptionChange(e)
+                                            }
+                                            value={av}
+                                            control={<Radio size="small" />}
+                                            label={av}
+                                          />
+                                        </Grid>
+                                      ))}
+                                  </Grid>
+                                ) : null}
+
+                                {(fv.answer_type == "1" ||
+                                  fv.answer_type == "text") && (
+                                  <Grid
+                                    container
+                                    spacing={2}
+                                    marginBottom={0}
+                                    paddingTop={1}
+                                  >
+                                    <Grid item xs={12}>
+                                      <TextFieldComponent
+                                        name={fv.answer_type + "_" + fv._id}
+                                        id={fv.answer_type + "_" + fv._id}
+                                        value={
+                                          fv?.answer?.answer
+                                            ? fv.answer.answer
+                                            : formValues.length
+                                            ? formValues.answer
+                                            : ""
+                                        }
+                                        multiline
+                                        rows={4}
+                                        onChange={(e) =>
+                                          /* istanbul ignore next */
+                                          handleTextChange(
+                                            fv._id,
+                                            e.target.value
+                                          )
+                                        }
+                                        inputProps={{
+                                          "data-testid": "texBoxInput",
+                                        }}
+                                        fullWidth={true}
+                                        className="form-control-bg"
+                                      />
+                                    </Grid>
+                                  </Grid>
+                                )}
+                              </RadioGroup>
+                            </Typography>
+                          </Typography>
+                        );
+                      })}
+
+                      {
+                        /* istanbul ignore next */
+                        questionnaireList?.length > 0 && (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              p: 1,
+                              m: 1,
+                              bgcolor: "background.paper",
+                              borderRadius: 1,
+                            }}
+                          >
+                            <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                              <Button
+                                type="submit"
+                                style={{
+                                  backgroundColor: questionnaireList?.some(
+                                    (item) => item.answer !== null
+                                  )
+                                    ? "#a9a9a9a9"
+                                    : "#6EC9DB",
+                                  textTransform: "none",
+                                }}
+                                disabled={questionnaireList?.some(
+                                  (item) => item.answer !== null
+                                )}
+                                onClick={(e) => {
+                                  /* istanbul ignore next */
+                                  handleSubmit(e);
+                                }}
+                                variant="contained"
+                                data-testid="submitFeedback1"
+                              >
+                                Submit
+                              </Button>
+                            </Grid>
+                            <Grid item xs={6} textAlign="center">
+                              <Button
+                                data-testid="cancleFeedbackButton1"
+                                variant="contained"
+                                style={{
+                                  backgroundColor: questionnaireList?.some(
+                                    (item) => item.answer !== null
+                                  )
+                                    ? "#a9a9a9a9"
+                                    : "#6BA08E",
+                                  textTransform: "none",
+                                }}
+                                disabled={questionnaireList?.some(
+                                  (item) => item.answer !== null
+                                )}
+                                onClick={
+                                  /* istanbul ignore next */
+                                  cancleFunction
+                                }
+                              >
+                                Cancel
+                              </Button>
+                            </Grid>
+                          </Box>
                         )
                       }
-                      style={{ minHeight: "0px", height: "45px" }}
-                      aria-controls={panelName + "bh-content"}
-                      id={panelName + "bh-header"}
-                      data-testid={panelName + "bh-header"}
+                    </AccordionDetails>
+                  )}
+                </Accordion>
+              </form>
+            );
+          })}
+      </Box>
+      <Box>
+        <Accordion
+          sx={{ marginTop: "4px", borderRadius: "4px" }}
+          style={{ borderRadius: "14px" }}
+          expanded={sessionPanelExpanded === "after_therapy"}
+          onChange={handleSessionPanelChange("after_therapy")}
+          onClick={() => {
+            /* istanbul ignore next */
+            setSessionNo("after_therapy");
+          }}
+          data-testid="SessionPanelItem"
+        >
+          <AccordionSummary
+            expandIcon={
+              sessionPanelExpanded === "after_therapy" ? (
+                <RemoveIcon className="text-white" />
+              ) : (
+                <AddIcon className="text-white" />
+              )
+            }
+            style={{ minHeight: "0px", height: "45px" }}
+            aria-controls={"after_therapy" + "bh-content"}
+            id={"after_therapy" + "bh-header"}
+            data-testid={"after_therapy" + "bh-header"}
+            sx={{
+              backgroundColor: "#6ba08e",
+              borderRadius: "12px",
+              border: "none",
+              marginTop: "10px",
+            }}
+          >
+            <Typography
+              className="text-white"
+              sx={{ width: "33%", flexShrink: 0 }}
+            >
+              After Therapy
+            </Typography>
+          </AccordionSummary>
+          {loading ? (
+            <Box
+              height={"100px"}
+              display="flex"
+              justifyContent={"center"}
+              alignItems="center"
+            >
+              <CircularProgress size={30} />
+            </Box>
+          ) : (
+            <AccordionDetails>
+              {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                ?.description &&
+                !questionnaireList.length && <Box>Data Not Available</Box>}
+
+              {patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                ?.description && (
+                <>
+                  <Box>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Instruction
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      border: "1px solid #cecece",
+                      display: "grid",
+                    }}
+                    p={2}
+                    marginBottom={"25px"}
+                    borderRadius={"7px"}
+                  >
+                    <Grid>
+                      <Typography>
+                        {
+                          patientNewFeedbackData?.patientGetFeedbackList[0]
+                            ?.description
+                        }
+                      </Typography>
+                    </Grid>
+                  </Box>
+                </>
+              )}
+              {questionnaireList?.map((fv, fk) => {
+                /* istanbul ignore next */
+                return (
+                  /* istanbul ignore next */
+                  <Typography
+                    key={fk + ""}
+                    gutterBottom
+                    component="div"
+                    style={{ marginBottom: "10px" }}
+                  >
+                    <Typography
                       sx={{
-                        backgroundColor: "#6ba08e",
-                        borderRadius: "12px",
-                        border: "none",
-                        marginTop: "10px",
+                        backgroundColor: "#dadada52 !important",
+                        border: "1px solid #dadada52 !important",
+                        color: "#3f4040b0 !important",
+                        fontSize: "15px",
+                        paddingLeft: "5px",
+                        fontWeight: "1px !important",
                       }}
                     >
-                      <Typography
-                        className="text-white"
-                        sx={{ width: "33%", flexShrink: 0 }}
-                      >
-                        Session {p}
-                      </Typography>
-                    </AccordionSummary>
-                    {loading ? (
-                      <Box
-                        height={"100px"}
-                        display="flex"
-                        justifyContent={"center"}
-                        alignItems="center"
-                      >
-                        <CircularProgress size={30} />
-                      </Box>
-                    ) : (
-                      <AccordionDetails>
-                        {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                          ?.description &&
-                          !questionnaireList.length && (
-                            <Box>Data Not Available</Box>
-                          )}
+                      {fk + 1}. {fv.question}
+                    </Typography>
 
-                        {patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                          ?.description && (
-                          <>
-                            <Box>
-                              <Typography style={{ fontWeight: "bold" }}>
-                                Instruction
-                              </Typography>
-                            </Box>
-                            <Box
-                              sx={{
-                                flexGrow: 1,
-                                border: "1px solid #cecece",
-                                display: "grid",
-                              }}
-                              p={2}
-                              marginBottom={"25px"}
-                              borderRadius={"7px"}
-                              data-testid="instruction"
-                            >
-                              <Grid>
-                                <Typography>
-                                  {patientNewFeedbackData &&
-                                    /* istanbul ignore next */
-                                    patientNewFeedbackData
-                                      ?.patientGetFeedbackList[0]?.description}
-                                </Typography>
-                              </Grid>
-                            </Box>
-                          </>
-                        )}
-                        {questionnaireList?.map((fv, fk) => {
-                          /* istanbul ignore next */
-                          return (
-                            <Typography
-                              key={fk + ""}
-                              gutterBottom
-                              component="div"
-                              style={{ marginBottom: "10px" }}
-                            >
-                              <Typography
-                                sx={{
-                                  backgroundColor: "#dadada52 !important",
-                                  border: "1px solid #dadada52 !important",
-                                  color: "#3f4040b0 !important",
-                                  fontSize: "15px",
-                                  paddingLeft: "5px",
-                                  fontWeight: "1px !important",
-                                }}
-                              >
-                                {fk + 1}. {fv.question}
-                              </Typography>
-
-                              <Typography>
-                                <RadioGroup
-                                  row
-                                  aria-labelledby="demo-row-radio-buttons-group-label"
-                                  name="row-radio-buttons-group"
-                                  defaultValue={
-                                    fv?.answer?.answer ? fv.answer.answer : ""
-                                  }
-                                >
-                                  {fv.answer_type === "2" ||
-                                  fv.answer_type === "list" ? (
-                                    <Grid container spacing={1}>
-                                      {fv.answer_options
-                                        .split(",")
-                                        .map((av, ak) => (
-                                          <Grid
-                                            item
-                                            xs={10}
-                                            sm={5}
-                                            md={av.length > 15 ? 6 : 2}
-                                            key={ak}
-                                          >
-                                            <FormControlLabel
-                                              disabled={!!fv.answer?.answer}
-                                              sx={{
-                                                fontSize: "15px",
-                                                color: "#3f4040b0 !important",
-                                              }}
-                                              name={"question_" + fv._id}
-                                              onChange={(e) =>
-                                                handleOptionChange(e)
-                                              }
-                                              value={av}
-                                              control={<Radio size="small" />}
-                                              label={av}
-                                            />
-                                          </Grid>
-                                        ))}
-                                    </Grid>
-                                  ) : null}
-
-                                  {(fv.answer_type == "1" ||
-                                    fv.answer_type == "text") && (
-                                    <Grid
-                                      container
-                                      spacing={2}
-                                      marginBottom={0}
-                                      paddingTop={1}
-                                    >
-                                      <Grid item xs={12}>
-                                        <TextFieldComponent
-                                          name={fv.answer_type + "_" + fv._id}
-                                          id={fv.answer_type + "_" + fv._id}
-                                          value={
-                                            fv?.answer?.answer
-                                              ? fv.answer.answer
-                                              : formValues.length
-                                              ? formValues.answer
-                                              : ""
-                                          }
-                                          multiline
-                                          rows={4}
-                                          onChange={(e) =>
-                                            /* istanbul ignore next */
-                                            handleTextChange(
-                                              fv._id,
-                                              e.target.value
-                                            )
-                                          }
-                                          inputProps={{
-                                            "data-testid": "texBoxInput",
-                                          }}
-                                          fullWidth={true}
-                                          className="form-control-bg"
-                                        />
-                                      </Grid>
-                                    </Grid>
-                                  )}
-                                </RadioGroup>
-                              </Typography>
-                            </Typography>
-                          );
-                        })}
-
-                        {
-                          /* istanbul ignore next */
-                          questionnaireList?.length > 0 && (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                p: 1,
-                                m: 1,
-                                bgcolor: "background.paper",
-                                borderRadius: 1,
-                              }}
-                            >
-                              <Grid
-                                item
-                                xs={6}
-                                style={{ paddingRight: "50px" }}
-                              >
-                                <Button
-                                  type="submit"
-                                  style={{
-                                    backgroundColor: questionnaireList?.some(
-                                      (item) => item.answer !== null
-                                    )
-                                      ? "#a9a9a9a9"
-                                      : "#6EC9DB",
-                                    textTransform: "none",
-                                  }}
-                                  disabled={questionnaireList?.some(
-                                    (item) => item.answer !== null
-                                  )}
-                                  onClick={(e) => {
-                                    /* istanbul ignore next */
-                                    handleSubmit(e);
-                                  }}
-                                  variant="contained"
-                                  data-testid="submitFeedback1"
-                                >
-                                  Submit
-                                </Button>
-                              </Grid>
-                              <Grid item xs={6} textAlign="center">
-                                <Button
-                                  data-testid="cancleFeedbackButton1"
-                                  variant="contained"
-                                  style={{
-                                    backgroundColor: questionnaireList?.some(
-                                      (item) => item.answer !== null
-                                    )
-                                      ? "#a9a9a9a9"
-                                      : "#6BA08E",
-                                    textTransform: "none",
-                                  }}
-                                  disabled={questionnaireList?.some(
-                                    (item) => item.answer !== null
-                                  )}
-                                  onClick={
-                                    /* istanbul ignore next */
-                                    cancleFunction
-                                  }
-                                >
-                                  Cancel
-                                </Button>
-                              </Grid>
-                            </Box>
-                          )
+                    <Typography>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        defaultValue={
+                          fv?.answer?.answer ? fv.answer.answer : ""
                         }
-                      </AccordionDetails>
-                    )}
-                  </Accordion>
-                </form>
-              );
-            })}
-        </Box>
-        <Box>
-          <Accordion
-            sx={{ marginTop: "4px", borderRadius: "4px" }}
-            style={{ borderRadius: "14px" }}
-            expanded={sessionPanelExpanded === "after_therapy"}
-            onChange={handleSessionPanelChange("after_therapy")}
-            onClick={() => {
-              /* istanbul ignore next */
-              setSessionNo("after_therapy");
-            }}
-            data-testid="SessionPanelItem"
-          >
-            <AccordionSummary
-              expandIcon={
-                sessionPanelExpanded === "after_therapy" ? (
-                  <RemoveIcon className="text-white" />
-                ) : (
-                  <AddIcon className="text-white" />
+                      >
+                        {(fv.answer_type == "2" || fv.answer_type == "list") &&
+                          fv.answer_options &&
+                          fv.answer_options.split(",").map((av, ak) => {
+                            /* istanbul ignore next */
+                            const j = ak + 1;
+                            /* istanbul ignore next */
+                            return (
+                              <FormControlLabel
+                                key={j}
+                                disabled={fv?.answer?.answer ? true : false}
+                                sx={{
+                                  fontSize: "15px",
+                                  color: "#3f4040b0 !important",
+                                  marginRight: "300px",
+                                }}
+                                name={"question_" + fv._id}
+                                onChange={(e) => handleOptionChange(e)}
+                                value={av}
+                                control={<Radio size="small" />}
+                                label={av}
+                              />
+                            );
+                          })}
+                        {(fv.answer_type == "1" ||
+                          fv.answer_type == "text") && (
+                          <Grid
+                            container
+                            spacing={2}
+                            marginBottom={0}
+                            paddingTop={1}
+                          >
+                            <Grid item xs={12}>
+                              <TextFieldComponent
+                                name={fv.answer_type + "_" + fv._id}
+                                id={fv.answer_type + "_" + fv._id}
+                                value={
+                                  fv?.answer?.answer
+                                    ? fv.answer.answer
+                                    : formValues.length
+                                    ? formValues.answer
+                                    : ""
+                                }
+                                multiline
+                                rows={4}
+                                onChange={(e) =>
+                                  /* istanbul ignore next */
+                                  handleTextChange(fv._id, e.target.value)
+                                }
+                                fullWidth={true}
+                                className="form-control-bg"
+                              />
+                            </Grid>
+                          </Grid>
+                        )}
+                      </RadioGroup>
+                    </Typography>
+                  </Typography>
+                );
+              })}
+              {
+                /* istanbul ignore next */
+                questionnaireList?.length > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      p: 1,
+                      m: 1,
+                      bgcolor: "background.paper",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                      <Button
+                        type="submit"
+                        style={{
+                          backgroundColor: questionnaireList?.some(
+                            (item) => item.answer !== null
+                          )
+                            ? "#a9a9a9a9"
+                            : "#6EC9DB",
+                          textTransform: "none",
+                        }}
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={(e) => {
+                          /* istanbul ignore next */
+                          handleSubmit(e);
+                        }}
+                        variant="contained"
+                        data-testid="submitFeedback1"
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign="center">
+                      <Button
+                        data-testid="cancleFeedbackButton"
+                        variant="contained"
+                        style={{
+                          backgroundColor: questionnaireList?.some(
+                            (item) => item.answer !== null
+                          )
+                            ? "#a9a9a9a9"
+                            : "#6BA08E",
+                          textTransform: "none",
+                        }}
+                        disabled={questionnaireList?.some(
+                          (item) => item.answer !== null
+                        )}
+                        onClick={
+                          /* istanbul ignore next */
+                          cancleFunction
+                        }
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Box>
                 )
               }
-              style={{ minHeight: "0px", height: "45px" }}
-              aria-controls={"after_therapy" + "bh-content"}
-              id={"after_therapy" + "bh-header"}
-              data-testid={"after_therapy" + "bh-header"}
-              sx={{
-                backgroundColor: "#6ba08e",
-                borderRadius: "12px",
-                border: "none",
-                marginTop: "10px",
-              }}
-            >
-              <Typography
-                className="text-white"
-                sx={{ width: "33%", flexShrink: 0 }}
-              >
-                After Therapy
-              </Typography>
-            </AccordionSummary>
-            {loading ? (
-              <Box
-                height={"100px"}
-                display="flex"
-                justifyContent={"center"}
-                alignItems="center"
-              >
-                <CircularProgress size={30} />
-              </Box>
-            ) : (
-              <AccordionDetails>
-                {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                  ?.description &&
-                  !questionnaireList.length && <Box>Data Not Available</Box>}
-
-                {patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                  ?.description && (
-                  <>
-                    <Box>
-                      <Typography style={{ fontWeight: "bold" }}>
-                        Instruction
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        flexGrow: 1,
-                        border: "1px solid #cecece",
-                        display: "grid",
-                      }}
-                      p={2}
-                      marginBottom={"25px"}
-                      borderRadius={"7px"}
-                    >
-                      <Grid>
-                        <Typography>
-                          {
-                            patientNewFeedbackData?.patientGetFeedbackList[0]
-                              ?.description
-                          }
-                        </Typography>
-                      </Grid>
-                    </Box>
-                  </>
-                )}
-                {questionnaireList?.map((fv, fk) => {
-                  /* istanbul ignore next */
-                  return (
-                    /* istanbul ignore next */
-                    <Typography
-                      key={fk + ""}
-                      gutterBottom
-                      component="div"
-                      style={{ marginBottom: "10px" }}
-                    >
-                      <Typography
-                        sx={{
-                          backgroundColor: "#dadada52 !important",
-                          border: "1px solid #dadada52 !important",
-                          color: "#3f4040b0 !important",
-                          fontSize: "15px",
-                          paddingLeft: "5px",
-                          fontWeight: "1px !important",
-                        }}
-                      >
-                        {fk + 1}. {fv.question}
-                      </Typography>
-
-                      <Typography>
-                        <RadioGroup
-                          row
-                          aria-labelledby="demo-row-radio-buttons-group-label"
-                          name="row-radio-buttons-group"
-                          defaultValue={
-                            fv?.answer?.answer ? fv.answer.answer : ""
-                          }
-                        >
-                          {(fv.answer_type == "2" ||
-                            fv.answer_type == "list") &&
-                            fv.answer_options &&
-                            fv.answer_options.split(",").map((av, ak) => {
-                              /* istanbul ignore next */
-                              const j = ak + 1;
-                              /* istanbul ignore next */
-                              return (
-                                <FormControlLabel
-                                  key={j}
-                                  disabled={fv?.answer?.answer ? true : false}
-                                  sx={{
-                                    fontSize: "15px",
-                                    color: "#3f4040b0 !important",
-                                    marginRight: "300px",
-                                  }}
-                                  name={"question_" + fv._id}
-                                  onChange={(e) => handleOptionChange(e)}
-                                  value={av}
-                                  control={<Radio size="small" />}
-                                  label={av}
-                                />
-                              );
-                            })}
-                          {(fv.answer_type == "1" ||
-                            fv.answer_type == "text") && (
-                            <Grid
-                              container
-                              spacing={2}
-                              marginBottom={0}
-                              paddingTop={1}
-                            >
-                              <Grid item xs={12}>
-                                <TextFieldComponent
-                                  name={fv.answer_type + "_" + fv._id}
-                                  id={fv.answer_type + "_" + fv._id}
-                                  value={
-                                    fv?.answer?.answer
-                                      ? fv.answer.answer
-                                      : formValues.length
-                                      ? formValues.answer
-                                      : ""
-                                  }
-                                  multiline
-                                  rows={4}
-                                  onChange={(e) =>
-                                    /* istanbul ignore next */
-                                    handleTextChange(fv._id, e.target.value)
-                                  }
-                                  fullWidth={true}
-                                  className="form-control-bg"
-                                />
-                              </Grid>
-                            </Grid>
-                          )}
-                        </RadioGroup>
-                      </Typography>
-                    </Typography>
-                  );
-                })}
-                {
-                  /* istanbul ignore next */
-                  questionnaireList?.length > 0 && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        p: 1,
-                        m: 1,
-                        bgcolor: "background.paper",
-                        borderRadius: 1,
-                      }}
-                    >
-                      <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                        <Button
-                          type="submit"
-                          style={{
-                            backgroundColor: questionnaireList?.some(
-                              (item) => item.answer !== null
-                            )
-                              ? "#a9a9a9a9"
-                              : "#6EC9DB",
-                            textTransform: "none",
-                          }}
-                          disabled={questionnaireList?.some(
-                            (item) => item.answer !== null
-                          )}
-                          onClick={(e) => {
-                            /* istanbul ignore next */
-                            handleSubmit(e);
-                          }}
-                          variant="contained"
-                          data-testid="submitFeedback1"
-                        >
-                          Submit
-                        </Button>
-                      </Grid>
-                      <Grid item xs={6} textAlign="center">
-                        <Button
-                          data-testid="cancleFeedbackButton"
-                          variant="contained"
-                          style={{
-                            backgroundColor: questionnaireList?.some(
-                              (item) => item.answer !== null
-                            )
-                              ? "#a9a9a9a9"
-                              : "#6BA08E",
-                            textTransform: "none",
-                          }}
-                          disabled={questionnaireList?.some(
-                            (item) => item.answer !== null
-                          )}
-                          onClick={
-                            /* istanbul ignore next */
-                            cancleFunction
-                          }
-                        >
-                          Cancel
-                        </Button>
-                      </Grid>
-                    </Box>
-                  )
-                }
-              </AccordionDetails>
-            )}
-          </Accordion>
-        </Box>
+            </AccordionDetails>
+          )}
+        </Accordion>
+      </Box>
       <>
         <SureModal
           modalOpen={modalOpen}
