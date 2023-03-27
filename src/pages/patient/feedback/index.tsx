@@ -627,7 +627,7 @@ const Feedback: NextPage = () => {
                   >
                     <AccordionSummary
                       expandIcon={
-                        sessionPanelExpanded === "before_therapy" ? (
+                        sessionPanelExpanded === panelName ? (
                           <RemoveIcon className="text-white" />
                         ) : (
                           <AddIcon className="text-white" />
@@ -718,37 +718,37 @@ const Feedback: NextPage = () => {
                                     fv?.answer?.answer ? fv.answer.answer : ""
                                   }
                                 >
-                                  {(fv.answer_type == "2" ||
-                                    fv.answer_type == "list") &&
-                                    fv.answer_options &&
-                                    fv.answer_options
-                                      .split(",")
-                                      .map((av, ak) => {
-                                        /* istanbul ignore next */
-                                        const j = ak + 1;
-                                        /* istanbul ignore next */
-                                        return (
-                                          <FormControlLabel
-                                            key={j}
-                                            disabled={
-                                              fv?.answer?.answer ? true : false
-                                            }
-                                            sx={{
-                                              fontSize: "15px",
-                                              color: "#3f4040b0 !important",
-                                              marginRight: "300px",
-                                            }}
-                                            name={"question_" + fv._id}
-                                            onChange={(e) =>
-                                              /* istanbul ignore next */
-                                              handleOptionChange(e)
-                                            }
-                                            value={av}
-                                            control={<Radio size="small" />}
-                                            label={av}
-                                          />
-                                        );
-                                      })}
+                                  {fv.answer_type === "2" ||
+                                  fv.answer_type === "list" ? (
+                                    <Grid container spacing={1}>
+                                      {fv.answer_options
+                                        .split(",")
+                                        .map((av, ak) => (
+                                          <Grid
+                                            item
+                                            xs={10}
+                                            sm={5}
+                                            md={av.length > 15 ? 6 : 2}
+                                            key={ak}
+                                          >
+                                            <FormControlLabel
+                                              disabled={!!fv.answer?.answer}
+                                              sx={{
+                                                fontSize: "15px",
+                                                color: "#3f4040b0 !important",
+                                              }}
+                                              name={"question_" + fv._id}
+                                              onChange={(e) =>
+                                                handleOptionChange(e)
+                                              }
+                                              value={av}
+                                              control={<Radio size="small" />}
+                                              label={av}
+                                            />
+                                          </Grid>
+                                        ))}
+                                    </Grid>
+                                  ) : null}
 
                                   {(fv.answer_type == "1" ||
                                     fv.answer_type == "text") && (
@@ -881,7 +881,7 @@ const Feedback: NextPage = () => {
           >
             <AccordionSummary
               expandIcon={
-                sessionPanelExpanded === "before_therapy" ? (
+                sessionPanelExpanded === "after_therapy" ? (
                   <RemoveIcon className="text-white" />
                 ) : (
                   <AddIcon className="text-white" />

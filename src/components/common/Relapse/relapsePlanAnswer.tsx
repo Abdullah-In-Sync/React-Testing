@@ -5,6 +5,7 @@ import {
   Grid,
   Radio,
   RadioGroup,
+  Typography,
 } from "@mui/material";
 import { FC } from "react";
 import FormikTextField from "../FormikFields/FormikTextField";
@@ -44,39 +45,48 @@ export const RelapsePlanAnswer: FC<Props> = ({
           rows={4}
         />
       ) : (
-        <FormControl>
-          <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            className="radio-buttons"
-            name="radio-buttons-group"
-            value={question?.patient_answer}
-            row
-          >
-            <Grid container spacing={1}>
-              {(
-                (question?.relapse_ques_typeoption?.split(",") ||
-                  []) as Array<any>
-              ).map((option: string, index: number) => (
-                <Grid
-                  item
-                  xs={10}
-                  sm={5}
-                  md={option.length > 15 ? 6 : 2}
-                  lg={3}
-                  xl={2}
-                >
-                  <FormControlLabel
-                    key={`answerType_${index}`}
-                    data-testid={`answer_${index}`}
-                    value={option}
-                    control={<Radio />}
-                    label={option}
-                    onClick={() => OnRadioSelect(option)}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </RadioGroup>
+        <FormControl
+          style={{
+            width: "100%",
+          }}
+        >
+          <Typography>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              className="radio-buttons"
+              name="row-radio-buttons-group"
+              value={question?.patient_answer}
+              row
+            >
+              <Grid spacing={1} container>
+                {(
+                  (question?.relapse_ques_typeoption?.split(",") ||
+                    []) as Array<any>
+                ).map((option: string, index: number) => (
+                  <Grid
+                    item
+                    xs={10}
+                    sm={5}
+                    md={option.length > 15 ? 6 : 2}
+                    key={index}
+                  >
+                    <FormControlLabel
+                      key={`answerType_${index}`}
+                      data-testid={`answer_${index}`}
+                      value={option}
+                      control={<Radio size="small" />}
+                      label={option}
+                      onClick={() => OnRadioSelect(option)}
+                      sx={{
+                        fontSize: "15px",
+                        color: "#3f4040b0 !important",
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </RadioGroup>
+          </Typography>
 
           <ErrorMessage
             name={`questions.${index}.patient_answer`}
