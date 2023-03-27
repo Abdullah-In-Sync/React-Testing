@@ -16,7 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TableGenerator from "../../TableGenerator";
 import NextLink from "next/link";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import DownloadIcon from "@mui/icons-material/Download";
 import moment from "moment";
 /* istanbul ignore next */
@@ -111,12 +111,9 @@ export default function FeedbackResponses(props: propTypes) {
   ];
 
   const [startDatevalue, setStartDateValue] = React.useState<Dayjs | null>(
-    dayjs("2014-08-18")
+    null
   );
-
-  const [endDatevalue, setEndDateValue] = React.useState<Dayjs | null>(
-    dayjs("2014-08-18")
-  );
+  const [endDatevalue, setEndDateValue] = React.useState<Dayjs | null>(null);
 
   /* istanbul ignore next */
   const handleChangeStartDate = (newValue: Dayjs | null) => {

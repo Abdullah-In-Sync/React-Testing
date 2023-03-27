@@ -180,3 +180,63 @@ export const DELETE_THERAPIST_RELAPSE_PLAN_QUESTION = gql`
     }
   }
 `;
+
+export const GET_PATIENT_RELAPSE_PLANS = gql`
+  query getPatientRelapsePlans {
+    getPatientRelapsePlans {
+      _id
+      created_date
+      description
+      name
+      patient_id
+      plan_owner
+      plan_type
+      questions {
+        _id
+        created_date
+        patient_answer
+        patient_id
+        plan_id
+        relapse_additional_details
+        relapse_ques
+        relapse_ques_status
+        relapse_ques_type
+        relapse_ques_typeoption
+        updated_date
+      }
+      share_status
+      therapist_id
+      updated_date
+    }
+  }
+`;
+
+export const ANSWER_RELAPSE_PLAN_BY_PATIENT_ID = gql`
+  mutation answerRelapsePlanByPatient($quesData: String!) {
+    answerRelapsePlanByPatient(quesData: $quesData) {
+      _id
+      created_date
+      description
+      name
+      patient_id
+      plan_owner
+      plan_type
+      questions {
+        _id
+        created_date
+        patient_answer
+        patient_id
+        plan_id
+        relapse_additional_details
+        relapse_ques
+        relapse_ques_status
+        relapse_ques_type
+        relapse_ques_typeoption
+        updated_date
+      }
+      share_status
+      therapist_id
+      updated_date
+    }
+  }
+`;
