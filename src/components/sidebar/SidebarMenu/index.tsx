@@ -256,7 +256,9 @@ const SidebarMenu = () => {
                           <Button
                             key={index}
                             className={
-                              currentRoute === `${val.path}` ? "active" : ""
+                              val.path.indexOf(currentRoute) !== -1
+                                ? "active"
+                                : ""
                             }
                             disableRipple
                             component="a"

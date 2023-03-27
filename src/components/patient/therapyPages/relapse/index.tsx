@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import { useMutation } from "@apollo/client";
-import Layout from "../../../components/layout";
-import { UPDATE_RELAPSE_QUESTION_ANSWER_DATA } from "../../../graphql/mutation/patient";
+import { UPDATE_RELAPSE_QUESTION_ANSWER_DATA } from "../../../../graphql/mutation/patient";
 import { useSnackbar } from "notistack";
-import ContentHeader from "../../../components/common/ContentHeader";
-import Loader from "../../../components/common/Loader";
-import Relapse from "../../../components/common/Relapse/relapse";
+import ContentHeader from "../../../common/ContentHeader";
+import Loader from "../../../common/Loader";
+import Relapse from "../../../common/Relapse/relapse";
 
 const PatientById: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -46,11 +45,9 @@ const PatientById: NextPage = () => {
 
   return (
     <>
-      <Layout>
-        <Loader visible={loader} />
-        <ContentHeader title="Relapse" />
-        <Relapse setLoader={setLoader} onSubmit={handleEdit} />
-      </Layout>
+      <Loader visible={loader} />
+      <ContentHeader title="Relapse" />
+      <Relapse setLoader={setLoader} onSubmit={handleEdit} />
     </>
   );
 };

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import type { NextPage } from "next";
 import { useMutation } from "@apollo/client";
-import Layout from "../../../components/layout";
 import { useSnackbar } from "notistack";
-import SafetyPlan from "../../../components/common/SafetyPlan/safetyPlan";
-import ContentHeader from "../../../components/common/ContentHeader";
-import Loader from "../../../components/common/Loader";
-import { ViewSafetyPlanById } from "../../../graphql/SafetyPlan/types";
-import { ANSWER_SAFETY_PLAN_BY_PATIENT_ID } from "../../../graphql/SafetyPlan/graphql";
-import { SuccessModal } from "../../../components/common/SuccessModal";
+import SafetyPlan from "../../../common/SafetyPlan/safetyPlan";
+import ContentHeader from "../../../common/ContentHeader";
+import Loader from "../../../common/Loader";
+import { ViewSafetyPlanById } from "../../../../graphql/SafetyPlan/types";
+import { ANSWER_SAFETY_PLAN_BY_PATIENT_ID } from "../../../../graphql/SafetyPlan/graphql";
+import { SuccessModal } from "../../../common/SuccessModal";
 
 const PatientById: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -45,17 +44,17 @@ const PatientById: NextPage = () => {
 
   return (
     <>
-      <Layout>
-        <Loader visible={loader} />
-        <ContentHeader title="Safety Plan" />
-        <SafetyPlan setLoader={setLoader} onSubmit={handleEdit} />
-        <SuccessModal
-          isOpen={showSuccessModal}
-          title={"Successful"}
-          description={"Your response has been submitted successfully."}
-          onOk={() => setShowSuccessModal(false)}
-        />
-      </Layout>
+      {/* <Layout> */}
+      <Loader visible={loader} />
+      <ContentHeader title="Safety Plan" />
+      <SafetyPlan setLoader={setLoader} onSubmit={handleEdit} />
+      <SuccessModal
+        isOpen={showSuccessModal}
+        title={"Successful"}
+        description={"Your response has been submitted successfully."}
+        onOk={() => setShowSuccessModal(false)}
+      />
+      {/* </Layout> */}
     </>
   );
 };

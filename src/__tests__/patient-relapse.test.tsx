@@ -5,7 +5,7 @@ import { GET_PATIENT_RELAPSE_DETAIL_BY_ID } from "../graphql/query/resource";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { UPDATE_RELAPSE_QUESTION_ANSWER_DATA } from "../graphql/mutation/patient";
-import Relapse from "../pages/patient/relapse";
+import Relapse from "../components/patient/therapyPages/relapse";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),

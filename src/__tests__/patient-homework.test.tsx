@@ -7,7 +7,7 @@ import { ThemeProvider } from "@mui/material";
 import { UPDATE_PATIENT_HOMEWORK_BY_ID } from "../graphql/mutation/patient";
 import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
 import { GET_PATIENT_HOMEWORK_LIST } from "../graphql/query/patient";
-import Homework from "../pages/patient/homework";
+import Homework from "../components/patient/therapyPages/homework";
 import theme from "../styles/theme/theme";
 
 import { useAppContext } from "../contexts/AuthContext";
