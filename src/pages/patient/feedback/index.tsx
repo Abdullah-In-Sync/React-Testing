@@ -413,30 +413,40 @@ const Feedback: NextPage = () => {
               </Box>
             ) : (
               <AccordionDetails>
-                <Box>
-                  <Typography style={{ fontWeight: "bold" }}>
-                    Instruction
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    border: "1px solid #cecece",
-                    display: "grid",
-                  }}
-                  p={2}
-                  marginBottom={"25px"}
-                  borderRadius={"7px"}
-                >
-                  <Grid>
-                    <Typography>
-                      {
-                        patientNewFeedbackData?.patientGetFeedbackList[0]
-                          ?.description
-                      }
-                    </Typography>
-                  </Grid>
-                </Box>
+                {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                  ?.description &&
+                  !questionnaireList.length && <Box>Data Not Available</Box>}
+
+                {patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                  ?.description && (
+                  <>
+                    <Box>
+                      <Typography style={{ fontWeight: "bold" }}>
+                        Instruction
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        border: "1px solid #cecece",
+                        display: "grid",
+                      }}
+                      p={2}
+                      marginBottom={"25px"}
+                      borderRadius={"7px"}
+                    >
+                      <Grid>
+                        <Typography>
+                          {
+                            patientNewFeedbackData?.patientGetFeedbackList[0]
+                              ?.description
+                          }
+                        </Typography>
+                      </Grid>
+                    </Box>
+                  </>
+                )}
+
                 {questionnaireList?.map((fv, fk) => {
                   /* istanbul ignore next */
                   return (
@@ -662,31 +672,42 @@ const Feedback: NextPage = () => {
                       </Box>
                     ) : (
                       <AccordionDetails>
-                        <Box>
-                          <Typography style={{ fontWeight: "bold" }}>
-                            Instruction
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            flexGrow: 1,
-                            border: "1px solid #cecece",
-                            display: "grid",
-                          }}
-                          p={2}
-                          marginBottom={"25px"}
-                          borderRadius={"7px"}
-                          data-testid="instruction"
-                        >
-                          <Grid>
-                            <Typography>
-                              {patientNewFeedbackData &&
-                                /* istanbul ignore next */
-                                patientNewFeedbackData
-                                  ?.patientGetFeedbackList[0]?.description}
-                            </Typography>
-                          </Grid>
-                        </Box>
+                        {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                          ?.description &&
+                          !questionnaireList.length && (
+                            <Box>Data Not Available</Box>
+                          )}
+
+                        {patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                          ?.description && (
+                          <>
+                            <Box>
+                              <Typography style={{ fontWeight: "bold" }}>
+                                Instruction
+                              </Typography>
+                            </Box>
+                            <Box
+                              sx={{
+                                flexGrow: 1,
+                                border: "1px solid #cecece",
+                                display: "grid",
+                              }}
+                              p={2}
+                              marginBottom={"25px"}
+                              borderRadius={"7px"}
+                              data-testid="instruction"
+                            >
+                              <Grid>
+                                <Typography>
+                                  {patientNewFeedbackData &&
+                                    /* istanbul ignore next */
+                                    patientNewFeedbackData
+                                      ?.patientGetFeedbackList[0]?.description}
+                                </Typography>
+                              </Grid>
+                            </Box>
+                          </>
+                        )}
                         {questionnaireList?.map((fv, fk) => {
                           /* istanbul ignore next */
                           return (
@@ -916,31 +937,39 @@ const Feedback: NextPage = () => {
               </Box>
             ) : (
               <AccordionDetails>
-                <Box>
-                  <Typography style={{ fontWeight: "bold" }}>
-                    Instruction
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    border: "1px solid #cecece",
-                    display: "grid",
-                  }}
-                  p={2}
-                  marginBottom={"25px"}
-                  borderRadius={"7px"}
-                >
-                  <Grid>
-                    <Typography>
-                      {
-                        /* istanbul ignore next */
-                        patientNewFeedbackData?.patientGetFeedbackList[0]
-                          ?.description
-                      }
-                    </Typography>
-                  </Grid>
-                </Box>
+                {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                  ?.description &&
+                  !questionnaireList.length && <Box>Data Not Available</Box>}
+
+                {patientNewFeedbackData?.patientGetFeedbackList?.[0]
+                  ?.description && (
+                  <>
+                    <Box>
+                      <Typography style={{ fontWeight: "bold" }}>
+                        Instruction
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        border: "1px solid #cecece",
+                        display: "grid",
+                      }}
+                      p={2}
+                      marginBottom={"25px"}
+                      borderRadius={"7px"}
+                    >
+                      <Grid>
+                        <Typography>
+                          {
+                            patientNewFeedbackData?.patientGetFeedbackList[0]
+                              ?.description
+                          }
+                        </Typography>
+                      </Grid>
+                    </Box>
+                  </>
+                )}
                 {questionnaireList?.map((fv, fk) => {
                   /* istanbul ignore next */
                   return (
