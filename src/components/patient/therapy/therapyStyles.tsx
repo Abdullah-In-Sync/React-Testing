@@ -21,6 +21,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
     "& .secondSection": {
       "& .therapyTabsWrapper": {
         paddingTop: 10,
+        paddingBottom: 10,
+        "& [role*=tabpanel]": {
+          padding: "10px 0px",
+        },
       },
     },
   },
