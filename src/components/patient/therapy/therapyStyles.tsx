@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
       "& .userNameWrapper h6": {
         textTransform: "capitalize",
+        lineHeight: 1,
       },
     },
     "& .secondSection": {
