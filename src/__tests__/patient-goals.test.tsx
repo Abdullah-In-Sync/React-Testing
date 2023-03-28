@@ -4,7 +4,7 @@ import { MockedProvider } from "@apollo/client/testing";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { UPDATE_PATIENT_GOAL_BY_ID } from "../graphql/mutation/patient";
-import GoalIndex from "../pages/patient/goals";
+import GoalIndex from "../components/patient/therapyPages/goals";
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_PATIENT_GOAL_DATA,

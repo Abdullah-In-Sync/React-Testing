@@ -9,7 +9,7 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
-import Relapse from "../pages/patient/relapse";
+import Relapse from "../components/patient/therapyPages/relapse";
 import {
   ANSWER_RELAPSE_PLAN_BY_PATIENT_ID,
   GET_PATIENT_RELAPSE_PLANS,

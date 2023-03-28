@@ -25,17 +25,19 @@ type propTypes = {
   activeTabs: any;
   editable?: boolean;
   onTabChange?: any;
+  loadFromUrl?: boolean;
 };
 
 const TherapyTabsGenerator = (props: propTypes) => {
   const router = useRouter();
-  const { tabsList, activeTabs, editable, onTabChange } = props;
+  const { tabsList, activeTabs, editable, onTabChange, loadFromUrl } = props;
   const [activeTab, setActiveTab] = useState(activeTabs);
 
   const tabType = router?.query.tab as string;
 
   const handleTabChange = (_, newValue) => {
-    setActiveTab(newValue);
+    if (loadFromUrl) router.push(`?tab=${newValue}`);
+    else setActiveTab(newValue);
   };
 
   useEffect(() => {
@@ -61,7 +63,7 @@ const TherapyTabsGenerator = (props: propTypes) => {
     if (tabType) {
       setActiveTab(tabType);
     }
-  }, []);
+  }, [activeTabs]);
 
   return (
     <div style={{ overflowX: "hidden", minHeight: 500 }}>

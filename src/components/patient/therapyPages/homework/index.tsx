@@ -1,18 +1,17 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 
-import Layout from "../../../components/layout";
-import HomeworkComponent from "../../../components/patient/homework";
-import ConfirmationModal from "../../../components/patient/homework/ConfirmationModal";
-import { UPDATE_PATIENT_HOMEWORK_BY_ID } from "../../../graphql/mutation/patient";
-import { GET_PATIENTTHERAPY_DATA } from "../../../graphql/query/common";
-import { GET_PATIENT_HOMEWORK_LIST } from "../../../graphql/query/patient";
+import HomeworkComponent from "../../../patient/homework";
+import ConfirmationModal from "../../../patient/homework/ConfirmationModal";
+import { UPDATE_PATIENT_HOMEWORK_BY_ID } from "../../../../graphql/mutation/patient";
+import { GET_PATIENTTHERAPY_DATA } from "../../../../graphql/query/common";
+import { GET_PATIENT_HOMEWORK_LIST } from "../../../../graphql/query/patient";
 
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { useAppContext } from "../../../contexts/AuthContext";
+import { useAppContext } from "../../../../contexts/AuthContext";
 import { useSnackbar } from "notistack";
-import Loader from "../../../components/common/Loader";
-import { SuccessModal } from "../../../components/common/SuccessModal";
+import Loader from "../../../common/Loader";
+import { SuccessModal } from "../../../common/SuccessModal";
 
 const Homework: NextPage = () => {
   const { user: { patient_data: { _id: patientId = null } = {} } = {} } =
@@ -115,30 +114,28 @@ const Homework: NextPage = () => {
 
   return (
     <>
-      <Layout boxStyle={{ height: "100vh" }}>
-        <Loader visible={loader} />
-        <HomeworkComponent
-          homeworkList={homeworkList}
-          handleSubmit={handleSubmit}
-          therapyData={therapyData}
-          onChangeTherapy={onChangeTherapy}
+      <Loader visible={loader} />
+      <HomeworkComponent
+        homeworkList={homeworkList}
+        handleSubmit={handleSubmit}
+        therapyData={therapyData}
+        onChangeTherapy={onChangeTherapy}
+      />
+      {isConfirm.status && (
+        <ConfirmationModal
+          label="Are you sure want to save the homework?"
+          onCancel={clearIsConfirm}
+          onConfirm={onConfirmSubmit}
         />
-        {isConfirm.status && (
-          <ConfirmationModal
-            label="Are you sure want to save the homework?"
-            onCancel={clearIsConfirm}
-            onConfirm={onConfirmSubmit}
-          />
-        )}
-        {successModal && (
-          <SuccessModal
-            isOpen={successModal}
-            title="HOMEWORK TASK"
-            description={"Task saved successfully."}
-            onOk={handleOk}
-          />
-        )}
-      </Layout>
+      )}
+      {successModal && (
+        <SuccessModal
+          isOpen={successModal}
+          title="HOMEWORK TASK"
+          description={"Task saved successfully."}
+          onOk={handleOk}
+        />
+      )}
     </>
   );
 };

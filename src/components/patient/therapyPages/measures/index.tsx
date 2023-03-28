@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import ContentHeader from "../../../components/common/ContentHeader";
-import MeasureList from "../../../components/patient/measures";
-import withAuthentication from "../../../hoc/auth";
+import withAuthentication from "../../../../hoc/auth";
+import ContentHeader from "../../../common/ContentHeader";
+import MeasureList from "../../../patient/measures";
 
 const Measure: NextPage = () => {
   return (

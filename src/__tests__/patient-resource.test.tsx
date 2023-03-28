@@ -1,4 +1,4 @@
-import Resource from "../pages/patient/resource";
+import Resource from "../components/patient/therapyPages/resource";
 
 import {
   screen,

@@ -3,7 +3,7 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
-import SafetyPlan from "../pages/patient/safetyPlan";
+import SafetyPlan from "../components/patient/therapyPages/safetyPlan";
 import {
   ANSWER_SAFETY_PLAN_BY_PATIENT_ID,
   GET_PATIENT_SAFETY_PlANS,
