@@ -49,7 +49,7 @@ const theme = (props?: any) => {
         light: "#eaf3ff",
       },
       secondary: {
-        main: "#7EBCA7",
+        main: "#6BA08E",
         contrastText: "#ffffff",
       },
       error: {

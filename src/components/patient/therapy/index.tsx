@@ -8,7 +8,7 @@ import TabsGeneratorTherapistPatient from "../../../components/common/TabsGenera
 import { useAppContext } from "../../../contexts/AuthContext";
 import TherapyMainComponent from "./Therapy";
 import { useStyles } from "./therapyStyles";
-import dayjs from "dayjs";
+import moment from "moment";
 
 const TherapyPatientComponent = () => {
   const styles = useStyles();
@@ -23,7 +23,7 @@ const TherapyPatientComponent = () => {
   } = useAppContext();
   const patientFullName = `${patientFirstName} ${patientLastName}`;
   const formatedBirthdate = birthdate
-    ? dayjs(birthdate).format("DD-MM-YYYY")
+    ? moment(birthdate, "MM-DD-YYYY").format("DD-MM-YYYY")
     : undefined;
 
   /* istanbul ignore next */
@@ -58,7 +58,7 @@ const TherapyPatientComponent = () => {
               </Typography>
               {formatedBirthdate && (
                 <Typography className="text-white" data-testid="patient_name">
-                  {formatedBirthdate}
+                  {`DOB : ${formatedBirthdate}`}
                 </Typography>
               )}
             </Box>
