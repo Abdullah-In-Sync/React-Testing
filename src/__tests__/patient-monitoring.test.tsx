@@ -9,7 +9,7 @@ import {
   GET_PATIENT_MONITOR_BY_ID,
 } from "../graphql/query/patient";
 
-import Monitoring from "../pages/patient/monitoring";
+import Monitoring from "../components/patient/therapyPages/monitoring";
 import dummyData from "../components/patient/monitoring/data";
 import theme from "../styles/theme/theme";
 

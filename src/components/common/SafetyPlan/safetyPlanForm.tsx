@@ -53,6 +53,10 @@ export const SafetyPlanForm: FC<Props> = ({
                     </Box>
                   </Box>
                 )}
+                {!formikHelper?.values?.description &&
+                  !formikHelper?.values?.questions?.length && (
+                    <Box>No data found</Box>
+                  )}
                 {formikHelper?.values.questions.map((question, index) => (
                   <SafetyPlanQuestion
                     key={question?._id}

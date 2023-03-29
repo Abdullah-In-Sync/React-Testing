@@ -2,6 +2,7 @@ import {
   Box,
   FormControl,
   FormControlLabel,
+  Grid,
   Radio,
   RadioGroup,
 } from "@mui/material";
@@ -43,25 +44,40 @@ export const SafetyPlanAnswer: FC<Props> = ({
           rows={4}
         />
       ) : (
-        <FormControl>
+        <FormControl
+          style={{
+            width: "100%",
+          }}
+        >
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
             className="radio-buttons"
             name="radio-buttons-group"
             value={question?.patient_answer}
           >
-            {(
-              (question?.safety_ques_typeoption?.split(",") || []) as Array<any>
-            ).map((option: string, index: number) => (
-              <FormControlLabel
-                key={`answerType_${index}`}
-                data-testid={`answer_${index}`}
-                value={option}
-                control={<Radio />}
-                label={option}
-                onClick={() => OnRadioSelect(option)}
-              />
-            ))}
+            <Grid spacing={1} container direction="row">
+              {(
+                (question?.safety_ques_typeoption?.split(",") ||
+                  []) as Array<any>
+              ).map((option: string, index: number) => (
+                <Grid
+                  item
+                  xs={10}
+                  sm={5}
+                  md={option.length > 15 ? 6 : 2}
+                  key={index}
+                >
+                  <FormControlLabel
+                    key={`answerType_${index}`}
+                    data-testid={`answer_${index}`}
+                    value={option}
+                    control={<Radio />}
+                    label={option}
+                    onClick={() => OnRadioSelect(option)}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </RadioGroup>
           <ErrorMessage
             name={`questions.${index}.patient_answer`}

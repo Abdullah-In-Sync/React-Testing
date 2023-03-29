@@ -9,7 +9,7 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
 
-import Measure from "../pages/patient/measures";
+import Measure from "../components/patient/therapyPages/measures";
 import { GET_PATIENT_MEASURE_LIST } from "../graphql/Measure/graphql";
 import { useRouter } from "next/router";
 

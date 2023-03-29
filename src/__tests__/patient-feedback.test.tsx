@@ -7,7 +7,8 @@ import {
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import Feedback from "../pages/patient/feedback";
+import Feedback from "../components/patient/therapyPages/feedback";
+
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_TOKEN_DATA,

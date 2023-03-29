@@ -105,3 +105,10 @@
 .disbledFields input :focus-visible {
   outline: unset !important;
 }
+.ellipsisTextWrapper{
+  height: auto;
+min-height: 1.4375em;
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+}

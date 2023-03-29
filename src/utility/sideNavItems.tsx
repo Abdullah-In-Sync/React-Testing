@@ -1,35 +1,30 @@
-import HomeIcon from "@mui/icons-material/Home";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import PersonIcon from "@mui/icons-material/Person";
-import CorporateFareIcon from "@mui/icons-material/CorporateFare";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
-import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
-import StyleIcon from "@mui/icons-material/Style";
-import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
-import BadgeIcon from "@mui/icons-material/Badge";
-import StraightenIcon from "@mui/icons-material/Straighten";
-import EqualizerIcon from "@mui/icons-material/Equalizer";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import DifferenceIcon from "@mui/icons-material/Difference";
-import FilePresentIcon from "@mui/icons-material/FilePresent";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import TungstenIcon from "@mui/icons-material/Tungsten";
+import BadgeIcon from "@mui/icons-material/Badge";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import DescriptionIcon from "@mui/icons-material/Description";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import SettingsIcon from "@mui/icons-material/Settings";
-import StarsIcon from "@mui/icons-material/Stars";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
-import HomeWorkIcon from "@mui/icons-material/HomeWork";
-import PreviewIcon from "@mui/icons-material/Preview";
 import ChatIcon from "@mui/icons-material/Chat";
-import VideoCallIcon from "@mui/icons-material/VideoCall";
-import HeadsetMicIcon from "@mui/icons-material/HeadsetMic";
+import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
+import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
+import DescriptionIcon from "@mui/icons-material/Description";
+import DifferenceIcon from "@mui/icons-material/Difference";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+import FilePresentIcon from "@mui/icons-material/FilePresent";
+import HomeIcon from "@mui/icons-material/Home";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
+import StraightenIcon from "@mui/icons-material/Straighten";
+import StyleIcon from "@mui/icons-material/Style";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import TungstenIcon from "@mui/icons-material/Tungsten";
 
 import { Link } from "../lib/helpers/common";
 
@@ -309,95 +304,17 @@ export const patient_routes: RoutesType[] = [
   },
   {
     key: 4,
-    label: "Goals",
-    path: "/patient/goals/",
-    icon: <StarsIcon />,
-    type: "GOALS",
+    label: "Therapy",
+    path: "/patient/therapy/?tab=safety-plan",
+    icon: <NewspaperIcon />,
+    type: "THERAPY",
   },
   {
     key: 5,
-    label: "Safety Plan",
-    path: "/patient/safetyPlan/",
-    icon: <BadgeIcon />,
-    type: "SAFETY_PLAN",
-  },
-  [
-    {
-      key: 6,
-      label: "Therapy",
-      path: "/therapies",
-      icon: <NewspaperIcon />,
-      type: "THERAPY",
-    },
-    {
-      key: 7,
-      label: "Homework",
-      path: "/patient/homework",
-      icon: <HomeWorkIcon />,
-      type: "HOMEWORK",
-    },
-    {
-      key: 8,
-      label: "Relapse",
-      path: "/patient/relapse",
-      icon: <HomeWorkIcon />,
-      type: "RELAPSE",
-    },
-  ],
-  [
-    { key: 9, label: "Review", path: "/review", icon: <PreviewIcon /> },
-    {
-      key: 10,
-      label: "Measures",
-      path: "/patient/measures",
-      icon: <PreviewIcon />,
-    },
-    {
-      key: 11,
-      label: "Monitoring",
-      path: "/patient/monitoring",
-      icon: <PreviewIcon />,
-    },
-  ],
-  {
-    key: 12,
-    label: "Resources",
-    path: "/patient/resource",
-    icon: <CrisisAlertIcon />,
-    type: "RESOURCES",
-  },
-  [
-    {
-      key: 13,
-      label: "Communication",
-      path: "/communication",
-      icon: <ChatIcon />,
-      type: "COMMUNICATION",
-    },
-    {
-      key: 14,
-      label: "Video",
-      path: Link + "/patient/communication/1",
-      icon: <VideoCallIcon />,
-    },
-    {
-      key: 15,
-      label: "Audio",
-      path: Link + "/patient/communication/2",
-      icon: <HeadsetMicIcon />,
-    },
-    {
-      key: 16,
-      label: "Messages",
-      path: Link + "/patient/communication/4",
-      icon: <ChatIcon />,
-    },
-  ],
-  {
-    key: 17,
-    label: "Feedback",
-    path: "/patient/feedback",
-    icon: <StyleIcon />,
+    label: "Communication",
+    path: Link + "/communication",
+    icon: <ChatIcon />,
+    type: "COMMUNICATION",
   },
 ];
 
@@ -405,7 +322,7 @@ export const default_patient_routes: RoutesType[] = [
   {
     key: 1,
     label: "Home",
-    path: Link + "/patient/dashboard",
+    path: "/patient/home",
     icon: <HomeIcon />,
     showNow: 1,
   },
