@@ -54,8 +54,7 @@ const RelapsePlanPage: NextPage = () => {
       setLoader(false);
     },
   });
-  console.log("Koca: organizationList ", organizationList);
-
+  
   const [
     getRelapsePlanList,
     {
