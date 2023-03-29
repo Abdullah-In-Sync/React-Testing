@@ -54,7 +54,7 @@ const RelapsePlanPage: NextPage = () => {
       setLoader(false);
     },
   });
-  
+
   const [
     getRelapsePlanList,
     {
