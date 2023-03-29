@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
 import { IS_ADMIN } from "../../../lib/constants";
+import TemplateArrow from "../../templateArrow";
 
 type propTypes = {
   onSubmit?: any;
@@ -630,13 +631,22 @@ export default function CreateResource(props: propTypes) {
         </Box>
       )}
 
-      {selectedComponentType.type == "TemplateTable" && (
+      {/* {selectedComponentType.type == "TemplateTable" && (
         <TemplateTable
           initialData={selectedComponentType.initialData}
           mode="edit"
           onSubmit={onTemplateSave}
           onCancel={onTemplateCancel}
           onPreview={onPreview}
+        />
+      )} */}
+      {selectedComponentType.type == "TemplateTable" && (
+        <TemplateArrow
+        // initialData={selectedComponentType.initialData}
+        // mode="edit"
+        // onSubmit={onTemplateSave}
+        // onCancel={onTemplateCancel}
+        // onPreview={onPreview}
         />
       )}
       {successModal && (
