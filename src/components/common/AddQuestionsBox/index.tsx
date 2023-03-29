@@ -45,7 +45,7 @@ const AddQuestionsBox = (
 ) => {
   const styles = useStyles();
 
-  const { values, setFieldValue } = formikProps;
+  const { values, setFieldValue, setFieldTouched} = formikProps;
   const confirmModalRef = useRef<ModalElement>(null);
   useImperativeHandle(ref, () => ({
     onAddQuesionBox() {
@@ -106,6 +106,10 @@ const AddQuestionsBox = (
     const value = e.target.value;
     if ((value == "text" || value == "1") && questionOption)
       setFieldValue(`questions.${i}.questionOption`, "");
+    else setFieldValue(`questions.${i}.questionOption`, "");
+    setFieldTouched(`questions.${i}.questionOption`, false);
+
+    setFieldValue(`questions.${i}.questionOption`, "");
     setFieldValue(`questions.${i}.questionType`, value);
   };
 
