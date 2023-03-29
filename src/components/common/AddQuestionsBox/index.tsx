@@ -45,7 +45,7 @@ const AddQuestionsBox = (
 ) => {
   const styles = useStyles();
 
-  const { values, setFieldValue, setFieldTouched} = formikProps;
+  const { values, setFieldValue, setFieldTouched } = formikProps;
   const confirmModalRef = useRef<ModalElement>(null);
   useImperativeHandle(ref, () => ({
     onAddQuesionBox() {
