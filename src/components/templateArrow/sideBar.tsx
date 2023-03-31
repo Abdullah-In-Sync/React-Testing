@@ -1,7 +1,11 @@
 import { Box } from "@mui/system";
+import React from "react";
 
 const SideBar = ({ iconItems }) => {
-  console.log(iconItems, "icons");
+  const onDragStart = (event, nodeType) => {
+    event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.effectAllowed = "move";
+  };
   return (
     <Box
       style={{
@@ -13,7 +17,16 @@ const SideBar = ({ iconItems }) => {
         textAlign: "center",
       }}
     >
-      {iconItems}
+      {iconItems.map((compo) => {
+        return (
+          <Box
+            onDragStart={(event) => onDragStart(event, compo.componentName)}
+            draggable
+          >
+            {compo.icon}
+          </Box>
+        );
+      })}
     </Box>
   );
 };
