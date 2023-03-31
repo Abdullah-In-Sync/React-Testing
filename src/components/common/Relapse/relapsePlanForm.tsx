@@ -29,7 +29,7 @@ export const RelapsePlanForm: FC<Props> = ({
           yup.object().shape({
             patient_answer: yup
               .string()
-              .required("Answer is required")
+              // .required("Answer is required")
               .nullable(),
           })
         ),
@@ -88,7 +88,7 @@ export const RelapsePlanForm: FC<Props> = ({
                         style={{
                           padding: "5px 20px 5px 20px",
                         }}
-                        disabled={!formikHelper.isValid}
+                        // disabled={!formikHelper.isValid}
                       >
                         Submit
                       </Button>

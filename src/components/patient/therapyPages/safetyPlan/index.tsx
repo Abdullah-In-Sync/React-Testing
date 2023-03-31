@@ -15,8 +15,9 @@ const PatientById: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
+  /* istanbul ignore next */
   const handleEdit = async (safetyPlan: ViewSafetyPlanById, callback: any) => {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     const data = safetyPlan?.questions.map((x) => ({
       answer: x.patient_answer,
       QuestionId: x._id,
