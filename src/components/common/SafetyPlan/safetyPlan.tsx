@@ -9,6 +9,8 @@ import {
   ViewSafetyPlanById,
 } from "../../../graphql/SafetyPlan/types";
 import { SafetyPlanForm } from "./safetyPlanForm";
+import ConfirmationModal from "../ConfirmationModal";
+import { useSnackbar } from "notistack";
 
 type propTypes = {
   onSubmit?: (safetyPlan: ViewSafetyPlanById, callback: any) => void;
@@ -16,7 +18,10 @@ type propTypes = {
 };
 
 const SafetyPlan = (props: propTypes) => {
+  let onToggle;
+  const { enqueueSnackbar } = useSnackbar();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [isConfirm, setIsConfirm] = useState(false);
 
   const [modifiedSafetyPlan, setModifiedSafetyPlan] =
     useState<ViewSafetyPlanById>();
@@ -38,19 +43,39 @@ const SafetyPlan = (props: propTypes) => {
     getPatientSafetyPlans();
   }, []);
 
+  const cancelConfirm = () => {
+    /* istanbul ignore next */
+    onToggle();
+    setIsConfirm(false);
+    /* istanbul ignore next */
+    enqueueSnackbar("Response cancel successfully", {
+      variant: "success",
+    });
+  };
+
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
+  const cancelFunction = () => {
+    setIsConfirm(true);
+  };
   return (
     <>
       {safetyPlanData?.getPatientSafetyPlans?.map((s) => (
         <Accordion
           key={s._id}
           title={s.name}
-          detail={(toggleAccordion) => (
-            <SafetyPlanForm
-              safetyPlan={s}
-              onSubmit={handleSubmit}
-              onCancel={toggleAccordion}
-            />
-          )}
+          detail={(toggleAccordion) => {
+            onToggle = toggleAccordion;
+            return (
+              <SafetyPlanForm
+                safetyPlan={s}
+                onSubmit={handleSubmit}
+                onCancel={cancelFunction}
+              />
+            );
+          }}
         />
       ))}
       {!loading && !safetyPlanData?.getPatientSafetyPlans?.length && (
@@ -94,6 +119,14 @@ const SafetyPlan = (props: propTypes) => {
           </Button>
         </Box>
       </SureModal>
+
+      {isConfirm && (
+        <ConfirmationModal
+          label="Are you sure you are canceling the response without submitting?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={cancelConfirm}
+        />
+      )}
     </>
   );
 };

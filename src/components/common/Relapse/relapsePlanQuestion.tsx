@@ -50,7 +50,21 @@ export const RelapsePlanQuestion: FC<Props> = ({
         shouldCloseOnBackgroundClick={false}
         modalView={"appointment"}
       >
-        <Box style={{ padding: "15px" }}>
+        <Box>
+          <Box
+            style={{
+              paddingRight: "15px",
+              color: "#6EC9DB",
+              fontWeight: "bold",
+              textAlign: "center",
+              paddingBottom: "15px",
+              fontSize: "20px",
+            }}
+            data-testid="safety_ques_info"
+          >
+            Question Information
+          </Box>
+
           <Box
             sx={{
               border: "1px solid #cecece",
