@@ -75,31 +75,37 @@ const TemplateArrow = () => {
   const icons = [
     {
       componentName: "apartment",
-      icon: <ApartmentIcon style={{ padding: "2px" }} />,
+      icon: <ApartmentIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
     {
       componentName: "appRegistration",
-      icon: <AppRegistrationIcon style={{ padding: "2px" }} />,
+      icon: (
+        <AppRegistrationIcon style={{ padding: "2px", cursor: "pointer" }} />
+      ),
     },
     {
       componentName: "autoStoriesIcon",
-      icon: <AutoStoriesIcon style={{ padding: "2px" }} />,
+      icon: <AutoStoriesIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
     {
       componentName: "calendarMonthIcon",
-      icon: <CalendarMonthIcon style={{ padding: "2px" }} />,
+      icon: <CalendarMonthIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
     {
       componentName: "chatIcon",
-      icon: <ChatIcon style={{ padding: "2px" }} />,
+      icon: <ChatIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
     {
       componentName: "connectWithoutContactIcon",
-      icon: <ConnectWithoutContactIcon style={{ padding: "2px" }} />,
+      icon: (
+        <ConnectWithoutContactIcon
+          style={{ padding: "2px", cursor: "pointer" }}
+        />
+      ),
     },
     {
       componentName: "contactPhoneIcon",
-      icon: <ContactPhoneIcon style={{ padding: "2px" }} />,
+      icon: <ContactPhoneIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
   ];
   return (
