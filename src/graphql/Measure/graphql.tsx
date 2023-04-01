@@ -97,3 +97,39 @@ export const VIEW_MEASURE_RESPONSE = gql`
     }
   }
 `;
+
+
+// mutation MyMutation {
+//   adminCreateMeasures(org_id: "", template_data: "", template_id: "", title: "", description: "") {
+//     result
+//     duplicateNames {
+//       _id
+//       name
+//     }
+//   }
+// }
+
+export const CREATE_MEASURE_TEMPLATE= gql`
+  mutation adminCreateMeasures(
+    $orgId: String!
+    $templateData: String!
+    $templateId: String!
+    $title: String!
+    $description: String
+  ) {
+    adminCreateMeasures(
+      org_id: $orgId
+      template_data: $templateData
+      template_id: $templateId
+      title: $title
+      description: $description
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
+

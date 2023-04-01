@@ -4,6 +4,7 @@ import TextFieldCustom from "../TextField/TextFieldCustom";
 
 const ResponseTextArea = (props) => {
   const [field, touched] = useField(props);
+  const { hideError } = props;
 
   return (
     <Stack>
@@ -13,11 +14,11 @@ const ResponseTextArea = (props) => {
         spellCheck="false"
         error={touched.touched && Boolean(touched.error)}
       />
-      <ErrorMessage
+      {!hideError && <ErrorMessage
         name={props.name}
         component="div"
         className="invalid-input-message"
-      />
+      />}
     </Stack>
   );
 };
