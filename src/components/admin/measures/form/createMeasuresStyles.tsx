@@ -17,7 +17,6 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
       [theme.breakpoints.up("lg")]: {},
     },
-
     "& .first": {
       flex: 1,
       "& .MuiBox-root": {
@@ -60,8 +59,17 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .second": {
+      "& .formatsOpenModalButtonWrapper": {
+        [theme.breakpoints.down("sm")]: {},
+        [theme.breakpoints.down("md")]: {
+          paddingBottom: 10
+        },
+        [theme.breakpoints.up("lg")]: {
+          paddingRight: 10
+        },
+      },
       "& .MuiBox-root": {
-        flex: 2,
+        // flex: 2,
       },
       "& button": {
         height: 38,

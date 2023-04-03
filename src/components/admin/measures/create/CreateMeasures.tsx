@@ -15,7 +15,7 @@ interface ViewProps {
   onPressCancel?: () => void;
 }
 
-const CreatePlanForm: React.FC<ViewProps> = ({
+const CreateMeasuersForm: React.FC<ViewProps> = ({
   submitForm,
   organizationList,
   onPressCancel,
@@ -43,15 +43,11 @@ const CreatePlanForm: React.FC<ViewProps> = ({
             onPressCancel={onPressCancel}
           />
         )}
-        
-        
       />
     );
   };
-  // validationSchema={safetyPlanValidationSchema}
-  // validateOnChange = {false}
-  // validateOnBlur ={false} <CommonForm organizationList={organizationList}/>
+
   return <>{commonform()}</>;
 };
 
-export default CreatePlanForm;
+export default CreateMeasuersForm;

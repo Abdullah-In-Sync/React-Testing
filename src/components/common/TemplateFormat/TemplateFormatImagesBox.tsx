@@ -1,8 +1,6 @@
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import * as React from "react";
-import Image from "next/image";
-import { useStyles } from "./templateFormatStyles"
+import { useStyles } from "./templateFormatStyles";
 
 interface ViewProps {
     handleOk?: () => void;
@@ -21,10 +19,7 @@ const ConfirmBox: React.FC<ViewProps> = ({ handleOk }) => {
                         <img
                             alt="My Help"
                             src="/v2/images/format_1.png"
-
                             className={'image'}
-
-
                         />
                     </Box>
                 </Box>
@@ -33,16 +28,15 @@ const ConfirmBox: React.FC<ViewProps> = ({ handleOk }) => {
                         <Typography className="headingText">Format 2</Typography>
                     </Box>
                     <Box className="imageWrapper">
-                    <img
-                        alt="My Help"
-                        src="/v2/images/format_2.png"
-                        className={'image'}
-                    />
+                        <img
+                            alt="My Help"
+                            src="/v2/images/format_2.png"
+                            className={'image'}
+                        />
                     </Box>
 
                 </Box>
             </Box>
-
             <Box className="okButtonWrapper">
                 <Button
                     variant="contained"
