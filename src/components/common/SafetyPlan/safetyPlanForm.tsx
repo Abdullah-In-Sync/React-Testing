@@ -29,7 +29,7 @@ export const SafetyPlanForm: FC<Props> = ({
           yup.object().shape({
             patient_answer: yup
               .string()
-              .required("Answer is required")
+              // .required("Answer is required")
               .nullable(),
           })
         ),
@@ -46,10 +46,19 @@ export const SafetyPlanForm: FC<Props> = ({
                     <Typography className={classis.headingText}>
                       Plan Description
                     </Typography>
-                    <Box className={classis.descriptionWrapper}>
-                      <Typography className={classis.descriptionText}>
-                        {formikHelper?.values?.description}
-                      </Typography>
+                    <Box
+                      sx={{
+                        border: "1px solid #cecece",
+                        display: "grid",
+                        paddingBottom: "10px",
+                      }}
+                      borderRadius={"7px"}
+                    >
+                      <Box className={classis.descriptionWrapper}>
+                        <Typography className={classis.descriptionText}>
+                          {formikHelper?.values?.description}
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
                 )}
@@ -78,7 +87,7 @@ export const SafetyPlanForm: FC<Props> = ({
                       style={{
                         padding: "5px 20px 5px 20px",
                       }}
-                      disabled={!formikHelper.isValid}
+                      // disabled={!formikHelper.isValid}
                     >
                       Submit
                     </Button>

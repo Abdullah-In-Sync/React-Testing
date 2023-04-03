@@ -45,7 +45,7 @@ const AddQuestionsBox = (
 ) => {
   const styles = useStyles();
 
-  const { values, setFieldValue } = formikProps;
+  const { values, setFieldValue, setFieldTouched } = formikProps;
   const confirmModalRef = useRef<ModalElement>(null);
   useImperativeHandle(ref, () => ({
     onAddQuesionBox() {
@@ -102,10 +102,10 @@ const AddQuestionsBox = (
     );
   };
 
-  const onChangeQuestionType = (e, i, questionOption) => {
+  const onChangeQuestionType = (e, i) => {
     const value = e.target.value;
-    if ((value == "text" || value == "1") && questionOption)
-      setFieldValue(`questions.${i}.questionOption`, "", false);
+    setFieldTouched(`questions.${i}.questionOption`, false);
+    setFieldValue(`questions.${i}.questionOption`, "");
     setFieldValue(`questions.${i}.questionType`, value);
   };
 
@@ -116,7 +116,7 @@ const AddQuestionsBox = (
 
   const questionBox = ({ i, item }) => {
     const { questions = [] } = values;
-    const { questionType, questionOption, questionId } = questions[i] || {};
+    const { questionType, questionId } = questions[i] || {};
     const isEdit = handleEditQuestion
       ? isEditView !== i + 1 && questionId
       : false;
@@ -174,7 +174,7 @@ const AddQuestionsBox = (
               {!isEdit && (
                 <Box className="selectChooseAnswerTypeWrapper">
                   <FormikSelectDropdown
-                    onChange={(e) => onChangeQuestionType(e, i, questionOption)}
+                    onChange={(e) => onChangeQuestionType(e, i)}
                     id={`questions.${i}.questionType`}
                     labelId={`questions.${i}.questionType`}
                     name={`questions.${i}.questionType`}
