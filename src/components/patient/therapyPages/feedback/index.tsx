@@ -263,12 +263,16 @@ const Feedback: NextPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     /* istanbul ignore next */
-    if (formValues.length == 0) {
+    if (formValues.length === 0) {
       enqueueSnackbar("Field can not be left blank", {
         variant: "error",
       });
-    } else {
+    } else if (questionnaireList.length === formValues.length) {
       setModalOpen(true);
+    } else {
+      enqueueSnackbar("Please attempt all questions", {
+        variant: "error",
+      });
     }
     /* istanbul ignore next */
     if (!confirmSubmission) return;
@@ -778,6 +782,7 @@ const Feedback: NextPage = () => {
                                   >
                                     <Grid item xs={12}>
                                       <TextFieldComponent
+                                        required
                                         name={fv.answer_type + "_" + fv._id}
                                         id={fv.answer_type + "_" + fv._id}
                                         value={

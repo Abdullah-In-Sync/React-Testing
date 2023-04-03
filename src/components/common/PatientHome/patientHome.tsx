@@ -190,7 +190,7 @@ const PatientHome = (props: propTypes) => {
               fontWeight: "700",
             }}
           >
-            {` Welcome to MyHelp Mr ${username?.patient_firstname} ${username?.patient_lastname}`}
+            {` Welcome to MyHelp Dear ${username?.patient_firstname} ${username?.patient_lastname}`}
           </h4>
           <p
             style={{
