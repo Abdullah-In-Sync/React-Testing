@@ -58,11 +58,10 @@ mocksData.push({
   },
   result: {
     data: {
-      data: {
-        createMeasures: {
-          result: true,
-          __typename: "result",
-        },
+      adminCreateMeasures: {
+        duplicateNames: null,
+        result: true,
+        __typename: "adminResult",
       },
     },
   },
@@ -82,11 +81,10 @@ mocksData.push({
   },
   result: {
     data: {
-      data: {
-        createMeasures: {
-          result: true,
-          __typename: "result",
-        },
+      adminCreateMeasures: {
+        duplicateNames: null,
+        result: true,
+        __typename: "adminResult",
       },
     },
   },

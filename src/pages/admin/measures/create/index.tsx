@@ -62,14 +62,11 @@ const CreateMeasures: NextPage = () => {
       templateId: templateId,
     };
 
-    console.debug("variables:", variables);
-
     try {
       await createMeasures({
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          console.log("data", data);
           if (data) {
             const {
               adminCreateMeasures: { duplicateNames },
