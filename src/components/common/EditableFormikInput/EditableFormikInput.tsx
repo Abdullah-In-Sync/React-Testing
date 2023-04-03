@@ -1,49 +1,39 @@
-import React from "react";
-import { Grid, TextField, Typography } from "@mui/material";
-import Modal from "../../common/Modal";
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import {useStyles} from "./editableFormikInputStyles"
+import { useState } from "react";
 import FormikTextField from "../FormikFields/FormikTextField";
-import { ErrorMessage } from "formik";
+import { useStyles } from "./editableFormikInputStyles";
 
 const EditableFormikInput = (props) => {
-  const {
-    name, 
-    value
-  } = props;
-
+  const { name, value } = props;
   const styles = useStyles(props);
-
-//   const [inputValue, setInpuValue] = React.useState(value);
-  const [isNameFocused, setIsNamedFocused] = React.useState(false);
+  const [isNameFocused, setIsNamedFocused] = useState(false);
 
   return (
     <Box>
-        {!isNameFocused && value ? (
-            <Typography
-            className={styles.editableInput}
-            onClick={() => {
-                setIsNamedFocused(true);
-            }}
-            >
-            {value}
-            </Typography>
-        ) : (
-            <>
-            <FormikTextField
+      {!isNameFocused && value ? (
+        <Typography
+          className={styles.editableInput}
+          onClick={() => {
+            setIsNamedFocused(true);
+          }}
+        >
+          {value}
+        </Typography>
+      ) : (
+        <>
+          <FormikTextField
             autoFocus
             name={name}
             id={name}
-            placeholder={
-              "Type"
-            }
-            onBlur={event => setIsNamedFocused(false)}
+            placeholder={"Type"}
+            onBlur={() => setIsNamedFocused(false)}
             size="small"
             hideError
             multiline
           />
-          </>
-        )}
+        </>
+      )}
     </Box>
   );
 };

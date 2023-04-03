@@ -59,13 +59,19 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .second": {
+      "& .selectFomatDropdown .MuiSelect-select": {
+        minWidth: 70,
+      },
       "& .formatsOpenModalButtonWrapper": {
+        "& button": {
+          color: theme.palette.secondary.main,
+        },
         [theme.breakpoints.down("sm")]: {},
         [theme.breakpoints.down("md")]: {
-          paddingBottom: 10
+          paddingBottom: 10,
         },
         [theme.breakpoints.up("lg")]: {
-          paddingRight: 10
+          paddingRight: 10,
         },
       },
       "& .MuiBox-root": {

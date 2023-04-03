@@ -7,9 +7,7 @@ interface ViewProps {
   modalRefFormatsView?: any;
 }
 
-const ViewFormatsModal: React.FC<ViewProps> = ({
-  modalRefFormatsView,
-}) => {
+const ViewFormatsModal: React.FC<ViewProps> = ({ modalRefFormatsView }) => {
   const styles = useStyles();
   return (
     <CommonModal

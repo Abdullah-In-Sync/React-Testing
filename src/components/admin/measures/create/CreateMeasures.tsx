@@ -4,7 +4,7 @@ import CommonForm from "../form/CommonForm";
 
 import { InitialFormValues } from "../form/types";
 import { measuresValidationSchema } from "../form/measuresValidationSchema";
-import { TemplateFormat1Data } from "../../../common/TemplateFormat/templateFormatData"
+import { TemplateFormat1Data } from "../../../common/TemplateFormat/templateFormatData";
 
 interface ViewProps {
   submitForm?: (
@@ -26,14 +26,13 @@ const CreateMeasuersForm: React.FC<ViewProps> = ({
     orgId: "",
     templateId: "",
     templateData: TemplateFormat1Data.data,
-    // ...TemplateFormat1Data.data
   };
 
   const commonform = () => {
     return (
       <Formik
-      enableReinitialize
-      validationSchema={measuresValidationSchema}
+        enableReinitialize
+        validationSchema={measuresValidationSchema}
         initialValues={initialValues}
         onSubmit={submitForm}
         children={(props: any) => (

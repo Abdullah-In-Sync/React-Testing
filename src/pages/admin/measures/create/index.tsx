@@ -18,6 +18,7 @@ const CreateMeasures: NextPage = () => {
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState<any>({
+    validationStatus: false,
     status: false,
     storedFunction: null,
     setSubmitting: null,
@@ -50,15 +51,8 @@ const CreateMeasures: NextPage = () => {
     } else return orgId;
   };
 
-  // $orgId: String!
-  // $templateData: String!
-  // $templateId: String!
-  // $title: String
-  // $description: String
-
   const submitForm = async (formFields, doneCallback) => {
-    const { orgId, description, templateData, templateId, title } =
-      formFields;
+    const { orgId, description, templateData, templateId, title } = formFields;
 
     const variables = {
       title,
@@ -68,13 +62,34 @@ const CreateMeasures: NextPage = () => {
       templateId: templateId,
     };
 
+    console.debug("variables:", variables);
+
     try {
-      await createMeasures({ 
+      await createMeasures({
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
+          console.log("data", data);
           if (data) {
-            setSuccessModal(true);
+            const {
+              adminCreateMeasures: { duplicateNames },
+            } = data;
+
+            if (duplicateNames) {
+              setIsConfirm({
+                ...isConfirm,
+                ...{
+                  validationStatus: true,
+                  confirmObject: {
+                    description: "Following measures already exist!",
+                  },
+                },
+                storedFunction: () => doneCallback(),
+              });
+            } else {
+              setSuccessModal(true);
+              doneCallback();
+            }
           }
         },
       });
@@ -91,16 +106,15 @@ const CreateMeasures: NextPage = () => {
       /* istanbul ignore next */
       setLoader(false);
       /* istanbul ignore next */
-      doneCallback();
     }
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
-    console.log({formFields})
     setIsConfirm({
       ...isConfirm,
       ...{
         status: true,
+        setSubmitting,
         confirmObject: {
           description: "Are you sure you want to create the measure?",
         },
@@ -110,7 +124,17 @@ const CreateMeasures: NextPage = () => {
   };
 
   const onPressCancel = () => {
-    setIsConfirm({ ...isConfirm, ...{ cancelStatus: true } });
+    setIsConfirm({
+      ...isConfirm,
+      ...{
+        status: true,
+        confirmObject: {
+          description:
+            "Are you sure you are canceling the measures without saving?",
+        },
+        storedFunction: () => cancelConfirm(),
+      },
+    });
   };
 
   const cancelConfirm = () => {
@@ -118,46 +142,9 @@ const CreateMeasures: NextPage = () => {
     router.back();
   };
 
-  const clearIsConfirmCancel = () => {
-    /* istanbul ignore next */
-    setIsConfirm({ ...isConfirm, ...{ cancelStatus: false } });
-  };
-
-  // const onConfirmSubmit = () => {
-  //   isConfirm.storedFunction(() => {
-  //     setLoader(true);
-  //     isConfirm.setSubmitting(false);
-  //     setIsConfirm({
-  //       status: false,
-  //       storedFunction: null,
-  //       setSubmitting: null,
-  //     });
-  //   });
-  // };
-
-  // const clearIsConfirm = () => {
-  //   isConfirm.setSubmitting(false);
-  //   setIsConfirm({
-  //     status: false,
-  //     storedFunction: null,
-  //     setSubmitting: null,
-  //     cancelStatus: false,
-  //   });
-  // };
-
   const handleOk = () => {
     setSuccessModal(false);
   };
-
-  // const onPressDeleteQuestion = (v) => {
-  //   setIsConfirm({
-  //     status: true,
-  //     confirmObject: {
-  //       description: "Are you sure you want to delete the Relapse plan?",
-  //     },
-  //     storedFunction: () => handleDeletesafetyPlan(v),
-  //   });
-  // };
 
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
@@ -167,6 +154,7 @@ const CreateMeasures: NextPage = () => {
         isConfirm.setSubmitting(false);
 
       setIsConfirm({
+        validationStatus: false,
         status: false,
         storedFunction: null,
         setSubmitting: null,
@@ -183,9 +171,9 @@ const CreateMeasures: NextPage = () => {
       storedFunction: null,
       setSubmitting: null,
       cancelStatus: false,
+      validationStatus: false,
     });
   };
-
 
   return (
     <>
@@ -198,20 +186,26 @@ const CreateMeasures: NextPage = () => {
           onPressCancel={onPressCancel}
         />
         {isConfirm.status && (
-        <ConfirmationModal
-          label={isConfirm.confirmObject.description}
-          onCancel={clearIsConfirm}
-          onConfirm={onConfirmSubmit}
-        />
-      )}
+          <ConfirmationModal
+            label={isConfirm.confirmObject.description}
+            onCancel={clearIsConfirm}
+            onConfirm={onConfirmSubmit}
+          />
+        )}
+        {isConfirm.validationStatus && (
+          <ConfirmationModal
+            label={isConfirm.confirmObject.description}
+            onOk={onConfirmSubmit}
+          />
+        )}
         {successModal && (
           <SuccessModal
             isOpen={successModal}
             title="Successfull"
-            description={"Your plan has been created Successfully."}
+            description={"Your measures has been created successfully."}
             onOk={handleOk}
           />
-        )} 
+        )}
       </Layout>
     </>
   );

@@ -14,11 +14,13 @@ const ResponseTextArea = (props) => {
         spellCheck="false"
         error={touched.touched && Boolean(touched.error)}
       />
-      {!hideError && <ErrorMessage
-        name={props.name}
-        component="div"
-        className="invalid-input-message"
-      />}
+      {!hideError && (
+        <ErrorMessage
+          name={props.name}
+          component="div"
+          className="invalid-input-message"
+        />
+      )}
     </Stack>
   );
 };

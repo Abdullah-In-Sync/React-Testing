@@ -1,16 +1,15 @@
+import { Info } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Stack } from "@mui/material";
 import { Form, FormikProps } from "formik";
 import React, { useRef } from "react";
 import CommonButton from "../../../common/Buttons/CommonButton";
-import {
-  ModalElement
-} from "../../../common/CustomModal/CommonModal";
+import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { Format1 } from "../../../common/TemplateFormat";
 import ViewFormatsModal from "../../../common/TemplateFormat/ViewFomatsModal";
 import { useStyles } from "./createMeasuresStyles";
-import * as types from "./types"
+import * as types from "./types";
 
 interface ViewProps {
   organizationList?: Array<{
@@ -25,10 +24,8 @@ const CommonForm: React.FC<ViewProps> = ({
   organizationList = [],
   onPressCancel,
   formikProps,
-  handleDeleteQuestion
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
-  const questionFieldscRef = useRef(null);
   const modalRefFormatsView = useRef<ModalElement>(null);
   const styles = useStyles();
   const csvDecode = (csvString) => {
@@ -51,7 +48,6 @@ const CommonForm: React.FC<ViewProps> = ({
               <Box className="fieldsBoxWrapperFirst">
                 <Box>
                   <FormikTextField
-
                     name="title"
                     id="title"
                     label="Title"
@@ -98,7 +94,6 @@ const CommonForm: React.FC<ViewProps> = ({
                       className="form-control-bg multiSelect"
                       extraProps={{ "data-testid": "organizationSelect" }}
                       multiSelect={csvDecode(values.orgId)}
-          
                     />
                   </Box>
                 </Box>
@@ -110,7 +105,8 @@ const CommonForm: React.FC<ViewProps> = ({
                       variant="outlined"
                       fullWidth
                     >
-                      Click here to know about the formats
+                      Click here to know about the formats&nbsp;
+                      <Info />
                     </Button>
                   </Box>
                   <Box>
@@ -118,15 +114,14 @@ const CommonForm: React.FC<ViewProps> = ({
                       id="templateId"
                       labelId="templateId"
                       name="templateId"
-
                       label="Add format"
                       options={[
                         { id: 1, value: "Format 1" },
-                        { id: 2, value: "Format 2" }
+                        { id: 2, value: "Format 2" },
                       ]}
                       mappingKeys={["id", "value"]}
                       size="small"
-                      className="form-control-bg"
+                      className="selectFomatDropdown"
                       extraProps={{ "data-testid": "templateFormatSelect" }}
                       fullWidth
                     />

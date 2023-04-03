@@ -98,7 +98,6 @@ export const VIEW_MEASURE_RESPONSE = gql`
   }
 `;
 
-
 // mutation MyMutation {
 //   adminCreateMeasures(org_id: "", template_data: "", template_id: "", title: "", description: "") {
 //     result
@@ -109,7 +108,7 @@ export const VIEW_MEASURE_RESPONSE = gql`
 //   }
 // }
 
-export const CREATE_MEASURE_TEMPLATE= gql`
+export const CREATE_MEASURE_TEMPLATE = gql`
   mutation adminCreateMeasures(
     $orgId: String!
     $templateData: String!
@@ -132,4 +131,3 @@ export const CREATE_MEASURE_TEMPLATE= gql`
     }
   }
 `;
-
