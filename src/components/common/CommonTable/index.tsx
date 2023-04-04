@@ -10,11 +10,10 @@ import { columns } from "./generateList";
 import { useStyles } from "./tableStyles";
 
 interface ViewProps {
-  data?: any;
-  // {
-  //   list: any;
-  //   total: number;
-  // } | null;
+  data?: {
+    list: any;
+    total: number;
+  } | null;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
   pageActionButtonClick?: (value) => void;
@@ -32,10 +31,9 @@ const CommonTable: React.FC<ViewProps> = ({
   tableCurentPage,
   rowsLimit,
   loading,
-  headerData
+  headerData,
 }) => {
   const styles = useStyles();
-  console.log("data----->", data)
   const { list, total = 0 } = data || {};
 
   const messageCheck = () => {
@@ -44,9 +42,7 @@ const CommonTable: React.FC<ViewProps> = ({
       return (
         <>
           <Typography className="alertHead">Oops!</Typography>
-          <Typography>
-            Currently you have not created any record
-          </Typography>
+          <Typography>Currently you have not created any record</Typography>
         </>
       );
     else if (list.length <= 0 && !loading)

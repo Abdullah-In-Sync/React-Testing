@@ -1,10 +1,11 @@
 import React from "react";
-import * as safetyPlanInterface from "../../../graphql/SafetyPlan/types";
+import * as measuresInterface from "../../../graphql/Measure/types";
 import Filter from "../../common/Filter";
 import CommonTable from "../../common/CommonTable";
+import measuresData from "./data";
 
 interface ViewProps {
-  safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
+  measuresList?: measuresInterface.AdminMeasuresList | null;
   pageActionButtonClick: (value) => void;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
@@ -15,11 +16,12 @@ interface ViewProps {
   organizationList?: object[];
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
-  loadingSafetyPlanList?: boolean;
+  loadingMeasuresList?: boolean;
+  onPressSideButton?: () => void;
 }
 
-const SafetyPlanComponent: React.FC<ViewProps> = ({
-  safetyPlanList,
+const MeasuresComponent: React.FC<ViewProps> = ({
+  measuresList,
   pageActionButtonClick,
   onPageChange,
   onSelectPageDropdown,
@@ -30,7 +32,8 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
   organizationList,
   selectFilterOptions,
   onChangeFilterDropdown,
-  loadingSafetyPlanList,
+  loadingMeasuresList,
+  onPressSideButton,
 }) => {
   return (
     <>
@@ -40,40 +43,22 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
         organizationList={organizationList}
         selectFilterOptions={selectFilterOptions}
         onChangeFilterDropdown={onChangeFilterDropdown}
+        sideButtonLabel={"Create Measures"}
+        onPressSideButton={onPressSideButton}
+        hidePlanType
       />
       <CommonTable
-        data={{list: safetyPlanList.data, total: safetyPlanList.total}}
+        data={{ list: measuresList.data, total: measuresList.total }}
         pageActionButtonClick={pageActionButtonClick}
         onPageChange={onPageChange}
-        onSelectPageDropdown={onChangeFilterDropdown}
+        onSelectPageDropdown={onSelectPageDropdown}
         tableCurentPage={tableCurentPage}
         rowsLimit={rowsLimit}
-        loading={loadingSafetyPlanList}
-        headerData={[
-          {
-            id: "sNo",
-            label: "S. No.",
-          },
-          {
-            id: "planName",
-            label: "Plan Name",
-          },
-          {
-            id: "planType",
-            label: "Plan Type",
-          },
-          {
-            id: "Organisation",
-            label: "Organisation",
-          },
-          {
-            id: "actions",
-            label: "Actions",
-          },
-        ]}
+        loading={loadingMeasuresList}
+        headerData={measuresData.measuresListHeader}
       />
     </>
   );
 };
 
-export default SafetyPlanComponent;
+export default MeasuresComponent;

@@ -52,6 +52,7 @@ const CreateMeasures: NextPage = () => {
   };
 
   const submitForm = async (formFields, doneCallback) => {
+    setLoader(true);
     const { orgId, description, templateData, templateId, title } = formFields;
 
     const variables = {
@@ -140,12 +141,12 @@ const CreateMeasures: NextPage = () => {
   };
 
   const handleOk = () => {
+    router.push(`/admin/measures`);
     setSuccessModal(false);
   };
 
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
-      setLoader(true);
       /* istanbul ignore next */
       if (isConfirm.setSubmitting instanceof Function)
         isConfirm.setSubmitting(false);

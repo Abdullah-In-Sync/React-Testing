@@ -1,6 +1,5 @@
 import { Box, Fab } from "@mui/material";
 import * as React from "react";
-// import * as safetyPlanInterface from "../../../graphql/SafetyPlan/types";
 
 interface ViewProps {
   data: any;

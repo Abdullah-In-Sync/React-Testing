@@ -1,25 +1,23 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { Box, Button } from "@mui/material";
+import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
-import React, { useEffect, useRef, useState } from "react";
-import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal";
+import React, { useEffect, useState } from "react";
 import MeasuresComponent from "../../../components/admin/measures";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
-import { SuccessModal } from "../../../components/common/SuccessModal";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import {
-  GET_SAFETY_PLAN_LIST,
-  UPDATE_SAFETY_PLAN,
-} from "../../../graphql/SafetyPlan/graphql";
-import {
-  UpdateSafetyPlanByIDRes,
-  UpdateSafetyPlanByIdVars,
-} from "../../../graphql/SafetyPlan/types";
+// import {
+//   UPDATE_MEASURES_PLAN,
+// } from "../../../graphql/Measures/graphql";
+
+import { GET_ADMIN_MEASURES_LIST } from "../../../graphql/Measure/graphql";
+// import {
+//   UpdateMeasuresByIDRes,
+//   UpdateMeasuresByIdVars,
+// } from "../../../graphql/Measures/types";
 import { useRouter } from "next/router";
 
-const SafetyPlanPage: NextPage = () => {
+const MeasuresListPage: NextPage = () => {
   const router = useRouter();
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
@@ -27,13 +25,10 @@ const SafetyPlanPage: NextPage = () => {
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const actionClickedId = useRef();
 
   useEffect(() => {
     getOrgList();
-    getSafetyPlanList({
+    getAdminMeasuresList({
       variables: { limit: rowsLimit, pageNo: initialPageNo },
     });
   }, []);
@@ -50,12 +45,12 @@ const SafetyPlanPage: NextPage = () => {
   });
 
   const [
-    getSafetyPlanList,
+    getAdminMeasuresList,
     {
-      loading: loadingSafetyPlanList,
-      data: { getSafetyPlanList: listData = {} } = {},
+      loading: loadingMeasuresList,
+      data: { adminMeasuresList: listData = {} } = {},
     },
-  ] = useLazyQuery(GET_SAFETY_PLAN_LIST, {
+  ] = useLazyQuery(GET_ADMIN_MEASURES_LIST, {
     fetchPolicy: "no-cache",
     onCompleted: () => {
       /* istanbul ignore next */
@@ -63,18 +58,18 @@ const SafetyPlanPage: NextPage = () => {
     },
   });
 
-  const [deleteSeftyPlanFn, { loading: deleteSeftyPlanLoading }] = useMutation<
-    UpdateSafetyPlanByIDRes,
-    UpdateSafetyPlanByIdVars
-  >(UPDATE_SAFETY_PLAN, {
-    onCompleted: () => {
-      /* istanbul ignore next */
-      getSafetyPlanList({
-        variables: { limit: rowsLimit, pageNo: initialPageNo },
-      });
-      setShowSuccessModal(true);
-    },
-  });
+  // const [deleteMeasuresFn, { loading: deleteSeftyPlanLoading }] = useMutation<
+  //   UpdateSafetyPlanByIDRes,
+  //   UpdateSafetyPlanByIdVars
+  // >(UPDATE_SAFETY_PLAN, {
+  //   onCompleted: () => {
+  //     /* istanbul ignore next */
+  //     getAdminMeasuresList({
+  //       variables: { limit: rowsLimit, pageNo: initialPageNo },
+  //     });
+  //     setShowSuccessModal(true);
+  //   },
+  // });
 
   const onPageChange = (event?: any, newPage?: number) => {
     /* istanbul ignore next */
@@ -83,7 +78,7 @@ const SafetyPlanPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getSafetyPlanList({
+    getAdminMeasuresList({
       variables: {
         limit: rowsLimit,
         pageNo: newPage + 1,
@@ -96,13 +91,14 @@ const SafetyPlanPage: NextPage = () => {
   };
 
   const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
+    alert(event.target.value);
     /* istanbul ignore next */
     const searchText =
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getSafetyPlanList({
+    getAdminMeasuresList({
       variables: {
         limit: +event.target.value,
         pageNo: initialPageNo,
@@ -118,7 +114,7 @@ const SafetyPlanPage: NextPage = () => {
 
   const onChangeSearchInput = (e) => {
     setSearchInputValue(() => {
-      getSafetyPlanList({
+      getAdminMeasuresList({
         variables: {
           limit: rowsLimit,
           searchText: e.target.value,
@@ -133,15 +129,13 @@ const SafetyPlanPage: NextPage = () => {
 
   const onChangeFilterDropdown = (e) => {
     const temp = selectFilterOptions;
-    /* istanbul ignore next */
     const searchText =
       searchInputValue && searchInputValue !== ""
         ? { searchText: searchInputValue }
         : {};
-    /* istanbul ignore next */
+
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
-    /* istanbul ignore next */
-    getSafetyPlanList({
+    getAdminMeasuresList({
       variables: {
         limit: rowsLimit,
         pageNo: initialPageNo,
@@ -149,43 +143,49 @@ const SafetyPlanPage: NextPage = () => {
         ...temp,
       },
     });
-    /* istanbul ignore next */
     setTableCurrentPage(0);
     setSelectFilterOptions({ ...temp });
   };
 
-  const deleteSeftyPlan = () => {
-    deleteSeftyPlanFn({
-      variables: {
-        planId: actionClickedId.current,
-        updatePlan: {
-          status: 0,
-        },
-      },
-    });
+  // const deleteSeftyPlan = () => {
+  //   deleteMeasuresFn({
+  //     variables: {
+  //       planId: actionClickedId.current,
+  //       updatePlan: {
+  //         status: 0,
+  //       },
+  //     },
+  //   });
+  // };
+
+  /* istanbul ignore next */
+  const handleActionButtonClick = () => {
+    // const { pressedIconButton, _id } = value;
+    /* istanbul ignore next */
+    // switch (
+    //   pressedIconButton
+    //   // case "edit":
+    //   //   return router.push(`/admin/measures/edit/${_id}`);
+    //   // case "view":
+    //   //   return router.push(`/admin/measures/view/${_id}`);
+    //   // case "delete":
+    //   //   actionClickedId.current = value?._id;
+    //   //   setDeleteConfirmation(true);
+    // ) {
+    // }
   };
 
-  const handleActionButtonClick = (value) => {
-    const { pressedIconButton, _id } = value;
-    /* istanbul ignore next */
-    switch (pressedIconButton) {
-      case "edit":
-        return router.push(`/admin/safetyPlan/edit/${_id}`);
-      case "view":
-        return router.push(`/admin/safetyPlan/view/${_id}`);
-      case "delete":
-        actionClickedId.current = value?._id;
-        setDeleteConfirmation(true);
-    }
+  const onPressSideButton = () => {
+    router.push(`/admin/measures/create`);
   };
 
   return (
     <>
-      <Layout >
+      <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Measures" />
         <MeasuresComponent
-          safetyPlanList={listData}
+          measuresList={listData}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
@@ -195,12 +195,12 @@ const SafetyPlanPage: NextPage = () => {
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          loadingSafetyPlanList={loadingSafetyPlanList}
+          loadingMeasuresList={loadingMeasuresList}
           pageActionButtonClick={handleActionButtonClick}
+          onPressSideButton={onPressSideButton}
         />
-
       </Layout>
     </>
   );
 };
-export default SafetyPlanPage;
+export default MeasuresListPage;
