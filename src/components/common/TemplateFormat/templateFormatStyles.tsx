@@ -131,6 +131,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .commonFieldWrapper": {
+      "& .inputBox": {
+        flex: 1,
+      },
       "& fieldset": {
         border: "unset",
       },
@@ -140,7 +143,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& .deleteButtonWrapper": {
       display: "flex",
-      flex: 1,
+      //   flex: 1,
       justifyContent: "flex-end",
       marginBottom: "0.7rem",
     },

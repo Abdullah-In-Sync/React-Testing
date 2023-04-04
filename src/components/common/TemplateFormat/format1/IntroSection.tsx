@@ -22,14 +22,16 @@ const IntroSection: React.FC<ViewProps> = ({ formikProps }) => {
           elevation={0}
           sx={{ p: "2px 4px", display: "flex", border: "1px solid #ccc" }}
         >
-          <FormikTextField
-            name={`templateData.intro`}
-            id={`templateData.intro`}
-            placeholder={"Please type here"}
-            fullWidth
-            multiline
-            hideError
-          />
+          <Box className="inputBox">
+            <FormikTextField
+              name={`templateData.intro`}
+              id={`templateData.intro`}
+              placeholder={"Please type here"}
+              fullWidth
+              multiline
+              hideError
+            />
+          </Box>
           <DeleteButton
             i={"intro"}
             data-testId={"introDelete"}
