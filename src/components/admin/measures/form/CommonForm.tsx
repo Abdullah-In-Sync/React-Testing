@@ -116,8 +116,8 @@ const CommonForm: React.FC<ViewProps> = ({
                       name="templateId"
                       label="Add format"
                       options={[
-                        { id: 1, value: "Format 1" },
-                        { id: 2, value: "Format 2" },
+                        { id: "format1", value: "Format 1" },
+                        { id: "format2", value: "Format 2" },
                       ]}
                       mappingKeys={["id", "value"]}
                       size="small"
@@ -128,7 +128,9 @@ const CommonForm: React.FC<ViewProps> = ({
                   </Box>
                 </Box>
               </Box>
-              {values.templateId === 1 && <Format1 formikProps={formikProps} />}
+              {values.templateId === "format1" && (
+                <Format1 formikProps={formikProps} />
+              )}
               <Box className="bottomActionButtonsWrapper">
                 <Box>
                   <CommonButton

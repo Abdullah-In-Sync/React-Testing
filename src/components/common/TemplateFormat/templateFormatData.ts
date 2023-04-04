@@ -50,7 +50,6 @@ export const TemplateFormat1Data: templateTypes.TemplateFormat = {
   validationSchema: Yup.object({
     intro: Yup.string().required(`Intro is requried`),
     description: Yup.string().required(`Description is requried`),
-    templateId: Yup.string().required(`Format is requried`),
     questions: Yup.array().of(
       Yup.object().shape({
         question: Yup.string().required("Question is required"),

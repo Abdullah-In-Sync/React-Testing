@@ -3,14 +3,14 @@ import { ErrorMessage, useField } from "formik";
 import TextFieldCustom from "../TextField/TextFieldCustom";
 
 const ResponseTextArea = (props) => {
-  const [field, touched] = useField(props);
-  const { hideError } = props;
+  const { hideError, ...rest } = props;
+  const [field, touched] = useField(rest);
 
   return (
     <Stack>
       <TextFieldCustom
         {...field}
-        {...props}
+        {...rest}
         spellCheck="false"
         error={touched.touched && Boolean(touched.error)}
       />
