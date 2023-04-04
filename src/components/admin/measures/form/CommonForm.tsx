@@ -105,7 +105,7 @@ const CommonForm: React.FC<ViewProps> = ({
                       variant="outlined"
                       fullWidth
                     >
-                      Click here to know about the formats&nbsp;
+                      Format Designs &nbsp;
                       <Info />
                     </Button>
                   </Box>
