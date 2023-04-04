@@ -108,3 +108,28 @@ export interface Patientmeasurequestion {
   patmques_severaldays: number;
   patmques_notatall: number;
 }
+
+export interface MeasuresList {
+  data: MeasuresData;
+}
+export interface MeasuresData {
+  adminMeasuresList: AdminMeasuresList;
+}
+export interface AdminMeasuresList {
+  data?: DataEntity[] | null;
+  total: number;
+  __typename: string;
+}
+export interface DataEntity {
+  _id: string;
+  created_date: string;
+  description: string;
+  org_id: string;
+  organization_name: string;
+  status: number;
+  template_data: string;
+  updated_date: string;
+  title: string;
+  template_id: string;
+  __typename: string;
+}
