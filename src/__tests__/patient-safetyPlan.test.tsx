@@ -1,4 +1,10 @@
-import { screen, render, fireEvent, within } from "@testing-library/react";
+import {
+  screen,
+  render,
+  fireEvent,
+  within,
+  waitFor,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useRouter } from "next/router";
@@ -499,5 +505,79 @@ describe("Patient Safety plans", () => {
     await screen.findByTestId("SuccessOkBtn");
 
     fireEvent.click(screen.getByTestId("SuccessOkBtn"));
+  });
+
+  it("Info relapse plan ", async () => {
+    await sut();
+    const list = await screen.findAllByTestId("list-tile");
+    expect(list.length).toEqual(9);
+
+    const firstAccordion = list[0];
+
+    expect(
+      within(firstAccordion).queryByTestId("cancel-form")
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
+
+    expect(
+      within(firstAccordion).queryByTestId(
+        "button-edit-icon_description Baby Failed"
+      )
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      within(firstAccordion).queryByTestId(
+        "button-edit-icon_description Baby Failed"
+      )
+    );
+
+    expect(screen.getByText("How are you Test Failed")).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId("editTemplateCancelButton")
+      ).toBeInTheDocument();
+    });
+
+    const confirmButton = await screen.findByTestId("editTemplateCancelButton");
+
+    fireEvent.click(confirmButton);
+
+    expect(list.length).toEqual(9);
+  });
+
+  it("Cancle relapse plan data", async () => {
+    await sut();
+    const list = await screen.findAllByTestId("list-tile");
+    expect(list.length).toEqual(9);
+
+    const firstAccordion = list[0];
+
+    expect(
+      within(firstAccordion).queryByTestId("cancel-form")
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
+
+    expect(
+      within(firstAccordion).queryByTestId("cancel-form")
+    ).toBeInTheDocument();
+
+    fireEvent.click(within(firstAccordion).queryByTestId("cancel-form"));
+
+    expect(
+      screen.getByText(
+        "Are you sure you are canceling the response without submitting?"
+      )
+    ).toBeInTheDocument();
+
+    const confirmButton = await screen.findByTestId("confirmButton");
+
+    fireEvent.click(confirmButton);
+
+    expect(
+      screen.getByText("Response cancel successfully")
+    ).toBeInTheDocument();
   });
 });

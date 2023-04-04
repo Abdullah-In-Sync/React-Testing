@@ -54,7 +54,7 @@ mocksData.push({
       planName: "test",
       planType: "fixed",
       questions:
-        '[{"question":"test","description":"test des","questionType":"1"}]',
+        '[{"question":"test","description":"test des","questionType":"1","questionOption":""}]',
     },
   },
   result: {

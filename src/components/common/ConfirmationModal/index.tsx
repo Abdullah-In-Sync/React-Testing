@@ -5,8 +5,9 @@ import SureModal from "../../admin/resource/SureModal";
 interface ViewProps {
   label: string;
   description?: string;
-  onCancel: () => void;
-  onConfirm: () => void;
+  onCancel?: () => void;
+  onConfirm?: () => void;
+  onOk?: () => void;
 }
 
 const ConfirmationModal: React.FC<ViewProps> = ({
@@ -14,6 +15,7 @@ const ConfirmationModal: React.FC<ViewProps> = ({
   onConfirm,
   label,
   description,
+  onOk,
 }) => {
   return (
     <div data-testid="openFileUpload">
@@ -37,27 +39,41 @@ const ConfirmationModal: React.FC<ViewProps> = ({
               {description}
             </Typography>
           )}
-          <Box marginTop="20px" display="flex" justifyContent="center">
-            <Button
-              color="primary"
-              variant="contained"
-              sx={{ marginRight: "10px" }}
-              size="small"
-              data-testid="confirmButton"
-              onClick={onConfirm}
-            >
-              Confirm
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="small"
-              data-testid="cancelButton"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-          </Box>
+          {!onOk ? (
+            <Box marginTop="20px" display="flex" justifyContent="center">
+              <Button
+                color="primary"
+                variant="contained"
+                sx={{ marginRight: "10px" }}
+                size="small"
+                data-testid="confirmButton"
+                onClick={onConfirm}
+              >
+                Confirm
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                data-testid="cancelButton"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+            </Box>
+          ) : (
+            <Box marginTop="20px" display="flex" justifyContent="center">
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                data-testid="cancelButton"
+                onClick={onOk}
+              >
+                Ok
+              </Button>
+            </Box>
+          )}
         </SureModal>
       </>
     </div>

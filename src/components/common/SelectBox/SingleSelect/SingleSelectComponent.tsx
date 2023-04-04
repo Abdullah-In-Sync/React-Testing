@@ -9,7 +9,7 @@ type propTypes = {
   id: string;
   labelId: string;
   label?: string;
-  name: string;
+  name?: string;
   value: any;
   onChange?: (event: React.ChangeEvent<HTMLElement>) => void;
   inputProps?: any;
