@@ -20,6 +20,8 @@ const QuestionsSection: React.FC<ViewProps> = ({
 }) => {
   const { values, setFieldValue, errors, touched } = formikProps;
   const { templateData } = values;
+  const { templateData: { questions: questionsTouched = [] } = {} } = touched;
+  const { templateData: { questions: questionsError = [] } = {} } = errors;
 
   const onAddQuesionBox = () => {
     // if (templateData.questions.length < 15) {
@@ -44,9 +46,9 @@ const QuestionsSection: React.FC<ViewProps> = ({
       </Box>
       <FieldArray name="questions">
         {() =>
-          templateData.questions.map((item, i) => {
+          templateData.questions.map((_, i) => {
             return (
-              <Box className="question">
+              <Box className="question" key={`question_${i}`}>
                 <Paper
                   className="inputPaper"
                   elevation={0}
@@ -94,11 +96,11 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   </Box>
                 </Paper>
 
-                {touched?.templateData?.questions[i] &&
-                  errors?.templateData?.questions[i] && (
-                    <ErrorMessage
-                      errorMsg={errors.templateData.questions[i]["question"]}
-                    />
+                {questionsTouched.length > 0 &&
+                  questionsTouched[i] &&
+                  questionsError.length > 0 &&
+                  questionsError[i] && (
+                    <ErrorMessage errorMsg={questionsError[i]["question"]} />
                   )}
               </Box>
             );

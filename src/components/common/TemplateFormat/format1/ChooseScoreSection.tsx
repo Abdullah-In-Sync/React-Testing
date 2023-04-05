@@ -21,15 +21,13 @@ const ChooseScoreSection: React.FC<ViewProps> = ({ formikProps }) => {
           templateData.scores.map((item, i) => {
             const { label } = item;
             return (
-              <Box className="scoreCardValue">
+              <Box className="scoreCardValue" key={`score_${i}`}>
                 <Box className="first">
                   <label>
                     <Typography>{label}</Typography>
                   </label>
                 </Box>
-
                 <Divider />
-
                 <Box className="editableInputWrapper">
                   <EditableFormikInput
                     name={`templateData.scores.${i}.value`}

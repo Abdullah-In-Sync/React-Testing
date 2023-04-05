@@ -6,7 +6,7 @@ export const measuresValidationSchema = Yup.object().shape({
   orgId: Yup.string().required("Organization is required"),
   templateId: Yup.string().required("Format is required"),
   templateData: Yup.object().when("templateId", {
-    is: 1,
+    is: "format1",
     then: TemplateFormat1Data.validationSchema,
   }),
 });
