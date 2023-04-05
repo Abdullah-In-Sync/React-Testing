@@ -151,3 +151,14 @@ export const CREATE_MEASURE_TEMPLATE = gql`
     }
   }
 `;
+
+export const UPDATE_MEASURE = gql`
+  mutation adminUpdateMeasureById(
+    $measureId: ID!
+    $update: UpdateMeasureInput
+  ) {
+    adminUpdateMeasureById(measure_id: $measureId, update: $update) {
+      _id
+    }
+  }
+`;

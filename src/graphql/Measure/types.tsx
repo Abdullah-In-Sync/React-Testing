@@ -133,3 +133,24 @@ export interface DataEntity {
   template_id: string;
   __typename: string;
 }
+
+export interface UpdateMeasureByIdVars {
+  measureId: string;
+  update: UpdateMeasure;
+}
+export interface UpdateMeasure {
+  status?: number;
+  description?: string;
+  org_id?: string;
+  template_data?: string;
+  template_id?: string;
+  title?: string;
+}
+
+export interface UpdateMeasureByIdResponse {
+  adminUpdateMeasureById: AdminUpdateMeasureById;
+}
+export interface AdminUpdateMeasureById {
+  _id: string;
+  __typename: string;
+}
