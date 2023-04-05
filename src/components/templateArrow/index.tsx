@@ -5,6 +5,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
+  applyEdgeChanges,
+  applyNodeChanges
 } from "reactflow";
 import "reactflow/dist/style.css";
 import ApartmentIcon from "@mui/icons-material/Apartment";
@@ -16,13 +18,23 @@ import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact
 import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import { Box } from "@mui/system";
 import SideBar from "./sideBar";
+import TextUpdaterNode from "./customNode";
+
+// const initialNodes = [
+//   {
+//     id: "1",
+//     type: "apartment",
+//     data: { label: "input node" },
+//     position: { x: 250, y: 5 },
+//   },
+// ];
 
 const initialNodes = [
   {
-    id: "1",
-    type: "apartment",
-    data: { label: "input node" },
-    position: { x: 250, y: 5 },
+    id: "node-1",
+    type: "selectorNode",
+    position: { x: 0, y: 0 },
+    data: { value: 123 },
   },
 ];
 
@@ -31,7 +43,7 @@ const getId = () => `dndnode_${id++}`;
 
 const TemplateArrow = () => {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
@@ -39,6 +51,15 @@ const TemplateArrow = () => {
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
   );
+
+  // const onNodesChange = useCallback(
+  //   (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+  //   [setNodes]
+  // );
+  // const onEdgesChange = useCallback(
+  //   (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+  //   [setEdges]
+  // );
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -62,7 +83,7 @@ const TemplateArrow = () => {
       });
       const newNode = {
         id: getId(),
-        type,
+        type: "selectorNode",
         position,
         data: { label: `${type} node` },
       };
@@ -108,6 +129,9 @@ const TemplateArrow = () => {
       icon: <ContactPhoneIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
   ];
+  const nodeType = {
+    selectorNode: TextUpdaterNode,
+  };
   return (
     <Box
       style={{
@@ -132,6 +156,7 @@ const TemplateArrow = () => {
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            nodeTypes={nodeType}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
