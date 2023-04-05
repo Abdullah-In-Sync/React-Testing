@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import MeasuresComponent from "../../../components/admin/measures";
@@ -6,16 +6,19 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-// import {
-//   UPDATE_MEASURES_PLAN,
-// } from "../../../graphql/Measures/graphql";
+import {
+  UPDATE_MEASURE,
+  GET_ADMIN_MEASURES_LIST,
+} from "../../../graphql/Measure/graphql";
 
-import { GET_ADMIN_MEASURES_LIST } from "../../../graphql/Measure/graphql";
-// import {
-//   UpdateMeasuresByIDRes,
-//   UpdateMeasuresByIdVars,
-// } from "../../../graphql/Measures/types";
+import {
+  UpdateMeasureByIdResponse,
+  UpdateMeasureByIdVars,
+} from "../../../graphql/Measure/types";
 import { useRouter } from "next/router";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { SuccessModal } from "../../../components/common/SuccessModal";
+import { useSnackbar } from "notistack";
 
 const MeasuresListPage: NextPage = () => {
   const router = useRouter();
@@ -25,11 +28,26 @@ const MeasuresListPage: NextPage = () => {
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
+  const { enqueueSnackbar } = useSnackbar();
+  const [isConfirm, setIsConfirm] = useState<any>({
+    status: false,
+    storedFunction: null,
+    setSubmitting: null,
+    cancelStatus: false,
+    confirmObject: {
+      description: "",
+    },
+  });
+  const [successModal, setSuccessModal] = useState<any>();
+  const [updateMeasure] = useMutation<
+    UpdateMeasureByIdResponse,
+    UpdateMeasureByIdVars
+  >(UPDATE_MEASURE);
 
   useEffect(() => {
     getOrgList();
     getAdminMeasuresList({
-      variables: { limit: rowsLimit, pageNo: initialPageNo },
+      variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
     });
   }, []);
 
@@ -37,7 +55,7 @@ const MeasuresListPage: NextPage = () => {
     getOrgList,
     { data: { getOrganizationData: organizationList = [] } = {} },
   ] = useLazyQuery(GET_ORGANIZATION_LIST, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
@@ -51,25 +69,12 @@ const MeasuresListPage: NextPage = () => {
       data: { adminMeasuresList: listData = {} } = {},
     },
   ] = useLazyQuery(GET_ADMIN_MEASURES_LIST, {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "cache-and-network",
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
     },
   });
-
-  // const [deleteMeasuresFn, { loading: deleteSeftyPlanLoading }] = useMutation<
-  //   UpdateSafetyPlanByIDRes,
-  //   UpdateSafetyPlanByIdVars
-  // >(UPDATE_SAFETY_PLAN, {
-  //   onCompleted: () => {
-  //     /* istanbul ignore next */
-  //     getAdminMeasuresList({
-  //       variables: { limit: rowsLimit, pageNo: initialPageNo },
-  //     });
-  //     setShowSuccessModal(true);
-  //   },
-  // });
 
   const onPageChange = (event?: any, newPage?: number) => {
     /* istanbul ignore next */
@@ -91,7 +96,6 @@ const MeasuresListPage: NextPage = () => {
   };
 
   const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
-    alert(event.target.value);
     /* istanbul ignore next */
     const searchText =
       searchInputValue && searchInputValue !== ""
@@ -147,36 +151,82 @@ const MeasuresListPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
-  // const deleteSeftyPlan = () => {
-  //   deleteMeasuresFn({
-  //     variables: {
-  //       planId: actionClickedId.current,
-  //       updatePlan: {
-  //         status: 0,
-  //       },
-  //     },
-  //   });
-  // };
-
-  /* istanbul ignore next */
-  const handleActionButtonClick = () => {
-    // const { pressedIconButton, _id } = value;
-    /* istanbul ignore next */
-    // switch (
-    //   pressedIconButton
-    //   // case "edit":
-    //   //   return router.push(`/admin/measures/edit/${_id}`);
-    //   // case "view":
-    //   //   return router.push(`/admin/measures/view/${_id}`);
-    //   // case "delete":
-    //   //   actionClickedId.current = value?._id;
-    //   //   setDeleteConfirmation(true);
-    // ) {
-    // }
+  const handleDeleteMeasure = async (id, doneCallback) => {
+    setLoader(true);
+    try {
+      await updateMeasure({
+        variables: {
+          measureId: id,
+          update: {
+            status: 0,
+          },
+        },
+        onCompleted: () => {
+          setSuccessModal({
+            description: "Your measure has been deleted successfully.",
+          });
+          getAdminMeasuresList({
+            variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
+          });
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    } finally {
+      doneCallback();
+      setLoader(false);
+    }
   };
 
   const onPressSideButton = () => {
     router.push(`/admin/measures/create`);
+  };
+
+  /* istanbul ignore next */
+  const handleActionButtonClick = (value) => {
+    const { pressedIconButton, _id } = value;
+    switch (pressedIconButton) {
+      // case "edit":
+      //   return router.push(`/admin/measures/edit/${_id}`);
+      // case "view":
+      //   return router.push(`/admin/measures/view/${_id}`);
+      case "delete":
+        return onPressDeleteMeasure(_id);
+    }
+  };
+
+  const onPressDeleteMeasure = (id) => {
+    setIsConfirm({
+      status: true,
+      confirmObject: {
+        description: "Are you sure you want to delete the measure?",
+      },
+      storedFunction: (callback) => handleDeleteMeasure(id, callback),
+    });
+  };
+
+  const clearIsConfirm = () => {
+    setIsConfirm({
+      status: false,
+      storedFunction: null,
+      setSubmitting: null,
+      cancelStatus: false,
+    });
+  };
+
+  const onConfirmSubmit = () => {
+    isConfirm.storedFunction(() => {
+      setIsConfirm({
+        status: false,
+        storedFunction: null,
+        setSubmitting: null,
+      });
+    });
+  };
+
+  const handleOk = () => {
+    setSuccessModal(undefined);
   };
 
   return (
@@ -199,6 +249,21 @@ const MeasuresListPage: NextPage = () => {
           pageActionButtonClick={handleActionButtonClick}
           onPressSideButton={onPressSideButton}
         />
+        {isConfirm.status && (
+          <ConfirmationModal
+            label={isConfirm.confirmObject.description}
+            onCancel={clearIsConfirm}
+            onConfirm={onConfirmSubmit}
+          />
+        )}
+        {successModal && (
+          <SuccessModal
+            isOpen={Boolean(successModal)}
+            title="Successful"
+            description={successModal.description}
+            onOk={handleOk}
+          />
+        )}
       </Layout>
     </>
   );

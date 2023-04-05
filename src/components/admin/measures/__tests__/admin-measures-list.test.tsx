@@ -4,11 +4,11 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-// import {
 
-//   UPDATE_MEASURES,
-// } from "../../../../graphql/Measure/graphql";
-import { GET_ADMIN_MEASURES_LIST } from "../../../../graphql/Measure/graphql";
+import {
+  GET_ADMIN_MEASURES_LIST,
+  UPDATE_MEASURE,
+} from "../../../../graphql/Measure/graphql";
 
 import MeasuresListPage from "../../../../pages/admin/measures";
 
@@ -212,24 +212,24 @@ mocksData.push({
   },
 });
 
-// mocksData.push({
-//   request: {
-//     query: UPDATE_MEASURE,
-//     variables: {
-//       planId: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
-//       updatePlan: {
-//         status: 0,
-//       },
-//     },
-//   },
-//   result: {
-//     data: {
-//       updateMeasureById: {
-//         _id: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
-//       },
-//     },
-//   },
-// });
+mocksData.push({
+  request: {
+    query: UPDATE_MEASURE,
+    variables: {
+      measureId: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
+      update: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateMeasureById: {
+        _id: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
+      },
+    },
+  },
+});
 
 const sut = async () => {
   render(
@@ -273,20 +273,18 @@ describe("Admin measures list", () => {
     await selectFromOrganizationDropdown();
   });
 
-  //   it("delele measure from list", async () => {
-  //     await sut();
-  //     const deleteButton = await screen.findByTestId(
-  //       "iconButton_delete_d2393912-bdd6-47a1-98b7-49f9ce9756a0"
-  //     );
-  //     expect(deleteButton).toBeInTheDocument();
-  //     fireEvent.click(deleteButton);
+  it("delele measure from list", async () => {
+    await sut();
+    const deleteButton = await screen.findByTestId(
+      "iconButton_delete_d2393912-bdd6-47a1-98b7-49f9ce9756a0"
+    );
+    expect(deleteButton).toBeInTheDocument();
+    fireEvent.click(deleteButton);
 
-  //     const approveDeleteBtn = screen.queryByTestId(
-  //       "approveDeletePlanModalConfirmButton"
-  //     );
-  //     expect(approveDeleteBtn).toBeInTheDocument();
-  //     await waitFor(() => fireEvent.click(approveDeleteBtn));
+    const approveDeleteBtn = screen.getByTestId("confirmButton");
+    expect(approveDeleteBtn).toBeInTheDocument();
+    fireEvent.click(approveDeleteBtn);
 
-  //     expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
-  //   });
+    expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
+  });
 });
