@@ -6,7 +6,7 @@ import ReactFlow, {
   useEdgesState,
   Controls,
   applyEdgeChanges,
-  applyNodeChanges
+  applyNodeChanges,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import ApartmentIcon from "@mui/icons-material/Apartment";
@@ -20,15 +20,6 @@ import { Box } from "@mui/system";
 import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 
-// const initialNodes = [
-//   {
-//     id: "1",
-//     type: "apartment",
-//     data: { label: "input node" },
-//     position: { x: 250, y: 5 },
-//   },
-// ];
-
 const initialNodes = [
   {
     id: "node-1",
@@ -37,6 +28,10 @@ const initialNodes = [
     data: { value: 123 },
   },
 ];
+
+const nodeType = {
+  selectorNode: TextUpdaterNode,
+};
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -51,15 +46,6 @@ const TemplateArrow = () => {
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
   );
-
-  // const onNodesChange = useCallback(
-  //   (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-  //   [setNodes]
-  // );
-  // const onEdgesChange = useCallback(
-  //   (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-  //   [setEdges]
-  // );
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -85,7 +71,9 @@ const TemplateArrow = () => {
         id: getId(),
         type: "selectorNode",
         position,
-        data: { label: `${type} node` },
+        data: {
+          label: "node",
+        },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -129,9 +117,7 @@ const TemplateArrow = () => {
       icon: <ContactPhoneIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
   ];
-  const nodeType = {
-    selectorNode: TextUpdaterNode,
-  };
+
   return (
     <Box
       style={{

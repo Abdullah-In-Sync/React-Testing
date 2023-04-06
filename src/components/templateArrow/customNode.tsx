@@ -4,17 +4,10 @@ import { Handle, Position } from "reactflow";
 
 const handleStyle = { left: 10 };
 
-function TextUpdaterNode({ data, isConnectable, onChange }) {
-  //   const onChange = useCallback((evt) => {
-  //     console.log(evt.target.value);
-  //   }, []);
-
-  const oneventChange = (event) => {
-    onChange({
-      ...data,
-      label: event.target.value,
-    });
-  };
+function TextUpdaterNode({ data, isConnectable }) {
+  const onChange = useCallback((e) => {
+    console.log(e.target.value);
+  }, []);
 
   return (
     <Box
@@ -28,32 +21,33 @@ function TextUpdaterNode({ data, isConnectable, onChange }) {
     >
       <Handle
         type="target"
+        id="c"
         position={Position.Top}
         isConnectable={isConnectable}
       />
+      <Handle
+        type="source"
+        position={Position.Right}
+        isConnectable={isConnectable}
+      />
       <Box>
-        <label
-          style={{
-            display: "block",
-            color: "#777",
-            fontSize: "12px",
-          }}
-          htmlFor="text"
-        >
-          Text:
-        </label>
         <input
           id="text"
           name="text"
-          onChange={oneventChange}
-          className="nodrag"
+          onChange={onChange}
+          style={{ fontSize: "8px", border: "none", outline: "none" }}
+          onFocus={(e) => {
+            if (e.target.matches(":focus-visible")) {
+              e.target.style.border = "none";
+              e.target.style.outline = "none";
+            }
+          }}
         />
       </Box>
       <Handle
-        type="source"
-        position={Position.Bottom}
+        type="target"
+        position={Position.Left}
         id="a"
-        style={handleStyle}
         isConnectable={isConnectable}
       />
       <Handle
