@@ -7,7 +7,7 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useStyles } from "../therapistRelapse/therapistRelapsePlanStyles";
@@ -17,6 +17,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { ADD_HOMEWORK } from "../../../../graphql/mutation/therapist";
 import { useSnackbar } from "notistack";
 import { GET_THERAPIST_HOMEWORK } from "../../../../graphql/query/therapist";
+import ConfirmBoxModal from "../../../common/ConfirmBoxModal";
+import { ModalElement } from "../../../common/CustomModal/CommonModal";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -72,10 +74,7 @@ function HomeworkDetails(props: propTypes) {
 
   const handleCreateInput = () => {
     if (inputs.length >= 15) {
-      enqueueSnackbar(
-        "You cannot add more than 15 task, Please delete a task to add a new task",
-        { variant: "error" }
-      );
+      confirmModalRef.current?.open();
       return; // exit the function without creating a new input
     }
     setInputs([...inputs, ""]);
@@ -124,6 +123,8 @@ function HomeworkDetails(props: propTypes) {
     setSuccessModal(false);
   };
 
+  const confirmModalRef = useRef<ModalElement>(null);
+
   const handlerAddAndUpdate = async () => {
     try {
       await addHomework({
@@ -158,164 +159,23 @@ function HomeworkDetails(props: propTypes) {
   };
 
   return (
-    <div>
-      <Stack className={styles.formWrapper}>
-        <Box
-          className="fieldBox second"
-          sx={{ display: "flex", justifyContent: "flex-end" }}
-        >
-          <Button
-            onClick={handleCreateInput}
-            data-testid={`addNewQuestion_${"planId"}`}
-            variant="outlined"
+    <>
+      <div>
+        <Stack className={styles.formWrapper}>
+          <Box
+            className="fieldBox second"
+            sx={{ display: "flex", justifyContent: "flex-end" }}
           >
-            Add Homework
-          </Button>
-        </Box>
-        {lastHomeworkList?.length > 0 && (
-          <Box>
-            <Box
-              style={{
-                paddingRight: "15px",
-                color: "#6EC9DB",
-                fontWeight: "bold",
-              }}
-              data-testid="safety_ques"
+            <Button
+              onClick={handleCreateInput}
+              data-testid={`addNewQuestion_${"planId"}`}
+              variant="outlined"
             >
-              Last Session's Homework
-            </Box>
-            <Box
-              sx={{
-                flexGrow: 1,
-                border: "1px solid #cecece",
-                display: "grid",
-              }}
-              p={5}
-              marginBottom={"25px"}
-              borderRadius={"7px"}
-            >
-              {lastHomeworkList?.map((data, index) => (
-                <div>
-                  <Typography>
-                    {index + 1 + "."}
-                    {data.pthomewrk_task}
-                  </Typography>
-                </div>
-              ))}
-            </Box>
-            {lastHomeworkList?.map((data, index) => (
-              <Box>
-                <Box
-                  style={{
-                    paddingRight: "15px",
-                    color: "#6EC9DB",
-                    fontWeight: "bold",
-                  }}
-                  data-testid="safety_ques"
-                >
-                  Homework Review Task {index + 1}
-                </Box>
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    border: "1px solid #cecece",
-                    display: "grid",
-                  }}
-                  p={5}
-                  marginBottom={"25px"}
-                  borderRadius={"7px"}
-                >
-                  <Box
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6EC9DB",
-                      fontWeight: "bold",
-                    }}
-                    data-testid="safety_ques"
-                  >
-                    Patient Response
-                  </Box>
-
-                  <Grid container spacing={2} marginBottom={0}>
-                    <Grid item xs={12}>
-                      <TextFieldComponent
-                        name="resource_references"
-                        id="references"
-                        value={
-                          patientInputs[index]
-                            ? patientInputs[index]
-                            : data?.pthomewrk_resp
-                        }
-                        multiline
-                        rows={4}
-                        onChange={(e) =>
-                          handlePatientInputChange(
-                            index,
-                            e.target.value,
-                            data._id
-                          )
-                        }
-                        inputProps={{ "data-testid": "resource_references" }}
-                        fullWidth={true}
-                        className="form-control-bg"
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Box
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6EC9DB",
-                      fontWeight: "bold",
-                      paddingTop: "10px",
-                    }}
-                    data-testid="safety_ques"
-                  >
-                    THERAPIST Response
-                  </Box>
-
-                  <Grid container spacing={2} marginBottom={0}>
-                    <Grid item xs={12}>
-                      <TextFieldComponent
-                        name="therapist_resp"
-                        id="references"
-                        value={
-                          therapistInputs[index]
-                            ? therapistInputs[index]
-                            : data?.therapist_resp
-                        }
-                        multiline
-                        rows={4}
-                        onChange={(e) =>
-                          handleTherapistInputChange(
-                            index,
-                            e.target.value,
-                            data._id
-                          )
-                        }
-                        inputProps={{ "data-testid": "therapist_resp" }}
-                        fullWidth={true}
-                        className="form-control-bg"
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Box>
-            ))}
+              Add Homework
+            </Button>
           </Box>
-        )}
-
-        {inputs.map((input, index) => (
-          <div key={index}>
-            <Box
-              className="fieldBox second"
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingBottom: "5px",
-                paddingTop: "5px",
-              }}
-            >
+          {lastHomeworkList?.length > 0 && (
+            <Box>
               <Box
                 style={{
                   paddingRight: "15px",
@@ -324,126 +184,274 @@ function HomeworkDetails(props: propTypes) {
                 }}
                 data-testid="safety_ques"
               >
-                Homework Task {index + 1}
+                Last Session's Homework
               </Box>
-
-              <IconButtonWrapper
-                aria-label="create"
-                size="small"
-                style={{ backgroundColor: "#6EC9DB" }}
-                data-testid={`button-delete-icon_`}
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  border: "1px solid #cecece",
+                  display: "grid",
+                }}
+                p={5}
+                marginBottom={"25px"}
+                borderRadius={"7px"}
               >
-                <DeleteIcon
-                  style={{ color: "white" }}
-                  onClick={() => handleDeleteInput(index)}
-                />
-              </IconButtonWrapper>
-            </Box>
+                {lastHomeworkList?.map((data, index) => (
+                  <div>
+                    <Typography>
+                      {index + 1 + "."}
+                      {data.pthomewrk_task}
+                    </Typography>
+                  </div>
+                ))}
+              </Box>
+              {lastHomeworkList?.map((data, index) => (
+                <Box>
+                  <Box
+                    style={{
+                      paddingRight: "15px",
+                      color: "#6EC9DB",
+                      fontWeight: "bold",
+                    }}
+                    data-testid="safety_ques"
+                  >
+                    Homework Review Task {index + 1}
+                  </Box>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      border: "1px solid #cecece",
+                      display: "grid",
+                    }}
+                    p={5}
+                    marginBottom={"25px"}
+                    borderRadius={"7px"}
+                  >
+                    <Box
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      Patient Response
+                    </Box>
 
-            <Box
-              sx={{
-                flexGrow: 1,
-                border: "1px solid #cecece",
-                display: "grid",
-              }}
-              p={5}
-              marginBottom={"25px"}
-              borderRadius={"7px"}
-            >
-              <Grid container spacing={2} marginBottom={0}>
-                <Grid item xs={12}>
-                  <TextFieldComponent
-                    name="resource_references"
-                    id="references"
-                    value={input}
-                    multiline
-                    rows={4}
-                    onChange={(e) => handleInputChange(index, e.target.value)}
-                    inputProps={{ "data-testid": `homework_task${index}` }}
-                    fullWidth={true}
-                    className="form-control-bg"
-                  />
-                </Grid>
-              </Grid>
+                    <Grid container spacing={2} marginBottom={0}>
+                      <Grid item xs={12}>
+                        <TextFieldComponent
+                          name="resource_references"
+                          id="references"
+                          value={
+                            patientInputs[index]
+                              ? patientInputs[index]
+                              : data?.pthomewrk_resp
+                          }
+                          multiline
+                          rows={4}
+                          onChange={(e) =>
+                            handlePatientInputChange(
+                              index,
+                              e.target.value,
+                              data._id
+                            )
+                          }
+                          inputProps={{ "data-testid": "resource_references" }}
+                          fullWidth={true}
+                          className="form-control-bg"
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <Box
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                        paddingTop: "10px",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      THERAPIST Response
+                    </Box>
+
+                    <Grid container spacing={2} marginBottom={0}>
+                      <Grid item xs={12}>
+                        <TextFieldComponent
+                          name="therapist_resp"
+                          id="references"
+                          value={
+                            therapistInputs[index]
+                              ? therapistInputs[index]
+                              : data?.therapist_resp
+                          }
+                          multiline
+                          rows={4}
+                          onChange={(e) =>
+                            handleTherapistInputChange(
+                              index,
+                              e.target.value,
+                              data._id
+                            )
+                          }
+                          inputProps={{ "data-testid": "therapist_resp" }}
+                          fullWidth={true}
+                          className="form-control-bg"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
+
+          {inputs.map((input, index) => (
+            <div key={index}>
               <Box
                 className="fieldBox second"
                 sx={{
                   display: "flex",
-                  justifyContent: "flex-end",
-                  paddingTop: "10px",
+                  justifyContent: "space-between",
+                  paddingBottom: "5px",
+                  paddingTop: "5px",
                 }}
               >
-                <Button
-                  onClick={handleCreateInput}
-                  data-testid={`addNewQuestion_${"planId"}`}
-                  variant="outlined"
+                <Box
+                  style={{
+                    paddingRight: "15px",
+                    color: "#6EC9DB",
+                    fontWeight: "bold",
+                  }}
+                  data-testid="safety_ques"
                 >
-                  Add Resource
-                </Button>
+                  Homework Task {index + 1}
+                </Box>
+
+                <IconButtonWrapper
+                  aria-label="create"
+                  size="small"
+                  style={{ backgroundColor: "#6EC9DB" }}
+                  data-testid={`button-delete-icon_`}
+                >
+                  <DeleteIcon
+                    style={{ color: "white" }}
+                    onClick={() => handleDeleteInput(index)}
+                  />
+                </IconButtonWrapper>
               </Box>
-            </Box>
-          </div>
-        ))}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            p: 1,
-            m: 1,
-            bgcolor: "background.paper",
-            borderRadius: 1,
-            paddingTop: "50px",
-          }}
-        >
-          <Grid item xs={6} style={{ paddingRight: "50px" }}>
-            <Button
-              data-testid="editTemplateSubmitButton"
-              variant="contained"
-              // type="submit"
-              onClick={(e) => {
-                /* istanbul ignore next */
-                handleSubmit(e);
-                setIsConfirm(true);
-              }}
-              style={{ paddingLeft: "50px", paddingRight: "50px" }}
-            >
-              Save
-            </Button>
-          </Grid>
-          <Grid item xs={6} textAlign="center">
-            <Button
-              data-testid="editTemplateCancelButton"
-              variant="contained"
-              style={{
-                paddingLeft: "40px",
-                paddingRight: "40px",
-                backgroundColor: "#6BA08E",
-              }}
-              onClick={props.onCancel}
-            >
-              Cancel
-            </Button>
-          </Grid>
-        </Box>
-      </Stack>
 
-      {isConfirm && (
-        <ConfirmationModal
-          label="Are you sure you want to add the homework?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={handlerAddAndUpdate}
-        />
-      )}
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  border: "1px solid #cecece",
+                  display: "grid",
+                }}
+                p={5}
+                marginBottom={"25px"}
+                borderRadius={"7px"}
+              >
+                <Grid container spacing={2} marginBottom={0}>
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="resource_references"
+                      id="references"
+                      value={input}
+                      multiline
+                      rows={4}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                      inputProps={{ "data-testid": `homework_task${index}` }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
+                  </Grid>
+                </Grid>
+                <Box
+                  className="fieldBox second"
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    paddingTop: "10px",
+                  }}
+                >
+                  <Button
+                    onClick={handleCreateInput}
+                    data-testid={`addNewQuestion_${"planId"}`}
+                    variant="outlined"
+                  >
+                    Add Resource
+                  </Button>
+                </Box>
+              </Box>
+            </div>
+          ))}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              p: 1,
+              m: 1,
+              bgcolor: "background.paper",
+              borderRadius: 1,
+              paddingTop: "50px",
+            }}
+          >
+            <Grid item xs={6} style={{ paddingRight: "50px" }}>
+              <Button
+                data-testid="editTemplateSubmitButton"
+                variant="contained"
+                // type="submit"
+                onClick={(e) => {
+                  /* istanbul ignore next */
+                  handleSubmit(e);
+                  setIsConfirm(true);
+                }}
+                style={{ paddingLeft: "50px", paddingRight: "50px" }}
+              >
+                Save
+              </Button>
+            </Grid>
+            <Grid item xs={6} textAlign="center">
+              <Button
+                data-testid="editTemplateCancelButton"
+                variant="contained"
+                style={{
+                  paddingLeft: "40px",
+                  paddingRight: "40px",
+                  backgroundColor: "#6BA08E",
+                }}
+                onClick={props.onCancel}
+              >
+                Cancel
+              </Button>
+            </Grid>
+          </Box>
+        </Stack>
 
-      {successModal && (
-        <SuccessModal
-          isOpen={successModal}
-          title="Successfull"
-          description={"Your feedback has been submitted Successfully."}
-          onOk={handleOk}
-        />
-      )}
-    </div>
+        {isConfirm && (
+          <ConfirmationModal
+            label="Are you sure you want to add the homework?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={handlerAddAndUpdate}
+          />
+        )}
+
+        {successModal && (
+          <SuccessModal
+            isOpen={successModal}
+            title="Successfull"
+            description={"Your feedback has been submitted Successfully."}
+            onOk={handleOk}
+          />
+        )}
+      </div>
+
+      <ConfirmBoxModal
+        infoMessage="You cannot add more than 15 task, Please delete a task to add a new task"
+        confirmModalRef={confirmModalRef}
+      />
+    </>
   );
 }
 
