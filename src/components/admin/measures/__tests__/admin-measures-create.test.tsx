@@ -301,5 +301,49 @@ describe("Admin create measures", () => {
     await fillUpperForm(2);
     const lastOptionText = screen.getByText(/15-21 severe anxiety./i);
     expect(lastOptionText).toBeInTheDocument();
+    const firstQuestionDeleteButton = screen.getByTestId(
+      "iconButtonQuestion_templateData.questions.bodyRows.0"
+    );
+    fireEvent.click(firstQuestionDeleteButton);
+    const addQuestionButton = screen.getByTestId("addQuestionButton");
+    fireEvent.click(addQuestionButton);
+    const row1Col1Input = screen.getByTestId(
+      "templateData.questions.bodyRows.0.col1"
+    );
+    fireEvent.change(row1Col1Input, {
+      target: { value: "testquestion" },
+    });
+    const row1Col2Input = screen.getByTestId(
+      "templateData.questions.bodyRows.0.col2"
+    );
+    fireEvent.change(row1Col2Input, {
+      target: { value: "0" },
+    });
+    const row1Col3Input = screen.getByTestId(
+      "templateData.questions.bodyRows.0.col1"
+    );
+    fireEvent.change(row1Col3Input, {
+      target: { value: "1" },
+    });
+    const row1Col4Input = screen.getByTestId(
+      "templateData.questions.bodyRows.0.col2"
+    );
+    fireEvent.change(row1Col4Input, {
+      target: { value: "2" },
+    });
+    const row1Col5Input = screen.getByTestId(
+      "templateData.questions.bodyRows.0.col2"
+    );
+    fireEvent.change(row1Col5Input, {
+      target: { value: "3" },
+    });
+
+    const submitFormButton = screen.getByTestId("submitForm");
+    fireEvent.click(submitFormButton);
+    const confirmButton = screen.getByRole("button", {
+      name: "Confirm",
+    });
+    // fireEvent.click(confirmButton);
+    expect(confirmButton).toBeInTheDocument();
   });
 });

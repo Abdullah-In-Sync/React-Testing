@@ -57,6 +57,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
         name={name}
         id={name}
         placeholder={"Type"}
+        inputProps={{ "data-testid": name }}
         fullWidth
         multiline
         hideError
