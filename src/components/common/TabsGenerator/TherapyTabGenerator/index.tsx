@@ -74,6 +74,7 @@ const TherapyTabsGenerator = (props: propTypes) => {
           indicatorColor="primary"
           textColor="primary"
           color="secondary"
+          // style={{ height: "32px" }}
           onChange={handleTabChange}
           TabIndicatorProps={{
             style: {
@@ -99,8 +100,10 @@ const TherapyTabsGenerator = (props: propTypes) => {
                   margin: "3px 5px",
                   color: "white",
                   backgroundColor: isActive ? "#689c8b" : "#6EC9DB",
-                  fontWeight: 600,
-                  borderRadius: "5px ",
+
+                  borderRadius: "5px",
+                  height: 37,
+                  fontSize: "14px",
                 }}
                 key={value}
                 value={value}

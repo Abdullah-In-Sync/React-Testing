@@ -5,9 +5,17 @@ import Loader from "../../../../components/common/Loader";
 import { Accordion } from "../../../../components/common/Accordion";
 import { Typography } from "@material-ui/core";
 import { GET_PATIENTSESSION_DATA } from "../../../../graphql/query/patient";
+import HomeworkDetails from "./addHomework";
+import ConfirmationModal from "../../../common/ConfirmationModal";
+import { useSnackbar } from "notistack";
 
 const TherapyPatientHomework: any = (props) => {
+  const { enqueueSnackbar } = useSnackbar();
+  let onToggle;
   const [loader, setLoader] = useState<boolean>(true);
+  const [isConfirm, setIsConfirm] = useState(false);
+
+  const therapyId = props.setTherapy;
 
   // Session Queries
   const [getPatientSessionData, { data: patientSessionData }] = useLazyQuery(
@@ -18,6 +26,7 @@ const TherapyPatientHomework: any = (props) => {
       },
     }
   );
+  console.log("Koca: patientSessionData ", patientSessionData);
 
   useEffect(() => {
     getPatientSessionData({
@@ -27,6 +36,25 @@ const TherapyPatientHomework: any = (props) => {
       },
     });
   }, [props.setTherapy]);
+
+  const cancelFunction = () => {
+    setIsConfirm(true);
+  };
+
+  const cancelConfirm = () => {
+    /* istanbul ignore next */
+    onToggle();
+    setIsConfirm(false);
+    /* istanbul ignore next */
+    enqueueSnackbar("Homework cancel successfully", {
+      variant: "success",
+    });
+  };
+
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
 
   return (
     <>
@@ -44,7 +72,17 @@ const TherapyPatientHomework: any = (props) => {
                     key={`according-${v.ptsession_no}`}
                     title={`Session ${v.ptsession_no}`}
                     marginBottom={"20px !important"}
-                    detail={"Details"}
+                    detail={(toggleAccordion) => {
+                      onToggle = toggleAccordion;
+                      return (
+                        <HomeworkDetails
+                          sessionNo={v.ptsession_no}
+                          sessionId={v._id}
+                          therapyId={therapyId}
+                          onCancel={cancelFunction}
+                        />
+                      );
+                    }}
                   />
                 );
               })
@@ -55,6 +93,13 @@ const TherapyPatientHomework: any = (props) => {
               )
         }
       </Box>
+      {isConfirm && (
+        <ConfirmationModal
+          label="Are you sure you are canceling the task without saving?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={cancelConfirm}
+        />
+      )}
     </>
   );
 };

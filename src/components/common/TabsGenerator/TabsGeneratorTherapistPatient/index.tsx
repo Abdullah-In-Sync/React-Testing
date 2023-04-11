@@ -83,8 +83,7 @@ const TabsGeneratorTherapistPatient = (props: propTypes) => {
                   marginBottom: 0,
                   color: isActive ? "white" : "#9e9e9e",
                   backgroundColor: isActive ? `#689c8b` : "white",
-                  font: "16px",
-                  fontWeight: 600,
+                  fontSize: "16px",
                   borderRadius: "5px 5px 0px 0px",
                 }}
                 key={value}

@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       padding: "10px 0px",
 
       "& .cancelButton": {
-        background: theme.palette.secondary.main,
+        background: theme?.palette?.secondary.main,
       },
     },
     "& .fieldsBoxWrapperFirst": {

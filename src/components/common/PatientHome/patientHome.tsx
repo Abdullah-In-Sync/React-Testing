@@ -47,6 +47,8 @@ const PatientHome = (props: propTypes) => {
       },
     });
 
+  console.log("Koca: homeDataData ", homeDataData);
+
   const appointmentDate = moment(
     homeDataData?.getPatientHomeData[0].appointment[0]?.app_date
   ).format("DD/MM/YY");
