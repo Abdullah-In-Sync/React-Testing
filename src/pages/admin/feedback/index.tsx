@@ -125,8 +125,10 @@ const Feedback: NextPage = () => {
           <Tooltip title={val} arrow>
             <p>{val.substring(0, 50) + "..."}</p>
           </Tooltip>
+        ) : val ? (
+          val.charAt(0).toUpperCase() + val.slice(1)
         ) : (
-          val ?? "---"
+          "---"
         ),
     },
     {
