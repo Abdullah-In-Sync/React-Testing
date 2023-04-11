@@ -102,7 +102,7 @@ const sut = async () => {
   );
 };
 
-const fillUpperForm = async () => {
+const fillUpperForm = async (formatType?: number) => {
   const dropdownSelect = await screen.findByTestId(/actions.dev-myhelp/i);
   expect(dropdownSelect).toBeInTheDocument();
 
@@ -110,17 +110,17 @@ const fillUpperForm = async () => {
   fireEvent.click(templateFormatSelect);
   expect(templateFormatSelect).toBeInTheDocument();
 
-  const buttonPlanTypeSelect = within(templateFormatSelect).getByRole("button");
-  fireEvent.mouseDown(buttonPlanTypeSelect);
+  const formatTypeSelect = within(templateFormatSelect).getByRole("button");
+  fireEvent.mouseDown(formatTypeSelect);
 
-  const listboxPlanTypeSelect = within(
+  const listFormatTypeSelect = within(
     await screen.getByRole("presentation")
   ).getByRole("listbox");
   const optionsPlanTypeSelect = await within(
-    listboxPlanTypeSelect
+    listFormatTypeSelect
   ).findAllByRole("option");
 
-  fireEvent.click(optionsPlanTypeSelect[1]);
+  fireEvent.click(optionsPlanTypeSelect[formatType ? formatType : 1]);
 
   const planNameInput = await screen.findByTestId("title");
   fireEvent.change(planNameInput, {
@@ -231,5 +231,12 @@ describe("Admin create measures", () => {
     expect(templateDescriptionDeleteButton).toBeInTheDocument();
     fireEvent.click(templateDescriptionDeleteButton);
     expect(templateDescriptionDeleteButton).not.toBeInTheDocument();
+  });
+
+  it("when change to format 2", async () => {
+    await sut();
+    await fillUpperForm(2);
+    const lastOptionText = screen.getByText(/15-21 severe anxiety./i);
+    expect(lastOptionText).toBeInTheDocument();
   });
 });

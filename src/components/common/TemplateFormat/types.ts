@@ -14,11 +14,20 @@ export interface Format1 {
   description?: string;
 }
 
-export interface TemplateData {
+export interface Format2 {
+  questions?: any;
+  optionsQuestions?: any;
+}
+
+export interface TemplateDataFormat1 {
   templateData: Format1;
 }
 
+export interface TemplateDataFormat2 {
+  templateData: Format2;
+}
+
 export interface TemplateFormat {
-  data: Format1;
+  data: Format1 | Format2;
   validationSchema?: any;
 }

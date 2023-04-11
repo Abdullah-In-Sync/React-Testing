@@ -7,7 +7,7 @@ import ErrorMessage from "../ErrorMessage";
 import * as templateTypes from "../types";
 
 interface ViewProps {
-  formikProps: FormikProps<templateTypes.TemplateData>;
+  formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
 }
 
 const DescriptionSection: React.FC<ViewProps> = ({ formikProps }) => {

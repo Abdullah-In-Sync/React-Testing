@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import { FormikProps } from "formik";
-import { useState } from "react";
-import ConfirmationModal from "../../ConfirmationModal";
+import { useRef } from "react";
+import ConfirmWrapper, { ConfirmElement } from "../ConfirmWrapper";
 import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
 import ChooseScoreSection from "./ChooseScoreSection";
@@ -11,84 +11,41 @@ import QuestionsSection from "./QuestionsSection";
 import WsasSection from "./WsasSection";
 
 type propTypes = {
-  formikProps: FormikProps<templateTypes.TemplateData>;
+  formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
 };
 
 export default function Format1({ formikProps }: propTypes) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
-
+  const confirmRef = useRef<ConfirmElement>(null);
   const { templateData } = values;
-  const [isConfirm, setIsConfirm] = useState<any>({
-    status: false,
-    storedFunction: null,
-    setSubmitting: null,
-    cancelStatus: false,
-    confirmObject: {
-      description: "",
-    },
-  });
 
-  const removeQuestion = (i) => {
+  const removeQuestion = (callback, i) => {
     const questions = [...templateData.questions];
     questions.splice(i, 1);
     setFieldValue("templateData.questions", questions);
+    callback();
   };
 
   const handleDeleteQuestion = (i) => {
-    setIsConfirm({
-      ...isConfirm,
-      ...{
-        status: true,
-        confirmObject: {
-          description: "Are you sure you want to delete the question?",
-        },
-        storedFunction: (callback) => {
-          removeQuestion(i);
-          callback();
-        },
-      },
-    });
-  };
-
-  const onConfirmSubmit = () => {
-    isConfirm.storedFunction(() => {
-      setIsConfirm({
-        status: false,
-        storedFunction: null,
-        setSubmitting: null,
-      });
-    });
-  };
-  const clearIsConfirm = () => {
-    if (isConfirm.setSubmitting instanceof Function)
-      isConfirm.setSubmitting(false);
-
-    setIsConfirm({
-      status: false,
-      storedFunction: null,
-      setSubmitting: null,
-      cancelStatus: false,
+    confirmRef.current.openConfrim({
+      confirmFunction: (callback) => removeQuestion(callback, i),
+      description: "Are you sure you want to delete the question?",
     });
   };
 
   return (
-    <Stack className={styles.templateFromat1Wrapper}>
-      <IntroSection formikProps={formikProps} />
-      <ChooseScoreSection formikProps={formikProps} />
-      <QuestionsSection
-        formikProps={formikProps}
-        handleDeleteQuestion={handleDeleteQuestion}
-      />
-      <WsasSection />
-      <DescriptionSection formikProps={formikProps} />
-      {isConfirm.status && (
-        <ConfirmationModal
-          label={isConfirm.confirmObject.description}
-          onCancel={clearIsConfirm}
-          onConfirm={onConfirmSubmit}
+    <ConfirmWrapper ref={confirmRef}>
+      <Stack className={styles.templateFromat1Wrapper}>
+        <IntroSection formikProps={formikProps} />
+        <ChooseScoreSection formikProps={formikProps} />
+        <QuestionsSection
+          formikProps={formikProps}
+          handleDeleteQuestion={handleDeleteQuestion}
         />
-      )}
-    </Stack>
+        <WsasSection />
+        <DescriptionSection formikProps={formikProps} />
+      </Stack>
+    </ConfirmWrapper>
   );
 }

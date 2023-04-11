@@ -4,7 +4,6 @@ import CommonForm from "../form/CommonForm";
 
 import { InitialFormValues } from "../form/types";
 import { measuresValidationSchema } from "../form/measuresValidationSchema";
-import { TemplateFormat1Data } from "../../../common/TemplateFormat/templateFormatData";
 
 interface ViewProps {
   submitForm?: (
@@ -25,7 +24,7 @@ const CreateMeasuersForm: React.FC<ViewProps> = ({
     description: "",
     orgId: "",
     templateId: "",
-    templateData: TemplateFormat1Data.data,
+    templateData: null,
   };
 
   const commonform = () => {

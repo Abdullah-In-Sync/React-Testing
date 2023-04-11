@@ -10,7 +10,7 @@ import * as templateTypes from "../types";
 import { Typography } from "@material-ui/core";
 
 interface ViewProps {
-  formikProps: FormikProps<templateTypes.TemplateData>;
+  formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
   handleDeleteQuestion: (value) => void;
 }
 
