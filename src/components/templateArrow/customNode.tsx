@@ -1,15 +1,27 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
-import { Handle, Position, useReactFlow } from "reactflow";
+import { Handle, Position, useReactFlow, Node } from "reactflow";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const handleStyle = { left: 10 };
+interface Data {
+  label: string;
+}
+interface TextUpdaterNodeProps {
+  id: string;
+  data: Data;
+  isConnectable: boolean;
+}
 
-function TextUpdaterNode({ id, data, isConnectable }) {
+const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
+  id,
+  data,
+  isConnectable,
+}) => {
   const [label, setLabel] = useState<string>(data?.label);
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
-  const onChange = (event) => {
-    nodes.forEach((ele) => {
+  const onChange = (event: any) => {
+    nodes.forEach((ele: Node<any>) => {
       if (ele.id == id) {
         ele.data.label = event.target.value;
       }
@@ -17,6 +29,10 @@ function TextUpdaterNode({ id, data, isConnectable }) {
 
     setLabel(event.target.value);
     reactFlowInstance.setNodes([...nodes]);
+  };
+  const OnDeleteNode = (id) => {
+    const filtered = nodes.filter((ele) => ele.id !== id);
+    reactFlowInstance.setNodes([...filtered]);
   };
 
   return (
@@ -29,6 +45,18 @@ function TextUpdaterNode({ id, data, isConnectable }) {
         background: "white",
       }}
     >
+      <Box onClick={() => OnDeleteNode(id)}>
+        <DeleteForeverIcon
+          style={{
+            position: "absolute",
+            left: "112px",
+            top: "-13px",
+            padding: "5px",
+            cursor: "pointer",
+            zIndex: 1000,
+          }}
+        />
+      </Box>
       <Handle
         type="target"
         id="c"
@@ -69,6 +97,6 @@ function TextUpdaterNode({ id, data, isConnectable }) {
       />
     </Box>
   );
-}
+};
 
 export default TextUpdaterNode;

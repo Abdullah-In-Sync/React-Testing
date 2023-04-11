@@ -1,7 +1,16 @@
 import { Box } from "@mui/system";
 import React from "react";
 
-const SideBar = ({ iconItems }) => {
+interface IconProp {
+  componentName: string;
+  icon: any;
+}
+
+interface SidebarProps {
+  iconItems: IconProp[];
+}
+
+const SideBar: React.FC<SidebarProps> = ({ iconItems }) => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";

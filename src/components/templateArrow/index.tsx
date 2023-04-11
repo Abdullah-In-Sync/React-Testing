@@ -5,23 +5,15 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Controls,
-  applyEdgeChanges,
-  applyNodeChanges,
   Node,
   Edge,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import ChatIcon from "@mui/icons-material/Chat";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import { Box } from "@mui/system";
 import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 import { Button, Grid } from "@mui/material";
+import CropSquareIcon from "@mui/icons-material/CropSquare";
 
 const nodeType = {
   selectorNode: TextUpdaterNode,
@@ -31,7 +23,7 @@ let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 interface TemplateArrowProps {
-  onSubmit?: (nodes: Node[], edges: Edge[]) => void;
+  onSubmit?: (updatedData: string) => void;
   onCancel?: any;
 }
 
@@ -54,6 +46,14 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  const onSubmitHandle = (nodes: Node[], edges: Edge[]) => {
+    const obj = {
+      nodes,
+      edges,
+    };
+    onSubmit(JSON.stringify(obj));
+  };
+
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -74,7 +74,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
         type: "selectorNode",
         position,
         data: {
-          label: "node",
+          label: "",
         },
       };
 
@@ -85,38 +85,12 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 
   const icons = [
     {
-      componentName: "apartment",
-      icon: <ApartmentIcon style={{ padding: "2px", cursor: "pointer" }} />,
-    },
-    {
-      componentName: "appRegistration",
+      componentName: "cropSquareIcon",
       icon: (
-        <AppRegistrationIcon style={{ padding: "2px", cursor: "pointer" }} />
-      ),
-    },
-    {
-      componentName: "autoStoriesIcon",
-      icon: <AutoStoriesIcon style={{ padding: "2px", cursor: "pointer" }} />,
-    },
-    {
-      componentName: "calendarMonthIcon",
-      icon: <CalendarMonthIcon style={{ padding: "2px", cursor: "pointer" }} />,
-    },
-    {
-      componentName: "chatIcon",
-      icon: <ChatIcon style={{ padding: "2px", cursor: "pointer" }} />,
-    },
-    {
-      componentName: "connectWithoutContactIcon",
-      icon: (
-        <ConnectWithoutContactIcon
-          style={{ padding: "2px", cursor: "pointer" }}
+        <CropSquareIcon
+          style={{ padding: "2px", cursor: "pointer", fontSize: "30px" }}
         />
       ),
-    },
-    {
-      componentName: "contactPhoneIcon",
-      icon: <ContactPhoneIcon style={{ padding: "2px", cursor: "pointer" }} />,
     },
   ];
 
@@ -170,7 +144,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               fontSize: "20px",
             }}
             //disabled={!formikHelper.isValid}
-            onClick={() => onSubmit(nodes, edges)}
+            onClick={() => onSubmitHandle(nodes, edges)}
           >
             Submit
           </Button>

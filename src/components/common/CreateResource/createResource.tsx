@@ -276,6 +276,14 @@ export default function CreateResource(props: propTypes) {
       setDimensionModal(true);
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
+
+    if (values.component_name == "ArrowTemplate") {
+      setTemplateModal(false);
+      setSelectedComponentType({
+        ...selectedComponentType,
+        type: values.component_name,
+      });
+    }
   };
   /* istanbul ignore next */
   const saveResource = (data) => {
@@ -342,14 +350,15 @@ export default function CreateResource(props: propTypes) {
     window.open("/v2/template/preview/create", "_blank");
   };
 
-  const onSaveArrowTemplate = (node, edge) => {
-    console.log(node, "node onsubmit");
-    console.log(edge, "edge on submit");
+  const onSaveArrowTemplate = (updatedEvent: string) => {
+    console.log(updatedEvent, "node/edges onsubmit");
   };
 
   const onCancelArrowTemplate = () => {
     console.log("clicked on cancel");
   };
+
+  console.log(selectedComponentType, "ArrowTemplate");
 
   return (
     <>
@@ -640,7 +649,7 @@ export default function CreateResource(props: propTypes) {
         </Box>
       )}
 
-      {/* {selectedComponentType.type == "TemplateTable" && (
+      {selectedComponentType.type == "TemplateTable" && (
         <TemplateTable
           initialData={selectedComponentType.initialData}
           mode="edit"
@@ -648,10 +657,10 @@ export default function CreateResource(props: propTypes) {
           onCancel={onTemplateCancel}
           onPreview={onPreview}
         />
-      )} */}
-      {selectedComponentType.type == "TemplateTable" && (
+      )}
+      {selectedComponentType.type == "ArrowTemplate" && (
         <TemplateArrow
-          // initialData={selectedComponentType.initialData}
+          //  initialData={selectedComponentType.initialData}
           // mode="edit"
           onSubmit={onSaveArrowTemplate}
           onCancel={onCancelArrowTemplate}
