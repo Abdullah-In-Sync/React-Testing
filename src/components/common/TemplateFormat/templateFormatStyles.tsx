@@ -347,4 +347,56 @@ export const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.custom.light,
     },
   },
+  infoMessageBoxModal: {
+    padding: 15,
+    "& .boxFirst": {
+      padding: "10px 10px",
+      display: "flex",
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      "& .iconWrapper": {
+        padding: 5,
+        display: "flex",
+        alignItems: "center",
+        "& svg": {
+          color: "red",
+          fontSize: "1.7rem",
+        },
+      },
+      "& .textWrapper": {
+        "& h6": {
+          color: "unset",
+        },
+      },
+    },
+    "& .duplicatesTable": {
+      "& th": {
+        borderLeft: "1px solid",
+        borderTop: "1px solid",
+        borderBottom: "1px solid",
+        "& p": {
+          color: "unset",
+          fontWeight: "bold",
+        },
+      },
+      "& th:last-child": {
+        borderRight: "1px solid",
+      },
+      "& td": {
+        borderLeft: "1px solid #ccc",
+      },
+      "& td:last-child": {
+        borderRight: "1px solid #ccc",
+      },
+    },
+    "& .okButtonWrapper": {
+      textAlign: "center",
+      position: "sticky",
+      insetBlockEnd: 0,
+      background: "#fff",
+      marginTop: 10,
+      paddingBottom: 10,
+    },
+  },
 }));

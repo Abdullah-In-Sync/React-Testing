@@ -15,7 +15,9 @@ import DeleteButton from "../DeleteButton";
 import ErrorMessage from "../ErrorMessage";
 import * as templateTypes from "../types";
 
+import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import CommonButton from "../../Buttons/CommonButton";
+import ConfirmBoxModal from "../../ConfirmBoxModal";
 
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
@@ -26,6 +28,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
 }) => {
+  const confirmModalRef = React.useRef<ModalElement>(null);
   const { values, setFieldValue, errors, touched } = formikProps;
 
   const { templateData } = values;
@@ -44,7 +47,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
       });
       setFieldValue("templateData.questions.bodyRows", questionsBodyRows);
     } else {
-      //   confirmModalRef.current?.open();
+      confirmModalRef.current?.open();
     }
   };
 
@@ -171,6 +174,10 @@ const QuestionsSection: React.FC<ViewProps> = ({
       {questionsTouched && questionsError && (
         <ErrorMessage errorMsg={"All valid fields required"} />
       )}
+      <ConfirmBoxModal
+        infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question"
+        confirmModalRef={confirmModalRef}
+      />
     </Box>
   );
 };

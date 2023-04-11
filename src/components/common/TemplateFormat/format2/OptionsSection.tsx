@@ -55,14 +55,16 @@ const OptionsSection: React.FC<ViewProps> = ({
                     hideError
                   />
                 </Box>
-                <FormControlLabel
-                  key={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
-                  data-testid={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
-                  value={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
-                  control={<Radio />}
-                  label={""}
-                  onClick={() => null}
-                />
+                <Box className="disbledFields">
+                  <FormControlLabel
+                    key={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
+                    data-testid={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
+                    value={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
+                    control={<Radio />}
+                    label={""}
+                    onClick={() => null}
+                  />
+                </Box>
               </Box>
             ))}
           </Box>
