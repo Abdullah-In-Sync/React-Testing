@@ -12,9 +12,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& table td p": {
       fontWeight: 600,
+      fontSize: "14px",
     },
     "& table th p": {
       fontWeight: "bold",
+      fontSize: "14px",
     },
     "& .actionsWrapper": {
       position: "relative",

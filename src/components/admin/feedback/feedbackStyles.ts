@@ -5,6 +5,7 @@ export const useStyles = makeStyles(() => ({
     "& table": {
       "& .MuiTableCell-head": {
         textAlign: "center",
+        fontSize: "14px",
       },
       "& .MuiTableCell-body": {
         textAlign: "center",

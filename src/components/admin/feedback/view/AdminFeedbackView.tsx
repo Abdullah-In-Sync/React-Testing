@@ -25,10 +25,10 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
   const styles = useStyles();
   const {
     organization_name,
-    user_type,
     session_no,
     name,
     description,
+    feedback_type,
     questions = [],
   } = data || {};
 
@@ -45,7 +45,9 @@ const AdminFeedbackView: React.FC<ViewProps> = ({
           <label>
             <Typography>User Type:</Typography>
           </label>
-          <Typography>{user_type}</Typography>
+          <Typography>
+            {feedback_type.charAt(0).toUpperCase() + feedback_type.slice(1)}
+          </Typography>
         </Box>
         <Box>
           <label>
