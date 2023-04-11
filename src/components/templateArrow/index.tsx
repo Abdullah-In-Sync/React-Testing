@@ -7,6 +7,8 @@ import ReactFlow, {
   Controls,
   applyEdgeChanges,
   applyNodeChanges,
+  Node,
+  Edge,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import ApartmentIcon from "@mui/icons-material/Apartment";
@@ -19,15 +21,7 @@ import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import { Box } from "@mui/system";
 import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
-
-const initialNodes = [
-  {
-    id: "node-1",
-    type: "selectorNode",
-    position: { x: 0, y: 0 },
-    data: { value: 123 },
-  },
-];
+import { Button, Grid } from "@mui/material";
 
 const nodeType = {
   selectorNode: TextUpdaterNode,
@@ -36,7 +30,15 @@ const nodeType = {
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const TemplateArrow = () => {
+interface TemplateArrowProps {
+  onSubmit?: (nodes: Node[], edges: Edge[]) => void;
+  onCancel?: any;
+}
+
+const TemplateArrow: React.FC<TemplateArrowProps> = ({
+  onSubmit,
+  onCancel,
+}) => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -119,43 +121,76 @@ const TemplateArrow = () => {
   ];
 
   return (
-    <Box
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        border: "1px solid #cecece",
-        borderRadius: "7px",
-        marginBottom: "40px",
-      }}
-    >
-      <ReactFlowProvider>
-        <SideBar iconItems={icons} />
-        <Box
-          style={{
-            height: "500px",
-            width: "100%",
-            alignItems: "center",
-            marginRight: "5px",
-          }}
-          ref={reactFlowWrapper}
-        >
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            nodeTypes={nodeType}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            fitView
+    <>
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          border: "1px solid #cecece",
+          borderRadius: "7px",
+          marginBottom: "40px",
+        }}
+      >
+        <ReactFlowProvider>
+          <SideBar iconItems={icons} />
+          <Box
+            style={{
+              height: "500px",
+              width: "100%",
+              alignItems: "center",
+              marginRight: "5px",
+            }}
+            ref={reactFlowWrapper}
           >
-            <Controls />
-          </ReactFlow>
-        </Box>
-      </ReactFlowProvider>
-    </Box>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              nodeTypes={nodeType}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onInit={setReactFlowInstance}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              fitView
+            >
+              <Controls />
+            </ReactFlow>
+          </Box>
+        </ReactFlowProvider>
+      </Box>
+      <Grid container justifyContent={"center"}>
+        <Grid item padding={"63px 0px 94px 0px"}>
+          <Button
+            data-testid="tableTemplateSubmit"
+            variant="contained"
+            type="submit"
+            style={{
+              padding: "5px 79px 5px 79px",
+              fontSize: "20px",
+            }}
+            //disabled={!formikHelper.isValid}
+            onClick={() => onSubmit(nodes, edges)}
+          >
+            Submit
+          </Button>
+          <Button
+            data-testid="tableTemplateCancel"
+            color="secondary"
+            variant="contained"
+            style={{
+              margin: "0px 27px 0px 27px",
+              padding: "5px 79px 5px 79px",
+              fontSize: "20px",
+            }}
+            //disabled={formikHelper?.isSubmitting}
+            onClick={() => onCancel()}
+          >
+            Cancel
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 export default TemplateArrow;

@@ -342,6 +342,15 @@ export default function CreateResource(props: propTypes) {
     window.open("/v2/template/preview/create", "_blank");
   };
 
+  const onSaveArrowTemplate = (node, edge) => {
+    console.log(node, "node onsubmit");
+    console.log(edge, "edge on submit");
+  };
+
+  const onCancelArrowTemplate = () => {
+    console.log("clicked on cancel");
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-crate-form">
@@ -642,11 +651,11 @@ export default function CreateResource(props: propTypes) {
       )} */}
       {selectedComponentType.type == "TemplateTable" && (
         <TemplateArrow
-        // initialData={selectedComponentType.initialData}
-        // mode="edit"
-        // onSubmit={onTemplateSave}
-        // onCancel={onTemplateCancel}
-        // onPreview={onPreview}
+          // initialData={selectedComponentType.initialData}
+          // mode="edit"
+          onSubmit={onSaveArrowTemplate}
+          onCancel={onCancelArrowTemplate}
+          // onPreview={onPreview}
         />
       )}
       {successModal && (

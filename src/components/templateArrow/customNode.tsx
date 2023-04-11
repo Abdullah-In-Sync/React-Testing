@@ -1,13 +1,23 @@
 import { Box } from "@mui/material";
-import { useCallback } from "react";
-import { Handle, Position } from "reactflow";
+import { useState } from "react";
+import { Handle, Position, useReactFlow } from "reactflow";
 
 const handleStyle = { left: 10 };
 
-function TextUpdaterNode({ data, isConnectable }) {
-  const onChange = useCallback((e) => {
-    console.log(e.target.value);
-  }, []);
+function TextUpdaterNode({ id, data, isConnectable }) {
+  const [label, setLabel] = useState<string>(data?.label);
+  const reactFlowInstance = useReactFlow();
+  const nodes = reactFlowInstance.getNodes();
+  const onChange = (event) => {
+    nodes.forEach((ele) => {
+      if (ele.id == id) {
+        ele.data.label = event.target.value;
+      }
+    });
+
+    setLabel(event.target.value);
+    reactFlowInstance.setNodes([...nodes]);
+  };
 
   return (
     <Box
@@ -34,7 +44,8 @@ function TextUpdaterNode({ data, isConnectable }) {
         <input
           id="text"
           name="text"
-          onChange={onChange}
+          value={label}
+          onChange={(e) => onChange(e)}
           style={{ fontSize: "8px", border: "none", outline: "none" }}
           onFocus={(e) => {
             if (e.target.matches(":focus-visible")) {
