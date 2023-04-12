@@ -16,7 +16,10 @@ import { SuccessModal } from "../../../common/SuccessModal";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { ADD_HOMEWORK } from "../../../../graphql/mutation/therapist";
 import { useSnackbar } from "notistack";
-import { GET_THERAPIST_HOMEWORK } from "../../../../graphql/query/therapist";
+import {
+  GET_THERAPIST_HOMEWORK,
+  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+} from "../../../../graphql/query/therapist";
 import ConfirmBoxModal from "../../../common/ConfirmBoxModal";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 
@@ -37,20 +40,48 @@ type propTypes = {
 function HomeworkDetails(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
   const styles = useStyles();
+  const confirmModalRef = useRef<ModalElement>(null);
+  const confirmModalRefForOldHomework = useRef<ModalElement>(null);
+
   const patientId = sessionStorage.getItem("patient_id");
 
   // Use State
-  const [inputs, setInputs] = useState([""]);
+  const [inputs, setInputs] = useState([]);
   const [therapistInputs, setTherapistInputs] = useState([]);
   const [patientInputs, setpatientInputs] = useState([]);
   const [lptHomeworkId, setLptHomeworkId] = useState([]);
+
   const [isConfirm, setIsConfirm] = useState(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [previoushomeworkId, setPrevioushomeworkId] = useState([]);
 
   // Mutation
   const [addHomework] = useMutation(ADD_HOMEWORK);
 
   // Queries
+
+  const [
+    getTherapistHomeworkData2,
+    { data: therapistHomeworkDataData2, refetch },
+  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
+    onCompleted: (data) => {
+      console.log("Koca: data ", data);
+    },
+  });
+
+  const previousSessionTaskData =
+    therapistHomeworkDataData2?.getPatientHomeworkData;
+
+  useEffect(() => {
+    getTherapistHomeworkData2({
+      variables: {
+        patient_id: patientId,
+        ptsession_id: props.sessionId,
+        therapy_id: props.therapyId,
+      },
+    });
+  }, [props.sessionId, props.therapyId, patientId]);
+
   const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
     useLazyQuery(GET_THERAPIST_HOMEWORK, {
       onCompleted: () => {
@@ -73,11 +104,26 @@ function HomeworkDetails(props: propTypes) {
   }, [props.sessionId, props.sessionNo, props.therapyId, patientId]);
 
   const handleCreateInput = () => {
+    if (previousSessionTaskData?.length > 0) {
+      confirmModalRefForOldHomework.current?.open();
+
+      return;
+    }
     if (inputs.length >= 15) {
       confirmModalRef.current?.open();
       return; // exit the function without creating a new input
     }
     setInputs([...inputs, ""]);
+  };
+
+  const handleInputChangePrviousHomework = (index, value, Id) => {
+    const updatedInputs = [...inputs];
+    updatedInputs[index] = value;
+    setInputs(updatedInputs);
+
+    const updatedId = [...previoushomeworkId];
+    updatedId[index] = Id;
+    setPrevioushomeworkId(updatedId);
   };
 
   const handleInputChange = (index, value) => {
@@ -123,8 +169,6 @@ function HomeworkDetails(props: propTypes) {
     setSuccessModal(false);
   };
 
-  const confirmModalRef = useRef<ModalElement>(null);
-
   const handlerAddAndUpdate = async () => {
     try {
       await addHomework({
@@ -132,8 +176,7 @@ function HomeworkDetails(props: propTypes) {
           patient_id: patientId,
           ptsession_id: props.sessionId,
           therapy_id: props.therapyId,
-          // pthomework_id: ,
-
+          pthomework_id: JSON.stringify(previoushomeworkId),
           pthomewrk_task: JSON.stringify(inputs),
           lpthomework_id: JSON.stringify(lptHomeworkId),
           pthomewrk_resp: JSON.stringify(patientInputs),
@@ -142,11 +185,12 @@ function HomeworkDetails(props: propTypes) {
         onCompleted: () => {
           setIsConfirm(false);
           setSuccessModal(true);
+          refetch();
         },
       });
     } catch (e) {
       /* istanbul ignore next */
-      enqueueSnackbar("Please fill the all fields", { variant: "error" });
+      enqueueSnackbar("Something is wrong", { variant: "error" });
     }
   };
 
@@ -168,7 +212,7 @@ function HomeworkDetails(props: propTypes) {
           >
             <Button
               onClick={handleCreateInput}
-              data-testid={`addNewQuestion_${"planId"}`}
+              data-testid={`add_homework_button`}
               variant="outlined"
             >
               Add Homework
@@ -307,126 +351,233 @@ function HomeworkDetails(props: propTypes) {
             </Box>
           )}
 
-          {inputs.map((input, index) => (
-            <div key={index}>
-              <Box
-                className="fieldBox second"
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  paddingBottom: "5px",
-                  paddingTop: "5px",
-                }}
-              >
-                <Box
-                  style={{
-                    paddingRight: "15px",
-                    color: "#6EC9DB",
-                    fontWeight: "bold",
-                  }}
-                  data-testid="safety_ques"
-                >
-                  Homework Task {index + 1}
-                </Box>
-
-                <IconButtonWrapper
-                  aria-label="create"
-                  size="small"
-                  style={{ backgroundColor: "#6EC9DB" }}
-                  data-testid={`button-delete-icon_`}
-                >
-                  <DeleteIcon
-                    style={{ color: "white" }}
-                    onClick={() => handleDeleteInput(index)}
-                  />
-                </IconButtonWrapper>
-              </Box>
-
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  border: "1px solid #cecece",
-                  display: "grid",
-                }}
-                p={5}
-                marginBottom={"25px"}
-                borderRadius={"7px"}
-              >
-                <Grid container spacing={2} marginBottom={0}>
-                  <Grid item xs={12}>
-                    <TextFieldComponent
-                      name="resource_references"
-                      id="references"
-                      value={input}
-                      multiline
-                      rows={4}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                      inputProps={{ "data-testid": `homework_task${index}` }}
-                      fullWidth={true}
-                      className="form-control-bg"
-                    />
-                  </Grid>
-                </Grid>
-                <Box
-                  className="fieldBox second"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    paddingTop: "10px",
-                  }}
-                >
-                  <Button
-                    onClick={handleCreateInput}
-                    data-testid={`addNewQuestion_${"planId"}`}
-                    variant="outlined"
+          {previousSessionTaskData?.length > 0 && (
+            <div>
+              {previousSessionTaskData?.map((data, index) => (
+                <Box>
+                  <Box
+                    className="fieldBox second"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      paddingBottom: "5px",
+                      paddingTop: "5px",
+                    }}
                   >
-                    Add Resource
-                  </Button>
+                    <Box
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      Homework Task {index + 1}
+                    </Box>
+
+                    <IconButtonWrapper
+                      aria-label="create"
+                      size="small"
+                      style={{ backgroundColor: "#6EC9DB" }}
+                      data-testid={`button-delete-icon_`}
+                    >
+                      <DeleteIcon
+                      // style={{ color: "white" }}
+                      // onClick={() => handleDeleteInput(index)}
+                      />
+                    </IconButtonWrapper>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      border: "1px solid #cecece",
+                      display: "grid",
+                    }}
+                    p={5}
+                    marginBottom={"25px"}
+                    borderRadius={"7px"}
+                  >
+                    <Grid container spacing={2} marginBottom={0}>
+                      <Grid item xs={12}>
+                        <TextFieldComponent
+                          name="resource_references"
+                          id="references"
+                          value={
+                            inputs[index] ? inputs[index] : data?.pthomewrk_task
+                          }
+                          multiline
+                          rows={4}
+                          onChange={(e) =>
+                            handleInputChangePrviousHomework(
+                              index,
+                              e.target.value,
+                              data._id
+                            )
+                          }
+                          inputProps={{
+                            "data-testid": `Pre_homework_task${index}`,
+                          }}
+                          fullWidth={true}
+                          className="form-control-bg"
+                        />
+                      </Grid>
+                    </Grid>
+                    <Box
+                      className="fieldBox second"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        paddingTop: "10px",
+                      }}
+                    >
+                      <Button
+                        onClick={handleCreateInput}
+                        data-testid={`addNewQuestion_${"planId"}`}
+                        variant="outlined"
+                      >
+                        Add Resource
+                      </Button>
+                    </Box>
+                  </Box>
                 </Box>
-              </Box>
+              ))}
             </div>
-          ))}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              p: 1,
-              m: 1,
-              bgcolor: "background.paper",
-              borderRadius: 1,
-              paddingTop: "50px",
-            }}
-          >
-            <Grid item xs={6} style={{ paddingRight: "50px" }}>
-              <Button
-                data-testid="editTemplateSubmitButton"
-                variant="contained"
-                // type="submit"
-                onClick={(e) => {
-                  /* istanbul ignore next */
-                  handleSubmit(e);
-                  setIsConfirm(true);
-                }}
-                style={{ paddingLeft: "50px", paddingRight: "50px" }}
-              >
-                Save
-              </Button>
-            </Grid>
-            <Grid item xs={6} textAlign="center">
-              <Button
-                data-testid="editTemplateCancelButton"
-                variant="contained"
-                style={{
-                  paddingLeft: "40px",
-                  paddingRight: "40px",
-                  backgroundColor: "#6BA08E",
-                }}
-                onClick={props.onCancel}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Box>
+          )}
+
+          {!previousSessionTaskData?.length && (
+            <Box>
+              {inputs.map((input, index) => (
+                <div key={index}>
+                  <Box
+                    className="fieldBox second"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      paddingBottom: "5px",
+                      paddingTop: "5px",
+                    }}
+                  >
+                    <Box
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      Homework Task {index + 1}
+                    </Box>
+
+                    <IconButtonWrapper
+                      aria-label="create"
+                      size="small"
+                      style={{ backgroundColor: "#6EC9DB" }}
+                      data-testid={`button-delete-icon_`}
+                    >
+                      <DeleteIcon
+                        style={{ color: "white" }}
+                        onClick={() => handleDeleteInput(index)}
+                      />
+                    </IconButtonWrapper>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      border: "1px solid #cecece",
+                      display: "grid",
+                    }}
+                    p={5}
+                    marginBottom={"25px"}
+                    borderRadius={"7px"}
+                  >
+                    <Grid container spacing={2} marginBottom={0}>
+                      <Grid item xs={12}>
+                        <TextFieldComponent
+                          name="resource_references"
+                          id="references"
+                          value={input}
+                          multiline
+                          rows={4}
+                          onChange={(e) =>
+                            handleInputChange(index, e.target.value)
+                          }
+                          inputProps={{
+                            "data-testid": `homework_task${index}`,
+                          }}
+                          fullWidth={true}
+                          className="form-control-bg"
+                        />
+                      </Grid>
+                    </Grid>
+                    <Box
+                      className="fieldBox second"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        paddingTop: "10px",
+                      }}
+                    >
+                      <Button
+                        onClick={handleCreateInput}
+                        data-testid={`addNewQuestion_${"planId"}`}
+                        variant="outlined"
+                      >
+                        Add Resource
+                      </Button>
+                    </Box>
+                  </Box>
+                </div>
+              ))}
+            </Box>
+          )}
+
+          {inputs.length > 0 ||
+          previousSessionTaskData?.length ||
+          lastHomeworkList?.length ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                p: 1,
+                m: 1,
+                bgcolor: "background.paper",
+                borderRadius: 1,
+                paddingTop: "50px",
+              }}
+            >
+              <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                <Button
+                  data-testid="editTemplateSubmitButton"
+                  variant="contained"
+                  // type="submit"
+                  onClick={(e) => {
+                    /* istanbul ignore next */
+                    handleSubmit(e);
+                    setIsConfirm(true);
+                  }}
+                  style={{ paddingLeft: "50px", paddingRight: "50px" }}
+                >
+                  Save
+                </Button>
+              </Grid>
+              <Grid item xs={6} textAlign="center">
+                <Button
+                  data-testid="editTemplateCancelButton"
+                  variant="contained"
+                  style={{
+                    paddingLeft: "40px",
+                    paddingRight: "40px",
+                    backgroundColor: "#6BA08E",
+                  }}
+                  onClick={props.onCancel}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+            </Box>
+          ) : null}
         </Stack>
 
         {isConfirm && (
@@ -450,6 +601,11 @@ function HomeworkDetails(props: propTypes) {
       <ConfirmBoxModal
         infoMessage="You cannot add more than 15 task, Please delete a task to add a new task"
         confirmModalRef={confirmModalRef}
+      />
+
+      <ConfirmBoxModal
+        infoMessage="Homework tasks cannot be added to older session, please add task to the next session."
+        confirmModalRef={confirmModalRefForOldHomework}
       />
     </>
   );
