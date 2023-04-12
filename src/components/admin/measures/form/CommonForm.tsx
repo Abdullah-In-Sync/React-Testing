@@ -6,10 +6,11 @@ import CommonButton from "../../../common/Buttons/CommonButton";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
-import { Format1 } from "../../../common/TemplateFormat";
+import Formats from "../../../common/TemplateFormat";
 import ViewFormatsModal from "../../../common/TemplateFormat/ViewFomatsModal";
 import { useStyles } from "./createMeasuresStyles";
 import * as types from "./types";
+import formatData from "../../../common/TemplateFormat/templateFormatData";
 
 interface ViewProps {
   organizationList?: Array<{
@@ -26,6 +27,7 @@ const CommonForm: React.FC<ViewProps> = ({
   formikProps,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
+  const FormatTemplate = values.templateId ? Formats[values.templateId] : null;
   const modalRefFormatsView = useRef<ModalElement>(null);
   const styles = useStyles();
   const csvDecode = (csvString) => {
@@ -39,6 +41,7 @@ const CommonForm: React.FC<ViewProps> = ({
     if (value.indexOf("all") > -1) setFieldValue("orgId", "all");
     else setFieldValue("orgId", value.join(","));
   };
+
   return (
     <>
       <Card>
@@ -114,6 +117,17 @@ const CommonForm: React.FC<ViewProps> = ({
                       id="templateId"
                       labelId="templateId"
                       name="templateId"
+                      onChange={(e) => {
+                        const {
+                          target: { value, name },
+                        } = e;
+                        setFieldValue(name, value);
+                        if (value)
+                          setFieldValue(
+                            "templateData",
+                            formatData[value]["data"]
+                          );
+                      }}
                       label="Add format"
                       options={[
                         { id: "format1", value: "Format 1" },
@@ -128,9 +142,7 @@ const CommonForm: React.FC<ViewProps> = ({
                   </Box>
                 </Box>
               </Box>
-              {values.templateId === "format1" && (
-                <Format1 formikProps={formikProps} />
-              )}
+              {FormatTemplate && <FormatTemplate formikProps={formikProps} />}
               <Box className="bottomActionButtonsWrapper">
                 <Box>
                   <CommonButton

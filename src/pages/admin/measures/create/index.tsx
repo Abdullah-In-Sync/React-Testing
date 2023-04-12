@@ -1,16 +1,20 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import CreateMeasuresComponent from "../../../../components/admin/measures/create/CreateMeasures";
-import ContentHeader from "../../../../components/common/ContentHeader";
-import Loader from "../../../../components/common/Loader";
-import Layout from "../../../../components/layout";
-import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import { CREATE_MEASURE_TEMPLATE } from "../../../../graphql/Measure/graphql";
-import { SuccessModal } from "../../../../components/common/SuccessModal";
-import ConfirmationModal from "../../../../components/common/ConfirmationModal";
 import { useSnackbar } from "notistack";
+import { useEffect, useRef, useState } from "react";
+import CreateMeasuresComponent from "../../../../components/admin/measures/create/CreateMeasures";
+import ConfirmationModal from "../../../../components/common/ConfirmationModal";
+import ContentHeader from "../../../../components/common/ContentHeader";
+import InfoModal, {
+  ConfirmElement,
+} from "../../../../components/common/CustomModal/InfoModal";
+import Loader from "../../../../components/common/Loader";
+import { SuccessModal } from "../../../../components/common/SuccessModal";
+import InfoMessage from "../../../../components/common/TemplateFormat/InfoMessage";
+import Layout from "../../../../components/layout";
+import { CREATE_MEASURE_TEMPLATE } from "../../../../graphql/Measure/graphql";
+import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();
@@ -18,7 +22,6 @@ const CreateMeasures: NextPage = () => {
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState<any>({
-    validationStatus: false,
     status: false,
     storedFunction: null,
     setSubmitting: null,
@@ -27,7 +30,7 @@ const CreateMeasures: NextPage = () => {
       description: "",
     },
   });
-
+  const infoModalRef = useRef<ConfirmElement>(null);
   const [createMeasures] = useMutation(CREATE_MEASURE_TEMPLATE);
 
   const [
@@ -74,16 +77,10 @@ const CreateMeasures: NextPage = () => {
             } = data;
 
             if (duplicateNames) {
-              setIsConfirm({
-                ...isConfirm,
-                ...{
-                  validationStatus: true,
-                  confirmObject: {
-                    description: "Following measures already exist!",
-                  },
-                },
-                storedFunction: () => doneCallback(),
+              infoModalRef.current.openConfirm({
+                data: { duplicateNames, measureText: title },
               });
+              doneCallback();
             } else {
               setSuccessModal(true);
               doneCallback();
@@ -135,41 +132,41 @@ const CreateMeasures: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const cancelConfirm = () => {
-    /* istanbul ignore next */
     router.back();
   };
 
+  /* istanbul ignore next */
   const handleOk = () => {
     router.push(`/admin/measures`);
     setSuccessModal(false);
   };
 
+  /* istanbul ignore next */
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
-      /* istanbul ignore next */
       if (isConfirm.setSubmitting instanceof Function)
         isConfirm.setSubmitting(false);
 
       setIsConfirm({
-        validationStatus: false,
         status: false,
         storedFunction: null,
         setSubmitting: null,
       });
     });
   };
+
+  /* istanbul ignore next */
   const clearIsConfirm = () => {
-    /* istanbul ignore next */
     if (isConfirm.setSubmitting instanceof Function)
       isConfirm.setSubmitting(false);
-    /* istanbul ignore next */
+
     setIsConfirm({
       status: false,
       storedFunction: null,
       setSubmitting: null,
       cancelStatus: false,
-      validationStatus: false,
     });
   };
 
@@ -190,12 +187,9 @@ const CreateMeasures: NextPage = () => {
             onConfirm={onConfirmSubmit}
           />
         )}
-        {isConfirm.validationStatus && (
-          <ConfirmationModal
-            label={isConfirm.confirmObject.description}
-            onOk={onConfirmSubmit}
-          />
-        )}
+        <InfoModal ref={infoModalRef}>
+          <InfoMessage />
+        </InfoModal>
         {successModal && (
           <SuccessModal
             isOpen={successModal}
@@ -208,4 +202,5 @@ const CreateMeasures: NextPage = () => {
     </>
   );
 };
+
 export default CreateMeasures;

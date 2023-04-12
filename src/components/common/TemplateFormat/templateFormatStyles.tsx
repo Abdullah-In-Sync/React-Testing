@@ -141,6 +141,164 @@ export const useStyles = makeStyles((theme: Theme) => ({
         width: "100%",
       },
     },
+
+    "& .deleteButtonWrapper": {
+      display: "flex",
+      //   flex: 1,
+      justifyContent: "flex-end",
+      marginBottom: "0.7rem",
+    },
+    "& .deleteButtonWrapper button": {
+      marginRight: 10,
+      color: theme.palette.custom.light,
+      background: theme.palette.primary.main,
+      width: 35,
+      height: 0,
+    },
+    "& .deleteButtonWrapper button svg": {
+      fontSize: "1.2rem",
+    },
+  },
+  templateFromat2Wrapper: {
+    padding: 10,
+    border: "1px solid #ccc",
+    borderRadius: 10,
+    "& .adminQuestions": {
+      "& .addQuestionButtonWrapper": {
+        textAlign: "right",
+        marginBottom: 5,
+      },
+      "& .tableContainer": {
+        "& table": {
+          minWidth: 800,
+          "& thead": {
+            "& th:first-child": {
+              borderRadius: "10px 0 0 0",
+              width: "37%",
+            },
+
+            background: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+            "& textarea": {
+              color: theme.palette.primary.contrastText,
+            },
+            "& fieldset": {
+              border: 0,
+            },
+            "& th:nth-child(even)": {
+              backgroundColor: "#61C4D8",
+            },
+            "& th:not(:first-child)": {
+              "& textarea": {
+                textAlign: "center",
+              },
+            },
+            "& th:last-child": {
+              borderRadius: "0 10px 0 0",
+              background: theme.palette.primary.main,
+            },
+          },
+          "& tbody": {
+            border: "1px solid rgba(224, 224, 224, 1)",
+            "& tr:last-child": {
+              "& td": {
+                border: "none",
+              },
+            },
+            "& fieldset": {
+              border: 0,
+            },
+
+            "& tr": {
+              "& td:nth-child(even)": {
+                backgroundColor: "#f5f5f5",
+              },
+              "& td:not(:first-child)": {
+                "& textarea": {
+                  textAlign: "center",
+                },
+              },
+              "& td:last-child": {
+                background: "#fff",
+              },
+            },
+          },
+          "& tfoot": {
+            borderRadius: 10,
+            "& textarea": {
+              textAlign: "center",
+            },
+            "&::before": {
+              content: '"@"',
+              display: "block",
+              lineHeight: 2,
+              textIndent: -99999,
+            },
+            "& tr": {
+              border: "1px solid #6ec9db",
+              background: "#ECFCFF",
+              "& td:first-child": {
+                "& textarea": {
+                  color: theme.palette.primary.main,
+                },
+              },
+              "& td:nth-child(even)": {
+                backgroundColor: "#BFF5FF",
+              },
+
+              "& td:last-child": {
+                background: "#ECFCFF",
+              },
+            },
+            "& tr:first-child": {
+              "& td": {
+                border: 0,
+              },
+              "& td:first-child": {},
+              "& td:last-child": {},
+            },
+            "& tr:last-child": {
+              "& td": {
+                border: 0,
+              },
+              "& td:first-child": {},
+              "& td:last-child": {},
+              "& td:nth-child(even)": {
+                backgroundColor: "#BFF5FF !important",
+              },
+            },
+            "& fieldset": {
+              border: 0,
+            },
+          },
+        },
+      },
+    },
+    "& .optionsSection": {
+      "& .radiosWrapper": {
+        display: "flex",
+        flex: 1,
+      },
+      "& .radioWrapper": {
+        "& label": {
+          marginLeft: 0,
+          marginRight: 0,
+        },
+        textAlign: "center",
+        flex: 1,
+        "& .inputBox": {
+          "& textarea": {
+            textAlign: "center",
+          },
+          "& fieldset": {
+            border: 0,
+          },
+        },
+        "& .radioInputBox .MuiOutlinedInput-root": {
+          paddingBottom: 0,
+        },
+      },
+    },
     "& .deleteButtonWrapper": {
       display: "flex",
       //   flex: 1,
@@ -164,18 +322,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
       color: "unset",
     },
     "& .imagesWrapper": {
-      // width: "100%",
-
       "& .imageWrapper": {
-        // width: "100%",
-        // "& span":{
-        //     width: "100%",
-        // }
-        // "& > div": {
-        //   position: "unset !important"
-        // },
         padding: 10,
-
         "& .image": {
           maxHeight: 300,
         },
@@ -200,6 +348,58 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& .MuiTypography-root .MuiBox-root button": {
       color: theme.palette.custom.light,
+    },
+  },
+  infoMessageBoxModal: {
+    padding: 15,
+    "& .boxFirst": {
+      padding: "10px 10px",
+      display: "flex",
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      "& .iconWrapper": {
+        padding: 5,
+        display: "flex",
+        alignItems: "center",
+        "& svg": {
+          color: "red",
+          fontSize: "1.7rem",
+        },
+      },
+      "& .textWrapper": {
+        "& h6": {
+          color: "unset",
+        },
+      },
+    },
+    "& .duplicatesTable": {
+      "& th": {
+        borderLeft: "1px solid",
+        borderTop: "1px solid",
+        borderBottom: "1px solid",
+        "& p": {
+          color: "unset",
+          fontWeight: "bold",
+        },
+      },
+      "& th:last-child": {
+        borderRight: "1px solid",
+      },
+      "& td": {
+        borderLeft: "1px solid #ccc",
+      },
+      "& td:last-child": {
+        borderRight: "1px solid #ccc",
+      },
+    },
+    "& .okButtonWrapper": {
+      textAlign: "center",
+      position: "sticky",
+      insetBlockEnd: 0,
+      background: "#fff",
+      marginTop: 10,
+      paddingBottom: 10,
     },
   },
 }));
