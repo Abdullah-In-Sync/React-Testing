@@ -282,6 +282,7 @@ export default function CreateResource(props: propTypes) {
       setSelectedComponentType({
         ...selectedComponentType,
         type: values.component_name,
+        info: values,
       });
     }
   };
@@ -350,8 +351,15 @@ export default function CreateResource(props: propTypes) {
     window.open("/v2/template/preview/create", "_blank");
   };
 
-  const onSaveArrowTemplate = (updatedEvent: string) => {
-    console.log(updatedEvent, "node/edges onsubmit");
+  const onSaveArrowTemplate = (arrowTemplateData: string) => {
+    console.log(selectedComponentType?.info?._id, "node/edges onsubmit");
+
+    saveResource({
+      ...formFields,
+      templateData: arrowTemplateData,
+      templateId: selectedComponentType?.info?._id,
+    });
+    /* istanbul ignore next */
   };
 
   const onCancelArrowTemplate = () => {

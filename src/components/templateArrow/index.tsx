@@ -25,15 +25,19 @@ const getId = () => `dndnode_${id++}`;
 interface TemplateArrowProps {
   onSubmit?: (updatedData: string) => void;
   onCancel?: any;
+  nodesData?: Node[] | [];
+  edgesData?: Edge[] | [];
 }
 
 const TemplateArrow: React.FC<TemplateArrowProps> = ({
   onSubmit,
   onCancel,
+  nodesData = [],
+  edgesData = [],
 }) => {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState([...nodesData]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([...edgesData]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   const onConnect = useCallback(
