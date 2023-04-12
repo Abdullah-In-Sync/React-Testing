@@ -12,6 +12,8 @@ import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
 import TherapyPatientHomeworkIndex from "../pages/therapist/patient/view/[id]/homework";
 import { GET_THERAPIST_HOMEWORK } from "../graphql/query/therapist";
 import { ADD_HOMEWORK } from "../graphql/mutation/therapist";
+import theme from "../styles/theme/theme";
+import { ThemeProvider } from "@mui/styles";
 
 jest.mock("../contexts/AuthContext");
 
@@ -188,11 +190,13 @@ const sut = async () => {
   sessionStorage.setItem("patient_name", "test");
   render(
     <MockedProvider mocks={mocks}>
-      <SnackbarProvider>
-        <TherapyPatientHomeworkIndex
-          setTherapy={"9edcc1cd374e44ab84cf5721a73748d3"}
-        />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <TherapyPatientHomeworkIndex
+            setTherapy={"9edcc1cd374e44ab84cf5721a73748d3"}
+          />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   // await waitForElementToBeRemoved(() =>
