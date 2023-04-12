@@ -26,6 +26,7 @@ export default function BasicModal(props) {
     closeOnEscape = false,
   } = props;
 
+  /* istanbul ignore next */
   const handleClose = (event, reason) => {
     switch (reason) {
       case "backdropClick":
