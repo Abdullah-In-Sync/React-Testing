@@ -200,6 +200,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
           },
           "& tbody": {
             border: "1px solid rgba(224, 224, 224, 1)",
+            "@supports (-moz-appearance:none)": {
+              borderLeft: "2px solid rgba(224, 224, 224, 1)",
+            },
             "& tr:last-child": {
               "& td": {
                 border: "none",
@@ -238,6 +241,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
               border: "1px solid #6ec9db",
               background: "#ECFCFF",
               "& td:first-child": {
+                "@supports (-moz-appearance:none)": {
+                  borderLeft: "2px solid #6ec9db",
+                },
                 "& textarea": {
                   color: theme.palette.primary.main,
                 },
