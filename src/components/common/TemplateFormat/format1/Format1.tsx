@@ -12,12 +12,13 @@ import WsasSection from "./WsasSection";
 
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
+  confirmRef?: any
 };
 
-export default function Format1({ formikProps }: propTypes) {
+export default function Format1({ formikProps, confirmRef }: propTypes) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
-  const confirmRef = useRef<ConfirmElement>(null);
+  // const confirmRef = useRef<ConfirmElement>(null);
   const { templateData } = values;
 
   const removeQuestion = (callback, i) => {
@@ -28,14 +29,13 @@ export default function Format1({ formikProps }: propTypes) {
   };
 
   const handleDeleteQuestion = (i) => {
-    confirmRef.current.openConfrim({
+    confirmRef.current.openConfirm({
       confirmFunction: (callback) => removeQuestion(callback, i),
       description: "Are you sure you want to delete the question?",
     });
   };
 
   return (
-    <ConfirmWrapper ref={confirmRef}>
       <Stack className={styles.templateFromat1Wrapper}>
         <IntroSection formikProps={formikProps} />
         <ChooseScoreSection formikProps={formikProps} />
@@ -46,6 +46,5 @@ export default function Format1({ formikProps }: propTypes) {
         <WsasSection />
         <DescriptionSection formikProps={formikProps} />
       </Stack>
-    </ConfirmWrapper>
   );
 }

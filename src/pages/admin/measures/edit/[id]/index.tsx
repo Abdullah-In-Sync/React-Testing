@@ -3,24 +3,55 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import CreateMeasuresComponent from "../../../../components/admin/measures/create/CreateMeasures";
-import ContentHeader from "../../../../components/common/ContentHeader";
-import {
+import EditMeasuresComponent from "../../../../../components/admin/measures/edit/EditMeasures";
+import ConfirmationModal from "../../../../../components/common/ConfirmationModal";
+import ContentHeader from "../../../../../components/common/ContentHeader";
+import InfoModal, {
   ConfirmInfoElement,
-} from "../../../../components/common/CustomModal/InfoModal";
-import Loader from "../../../../components/common/Loader";
-import { ConfirmElement } from "../../../../components/common/TemplateFormat/ConfirmWrapper";
-import Layout from "../../../../components/layout";
-import { CREATE_MEASURE_TEMPLATE } from "../../../../graphql/Measure/graphql";
-import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
+} from "../../../../../components/common/CustomModal/InfoModal";
+import Loader from "../../../../../components/common/Loader";
+import { SuccessModal } from "../../../../../components/common/SuccessModal";
+import InfoMessage from "../../../../../components/common/TemplateFormat/InfoMessage";
+import Layout from "../../../../../components/layout";
+import {
+  CREATE_MEASURE_TEMPLATE,
+  AdMIN_VIEW_MEASURE,
+  UPDATE_MEASURE
+} from "../../../../../graphql/Measure/graphql";
+import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
+import {
+  UpdateMeasureByIdResponse,
+  UpdateMeasureByIdVars,
+} from "../../../../../graphql/Measure/types";
+import {ConfirmElement} from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();
-  const confirmRef = useRef<ConfirmElement>(null);
+  const {
+    query: { id },
+  } = router;
+  const measureId = id as string;
+  const [updateMeasure] = useMutation<
+  UpdateMeasureByIdResponse,
+  UpdateMeasureByIdVars
+>(UPDATE_MEASURE); 
+const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
-  const [createMeasures] = useMutation(CREATE_MEASURE_TEMPLATE);
+
+  const [
+    getAdminMeasure,
+    {
+      loading: loadingMeasureData,
+      data: { adminViewMeasureById: measureData = {} } = {},
+    },
+  ] = useLazyQuery(AdMIN_VIEW_MEASURE, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      setLoader(false);
+    },
+  });
 
   const [
     getOrgList,
@@ -33,6 +64,11 @@ const CreateMeasures: NextPage = () => {
   });
 
   useEffect(() => {
+    getAdminMeasure({
+      variables: {
+        measureId,
+      },
+    });
     getOrgList();
   }, []);
 
@@ -48,57 +84,40 @@ const CreateMeasures: NextPage = () => {
     const { orgId, description, templateData, templateId, title } = formFields;
 
     const variables = {
-      title,
-      description: description,
-      orgId: selectedOrgIds(orgId),
-      templateData: JSON.stringify(templateData),
-      templateId: templateId,
-    };
+      measureId,
+      update: {
+        title,
+        description: description,
+        org_id: selectedOrgIds(orgId),
+        template_data: JSON.stringify(templateData),
+        template_id: templateId,
+      },
+    }
 
+    setLoader(true);
     try {
-      await createMeasures({
+      await updateMeasure({
         variables,
-        fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            const {
-              adminCreateMeasures: { duplicateNames },
-            } = data;
-
-            if (duplicateNames) {
-              infoModalRef.current.openConfirm({
-                data: { duplicateNames, measureText: title },
-              });
-            } else {
-              confirmRef.current.showSuccess({
-                description: "Your measures has been created successfully.",
-                handleOk
-              })
-            }
-            doneCallback();
-          }
+        onCompleted: () => {
+          confirmRef.current.showSuccess({
+            description: "Your measure has been updated successfully.",
+            handleOk
+          })
         },
       });
     } catch (e) {
-      /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
-      enqueueSnackbar("Server error please try later.", {
-        variant: "error",
-      });
-      /* istanbul ignore next */
-      doneCallback();
+      enqueueSnackbar("Something is wrong", { variant: "error" });
     } finally {
-      /* istanbul ignore next */
+      doneCallback();
       setLoader(false);
-      /* istanbul ignore next */
     }
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
-      description: "Are you sure you want to create the measure?",
+      description: "Are you sure you want to update the measure?",
       setSubmitting
     });
   };
@@ -126,13 +145,15 @@ const CreateMeasures: NextPage = () => {
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
         <ContentHeader title="Create Measures" />
-        <CreateMeasuresComponent
+        <EditMeasuresComponent
           organizationList={organizationList}
           submitForm={handleSavePress}
           onPressCancel={onPressCancel}
+          measureData={measureData}
           confirmRef={confirmRef}
           infoModalRef={infoModalRef}
         />
+
       </Layout>
     </>
   );

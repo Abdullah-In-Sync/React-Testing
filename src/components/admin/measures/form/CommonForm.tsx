@@ -11,21 +11,24 @@ import ViewFormatsModal from "../../../common/TemplateFormat/ViewFomatsModal";
 import { useStyles } from "./createMeasuresStyles";
 import * as types from "./types";
 import formatData from "../../../common/TemplateFormat/templateFormatData";
+import InfoModal, {
+  ConfirmInfoElement,
+} from "../../../common/CustomModal/InfoModal";
+import InfoMessage from "../../../common/TemplateFormat/InfoMessage";
+import ConfirmWrapper, {ConfirmElement} from "../../../common/TemplateFormat/ConfirmWrapper";
 
-interface ViewProps {
-  organizationList?: Array<{
-    [key: string]: any;
-  }>;
-  formikProps: FormikProps<types.InitialFormValues>;
-  onPressCancel?: () => void;
-  handleDeleteQuestion?: (v) => void;
-}
+import {CommonFormProps, ModalRefs} from "../form/types"
+
+type ViewProps = CommonFormProps & ModalRefs
 
 const CommonForm: React.FC<ViewProps> = ({
   organizationList = [],
   onPressCancel,
   formikProps,
+  confirmRef,
+  infoModalRef
 }) => {
+
   const { values, isSubmitting, setFieldValue } = formikProps;
   const FormatTemplate = values.templateId ? Formats[values.templateId] : null;
   const modalRefFormatsView = useRef<ModalElement>(null);
@@ -44,6 +47,7 @@ const CommonForm: React.FC<ViewProps> = ({
 
   return (
     <>
+    <ConfirmWrapper ref={confirmRef}>
       <Card>
         <CardContent>
           <Stack className={styles.formWrapper}>
@@ -142,7 +146,7 @@ const CommonForm: React.FC<ViewProps> = ({
                   </Box>
                 </Box>
               </Box>
-              {FormatTemplate && <FormatTemplate formikProps={formikProps} />}
+              {FormatTemplate && <FormatTemplate formikProps={formikProps} confirmRef={confirmRef}/>}
               <Box className="bottomActionButtonsWrapper">
                 <Box>
                   <CommonButton
@@ -170,6 +174,10 @@ const CommonForm: React.FC<ViewProps> = ({
         </CardContent>
       </Card>
       <ViewFormatsModal modalRefFormatsView={modalRefFormatsView} />
+      <InfoModal ref={infoModalRef}>
+          <InfoMessage />
+        </InfoModal>
+      </ConfirmWrapper>
     </>
   );
 };
