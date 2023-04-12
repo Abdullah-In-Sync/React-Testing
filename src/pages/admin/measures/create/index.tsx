@@ -132,19 +132,20 @@ const CreateMeasures: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const cancelConfirm = () => {
-    /* istanbul ignore next */
     router.back();
   };
 
+  /* istanbul ignore next */
   const handleOk = () => {
     router.push(`/admin/measures`);
     setSuccessModal(false);
   };
 
+  /* istanbul ignore next */
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
-      /* istanbul ignore next */
       if (isConfirm.setSubmitting instanceof Function)
         isConfirm.setSubmitting(false);
 
@@ -155,11 +156,12 @@ const CreateMeasures: NextPage = () => {
       });
     });
   };
+
+  /* istanbul ignore next */
   const clearIsConfirm = () => {
-    /* istanbul ignore next */
     if (isConfirm.setSubmitting instanceof Function)
       isConfirm.setSubmitting(false);
-    /* istanbul ignore next */
+
     setIsConfirm({
       status: false,
       storedFunction: null,

@@ -160,6 +160,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
   },
   templateFromat2Wrapper: {
+    padding: 10,
+    border: "1px solid #ccc",
+    borderRadius: 10,
     "& .adminQuestions": {
       "& .addQuestionButtonWrapper": {
         textAlign: "right",

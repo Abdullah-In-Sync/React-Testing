@@ -340,10 +340,16 @@ describe("Admin create measures", () => {
 
     const submitFormButton = screen.getByTestId("submitForm");
     fireEvent.click(submitFormButton);
-    const confirmButton = screen.getByRole("button", {
-      name: "Confirm",
-    });
-    // fireEvent.click(confirmButton);
-    expect(confirmButton).toBeInTheDocument();
+    const cancelButton = screen.getByTestId("cancelButton");
+    fireEvent.click(cancelButton);
+    expect(cancelButton).not.toBeInTheDocument();
+
+    const optionsQuestionsDelete = screen.getByTestId(
+      "iconButtonQuestion_templateData.optionsQuestions.1.question"
+    );
+    fireEvent.click(optionsQuestionsDelete);
+    const optionConfirmButton = screen.getByTestId("confirmButton");
+    fireEvent.click(optionConfirmButton);
+    expect(lastOptionText).not.toBeInTheDocument();
   });
 });
