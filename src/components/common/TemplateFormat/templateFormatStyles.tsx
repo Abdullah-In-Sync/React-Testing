@@ -21,6 +21,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
           padding: "0px 5px",
           border: 0,
           "& .editableInputWrapper": {
+            display: "-webkit-inline-box",
             inlineSize: "70px",
             overflowWrap: "break-word",
             "& .makeStyles-editableInput-6": {
