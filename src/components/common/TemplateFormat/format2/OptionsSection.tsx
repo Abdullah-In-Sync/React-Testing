@@ -44,7 +44,7 @@ const OptionsSection: React.FC<ViewProps> = ({
         >
           <Box className="radiosWrapper">
             {labels.map((_, i: number) => (
-              <Box className="radioWrapper">
+              <Box key={`radioOption_${i}`} className="radioWrapper">
                 <Box className="inputBox radioInputBox">
                   <FormikTextField
                     name={`templateData.optionsQuestions.${optionIndex}.labels.${i}.option`}
@@ -82,7 +82,7 @@ const OptionsSection: React.FC<ViewProps> = ({
       >
         <Box className="radiosWrapper">
           {labels.map((_, i: number) => (
-            <Box className="radioWrapper">
+            <Box key={`textOption_${i}`} className="radioWrapper">
               <Box className="inputBox">
                 <FormikTextField
                   name={`templateData.optionsQuestions.${optionIndex}.labels.${i}.option`}
@@ -114,7 +114,7 @@ const OptionsSection: React.FC<ViewProps> = ({
     <Box className="optionsSection commonFieldWrapper cSection">
       {values.templateData.optionsQuestions.map((item, i) => {
         return (
-          <>
+          <Box key={`optionsQuestion_${i}`}>
             <Paper
               elevation={0}
               sx={{ p: "2px 10px", mt: 2, border: "1px solid #ccc" }}
@@ -139,7 +139,7 @@ const OptionsSection: React.FC<ViewProps> = ({
             {optionsQuestionsTouched[i] && optionsQuestionsError[i] && (
               <ErrorMessage errorMsg={"All field required"} />
             )}
-          </>
+          </Box>
         );
       })}
     </Box>

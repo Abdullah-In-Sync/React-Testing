@@ -4,33 +4,20 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import CreateMeasuresComponent from "../../../../components/admin/measures/create/CreateMeasures";
-import ConfirmationModal from "../../../../components/common/ConfirmationModal";
 import ContentHeader from "../../../../components/common/ContentHeader";
-import InfoModal, {
-  ConfirmElement,
-} from "../../../../components/common/CustomModal/InfoModal";
+import { ConfirmInfoElement } from "../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../components/common/Loader";
-import { SuccessModal } from "../../../../components/common/SuccessModal";
-import InfoMessage from "../../../../components/common/TemplateFormat/InfoMessage";
+import { ConfirmElement } from "../../../../components/common/TemplateFormat/ConfirmWrapper";
 import Layout from "../../../../components/layout";
 import { CREATE_MEASURE_TEMPLATE } from "../../../../graphql/Measure/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();
+  const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
-  const [successModal, setSuccessModal] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(true);
-  const [isConfirm, setIsConfirm] = useState<any>({
-    status: false,
-    storedFunction: null,
-    setSubmitting: null,
-    cancelStatus: false,
-    confirmObject: {
-      description: "",
-    },
-  });
-  const infoModalRef = useRef<ConfirmElement>(null);
+  const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [createMeasures] = useMutation(CREATE_MEASURE_TEMPLATE);
 
   const [
@@ -80,11 +67,13 @@ const CreateMeasures: NextPage = () => {
               infoModalRef.current.openConfirm({
                 data: { duplicateNames, measureText: title },
               });
-              doneCallback();
             } else {
-              setSuccessModal(true);
-              doneCallback();
+              confirmRef.current.showSuccess({
+                description: "Your measures has been created successfully.",
+                handleOk,
+              });
             }
+            doneCallback();
           }
         },
       });
@@ -105,69 +94,30 @@ const CreateMeasures: NextPage = () => {
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
-    setIsConfirm({
-      ...isConfirm,
-      ...{
-        status: true,
-        setSubmitting,
-        confirmObject: {
-          description: "Are you sure you want to create the measure?",
-        },
-        storedFunction: (callback) => submitForm(formFields, callback),
-      },
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => submitForm(formFields, callback),
+      description: "Are you sure you want to create the measure?",
+      setSubmitting,
     });
   };
 
   const onPressCancel = () => {
-    setIsConfirm({
-      ...isConfirm,
-      ...{
-        status: true,
-        confirmObject: {
-          description:
-            "Are you sure you are canceling the measures without saving?",
-        },
-        storedFunction: () => cancelConfirm(),
-      },
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => cancelConfirm(callback),
+      description:
+        "Are you sure you are canceling the measures without saving?",
     });
   };
 
   /* istanbul ignore next */
-  const cancelConfirm = () => {
+  const cancelConfirm = (callback) => {
     router.back();
+    callback();
   };
 
   /* istanbul ignore next */
   const handleOk = () => {
     router.push(`/admin/measures`);
-    setSuccessModal(false);
-  };
-
-  /* istanbul ignore next */
-  const onConfirmSubmit = () => {
-    isConfirm.storedFunction(() => {
-      if (isConfirm.setSubmitting instanceof Function)
-        isConfirm.setSubmitting(false);
-
-      setIsConfirm({
-        status: false,
-        storedFunction: null,
-        setSubmitting: null,
-      });
-    });
-  };
-
-  /* istanbul ignore next */
-  const clearIsConfirm = () => {
-    if (isConfirm.setSubmitting instanceof Function)
-      isConfirm.setSubmitting(false);
-
-    setIsConfirm({
-      status: false,
-      storedFunction: null,
-      setSubmitting: null,
-      cancelStatus: false,
-    });
   };
 
   return (
@@ -179,25 +129,9 @@ const CreateMeasures: NextPage = () => {
           organizationList={organizationList}
           submitForm={handleSavePress}
           onPressCancel={onPressCancel}
+          confirmRef={confirmRef}
+          infoModalRef={infoModalRef}
         />
-        {isConfirm.status && (
-          <ConfirmationModal
-            label={isConfirm.confirmObject.description}
-            onCancel={clearIsConfirm}
-            onConfirm={onConfirmSubmit}
-          />
-        )}
-        <InfoModal ref={infoModalRef}>
-          <InfoMessage />
-        </InfoModal>
-        {successModal && (
-          <SuccessModal
-            isOpen={successModal}
-            title="Successfull"
-            description={"Your measures has been created successfully."}
-            onOk={handleOk}
-          />
-        )}
       </Layout>
     </>
   );

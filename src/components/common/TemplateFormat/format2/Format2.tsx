@@ -1,8 +1,5 @@
 import { Stack } from "@mui/material";
 import { FormikProps } from "formik";
-import { useRef } from "react";
-
-import ConfirmWrapper, { ConfirmElement } from "../ConfirmWrapper";
 import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
 import OptionsSection from "./OptionsSection";
@@ -10,17 +7,16 @@ import QuestionsSection from "./QuestionsSections";
 
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
+  confirmRef?: any;
 };
 
-export default function Format1({ formikProps }: propTypes) {
+export default function Format1({ formikProps, confirmRef }: propTypes) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
   const { templateData } = values;
 
-  const confirmRef = useRef<ConfirmElement>(null);
-
   const handleDeleteQuestion = (i) => {
-    confirmRef.current.openConfrim({
+    confirmRef.current.openConfirm({
       confirmFunction: (callback) => removeQuestion(callback, i),
       description: `Are you sure you want to delete the Measure?`,
     });
@@ -34,7 +30,7 @@ export default function Format1({ formikProps }: propTypes) {
   };
 
   const handleDeleteOption = (i) => {
-    confirmRef.current.openConfrim({
+    confirmRef.current.openConfirm({
       confirmFunction: (callback) => removeOption(callback, i),
       description: `Are you sure you want to delete the Measure?`,
     });
@@ -48,17 +44,15 @@ export default function Format1({ formikProps }: propTypes) {
   };
 
   return (
-    <ConfirmWrapper ref={confirmRef}>
-      <Stack className={styles.templateFromat2Wrapper}>
-        <QuestionsSection
-          formikProps={formikProps}
-          handleDeleteQuestion={handleDeleteQuestion}
-        />
-        <OptionsSection
-          formikProps={formikProps}
-          handleDeleteOption={handleDeleteOption}
-        />
-      </Stack>
-    </ConfirmWrapper>
+    <Stack className={styles.templateFromat2Wrapper}>
+      <QuestionsSection
+        formikProps={formikProps}
+        handleDeleteQuestion={handleDeleteQuestion}
+      />
+      <OptionsSection
+        formikProps={formikProps}
+        handleDeleteOption={handleDeleteOption}
+      />
+    </Stack>
   );
 }

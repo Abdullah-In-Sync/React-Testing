@@ -159,6 +159,32 @@ export const UPDATE_MEASURE = gql`
   ) {
     adminUpdateMeasureById(measure_id: $measureId, update: $update) {
       _id
+      created_date
+      description
+      org_id
+      organization_name
+      status
+      template_data
+      template_id
+      title
+      updated_date
+    }
+  }
+`;
+
+export const AdMIN_VIEW_MEASURE = gql`
+  query adminViewMeasureById($measureId: ID!) {
+    adminViewMeasureById(measure_id: $measureId) {
+      _id
+      created_date
+      description
+      org_id
+      organization_name
+      status
+      template_data
+      template_id
+      title
+      updated_date
     }
   }
 `;

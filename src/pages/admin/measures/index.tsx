@@ -187,8 +187,8 @@ const MeasuresListPage: NextPage = () => {
   const handleActionButtonClick = (value) => {
     const { pressedIconButton, _id } = value;
     switch (pressedIconButton) {
-      // case "edit":
-      //   return router.push(`/admin/measures/edit/${_id}`);
+      case "edit":
+        return router.push(`/admin/measures/edit/${_id}`);
       // case "view":
       //   return router.push(`/admin/measures/view/${_id}`);
       case "delete":
