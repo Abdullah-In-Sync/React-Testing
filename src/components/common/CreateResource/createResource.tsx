@@ -268,8 +268,6 @@ export default function CreateResource(props: propTypes) {
 
   const onTemplateSelect = (values: any) => {
     /* istanbul ignore next */
-    console.log(values, "values");
-    /* istanbul ignore next */
     if (values.component_name == "TemplateTable") {
       setTemplateModal(false);
       setDimensionModal(true);
@@ -312,8 +310,6 @@ export default function CreateResource(props: propTypes) {
     value: TemplateFormData,
     formikHelper: FormikProps<TemplateFormData>
   ) => {
-    /* istanbul ignore next */
-    console.log(value, formikHelper, formFields, "on submit");
     /* istanbul ignore next */
     saveResource({
       ...formFields,

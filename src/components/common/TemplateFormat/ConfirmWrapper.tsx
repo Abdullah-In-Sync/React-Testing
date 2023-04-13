@@ -33,14 +33,14 @@ const ConfirmWrapper = forwardRef(({ children }: Props, ref): JSX.Element => {
     showSuccess({ handleOk, description }) {
       setSuccessModal({
         description,
-        handleOk
+        handleOk,
       });
     },
   }));
 
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
-      clearIsConfirm()
+      clearIsConfirm();
     });
   };
   const clearIsConfirm = () => {
@@ -56,8 +56,7 @@ const ConfirmWrapper = forwardRef(({ children }: Props, ref): JSX.Element => {
   };
 
   const handleOk = () => {
-    if (successModal.handleOk instanceof Function)
-      successModal.handleOk()
+    if (successModal.handleOk instanceof Function) successModal.handleOk();
 
     setSuccessModal(undefined);
   };
@@ -80,7 +79,6 @@ const ConfirmWrapper = forwardRef(({ children }: Props, ref): JSX.Element => {
           onOk={handleOk}
         />
       )}
-      
     </>
   );
 });
@@ -100,5 +98,5 @@ type OpenSuccessParam = {
 
 export type ConfirmElement = {
   openConfirm: ({ confirmFunction, description }: OpenConfirmPram) => void;
-  showSuccess: ({handleOk, description}:OpenSuccessParam) => void;
+  showSuccess: ({ handleOk, description }: OpenSuccessParam) => void;
 };

@@ -5,9 +5,7 @@ import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import CreateMeasuresComponent from "../../../../components/admin/measures/create/CreateMeasures";
 import ContentHeader from "../../../../components/common/ContentHeader";
-import {
-  ConfirmInfoElement,
-} from "../../../../components/common/CustomModal/InfoModal";
+import { ConfirmInfoElement } from "../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../components/common/Loader";
 import { ConfirmElement } from "../../../../components/common/TemplateFormat/ConfirmWrapper";
 import Layout from "../../../../components/layout";
@@ -72,8 +70,8 @@ const CreateMeasures: NextPage = () => {
             } else {
               confirmRef.current.showSuccess({
                 description: "Your measures has been created successfully.",
-                handleOk
-              })
+                handleOk,
+              });
             }
             doneCallback();
           }
@@ -99,14 +97,15 @@ const CreateMeasures: NextPage = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
       description: "Are you sure you want to create the measure?",
-      setSubmitting
+      setSubmitting,
     });
   };
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
-      description: "Are you sure you are canceling the measures without saving?",
+      description:
+        "Are you sure you are canceling the measures without saving?",
     });
   };
 

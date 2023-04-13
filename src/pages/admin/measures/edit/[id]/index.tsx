@@ -4,26 +4,21 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import EditMeasuresComponent from "../../../../../components/admin/measures/edit/EditMeasures";
-import ConfirmationModal from "../../../../../components/common/ConfirmationModal";
 import ContentHeader from "../../../../../components/common/ContentHeader";
-import InfoModal, {
-  ConfirmInfoElement,
-} from "../../../../../components/common/CustomModal/InfoModal";
+import { ConfirmInfoElement } from "../../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../../components/common/Loader";
-import { SuccessModal } from "../../../../../components/common/SuccessModal";
-import InfoMessage from "../../../../../components/common/TemplateFormat/InfoMessage";
+import { ConfirmElement } from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
 import Layout from "../../../../../components/layout";
 import {
-  CREATE_MEASURE_TEMPLATE,
   AdMIN_VIEW_MEASURE,
-  UPDATE_MEASURE
+  UPDATE_MEASURE,
 } from "../../../../../graphql/Measure/graphql";
-import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
 import {
   UpdateMeasureByIdResponse,
   UpdateMeasureByIdVars,
+  ViewMeasureData,
 } from "../../../../../graphql/Measure/types";
-import {ConfirmElement} from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
+import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();
@@ -32,10 +27,10 @@ const CreateMeasures: NextPage = () => {
   } = router;
   const measureId = id as string;
   const [updateMeasure] = useMutation<
-  UpdateMeasureByIdResponse,
-  UpdateMeasureByIdVars
->(UPDATE_MEASURE); 
-const confirmRef = useRef<ConfirmElement>(null);
+    UpdateMeasureByIdResponse,
+    UpdateMeasureByIdVars
+  >(UPDATE_MEASURE);
+  const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
@@ -44,11 +39,11 @@ const confirmRef = useRef<ConfirmElement>(null);
     getAdminMeasure,
     {
       loading: loadingMeasureData,
-      data: { adminViewMeasureById: measureData = {} } = {},
+      data: { adminViewMeasureById: measureData = null } = {},
     },
-  ] = useLazyQuery(AdMIN_VIEW_MEASURE, {
+  ] = useLazyQuery<ViewMeasureData>(AdMIN_VIEW_MEASURE, {
     fetchPolicy: "cache-and-network",
-    onCompleted: (data) => {
+    onCompleted: () => {
       setLoader(false);
     },
   });
@@ -92,7 +87,7 @@ const confirmRef = useRef<ConfirmElement>(null);
         template_data: JSON.stringify(templateData),
         template_id: templateId,
       },
-    }
+    };
 
     setLoader(true);
     try {
@@ -101,8 +96,8 @@ const confirmRef = useRef<ConfirmElement>(null);
         onCompleted: () => {
           confirmRef.current.showSuccess({
             description: "Your measure has been updated successfully.",
-            handleOk
-          })
+            handleOk,
+          });
         },
       });
     } catch (e) {
@@ -118,14 +113,15 @@ const confirmRef = useRef<ConfirmElement>(null);
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
       description: "Are you sure you want to update the measure?",
-      setSubmitting
+      setSubmitting,
     });
   };
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
-      description: "Are you sure you are canceling the measures without saving?",
+      description:
+        "Are you sure you are canceling the measures without saving?",
     });
   };
 
@@ -145,15 +141,16 @@ const confirmRef = useRef<ConfirmElement>(null);
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
         <ContentHeader title="Create Measures" />
-        <EditMeasuresComponent
-          organizationList={organizationList}
-          submitForm={handleSavePress}
-          onPressCancel={onPressCancel}
-          measureData={measureData}
-          confirmRef={confirmRef}
-          infoModalRef={infoModalRef}
-        />
-
+        {!loadingMeasureData && (
+          <EditMeasuresComponent
+            organizationList={organizationList}
+            submitForm={handleSavePress}
+            onPressCancel={onPressCancel}
+            measureData={measureData}
+            confirmRef={confirmRef}
+            infoModalRef={infoModalRef}
+          />
+        )}
       </Layout>
     </>
   );

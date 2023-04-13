@@ -1,7 +1,5 @@
 import { Stack } from "@mui/material";
 import { FormikProps } from "formik";
-import { useRef } from "react";
-import ConfirmWrapper, { ConfirmElement } from "../ConfirmWrapper";
 import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
 import ChooseScoreSection from "./ChooseScoreSection";
@@ -12,7 +10,7 @@ import WsasSection from "./WsasSection";
 
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
-  confirmRef?: any
+  confirmRef?: any;
 };
 
 export default function Format1({ formikProps, confirmRef }: propTypes) {
@@ -36,15 +34,15 @@ export default function Format1({ formikProps, confirmRef }: propTypes) {
   };
 
   return (
-      <Stack className={styles.templateFromat1Wrapper}>
-        <IntroSection formikProps={formikProps} />
-        <ChooseScoreSection formikProps={formikProps} />
-        <QuestionsSection
-          formikProps={formikProps}
-          handleDeleteQuestion={handleDeleteQuestion}
-        />
-        <WsasSection />
-        <DescriptionSection formikProps={formikProps} />
-      </Stack>
+    <Stack className={styles.templateFromat1Wrapper}>
+      <IntroSection formikProps={formikProps} />
+      <ChooseScoreSection formikProps={formikProps} />
+      <QuestionsSection
+        formikProps={formikProps}
+        handleDeleteQuestion={handleDeleteQuestion}
+      />
+      <WsasSection />
+      <DescriptionSection formikProps={formikProps} />
+    </Stack>
   );
 }

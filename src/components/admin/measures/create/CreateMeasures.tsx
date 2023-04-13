@@ -1,19 +1,17 @@
 import { Formik } from "formik";
 import React from "react";
 import CommonForm from "../form/CommonForm";
-
-
 import { measuresValidationSchema } from "../form/measuresValidationSchema";
-import {CommonFormProps, ModalRefs} from "../form/types"
+import { CommonFormProps, ModalRefs } from "../form/types";
 
-type ViewProps = CommonFormProps & ModalRefs
+type ViewProps = CommonFormProps & ModalRefs;
 
 const CreateMeasuersForm: React.FC<ViewProps> = ({
   submitForm,
   organizationList,
   onPressCancel,
   confirmRef,
-  infoModalRef
+  infoModalRef,
 }) => {
   const initialValues = {
     title: "",

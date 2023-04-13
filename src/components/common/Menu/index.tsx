@@ -26,7 +26,6 @@ export const ActionMenu: FC<ActionMenuProps> = ({
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log(event, "event");
   };
   const handleClose = () => {
     setAnchorEl(null);

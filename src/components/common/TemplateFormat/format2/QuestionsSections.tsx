@@ -68,12 +68,14 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const tableHeader = () => {
     return (
       <TableHead>
-        {templateData.questions.headerRow.map((column, i) => (
-          <TableCell key={column.id} align={column.align}>
-            {inputTextField(`templateData.questions.headerRow.${i}.label`)}
-          </TableCell>
-        ))}
-        <TableCell />
+        <TableRow>
+          {templateData.questions.headerRow.map((column, i) => (
+            <TableCell key={`tableHead_${column.id}`} align={column.align}>
+              {inputTextField(`templateData.questions.headerRow.${i}.label`)}
+            </TableCell>
+          ))}
+          <TableCell />
+        </TableRow>
       </TableHead>
     );
   };
@@ -81,12 +83,15 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const tableBody = () => {
     return (
       <TableBody>
-        {templateData.questions.bodyRows.map((row, i) => {
+        {templateData.questions.bodyRows.map((_, i) => {
           return (
-            <TableRow role="checkbox" tabIndex={-1} key={`tableRow_${i}`}>
+            <TableRow role="checkbox" tabIndex={-1} key={`tableBodyRow_${i}`}>
               {templateData.questions.headerRow.map((column) => {
                 return (
-                  <TableCell key={column.id} align={column.align}>
+                  <TableCell
+                    key={`tableBodyCell_${column.id}`}
+                    align={column.align}
+                  >
                     {inputTextField(
                       `templateData.questions.bodyRows.${i}.${column.id}`
                     )}
@@ -116,13 +121,16 @@ const QuestionsSection: React.FC<ViewProps> = ({
               hover
               role="checkbox"
               tabIndex={-1}
-              key={`tableRow_${outerIndex}`}
+              key={`tableFotterRow_${outerIndex}`}
             >
               {templateData.questions.headerRow.map((column, i) => {
                 const value = column.id ? row[column.id] : undefined;
                 if (value !== undefined) {
                   return (
-                    <TableCell key={column.id} align={column.align}>
+                    <TableCell
+                      key={`tableFotterCell_${column.id}`}
+                      align={column.align}
+                    >
                       {inputTextField(
                         `templateData.questions.footerRows.${outerIndex}.${column.id}`
                       )}

@@ -1,22 +1,18 @@
-import { Formik, FormikProps } from "formik";
-import React, { useRef } from "react";
+import { Formik } from "formik";
+import React from "react";
 import CommonForm from "../form/CommonForm";
-
-import { InitialFormValues } from "../form/types";
 import { measuresValidationSchema } from "../form/measuresValidationSchema";
-import ConfirmWrapper, {ConfirmElement} from "../../../common/TemplateFormat/ConfirmWrapper";
+import { CommonFormProps, ModalRefs } from "../form/types";
 
-import {CommonFormProps, ModalRefs} from "../form/types"
-
-type ViewProps = CommonFormProps & ModalRefs
+type ViewProps = CommonFormProps & ModalRefs;
 
 const EditMeasuersForm: React.FC<ViewProps> = ({
   submitForm,
   organizationList,
   onPressCancel,
-  measureData = {},
+  measureData,
   confirmRef,
-  infoModalRef
+  infoModalRef,
 }) => {
   const {
     title = "",
@@ -24,10 +20,7 @@ const EditMeasuersForm: React.FC<ViewProps> = ({
     org_id: orgId = "",
     template_id: templateId = "",
     template_data = null,
-    status,
-  } = measureData;
-
-  console.log("measureData edit", measureData);
+  } = measureData || {};
 
   const initialValues = {
     title,
@@ -51,6 +44,7 @@ const EditMeasuersForm: React.FC<ViewProps> = ({
             onPressCancel={onPressCancel}
             confirmRef={confirmRef}
             infoModalRef={infoModalRef}
+            isEdit
           />
         )}
       />

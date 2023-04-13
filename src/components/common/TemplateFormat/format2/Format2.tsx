@@ -1,8 +1,5 @@
 import { Stack } from "@mui/material";
 import { FormikProps } from "formik";
-import { useRef } from "react";
-
-import ConfirmWrapper, { ConfirmElement } from "../ConfirmWrapper";
 import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
 import OptionsSection from "./OptionsSection";
@@ -10,15 +7,13 @@ import QuestionsSection from "./QuestionsSections";
 
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
-  confirmRef?: any
+  confirmRef?: any;
 };
 
 export default function Format1({ formikProps, confirmRef }: propTypes) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
   const { templateData } = values;
-
-  // const confirmRef = useRef<ConfirmElement>(null);
 
   const handleDeleteQuestion = (i) => {
     confirmRef.current.openConfirm({
@@ -49,15 +44,15 @@ export default function Format1({ formikProps, confirmRef }: propTypes) {
   };
 
   return (
-      <Stack className={styles.templateFromat2Wrapper}>
-        <QuestionsSection
-          formikProps={formikProps}
-          handleDeleteQuestion={handleDeleteQuestion}
-        />
-        <OptionsSection
-          formikProps={formikProps}
-          handleDeleteOption={handleDeleteOption}
-        />
-      </Stack>
+    <Stack className={styles.templateFromat2Wrapper}>
+      <QuestionsSection
+        formikProps={formikProps}
+        handleDeleteQuestion={handleDeleteQuestion}
+      />
+      <OptionsSection
+        formikProps={formikProps}
+        handleDeleteOption={handleDeleteOption}
+      />
+    </Stack>
   );
 }
