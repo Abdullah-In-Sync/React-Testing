@@ -154,3 +154,23 @@ export interface AdminUpdateMeasureById {
   _id: string;
   __typename: string;
 }
+
+export interface ViewMeasure {
+  data: ViewMeasureData;
+}
+export interface ViewMeasureData {
+  adminViewMeasureById: AdminViewMeasureById;
+}
+export interface AdminViewMeasureById {
+  _id: string;
+  created_date: string;
+  description: string;
+  org_id: string;
+  organization_name: string;
+  status: number;
+  template_data: string;
+  template_id: string;
+  title: string;
+  updated_date: string;
+  __typename: string;
+}

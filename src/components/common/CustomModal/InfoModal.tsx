@@ -11,7 +11,7 @@ import { useStyles } from "./commonModalStyles";
 
 type ViewProps = React.PropsWithChildren;
 
-const InfoModal = forwardRef<ConfirmElement, ViewProps>(
+const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
   ({ children }, ref): JSX.Element => {
     const styles = useStyles();
     const [data, setData] = useState();
@@ -45,6 +45,6 @@ type OpenConfirmPram = {
   data?: any;
 };
 
-export type ConfirmElement = {
+export type ConfirmInfoElement = {
   openConfirm: ({ data }: OpenConfirmPram) => void;
 };
