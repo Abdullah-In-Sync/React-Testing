@@ -140,7 +140,7 @@ const CreateMeasures: NextPage = () => {
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
-        <ContentHeader title="Create Measures" />
+        <ContentHeader title="Edit Measures" />
         {!loadingMeasureData && (
           <EditMeasuresComponent
             organizationList={organizationList}
