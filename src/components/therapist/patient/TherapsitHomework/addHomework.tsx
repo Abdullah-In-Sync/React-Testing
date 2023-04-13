@@ -242,7 +242,12 @@ function HomeworkDetails(props: propTypes) {
               >
                 {lastHomeworkList?.map((data, index) => (
                   <div>
-                    <Typography>
+                    <Typography
+                      style={{
+                        textAlign: "left",
+                        color: "#000000DE",
+                      }}
+                    >
                       {index + 1 + "."}
                       {data.pthomewrk_task}
                     </Typography>
