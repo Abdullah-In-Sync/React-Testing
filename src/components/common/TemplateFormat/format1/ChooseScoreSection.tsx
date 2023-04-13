@@ -2,7 +2,7 @@ import { ArrowRightAlt } from "@mui/icons-material";
 import { Box, Divider, Typography } from "@mui/material";
 import { FieldArray, FormikProps } from "formik";
 import * as React from "react";
-import EditableFormikInput from "../../EditableFormikInput/EditableFormikInput";
+import FormikTextField from "../../FormikFields/FormikTextField";
 import ErrorMessage from "../ErrorMessage";
 import * as templateTypes from "../types";
 
@@ -29,9 +29,14 @@ const ChooseScoreSection: React.FC<ViewProps> = ({ formikProps }) => {
                 </Box>
                 <Divider />
                 <Box className="editableInputWrapper">
-                  <EditableFormikInput
+                  <FormikTextField
+                    autoFocus
                     name={`templateData.scores.${i}.value`}
-                    value={templateData.scores[i]["value"]}
+                    id={`templateData.scores.${i}.value`}
+                    placeholder={"Type"}
+                    size="small"
+                    hideError
+                    multiline
                   />
                 </Box>
               </Box>
