@@ -10,7 +10,10 @@ import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/react-testing";
 import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
 import TherapyPatientHomeworkIndex from "../pages/therapist/patient/view/[id]/homework";
-import { GET_THERAPIST_HOMEWORK } from "../graphql/query/therapist";
+import {
+  GET_THERAPIST_HOMEWORK,
+  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+} from "../graphql/query/therapist";
 import { ADD_HOMEWORK } from "../graphql/mutation/therapist";
 import theme from "../styles/theme/theme";
 import { ThemeProvider } from "@mui/styles";
@@ -97,6 +100,7 @@ mocks.push({
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
       therapy_id: "9edcc1cd374e44ab84cf5721a73748d3",
+      pthomework_id: "[]",
       pthomewrk_task: '["Task 1"]',
       lpthomework_id: "[]",
       pthomewrk_resp: "[]",
@@ -121,7 +125,8 @@ mocks.push({
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       ptsession_id: "da790381eeb14b5db6d75886ffbb807c",
       therapy_id: "9edcc1cd374e44ab84cf5721a73748d3",
-      pthomewrk_task: '[""]',
+      pthomework_id: "[]",
+      pthomewrk_task: "[]",
       lpthomework_id: '["fcce9721-531f-4473-8d5e-2331e9385042"]',
       pthomewrk_resp: "[]",
       therapist_resp: '["therapist response"]',
@@ -184,6 +189,40 @@ mocks.push({
   },
 });
 
+mocks.push({
+  request: {
+    query: GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
+      therapy_id: "9edcc1cd374e44ab84cf5721a73748d3",
+    },
+  },
+  result: {
+    data: {
+      getPatientHomeworkData: [
+        {
+          __typename: "Homework",
+          _id: "aa075490-2d11-4293-b18a-a6a3d93a83b4",
+          complete_status: "0",
+          created_date: "2023-04-11T06:13:09.780Z",
+          patient_id: "c318269da3024855b2c74876eb57d296",
+          pthomewrk_date: "2023-04-11T11:25:55.988Z",
+          pthomewrk_resp: "Res P 2",
+          pthomewrk_status: 1,
+          pthomewrk_task: "Task 1 updated already exist1",
+          ptsession_id: "d7102f5b7e6249bbbdb46e6b9e6285e5",
+          ptshareres_id: "",
+          resource_id: "",
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          therapist_resp: "Res P 2",
+          therapy_id: "1c8dfc275db54c9e8bbb4fe4db17e9fc",
+        },
+      ],
+    },
+  },
+});
+
 const sut = async () => {
   // system under test
   sessionStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
@@ -242,6 +281,10 @@ describe("Therapist client feedback list", () => {
 
     fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
 
+    expect(screen.getByTestId("add_homework_button")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("add_homework_button"));
+
     expect(
       within(firstAccordion).queryByTestId("homework_task0")
     ).toBeInTheDocument();
@@ -271,6 +314,32 @@ describe("Therapist client feedback list", () => {
     });
   });
 
+  it("Get the previous task data", async () => {
+    await sut();
+    const list = await screen.findAllByTestId("list-tile");
+    expect(list.length).toEqual(5);
+
+    const firstAccordion = list[0];
+
+    fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
+
+    expect(screen.getByTestId("add_homework_button")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("add_homework_button"));
+
+    expect(
+      within(firstAccordion).queryByTestId("homework_task0")
+    ).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("Pre_homework_task0")).toBeInTheDocument();
+
+      expect(screen.getByTestId("Pre_homework_task0")).toHaveValue(
+        "Task 1 updated already exist1"
+      );
+    });
+  });
+
   it("Get data and update therapist response", async () => {
     await sut();
     const list = await screen.findAllByTestId("list-tile");
@@ -283,8 +352,6 @@ describe("Therapist client feedback list", () => {
     await waitFor(async () => {
       expect(screen.getByText("Patient Response")).toBeInTheDocument();
     });
-
-    // fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
 
     await waitFor(async () => {
       expect(screen.getByTestId("therapist_resp")).toBeInTheDocument();
@@ -327,8 +394,6 @@ describe("Therapist client feedback list", () => {
     await waitFor(async () => {
       expect(screen.getByText("Patient Response")).toBeInTheDocument();
     });
-
-    // fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
 
     await waitFor(async () => {
       expect(screen.getByTestId("therapist_resp")).toBeInTheDocument();

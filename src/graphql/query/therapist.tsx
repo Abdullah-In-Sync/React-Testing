@@ -110,3 +110,32 @@ export const GET_THERAPIST_HOMEWORK = gql`
     }
   }
 `;
+
+export const GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA = gql`
+  query getPatientHomeworkData(
+    $patient_id: String
+    $ptsession_id: String
+    $therapy_id: String
+  ) {
+    getPatientHomeworkData(
+      patient_id: $patient_id
+      ptsession_id: $ptsession_id
+      therapy_id: $therapy_id
+    ) {
+      _id
+      complete_status
+      created_date
+      patient_id
+      pthomewrk_date
+      pthomewrk_resp
+      pthomewrk_status
+      pthomewrk_task
+      ptsession_id
+      ptshareres_id
+      resource_id
+      therapist_id
+      therapist_resp
+      therapy_id
+    }
+  }
+`;
