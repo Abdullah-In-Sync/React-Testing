@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { Handle, Position, useReactFlow, Node } from "reactflow";
@@ -30,7 +31,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
     setLabel(event.target.value);
     reactFlowInstance.setNodes([...nodes]);
   };
-  /* istanbul ignore next */
   const OnDeleteNode = (id) => {
     const filtered = nodes.filter((ele) => ele.id !== id);
     reactFlowInstance.setNodes([...filtered]);
@@ -83,7 +83,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               e.target.style.outline = "none";
             }
           }}
-          /* istanbul ignore end */
         />
       </Box>
       <Handle

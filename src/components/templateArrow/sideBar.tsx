@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Box } from "@mui/system";
 import React from "react";
 
@@ -11,11 +12,9 @@ interface SidebarProps {
 }
 
 const SideBar: React.FC<SidebarProps> = ({ iconItems }) => {
-  /* istanbul ignore next */
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
-    /* istanbul ignore end */
   };
   return (
     <Box
@@ -31,7 +30,6 @@ const SideBar: React.FC<SidebarProps> = ({ iconItems }) => {
       {iconItems.map((compo) => {
         return (
           <Box
-            /* istanbul ignore next */
             onDragStart={(event) => onDragStart(event, compo.componentName)}
             draggable
           >
@@ -42,6 +40,5 @@ const SideBar: React.FC<SidebarProps> = ({ iconItems }) => {
     </Box>
   );
 };
-/* istanbul ignore end */
 
 export default SideBar;

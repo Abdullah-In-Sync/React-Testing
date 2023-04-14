@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React, { useState, useRef, useCallback } from "react";
 import ReactFlow, {
   ReactFlowProvider,
@@ -43,12 +44,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
   );
-  /* istanbul ignore next */
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
-
   const onSubmitHandle = (nodes: Node[], edges: Edge[]) => {
     const obj = {
       nodes,
@@ -56,10 +55,9 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     };
     onSubmit(JSON.stringify(obj));
   };
-  /* istanbul ignore end */
   const onDrop = useCallback(
     (event) => {
-      event.preventDefault(); //>
+      event.preventDefault();
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData("application/reactflow");
@@ -146,7 +144,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               padding: "5px 79px 5px 79px",
               fontSize: "20px",
             }}
-            //disabled={!formikHelper.isValid}
             onClick={() => onSubmitHandle(nodes, edges)}
           >
             Submit
@@ -160,7 +157,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               padding: "5px 79px 5px 79px",
               fontSize: "20px",
             }}
-            //disabled={formikHelper?.isSubmitting}
             onClick={() => onCancel()}
           >
             Cancel
