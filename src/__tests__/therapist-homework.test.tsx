@@ -443,16 +443,12 @@ describe("Therapist client feedback list", () => {
     fireEvent.click(await screen.findByTestId("editTemplateCancelButton"));
 
     expect(
-      screen.getByText(
-        "Are you sure you are canceling the task without saving?"
-      )
+      screen.getByText("Are you sure you want to cancel without saving?")
     ).toBeInTheDocument();
 
     fireEvent.click(await screen.findByTestId("confirmButton"));
 
-    expect(
-      screen.getByText("Homework cancel successfully")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Cancel successfully")).toBeInTheDocument();
   });
 
   it("Delete Homework task", async () => {

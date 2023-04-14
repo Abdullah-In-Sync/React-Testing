@@ -51,7 +51,7 @@ const TherapyPatientHomework: any = (props) => {
 
     setIsConfirm(false);
     /* istanbul ignore next */
-    enqueueSnackbar("Homework cancel successfully", {
+    enqueueSnackbar("Cancel successfully", {
       variant: "success",
     });
   };
@@ -100,7 +100,7 @@ const TherapyPatientHomework: any = (props) => {
       </Box>
       {isConfirm && (
         <ConfirmationModal
-          label="Are you sure you are canceling the task without saving?"
+          label="Are you sure you want to cancel without saving?"
           onCancel={clearIsConfirmCancel}
           onConfirm={cancelConfirm}
         />
