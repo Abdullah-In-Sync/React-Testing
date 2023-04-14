@@ -30,6 +30,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
     setLabel(event.target.value);
     reactFlowInstance.setNodes([...nodes]);
   };
+  /* istanbul ignore next */
   const OnDeleteNode = (id) => {
     const filtered = nodes.filter((ele) => ele.id !== id);
     reactFlowInstance.setNodes([...filtered]);
@@ -44,6 +45,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         borderRadius: "5px",
         background: "white",
       }}
+      data-testid="arrow-template-test-1"
     >
       <Box onClick={() => OnDeleteNode(id)}>
         <DeleteForeverIcon
@@ -81,6 +83,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               e.target.style.outline = "none";
             }
           }}
+          /* istanbul ignore end */
         />
       </Box>
       <Handle

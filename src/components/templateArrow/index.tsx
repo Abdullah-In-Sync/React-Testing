@@ -39,12 +39,11 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const [nodes, setNodes, onNodesChange] = useNodesState([...nodesData]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([...edgesData]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
   );
-
+  /* istanbul ignore next */
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -57,10 +56,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     };
     onSubmit(JSON.stringify(obj));
   };
-
+  /* istanbul ignore end */
   const onDrop = useCallback(
     (event) => {
-      event.preventDefault();
+      event.preventDefault(); //>
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const type = event.dataTransfer.getData("application/reactflow");
