@@ -112,6 +112,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
           width: "100%",
           marginBottom: 10,
         },
+        [theme.breakpoints.down("md")]: {
+          width: "100%",
+          marginBottom: 10,
+        },
         [theme.breakpoints.up("md")]: {
           padding: "0px 10px",
         },
@@ -123,11 +127,89 @@ export const useStyles = makeStyles((theme: Theme) => ({
         [theme.breakpoints.down("sm")]: {
           width: "100%",
         },
-        [theme.breakpoints.down("md")]: {},
-        [theme.breakpoints.up("lg")]: {
+        [theme.breakpoints.down("md")]: {
+          width: "100%",
+        },
+        [theme.breakpoints.up("md")]: {
           width: "10em",
         },
+        // [theme.breakpoints.down("md")]: {},
+        // [theme.breakpoints.up("lg")]: {
+        //   width: "10em",
+        // },
       },
+    },
+  },
+  viewForm: {
+    paddingBottom: 20,
+    "& .descBox": {
+      padding: 10,
+      border: "1px solid #ccc",
+      borderRadius: 4,
+      marginBottom: 5,
+    },
+    "& header": {
+      "& .MuiToolbar-root": {
+        justifyContent: "unset",
+      },
+    },
+    "& .templateFromat1Wrapper": {
+      "& .introSection": {
+        "& .MuiPaper-root": {
+          background: "#F3FEFA",
+          "& textarea": {
+            textAlign: "center",
+          },
+        },
+      },
+      "& .descriptionSection ": {
+        "& .MuiPaper-root": {
+          background: "#F3FEFA",
+          "& textarea": {
+            textAlign: "center",
+          },
+        },
+      },
+      "& .questionsSection": {
+        "& .MuiPaper-root": {
+          borderColor: theme.palette.primary.main,
+        },
+      },
+      "& .scoreCardWrapper": {
+        "& .scoreCard": {
+          border: "1px solid #ccc",
+          borderRadius: 4,
+          padding: 5,
+        },
+        "& .scoreCardTextWrapper": {
+          paddingTop: "20px !important",
+        },
+        "& .rightArrowIconWrapper": {
+          paddingTop: "20px !important",
+        },
+      },
+    },
+    "& .templateFromat2Wrapper": {
+      "& .inputBox": {
+        "& fieldset": {
+          border: 0,
+        },
+      },
+      "& .adminQuestions": {
+        "& tbody": {
+          "& td:nth-child(even)": {
+            backgroundColor: "#E4FAFF !important",
+          },
+          "& td:nth-child(odd)": {
+            backgroundColor: "#ECFCFF !important",
+          },
+        },
+      },
+    },
+    "& .commonBorder": {
+      border: "unset",
+      padding: "unset",
+      borderRadius: "unset",
     },
   },
 }));

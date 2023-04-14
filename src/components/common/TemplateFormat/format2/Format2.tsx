@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Box } from "@mui/material";
 import { FormikProps } from "formik";
 import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
@@ -8,9 +8,14 @@ import QuestionsSection from "./QuestionsSections";
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
   confirmRef?: any;
+  isView?: boolean;
 };
 
-export default function Format1({ formikProps, confirmRef }: propTypes) {
+export default function Format1({
+  formikProps,
+  confirmRef,
+  isView,
+}: propTypes) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
   const { templateData } = values;
@@ -44,15 +49,19 @@ export default function Format1({ formikProps, confirmRef }: propTypes) {
   };
 
   return (
-    <Stack className={styles.templateFromat2Wrapper}>
-      <QuestionsSection
-        formikProps={formikProps}
-        handleDeleteQuestion={handleDeleteQuestion}
-      />
-      <OptionsSection
-        formikProps={formikProps}
-        handleDeleteOption={handleDeleteOption}
-      />
-    </Stack>
+    <Box className={styles.root}>
+      <Stack className="templateFromat2Wrapper commonBorder">
+        <QuestionsSection
+          formikProps={formikProps}
+          handleDeleteQuestion={handleDeleteQuestion}
+          isView={isView}
+        />
+        <OptionsSection
+          formikProps={formikProps}
+          handleDeleteOption={handleDeleteOption}
+          isView={isView}
+        />
+      </Stack>
+    </Box>
   );
 }

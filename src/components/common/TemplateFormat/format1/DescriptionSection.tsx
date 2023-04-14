@@ -8,9 +8,10 @@ import * as templateTypes from "../types";
 
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
+  isView?: boolean;
 }
 
-const DescriptionSection: React.FC<ViewProps> = ({ formikProps }) => {
+const DescriptionSection: React.FC<ViewProps> = ({ formikProps, isView }) => {
   const { values, resetForm, errors, touched } = formikProps;
   const { templateData } = values;
 
@@ -32,16 +33,18 @@ const DescriptionSection: React.FC<ViewProps> = ({ formikProps }) => {
               hideError
             />
           </Box>
-          <DeleteButton
-            i={"templateDataDescription"}
-            onDelete={() => {
-              delete templateData.description;
-              resetForm({
-                values,
-              });
-            }}
-            data-testid={"tempateDataDescription"}
-          />
+          {!isView && (
+            <DeleteButton
+              i={"templateDataDescription"}
+              onDelete={() => {
+                delete templateData.description;
+                resetForm({
+                  values,
+                });
+              }}
+              data-testid={"tempateDataDescription"}
+            />
+          )}
         </Paper>
 
         {touched.templateData && errors.templateData && (

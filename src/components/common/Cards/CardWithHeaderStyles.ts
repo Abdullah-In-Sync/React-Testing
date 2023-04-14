@@ -2,7 +2,7 @@ import { makeStyles } from "@mui/styles";
 
 export const useStyles = makeStyles(() => ({
   boxWithHeader: {
-    "& .MuiPaper-root": {
+    "& header": {
       color: "#fff",
       padding: "0px 10px",
       borderRadius: "10px 10px 0px 0px",
@@ -29,7 +29,7 @@ export const useStyles = makeStyles(() => ({
   simpleHeaderAppBar: {
     color: "#fff",
     padding: "0px 10px",
-    "& .MuiPaper-root": {
+    "& header": {
       color: "#fff",
       padding: "0px 10px",
       borderRadius: 0,
