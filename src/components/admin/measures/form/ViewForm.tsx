@@ -17,7 +17,7 @@ const CommonForm: React.FC<ViewProps> = ({ formikProps }) => {
   const styles = useStyles();
 
   return (
-    <Box className={`${styles.viewForm}`}>
+    <Box className={`${styles.viewForm} disbledFields`}>
       <CardWithHeader label={title}>
         <CardContent>
           <Form>
