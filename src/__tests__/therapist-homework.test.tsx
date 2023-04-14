@@ -14,7 +14,11 @@ import {
   GET_THERAPIST_HOMEWORK,
   GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
 } from "../graphql/query/therapist";
-import { ADD_HOMEWORK } from "../graphql/mutation/therapist";
+import {
+  ADD_HOMEWORK,
+  COMPLETE_HOMEWORK,
+  DELETE_HOMEWORK_TASK,
+} from "../graphql/mutation/therapist";
 import theme from "../styles/theme/theme";
 import { ThemeProvider } from "@mui/styles";
 
@@ -223,6 +227,43 @@ mocks.push({
   },
 });
 
+mocks.push({
+  request: {
+    query: DELETE_HOMEWORK_TASK,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      pthomework_id: "aa075490-2d11-4293-b18a-a6a3d93a83b4",
+    },
+  },
+  result: {
+    data: {
+      saveHomeworkTask: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
+mocks.push({
+  request: {
+    query: COMPLETE_HOMEWORK,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      last_session_homeworkid: "fcce9721-531f-4473-8d5e-2331e9385042",
+      complete_status: 1,
+    },
+  },
+  result: {
+    data: {
+      saveHomeworkTask: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   // system under test
   sessionStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
@@ -296,15 +337,13 @@ describe("Therapist client feedback list", () => {
     fireEvent.click(await screen.findByTestId("editTemplateSubmitButton"));
 
     expect(
-      screen.getByText("Are you sure you want to add the homework?")
+      screen.getByText("Are you sure you want to save?")
     ).toBeInTheDocument();
 
     fireEvent.click(await screen.findByTestId("confirmButton"));
 
     await waitFor(async () => {
-      expect(
-        screen.getByText("Your feedback has been submitted Successfully.")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Saved Successfully.")).toBeInTheDocument();
     });
 
     fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
@@ -364,15 +403,13 @@ describe("Therapist client feedback list", () => {
     fireEvent.click(await screen.findByTestId("editTemplateSubmitButton"));
 
     expect(
-      screen.getByText("Are you sure you want to add the homework?")
+      screen.getByText("Are you sure you want to save?")
     ).toBeInTheDocument();
 
     fireEvent.click(await screen.findByTestId("confirmButton"));
 
     await waitFor(async () => {
-      expect(
-        screen.getByText("Your feedback has been submitted Successfully.")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Saved Successfully.")).toBeInTheDocument();
     });
 
     fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
@@ -416,5 +453,71 @@ describe("Therapist client feedback list", () => {
     expect(
       screen.getByText("Homework cancel successfully")
     ).toBeInTheDocument();
+  });
+
+  it("Delete Homework task", async () => {
+    await sut();
+    const list = await screen.findAllByTestId("list-tile");
+    expect(list.length).toEqual(5);
+
+    const firstAccordion = list[0];
+
+    fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
+
+    expect(screen.getByTestId("add_homework_button")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("add_homework_button"));
+
+    expect(
+      within(firstAccordion).queryByTestId("homework_task0")
+    ).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("button-delete-icon0")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("button-delete-icon0"));
+
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(
+        screen.getByText("Your task has been deleted successfully.")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Compleated homework", async () => {
+    await sut();
+    const list = await screen.findAllByTestId("list-tile");
+    expect(list.length).toEqual(5);
+
+    const firstAccordion = list[1];
+
+    fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
+
+    await waitFor(async () => {
+      expect(screen.getByText("Patient Response")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText("Completed")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByText("Completed"));
+
+      expect(
+        screen.getByText(
+          "Are you sure, you want to mark last session's homework as completed?"
+        )
+      ).toBeInTheDocument();
+
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(
+        screen.getByText("Your task has been completed successfully.")
+      ).toBeInTheDocument();
+    });
   });
 });

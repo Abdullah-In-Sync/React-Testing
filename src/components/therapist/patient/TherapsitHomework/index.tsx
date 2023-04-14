@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import { useLazyQuery } from "@apollo/client";
 import Loader from "../../../../components/common/Loader";
@@ -11,7 +11,7 @@ import { useSnackbar } from "notistack";
 
 const TherapyPatientHomework: any = (props) => {
   const { enqueueSnackbar } = useSnackbar();
-  let onToggle;
+  const onToggle = useRef<any>();
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState(false);
 
@@ -37,13 +37,18 @@ const TherapyPatientHomework: any = (props) => {
     });
   }, [props.setTherapy]);
 
-  const cancelFunction = () => {
+  const cancelFunction = (callBack) => {
     setIsConfirm(true);
+    onToggle.current = callBack;
   };
 
   const cancelConfirm = () => {
     /* istanbul ignore next */
-    onToggle();
+    // onToggle?.current && onToggle.current?.(true);
+    if (onToggle?.current) {
+      onToggle.current(true);
+    }
+
     setIsConfirm(false);
     /* istanbul ignore next */
     enqueueSnackbar("Homework cancel successfully", {
@@ -73,13 +78,13 @@ const TherapyPatientHomework: any = (props) => {
                     title={`Session ${v.ptsession_no}`}
                     marginBottom={"20px !important"}
                     detail={(toggleAccordion) => {
-                      onToggle = toggleAccordion;
                       return (
                         <HomeworkDetails
                           sessionNo={v.ptsession_no}
                           sessionId={v._id}
                           therapyId={therapyId}
                           onCancel={cancelFunction}
+                          toggleAccordion={toggleAccordion}
                         />
                       );
                     }}

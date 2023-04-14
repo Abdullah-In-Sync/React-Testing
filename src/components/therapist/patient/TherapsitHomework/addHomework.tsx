@@ -1,6 +1,10 @@
 import {
   Box,
   Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid,
   IconButton,
   Typography,
@@ -12,7 +16,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { SuccessModal } from "../../../common/SuccessModal";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { ADD_HOMEWORK } from "../../../../graphql/mutation/therapist";
+import {
+  ADD_HOMEWORK,
+  COMPLETE_HOMEWORK,
+  DELETE_HOMEWORK_TASK,
+} from "../../../../graphql/mutation/therapist";
 import { useSnackbar } from "notistack";
 import {
   GET_THERAPIST_HOMEWORK,
@@ -33,11 +41,11 @@ type propTypes = {
   therapyId?: any;
   sessionNo?: any;
   onCancel?: any;
+  toggleAccordion?: any;
 };
 
 function HomeworkDetails(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
-
   const confirmModalRef = useRef<ModalElement>(null);
   const confirmModalRefForOldHomework = useRef<ModalElement>(null);
 
@@ -48,24 +56,58 @@ function HomeworkDetails(props: propTypes) {
   const [therapistInputs, setTherapistInputs] = useState([]);
   const [patientInputs, setpatientInputs] = useState([]);
   const [lptHomeworkId, setLptHomeworkId] = useState([]);
-
+  const [completeHomeworkid, setCompleteHomeWorkId] = useState("");
+  const [checkCompleteCheckBox, setCheckCompleteCheckbox] = useState<any>();
   const [isConfirm, setIsConfirm] = useState(false);
+  const [isConfirmDeleteTask, setIsConfirmDeleteTask] = useState(false);
+  const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
+  const [deleteTaskId, setDeleteTaskId] = useState("");
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [previoushomeworkId, setPrevioushomeworkId] = useState([]);
 
+  const [deleteTasksuccessModal, setDeleteTaskSuccessModal] =
+    useState<boolean>(false);
+
+  const [completeTasksuccessModal, setCompleteTaskSuccessModal] =
+    useState<boolean>(false);
+
   // Mutation
   const [addHomework] = useMutation(ADD_HOMEWORK);
+  const [deleteHomeworkTask] = useMutation(DELETE_HOMEWORK_TASK);
+  const [CompleteHomeworkTask] = useMutation(COMPLETE_HOMEWORK);
 
   // Queries
-
   const [
     getTherapistHomeworkData2,
     { data: therapistHomeworkDataData2, refetch },
   ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
+    fetchPolicy: "network-only",
     onCompleted: (data) => {
       console.log("Koca: data ", data);
     },
   });
+
+  const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
+    useLazyQuery(GET_THERAPIST_HOMEWORK, {
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        const last_homework_list =
+          data?.therapistViewPatientHomework?.last_homework_list;
+        const ids = last_homework_list?.map((item) => item._id);
+        setCompleteHomeWorkId(ids);
+
+        const verifyValuetoCheckBox = last_homework_list?.some(
+          (item) => item.complete_status
+        );
+
+        if (verifyValuetoCheckBox == true) {
+          setCheckCompleteCheckbox(1);
+        }
+      },
+    });
+
+  const lastHomeworkList =
+    therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
 
   const previousSessionTaskData =
     therapistHomeworkDataData2?.getPatientHomeworkData;
@@ -80,16 +122,6 @@ function HomeworkDetails(props: propTypes) {
     });
   }, [props.sessionId, props.therapyId, patientId]);
 
-  const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
-    useLazyQuery(GET_THERAPIST_HOMEWORK, {
-      onCompleted: () => {
-        // setLoader(false);
-      },
-    });
-
-  const lastHomeworkList =
-    therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
-
   useEffect(() => {
     getTherapistHomeworkData({
       variables: {
@@ -100,6 +132,18 @@ function HomeworkDetails(props: propTypes) {
       },
     });
   }, [props.sessionId, props.sessionNo, props.therapyId, patientId]);
+
+  function refreshData() {
+    getTherapistHomeworkData({
+      variables: {
+        patient_id: patientId,
+        ptsession_id: props.sessionId,
+        ptsession_no: props.sessionNo,
+        pttherapy_id: props.therapyId,
+      },
+      fetchPolicy: "network-only",
+    });
+  }
 
   const handleCreateInput = () => {
     if (previousSessionTaskData?.length > 0) {
@@ -157,16 +201,6 @@ function HomeworkDetails(props: propTypes) {
     setInputs(updatedInputs);
   };
 
-  const clearIsConfirmCancel = () => {
-    /* istanbul ignore next */
-    setIsConfirm(false);
-  };
-
-  const handleOk = () => {
-    /* istanbul ignore next */
-    setSuccessModal(false);
-  };
-
   const handlerAddAndUpdate = async () => {
     try {
       await addHomework({
@@ -192,6 +226,45 @@ function HomeworkDetails(props: propTypes) {
     }
   };
 
+  const handleDeleteHomeworkTask = async () => {
+    try {
+      await deleteHomeworkTask({
+        variables: {
+          patient_id: patientId,
+          pthomework_id: deleteTaskId,
+        },
+        onCompleted: () => {
+          setIsConfirmDeleteTask(false);
+          setDeleteTaskSuccessModal(true);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const compleateHomework = async () => {
+    try {
+      await CompleteHomeworkTask({
+        variables: {
+          patient_id: patientId,
+          last_session_homeworkid: completeHomeworkid.toString(),
+          complete_status: checkCompleteCheckBox,
+        },
+        onCompleted: () => {
+          setIsConfirmCompleteTask(false);
+          setCompleteTaskSuccessModal(true);
+
+          refreshData();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -200,21 +273,88 @@ function HomeworkDetails(props: propTypes) {
     if (!isConfirm) return;
   };
 
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+    setIsConfirmDeleteTask(false);
+    setIsConfirmCompleteTask(false);
+    setCheckCompleteCheckbox("");
+  };
+
+  const handleOk = () => {
+    /* istanbul ignore next */
+    setSuccessModal(false);
+    setCompleteTaskSuccessModal(false);
+  };
+
+  const handleOk2 = () => {
+    /* istanbul ignore next */
+    setDeleteTaskSuccessModal(false);
+    setInputs([]);
+    refetch();
+  };
+
+  const setCheckBox = () => {
+    setIsConfirmCompleteTask(true);
+    setCheckCompleteCheckbox(1);
+  };
+
   return (
     <>
       <div>
         <Box
-          className="fieldBox second"
-          sx={{ display: "flex", justifyContent: "flex-end" }}
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end", // change to "flex-end"
+          }}
         >
-          <Button
-            onClick={handleCreateInput}
-            data-testid={`add_homework_button`}
-            variant="outlined"
-          >
-            Add Homework
-          </Button>
+          {lastHomeworkList?.length > 0 && (
+            <Box style={{ paddingRight: "10px" }}>
+              <FormControl
+                sx={{
+                  m: 1,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+                data-testid="complete_checkbox"
+              >
+                <FormGroup aria-label="position">
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      onChange={setCheckBox}
+                      checked={checkCompleteCheckBox === 1 ? true : false}
+                      label={
+                        <Grid>
+                          <Typography
+                            style={{ color: "#6EC9DB", fontWeight: "bold" }}
+                          >
+                            Completed
+                          </Typography>
+                        </Grid>
+                      }
+                      disabled={lastHomeworkList?.some((homework) =>
+                        homework?.complete_status === 1 ? true : false
+                      )}
+                    />
+                  </FormGroup>
+                </FormGroup>
+              </FormControl>
+            </Box>
+          )}
+
+          <Box>
+            <Button
+              onClick={handleCreateInput}
+              data-testid={`add_homework_button`}
+              variant="outlined"
+            >
+              Add Homework
+            </Button>
+          </Box>
         </Box>
+
         {lastHomeworkList?.length > 0 && (
           <Box>
             <Box
@@ -381,11 +521,18 @@ function HomeworkDetails(props: propTypes) {
                     aria-label="create"
                     size="small"
                     style={{ backgroundColor: "#6EC9DB" }}
-                    data-testid={`button-delete-icon_`}
                   >
                     <DeleteIcon
-                    // style={{ color: "white" }}
-                    // onClick={() => handleDeleteInput(index)}
+                      // style={{ color: "white" }}
+                      // onClick={
+                      //   () => setIsConfirmDeleteTask(true)
+                      //   // setDeleteTaskId(data._id)
+                      // }
+                      data-testid={`button-delete-icon${index}`}
+                      onClick={() => {
+                        setIsConfirmDeleteTask(true);
+                        setDeleteTaskId(data._id);
+                      }}
                     />
                   </IconButtonWrapper>
                 </Box>
@@ -475,7 +622,7 @@ function HomeworkDetails(props: propTypes) {
                     aria-label="create"
                     size="small"
                     style={{ backgroundColor: "#6EC9DB" }}
-                    data-testid={`button-delete-icon_`}
+                    // data-testid={`button-delete-icon_`}
                   >
                     <DeleteIcon
                       style={{ color: "white" }}
@@ -573,7 +720,7 @@ function HomeworkDetails(props: propTypes) {
                   paddingRight: "40px",
                   backgroundColor: "#6BA08E",
                 }}
-                onClick={props.onCancel}
+                onClick={() => props.onCancel(props.toggleAccordion)}
               >
                 Cancel
               </Button>
@@ -583,17 +730,51 @@ function HomeworkDetails(props: propTypes) {
 
         {isConfirm && (
           <ConfirmationModal
-            label="Are you sure you want to add the homework?"
+            label="Are you sure you want to save?"
             onCancel={clearIsConfirmCancel}
             onConfirm={handlerAddAndUpdate}
+          />
+        )}
+
+        {isConfirmDeleteTask && (
+          <ConfirmationModal
+            label="Are you sure you want to delete the task?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={handleDeleteHomeworkTask}
+          />
+        )}
+
+        {deleteTasksuccessModal && (
+          <SuccessModal
+            isOpen={deleteTasksuccessModal}
+            title="Successful"
+            description={"Your task has been deleted successfully."}
+            onOk={handleOk2}
           />
         )}
 
         {successModal && (
           <SuccessModal
             isOpen={successModal}
-            title="Successfull"
-            description={"Your feedback has been submitted Successfully."}
+            title="Successful"
+            description={"Saved Successfully."}
+            onOk={handleOk}
+          />
+        )}
+
+        {isConfirmCompleteTask && (
+          <ConfirmationModal
+            label="Are you sure, you want to mark last session's homework as completed?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={compleateHomework}
+          />
+        )}
+
+        {completeTasksuccessModal && (
+          <SuccessModal
+            isOpen={completeTasksuccessModal}
+            title="Successful"
+            description={"Your task has been completed successfully."}
             onOk={handleOk}
           />
         )}
