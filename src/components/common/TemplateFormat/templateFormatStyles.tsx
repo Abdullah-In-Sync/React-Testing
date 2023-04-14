@@ -69,7 +69,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
           "& .questionInputWrapper": {
             display: "flex",
             "& p": {
-              paddingLeft: 5,
+              paddingLeft: 10,
               display: "flex",
               alignItems: "center",
             },
