@@ -81,12 +81,21 @@ export const useStyles = makeStyles((theme: Theme) => ({
         "& .inputPaper": {
           "& div:nth-child(1)": {
             flex: 5,
+            [theme.breakpoints.down("lg")]: {
+              flex: 3,
+            },
           },
           "& div:nth-child(2)": {
             flex: 1,
             display: "flex",
             alignItems: "center",
             width: 100,
+
+            [theme.breakpoints.down("sm")]: {
+              flexWrap: "wrap",
+              flexDirection: "column-reverse",
+              marginBottom: 5,
+            },
           },
           "& .inputPaperSecondColumn": {
             // display: "flex"
@@ -111,6 +120,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
         backgroundColor: "#ECFCFF",
         "& .MuiBox-root:nth-child(1)": {
           flex: 5,
+          [theme.breakpoints.down("lg")]: {
+            flex: 3,
+          },
           textAlign: "center",
           "& p": {
             fontWeight: "bold",

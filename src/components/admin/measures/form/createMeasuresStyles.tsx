@@ -147,9 +147,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
       borderRadius: 10,
     },
     "& .header-box": {
-      border: "unset",
-      padding: "unset",
-      borderRadius: "unset",
+      border: "unset !important",
+      padding: "unset !important",
+      borderRadius: "unset !important",
     },
     "& .descBox": {
       padding: 10,
@@ -161,7 +161,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       "& .MuiToolbar-root": {
         justifyContent: "unset",
       },
-      borderRadius: 7,
+      borderRadius: "7px !important",
     },
     "& .templateFromat1Wrapper": {
       "& .introSection": {
