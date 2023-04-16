@@ -22,11 +22,13 @@ import ConfirmBoxModal from "../../ConfirmBoxModal";
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
   handleDeleteQuestion: (value) => void;
+  isView?: boolean;
 }
 
 const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
+  isView,
 }) => {
   const confirmModalRef = React.useRef<ModalElement>(null);
   const { values, setFieldValue, errors, touched } = formikProps;
@@ -74,7 +76,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
               {inputTextField(`templateData.questions.headerRow.${i}.label`)}
             </TableCell>
           ))}
-          <TableCell />
+          {!isView && <TableCell />}
         </TableRow>
       </TableHead>
     );
@@ -98,13 +100,15 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   </TableCell>
                 );
               })}
-              <TableCell key={"deelte"}>
-                <DeleteButton
-                  i={`templateData.questions.bodyRows.${i}`}
-                  data-testId={`templateData.questions.bodyRows.${i}`}
-                  onDelete={() => handleDeleteQuestion(i)}
-                />
-              </TableCell>
+              {!isView && (
+                <TableCell key={"deelte"}>
+                  <DeleteButton
+                    i={`templateData.questions.bodyRows.${i}`}
+                    data-testId={`templateData.questions.bodyRows.${i}`}
+                    onDelete={() => handleDeleteQuestion(i)}
+                  />
+                </TableCell>
+              )}
             </TableRow>
           );
         })}
@@ -152,7 +156,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   else return null;
                 }
               })}
-              {outerIndex === 0 && <TableCell />}
+              {!isView && outerIndex === 0 && <TableCell />}
             </TableRow>
           );
         })}
@@ -162,15 +166,17 @@ const QuestionsSection: React.FC<ViewProps> = ({
 
   return (
     <Box className="adminQuestions">
-      <Box className="addQuestionButtonWrapper">
-        <CommonButton
-          variant="outlined"
-          onClick={onAddQuesionBox}
-          data-testid="addQuestionButton"
-        >
-          Add Question
-        </CommonButton>
-      </Box>
+      {!isView && (
+        <Box className="addQuestionButtonWrapper">
+          <CommonButton
+            variant="outlined"
+            onClick={onAddQuesionBox}
+            data-testid="addQuestionButton"
+          >
+            Add Question
+          </CommonButton>
+        </Box>
+      )}
       <Box>
         <TableContainer className="tableContainer">
           <Table aria-label="spanning table">

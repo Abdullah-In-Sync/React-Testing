@@ -16,11 +16,13 @@ import * as templateTypes from "../types";
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
   handleDeleteOption: (value) => void;
+  isView?: boolean;
 }
 
 const OptionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteOption,
+  isView,
 }) => {
   const { values, errors, touched } = formikProps;
   const {
@@ -115,15 +117,14 @@ const OptionsSection: React.FC<ViewProps> = ({
       {values.templateData.optionsQuestions.map((item, i) => {
         return (
           <Box key={`optionsQuestion_${i}`}>
-            <Paper
-              elevation={0}
-              sx={{ p: "2px 10px", mt: 2, border: "1px solid #ccc" }}
-            >
-              <DeleteButton
-                i={`templateData.optionsQuestions.${i}.question`}
-                data-testId={`templateData.optionsQuestions.${i}.question`}
-                onDelete={() => handleDeleteOption(i)}
-              />
+            <Paper elevation={0} className="optionPaper">
+              {!isView && (
+                <DeleteButton
+                  i={`templateData.optionsQuestions.${i}.question`}
+                  data-testId={`templateData.optionsQuestions.${i}.question`}
+                  onDelete={() => handleDeleteOption(i)}
+                />
+              )}
               <Box className="inputBox">
                 <FormikTextField
                   name={`templateData.optionsQuestions.${i}.question`}
@@ -134,7 +135,7 @@ const OptionsSection: React.FC<ViewProps> = ({
                   hideError
                 />
               </Box>
-              <Box>{options(item, i)}</Box>
+              <Box className="optionWrapper">{options(item, i)}</Box>
             </Paper>
             {optionsQuestionsTouched[i] && optionsQuestionsError[i] && (
               <ErrorMessage errorMsg={"All field required"} />

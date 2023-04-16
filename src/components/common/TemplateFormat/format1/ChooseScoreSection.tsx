@@ -8,6 +8,7 @@ import * as templateTypes from "../types";
 
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
+  isView?: boolean;
 }
 
 const ChooseScoreSection: React.FC<ViewProps> = ({ formikProps }) => {

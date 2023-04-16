@@ -14,11 +14,13 @@ import * as templateTypes from "../types";
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
   handleDeleteQuestion: (value) => void;
+  isView?: boolean;
 }
 
 const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
+  isView,
 }) => {
   const confirmModalRef = React.useRef<ModalElement>(null);
   const { values, setFieldValue, errors, touched } = formikProps;
@@ -39,15 +41,17 @@ const QuestionsSection: React.FC<ViewProps> = ({
   return (
     <>
       <Box className="questionsSection commonFieldWrapper cSection">
-        <Box className="addQuestionButtonWrapper">
-          <CommonButton
-            variant="outlined"
-            onClick={onAddQuesionBox}
-            data-testid="addQuestionButton"
-          >
-            Add Question
-          </CommonButton>
-        </Box>
+        {!isView && (
+          <Box className="addQuestionButtonWrapper">
+            <CommonButton
+              variant="outlined"
+              onClick={onAddQuesionBox}
+              data-testid="addQuestionButton"
+            >
+              Add Question
+            </CommonButton>
+          </Box>
+        )}
         <FieldArray name="questions">
           {() =>
             templateData.questions.map((_, i) => {
@@ -92,11 +96,13 @@ const QuestionsSection: React.FC<ViewProps> = ({
                           fullWidth
                         />
                       </Box>
-                      <DeleteButton
-                        i={i}
-                        data-testid={`deletequestions.${i}.question`}
-                        onDelete={() => handleDeleteQuestion(i)}
-                      />
+                      {!isView && (
+                        <DeleteButton
+                          i={i}
+                          data-testid={`deletequestions.${i}.question`}
+                          onDelete={() => handleDeleteQuestion(i)}
+                        />
+                      )}
                     </Box>
                   </Paper>
 
