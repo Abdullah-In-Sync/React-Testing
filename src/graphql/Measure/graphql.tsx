@@ -97,3 +97,94 @@ export const VIEW_MEASURE_RESPONSE = gql`
     }
   }
 `;
+
+export const GET_ADMIN_MEASURES_LIST = gql`
+  query adminMeasuresList(
+    $limit: Int
+    $pageNo: Int
+    $orgId: String
+    $searchText: String
+  ) {
+    adminMeasuresList(
+      limit: $limit
+      pageNo: $pageNo
+      org_id: $orgId
+      title: $searchText
+    ) {
+      data {
+        _id
+        created_date
+        description
+        org_id
+        organization_name
+        status
+        template_data
+        updated_date
+        title
+        template_id
+      }
+      total
+    }
+  }
+`;
+
+export const CREATE_MEASURE_TEMPLATE = gql`
+  mutation adminCreateMeasures(
+    $orgId: String!
+    $templateData: String!
+    $templateId: String!
+    $title: String!
+    $description: String
+  ) {
+    adminCreateMeasures(
+      org_id: $orgId
+      template_data: $templateData
+      template_id: $templateId
+      title: $title
+      description: $description
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
+
+export const UPDATE_MEASURE = gql`
+  mutation adminUpdateMeasureById(
+    $measureId: ID!
+    $update: UpdateMeasureInput
+  ) {
+    adminUpdateMeasureById(measure_id: $measureId, update: $update) {
+      _id
+      created_date
+      description
+      org_id
+      organization_name
+      status
+      template_data
+      template_id
+      title
+      updated_date
+    }
+  }
+`;
+
+export const AdMIN_VIEW_MEASURE = gql`
+  query adminViewMeasureById($measureId: ID!) {
+    adminViewMeasureById(measure_id: $measureId) {
+      _id
+      created_date
+      description
+      org_id
+      organization_name
+      status
+      template_data
+      template_id
+      title
+      updated_date
+    }
+  }
+`;

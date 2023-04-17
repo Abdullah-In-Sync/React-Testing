@@ -8,6 +8,7 @@ import { Link } from "../../../../../../lib/helpers/common";
 import TherapistSafetyPlanIndex from "../safetyPlan";
 import TherapistFeedbackTabs from "../../../../feedback/FeedbackTabs";
 import TherapistRelapseIndex from "../relapse";
+import TherapyPatientHomeworkIndex from "../homework";
 
 type propTypes = {
   setTherapy: any;
@@ -51,8 +52,8 @@ export default function TherapyMainComponent(props: propTypes) {
     {
       label: "Homework",
       value: "homework",
-      //  component: < />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=homework`,
+      component: <TherapyPatientHomeworkIndex setTherapy={setTherapy} />,
+      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=homework`,
     },
     {
       label: "Relapse",

@@ -74,7 +74,7 @@ mocksData.push({
       planName: "test",
       planType: "fixed",
       questions:
-        '[{"question":"test","description":"test des","questionType":"text"}]',
+        '[{"question":"test","description":"test des","questionType":"text","questionOption":""}]',
     },
   },
   result: {
@@ -96,7 +96,7 @@ mocksData.push({
       planName: "test dup",
       planType: "fixed",
       questions:
-        '[{"question":"test","description":"test des","questionType":"text"}]',
+        '[{"question":"test","description":"test des","questionType":"text","questionOption":""}]',
     },
   },
   result: {

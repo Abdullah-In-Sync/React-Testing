@@ -143,6 +143,7 @@ export const GET_PATIENT_GOAL_DATA = gql`
     }
   }
 `;
+
 export const GET_TOKEN_DATA = gql`
   query MyQuery {
     getTokenData {
@@ -180,6 +181,7 @@ export const GET_TOKEN_DATA = gql`
       patient_data {
         _id
         created_date
+        birthdate
         hos_id
         org_id
         patient_availability

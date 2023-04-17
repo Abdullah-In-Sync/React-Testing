@@ -27,7 +27,6 @@ const QuestionResponse: React.FC<ViewProps> = ({
   formikProps,
   isEditView,
 }) => {
-  console.log({ item });
   const { setFieldValue } = formikProps;
 
   const {

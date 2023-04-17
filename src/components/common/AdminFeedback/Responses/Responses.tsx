@@ -28,9 +28,11 @@ type propTypes = {
   feedbackId?: string;
   handleCsvDownload?: (value: any) => void;
 };
+import { useStyles } from "../../../../components/admin/feedback/feedbackStyles";
 
 export default function FeedbackResponses(props: propTypes) {
   const router = useRouter();
+  const styles = useStyles();
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
   const [nextPage] = useState<string>(null);
@@ -309,7 +311,10 @@ export default function FeedbackResponses(props: propTypes) {
             </Grid>
           </Grid>
 
-          <Box style={{ paddingBottom: 30 }}>
+          <Box
+            className={styles.adminFeedbackTable}
+            style={{ paddingBottom: 30 }}
+          >
             <TableGenerator
               fields={fields}
               data={filterFeedbackresponseData}

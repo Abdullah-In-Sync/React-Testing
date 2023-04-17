@@ -134,7 +134,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 14,
       label: "Measures",
-      path: Link + "/superadmin/measure",
+      path: "/admin/measures",
       icon: <StraightenIcon />,
     },
     {
@@ -312,7 +312,7 @@ export const patient_routes: RoutesType[] = [
   {
     key: 5,
     label: "Communication",
-    path: Link + "/communication",
+    path: Link + "/patient/communication/1",
     icon: <ChatIcon />,
     type: "COMMUNICATION",
   },

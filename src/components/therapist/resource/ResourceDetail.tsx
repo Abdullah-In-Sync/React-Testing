@@ -35,7 +35,6 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
     resource_name = "",
     template_data,
   } = resourceData;
-  console.log("resourceData--->", resourceData);
   const nexButtonClick = template_data && { nexButtonClick: handleNextButton };
 
   const inputViewBox = ({ title, description }: any) => {

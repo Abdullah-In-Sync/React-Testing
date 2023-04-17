@@ -25,7 +25,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.primary.main,
     },
     "& table td p": {
-      fontWeight: 400,
+      fontSize: "14px",
     },
     "& table th p": {
       fontWeight: "bold",
