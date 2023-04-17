@@ -263,6 +263,16 @@ export default function EditForm(props: propTypes) {
 
   const onCancelArrowTemplate = () => {
     console.log("clicked on cancel");
+    setSelectedComponentType({
+      type: "",
+      initialData: {},
+      info: null,
+    });
+    setFormFields({
+      ...formFields,
+      template_data: "",
+      template_id: "",
+    });
   };
   useEffect(() => {
     props.setLoader(true);

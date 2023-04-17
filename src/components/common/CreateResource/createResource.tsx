@@ -363,7 +363,12 @@ export default function CreateResource(props: propTypes) {
   };
 
   const onCancelArrowTemplate = () => {
-    console.log("clicked on cancel");
+    setSelectedComponentType({
+      ...selectedComponentType,
+      type: "",
+      initialData: {},
+      info: null,
+    });
   };
 
   console.log(selectedComponentType, "ArrowTemplate");
