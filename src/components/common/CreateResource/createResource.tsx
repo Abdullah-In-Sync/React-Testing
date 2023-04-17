@@ -362,17 +362,6 @@ export default function CreateResource(props: propTypes) {
     /* istanbul ignore next */
   };
 
-  const onCancelArrowTemplate = () => {
-    setSelectedComponentType({
-      ...selectedComponentType,
-      type: "",
-      initialData: {},
-      info: null,
-    });
-  };
-
-  console.log(selectedComponentType, "ArrowTemplate");
-
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-crate-form">
@@ -676,7 +665,7 @@ export default function CreateResource(props: propTypes) {
           //  initialData={selectedComponentType.initialData}
           // mode="edit"
           onSubmit={onSaveArrowTemplate}
-          onCancel={onCancelArrowTemplate}
+          onCancel={onTemplateCancel}
           // onPreview={onPreview}
         />
       )}
