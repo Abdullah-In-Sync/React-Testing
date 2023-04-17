@@ -19,4 +19,26 @@ export const useStyles = makeStyles((theme: Theme) => ({
       color: theme.palette.custom.light,
     },
   },
+  modalC: {
+    "& .MuiTypography-root": {
+      background: theme.palette.primary.contrastText,
+      color: theme.palette.primary.main,
+      textAlign: "center",
+      height: "auto",
+      position: "relative",
+    },
+    "& .MuiTypography-root .MuiBox-root ": {
+      position: "absolute",
+      right: 0,
+      top: 0,
+      padding: 7,
+      color: theme.palette.custom.light,
+    },
+    "& .MuiTypography-root .MuiBox-root button": {
+      color: theme.palette.custom.light,
+    },
+    "& .MuiDialogContent-root": {
+      padding: 0,
+    },
+  },
 }));

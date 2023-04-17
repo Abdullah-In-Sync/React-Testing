@@ -8,18 +8,23 @@ import TabsGeneratorTherapistPatient from "../../../components/common/TabsGenera
 import { useAppContext } from "../../../contexts/AuthContext";
 import TherapyMainComponent from "./Therapy";
 import { useStyles } from "./therapyStyles";
+import moment from "moment";
 
 const TherapyPatientComponent = () => {
   const styles = useStyles();
   const {
     user: {
       patient_data: {
+        birthdate = undefined,
         patient_firstname: patientFirstName = "",
         patient_lastname: patientLastName = "",
       } = {},
     } = {},
   } = useAppContext();
   const patientFullName = `${patientFirstName} ${patientLastName}`;
+  const formatedBirthdate = birthdate
+    ? moment(birthdate, "MM-DD-YYYY").format("DD-MM-YYYY")
+    : undefined;
 
   /* istanbul ignore next */
   const tabs2 = [
@@ -51,6 +56,11 @@ const TherapyPatientComponent = () => {
               >
                 {patientFullName}
               </Typography>
+              {formatedBirthdate && (
+                <Typography className="text-white" data-testid="patient_name">
+                  {`DOB : ${formatedBirthdate}`}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Box className="secondSection" data-testid="patientViewMenu">

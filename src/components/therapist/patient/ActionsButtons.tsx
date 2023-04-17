@@ -27,7 +27,6 @@ const iconButtonsData = [
 ];
 
 const isValidImageURL = (url) => {
-  console.log("url-------->", url);
   return /\.(jpg|jpeg|png|PNG)$/.test(url);
 };
 

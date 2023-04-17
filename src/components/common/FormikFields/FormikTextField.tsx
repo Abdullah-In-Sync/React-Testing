@@ -3,21 +3,24 @@ import { ErrorMessage, useField } from "formik";
 import TextFieldCustom from "../TextField/TextFieldCustom";
 
 const ResponseTextArea = (props) => {
-  const [field, touched] = useField(props);
+  const { hideError, ...rest } = props;
+  const [field, touched] = useField(rest);
 
   return (
     <Stack>
       <TextFieldCustom
         {...field}
-        {...props}
+        {...rest}
         spellCheck="false"
         error={touched.touched && Boolean(touched.error)}
       />
-      <ErrorMessage
-        name={props.name}
-        component="div"
-        className="invalid-input-message"
-      />
+      {!hideError && (
+        <ErrorMessage
+          name={props.name}
+          component="div"
+          className="invalid-input-message"
+        />
+      )}
     </Stack>
   );
 };

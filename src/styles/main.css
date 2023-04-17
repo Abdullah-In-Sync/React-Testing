@@ -87,15 +87,15 @@
 }
 
 .invalid-input-message{
-  color: #ff1744;
-  font-weight: 400;
-  font-size: 0.75rem;
-  line-height: 1.66;
-  text-align: left;
-  margin-top: 3px;
-  margin-right: 14px;
-  margin-bottom: 0;
-  margin-left: 14px;
+  color: #ff1744 !important;
+  font-weight: 400 !important;
+  font-size: 0.75rem !important;
+  line-height: 1.66 !important;
+  text-align: left !important;
+  margin-top: 3px !important;
+  margin-right: 14px !important;
+  margin-bottom: 0 !important;
+  margin-left: 14px !important;
 }
 
 .disbledFields {
@@ -111,4 +111,7 @@ min-height: 1.4375em;
 text-overflow: ellipsis;
 white-space: nowrap;
 overflow: hidden;
+}
+p{
+  font-size: 14px !important;
 }

@@ -119,6 +119,11 @@ export type editGoalsFormField = {
   updated_date: string;
 };
 
+export type therapistHomeworkRespone = {
+  therapist_resp: string;
+  pthomewrk_resp: string;
+};
+
 export type patientAgreementFormFeild = {
   _id: string;
   patient_contract: number;

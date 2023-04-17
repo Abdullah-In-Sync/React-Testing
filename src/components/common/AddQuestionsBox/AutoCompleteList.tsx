@@ -18,6 +18,7 @@ const AutoCompleteList = ({ i, formikProps }: Props) => {
     setFieldValue,
     errors,
     touched,
+    handleBlur,
   } = formikProps;
   const { questionOption } = questions[i] || {};
   const { questions: questionsError = {} } = errors || {};
@@ -33,9 +34,11 @@ const AutoCompleteList = ({ i, formikProps }: Props) => {
         <Autocomplete
           multiple
           freeSolo
+          componentName={`questions.${i}.questionOption`}
           id={`questions.${i}.questionOption`}
           options={[]}
           defaultValue={initialOptions}
+          onBlur={handleBlur}
           onChange={(_, newValue) =>
             setFieldValue(`questions.${i}.questionOption`, newValue.join(","))
           }
@@ -45,11 +48,15 @@ const AutoCompleteList = ({ i, formikProps }: Props) => {
               component={TextField}
               label="List options"
               placeholder="Add option"
+              name={`questions.${i}.questionOption`}
+              onBlur={handleBlur}
               error={
-                touched.questions && Boolean(questionsError[i]?.questionOption)
+                touched?.questions?.[i]?.questionOption &&
+                Boolean(questionsError[i]?.questionOption)
               }
               helperText={
-                touched.questions && questionsError[i]?.questionOption
+                touched?.questions?.[i]?.questionOption &&
+                questionsError[i]?.questionOption
               }
             />
           )}

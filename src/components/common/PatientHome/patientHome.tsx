@@ -47,6 +47,8 @@ const PatientHome = (props: propTypes) => {
       },
     });
 
+  console.log("Koca: homeDataData ", homeDataData);
+
   const appointmentDate = moment(
     homeDataData?.getPatientHomeData[0].appointment[0]?.app_date
   ).format("DD/MM/YY");
@@ -190,7 +192,7 @@ const PatientHome = (props: propTypes) => {
               fontWeight: "700",
             }}
           >
-            {` Welcome to MyHelp Mr ${username?.patient_firstname} ${username?.patient_lastname}`}
+            {` Welcome to MyHelp Dear ${username?.patient_firstname} ${username?.patient_lastname}`}
           </h4>
           <p
             style={{
