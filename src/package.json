@@ -52,6 +52,7 @@
     "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
+    "reactflow": "^11.7.0",
     "rollbar": "^2.26.1",
     "yup": "^0.32.11"
   },

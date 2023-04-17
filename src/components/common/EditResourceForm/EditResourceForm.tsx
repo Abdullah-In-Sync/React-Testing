@@ -42,6 +42,7 @@ import { AddButton } from "../Buttons";
 import { TemplateFormData } from "../../templateTable/table.model";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
+import TemplateArrow from "../../templateArrow";
 
 const defaultFormValue = {
   _id: "",
@@ -195,6 +196,14 @@ export default function EditForm(props: propTypes) {
       setDimensionModal(true);
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
+    if (values.component_name == "ArrowTemplate") {
+      setTemplateModal(false);
+      setSelectedComponentType({
+        ...selectedComponentType,
+        type: values.component_name,
+        info: values,
+      });
+    }
   };
 
   const onGenerateTable = (values: TableDimensionFormData) => {
@@ -239,6 +248,21 @@ export default function EditForm(props: propTypes) {
       template_data: "",
       template_id: "",
     });
+  };
+  const onSaveArrowTemplate = (arrowTemplateData: string) => {
+    console.log(selectedComponentType, "node/edges onsubmit");
+
+    setFormFields({
+      ...formFields,
+      template_data: arrowTemplateData,
+      template_id: selectedComponentType?.info?._id,
+    });
+    setModalOpen(true);
+    /* istanbul ignore next */
+  };
+
+  const onCancelArrowTemplate = () => {
+    console.log("clicked on cancel");
   };
   useEffect(() => {
     props.setLoader(true);
@@ -287,6 +311,7 @@ export default function EditForm(props: propTypes) {
     getResourceData({
       variables: { resourceId: id },
     });
+    console.log(router?.query, " router?.query");
     setLoader(false);
   }, []);
 
@@ -864,6 +889,17 @@ export default function EditForm(props: propTypes) {
             onSubmit={onTemplateSave}
             onCancel={onTemplateCancel}
             onPreview={onPreview}
+          />
+        )}
+        {selectedComponentType.type == "ArrowTemplate" && (
+          <TemplateArrow
+            //  initialData={selectedComponentType.initialData}
+            // mode="edit"
+            nodesData={selectedComponentType.initialData.nodes}
+            edgesData={selectedComponentType.initialData.edges}
+            onSubmit={onSaveArrowTemplate}
+            onCancel={onCancelArrowTemplate}
+            // onPreview={onPreview}
           />
         )}
       </Box>
