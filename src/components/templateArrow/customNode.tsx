@@ -6,6 +6,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface Data {
   label: string;
+  description: string;
 }
 interface TextUpdaterNodeProps {
   id: string;
