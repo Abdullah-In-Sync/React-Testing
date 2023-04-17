@@ -19,16 +19,22 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   isConnectable,
 }) => {
   const [label, setLabel] = useState<string>(data?.label);
+  const [description, setDescription] = useState<string>(data?.description);
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
   const onChange = (event: any) => {
     nodes.forEach((ele: Node<any>) => {
       if (ele.id == id) {
-        ele.data.label = event.target.value;
+        if (event.target.name == "title") {
+          ele.data.label = event.target.value;
+          setLabel(event.target.value);
+        } else {
+          ele.data.description = event.target.value;
+          setDescription(event.target.value);
+        }
       }
     });
 
-    setLabel(event.target.value);
     reactFlowInstance.setNodes([...nodes]);
   };
   const OnDeleteNode = (id) => {
@@ -39,10 +45,8 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   return (
     <Box
       style={{
-        height: "50px",
         border: "1px solid #eee",
         padding: "5px",
-        borderRadius: "5px",
         background: "white",
       }}
       data-testid="arrow-template-test-1"
@@ -70,19 +74,22 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         position={Position.Right}
         isConnectable={isConnectable}
       />
-      <Box>
+      <Box display={"flex"} flexDirection={"column"} gap={"5px"}>
         <input
           id="text"
-          name="text"
+          name="title"
           value={label}
           onChange={(e) => onChange(e)}
-          style={{ fontSize: "8px", border: "none", outline: "none" }}
-          onFocus={(e) => {
-            if (e.target.matches(":focus-visible")) {
-              e.target.style.border = "none";
-              e.target.style.outline = "none";
-            }
-          }}
+          placeholder="Enter title here"
+          style={{ fontSize: "8px" }}
+        />
+        <input
+          id="text"
+          name="description"
+          value={description}
+          onChange={(e) => onChange(e)}
+          placeholder="Enter description here"
+          style={{ fontSize: "8px" }}
         />
       </Box>
       <Handle

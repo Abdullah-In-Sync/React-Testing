@@ -311,6 +311,7 @@ export default function EditForm(props: propTypes) {
     getResourceData({
       variables: { resourceId: id },
     });
+    console.log(router?.query, " router?.query");
     setLoader(false);
   }, []);
 
