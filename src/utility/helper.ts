@@ -1,3 +1,5 @@
 export const uniqueString = (): string => {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+  const buf = new Uint8Array(1);
+  crypto.getRandomValues(buf);
+  return Date.now().toString(36) + buf[0].toString(36).substring(2);
 };
