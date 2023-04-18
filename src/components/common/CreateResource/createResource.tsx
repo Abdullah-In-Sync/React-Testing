@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
 import { IS_ADMIN } from "../../../lib/constants";
+import TemplateArrow from "../../templateArrow";
 
 type propTypes = {
   onSubmit?: any;
@@ -273,6 +274,15 @@ export default function CreateResource(props: propTypes) {
       setDimensionModal(true);
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
+
+    if (values.component_name == "ArrowTemplate") {
+      setTemplateModal(false);
+      setSelectedComponentType({
+        ...selectedComponentType,
+        type: values.component_name,
+        info: values,
+      });
+    }
   };
   /* istanbul ignore next */
   const saveResource = (data) => {
@@ -336,6 +346,23 @@ export default function CreateResource(props: propTypes) {
     );
     window.open("/v2/template/preview/create", "_blank");
   };
+
+  const onSaveArrowTemplate = (arrowTemplateData: string) => {
+    console.log(selectedComponentType?.info?._id, "node/edges onsubmit");
+
+    saveResource({
+      ...formFields,
+      templateData: arrowTemplateData,
+      templateId: selectedComponentType?.info?._id,
+    });
+    /* istanbul ignore next */
+  };
+
+  const onCancelArrowTemplate = () => {
+    console.log("clicked on cancel");
+  };
+
+  console.log(selectedComponentType, "ArrowTemplate");
 
   return (
     <>
@@ -633,6 +660,15 @@ export default function CreateResource(props: propTypes) {
           onSubmit={onTemplateSave}
           onCancel={onTemplateCancel}
           onPreview={onPreview}
+        />
+      )}
+      {selectedComponentType.type == "ArrowTemplate" && (
+        <TemplateArrow
+          //  initialData={selectedComponentType.initialData}
+          // mode="edit"
+          onSubmit={onSaveArrowTemplate}
+          onCancel={onCancelArrowTemplate}
+          // onPreview={onPreview}
         />
       )}
       {successModal && (

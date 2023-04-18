@@ -26,3 +26,27 @@ export const ADD_HOMEWORK = gql`
     }
   }
 `;
+
+export const DELETE_HOMEWORK_TASK = gql`
+  mutation ($patient_id: String, $pthomework_id: String) {
+    deleteHomeworkTask(patient_id: $patient_id, pthomework_id: $pthomework_id) {
+      deleted
+    }
+  }
+`;
+
+export const COMPLETE_HOMEWORK = gql`
+  mutation (
+    $complete_status: Int
+    $patient_id: String
+    $last_session_homeworkid: String
+  ) {
+    completeHomeworkTask(
+      complete_status: $complete_status
+      patient_id: $patient_id
+      last_session_homeworkid: $last_session_homeworkid
+    ) {
+      result
+    }
+  }
+`;
