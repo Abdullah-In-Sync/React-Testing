@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
 import CommonForm from "../form/CommonForm";
-import { therapistMeasuresValidationSchema } from "../form/measuresValidationSchema";
+import { measuresValidationSchema } from "../form/measuresValidationSchema";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
 type ViewProps = CommonFormProps & ModalRefs;
@@ -23,7 +23,7 @@ const CreateMeasuersForm: React.FC<ViewProps> = ({
   const commonform = () => {
     return (
       <Formik
-        validationSchema={therapistMeasuresValidationSchema}
+        validationSchema={measuresValidationSchema}
         initialValues={initialValues}
         onSubmit={submitForm}
         children={(props: any) => (
