@@ -19,29 +19,16 @@ import { CommonFormProps, ModalRefs } from "../form/types";
 type ViewProps = CommonFormProps & ModalRefs;
 
 const CommonForm: React.FC<ViewProps> = ({
-  organizationList = [],
   onPressCancel,
   formikProps,
   confirmRef,
   infoModalRef,
   isEdit,
-  handleDeleteQuestion,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const FormatTemplate = values.templateId ? Formats[values.templateId] : null;
   const modalRefFormatsView = useRef<ModalElement>(null);
   const styles = useStyles();
-  const csvDecode = (csvString) => {
-    return csvString ? csvString.split(",") : [];
-  };
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-
-    if (value.indexOf("all") > -1) setFieldValue("orgId", "all");
-    else setFieldValue("orgId", value.join(","));
-  };
 
   const handleChangeFormat = (e) => {
     if (!isEdit) {
@@ -90,30 +77,6 @@ const CommonForm: React.FC<ViewProps> = ({
                   </Box>
                 </Box>
                 <Box className="fieldsBoxWrapper">
-                  <Box className="fieldBox first">
-                    <Box>
-                      <FormikSelectDropdown
-                        fullWidth
-                        inputProps={{
-                          "data-testid": organizationList[0]?.name,
-                        }}
-                        onChange={handleChange}
-                        id="organizationSelect"
-                        labelId="organizationSelect"
-                        name="orgId"
-                        label="Select Organization"
-                        options={[
-                          ...[{ _id: "all", name: "Select All" }],
-                          ...organizationList,
-                        ]}
-                        mappingKeys={["_id", "name"]}
-                        size="small"
-                        className="form-control-bg multiSelect"
-                        extraProps={{ "data-testid": "organizationSelect" }}
-                        multiSelect={csvDecode(values.orgId)}
-                      />
-                    </Box>
-                  </Box>
                   <Box className="fieldBox second">
                     <Box className="formatsOpenModalButtonWrapper">
                       <Button
@@ -150,7 +113,6 @@ const CommonForm: React.FC<ViewProps> = ({
                   <FormatTemplate
                     formikProps={formikProps}
                     confirmRef={confirmRef}
-                    deleteQuestion={handleDeleteQuestion}
                   />
                 )}
                 <Box className="bottomActionButtonsWrapper">

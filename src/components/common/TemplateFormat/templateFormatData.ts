@@ -1,5 +1,6 @@
 import * as templateTypes from "./types";
 import * as Yup from "yup";
+import { uniqueString } from "../../../utility/helper";
 
 export const format1: templateTypes.TemplateFormat = {
   data: <templateTypes.Format1>{
@@ -91,6 +92,7 @@ export const format2: templateTypes.TemplateFormat = {
       ],
       bodyRows: [
         {
+          id: uniqueString(),
           col1: "",
           col2: "",
           col3: "",
@@ -179,10 +181,6 @@ export const format2: templateTypes.TemplateFormat = {
       footerRows: Yup.array().of(
         Yup.object().shape({
           col1: Yup.string().required("Question is required"),
-          // col2: Yup.number().required("Question is required"),
-          // col3: Yup.number().required("Question is required"),
-          // col4: Yup.number().required("Question is required"),
-          // col5: Yup.number().required("Question is required"),
           // colAvg: Yup.number().required("Question is required")
         })
       ),

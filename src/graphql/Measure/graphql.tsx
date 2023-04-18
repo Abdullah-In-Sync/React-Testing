@@ -188,3 +188,27 @@ export const AdMIN_VIEW_MEASURE = gql`
     }
   }
 `;
+
+export const THERAPIST_CREATE_MEASURES = gql`
+  mutation therapistCreateMeasures(
+    $patientId: String!
+    $templateData: String!
+    $templateId: String!
+    $title: String!
+    $description: String
+  ) {
+    therapistCreateMeasures(
+      patient_id: $patientId
+      template_data: $templateData
+      template_id: $templateId
+      title: $title
+      description: $description
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;

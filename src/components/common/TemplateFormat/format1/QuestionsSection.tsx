@@ -10,6 +10,7 @@ import FormikTextField from "../../FormikFields/FormikTextField";
 import DeleteButton from "../DeleteButton";
 import ErrorMessage from "../ErrorMessage";
 import * as templateTypes from "../types";
+import { uniqueString } from "../../../../utility/helper";
 
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
@@ -31,7 +32,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const onAddQuesionBox = () => {
     if (templateData.questions.length < 15) {
       const questions = [...templateData.questions];
-      questions.push({ question: "" });
+      questions.push({ id: uniqueString(), question: "" });
       setFieldValue("templateData.questions", questions);
     } else {
       confirmModalRef.current?.open();
@@ -54,7 +55,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
         )}
         <FieldArray name="questions">
           {() =>
-            templateData.questions.map((_, i) => {
+            templateData.questions.map((item, i) => {
               return (
                 <Box className="question" key={`question_${i}`}>
                   <Paper
@@ -100,7 +101,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         <DeleteButton
                           i={i}
                           data-testid={`deletequestions.${i}.question`}
-                          onDelete={() => handleDeleteQuestion(i)}
+                          onDelete={() => handleDeleteQuestion({ item, i })}
                         />
                       )}
                     </Box>

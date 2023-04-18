@@ -9,25 +9,33 @@ type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
   confirmRef?: any;
   isView?: boolean;
+  deleteQuestion?: (value) => void;
 };
 
 export default function Format1({
   formikProps,
   confirmRef,
   isView,
+  deleteQuestion,
 }: propTypes) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
   const { templateData } = values;
 
-  const handleDeleteQuestion = (i) => {
+  const handleDeleteQuestion = (value) => {
     confirmRef.current.openConfirm({
-      confirmFunction: (callback) => removeQuestion(callback, i),
+      confirmFunction: (callback) =>
+        deleteQuestion
+          ? deleteQuestion({
+              callback: () => removeQuestion(callback, value),
+              ...value,
+            })
+          : removeQuestion(callback, value),
       description: `Are you sure you want to delete the Measure?`,
     });
   };
 
-  const removeQuestion = (callback, i) => {
+  const removeQuestion = (callback, { i }) => {
     const questionsBodyRows = [...templateData.questions.bodyRows];
     questionsBodyRows.splice(i, 1);
     setFieldValue("templateData.questions.bodyRows", questionsBodyRows);
