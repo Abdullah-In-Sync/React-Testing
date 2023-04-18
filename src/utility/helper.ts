@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 export const uniqueString = (): string => {
   const buf = new Uint8Array(1);
   crypto.getRandomValues(buf);
