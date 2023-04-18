@@ -49,8 +49,6 @@ export const format1: templateTypes.TemplateFormat = {
       "The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional.",
   },
   validationSchema: Yup.object({
-    intro: Yup.string().required(`Intro is requried`),
-    description: Yup.string().required(`Description is requried`),
     questions: Yup.array().of(
       Yup.object().shape({
         question: Yup.string().required("Question is required"),
