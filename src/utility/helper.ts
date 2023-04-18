@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+const crypto = require("crypto");
 
 export const uniqueString = (): string => {
   const buf = new Uint8Array(1);
