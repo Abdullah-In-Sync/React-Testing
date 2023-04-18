@@ -8,6 +8,7 @@ import ReactFlow, {
   Controls,
   Node,
   Edge,
+  MarkerType,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Box } from "@mui/system";
@@ -40,10 +41,15 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const [nodes, setNodes, onNodesChange] = useNodesState([...nodesData]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([...edgesData]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
+  const onConnect = useCallback((params) => {
+    params.type = "smoothstep";
+    params.markerEnd = {
+      type: MarkerType.Arrow,
+    };
+    setEdges((eds) => {
+      return addEdge(params, eds);
+    });
+  }, []);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";

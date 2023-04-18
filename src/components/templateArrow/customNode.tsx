@@ -24,17 +24,14 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
   const onChange = (event: any) => {
-    nodes.forEach((ele: Node<any>) => {
-      if (ele.id == id) {
-        if (event.target.name == "title") {
-          ele.data.label = event.target.value;
-          setLabel(event.target.value);
-        } else {
-          ele.data.description = event.target.value;
-          setDescription(event.target.value);
-        }
-      }
-    });
+    const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
+    if (event.target.name == "title") {
+      nodes[getNodeIndex].data.label = event.target.value;
+      setLabel(event.target.value);
+    } else {
+      nodes[getNodeIndex].data.description = event.target.value;
+      setDescription(event.target.value);
+    }
 
     reactFlowInstance.setNodes([...nodes]);
   };
