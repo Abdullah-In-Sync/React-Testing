@@ -9,7 +9,7 @@ import TherapistSafetyPlanIndex from "../safetyPlan";
 import TherapistFeedbackTabs from "../../../../feedback/FeedbackTabs";
 import TherapistRelapseIndex from "../relapse";
 import TherapyPatientHomeworkIndex from "../homework";
-import Measures from "../../../../../../components/therapist/measures"
+import Measures from "../../../../../../components/therapist/measures";
 
 type propTypes = {
   setTherapy: any;

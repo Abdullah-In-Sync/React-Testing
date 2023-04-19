@@ -8,8 +8,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
       "& .topHeaderFirstSection": {
         "& h6": {
           fontWeight: "bold",
-          color: theme.palette.primary.main
-        }
+          color: theme.palette.primary.main,
+        },
       },
       display: "flex",
       flex: 1,
@@ -17,15 +17,14 @@ export const useStyles = makeStyles((theme: Theme) => ({
       alignItems: "center",
       paddingBottom: 10,
       "& button:first-child": {
-        marginRight: 10
-      }
+        marginRight: 10,
+      },
     },
     "& .measuresListWrapper": {
-
       "& .actionWrapper": {
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       },
 
       "& .actionButton": {
@@ -33,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         height: 32,
         marginRight: 5,
         "& svg": {
-          fontSize: 13
+          fontSize: 13,
         },
         background: theme.palette.custom.light,
         borderRadius: "50%",
@@ -41,7 +40,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: "pointer"
+        cursor: "pointer",
       },
 
       "& .accordionDetailWrapper": {
@@ -53,10 +52,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
           borderRadius: 5,
           textAlign: "center",
           color: theme.palette.secondary.main,
-          "h6": {
-            fontWeight: "bold"
-          }
-
+          h6: {
+            fontWeight: "bold",
+          },
         },
         "& .detailSecond": {
           "& .scoreButton": {
@@ -69,10 +67,8 @@ export const useStyles = makeStyles((theme: Theme) => ({
               backgroundColor: "#d8ecf0",
             },
           },
-        }
-      }
+        },
+      },
     },
-
   },
-
 }));

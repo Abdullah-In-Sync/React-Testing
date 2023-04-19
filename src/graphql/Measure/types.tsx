@@ -179,7 +179,7 @@ export interface TherapistMeasures {
   data: TherapistMeasuresData;
 }
 export interface TherapistMeasuresData {
-  therapistListMeasures?: (TherapistListMeasuresEntity)[] | null;
+  therapistListMeasures?: TherapistListMeasuresEntity[] | null;
 }
 export interface TherapistListMeasuresEntity {
   _id: string;
@@ -198,4 +198,3 @@ export interface TherapistListMeasuresEntity {
   updated_date: string;
   __typename: string;
 }
-

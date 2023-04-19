@@ -214,12 +214,8 @@ export const THERAPIST_CREATE_MEASURES = gql`
 `;
 
 export const GET_THERAPIST_MEASURES_LIST = gql`
-  query TherapistListMeasures(
-    $patientId: String!
-  ) {
-    therapistListMeasures(
-      patient_id: $patientId
-    ) {
+  query TherapistListMeasures($patientId: String!) {
+    therapistListMeasures(patient_id: $patientId) {
       _id
       created_date
       description
@@ -246,4 +242,3 @@ export const GET_THERAPIST_MEASURES_LIST = gql`
     }
   }
 `;
-
