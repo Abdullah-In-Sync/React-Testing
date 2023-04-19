@@ -41,7 +41,7 @@ export const Accordion: FC<Props> = ({
         ) : (
           title
         )}
-        <Box margin={0} padding={0} height="20px">
+        <Box margin={0} padding={0} height="20px" className="actionWrapper">
           {typeof actionButtons === "function"
             ? actionButtons(toggleContent)
             : actionButtons}
