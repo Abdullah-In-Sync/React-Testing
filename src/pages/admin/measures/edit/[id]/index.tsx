@@ -109,6 +109,36 @@ const CreateMeasures: NextPage = () => {
     }
   };
 
+  const deleteQuestion = async (templateData, doneCallback) => {
+    setLoader(true);
+    const { org_id, description, template_id, title } = measureData;
+    const variables = {
+      measureId,
+      update: {
+        title,
+        description: description,
+        org_id: org_id,
+        template_data: JSON.stringify(templateData),
+        template_id,
+      },
+    };
+
+    try {
+      await updateMeasure({
+        variables,
+        onCompleted: () => {
+          enqueueSnackbar("Question has been deleted successfully", {
+            variant: "success",
+          });
+          doneCallback();
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
   const handleSavePress = (formFields, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
@@ -136,6 +166,22 @@ const CreateMeasures: NextPage = () => {
     router.push(`/admin/measures`);
   };
 
+  const handleDeleteQuestion = ({ callback, item }) => {
+    const { template_data } = measureData;
+    const templateData = JSON.parse(template_data);
+
+    const questions = templateData.questions.bodyRows
+      ? templateData.questions.bodyRows
+      : templateData.questions;
+    const questionIndex = questions.findIndex((value) => item.id === value.id);
+    if (questionIndex > -1) {
+      questions.splice(questionIndex, 1);
+      deleteQuestion(templateData, callback);
+    } else {
+      callback();
+    }
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -149,6 +195,7 @@ const CreateMeasures: NextPage = () => {
             measureData={measureData}
             confirmRef={confirmRef}
             infoModalRef={infoModalRef}
+            handleDeleteQuestion={handleDeleteQuestion}
           />
         )}
       </Layout>

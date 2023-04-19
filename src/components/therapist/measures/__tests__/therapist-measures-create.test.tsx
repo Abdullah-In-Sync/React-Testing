@@ -3,10 +3,10 @@ import { ThemeProvider } from "@mui/material";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
-import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import CreateMeasuresPage from "../../../../pages/admin/measures/create";
+import CreateMeasuresPage from "../../../../pages/therapist/patient/view/[id]/measures/create";
 
-import { CREATE_MEASURE_TEMPLATE } from "../../../../graphql/Measure/graphql";
+import { useRouter } from "next/router";
+import { THERAPIST_CREATE_MEASURES } from "../../../../graphql/Measure/graphql";
 import theme from "../../../../styles/theme/theme";
 
 import { uniqueString } from "../../../../utility/helper";
@@ -14,6 +14,8 @@ import { uniqueString } from "../../../../utility/helper";
 jest.mock("../../../../utility/helper", () => ({
   uniqueString: jest.fn(),
 }));
+
+const pushMock = jest.fn();
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -24,53 +26,9 @@ const mocksData = [];
 
 mocksData.push({
   request: {
-    query: GET_ORGANIZATION_LIST,
-  },
-  result: {
-    data: {
-      getOrganizationData: [
-        {
-          _id: "2301536c4d674b3598814174d8f19593",
-          contract:
-            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>",
-          created_date: "2022-12-05T09:47:11.000Z",
-          logo: "",
-          logo_url: null,
-          name: "actions.dev-myhelp",
-          panel_color: "#6ec9db",
-          patient: "Patient",
-          patient_plural: "Patients",
-          side_menu_color: "#6ec9db",
-          therapist: "Therapist",
-          therapy: "Therapy",
-          __typename: "Organization",
-        },
-        {
-          _id: "72b6b276ee55481682cb9bf246294faa",
-          contract:
-            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>",
-          created_date: "2022-12-05T09:47:11.000Z",
-          logo: "",
-          logo_url: null,
-          name: "second",
-          panel_color: "#6ec9db",
-          patient: "Patient",
-          patient_plural: "Patients",
-          side_menu_color: "#6ec9db",
-          therapist: "Therapist",
-          therapy: "Therapy",
-          __typename: "Organization",
-        },
-      ],
-    },
-  },
-});
-//"[]"
-mocksData.push({
-  request: {
-    query: CREATE_MEASURE_TEMPLATE,
+    query: THERAPIST_CREATE_MEASURES,
     variables: {
-      orgId: "2301536c4d674b3598814174d8f19593",
+      patientId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
       description: "test des",
       title: "test",
       templateId: "format1",
@@ -80,10 +38,9 @@ mocksData.push({
   },
   result: {
     data: {
-      adminCreateMeasures: {
+      therapistCreateMeasures: {
         duplicateNames: null,
         result: true,
-        __typename: "adminResult",
       },
     },
   },
@@ -91,9 +48,9 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: CREATE_MEASURE_TEMPLATE,
+    query: THERAPIST_CREATE_MEASURES,
     variables: {
-      orgId: "2301536c4d674b3598814174d8f19593",
+      patientId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-full",
       description: "test des",
       title: "test",
       templateId: "format1",
@@ -102,10 +59,9 @@ mocksData.push({
   },
   result: {
     data: {
-      adminCreateMeasures: {
+      therapistCreateMeasures: {
         duplicateNames: null,
         result: true,
-        __typename: "adminResult",
       },
     },
   },
@@ -113,9 +69,9 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: CREATE_MEASURE_TEMPLATE,
+    query: THERAPIST_CREATE_MEASURES,
     variables: {
-      orgId: "72b6b276ee55481682cb9bf246294faa",
+      patientId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-dup",
       description: "test des",
       title: "test",
       templateId: "format1",
@@ -125,21 +81,16 @@ mocksData.push({
   },
   result: {
     data: {
-      adminCreateMeasures: {
+      therapistCreateMeasures: {
         duplicateNames: [
           {
             _id: "72b6b276ee55481682cb9bf246294faa",
-            name: "arti",
-            __typename: "OrgDetails",
           },
           {
             _id: "517fa21a82c0464a92aaae90ae0d5c59",
-            name: "portal.dev-myhelp",
-            __typename: "OrgDetails",
           },
         ],
         result: false,
-        __typename: "adminResult",
       },
     },
   },
@@ -157,10 +108,7 @@ const sut = async () => {
   );
 };
 
-const fillUpperForm = async (formatType?: number, orgOption?: number) => {
-  const dropdownSelect = await screen.findByTestId(/actions.dev-myhelp/i);
-  expect(dropdownSelect).toBeInTheDocument();
-
+const fillUpperForm = async (formatType?: number) => {
   const templateFormatSelect = screen.getByTestId("templateFormatSelect");
   fireEvent.click(templateFormatSelect);
   expect(templateFormatSelect).toBeInTheDocument();
@@ -189,16 +137,6 @@ const fillUpperForm = async (formatType?: number, orgOption?: number) => {
   });
 
   expect(descriptionInput).toBeInTheDocument();
-  const selectOrganization = screen.getByTestId("organizationSelect");
-  expect(selectOrganization).toBeInTheDocument();
-
-  const button = within(selectOrganization).getByRole("button");
-  fireEvent.mouseDown(button);
-
-  const listbox = within(screen.getByRole("presentation")).getByRole("listbox");
-  const options = within(listbox).getAllByRole("option");
-
-  fireEvent.click(options[orgOption ? orgOption : 1]);
 };
 
 const fillQuestionForm = async () => {
@@ -228,8 +166,17 @@ const submitFullForm = async () => {
   fireEvent.click(submitFormButton);
 };
 
-describe("Admin create measures", () => {
-  it("should render admin create measures page and submit the form", async () => {
+beforeEach(() => {
+  (useRouter as jest.Mock).mockReturnValue({
+    query: {
+      id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
+    },
+    push: pushMock,
+  });
+});
+
+describe("Therapist create measures", () => {
+  it("should render therapist create measures page and submit the form", async () => {
     await submitForm();
 
     const confirmButton = await screen.findByRole("button", {
@@ -241,15 +188,23 @@ describe("Admin create measures", () => {
   });
 
   it("should render duplicate info modal", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-dup",
+      },
+      push: pushMock,
+    });
     await sut();
-    await fillUpperForm(1, 2);
+    await fillUpperForm();
     const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
     const confirmButton = await screen.findByRole("button", {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const tableText = await screen.findByText(/portal.dev-myhelp/i);
+    const tableText = await screen.findByText(
+      /This measure name already exist./i
+    );
     expect(tableText).toBeInTheDocument();
   });
 
@@ -268,6 +223,12 @@ describe("Admin create measures", () => {
   });
 
   it("should submit full form data", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-full",
+      },
+      push: pushMock,
+    });
     (uniqueString as jest.Mock).mockReturnValue("some");
     await submitFullForm();
     const confirmButton = await screen.findByRole("button", {

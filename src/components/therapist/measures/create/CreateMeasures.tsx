@@ -6,31 +6,18 @@ import { CommonFormProps, ModalRefs } from "../form/types";
 
 type ViewProps = CommonFormProps & ModalRefs;
 
-const EditMeasuersForm: React.FC<ViewProps> = ({
+const CreateMeasuersForm: React.FC<ViewProps> = ({
   submitForm,
   organizationList,
   onPressCancel,
-  measureData,
   confirmRef,
   infoModalRef,
-  handleDeleteQuestion,
 }) => {
-  if (!measureData) return null;
-
-  const {
-    title = "",
-    description = "",
-    org_id: orgId = "",
-    template_id: templateId = "",
-    template_data = null,
-  } = measureData || {};
-
   const initialValues = {
-    title,
-    description,
-    orgId,
-    templateId,
-    templateData: JSON.parse(template_data),
+    title: "",
+    description: "",
+    templateId: "",
+    templateData: null,
   };
 
   const commonform = () => {
@@ -46,8 +33,6 @@ const EditMeasuersForm: React.FC<ViewProps> = ({
             onPressCancel={onPressCancel}
             confirmRef={confirmRef}
             infoModalRef={infoModalRef}
-            handleDeleteQuestion={handleDeleteQuestion}
-            isEdit
           />
         )}
       />
@@ -57,4 +42,4 @@ const EditMeasuersForm: React.FC<ViewProps> = ({
   return <>{commonform()}</>;
 };
 
-export default EditMeasuersForm;
+export default CreateMeasuersForm;

@@ -24,7 +24,6 @@ const CreateMeasuersForm: React.FC<ViewProps> = ({
   const commonform = () => {
     return (
       <Formik
-        enableReinitialize
         validationSchema={measuresValidationSchema}
         initialValues={initialValues}
         onSubmit={submitForm}

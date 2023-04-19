@@ -18,6 +18,7 @@ import * as templateTypes from "../types";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import CommonButton from "../../Buttons/CommonButton";
 import ConfirmBoxModal from "../../ConfirmBoxModal";
+import { uniqueString } from "../../../../utility/helper";
 
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
@@ -41,6 +42,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
     if (templateData.questions.bodyRows.length < 15) {
       const questionsBodyRows = [...templateData.questions.bodyRows];
       questionsBodyRows.push({
+        id: uniqueString(),
         col1: "",
         col2: "",
         col3: "",
@@ -85,7 +87,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const tableBody = () => {
     return (
       <TableBody>
-        {templateData.questions.bodyRows.map((_, i) => {
+        {templateData.questions.bodyRows.map((item, i) => {
           return (
             <TableRow role="checkbox" tabIndex={-1} key={`tableBodyRow_${i}`}>
               {templateData.questions.headerRow.map((column) => {
@@ -105,7 +107,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   <DeleteButton
                     i={`templateData.questions.bodyRows.${i}`}
                     data-testId={`templateData.questions.bodyRows.${i}`}
-                    onDelete={() => handleDeleteQuestion(i)}
+                    onDelete={() => handleDeleteQuestion({ item, i })}
                   />
                 </TableCell>
               )}
