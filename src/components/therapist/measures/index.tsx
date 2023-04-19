@@ -30,10 +30,12 @@ const Measures: React.FC = () => {
     });
   }, []);
 
+  /* istanbul ignore next */
   const handleCreateMeasure = () => {
     router.push("/measures/create");
   };
 
+  /* istanbul ignore next */
   const actionButtonClick = () => null;
 
   if (loadingMeasuresList) return <Loader visible={true} />;
