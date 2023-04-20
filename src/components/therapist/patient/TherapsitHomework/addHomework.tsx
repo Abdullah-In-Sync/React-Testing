@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { SuccessModal } from "../../../common/SuccessModal";
 import { useLazyQuery, useMutation } from "@apollo/client";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import {
   ADD_HOMEWORK,
   ASSIGN_RESOURCE_HOMEWORK,
@@ -442,7 +443,7 @@ function HomeworkDetails(props: propTypes) {
 
         {lastHomeworkList?.length > 0 && (
           <Box>
-            <Box
+            <Typography
               style={{
                 paddingRight: "15px",
                 color: "#6EC9DB",
@@ -451,7 +452,7 @@ function HomeworkDetails(props: propTypes) {
               data-testid="safety_ques"
             >
               Last Session's Homework
-            </Box>
+            </Typography>
             <Box
               sx={{
                 flexGrow: 1,
@@ -477,8 +478,8 @@ function HomeworkDetails(props: propTypes) {
               ))}
             </Box>
             {lastHomeworkList?.map((data, index) => (
-              <Box>
-                <Box
+              <Box style={{ paddingBottom: "20px" }}>
+                <Typography
                   style={{
                     paddingRight: "15px",
                     color: "#6EC9DB",
@@ -487,18 +488,15 @@ function HomeworkDetails(props: propTypes) {
                   data-testid="safety_ques"
                 >
                   Homework Review Task {index + 1}
-                </Box>
+                </Typography>
                 <Box
                   sx={{
-                    flexGrow: 1,
                     border: "1px solid #cecece",
-                    display: "grid",
+                    padding: "10px",
                   }}
-                  p={5}
-                  marginBottom={"25px"}
                   borderRadius={"7px"}
                 >
-                  <Box
+                  <Typography
                     style={{
                       paddingRight: "15px",
                       color: "#6EC9DB",
@@ -507,7 +505,7 @@ function HomeworkDetails(props: propTypes) {
                     data-testid="safety_ques"
                   >
                     Patient Response
-                  </Box>
+                  </Typography>
 
                   <Grid container spacing={2} marginBottom={0}>
                     <Grid item xs={12}>
@@ -535,7 +533,7 @@ function HomeworkDetails(props: propTypes) {
                     </Grid>
                   </Grid>
 
-                  <Box
+                  <Typography
                     style={{
                       paddingRight: "15px",
                       color: "#6EC9DB",
@@ -545,7 +543,7 @@ function HomeworkDetails(props: propTypes) {
                     data-testid="safety_ques"
                   >
                     THERAPIST Response
-                  </Box>
+                  </Typography>
 
                   <Grid container spacing={2} marginBottom={0}>
                     <Grid item xs={12}>
@@ -581,7 +579,7 @@ function HomeworkDetails(props: propTypes) {
         {previousSessionTaskData?.length > 0 && (
           <div>
             {previousSessionTaskData?.map((data, index) => (
-              <Box>
+              <Box style={{ paddingTop: "10px" }}>
                 <Box
                   className="fieldBox second"
                   sx={{
@@ -591,7 +589,7 @@ function HomeworkDetails(props: propTypes) {
                     paddingTop: "5px",
                   }}
                 >
-                  <Box
+                  <Typography
                     style={{
                       paddingRight: "15px",
                       color: "#6EC9DB",
@@ -600,59 +598,63 @@ function HomeworkDetails(props: propTypes) {
                     data-testid="safety_ques"
                   >
                     Homework Task {index + 1}
-                  </Box>
-
-                  <IconButtonWrapper
-                    aria-label="create"
-                    size="small"
-                    style={{ backgroundColor: "#6EC9DB" }}
-                  >
-                    <DeleteIcon
-                      // style={{ color: "white" }}
-                      data-testid={`button-delete-icon${index}`}
-                      onClick={() => {
-                        setIsConfirmDeleteTask(true);
-                        setDeleteTaskId(data._id);
-                      }}
-                    />
-                  </IconButtonWrapper>
+                  </Typography>
                 </Box>
 
                 <Box
                   sx={{
-                    flexGrow: 1,
                     border: "1px solid #cecece",
-                    display: "grid",
+                    padding: "10px",
                   }}
-                  p={5}
-                  marginBottom={"25px"}
                   borderRadius={"7px"}
                 >
-                  <Grid container spacing={2} marginBottom={0}>
-                    <Grid item xs={12}>
-                      <TextFieldComponent
-                        name="resource_references"
-                        id="references"
-                        value={
-                          inputs[index] ? inputs[index] : data?.pthomewrk_task
-                        }
-                        multiline
-                        rows={4}
-                        onChange={(e) =>
-                          handleInputChangePrviousHomework(
-                            index,
-                            e.target.value,
-                            data._id
-                          )
-                        }
-                        inputProps={{
-                          "data-testid": `Pre_homework_task${index}`,
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      paddingBottom: "5px",
+                    }}
+                  >
+                    <IconButtonWrapper
+                      aria-label="create"
+                      size="small"
+                      style={{ backgroundColor: "#6EC9DB" }}
+                    >
+                      <DeleteIcon
+                        style={{ color: "white" }}
+                        data-testid={`button-delete-icon${index}`}
+                        onClick={() => {
+                          setIsConfirmDeleteTask(true);
+                          setDeleteTaskId(data._id);
                         }}
-                        fullWidth={true}
-                        className="form-control-bg"
                       />
-                    </Grid>
+                    </IconButtonWrapper>
+                  </Box>
+
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="resource_references"
+                      id="references"
+                      value={
+                        inputs[index] ? inputs[index] : data?.pthomewrk_task
+                      }
+                      multiline
+                      rows={4}
+                      onChange={(e) =>
+                        handleInputChangePrviousHomework(
+                          index,
+                          e.target.value,
+                          data._id
+                        )
+                      }
+                      inputProps={{
+                        "data-testid": `Pre_homework_task${index}`,
+                      }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
                   </Grid>
+
                   <Box
                     className="fieldBox second"
                     sx={{
@@ -669,6 +671,7 @@ function HomeworkDetails(props: propTypes) {
                       }}
                       data-testid={`addNewQuestion_${index}`}
                       variant="outlined"
+                      startIcon={<AttachFileIcon />}
                     >
                       Add Resource
                     </Button>
@@ -692,7 +695,7 @@ function HomeworkDetails(props: propTypes) {
                     paddingTop: "5px",
                   }}
                 >
-                  <Box
+                  <Typography
                     style={{
                       paddingRight: "15px",
                       color: "#6EC9DB",
@@ -701,50 +704,52 @@ function HomeworkDetails(props: propTypes) {
                     data-testid="safety_ques"
                   >
                     Homework Task {index + 1}
-                  </Box>
-
-                  <IconButtonWrapper
-                    aria-label="create"
-                    size="small"
-                    style={{ backgroundColor: "#6EC9DB" }}
-                    // data-testid={`button-delete-icon_`}
-                  >
-                    <DeleteIcon
-                      style={{ color: "white" }}
-                      onClick={() => handleDeleteInput(index)}
-                    />
-                  </IconButtonWrapper>
+                  </Typography>
                 </Box>
 
                 <Box
                   sx={{
-                    flexGrow: 1,
                     border: "1px solid #cecece",
-                    display: "grid",
+                    padding: "10px",
                   }}
-                  p={5}
-                  marginBottom={"25px"}
                   borderRadius={"7px"}
                 >
-                  <Grid container spacing={2} marginBottom={0}>
-                    <Grid item xs={12}>
-                      <TextFieldComponent
-                        name="resource_references"
-                        id="references"
-                        value={input}
-                        multiline
-                        rows={4}
-                        onChange={(e) =>
-                          handleInputChange(index, e.target.value)
-                        }
-                        inputProps={{
-                          "data-testid": `homework_task${index}`,
-                        }}
-                        fullWidth={true}
-                        className="form-control-bg"
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      paddingBottom: "5px",
+                    }}
+                  >
+                    <IconButtonWrapper
+                      aria-label="create"
+                      size="small"
+                      style={{ backgroundColor: "#6EC9DB" }}
+                      // data-testid={`button-delete-icon_`}
+                    >
+                      <DeleteIcon
+                        style={{ color: "white" }}
+                        onClick={() => handleDeleteInput(index)}
                       />
-                    </Grid>
+                    </IconButtonWrapper>
+                  </Box>
+
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="resource_references"
+                      id="references"
+                      value={input}
+                      multiline
+                      rows={4}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                      inputProps={{
+                        "data-testid": `homework_task${index}`,
+                      }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
                   </Grid>
+
                   <Box
                     className="fieldBox second"
                     sx={{
@@ -757,6 +762,7 @@ function HomeworkDetails(props: propTypes) {
                       onClick={() => setOpenResourceModal(true)}
                       data-testid={`addResource2_${index}`}
                       variant="outlined"
+                      startIcon={<AttachFileIcon />}
                     >
                       Add Resource
                     </Button>
