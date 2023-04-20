@@ -174,3 +174,27 @@ export interface AdminViewMeasureById {
   updated_date: string;
   __typename: string;
 }
+
+export interface TherapistMeasures {
+  data: TherapistMeasuresData;
+}
+export interface TherapistMeasuresData {
+  therapistListMeasures?: TherapistListMeasuresEntity[] | null;
+}
+export interface TherapistListMeasuresEntity {
+  _id: string;
+  created_date: string;
+  description: string;
+  patient_id: string;
+  score: number;
+  score_date: string;
+  scores_list?: null;
+  share_status: number;
+  status: number;
+  template_data: string;
+  template_id: string;
+  therapist_id: string;
+  title: string;
+  updated_date: string;
+  __typename: string;
+}
