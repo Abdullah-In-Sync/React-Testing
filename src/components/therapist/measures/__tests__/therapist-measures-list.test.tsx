@@ -91,7 +91,7 @@ beforeEach(() => {
 });
 
 describe("Therapist patient measures", () => {
-  it.only("should render therapist measures list", async () => {
+  it("should render therapist measures list", async () => {
     await sut();
     const firstTitleText = await screen.findByText(/test4/i);
     expect(firstTitleText).toBeInTheDocument();
