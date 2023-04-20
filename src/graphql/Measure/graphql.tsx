@@ -212,3 +212,33 @@ export const THERAPIST_CREATE_MEASURES = gql`
     }
   }
 `;
+
+export const GET_THERAPIST_MEASURES_LIST = gql`
+  query TherapistListMeasures($patientId: String!) {
+    therapistListMeasures(patient_id: $patientId) {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        status
+        template_data
+        template_id
+      }
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
