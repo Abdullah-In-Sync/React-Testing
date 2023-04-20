@@ -10,6 +10,7 @@ type Props = {
   detail?: any;
   actionButtons?: any;
   marginBottom?: string;
+  index?: number;
 };
 
 export const Accordion: FC<Props> = ({
@@ -17,6 +18,7 @@ export const Accordion: FC<Props> = ({
   detail,
   actionButtons,
   marginBottom,
+  index = "",
 }) => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
@@ -47,13 +49,13 @@ export const Accordion: FC<Props> = ({
             : actionButtons}
           {!isOpen ? (
             <AddIcon
-              data-testid="toggleContent"
+              data-testid={`toggleContent${index}`}
               className={classes.iconButton}
               onClick={toggleContent}
             />
           ) : (
             <RemoveIcon
-              data-testid="toggleContent"
+              data-testid={`toggleContent${index}`}
               className={classes.iconButton}
               onClick={toggleContent}
             />

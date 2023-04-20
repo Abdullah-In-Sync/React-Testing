@@ -24,7 +24,6 @@ const MeasuresList: React.FC<ViewProps> = ({
           <CommonButton variant="contained" className="scoreButton">
             View Scores
           </CommonButton>
-
           <CommonButton variant="contained" className="scoreButton">
             Take Test
           </CommonButton>
@@ -33,11 +32,12 @@ const MeasuresList: React.FC<ViewProps> = ({
     );
   };
 
-  const accordion = ({ title, item }) => {
+  const accordion = ({ title, item, i }) => {
     return (
       <Accordion
         title={title}
         detail={accordionDetail}
+        index={i}
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />
         }
@@ -48,7 +48,7 @@ const MeasuresList: React.FC<ViewProps> = ({
   const accordionList = () => {
     return (listData as Array<TherapistListMeasuresEntity>).map((item, i) => {
       const { title } = item;
-      return <Box key={`measure_${i}`}>{accordion({ title, item })}</Box>;
+      return <Box key={`measure_${i}`}>{accordion({ title, item, i })}</Box>;
     });
   };
 
