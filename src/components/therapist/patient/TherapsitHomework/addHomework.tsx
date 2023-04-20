@@ -18,16 +18,20 @@ import { SuccessModal } from "../../../common/SuccessModal";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   ADD_HOMEWORK,
+  ASSIGN_RESOURCE_HOMEWORK,
   COMPLETE_HOMEWORK,
   DELETE_HOMEWORK_TASK,
 } from "../../../../graphql/mutation/therapist";
 import { useSnackbar } from "notistack";
 import {
+  GET_POPUP_RESOURCE_LIST_DATA,
   GET_THERAPIST_HOMEWORK,
   GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
 } from "../../../../graphql/query/therapist";
 import ConfirmBoxModal from "../../../common/ConfirmBoxModal";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
+import { useAppContext } from "../../../../contexts/AuthContext";
+import ResourcePopup from "./resourcePopup";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -45,6 +49,8 @@ type propTypes = {
 };
 
 function HomeworkDetails(props: propTypes) {
+  const { user } = useAppContext();
+  const orgId = user?.therapist_data?.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const confirmModalRef = useRef<ModalElement>(null);
   const confirmModalRefForOldHomework = useRef<ModalElement>(null);
@@ -64,17 +70,27 @@ function HomeworkDetails(props: propTypes) {
   const [deleteTaskId, setDeleteTaskId] = useState("");
   const [successModal, setSuccessModal] = useState<boolean>(false);
   const [previoushomeworkId, setPrevioushomeworkId] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [ptHomeworkId, setPtHomeworkId] = useState("");
+  const [ptShareId, setPtShareId] = useState("");
+  const [myResource, setMyResource] = useState(0);
+  const [myFavourite, setMyFavourite] = useState(0);
 
+  const [openResourceModal, setOpenResourceModal] = useState(false);
   const [deleteTasksuccessModal, setDeleteTaskSuccessModal] =
     useState<boolean>(false);
 
   const [completeTasksuccessModal, setCompleteTaskSuccessModal] =
     useState<boolean>(false);
 
+  const [completeResourceAssignedModal, setCompleteResourceAssignedModal] =
+    useState<boolean>(false);
+
   // Mutation
   const [addHomework] = useMutation(ADD_HOMEWORK);
   const [deleteHomeworkTask] = useMutation(DELETE_HOMEWORK_TASK);
   const [CompleteHomeworkTask] = useMutation(COMPLETE_HOMEWORK);
+  const [AssigneResource] = useMutation(ASSIGN_RESOURCE_HOMEWORK);
 
   // Queries
   const [
@@ -106,6 +122,16 @@ function HomeworkDetails(props: propTypes) {
       },
     });
 
+  const [getPopupData, { data: popupData }] = useLazyQuery(
+    GET_POPUP_RESOURCE_LIST_DATA,
+    {
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        console.log("Koca: data ", data);
+      },
+    }
+  );
+
   const lastHomeworkList =
     therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
 
@@ -133,6 +159,26 @@ function HomeworkDetails(props: propTypes) {
     });
   }, [props.sessionId, props.sessionNo, props.therapyId, patientId]);
 
+  useEffect(() => {
+    getPopupData({
+      variables: {
+        therapyId: props.therapyId,
+        orgId: orgId,
+        searchText: searchValue,
+        myResource: myResource,
+        myFav: myFavourite,
+      },
+    });
+  }, [
+    props.sessionId,
+    props.sessionNo,
+    props.therapyId,
+    patientId,
+    searchValue,
+    myResource,
+    myFavourite,
+  ]);
+
   function refreshData() {
     getTherapistHomeworkData({
       variables: {
@@ -144,6 +190,18 @@ function HomeworkDetails(props: propTypes) {
       fetchPolicy: "network-only",
     });
   }
+
+  const handleSearchData = (data) => {
+    setSearchValue(data);
+  };
+
+  const handleMyResourceData = (data) => {
+    setMyResource(data);
+  };
+
+  const handleMyFavouritesData = (data) => {
+    setMyFavourite(data);
+  };
 
   const handleCreateInput = () => {
     if (previousSessionTaskData?.length > 0) {
@@ -265,6 +323,31 @@ function HomeworkDetails(props: propTypes) {
     }
   };
 
+  const assigneHomeworkResources = async (resourceId) => {
+    try {
+      await AssigneResource({
+        variables: {
+          patient_id: patientId,
+          ptsession_id: props.sessionId,
+          therapy_id: props.therapyId,
+          session_no: `${props.sessionNo}`,
+          pthomework_id: ptHomeworkId,
+          ptshare_id: ptShareId,
+          source_id: "3",
+          restype: 0,
+          resource_id: resourceId,
+        },
+        onCompleted: (data) => {
+          console.debug("Koca: Assigned data ", data);
+          setCompleteResourceAssignedModal(true);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -285,6 +368,8 @@ function HomeworkDetails(props: propTypes) {
     /* istanbul ignore next */
     setSuccessModal(false);
     setCompleteTaskSuccessModal(false);
+    setCompleteResourceAssignedModal(false);
+    setOpenResourceModal(false);
   };
 
   const handleOk2 = () => {
@@ -305,7 +390,7 @@ function HomeworkDetails(props: propTypes) {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end", // change to "flex-end"
+            justifyContent: "flex-end",
           }}
         >
           {lastHomeworkList?.length > 0 && (
@@ -524,10 +609,6 @@ function HomeworkDetails(props: propTypes) {
                   >
                     <DeleteIcon
                       // style={{ color: "white" }}
-                      // onClick={
-                      //   () => setIsConfirmDeleteTask(true)
-                      //   // setDeleteTaskId(data._id)
-                      // }
                       data-testid={`button-delete-icon${index}`}
                       onClick={() => {
                         setIsConfirmDeleteTask(true);
@@ -581,8 +662,12 @@ function HomeworkDetails(props: propTypes) {
                     }}
                   >
                     <Button
-                      onClick={handleCreateInput}
-                      data-testid={`addNewQuestion_${"planId"}`}
+                      onClick={() => {
+                        setOpenResourceModal(true);
+                        setPtHomeworkId(data._id);
+                        setPtShareId(data.ptshareres_id);
+                      }}
+                      data-testid={`addNewQuestion_${index}`}
                       variant="outlined"
                     >
                       Add Resource
@@ -669,8 +754,8 @@ function HomeworkDetails(props: propTypes) {
                     }}
                   >
                     <Button
-                      onClick={handleCreateInput}
-                      data-testid={`addNewQuestion_${"planId"}`}
+                      onClick={() => setOpenResourceModal(true)}
+                      data-testid={`addResource2_${index}`}
                       variant="outlined"
                     >
                       Add Resource
@@ -778,6 +863,15 @@ function HomeworkDetails(props: propTypes) {
             onOk={handleOk}
           />
         )}
+
+        {completeResourceAssignedModal && (
+          <SuccessModal
+            isOpen={completeResourceAssignedModal}
+            title="Successful"
+            description={"Resource assigned successfully."}
+            onOk={handleOk}
+          />
+        )}
       </div>
 
       <ConfirmBoxModal
@@ -788,6 +882,15 @@ function HomeworkDetails(props: propTypes) {
       <ConfirmBoxModal
         infoMessage="Homework tasks cannot be added to older session, please add task to the next session."
         confirmModalRef={confirmModalRefForOldHomework}
+      />
+      <ResourcePopup
+        openResourceModal={openResourceModal}
+        setOpenResourceModal={setOpenResourceModal}
+        popupData={popupData}
+        onSearchData={handleSearchData}
+        handleMyResourceData={handleMyResourceData}
+        handleMyFavouritesData={handleMyFavouritesData}
+        assigneHomeworkResources={assigneHomeworkResources}
       />
     </>
   );
