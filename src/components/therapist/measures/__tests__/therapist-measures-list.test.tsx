@@ -1,6 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import Measures from "..";
@@ -91,9 +91,13 @@ beforeEach(() => {
 });
 
 describe("Therapist patient measures", () => {
-  it("should render therapist measures list", async () => {
+  it.only("should render therapist measures list", async () => {
     await sut();
     const firstTitleText = await screen.findByText(/test4/i);
     expect(firstTitleText).toBeInTheDocument();
+
+    const firstPlusIcon = await screen.findByTestId("toggleContent0");
+    fireEvent.click(firstPlusIcon);
+    expect(await screen.findByText(/Current Score/i)).toBeInTheDocument();
   });
 });
