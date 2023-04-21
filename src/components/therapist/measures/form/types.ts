@@ -1,6 +1,9 @@
 import { FormikProps } from "formik";
 import { ForwardedRef } from "react";
-import { AdminViewMeasureById } from "../../../../graphql/Measure/types";
+import {
+  AdminViewMeasureById,
+  TherapistListMeasuresEntity,
+} from "../../../../graphql/Measure/types";
 import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
 import { ConfirmElement } from "../../../common/TemplateFormat/ConfirmWrapper";
 import {
@@ -30,7 +33,7 @@ export interface CommonFormProps {
     [key: string]: any;
   }>;
   onPressCancel?: () => void;
-  measureData?: AdminViewMeasureById;
+  measureData?: AdminViewMeasureById | TherapistListMeasuresEntity;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
   isEdit?: boolean;

@@ -55,12 +55,12 @@ const QuestionsSection: React.FC<ViewProps> = ({
     }
   };
 
-  const inputTextField = (name) => {
+  const inputTextField = ({ name, placeholder = "Type" }: any) => {
     return (
       <FormikTextField
         name={name}
         id={name}
-        placeholder={"Type"}
+        placeholder={placeholder}
         inputProps={{ "data-testid": name }}
         fullWidth
         multiline
@@ -75,7 +75,9 @@ const QuestionsSection: React.FC<ViewProps> = ({
         <TableRow>
           {templateData.questions.headerRow.map((column, i) => (
             <TableCell key={`tableHead_${column.id}`} align={column.align}>
-              {inputTextField(`templateData.questions.headerRow.${i}.label`)}
+              {inputTextField({
+                name: `templateData.questions.headerRow.${i}.label`,
+              })}
             </TableCell>
           ))}
           {!isView && <TableCell />}
@@ -90,15 +92,20 @@ const QuestionsSection: React.FC<ViewProps> = ({
         {templateData.questions.bodyRows.map((item, i) => {
           return (
             <TableRow role="checkbox" tabIndex={-1} key={`tableBodyRow_${i}`}>
-              {templateData.questions.headerRow.map((column) => {
+              {templateData.questions.headerRow.map((column, columnIndex) => {
                 return (
                   <TableCell
                     key={`tableBodyCell_${column.id}`}
                     align={column.align}
                   >
-                    {inputTextField(
-                      `templateData.questions.bodyRows.${i}.${column.id}`
-                    )}
+                    {inputTextField({
+                      name: `templateData.questions.bodyRows.${i}.${column.id}`,
+                      placeholder: placeholderCellText(
+                        i,
+                        columnIndex,
+                        "bodyCell"
+                      ),
+                    })}
                   </TableCell>
                 );
               })}
@@ -116,6 +123,18 @@ const QuestionsSection: React.FC<ViewProps> = ({
         })}
       </TableBody>
     );
+  };
+
+  const placeholderCellText = (rowIndex, columnIndex, type) => {
+    switch (type) {
+      case "footerCell":
+        if (rowIndex === 0 && columnIndex === 0) return "Column Total";
+        else if (rowIndex === 1 && columnIndex === 0) return "Total Score";
+        break;
+      case "bodyCell":
+        if (columnIndex === 0) return "Type your question here";
+        break;
+    }
   };
 
   const tableFooter = () => {
@@ -137,9 +156,14 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
                     >
-                      {inputTextField(
-                        `templateData.questions.footerRows.${outerIndex}.${column.id}`
-                      )}
+                      {inputTextField({
+                        name: `templateData.questions.footerRows.${outerIndex}.${column.id}`,
+                        placeholder: placeholderCellText(
+                          outerIndex,
+                          i,
+                          "footerCell"
+                        ),
+                      })}
                     </TableCell>
                   );
                 } else {
@@ -150,9 +174,9 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         align={column.align}
                         colSpan={5}
                       >
-                        {inputTextField(
-                          `templateData.questions.footerRows.${outerIndex}.colAvg`
-                        )}
+                        {inputTextField({
+                          name: `templateData.questions.footerRows.${outerIndex}.colAvg`,
+                        })}
                       </TableCell>
                     );
                   else return null;

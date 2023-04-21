@@ -115,3 +115,12 @@ overflow: hidden;
 p{
   font-size: 14px !important;
 }
+.simple-tabpanel-measures > div{
+  color: unset !important;
+  font-size: unset !important;
+  font-weight: unset !important;
+  line-height: unset !important;
+  border-radius: unset !important;
+  text-transform: unset !important;
+  background-color: unset !important;
+}

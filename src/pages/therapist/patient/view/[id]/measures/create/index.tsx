@@ -50,6 +50,7 @@ const CreateMeasures: NextPage = () => {
             } else {
               confirmRef.current.showSuccess({
                 description: "Your measures has been created successfully.",
+                handleOk,
               });
             }
             doneCallback();
@@ -85,8 +86,12 @@ const CreateMeasures: NextPage = () => {
 
   /* istanbul ignore next */
   const cancelConfirm = (callback) => {
-    router.back();
+    handleOk();
     callback();
+  };
+
+  const handleOk = () => {
+    router.push(`/therapist/patient/view/${patientId}/?tab=measures`);
   };
 
   return (

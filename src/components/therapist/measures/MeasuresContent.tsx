@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import * as React from "react";
 import MeasuresList from "./list/MeasuresList";
 import { useStyles } from "./measuresStyles";
@@ -46,10 +46,10 @@ const MeasuresContent: React.FC<ViewProps> = ({
   };
 
   return (
-    <Stack className={styles.measuresWrapper}>
+    <Box className={styles.measuresWrapper}>
       {topHeader()}
       <MeasuresList listData={listData} actionButtonClick={actionButtonClick} />
-    </Stack>
+    </Box>
   );
 };
 
