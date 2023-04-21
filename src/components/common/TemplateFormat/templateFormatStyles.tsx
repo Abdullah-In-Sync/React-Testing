@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
                 margin: 0,
                 "& textarea": {
                   textAlign: "center",
-                  fontSize: 13,
+                  fontSize: 12,
                 },
                 "& input": {
                   border: 0,
