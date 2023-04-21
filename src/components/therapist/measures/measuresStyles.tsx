@@ -3,6 +3,9 @@ import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles((theme: Theme) => ({
   measuresWrapper: {
+    "& .infoMessageBoxWrapper": {
+      textAlign: "center",
+    },
     padding: 10,
     "& .topHeaderWrapper": {
       "& .topHeaderFirstSection": {

@@ -69,6 +69,20 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_MEASURES_LIST,
+    variables: {
+      patientId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-no-data",
+    },
+  },
+  result: {
+    data: {
+      therapistListMeasures: [],
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -99,5 +113,17 @@ describe("Therapist patient measures", () => {
     const firstPlusIcon = await screen.findByTestId("toggleContent0");
     fireEvent.click(firstPlusIcon);
     expect(await screen.findByText(/Current Score/i)).toBeInTheDocument();
+  });
+
+  it("should render measures no data", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-no-data",
+      },
+      push: pushMock,
+    });
+    await sut();
+    const noDataFoundText = await screen.findByText(/No data found./i);
+    expect(noDataFoundText).toBeInTheDocument();
   });
 });
