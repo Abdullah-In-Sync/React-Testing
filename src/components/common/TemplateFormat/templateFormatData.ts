@@ -16,7 +16,7 @@ export const format1: templateTypes.TemplateFormat = {
         label: "1",
       },
       {
-        value: "slightly disagree",
+        value: "Slightly disagree",
         label: "2",
       },
       {
@@ -32,11 +32,11 @@ export const format1: templateTypes.TemplateFormat = {
         label: "5",
       },
       {
-        value: "Slightly agree",
+        value: "Somewhat agree",
         label: "6",
       },
       {
-        value: "Strongly agree",
+        value: "Slightly agree",
         label: "7",
       },
       {
