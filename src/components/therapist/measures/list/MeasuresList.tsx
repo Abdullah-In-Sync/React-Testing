@@ -52,7 +52,11 @@ const MeasuresList: React.FC<ViewProps> = ({
     });
   };
 
-  return <Stack className="measuresListWrapper">{accordionList()}</Stack>;
+  return (
+    <>
+      <Stack className="measuresListWrapper">{accordionList()}</Stack>;
+    </>
+  );
 };
 
 export default MeasuresList;

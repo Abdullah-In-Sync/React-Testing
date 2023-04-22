@@ -198,3 +198,37 @@ export interface TherapistListMeasuresEntity {
   updated_date: string;
   __typename: string;
 }
+
+export interface UpdateTherapistMeasureVars {
+  measure_id: string;
+  update: Update;
+}
+
+export interface Update {
+  title: string;
+  description: string;
+  template_id: string;
+  template_data: string;
+  share_status: number;
+  status: number;
+}
+
+export interface UpdateTherapistMeasureRes {
+  updateTherapistMeasure: UpdateTherapistMeasure;
+}
+
+export interface UpdateTherapistMeasure {
+  _id: string;
+  created_date: string;
+  description: string;
+  patient_id: string;
+  score: null;
+  score_date: null;
+  share_status: number;
+  status: number;
+  template_data: string;
+  template_id: string;
+  title: string;
+  therapist_id: null;
+  updated_date: string;
+}

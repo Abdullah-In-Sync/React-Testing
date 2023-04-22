@@ -1,12 +1,21 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import * as React from "react";
-import { GET_THERAPIST_MEASURES_LIST } from "../../../graphql/Measure/graphql";
+import {
+  GET_THERAPIST_MEASURES_LIST,
+  UPDATE_THERAPIST_MEASURE,
+} from "../../../graphql/Measure/graphql";
 import MeasureContent from "./MeasuresContent";
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { TherapistMeasuresData } from "../../../graphql/Measure/types";
+import {
+  TherapistMeasuresData,
+  UpdateTherapistMeasureRes,
+  UpdateTherapistMeasureVars,
+} from "../../../graphql/Measure/types";
 import Loader from "../../common/Loader";
+import ConfirmationModal from "../../common/ConfirmationModal";
+import { SuccessModal } from "../../common/SuccessModal";
 
 const Measures: React.FC = () => {
   const router = useRouter();
@@ -14,6 +23,38 @@ const Measures: React.FC = () => {
     query: { id },
   } = router;
   const patientId = id as string;
+  const [isConfirmationModel, setIsConfirmationModel] = React.useState(false);
+  const selectedMeasure = React.useRef<any>();
+  const [isSuccess, setIsSuccess] = React.useState(false);
+  const onClear = () => {
+    setIsConfirmationModel(false);
+  };
+  const onConfirmSubmit = () => {
+    const {
+      _id,
+      description,
+      share_status,
+      status,
+      template_data,
+      template_id,
+      title,
+      pressedIconButton,
+    } = selectedMeasure.current;
+    setIsConfirmationModel(false);
+    updateMeasure({
+      variables: {
+        measure_id: _id,
+        update: {
+          description,
+          share_status: pressedIconButton == "share" ? 1 : share_status,
+          status: pressedIconButton == "delete" ? 1 : status,
+          template_data,
+          template_id,
+          title,
+        },
+      },
+    });
+  };
   const [
     getTherapistMeasuresList,
     {
@@ -21,7 +62,17 @@ const Measures: React.FC = () => {
       data: { therapistListMeasures: listData = [] } = {},
     },
   ] = useLazyQuery<TherapistMeasuresData>(GET_THERAPIST_MEASURES_LIST, {
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "no-cache",
+  });
+
+  const [updateMeasure, { data, loading, error }] = useMutation<
+    UpdateTherapistMeasureRes,
+    UpdateTherapistMeasureVars
+  >(UPDATE_THERAPIST_MEASURE, {
+    onCompleted: (data) => {
+      /* istanbul ignore next */
+      setIsSuccess(true);
+    },
   });
 
   useEffect(() => {
@@ -36,16 +87,49 @@ const Measures: React.FC = () => {
   };
 
   /* istanbul ignore next */
-  const actionButtonClick = () => null;
+  const actionButtonClick = (value) => {
+    selectedMeasure.current = value;
+    if (value?.pressedIconButton == "share") {
+      setIsConfirmationModel(true);
+    }
+    if (value?.pressedIconButton == "delete") {
+      setIsConfirmationModel(true);
+    }
+  };
+
+  const handleOk = () => {
+    setIsSuccess(false);
+    getTherapistMeasuresList({
+      variables: { patientId },
+    });
+  };
 
   if (loadingMeasuresList) return <Loader visible={true} />;
 
   return (
-    <MeasureContent
-      listData={listData}
-      onClickCreateMeasure={handleCreateMeasure}
-      actionButtonClick={actionButtonClick}
-    />
+    <>
+      <MeasureContent
+        listData={listData}
+        onClickCreateMeasure={handleCreateMeasure}
+        actionButtonClick={actionButtonClick}
+      />
+      {isConfirmationModel && (
+        <ConfirmationModal
+          label={`Are you sure you want to ${selectedMeasure.current.pressedIconButton}
+      the Measures?`}
+          onCancel={onClear}
+          onConfirm={onConfirmSubmit}
+        />
+      )}
+      {isSuccess && (
+        <SuccessModal
+          isOpen={Boolean(isSuccess)}
+          title="Successful"
+          description={`Your Measure has been ${selectedMeasure.current.pressedIconButton}d successfully.`}
+          onOk={handleOk}
+        />
+      )}
+    </>
   );
 };
 

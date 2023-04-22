@@ -100,4 +100,25 @@ describe("Therapist patient measures", () => {
     fireEvent.click(firstPlusIcon);
     expect(await screen.findByText(/Current Score/i)).toBeInTheDocument();
   });
+
+  it.only("click on delete button", async () => {
+    await sut();
+    const deleteButton = await screen.findByTestId(
+      "iconButton_a6e9bf54-76fe-49e0-8872-a7ff0681ccf7_1"
+    );
+    fireEvent.click(deleteButton);
+    expect(
+      await screen.findByText(/Are you sure you want to delete the Measures?/i)
+    ).toBeInTheDocument();
+  });
+  it.only("click on share button", async () => {
+    await sut();
+    const shareButton = await screen.findByTestId(
+      "iconButton_a6e9bf54-76fe-49e0-8872-a7ff0681ccf7_2"
+    );
+    fireEvent.click(shareButton);
+    expect(
+      await screen.findByText(/Are you sure you want to share the Measures?/i)
+    ).toBeInTheDocument();
+  });
 });
