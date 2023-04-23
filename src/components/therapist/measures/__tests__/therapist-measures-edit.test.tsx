@@ -42,7 +42,7 @@ mocksData.push({
         organization_name: "portal.dev-myhelp",
         status: 1,
         template_data:
-          '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Slightly agree","label":"6"},{"value":"Strongly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional."}',
+          '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional."}',
         template_id: "format1",
         title: "test",
         updated_date: "2023-04-10T18:08:28.798Z",
@@ -86,7 +86,7 @@ mocksData.push({
         title: "test",
         template_id: "format1",
         template_data:
-          '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Slightly agree","label":"6"},{"value":"Strongly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional."}',
+          '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional."}',
       },
     },
   },
@@ -108,7 +108,7 @@ mocksData.push({
         description: "test des",
         title: "test",
         template_id: "format1",
-        template_data: `{"intro":"People's problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Slightly agree","label":"6"},{"value":"Strongly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[{"id":"some","question":"testquestion"}],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional."}`,
+        template_data: `{"intro":"People's problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[{"id":"some","question":"testquestion"}],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional."}`,
       },
     },
   },
@@ -134,13 +134,12 @@ const sut = async () => {
 };
 
 const fillUpperForm = async () => {
-  const planNameInput = await screen.findByTestId("title");
-  fireEvent.change(planNameInput, {
+  const titleInput = await screen.findByTestId("title");
+  fireEvent.change(titleInput, {
     target: { value: "test" },
   });
 
-  const descriptionInput = await screen.findByTestId("description");
-
+  const descriptionInput = screen.getByTestId("description");
   fireEvent.change(descriptionInput, {
     target: { value: "test des" },
   });
@@ -150,7 +149,7 @@ const fillUpperForm = async () => {
 
 const fillQuestionForm = async () => {
   await fillUpperForm();
-  const addQuestionButton = screen.getByTestId("addQuestionButton");
+  const addQuestionButton = await screen.findByTestId("addQuestionButton");
   fireEvent.click(addQuestionButton);
   const firstQuestionInput = screen.getByTestId(
     "templateData.questions.0.question"
@@ -162,7 +161,7 @@ const fillQuestionForm = async () => {
 
 const submitForm = async () => {
   await sut();
-  await fillUpperForm();
+  fillUpperForm();
   const submitFormButton = await screen.findByTestId("submitForm");
   fireEvent.click(submitFormButton);
 };
@@ -171,7 +170,7 @@ const submitFullForm = async () => {
   await sut();
 
   await fillQuestionForm();
-  const submitFormButton = await screen.findByTestId("submitForm");
+  const submitFormButton = screen.getByTestId("submitForm");
   fireEvent.click(submitFormButton);
 };
 
@@ -198,12 +197,12 @@ describe("Therapist update measures", () => {
 
   it("when cancel button press", async () => {
     await sut();
-    await fillUpperForm();
+    fillUpperForm();
     const cancelButton = await screen.findByTestId("cancelForm");
     expect(cancelButton).toBeInTheDocument();
     fireEvent.click(cancelButton);
 
-    const confirmButton = await screen.findByRole("button", {
+    const confirmButton = screen.getByRole("button", {
       name: "Confirm",
     });
 
@@ -211,12 +210,6 @@ describe("Therapist update measures", () => {
   });
 
   it("should submit full form data", async () => {
-    // (useRouter as jest.Mock).mockReturnValue({
-    //     query: {
-    //       measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-full",
-    //     },
-    //     push: pushMock,
-    //   });
     (uniqueString as jest.Mock).mockReturnValue("some");
     await submitFullForm();
     const confirmButton = await screen.findByRole("button", {
@@ -228,13 +221,15 @@ describe("Therapist update measures", () => {
   });
 
   it("should render delete", async () => {
-    await submitFullForm();
-    const deleteIntroButton = screen.getByTestId("iconButtonQuestion_intro");
+    submitFullForm();
+    const deleteIntroButton = await screen.findByTestId(
+      "iconButtonQuestion_intro"
+    );
     expect(deleteIntroButton).toBeInTheDocument();
     fireEvent.click(deleteIntroButton);
     expect(deleteIntroButton).not.toBeInTheDocument();
 
-    const questionFirstDeleteButton = screen.getByTestId(
+    const questionFirstDeleteButton = await screen.findByTestId(
       "iconButtonQuestion_0"
     );
     expect(questionFirstDeleteButton).toBeInTheDocument();
@@ -259,8 +254,8 @@ describe("Therapist update measures", () => {
       push: pushMock,
     });
     await sut();
-    await fillUpperForm();
-    const lastOptionText = screen.getByText(/15-21 severe anxiety./i);
+    fillUpperForm();
+    const lastOptionText = await screen.findByText(/15-21 severe anxiety./i);
     expect(lastOptionText).toBeInTheDocument();
     const firstQuestionDeleteButton = screen.getByTestId(
       "iconButtonQuestion_templateData.questions.bodyRows.0"
