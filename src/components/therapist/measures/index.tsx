@@ -47,7 +47,7 @@ const Measures: React.FC = () => {
         update: {
           description,
           share_status: pressedIconButton == "share" ? 1 : share_status,
-          status: pressedIconButton == "delete" ? 1 : status,
+          status: pressedIconButton == "delete" ? 0 : status,
           template_data,
           template_id,
           title,
