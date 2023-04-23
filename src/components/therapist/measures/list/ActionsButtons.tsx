@@ -31,9 +31,18 @@ const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
           key={`iconButton_${_id}_${i}`}
           aria-label={`iconButton_${_id}_${i}`}
           data-testid={`iconButton_${_id}_${i}`}
-          onClick={() => {
-            buttonClick({ ...data, ...{ pressedIconButton: id } });
-          }}
+          style={
+            id == "share" && data?.share_status == 1
+              ? { backgroundColor: "#6EC9DB" }
+              : null
+          }
+          onClick={
+            id == "share" && data?.share_status == 1
+              ? null
+              : () => {
+                  buttonClick({ ...data, ...{ pressedIconButton: id } });
+                }
+          }
           className="actionButton"
         >
           <Icon />

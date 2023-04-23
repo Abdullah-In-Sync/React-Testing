@@ -65,11 +65,11 @@ const Measures: React.FC = () => {
     fetchPolicy: "no-cache",
   });
 
-  const [updateMeasure, { data, loading, error }] = useMutation<
+  const [updateMeasure] = useMutation<
     UpdateTherapistMeasureRes,
     UpdateTherapistMeasureVars
   >(UPDATE_THERAPIST_MEASURE, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       /* istanbul ignore next */
       setIsSuccess(true);
     },
