@@ -139,7 +139,7 @@ const fillUpperForm = async () => {
     target: { value: "test" },
   });
 
-  const descriptionInput = screen.getByTestId("description");
+  const descriptionInput = await screen.findByTestId("description");
   fireEvent.change(descriptionInput, {
     target: { value: "test des" },
   });
@@ -151,7 +151,7 @@ const fillQuestionForm = async () => {
   await fillUpperForm();
   const addQuestionButton = await screen.findByTestId("addQuestionButton");
   fireEvent.click(addQuestionButton);
-  const firstQuestionInput = screen.getByTestId(
+  const firstQuestionInput = await screen.findByTestId(
     "templateData.questions.0.question"
   );
   fireEvent.change(firstQuestionInput, {
@@ -161,16 +161,15 @@ const fillQuestionForm = async () => {
 
 const submitForm = async () => {
   await sut();
-  fillUpperForm();
+  await fillUpperForm();
   const submitFormButton = await screen.findByTestId("submitForm");
   fireEvent.click(submitFormButton);
 };
 
 const submitFullForm = async () => {
   await sut();
-
   await fillQuestionForm();
-  const submitFormButton = screen.getByTestId("submitForm");
+  const submitFormButton = await screen.findByTestId("submitForm");
   fireEvent.click(submitFormButton);
 };
 
@@ -186,7 +185,6 @@ beforeEach(() => {
 describe("Therapist update measures", () => {
   it("should render therapist update measures page and submit the form", async () => {
     await submitForm();
-
     const confirmButton = await screen.findByRole("button", {
       name: "Confirm",
     });
@@ -197,7 +195,7 @@ describe("Therapist update measures", () => {
 
   it("when cancel button press", async () => {
     await sut();
-    fillUpperForm();
+    await fillUpperForm();
     const cancelButton = await screen.findByTestId("cancelForm");
     expect(cancelButton).toBeInTheDocument();
     fireEvent.click(cancelButton);
@@ -221,7 +219,7 @@ describe("Therapist update measures", () => {
   });
 
   it("should render delete", async () => {
-    submitFullForm();
+    await submitFullForm();
     const deleteIntroButton = await screen.findByTestId(
       "iconButtonQuestion_intro"
     );
@@ -234,11 +232,11 @@ describe("Therapist update measures", () => {
     );
     expect(questionFirstDeleteButton).toBeInTheDocument();
     fireEvent.click(questionFirstDeleteButton);
-    const confirmButton = screen.getByTestId("confirmButton");
+    const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
     expect(questionFirstDeleteButton).not.toBeInTheDocument();
 
-    const templateDescriptionDeleteButton = screen.getByTestId(
+    const templateDescriptionDeleteButton = await screen.findByTestId(
       "iconButtonQuestion_templateDataDescription"
     );
     expect(templateDescriptionDeleteButton).toBeInTheDocument();
@@ -254,57 +252,57 @@ describe("Therapist update measures", () => {
       push: pushMock,
     });
     await sut();
-    fillUpperForm();
+    await fillUpperForm();
     const lastOptionText = await screen.findByText(/15-21 severe anxiety./i);
     expect(lastOptionText).toBeInTheDocument();
-    const firstQuestionDeleteButton = screen.getByTestId(
+    const firstQuestionDeleteButton = await screen.findByTestId(
       "iconButtonQuestion_templateData.questions.bodyRows.0"
     );
     fireEvent.click(firstQuestionDeleteButton);
-    const addQuestionButton = screen.getByTestId("addQuestionButton");
+    const addQuestionButton = await screen.findByTestId("addQuestionButton");
     fireEvent.click(addQuestionButton);
-    const row1Col1Input = screen.getByTestId(
+    const row1Col1Input = await screen.findByTestId(
       "templateData.questions.bodyRows.0.col1"
     );
     fireEvent.change(row1Col1Input, {
       target: { value: "testquestion" },
     });
-    const row1Col2Input = screen.getByTestId(
+    const row1Col2Input = await screen.findByTestId(
       "templateData.questions.bodyRows.0.col2"
     );
     fireEvent.change(row1Col2Input, {
       target: { value: "0" },
     });
-    const row1Col3Input = screen.getByTestId(
+    const row1Col3Input = await screen.findByTestId(
       "templateData.questions.bodyRows.0.col1"
     );
     fireEvent.change(row1Col3Input, {
       target: { value: "1" },
     });
-    const row1Col4Input = screen.getByTestId(
+    const row1Col4Input = await screen.findByTestId(
       "templateData.questions.bodyRows.0.col2"
     );
     fireEvent.change(row1Col4Input, {
       target: { value: "2" },
     });
-    const row1Col5Input = screen.getByTestId(
+    const row1Col5Input = await screen.findByTestId(
       "templateData.questions.bodyRows.0.col2"
     );
     fireEvent.change(row1Col5Input, {
       target: { value: "3" },
     });
 
-    const submitFormButton = screen.getByTestId("submitForm");
+    const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
-    const cancelButton = screen.getByTestId("cancelButton");
+    const cancelButton = await screen.findByTestId("cancelButton");
     fireEvent.click(cancelButton);
     expect(cancelButton).not.toBeInTheDocument();
 
-    const optionsQuestionsDelete = screen.getByTestId(
+    const optionsQuestionsDelete = await screen.findByTestId(
       "iconButtonQuestion_templateData.optionsQuestions.1.question"
     );
     fireEvent.click(optionsQuestionsDelete);
-    const optionConfirmButton = screen.getByTestId("confirmButton");
+    const optionConfirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(optionConfirmButton);
     expect(lastOptionText).not.toBeInTheDocument();
   });
