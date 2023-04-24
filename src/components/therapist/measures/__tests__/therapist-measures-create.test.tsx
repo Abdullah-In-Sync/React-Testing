@@ -266,7 +266,7 @@ describe("Therapist create measures", () => {
   it("when change to format 2", async () => {
     await sut();
     await fillUpperForm(2);
-    const lastOptionText = screen.getByText(/15-21 severe anxiety./i);
+    const lastOptionText = await screen.findByText(/15-21 severe anxiety./i);
     expect(lastOptionText).toBeInTheDocument();
     const firstQuestionDeleteButton = await screen.findByTestId(
       "iconButtonQuestion_templateData.questions.bodyRows.0"
