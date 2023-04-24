@@ -133,6 +133,8 @@ export const GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA = gql`
       ptsession_id
       ptshareres_id
       resource_id
+      resource_name
+      resource_url
       therapist_id
       therapist_resp
       therapy_id

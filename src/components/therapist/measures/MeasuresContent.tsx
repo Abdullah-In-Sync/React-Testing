@@ -10,12 +10,14 @@ type ViewProps = {
   listData: TherapistListMeasuresEntity[];
   onClickCreateMeasure: () => void;
   actionButtonClick: (value) => void;
+  onPressAddPlan?: () => void;
 };
 
 const MeasuresContent: React.FC<ViewProps> = ({
   listData,
   onClickCreateMeasure,
   actionButtonClick,
+  onPressAddPlan,
 }) => {
   const styles = useStyles();
 
@@ -35,8 +37,8 @@ const MeasuresContent: React.FC<ViewProps> = ({
           </CommonButton>
           <CommonButton
             variant="contained"
-            onClick={null}
-            data-testid="addQuestionButton"
+            onClick={onPressAddPlan}
+            data-testid="addMeasureButton"
           >
             Add Measure
           </CommonButton>

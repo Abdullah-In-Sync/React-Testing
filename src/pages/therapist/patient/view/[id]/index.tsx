@@ -172,7 +172,10 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
               </Typography>
             </Grid>
             <Grid item xs={4}>
-              <FormControl sx={{ mt: 3, minWidth: 120 }} size="small">
+              <FormControl
+                sx={{ mt: 3, minWidth: 120, maxWidth: "100%" }}
+                size="small"
+              >
                 <InputLabel id="lblSelectTherapy" style={{ color: "#fff" }}>
                   Select Therapy
                 </InputLabel>
