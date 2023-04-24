@@ -3,87 +3,69 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import EditMeasuresComponent from "../../../../../components/admin/measures/edit/EditMeasures";
-import ContentHeader from "../../../../../components/common/ContentHeader";
-import { ConfirmInfoElement } from "../../../../../components/common/CustomModal/InfoModal";
-import Loader from "../../../../../components/common/Loader";
-import { ConfirmElement } from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
-import Layout from "../../../../../components/layout";
+
+import EditMeasuresComponent from "../../../../../../../../components/therapist/measures/edit/EditMeasures";
+import ContentHeader from "../../../../../../../../components/common/ContentHeader";
+import { ConfirmInfoElement } from "../../../../../../../../components/common/CustomModal/InfoModal";
+import Loader from "../../../../../../../../components/common/Loader";
+import { ConfirmElement } from "../../../../../../../../components/common/TemplateFormat/ConfirmWrapper";
+import Layout from "../../../../../../../../components/layout";
 import {
-  AdMIN_VIEW_MEASURE,
-  ADMIN_UPDATE_MEASURE,
-} from "../../../../../graphql/Measure/graphql";
+  THERAPIST_VIEW_MEASURE,
+  THERAPIST_UPDATE_MEASURE,
+} from "../../../../../../../../graphql/Measure/graphql";
 import {
   UpdateMeasureByIdResponse,
   UpdateMeasureByIdVars,
-  ViewMeasureData,
-} from "../../../../../graphql/Measure/types";
-import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
+  TherapistViewMeasuresData,
+} from "../../../../../../../../graphql/Measure/types";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();
   const {
-    query: { id },
+    query: { id, measureId: queryMeasureId },
   } = router;
-  const measureId = id as string;
+  const patientId = id as string;
+  const measureId = queryMeasureId as string;
   const [updateMeasure] = useMutation<
     UpdateMeasureByIdResponse,
     UpdateMeasureByIdVars
-  >(ADMIN_UPDATE_MEASURE);
+  >(THERAPIST_UPDATE_MEASURE);
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
 
   const [
-    getAdminMeasure,
+    getTherapistMeasure,
     {
       loading: loadingMeasureData,
-      data: { adminViewMeasureById: measureData = null } = {},
+      data: { therapistViewMeasure: measureData = null } = {},
     },
-  ] = useLazyQuery<ViewMeasureData>(AdMIN_VIEW_MEASURE, {
+  ] = useLazyQuery<TherapistViewMeasuresData>(THERAPIST_VIEW_MEASURE, {
     fetchPolicy: "cache-and-network",
     onCompleted: () => {
       setLoader(false);
     },
   });
 
-  const [
-    getOrgList,
-    { data: { getOrganizationData: organizationList = [] } = {} },
-  ] = useLazyQuery(GET_ORGANIZATION_LIST, {
-    onCompleted: () => {
-      /* istanbul ignore next */
-      setLoader(false);
-    },
-  });
-
   useEffect(() => {
-    getAdminMeasure({
+    getTherapistMeasure({
       variables: {
         measureId,
       },
     });
-    getOrgList();
   }, []);
-
-  const selectedOrgIds = (orgId) => {
-    if (orgId === "all") {
-      /* istanbul ignore next */
-      return organizationList.map((item) => item._id).join(",");
-    } else return orgId;
-  };
 
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
-    const { orgId, description, templateData, templateId, title } = formFields;
+    const { description, templateData, templateId, title } = formFields;
 
     const variables = {
       measureId,
       update: {
         title,
         description: description,
-        org_id: selectedOrgIds(orgId),
         template_data: JSON.stringify(templateData),
         template_id: templateId,
       },
@@ -111,13 +93,12 @@ const CreateMeasures: NextPage = () => {
 
   const deleteQuestion = async (templateData, doneCallback) => {
     setLoader(true);
-    const { org_id, description, template_id, title } = measureData;
+    const { description, template_id, title } = measureData;
     const variables = {
       measureId,
       update: {
         title,
         description: description,
-        org_id: org_id,
         template_data: JSON.stringify(templateData),
         template_id,
       },
@@ -157,13 +138,13 @@ const CreateMeasures: NextPage = () => {
 
   /* istanbul ignore next */
   const cancelConfirm = (callback) => {
-    router.back();
+    handleOk();
     callback();
   };
 
   /* istanbul ignore next */
   const handleOk = () => {
-    router.push(`/admin/measures`);
+    router.push(`/therapist/patient/view/${patientId}/?tab=measures`);
   };
 
   const handleDeleteQuestion = ({ callback, item }) => {
@@ -189,7 +170,6 @@ const CreateMeasures: NextPage = () => {
         <ContentHeader title="Edit Measures" />
         {!loadingMeasureData && (
           <EditMeasuresComponent
-            organizationList={organizationList}
             submitForm={handleSavePress}
             onPressCancel={onPressCancel}
             measureData={measureData}

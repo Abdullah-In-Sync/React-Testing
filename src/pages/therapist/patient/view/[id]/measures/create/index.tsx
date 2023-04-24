@@ -19,7 +19,7 @@ const CreateMeasures: NextPage = () => {
   const patientId = id as string;
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
-  const [loader, setLoader] = useState<boolean>(true);
+  const [loader, setLoader] = useState<boolean>(false);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [createMeasures] = useMutation(THERAPIST_CREATE_MEASURES);
 
@@ -50,6 +50,7 @@ const CreateMeasures: NextPage = () => {
             } else {
               confirmRef.current.showSuccess({
                 description: "Your measures has been created successfully.",
+                handleOk,
               });
             }
             doneCallback();
@@ -85,8 +86,12 @@ const CreateMeasures: NextPage = () => {
 
   /* istanbul ignore next */
   const cancelConfirm = (callback) => {
-    router.back();
+    handleOk();
     callback();
+  };
+
+  const handleOk = () => {
+    router.push(`/therapist/patient/view/${patientId}/?tab=measures`);
   };
 
   return (

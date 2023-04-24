@@ -198,3 +198,10 @@ export interface TherapistListMeasuresEntity {
   updated_date: string;
   __typename: string;
 }
+
+export interface TherapistViewMeasures {
+  data: TherapistViewMeasuresData;
+}
+export interface TherapistViewMeasuresData {
+  therapistViewMeasure: TherapistListMeasuresEntity;
+}

@@ -43,6 +43,7 @@ const CommonForm: React.FC<ViewProps> = ({
     else setFieldValue("orgId", value.join(","));
   };
 
+  /* istanbul ignore next */
   const handleChangeFormat = (e) => {
     if (!isEdit) {
       const {

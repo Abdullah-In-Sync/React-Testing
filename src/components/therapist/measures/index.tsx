@@ -32,11 +32,19 @@ const Measures: React.FC = () => {
 
   /* istanbul ignore next */
   const handleCreateMeasure = () => {
-    router.push("/measures/create");
+    router.push(`/therapist/patient/view/${patientId}/measures/create`);
   };
 
   /* istanbul ignore next */
-  const actionButtonClick = () => null;
+  const actionButtonClick = (v) => {
+    const { pressedIconButton, _id } = v;
+    switch (pressedIconButton) {
+      case "edit":
+        return router.push(
+          `/therapist/patient/view/${patientId}/measures/edit/${_id}`
+        );
+    }
+  };
 
   if (loadingMeasuresList) return <Loader visible={true} />;
 

@@ -16,7 +16,7 @@ export const format1: templateTypes.TemplateFormat = {
         label: "1",
       },
       {
-        value: "slightly disagree",
+        value: "Slightly disagree",
         label: "2",
       },
       {
@@ -32,11 +32,11 @@ export const format1: templateTypes.TemplateFormat = {
         label: "5",
       },
       {
-        value: "Slightly agree",
+        value: "Somewhat agree",
         label: "6",
       },
       {
-        value: "Strongly agree",
+        value: "Slightly agree",
         label: "7",
       },
       {
@@ -101,14 +101,14 @@ export const format2: templateTypes.TemplateFormat = {
       footerRows: [
         {
           col1: "Column Total",
-          col2: "0",
-          col3: "1",
-          col4: "2",
-          col5: "3",
+          col2: "",
+          col3: "",
+          col4: "",
+          col5: "",
         },
         {
           col1: "Total Score",
-          colAvg: "0",
+          colAvg: "",
         },
       ],
     },

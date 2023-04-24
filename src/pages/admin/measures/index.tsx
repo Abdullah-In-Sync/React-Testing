@@ -7,7 +7,7 @@ import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import {
-  UPDATE_MEASURE,
+  ADMIN_UPDATE_MEASURE,
   GET_ADMIN_MEASURES_LIST,
 } from "../../../graphql/Measure/graphql";
 
@@ -42,7 +42,7 @@ const MeasuresListPage: NextPage = () => {
   const [updateMeasure] = useMutation<
     UpdateMeasureByIdResponse,
     UpdateMeasureByIdVars
-  >(UPDATE_MEASURE);
+  >(ADMIN_UPDATE_MEASURE);
 
   useEffect(() => {
     getOrgList();
