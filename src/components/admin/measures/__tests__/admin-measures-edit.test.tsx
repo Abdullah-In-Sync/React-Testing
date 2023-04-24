@@ -218,7 +218,7 @@ const fillUpperForm = async (_?: number, orgOption?: number) => {
 
 const fillQuestionForm = async () => {
   await fillUpperForm();
-  const addQuestionButton = screen.getByTestId("addQuestionButton");
+  const addQuestionButton = await screen.findByTestId("addQuestionButton");
   fireEvent.click(addQuestionButton);
   const firstQuestionInput = screen.getByTestId(
     "templateData.questions.0.question"

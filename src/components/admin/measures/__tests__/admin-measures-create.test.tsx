@@ -201,7 +201,7 @@ const fillUpperForm = async (formatType?: number, orgOption?: number) => {
 };
 
 const fillQuestionForm = async () => {
-  fillUpperForm();
+  await fillUpperForm();
   const addQuestionButton = await screen.findByTestId("addQuestionButton");
   fireEvent.click(addQuestionButton);
   const firstQuestionInput = screen.getByTestId(

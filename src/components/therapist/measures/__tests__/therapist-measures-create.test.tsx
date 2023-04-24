@@ -138,9 +138,9 @@ const fillUpperForm = (formatType?: number) => {
   expect(descriptionInput).toBeInTheDocument();
 };
 
-const fillQuestionForm = () => {
-  fillUpperForm();
-  const addQuestionButton = screen.getByTestId("addQuestionButton");
+const fillQuestionForm = async () => {
+  await fillUpperForm();
+  const addQuestionButton = await screen.findByTestId("addQuestionButton");
   fireEvent.click(addQuestionButton);
   const firstQuestionInput = screen.getByTestId(
     "templateData.questions.0.question"
