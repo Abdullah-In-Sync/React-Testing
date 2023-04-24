@@ -31,7 +31,6 @@ import withAuthentication from "../../../../hoc/auth";
 
 const ResourceDetailById: NextPage = () => {
   const router = useRouter();
-  const fromUrl = router?.query?.from;
   const id = router.query.id as string;
   const [loader, setLoader] = useState<boolean>(false);
   const [ptId, setPtId] = useState<string>("");
@@ -95,27 +94,20 @@ const ResourceDetailById: NextPage = () => {
           {patientResourceData?.getResourceDetailById != null ? (
             <Grid container rowSpacing={2} data-testid="patResourceDetail">
               <Grid item xs={6} data-testid="backButton">
-                <NextLink
-                  passHref
-                  href={{
-                    pathname: fromUrl
-                      ? (fromUrl as string)
-                      : "/patient/resource",
-                    query: {
-                      tabName: router.query.tabName,
-                    },
-                  }}
+                <Button
+                  mat-button
+                  className={`text-white bg-themeblue`}
+                  variant="contained"
+                  sx={{ textTransform: "none" }}
+                  onClick={() =>
+                    /* istanbul ignore next */
+                    router.back()
+                  }
                 >
-                  <Button
-                    mat-button
-                    className={`text-white bg-themeblue`}
-                    variant="contained"
-                    sx={{ textTransform: "none" }}
-                  >
-                    <KeyboardBackspaceIcon />
-                    Back
-                  </Button>
-                </NextLink>
+                  <KeyboardBackspaceIcon />
+                  Back
+                </Button>
+
                 {patientResourceData.getResourceDetailById[0].resource_data[0]
                   .resource_issmartdraw == "1" && (
                   <NextLink

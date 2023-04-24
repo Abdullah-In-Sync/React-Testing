@@ -83,37 +83,47 @@ const ResourcePopup: React.FC<ViewProps> = ({
             boxShadow: 24,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              placeItems: "center",
-              justifyContent: "space-between",
-              p: 1,
-              bgcolor: "background.paper",
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 999,
               backgroundColor: "#6EC9DB",
-              borderRadius: "5px 5px 0 0",
-              paddingBottom: "13px",
             }}
           >
-            <div></div>
-            <Typography
+            <Box
               sx={{
-                color: "white",
-                fontWeight: "bold",
-                display: "grid",
+                display: "flex",
                 placeItems: "center",
+                justifyContent: "space-between",
+                p: 1,
+                bgcolor: "background.paper",
+                backgroundColor: "#6EC9DB",
+                borderRadius: "5px 5px 0 0",
+                paddingBottom: "13px",
               }}
             >
-              Select Resources
-            </Typography>
-            <IconButton
-              style={{ color: "white" }}
-              size="small"
-              onClick={() => setOpenResourceModal(false)}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Box>
+              <div></div>
+              <Typography
+                sx={{
+                  color: "white",
+                  fontWeight: "bold",
+                  display: "grid",
+                  placeItems: "center",
+                }}
+              >
+                Select Resources
+              </Typography>
+              <IconButton
+                style={{ color: "white" }}
+                size="small"
+                onClick={() => setOpenResourceModal(false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </div>
+
           <Box
             style={{
               padding: "15px",
@@ -243,24 +253,34 @@ const ResourcePopup: React.FC<ViewProps> = ({
               ))}
             </Grid>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              paddingBottom: "10px",
+          <div
+            style={{
+              position: "sticky",
+              bottom: 0,
+              zIndex: 999,
+              backgroundColor: "#ffff",
+              paddingTop: "10px",
             }}
           >
-            <Button
-              data-testid="assign_resource_button"
-              variant="contained"
-              style={{
-                backgroundColor: "#6BA08E",
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                paddingBottom: "10px",
               }}
-              onClick={() => assigneHomeworkResources(selectResourceId)}
             >
-              Assign Resource
-            </Button>
-          </Box>
+              <Button
+                data-testid="assign_resource_button"
+                variant="contained"
+                style={{
+                  backgroundColor: "#6BA08E",
+                }}
+                onClick={() => assigneHomeworkResources(selectResourceId)}
+              >
+                Assign Resource
+              </Button>
+            </Box>
+          </div>
         </Box>
       </Modal>
     </Box>

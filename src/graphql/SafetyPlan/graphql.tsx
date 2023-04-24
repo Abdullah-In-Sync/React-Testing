@@ -230,6 +230,24 @@ export const GET_THERAPIST_SAFETY_PLAN_LIST = gql`
     }
   }
 `;
+
+export const GET_THERAPIST_MEASURES_PLAN_LIST = gql`
+  query MyQuery {
+    therapistGetAdminMeasures {
+      _id
+      created_date
+      description
+      org_id
+      organization_name
+      status
+      template_data
+      template_id
+      title
+      updated_date
+    }
+  }
+`;
+
 export const VIEW_SAFETY_BY_PATIENT_ID = gql`
   query viewSafetyPlanById($planId: ID!) {
     viewSafetyPlanById(planId: $planId) {
@@ -307,6 +325,14 @@ export const UPDATE_THERAPIST_SAFETY_PLAN = gql`
 export const ADD_THERAPIST_SAFETY_PLAN = gql`
   mutation addTherapistSafetyPlan($patientId: String!, $planId: String!) {
     addTherapistSafetyPlan(patientId: $patientId, planId: $planId) {
+      result
+    }
+  }
+`;
+
+export const ADD_THERAPIST_MEASURE_PLAN_ADD = gql`
+  mutation therapistAddMeasure($patient_id: String!, $measure_id: String!) {
+    therapistAddMeasure(patient_id: $patient_id, measure_id: $measure_id) {
       result
     }
   }
