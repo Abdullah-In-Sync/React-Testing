@@ -41,6 +41,19 @@ const Measures: React.FC = () => {
       pressedIconButton,
     } = selectedMeasure.current;
     setIsConfirmationModel(false);
+    console.debug({
+      variables: {
+        measure_id: _id,
+        update: {
+          description,
+          share_status: pressedIconButton == "share" ? 1 : share_status,
+          status: pressedIconButton == "delete" ? 0 : status,
+          template_data,
+          template_id,
+          title,
+        },
+      },
+    });
     updateMeasure({
       variables: {
         measure_id: _id,
@@ -83,17 +96,22 @@ const Measures: React.FC = () => {
 
   /* istanbul ignore next */
   const handleCreateMeasure = () => {
-    router.push("/measures/create");
+    router.push(`/therapist/patient/view/${patientId}/measures/create`);
   };
 
   /* istanbul ignore next */
   const actionButtonClick = (value) => {
     selectedMeasure.current = value;
-    if (value?.pressedIconButton == "share") {
-      setIsConfirmationModel(true);
-    }
-    if (value?.pressedIconButton == "delete") {
-      setIsConfirmationModel(true);
+    const { pressedIconButton, _id } = value;
+    switch (pressedIconButton) {
+      case "edit":
+        return router.push(
+          `/therapist/patient/view/${patientId}/measures/edit/${_id}`
+        );
+      case "share":
+      case "delete":
+        setIsConfirmationModel(true);
+        break;
     }
   };
 

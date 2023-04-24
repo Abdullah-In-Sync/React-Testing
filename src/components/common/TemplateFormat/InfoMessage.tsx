@@ -96,7 +96,8 @@ const InfoMessage: React.FC<ViewProps> = ({ data = {}, modalRef }) => {
         </Box>
         <Box className="textWrapper">
           <Typography variant="h6">
-            Following Measure already exist! kindly uncheck to proceed
+            Following measure already exists ! Kindly uncheck the enlisted
+            organisation to proceed
           </Typography>
         </Box>
       </Box>

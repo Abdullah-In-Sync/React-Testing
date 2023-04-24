@@ -45,6 +45,14 @@ const MeasuresList: React.FC<ViewProps> = ({
     );
   };
 
+  const infoBox = (message) => {
+    return (
+      <Box className="infoMessageBoxWrapper">
+        <Typography>{message}</Typography>
+      </Box>
+    );
+  };
+
   const accordionList = () => {
     return (listData as Array<TherapistListMeasuresEntity>).map((item, i) => {
       const { title } = item;
@@ -52,11 +60,9 @@ const MeasuresList: React.FC<ViewProps> = ({
     });
   };
 
-  return (
-    <>
-      <Stack className="measuresListWrapper">{accordionList()}</Stack>;
-    </>
-  );
+  if (listData.length <= 0) return infoBox("No data found.");
+
+  return <Stack className="measuresListWrapper">{accordionList()}</Stack>;
 };
 
 export default MeasuresList;

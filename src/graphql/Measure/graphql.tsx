@@ -152,7 +152,7 @@ export const CREATE_MEASURE_TEMPLATE = gql`
   }
 `;
 
-export const UPDATE_MEASURE = gql`
+export const ADMIN_UPDATE_MEASURE = gql`
   mutation adminUpdateMeasureById(
     $measureId: ID!
     $update: UpdateMeasureInput
@@ -250,6 +250,69 @@ export const UPDATE_THERAPIST_MEASURE = gql`
   ) {
     updateTherapistMeasure(measure_id: $measure_id, update: $update) {
       _id
+    }
+  }
+`;
+
+export const THERAPIST_VIEW_MEASURE = gql`
+  query TherapistViewMeasure($measureId: String!) {
+    therapistViewMeasure(measure_id: $measureId) {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        status
+        template_data
+        template_id
+      }
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
+export const THERAPIST_UPDATE_MEASURE = gql`
+  mutation UpdateTherapistMeasure(
+    $measureId: String!
+    $update: UpdateTherapistMeasureInput
+  ) {
+    updateTherapistMeasure(measure_id: $measureId, update: $update) {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      scores_list {
+        template_id
+        template_data
+        status
+        score
+        measure_id
+        created_date
+        added_by
+        _id
+      }
+      updated_date
+      title
+      therapist_id
+      template_id
+      template_data
+      status
+      share_status
     }
   }
 `;

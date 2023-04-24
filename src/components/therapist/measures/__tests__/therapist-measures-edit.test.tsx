@@ -1,15 +1,14 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
-import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import EditMeasuresPage from "../../../../pages/admin/measures/edit/[id]";
+import EditMeasuresPage from "../../../../pages/therapist/patient/view/[id]/measures/edit/[measureId]";
 
 import { useRouter } from "next/router";
 import {
-  AdMIN_VIEW_MEASURE,
-  ADMIN_UPDATE_MEASURE,
+  THERAPIST_VIEW_MEASURE,
+  THERAPIST_UPDATE_MEASURE,
 } from "../../../../graphql/Measure/graphql";
 import theme from "../../../../styles/theme/theme";
 import { uniqueString } from "../../../../utility/helper";
@@ -29,62 +28,17 @@ const mocksData = [];
 
 mocksData.push({
   request: {
-    query: GET_ORGANIZATION_LIST,
-  },
-  result: {
-    data: {
-      getOrganizationData: [
-        {
-          _id: "2301536c4d674b3598814174d8f19593",
-          contract:
-            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>",
-          created_date: "2022-12-05T09:47:11.000Z",
-          logo: "",
-          logo_url: null,
-          name: "actions.dev-myhelp",
-          panel_color: "#6ec9db",
-          patient: "Patient",
-          patient_plural: "Patients",
-          side_menu_color: "#6ec9db",
-          therapist: "Therapist",
-          therapy: "Therapy",
-          __typename: "Organization",
-        },
-        {
-          _id: "72b6b276ee55481682cb9bf246294faa",
-          contract:
-            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>",
-          created_date: "2022-12-05T09:47:11.000Z",
-          logo: "",
-          logo_url: null,
-          name: "second",
-          panel_color: "#6ec9db",
-          patient: "Patient",
-          patient_plural: "Patients",
-          side_menu_color: "#6ec9db",
-          therapist: "Therapist",
-          therapy: "Therapy",
-          __typename: "Organization",
-        },
-      ],
-    },
-  },
-});
-
-mocksData.push({
-  request: {
-    query: AdMIN_VIEW_MEASURE,
+    query: THERAPIST_VIEW_MEASURE,
     variables: {
       measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
     },
   },
   result: {
     data: {
-      adminViewMeasureById: {
+      therapistViewMeasure: {
         _id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
         created_date: "2023-04-10T18:08:28.798Z",
         description: "",
-        org_id: "",
         organization_name: "portal.dev-myhelp",
         status: 1,
         template_data:
@@ -92,7 +46,6 @@ mocksData.push({
         template_id: "format1",
         title: "test",
         updated_date: "2023-04-10T18:08:28.798Z",
-        __typename: "AdminMeasures",
       },
     },
   },
@@ -100,18 +53,17 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: AdMIN_VIEW_MEASURE,
+    query: THERAPIST_VIEW_MEASURE,
     variables: {
       measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-format2",
     },
   },
   result: {
     data: {
-      adminViewMeasureById: {
+      therapistViewMeasure: {
         _id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
         created_date: "2023-04-12T18:00:33.727Z",
         description: "",
-        org_id: "517fa21a82c0464a92aaae90ae0d5c59",
         organization_name: "portal.dev-myhelp",
         status: 1,
         template_data:
@@ -119,7 +71,6 @@ mocksData.push({
         template_id: "format2",
         title: "new",
         updated_date: "2023-04-13T04:48:47.965Z",
-        __typename: "AdminMeasures",
       },
     },
   },
@@ -127,11 +78,10 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: ADMIN_UPDATE_MEASURE,
+    query: THERAPIST_UPDATE_MEASURE,
     variables: {
       measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
       update: {
-        org_id: "2301536c4d674b3598814174d8f19593",
         description: "test des",
         title: "test",
         template_id: "format1",
@@ -142,10 +92,8 @@ mocksData.push({
   },
   result: {
     data: {
-      adminCreateMeasures: {
-        duplicateNames: null,
-        result: true,
-        __typename: "adminResult",
+      updateTherapistMeasure: {
+        _id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
       },
     },
   },
@@ -153,11 +101,10 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: ADMIN_UPDATE_MEASURE,
+    query: THERAPIST_UPDATE_MEASURE,
     variables: {
       measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
       update: {
-        org_id: "2301536c4d674b3598814174d8f19593",
         description: "test des",
         title: "test",
         template_id: "format1",
@@ -167,10 +114,8 @@ mocksData.push({
   },
   result: {
     data: {
-      adminCreateMeasures: {
-        duplicateNames: null,
-        result: true,
-        __typename: "adminResult",
+      updateTherapistMeasure: {
+        _id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
       },
     },
   },
@@ -188,32 +133,18 @@ const sut = async () => {
   );
 };
 
-const fillUpperForm = async (_?: number, orgOption?: number) => {
-  const dropdownSelect = await screen.findByTestId(/actions.dev-myhelp/i);
-  expect(dropdownSelect).toBeInTheDocument();
-
+const fillUpperForm = async () => {
   const titleInput = await screen.findByTestId("title");
   fireEvent.change(titleInput, {
     target: { value: "test" },
   });
 
   const descriptionInput = await screen.findByTestId("description");
-
   fireEvent.change(descriptionInput, {
     target: { value: "test des" },
   });
 
   expect(descriptionInput).toBeInTheDocument();
-  const selectOrganization = await screen.findByTestId("organizationSelect");
-  expect(selectOrganization).toBeInTheDocument();
-
-  const button = within(selectOrganization).getByRole("button");
-  fireEvent.mouseDown(button);
-
-  const listbox = within(screen.getByRole("presentation")).getByRole("listbox");
-  const options = await within(listbox).findAllByRole("option");
-
-  fireEvent.click(options[orgOption ? orgOption : 1]);
 };
 
 const fillQuestionForm = async () => {
@@ -237,7 +168,6 @@ const submitForm = async () => {
 
 const submitFullForm = async () => {
   await sut();
-
   await fillQuestionForm();
   const submitFormButton = await screen.findByTestId("submitForm");
   fireEvent.click(submitFormButton);
@@ -246,14 +176,14 @@ const submitFullForm = async () => {
 beforeEach(() => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
-      id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
+      measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e",
     },
     push: pushMock,
   });
 });
 
-describe("Admin update measures", () => {
-  it("should render admin update measures page and submit the form", async () => {
+describe("Therapist update measures", () => {
+  it("should render therapist update measures page and submit the form", async () => {
     await submitForm();
     const confirmButton = await screen.findByRole("button", {
       name: "Confirm",
@@ -270,7 +200,7 @@ describe("Admin update measures", () => {
     expect(cancelButton).toBeInTheDocument();
     fireEvent.click(cancelButton);
 
-    const confirmButton = await screen.findByRole("button", {
+    const confirmButton = screen.getByRole("button", {
       name: "Confirm",
     });
 
@@ -317,12 +247,12 @@ describe("Admin update measures", () => {
   it("when change to format 2", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
-        id: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-format2",
+        measureId: "04e25ccf-8f3e-48dd-b8ed-a4799a2c023e-format2",
       },
       push: pushMock,
     });
     await sut();
-    await fillUpperForm(2);
+    await fillUpperForm();
     const lastOptionText = await screen.findByText(/15-21 severe anxiety./i);
     expect(lastOptionText).toBeInTheDocument();
     const firstQuestionDeleteButton = await screen.findByTestId(

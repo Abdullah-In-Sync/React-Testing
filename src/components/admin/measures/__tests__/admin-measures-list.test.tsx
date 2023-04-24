@@ -7,7 +7,7 @@ import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 
 import {
   GET_ADMIN_MEASURES_LIST,
-  UPDATE_MEASURE,
+  ADMIN_UPDATE_MEASURE,
 } from "../../../../graphql/Measure/graphql";
 
 import MeasuresListPage from "../../../../pages/admin/measures";
@@ -214,7 +214,7 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: UPDATE_MEASURE,
+    query: ADMIN_UPDATE_MEASURE,
     variables: {
       measureId: "d2393912-bdd6-47a1-98b7-49f9ce9756a0",
       update: {

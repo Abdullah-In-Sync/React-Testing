@@ -232,3 +232,10 @@ export interface UpdateTherapistMeasure {
   therapist_id: null;
   updated_date: string;
 }
+
+export interface TherapistViewMeasures {
+  data: TherapistViewMeasuresData;
+}
+export interface TherapistViewMeasuresData {
+  therapistViewMeasure: TherapistListMeasuresEntity;
+}
