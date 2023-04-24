@@ -152,7 +152,7 @@ const fillQuestionForm = async () => {
 
 const submitForm = async () => {
   await sut();
-  fillUpperForm();
+  await fillUpperForm();
   const submitFormButton = await screen.findByTestId("submitForm");
   fireEvent.click(submitFormButton);
 };
@@ -246,7 +246,7 @@ describe("Therapist create measures", () => {
     fireEvent.click(deleteIntroButton);
     expect(deleteIntroButton).not.toBeInTheDocument();
 
-    const questionFirstDeleteButton = screen.getByTestId(
+    const questionFirstDeleteButton = await screen.findByTestId(
       "iconButtonQuestion_0"
     );
     expect(questionFirstDeleteButton).toBeInTheDocument();
