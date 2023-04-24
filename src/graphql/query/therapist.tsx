@@ -113,9 +113,9 @@ export const GET_THERAPIST_HOMEWORK = gql`
 
 export const GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA = gql`
   query getPatientHomeworkData(
-    $patient_id: String
-    $ptsession_id: String
-    $therapy_id: String
+    $patient_id: String!
+    $ptsession_id: String!
+    $therapy_id: String!
   ) {
     getPatientHomeworkData(
       patient_id: $patient_id
@@ -136,6 +136,61 @@ export const GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA = gql`
       therapist_id
       therapist_resp
       therapy_id
+    }
+  }
+`;
+
+export const GET_POPUP_RESOURCE_LIST_DATA = gql`
+  query getPopupResourceList(
+    $disorderId: String
+    $modelId: String
+    $myFav: Int
+    $myResource: Int
+    $orgId: String
+    $searchText: String
+    $therapyId: String
+  ) {
+    getPopupResourceList(
+      disorderId: $disorderId
+      modelId: $modelId
+      myFav: $myFav
+      myResource: $myResource
+      orgId: $orgId
+      searchText: $searchText
+      therapyId: $therapyId
+    ) {
+      _id
+      agenda_id
+      category_id
+      created_date
+      disorder_id
+      download_resource_url
+      fav_res_detail {
+        _id
+        created_date
+        resfav_status
+        resource_id
+        user_id
+        user_type
+      }
+      model_id
+      org_id
+      resource_avail_onlyme
+      resource_avail_therapist
+      resource_desc
+      resource_instruction
+      resource_isformualation
+      resource_issmartdraw
+      resource_name
+      resource_references
+      resource_returnurl
+      resource_session_no
+      resource_status
+      resource_type
+      resource_url
+      updated_date
+      user_id
+      user_type
     }
   }
 `;
