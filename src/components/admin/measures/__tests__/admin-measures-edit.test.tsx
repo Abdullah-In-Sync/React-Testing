@@ -192,8 +192,8 @@ const fillUpperForm = async (_?: number, orgOption?: number) => {
   const dropdownSelect = await screen.findByTestId(/actions.dev-myhelp/i);
   expect(dropdownSelect).toBeInTheDocument();
 
-  const planNameInput = screen.getByTestId("title");
-  fireEvent.change(planNameInput, {
+  const titleInput = await screen.findByTestId("title");
+  fireEvent.change(titleInput, {
     target: { value: "test" },
   });
 

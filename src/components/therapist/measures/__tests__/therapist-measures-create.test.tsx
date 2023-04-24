@@ -108,7 +108,18 @@ const sut = async () => {
   );
 };
 
-const fillUpperForm = (formatType?: number) => {
+const fillUpperForm = async (formatType?: number) => {
+  const titleInput = await screen.findByTestId("title");
+  fireEvent.change(titleInput, {
+    target: { value: "test" },
+  });
+
+  const descriptionInput = screen.getByTestId("description");
+
+  fireEvent.change(descriptionInput, {
+    target: { value: "test des" },
+  });
+
   const templateFormatSelect = screen.getByTestId("templateFormatSelect");
   fireEvent.click(templateFormatSelect);
   expect(templateFormatSelect).toBeInTheDocument();
@@ -123,19 +134,6 @@ const fillUpperForm = (formatType?: number) => {
     within(listFormatTypeSelect).getAllByRole("option");
 
   fireEvent.click(optionsFormatTypeSelect[formatType ? formatType : 1]);
-
-  const titleInput = screen.getByTestId("title");
-  fireEvent.change(titleInput, {
-    target: { value: "test" },
-  });
-
-  const descriptionInput = screen.getByTestId("description");
-
-  fireEvent.change(descriptionInput, {
-    target: { value: "test des" },
-  });
-
-  expect(descriptionInput).toBeInTheDocument();
 };
 
 const fillQuestionForm = async () => {
