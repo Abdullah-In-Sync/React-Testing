@@ -7,6 +7,7 @@ import {
   FormGroup,
   Grid,
   IconButton,
+  Link,
   Typography,
   styled,
 } from "@mui/material";
@@ -371,6 +372,7 @@ function HomeworkDetails(props: propTypes) {
     setCompleteTaskSuccessModal(false);
     setCompleteResourceAssignedModal(false);
     setOpenResourceModal(false);
+    refetch();
   };
 
   const handleOk2 = () => {
@@ -392,16 +394,19 @@ function HomeworkDetails(props: propTypes) {
           sx={{
             display: "flex",
             justifyContent: "flex-end",
+            alignItems: "center",
           }}
         >
           {lastHomeworkList?.length > 0 && (
             <Box style={{ paddingRight: "10px" }}>
               <FormControl
                 sx={{
-                  m: 1,
                   display: "flex",
                   flexDirection: "row",
-                  alignItems: "center",
+                  border: "1px solid #6EC9DB",
+                  paddingLeft: "10px",
+                  borderRadius: "5px",
+                  height: "38px",
                 }}
                 data-testid="complete_checkbox"
               >
@@ -435,6 +440,11 @@ function HomeworkDetails(props: propTypes) {
               onClick={handleCreateInput}
               data-testid={`add_homework_button`}
               variant="outlined"
+              style={{
+                color: "#6EC9DB",
+                fontWeight: "bold",
+                border: "1px solid #6EC9DB",
+              }}
             >
               Add Homework
             </Button>
@@ -542,7 +552,7 @@ function HomeworkDetails(props: propTypes) {
                     }}
                     data-testid="safety_ques"
                   >
-                    THERAPIST Response
+                    Therapist Response
                   </Typography>
 
                   <Grid container spacing={2} marginBottom={0}>
@@ -608,29 +618,6 @@ function HomeworkDetails(props: propTypes) {
                   }}
                   borderRadius={"7px"}
                 >
-                  <Box
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      paddingBottom: "5px",
-                    }}
-                  >
-                    <IconButtonWrapper
-                      aria-label="create"
-                      size="small"
-                      style={{ backgroundColor: "#6EC9DB" }}
-                    >
-                      <DeleteIcon
-                        style={{ color: "white" }}
-                        data-testid={`button-delete-icon${index}`}
-                        onClick={() => {
-                          setIsConfirmDeleteTask(true);
-                          setDeleteTaskId(data._id);
-                        }}
-                      />
-                    </IconButtonWrapper>
-                  </Box>
-
                   <Grid item xs={12}>
                     <TextFieldComponent
                       name="resource_references"
@@ -663,6 +650,18 @@ function HomeworkDetails(props: propTypes) {
                       paddingTop: "10px",
                     }}
                   >
+                    <Link
+                      data-testid="edit-upload-file"
+                      href={data?.resource_url}
+                      underline="none"
+                      target="_blank"
+                      style={{ paddingTop: "10px", paddingRight: "20px" }}
+                    >
+                      <Typography style={{ color: "black" }}>
+                        {data?.resource_name}
+                      </Typography>
+                    </Link>
+
                     <Button
                       onClick={() => {
                         setOpenResourceModal(true);
@@ -675,6 +674,30 @@ function HomeworkDetails(props: propTypes) {
                     >
                       Add Resource
                     </Button>
+
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        paddingBottom: "5px",
+                        paddingLeft: "5px",
+                      }}
+                    >
+                      <IconButtonWrapper
+                        aria-label="create"
+                        size="small"
+                        style={{ backgroundColor: "#6EC9DB" }}
+                      >
+                        <DeleteIcon
+                          style={{ color: "white" }}
+                          data-testid={`button-delete-icon${index}`}
+                          onClick={() => {
+                            setIsConfirmDeleteTask(true);
+                            setDeleteTaskId(data._id);
+                          }}
+                        />
+                      </IconButtonWrapper>
+                    </Box>
                   </Box>
                 </Box>
               </Box>
@@ -714,26 +737,6 @@ function HomeworkDetails(props: propTypes) {
                   }}
                   borderRadius={"7px"}
                 >
-                  <Box
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      paddingBottom: "5px",
-                    }}
-                  >
-                    <IconButtonWrapper
-                      aria-label="create"
-                      size="small"
-                      style={{ backgroundColor: "#6EC9DB" }}
-                      // data-testid={`button-delete-icon_`}
-                    >
-                      <DeleteIcon
-                        style={{ color: "white" }}
-                        onClick={() => handleDeleteInput(index)}
-                      />
-                    </IconButtonWrapper>
-                  </Box>
-
                   <Grid item xs={12}>
                     <TextFieldComponent
                       name="resource_references"
@@ -766,6 +769,26 @@ function HomeworkDetails(props: propTypes) {
                     >
                       Add Resource
                     </Button>
+
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        paddingBottom: "5px",
+                        paddingLeft: "5px",
+                      }}
+                    >
+                      <IconButtonWrapper
+                        aria-label="create"
+                        size="small"
+                        style={{ backgroundColor: "#6EC9DB" }}
+                      >
+                        <DeleteIcon
+                          style={{ color: "white" }}
+                          onClick={() => handleDeleteInput(index)}
+                        />
+                      </IconButtonWrapper>
+                    </Box>
                   </Box>
                 </Box>
               </div>
@@ -881,7 +904,7 @@ function HomeworkDetails(props: propTypes) {
       </div>
 
       <ConfirmBoxModal
-        infoMessage="You cannot add more than 15 task, Please delete a task to add a new task"
+        infoMessage="You cannot add more than 15 tasks, Please delete a task to add a new task"
         confirmModalRef={confirmModalRef}
       />
 

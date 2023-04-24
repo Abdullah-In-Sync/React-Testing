@@ -168,6 +168,7 @@ const Feedback: NextPage = () => {
   const handleSessionPanelChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setSessionPanelExpanded(isExpanded ? panel : false);
+      setFormValues([]);
     };
 
   /* istanbul ignore next */
