@@ -1,10 +1,17 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import * as React from "react";
-import { GET_THERAPIST_MEASURES_LIST } from "../../../graphql/Measure/graphql";
+import {
+  GET_THERAPIST_MEASURES_LIST,
+  UPDATE_THERAPIST_MEASURE,
+} from "../../../graphql/Measure/graphql";
 import MeasureContent from "./MeasuresContent";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { TherapistMeasuresData } from "../../../graphql/Measure/types";
+import {
+  TherapistMeasuresData,
+  UpdateTherapistMeasureRes,
+  UpdateTherapistMeasureVars,
+} from "../../../graphql/Measure/types";
 import Loader from "../../common/Loader";
 import {
   CommonModal,
@@ -48,6 +55,51 @@ const Measures: React.FC = () => {
     query: { id },
   } = router;
   const patientId = id as string;
+  const [isConfirmationModel, setIsConfirmationModel] = React.useState(false);
+  const selectedMeasure = React.useRef<any>();
+  const [isSuccess, setIsSuccess] = React.useState(false);
+  const onClear = () => {
+    setIsConfirmationModel(false);
+  };
+  const onConfirmSubmit = () => {
+    const {
+      _id,
+      description,
+      share_status,
+      status,
+      template_data,
+      template_id,
+      title,
+      pressedIconButton,
+    } = selectedMeasure.current;
+    setIsConfirmationModel(false);
+    console.debug({
+      variables: {
+        measure_id: _id,
+        update: {
+          description,
+          share_status: pressedIconButton == "share" ? 1 : share_status,
+          status: pressedIconButton == "delete" ? 0 : status,
+          template_data,
+          template_id,
+          title,
+        },
+      },
+    });
+    updateMeasure({
+      variables: {
+        measure_id: _id,
+        update: {
+          description,
+          share_status: pressedIconButton == "share" ? 1 : share_status,
+          status: pressedIconButton == "delete" ? 0 : status,
+          template_data,
+          template_id,
+          title,
+        },
+      },
+    });
+  };
   const [
     getTherapistMeasuresList,
     {
@@ -56,7 +108,17 @@ const Measures: React.FC = () => {
       refetch,
     },
   ] = useLazyQuery<TherapistMeasuresData>(GET_THERAPIST_MEASURES_LIST, {
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "no-cache",
+  });
+
+  const [updateMeasure] = useMutation<
+    UpdateTherapistMeasureRes,
+    UpdateTherapistMeasureVars
+  >(UPDATE_THERAPIST_MEASURE, {
+    onCompleted: () => {
+      /* istanbul ignore next */
+      setIsSuccess(true);
+    },
   });
 
   const [getMeasuresTherapistPlanList, { data: therapistListData }] =
@@ -82,13 +144,18 @@ const Measures: React.FC = () => {
   };
 
   /* istanbul ignore next */
-  const actionButtonClick = (v) => {
-    const { pressedIconButton, _id } = v;
+  const actionButtonClick = (value) => {
+    selectedMeasure.current = value;
+    const { pressedIconButton, _id } = value;
     switch (pressedIconButton) {
       case "edit":
         return router.push(
           `/therapist/patient/view/${patientId}/measures/edit/${_id}`
         );
+      case "share":
+      case "delete":
+        setIsConfirmationModel(true);
+        break;
     }
   };
 
@@ -142,6 +209,7 @@ const Measures: React.FC = () => {
   const handleOk = () => {
     /* istanbul ignore next */
     setAddTaskSuccessModal(false);
+    setIsSuccess(false);
     /* istanbul ignore next */
     refetch();
   };
@@ -171,6 +239,22 @@ const Measures: React.FC = () => {
           label="Are you sure you want to add the measure?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handleAddPlan}
+        />
+      )}
+      {isConfirmationModel && (
+        <ConfirmationModal
+          label={`Are you sure you want to ${selectedMeasure.current.pressedIconButton}
+      the Measures?`}
+          onCancel={onClear}
+          onConfirm={onConfirmSubmit}
+        />
+      )}
+      {isSuccess && (
+        <SuccessModal
+          isOpen={Boolean(isSuccess)}
+          title="Successful"
+          description={`Your Measure has been ${selectedMeasure.current.pressedIconButton}d successfully.`}
+          onOk={handleOk}
         />
       )}
 

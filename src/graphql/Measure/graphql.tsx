@@ -243,6 +243,17 @@ export const GET_THERAPIST_MEASURES_LIST = gql`
   }
 `;
 
+export const UPDATE_THERAPIST_MEASURE = gql`
+  mutation updateTherapistMeasure(
+    $measure_id: String = ""
+    $update: UpdateTherapistMeasureInput = {}
+  ) {
+    updateTherapistMeasure(measure_id: $measure_id, update: $update) {
+      _id
+    }
+  }
+`;
+
 export const THERAPIST_VIEW_MEASURE = gql`
   query TherapistViewMeasure($measureId: String!) {
     therapistViewMeasure(measure_id: $measureId) {
