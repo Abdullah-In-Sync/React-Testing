@@ -12,9 +12,9 @@ type ViewProps = {
 
 const MeasuresList: React.FC<ViewProps> = ({
   listData = [],
-  actionButtonClick,
+  actionButtonClick
 }) => {
-  const accordionDetail = () => {
+  const accordionDetail = (item) => {
     return (
       <Box className="accordionDetailWrapper">
         <Box className="detailFirst">
@@ -24,7 +24,7 @@ const MeasuresList: React.FC<ViewProps> = ({
           <CommonButton variant="contained" className="scoreButton">
             View Scores
           </CommonButton>
-          <CommonButton variant="contained" className="scoreButton">
+          <CommonButton variant="contained" className="scoreButton" onClick={()=>actionButtonClick({ ...item, ...{ pressedIconButton: "takeTest" } })}>
             Take Test
           </CommonButton>
         </Box>
@@ -36,7 +36,7 @@ const MeasuresList: React.FC<ViewProps> = ({
     return (
       <Accordion
         title={title}
-        detail={accordionDetail}
+        detail={()=>accordionDetail(item)}
         index={i}
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />

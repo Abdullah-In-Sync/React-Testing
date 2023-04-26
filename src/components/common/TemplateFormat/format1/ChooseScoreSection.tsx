@@ -9,9 +9,10 @@ import * as templateTypes from "../types";
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
   isView?: boolean;
+  isResponse?: boolean;
 }
 
-const ChooseScoreSection: React.FC<ViewProps> = ({ formikProps }) => {
+const ChooseScoreSection: React.FC<ViewProps> = ({ formikProps, isResponse }) => {
   const { values, errors, touched } = formikProps;
   const { templateData } = values;
 
@@ -49,7 +50,7 @@ const ChooseScoreSection: React.FC<ViewProps> = ({ formikProps }) => {
   };
 
   return (
-    <Box className="chooseScoreSection cSection">
+    <Box className={`chooseScoreSection cSection ${isResponse?"disbledFields":""}`}>
       <Box className="scoreCardWrapper">
         <Box className="scoreCardTextWrapper">
           <Typography>Choose your scores from</Typography>

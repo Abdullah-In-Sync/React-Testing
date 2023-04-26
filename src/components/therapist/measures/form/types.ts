@@ -17,6 +17,8 @@ export interface InitialFormValues {
   orgId?: string;
   templateId: string | number;
   templateData: TemplateDataFormat1 | TemplateDataFormat2;
+  sessionNo?: string;
+  score?: number
 }
 
 export interface ModalRefs {
@@ -29,11 +31,8 @@ export interface CommonFormProps {
     formData: InitialFormValues,
     formikHelper: FormikProps<InitialFormValues>
   ) => void;
-  organizationList?: Array<{
-    [key: string]: any;
-  }>;
-  onPressCancel?: () => void;
-  measureData?: AdminViewMeasureById | TherapistListMeasuresEntity;
+  onPressCancel?: (value) => void;
+  measureData?: TherapistListMeasuresEntity;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
   isEdit?: boolean;

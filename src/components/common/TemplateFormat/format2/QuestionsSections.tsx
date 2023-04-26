@@ -15,72 +15,74 @@ import DeleteButton from "../DeleteButton";
 import ErrorMessage from "../ErrorMessage";
 import * as templateTypes from "../types";
 
+import { Typography } from "@material-ui/core";
+import { useEffect } from "react";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import CommonButton from "../../Buttons/CommonButton";
 import ConfirmBoxModal from "../../ConfirmBoxModal";
-import { uniqueString } from "../../../../utility/helper";
+import { allAnsColSum, onAddQuesionBox, placeholderCellText } from "./helper";
 
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
   handleDeleteQuestion: (value) => void;
   isView?: boolean;
+  isResponse?: boolean;
 }
 
 const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
-  isView,
+  isView, 
+  isResponse
 }) => {
   const confirmModalRef = React.useRef<ModalElement>(null);
   const { values, setFieldValue, errors, touched } = formikProps;
 
   const { templateData } = values;
+  const { questions: { headerRow = [], bodyRows = [], footerRows = [] } = {} } = templateData;
   const { templateData: { questions: questionsTouched } = {} } = touched;
   const { templateData: { questions: questionsError } = {} } = errors;
 
-  const onAddQuesionBox = () => {
-    if (templateData.questions.bodyRows.length < 15) {
-      const questionsBodyRows = [...templateData.questions.bodyRows];
-      questionsBodyRows.push({
-        id: uniqueString(),
-        col1: "",
-        col2: "",
-        col3: "",
-        col4: "",
-        col5: "",
-      });
-      setFieldValue("templateData.questions.bodyRows", questionsBodyRows);
-    } else {
-      confirmModalRef.current?.open();
-    }
-  };
+  useEffect(() => {
+    const { tableFooter, overAllTotal } = allAnsColSum(templateData)
+    setFieldValue(`templateData.questions.footerRows`, tableFooter);
+    setFieldValue(`templateData.totalScore`, overAllTotal)
+  }, [templateData.questions.bodyRows])
 
-  const inputTextField = ({ name, placeholder = "Type" }: any) => {
-    return (
-      <FormikTextField
-        name={name}
-        id={name}
-        placeholder={placeholder}
-        inputProps={{ "data-testid": name }}
-        fullWidth
-        multiline
-        hideError
-      />
-    );
+  const onResponse = ({ name, columnName }) => {
+    setFieldValue(`${name}.answer`, columnName);
+  }
+
+  const inputTextField = ({ name, placeholder = "Type", value, rowIndex, columnName, row = {} }: any) => {
+    const { answer } = row;
+    if (isResponse && value)
+      return <Box className={`viewValueWrapper ${answer === columnName ? "answerActive" : ""}`} onClick={() => onResponse({ name: rowIndex, columnName })}><Typography>{value}</Typography></Box>
+    else
+      return (
+        <FormikTextField
+          name={name}
+          id={name}
+          placeholder={placeholder}
+          inputProps={{ "data-testid": name }}
+          fullWidth
+          multiline
+          hideError
+        />
+      );
   };
 
   const tableHeader = () => {
     return (
-      <TableHead>
+      <TableHead className={`${isResponse?"disbledFields":""}`}>
         <TableRow>
-          {templateData.questions.headerRow.map((column, i) => (
+          {headerRow.map((column, i) => (
             <TableCell key={`tableHead_${column.id}`} align={column.align}>
               {inputTextField({
                 name: `templateData.questions.headerRow.${i}.label`,
               })}
             </TableCell>
           ))}
-          {!isView && <TableCell />}
+          {(!isView && !isResponse) && <TableCell />}
         </TableRow>
       </TableHead>
     );
@@ -89,17 +91,21 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const tableBody = () => {
     return (
       <TableBody>
-        {templateData.questions.bodyRows.map((item, i) => {
+        {bodyRows.map((row, i) => {
           return (
             <TableRow role="checkbox" tabIndex={-1} key={`tableBodyRow_${i}`}>
               {templateData.questions.headerRow.map((column, columnIndex) => {
+                const value = columnIndex != 0 ? { value: row[column.id], columnName: column.id } : {}
                 return (
                   <TableCell
                     key={`tableBodyCell_${column.id}`}
                     align={column.align}
                   >
                     {inputTextField({
+                      ...value,
+                      rowIndex: `templateData.questions.bodyRows.${i}`,
                       name: `templateData.questions.bodyRows.${i}.${column.id}`,
+                      row,
                       placeholder: placeholderCellText(
                         i,
                         columnIndex,
@@ -109,12 +115,12 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   </TableCell>
                 );
               })}
-              {!isView && (
+              {(!isView && !isResponse) && (
                 <TableCell key={"deelte"}>
                   <DeleteButton
                     i={`templateData.questions.bodyRows.${i}`}
                     data-testId={`templateData.questions.bodyRows.${i}`}
-                    onDelete={() => handleDeleteQuestion({ item, i })}
+                    onDelete={() => handleDeleteQuestion({ item: row, i })}
                   />
                 </TableCell>
               )}
@@ -125,22 +131,12 @@ const QuestionsSection: React.FC<ViewProps> = ({
     );
   };
 
-  const placeholderCellText = (rowIndex, columnIndex, type) => {
-    switch (type) {
-      case "footerCell":
-        if (rowIndex === 0 && columnIndex === 0) return "Column Total";
-        else if (rowIndex === 1 && columnIndex === 0) return "Total Score";
-        break;
-      case "bodyCell":
-        if (columnIndex === 0) return "Type your question here";
-        break;
-    }
-  };
+
 
   const tableFooter = () => {
     return (
-      <TableFooter>
-        {templateData.questions.footerRows.map((row, outerIndex) => {
+      <TableFooter className={`${isResponse?"disbledFields":""}`}>
+        {footerRows.map((row, outerIndex) => {
           return (
             <TableRow
               hover
@@ -150,14 +146,20 @@ const QuestionsSection: React.FC<ViewProps> = ({
             >
               {templateData.questions.headerRow.map((column, i) => {
                 const value = column.id ? row[column.id] : undefined;
+                const valueProps = i != 0 ? { value, columnName: column.id } : {}
+
                 if (value !== undefined) {
                   return (
                     <TableCell
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
+                      className={`${!isResponse && i === 0?"disbledFields":""}`}
                     >
                       {inputTextField({
+                        ...valueProps,
+                        rowIndex: `templateData.questions.footerRows.${outerIndex}`,
                         name: `templateData.questions.footerRows.${outerIndex}.${column.id}`,
+                        row,
                         placeholder: placeholderCellText(
                           outerIndex,
                           i,
@@ -175,6 +177,8 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         colSpan={5}
                       >
                         {inputTextField({
+                          ...valueProps,
+                          row,
                           name: `templateData.questions.footerRows.${outerIndex}.colAvg`,
                         })}
                       </TableCell>
@@ -182,7 +186,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   else return null;
                 }
               })}
-              {!isView && outerIndex === 0 && <TableCell />}
+              {(!isView && !isResponse) && outerIndex === 0 && <TableCell />}
             </TableRow>
           );
         })}
@@ -192,11 +196,11 @@ const QuestionsSection: React.FC<ViewProps> = ({
 
   return (
     <Box className="adminQuestions">
-      {!isView && (
+      {(!isView && !isResponse) && (
         <Box className="addQuestionButtonWrapper">
           <CommonButton
             variant="outlined"
-            onClick={onAddQuesionBox}
+            onClick={() => onAddQuesionBox({ templateData, setFieldValue, confirmModalRef })}
             data-testid="addQuestionButton"
           >
             Add Question

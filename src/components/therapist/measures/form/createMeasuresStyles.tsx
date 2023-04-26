@@ -1,7 +1,48 @@
 import { makeStyles } from "@mui/styles";
 import { Theme } from "@mui/system";
 
-export const useStyles = makeStyles((theme: Theme) => ({
+export const useStyles = makeStyles((theme: Theme) => {
+
+  const commonButtonWrapper = {
+    display: "flex",
+    flexWrap: "wrap",
+    flex: "1",
+    justifyContent: "center",
+    padding: "10px 0px",
+    "& .MuiBox-root": {
+      [theme.breakpoints.down("sm")]: {
+        width: "100%",
+        marginBottom: 10,
+      },
+      [theme.breakpoints.down("md")]: {
+        width: "100%",
+        marginBottom: 10,
+      },
+      [theme.breakpoints.up("md")]: {
+        padding: "0px 10px",
+      },
+    },
+    "& .cancelButton": {
+      background: theme.palette.secondary.main,
+    },
+    "& .MuiBox-root button": {
+      [theme.breakpoints.down("sm")]: {
+        width: "100%",
+      },
+      [theme.breakpoints.down("md")]: {
+        width: "100%",
+      },
+      [theme.breakpoints.up("md")]: {
+        width: "10em",
+      },
+      // [theme.breakpoints.down("md")]: {},
+      // [theme.breakpoints.up("lg")]: {
+      //   width: "10em",
+      // },
+    },
+  }
+
+return {
   formWrapper: {
     "& .fieldsBoxWrapperFirst": {
       "& .MuiBox-root": {
@@ -102,46 +143,30 @@ export const useStyles = makeStyles((theme: Theme) => ({
       [theme.breakpoints.up("lg")]: {},
     },
 
-    "& .bottomActionButtonsWrapper": {
-      display: "flex",
-      flexWrap: "wrap",
-      flex: "1",
-      justifyContent: "center",
-      padding: "10px 0px",
-      "& .MuiBox-root": {
-        [theme.breakpoints.down("sm")]: {
-          width: "100%",
-          marginBottom: 10,
-        },
-        [theme.breakpoints.down("md")]: {
-          width: "100%",
-          marginBottom: 10,
-        },
-        [theme.breakpoints.up("md")]: {
-          padding: "0px 10px",
-        },
-      },
-      "& .cancelButton": {
-        background: theme.palette.secondary.main,
-      },
-      "& .MuiBox-root button": {
-        [theme.breakpoints.down("sm")]: {
-          width: "100%",
-        },
-        [theme.breakpoints.down("md")]: {
-          width: "100%",
-        },
-        [theme.breakpoints.up("md")]: {
-          width: "10em",
-        },
-        // [theme.breakpoints.down("md")]: {},
-        // [theme.breakpoints.up("lg")]: {
-        //   width: "10em",
-        // },
-      },
-    },
+    "& .bottomActionButtonsWrapper": commonButtonWrapper,
   },
   viewForm: {
+    "& .autoCompeleteSessionWrapper":{
+      "& label": {
+        color: theme.palette.primary.contrastText
+      },
+      "& input": {
+        color: theme.palette.primary.contrastText
+      },
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.palette.primary.contrastText
+  },
+  "& .MuiOutlinedInput-root.Mui-focused": {
+    borderColor: theme.palette.secondary.main
+},
+    },
+    "& .MuiToolbar-root": {
+      justifyContent: "space-between !important",
+      "& .MuiAutocomplete-root": {
+        minWidth: 180
+      }
+    },
+    "& .bottomActionButtonsWrapper": commonButtonWrapper,
     paddingBottom: 20,
     "& > div:first-child": {
       border: "1px solid #ccc",
@@ -223,4 +248,5 @@ export const useStyles = makeStyles((theme: Theme) => ({
       borderRadius: "unset",
     },
   },
-}));
+}
+});

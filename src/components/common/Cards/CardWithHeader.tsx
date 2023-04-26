@@ -10,6 +10,7 @@ type propTypes = {
   onClickView?: () => void;
   simpleHeader?: boolean;
   activeBoxBorder?: boolean;
+  rightComponent?: any;
 };
 
 const CardWithHeader = (props: propTypes) => {
@@ -20,6 +21,7 @@ const CardWithHeader = (props: propTypes) => {
     children = null,
     simpleHeader,
     activeBoxBorder,
+    rightComponent
   } = props || {};
   return (
     <div
@@ -47,6 +49,7 @@ const CardWithHeader = (props: propTypes) => {
               <VisibilityIcon />
             </Fab>
           )}
+          {rightComponent && rightComponent()}
         </Toolbar>
       </AppBar>
       <Box

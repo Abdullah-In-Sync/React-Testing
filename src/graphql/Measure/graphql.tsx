@@ -316,3 +316,26 @@ export const THERAPIST_UPDATE_MEASURE = gql`
     }
   }
 `;
+
+
+export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
+  mutation TherapistMeasureSubmitTest(
+    $measureId: String!
+    $score: Int!
+    $templateData: String!
+    $sessionNo: String
+    $templateId: String!
+  ) {
+    therapistMeasureSubmitTest(measure_id: $measureId, score: $score, template_data: $templateData, template_id: $templateId, session_no: $sessionNo) {
+      _id
+      added_by
+      created_date
+      measure_id
+      score
+      session_no
+      template_data
+      template_id
+      status
+    }
+  }
+`;

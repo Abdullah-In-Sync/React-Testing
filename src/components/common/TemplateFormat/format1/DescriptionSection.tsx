@@ -9,16 +9,17 @@ import * as templateTypes from "../types";
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
   isView?: boolean;
+  isResponse?: boolean;
 }
 
-const DescriptionSection: React.FC<ViewProps> = ({ formikProps, isView }) => {
+const DescriptionSection: React.FC<ViewProps> = ({ formikProps, isView, isResponse }) => {
   const { values, resetForm, errors, touched } = formikProps;
   const { templateData } = values;
 
   if (templateData.description === undefined) return null;
   else
     return (
-      <Box className="descriptionSection commonFieldWrapper cSection">
+      <Box className={`descriptionSection commonFieldWrapper cSection ${isResponse?"disbledFields":""}`}>
         <Paper
           elevation={0}
           sx={{ p: "2px 4px", display: "flex", border: "1px solid #ccc" }}
@@ -33,7 +34,7 @@ const DescriptionSection: React.FC<ViewProps> = ({ formikProps, isView }) => {
               hideError
             />
           </Box>
-          {!isView && (
+          {(!isView && !isResponse) && (
             <DeleteButton
               i={"templateDataDescription"}
               onDelete={() => {

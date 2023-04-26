@@ -4,20 +4,23 @@ import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
 import OptionsSection from "./OptionsSection";
 import QuestionsSection from "./QuestionsSections";
+import { useEffect } from "react";
+import { ModalRefs } from "../../../admin/measures/form/types";
 
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
-  confirmRef?: any;
   isView?: boolean;
   deleteQuestion?: (value) => void;
+  isResponse?: boolean;
 };
 
 export default function Format1({
   formikProps,
   confirmRef,
   isView,
+  isResponse,
   deleteQuestion,
-}: propTypes) {
+}: propTypes & ModalRefs) {
   const styles = useStyles();
   const { values, setFieldValue } = formikProps;
   const { templateData } = values;
@@ -63,11 +66,13 @@ export default function Format1({
           formikProps={formikProps}
           handleDeleteQuestion={handleDeleteQuestion}
           isView={isView}
+          isResponse={isResponse}
         />
         <OptionsSection
           formikProps={formikProps}
           handleDeleteOption={handleDeleteOption}
           isView={isView}
+          isResponse={isResponse}
         />
       </Stack>
     </Box>

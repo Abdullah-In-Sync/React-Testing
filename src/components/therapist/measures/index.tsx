@@ -3,6 +3,7 @@ import * as React from "react";
 import {
   GET_THERAPIST_MEASURES_LIST,
   UPDATE_THERAPIST_MEASURE,
+  THERAPIST_MEASURE_SUBMIT_TEST
 } from "../../../graphql/Measure/graphql";
 import MeasureContent from "./MeasuresContent";
 import { useRouter } from "next/router";
@@ -25,19 +26,24 @@ import AddMeasuresPlanForm from "./AddMeasuresPlan";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../common/ConfirmationModal";
 import { SuccessModal } from "../../common/SuccessModal";
+import { ConfirmElement } from "../../common/TemplateFormat/ConfirmWrapper";
+
 
 const Measures: React.FC = () => {
+  const confirmRef = useRef<ConfirmElement>(null);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [isConfirmAddTask, setIsConfirmAddTask] = useState(false);
   const [addTasksuccessModal, setAddTaskSuccessModal] =
     useState<boolean>(false);
+    const [ accodionView, setAccodionView ] = useState();
 
   const [planid, setPlanId] = useState();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const [addTherapistMeasuresPlan] = useMutation(
     ADD_THERAPIST_MEASURE_PLAN_ADD
   );
+  const [therapistMeasureSubmitTest] = useMutation(THERAPIST_MEASURE_SUBMIT_TEST)
   /* istanbul ignore next */
   const patId = router?.query?.id as string;
 
@@ -156,10 +162,11 @@ const Measures: React.FC = () => {
       case "delete":
         setIsConfirmationModel(true);
         break;
+      case "takeTest":
+        return setAccodionView(value)
+
     }
   };
-
-  if (loadingMeasuresList) return <Loader visible={true} />;
 
   /* istanbul ignore next */
   const receivePlanId = (value) => {
@@ -213,14 +220,59 @@ const Measures: React.FC = () => {
     /* istanbul ignore next */
     refetch();
   };
+
+  const onPressCancel = (value) => {
+    setAccodionView(undefined)
+  }
+
+  const takeTestSubmit = async (formFields, callback) => {
+    console.log("formFields", formFields)
+    const { templateData, sessionNo, templateId, measureId } = formFields;
+    const { totalScore = 0 } = templateData || {}
+    const variables = {
+      measureId,
+      score: totalScore,
+      templateData: JSON.stringify(templateData),
+      sessionNo,
+      templateId
+    }
+    
+    try {
+      await therapistMeasureSubmitTest({
+        variables,
+        onCompleted: (data) => {
+          console.log("data", data)
+          callback();
+        },
+      });
+
+    } catch (e) {
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
+  const handleSavePress = (formFields, { setSubmitting }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => takeTestSubmit(formFields, callback),
+      description: "Are you sure you want to create the measure?",
+      setSubmitting,
+    });
+  };
+
+  if (loadingMeasuresList) return <Loader visible={true} />;
+
   return (
     <>
-      <MeasureContent
-        listData={listData}
-        onClickCreateMeasure={handleCreateMeasure}
-        actionButtonClick={actionButtonClick}
-        onPressAddPlan={handleOpenAddPlanModal}
-      />
+    <MeasureContent
+      listData={listData}
+      onClickCreateMeasure={handleCreateMeasure}
+      actionButtonClick={actionButtonClick}
+      accordionViewData={accodionView}
+      onPressAddPlan={handleOpenAddPlanModal}
+      onPressCancel={onPressCancel}
+      submitForm={handleSavePress}
+      confirmRef={confirmRef}
+    />
 
       <CommonModal
         ref={modalRefAddPlan}

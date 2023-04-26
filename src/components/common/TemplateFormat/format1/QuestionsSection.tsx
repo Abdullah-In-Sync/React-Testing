@@ -16,13 +16,24 @@ interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
   handleDeleteQuestion: (value) => void;
   isView?: boolean;
+  isResponse?: boolean;
+}
+
+const getScoreOptions = () => {
+  const tempSession = []
+  for(let i=0; i<=8; i++){
+    tempSession.push({ id: i, value: i })
+  }
+  return tempSession
 }
 
 const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
   isView,
+  isResponse
 }) => {
+  const scoresOptions = getScoreOptions();
   const confirmModalRef = React.useRef<ModalElement>(null);
   const { values, setFieldValue, errors, touched } = formikProps;
   const { templateData } = values;
@@ -32,17 +43,17 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const onAddQuesionBox = () => {
     if (templateData.questions.length < 15) {
       const questions = [...templateData.questions];
-      questions.push({ id: uniqueString(), question: "" });
+      questions.push({ id: uniqueString(), question: "", answer: 0 });
       setFieldValue("templateData.questions", questions);
     } else {
       confirmModalRef.current?.open();
     }
   };
-
+//disbledFields
   return (
     <>
       <Box className="questionsSection commonFieldWrapper cSection">
-        {!isView && (
+        {!isView && !isResponse && (
           <Box className="addQuestionButtonWrapper">
             <CommonButton
               variant="outlined"
@@ -67,7 +78,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       border: "1px solid #ccc",
                     }}
                   >
-                    <Box className="questionInputWrapper">
+                    <Box className={`questionInputWrapper ${isResponse?"disbledFields":""}`}>
                       <Typography>{i + 1}</Typography>
 
                       <FormikTextField
@@ -82,22 +93,21 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         hideError
                       />
                     </Box>
-
                     <Box>
                       <Box className="inputPaperSecondColumn">
                         <FormikSelectDropdown
-                          value="1"
-                          name="some"
-                          options={[{ id: 1, value: "0" }]}
+                          showDefaultSelectOption={false}
+                          name={`templateData.questions.${i}.answer`}
+                          options={scoresOptions}
                           mappingKeys={["id", "value"]}
                           size="small"
                           className="selectOutline"
-                          extraProps={{ "data-testid": "dummy" }}
-                          disabled
+                          extraProps={{ "data-testid": `templateData.questions.${i}.answer` }}
+                          disabled={!isResponse}
                           fullWidth
                         />
                       </Box>
-                      {!isView && (
+                      {(!isView && !isResponse) && (
                         <DeleteButton
                           i={i}
                           data-testid={`deletequestions.${i}.question`}

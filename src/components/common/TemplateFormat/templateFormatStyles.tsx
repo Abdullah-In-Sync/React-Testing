@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
             border: 0,
             "& .editableInputWrapper": {
               display: "-webkit-inline-box",
-              inlineSize: "70px",
+              // inlineSize: "70px",
               overflowWrap: "break-word",
               "& .makeStyles-editableInput-6": {
                 fontSize: 14,
@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
                 margin: 0,
                 "& textarea": {
                   textAlign: "center",
-                  fontSize: 12,
+                  padding: "unset"
                 },
                 "& input": {
                   border: 0,
@@ -347,6 +347,15 @@ export const useStyles = makeStyles((theme: Theme) => ({
         fontSize: "1.2rem",
       },
     },
+    "& tbody": {
+      "& td:not(:first-child)": {
+        textAlign: "center"
+      }
+
+    },
+    "& .answerActive": {
+      border: "1px solid"
+    }
   },
   formatImagesBoxModal: {
     alignItems: "center",
