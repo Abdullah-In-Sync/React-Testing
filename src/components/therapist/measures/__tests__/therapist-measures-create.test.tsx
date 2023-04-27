@@ -175,7 +175,7 @@ beforeEach(() => {
 });
 
 describe("Therapist create measures", () => {
-  it.only("should render therapist create measures page and submit the form", async () => {
+  it("should render therapist create measures page and submit the form", async () => {
     await submitForm();
     const confirmButton = await screen.findByRole("button", {
       name: "Confirm",
