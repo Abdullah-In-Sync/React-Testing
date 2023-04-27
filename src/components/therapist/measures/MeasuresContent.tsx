@@ -14,8 +14,9 @@ type ViewProps = {
   actionButtonClick: (value) => void;
   onPressAddPlan?: () => void;
   accordionViewData: TherapistListMeasuresEntity;
-  onPressCancel?: (value) => void
-} & ModalRefs & CommonFormProps;
+  onPressCancel?: (value) => void;
+} & ModalRefs &
+  CommonFormProps;
 
 const MeasuresContent: React.FC<ViewProps> = ({
   listData,
@@ -25,7 +26,7 @@ const MeasuresContent: React.FC<ViewProps> = ({
   accordionViewData,
   onPressCancel,
   submitForm,
-  confirmRef
+  confirmRef,
 }) => {
   const styles = useStyles();
 
@@ -56,11 +57,23 @@ const MeasuresContent: React.FC<ViewProps> = ({
   };
 
   const accordionView = () => {
-    if(accordionViewData)
-      return <TakeTest measureData={accordionViewData} onPressCancel={onPressCancel} submitForm={submitForm} confirmRef={confirmRef}/>
+    if (accordionViewData)
+      return (
+        <TakeTest
+          measureData={accordionViewData}
+          onPressCancel={onPressCancel}
+          submitForm={submitForm}
+          confirmRef={confirmRef}
+        />
+      );
     else
-      return <MeasuresList listData={listData} actionButtonClick={actionButtonClick} />
-  }
+      return (
+        <MeasuresList
+          listData={listData}
+          actionButtonClick={actionButtonClick}
+        />
+      );
+  };
 
   return (
     <Box className={styles.measuresWrapper}>

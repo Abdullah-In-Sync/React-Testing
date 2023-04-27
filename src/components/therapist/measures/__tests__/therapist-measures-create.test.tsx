@@ -201,7 +201,7 @@ describe("Therapist create measures", () => {
     });
     fireEvent.click(confirmButton);
     const tableText = await screen.findByText(
-      /This measure name already exist./i
+      /This measure’s name already exists./i
     );
     expect(tableText).toBeInTheDocument();
   });

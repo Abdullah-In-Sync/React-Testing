@@ -20,18 +20,18 @@ interface ViewProps {
 }
 
 const getScoreOptions = () => {
-  const tempSession = []
-  for(let i=0; i<=8; i++){
-    tempSession.push({ id: i, value: i })
+  const tempSession = [];
+  for (let i = 0; i <= 8; i++) {
+    tempSession.push({ id: i, value: i });
   }
-  return tempSession
-}
+  return tempSession;
+};
 
 const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
   isView,
-  isResponse
+  isResponse,
 }) => {
   const scoresOptions = getScoreOptions();
   const confirmModalRef = React.useRef<ModalElement>(null);
@@ -49,7 +49,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
       confirmModalRef.current?.open();
     }
   };
-//disbledFields
+  //disbledFields
   return (
     <>
       <Box className="questionsSection commonFieldWrapper cSection">
@@ -78,7 +78,11 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       border: "1px solid #ccc",
                     }}
                   >
-                    <Box className={`questionInputWrapper ${isResponse?"disbledFields":""}`}>
+                    <Box
+                      className={`questionInputWrapper ${
+                        isResponse ? "disbledFields" : ""
+                      }`}
+                    >
                       <Typography>{i + 1}</Typography>
 
                       <FormikTextField
@@ -102,12 +106,14 @@ const QuestionsSection: React.FC<ViewProps> = ({
                           mappingKeys={["id", "value"]}
                           size="small"
                           className="selectOutline"
-                          extraProps={{ "data-testid": `templateData.questions.${i}.answer` }}
+                          extraProps={{
+                            "data-testid": `templateData.questions.${i}.answer`,
+                          }}
                           disabled={!isResponse}
                           fullWidth
                         />
                       </Box>
-                      {(!isView && !isResponse) && (
+                      {!isView && !isResponse && (
                         <DeleteButton
                           i={i}
                           data-testid={`deletequestions.${i}.question`}
@@ -130,7 +136,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
         </FieldArray>
       </Box>
       <ConfirmBoxModal
-        infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question"
+        infoMessage="You cannot add more than 15 questions. Please delete a question to add a new question"
         confirmModalRef={confirmModalRef}
       />
     </>

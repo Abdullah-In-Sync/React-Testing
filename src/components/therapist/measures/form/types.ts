@@ -1,9 +1,6 @@
 import { FormikProps } from "formik";
 import { ForwardedRef } from "react";
-import {
-  AdminViewMeasureById,
-  TherapistListMeasuresEntity,
-} from "../../../../graphql/Measure/types";
+import { TherapistListMeasuresEntity } from "../../../../graphql/Measure/types";
 import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
 import { ConfirmElement } from "../../../common/TemplateFormat/ConfirmWrapper";
 import {
@@ -18,7 +15,7 @@ export interface InitialFormValues {
   templateId: string | number;
   templateData: TemplateDataFormat1 | TemplateDataFormat2;
   sessionNo?: string;
-  score?: number
+  score?: number;
 }
 
 export interface ModalRefs {

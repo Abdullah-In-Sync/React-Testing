@@ -1,12 +1,16 @@
 import { Formik } from "formik";
 import React from "react";
-import ContentHeader from "../../../common/ContentHeader";
 import ResponseForm from "../form/ResponseForm";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
-type ViewProps = CommonFormProps & ModalRefs
+type ViewProps = CommonFormProps & ModalRefs;
 
-const TakeTestForm: React.FC<ViewProps> = ({ measureData, onPressCancel, submitForm, confirmRef }) => {
+const TakeTestForm: React.FC<ViewProps> = ({
+  measureData,
+  onPressCancel,
+  submitForm,
+  confirmRef,
+}) => {
   const {
     _id: measureId,
     title = "",
@@ -14,7 +18,7 @@ const TakeTestForm: React.FC<ViewProps> = ({ measureData, onPressCancel, submitF
     template_id: templateId = "",
     template_data = null,
     session_no = "start",
-    score
+    score,
   } = measureData || {};
 
   const initialValues = {
@@ -22,8 +26,8 @@ const TakeTestForm: React.FC<ViewProps> = ({ measureData, onPressCancel, submitF
     title,
     description,
     templateId,
-    templateData: {...JSON.parse(template_data), ...{totalScore: score}},
-    sessionNo: session_no
+    templateData: { ...JSON.parse(template_data), ...{ totalScore: score } },
+    sessionNo: session_no,
   };
 
   const commonform = () => {
@@ -32,16 +36,18 @@ const TakeTestForm: React.FC<ViewProps> = ({ measureData, onPressCancel, submitF
         enableReinitialize
         initialValues={initialValues}
         onSubmit={submitForm}
-        children={(props: any) => <ResponseForm formikProps={props} onPressCancel={onPressCancel} confirmRef={confirmRef}/>}
+        children={(props: any) => (
+          <ResponseForm
+            formikProps={props}
+            onPressCancel={onPressCancel}
+            confirmRef={confirmRef}
+          />
+        )}
       />
     );
   };
 
-  return (
-    <>
-      {commonform()}
-    </>
-  );
+  return <>{commonform()}</>;
 };
 
 export default TakeTestForm;

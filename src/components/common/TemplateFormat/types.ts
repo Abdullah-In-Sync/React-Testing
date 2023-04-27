@@ -33,5 +33,5 @@ export interface TemplateDataFormat2 {
 export interface TemplateFormat {
   data: Format1 | Format2;
   validationSchema?: any;
-  onResponse?: (value) => void
+  onResponse?: (value) => void;
 }

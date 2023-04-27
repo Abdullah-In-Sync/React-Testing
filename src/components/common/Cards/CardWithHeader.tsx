@@ -21,7 +21,7 @@ const CardWithHeader = (props: propTypes) => {
     children = null,
     simpleHeader,
     activeBoxBorder,
-    rightComponent
+    rightComponent,
   } = props || {};
   return (
     <div

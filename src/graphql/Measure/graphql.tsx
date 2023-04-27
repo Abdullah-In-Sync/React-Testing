@@ -317,7 +317,6 @@ export const THERAPIST_UPDATE_MEASURE = gql`
   }
 `;
 
-
 export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
   mutation TherapistMeasureSubmitTest(
     $measureId: String!
@@ -326,7 +325,13 @@ export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
     $sessionNo: String
     $templateId: String!
   ) {
-    therapistMeasureSubmitTest(measure_id: $measureId, score: $score, template_data: $templateData, template_id: $templateId, session_no: $sessionNo) {
+    therapistMeasureSubmitTest(
+      measure_id: $measureId
+      score: $score
+      template_data: $templateData
+      template_id: $templateId
+      session_no: $sessionNo
+    ) {
       _id
       added_by
       created_date

@@ -10,10 +10,12 @@ interface ViewProps {
 
 const WsasSection: React.FC<ViewProps> = ({ formikProps }) => {
   const { values } = formikProps;
-  const { templateData: { totalScore = 0 } } = values;
-  
+  const {
+    templateData: { totalScore = 0 },
+  } = values;
+
   return (
-    <Box  className="cSection">
+    <Box className="cSection">
       <Box className="wsasSection">
         <Box>
           <Typography>Total WSAS Score</Typography>

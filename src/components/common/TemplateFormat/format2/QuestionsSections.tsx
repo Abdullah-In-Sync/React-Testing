@@ -32,31 +32,51 @@ interface ViewProps {
 const QuestionsSection: React.FC<ViewProps> = ({
   formikProps,
   handleDeleteQuestion,
-  isView, 
-  isResponse
+  isView,
+  isResponse,
 }) => {
   const confirmModalRef = React.useRef<ModalElement>(null);
   const { values, setFieldValue, errors, touched } = formikProps;
 
   const { templateData } = values;
-  const { questions: { headerRow = [], bodyRows = [], footerRows = [] } = {} } = templateData;
+  const { questions: { headerRow = [], bodyRows = [], footerRows = [] } = {} } =
+    templateData;
   const { templateData: { questions: questionsTouched } = {} } = touched;
   const { templateData: { questions: questionsError } = {} } = errors;
 
   useEffect(() => {
-    const { tableFooter, overAllTotal } = allAnsColSum(templateData)
+    const { tableFooter, totalScore } = allAnsColSum(templateData);
     setFieldValue(`templateData.questions.footerRows`, tableFooter);
-    setFieldValue(`templateData.totalScore`, overAllTotal)
-  }, [templateData.questions.bodyRows])
+    setFieldValue(`templateData.totalScore`, totalScore);
+  }, [templateData.questions.bodyRows]);
 
   const onResponse = ({ name, columnName }) => {
     setFieldValue(`${name}.answer`, columnName);
-  }
+  };
 
-  const inputTextField = ({ name, placeholder = "Type", value, rowIndex, columnName, row = {} }: any) => {
+  const inputTextField = ({
+    name,
+    placeholder = "Type",
+    value,
+    rowIndex,
+    columnName,
+    row = {},
+    type,
+  }: any) => {
     const { answer } = row;
-    if (isResponse && value)
-      return <Box className={`viewValueWrapper ${answer === columnName ? "answerActive" : ""}`} onClick={() => onResponse({ name: rowIndex, columnName })}><Typography>{value}</Typography></Box>
+    if (isResponse && value && type === "bodyCell")
+      return (
+        <Box
+          className={`viewValueWrapper`}
+          onClick={() => onResponse({ name: rowIndex, columnName })}
+        >
+          <Typography
+            className={`${answer === columnName ? "answerActive" : ""}`}
+          >
+            {value}
+          </Typography>
+        </Box>
+      );
     else
       return (
         <FormikTextField
@@ -73,7 +93,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
 
   const tableHeader = () => {
     return (
-      <TableHead className={`${isResponse?"disbledFields":""}`}>
+      <TableHead className={`${isResponse ? "disbledFields" : ""}`}>
         <TableRow>
           {headerRow.map((column, i) => (
             <TableCell key={`tableHead_${column.id}`} align={column.align}>
@@ -82,7 +102,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
               })}
             </TableCell>
           ))}
-          {(!isView && !isResponse) && <TableCell />}
+          {!isView && !isResponse && <TableCell />}
         </TableRow>
       </TableHead>
     );
@@ -95,7 +115,10 @@ const QuestionsSection: React.FC<ViewProps> = ({
           return (
             <TableRow role="checkbox" tabIndex={-1} key={`tableBodyRow_${i}`}>
               {templateData.questions.headerRow.map((column, columnIndex) => {
-                const value = columnIndex != 0 ? { value: row[column.id], columnName: column.id } : {}
+                const value =
+                  columnIndex != 0
+                    ? { value: row[column.id], columnName: column.id }
+                    : {};
                 return (
                   <TableCell
                     key={`tableBodyCell_${column.id}`}
@@ -111,11 +134,12 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         columnIndex,
                         "bodyCell"
                       ),
+                      type: "bodyCell",
                     })}
                   </TableCell>
                 );
               })}
-              {(!isView && !isResponse) && (
+              {!isView && !isResponse && (
                 <TableCell key={"deelte"}>
                   <DeleteButton
                     i={`templateData.questions.bodyRows.${i}`}
@@ -131,11 +155,9 @@ const QuestionsSection: React.FC<ViewProps> = ({
     );
   };
 
-
-
   const tableFooter = () => {
     return (
-      <TableFooter className={`${isResponse?"disbledFields":""}`}>
+      <TableFooter className={`${isResponse ? "disbledFields" : ""}`}>
         {footerRows.map((row, outerIndex) => {
           return (
             <TableRow
@@ -146,14 +168,17 @@ const QuestionsSection: React.FC<ViewProps> = ({
             >
               {templateData.questions.headerRow.map((column, i) => {
                 const value = column.id ? row[column.id] : undefined;
-                const valueProps = i != 0 ? { value, columnName: column.id } : {}
+                const valueProps =
+                  i != 0 ? { value, columnName: column.id } : {};
 
                 if (value !== undefined) {
                   return (
                     <TableCell
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
-                      className={`${!isResponse && i === 0?"disbledFields":""}`}
+                      className={`${
+                        !isResponse && i === 0 ? "disbledFields" : ""
+                      }`}
                     >
                       {inputTextField({
                         ...valueProps,
@@ -186,7 +211,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   else return null;
                 }
               })}
-              {(!isView && !isResponse) && outerIndex === 0 && <TableCell />}
+              {!isView && !isResponse && outerIndex === 0 && <TableCell />}
             </TableRow>
           );
         })}
@@ -196,11 +221,13 @@ const QuestionsSection: React.FC<ViewProps> = ({
 
   return (
     <Box className="adminQuestions">
-      {(!isView && !isResponse) && (
+      {!isView && !isResponse && (
         <Box className="addQuestionButtonWrapper">
           <CommonButton
             variant="outlined"
-            onClick={() => onAddQuesionBox({ templateData, setFieldValue, confirmModalRef })}
+            onClick={() =>
+              onAddQuesionBox({ templateData, setFieldValue, confirmModalRef })
+            }
             data-testid="addQuestionButton"
           >
             Add Question
@@ -220,7 +247,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
         <ErrorMessage errorMsg={"All valid fields required"} />
       )}
       <ConfirmBoxModal
-        infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question"
+        infoMessage="You cannot add more than 15 questions. Please delete a question to add a new question"
         confirmModalRef={confirmModalRef}
       />
     </Box>

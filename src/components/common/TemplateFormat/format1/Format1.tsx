@@ -25,23 +25,22 @@ export default function Format1({
   deleteQuestion,
 }: propTypes & ModalRefs) {
   const styles = useStyles();
-  const { values, setFieldValue } = formikProps;
+  const { values, setFieldValue, resetForm } = formikProps;
   const { templateData } = values;
 
   useEffect(() => {
     setFieldValue(`templateData.totalScore`, allAnsColSum());
-  }, [templateData.questions])
+  }, [templateData.questions]);
 
   const allAnsColSum = () => {
     const { questions } = templateData;
     let totalScore = 0;
     questions.forEach((item) => {
-      const { answer } = item
+      const { answer } = item;
       totalScore += answer;
-      
-    })
-    return totalScore
-  }
+    });
+    return totalScore;
+  };
 
   const removeQuestion = (callback, { i }) => {
     const questions = [...templateData.questions];
@@ -63,19 +62,59 @@ export default function Format1({
     });
   };
 
+  const handleDeleteIntro = () => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => {
+        delete templateData.intro;
+        resetForm({
+          values,
+        });
+        callback();
+      },
+      description: `Are you sure you want to delete the description?`,
+    });
+  };
+
+  const handleDelteDescripton = () => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => {
+        delete templateData.description;
+        resetForm({
+          values,
+        });
+        callback();
+      },
+      description: `Are you sure you want to delete the description?`,
+    });
+  };
+
   return (
     <Box className={styles.root}>
       <Stack className="templateFromat1Wrapper commonBorder">
-        <IntroSection formikProps={formikProps} isView={isView} isResponse={isResponse}/>
-        <ChooseScoreSection formikProps={formikProps} isView={isView} isResponse={isResponse}/>
+        <IntroSection
+          formikProps={formikProps}
+          isView={isView}
+          isResponse={isResponse}
+          handleDelete={handleDeleteIntro}
+        />
+        <ChooseScoreSection
+          formikProps={formikProps}
+          isView={isView}
+          isResponse={isResponse}
+        />
         <QuestionsSection
           formikProps={formikProps}
           handleDeleteQuestion={handleDeleteQuestion}
           isView={isView}
           isResponse={isResponse}
         />
-        <WsasSection formikProps={formikProps}/>
-        <DescriptionSection formikProps={formikProps} isView={isView} isResponse={isResponse}/>
+        <WsasSection formikProps={formikProps} />
+        <DescriptionSection
+          formikProps={formikProps}
+          isView={isView}
+          isResponse={isResponse}
+          handleDelete={handleDelteDescripton}
+        />
       </Stack>
     </Box>
   );

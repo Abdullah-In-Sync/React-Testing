@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
                 margin: 0,
                 "& textarea": {
                   textAlign: "center",
-                  padding: "unset"
+                  padding: "unset",
                 },
                 "& input": {
                   border: 0,
@@ -349,13 +349,26 @@ export const useStyles = makeStyles((theme: Theme) => ({
     },
     "& tbody": {
       "& td:not(:first-child)": {
-        textAlign: "center"
-      }
-
+        textAlign: "center",
+      },
     },
-    "& .answerActive": {
-      border: "1px solid"
-    }
+    "& .viewValueWrapper": {
+      "& p": {
+        cursor: "pointer",
+      },
+
+      "& .answerActive": {
+        display: "block",
+        height: 35,
+        width: 35,
+        borderRadius: "50%",
+        border: "1px solid #000",
+        margin: "auto",
+        lineHeight: "35px",
+        textAlign: "center",
+        color: "black",
+      },
+    },
   },
   formatImagesBoxModal: {
     alignItems: "center",

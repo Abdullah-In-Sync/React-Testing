@@ -1,47 +1,58 @@
 import { Box, CardContent } from "@mui/material";
 import { Form } from "formik";
-import React, { useEffect } from "react";
+import React from "react";
 import Formats from "../../../common/TemplateFormat";
 import { useStyles } from "./createMeasuresStyles";
 
 import { Typography } from "@material-ui/core";
+import CommonAutocomplete from "../../../common/AutoComplete/AutoComplete";
+import CommonButton from "../../../common/Buttons/CommonButton";
 import CardWithHeader from "../../../common/Cards/CardWithHeader";
 import { CommonFormProps, ModalRefs } from "./types";
-import CommonButton from "../../../common/Buttons/CommonButton";
-import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
-import CommonAutocomplete from "../../../common/AutoComplete/AutoComplete";
 // import { sessionOptions } from "../../../../lib/constants";
 import ConfirmWrapper from "../../../common/TemplateFormat/ConfirmWrapper";
 
 type ViewProps = CommonFormProps & ModalRefs;
 
 const getSessionOptions = () => {
-  const tempSession = [
-    { value: "start", label: "Start" },
-  ]
-  for(let i=1; i<=50; i++){
-    tempSession.push({ value: i.toString(), label: `Session ${i}` })
+  const tempSession = [{ value: "start", label: "Start" }];
+  for (let i = 1; i <= 50; i++) {
+    tempSession.push({ value: i.toString(), label: `Session ${i}` });
   }
-  return tempSession
-}
+  return tempSession;
+};
 
-const ResponseForm: React.FC<ViewProps> = ({ onPressCancel, formikProps, confirmRef }) => {
+const ResponseForm: React.FC<ViewProps> = ({
+  onPressCancel,
+  formikProps,
+  confirmRef,
+}) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
-  const { templateId, description, title, templateData, sessionNo } = values;
+  const { templateId, description, title } = values;
   const FormatTemplate = templateId ? Formats[templateId] : null;
   const styles = useStyles();
-  const sessionOptions = getSessionOptions()
+  const sessionOptions = getSessionOptions();
 
   const handleChangeSession = (e) => {
-    const { target: { value } } = e;
+    const {
+      target: { value },
+    } = e;
     setFieldValue(`sessionNo`, value);
-  }
+  };
 
   const sessionDropdown = () => {
-    return <Box className="autoCompeleteSessionWrapper">
-      <CommonAutocomplete handleSelect={handleChangeSession} name={`sessionNo`} initialOptions={sessionOptions} label="Enter Session" defaultValue="start" />
-    </Box>
-  }
+    return (
+      <Box className="autoCompeleteSessionWrapper">
+        <CommonAutocomplete
+          handleSelect={handleChangeSession}
+          name={`sessionNo`}
+          initialOptions={sessionOptions}
+          label="Enter Session"
+          defaultValue="start"
+        />
+      </Box>
+    );
+  };
 
   return (
     <ConfirmWrapper ref={confirmRef}>
@@ -55,7 +66,11 @@ const ResponseForm: React.FC<ViewProps> = ({ onPressCancel, formikProps, confirm
                 </Box>
               )}
               {FormatTemplate && (
-                <FormatTemplate formikProps={formikProps} isResponse confirmRef={confirmRef} />
+                <FormatTemplate
+                  formikProps={formikProps}
+                  isResponse
+                  confirmRef={confirmRef}
+                />
               )}
               <Box className="bottomActionButtonsWrapper">
                 <Box>

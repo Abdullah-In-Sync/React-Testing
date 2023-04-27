@@ -1,11 +1,10 @@
-import { Stack, Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { FormikProps } from "formik";
+import { ModalRefs } from "../../../admin/measures/form/types";
 import { useStyles } from "../templateFormatStyles";
 import * as templateTypes from "../types";
 import OptionsSection from "./OptionsSection";
 import QuestionsSection from "./QuestionsSections";
-import { useEffect } from "react";
-import { ModalRefs } from "../../../admin/measures/form/types";
 
 type propTypes = {
   formikProps: FormikProps<templateTypes.TemplateDataFormat2>;
@@ -34,7 +33,7 @@ export default function Format1({
               ...value,
             })
           : removeQuestion(callback, value),
-      description: `Are you sure you want to delete the Measure?`,
+      description: `Are you sure you want to delete the question?`,
     });
   };
 
@@ -48,7 +47,7 @@ export default function Format1({
   const handleDeleteOption = (i) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => removeOption(callback, i),
-      description: `Are you sure you want to delete the Measure?`,
+      description: `Are you sure you want to delete the description?`,
     });
   };
 

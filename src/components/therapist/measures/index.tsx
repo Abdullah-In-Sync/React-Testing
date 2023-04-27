@@ -3,7 +3,7 @@ import * as React from "react";
 import {
   GET_THERAPIST_MEASURES_LIST,
   UPDATE_THERAPIST_MEASURE,
-  THERAPIST_MEASURE_SUBMIT_TEST
+  THERAPIST_MEASURE_SUBMIT_TEST,
 } from "../../../graphql/Measure/graphql";
 import MeasureContent from "./MeasuresContent";
 import { useRouter } from "next/router";
@@ -28,7 +28,6 @@ import ConfirmationModal from "../../common/ConfirmationModal";
 import { SuccessModal } from "../../common/SuccessModal";
 import { ConfirmElement } from "../../common/TemplateFormat/ConfirmWrapper";
 
-
 const Measures: React.FC = () => {
   const confirmRef = useRef<ConfirmElement>(null);
   const router = useRouter();
@@ -36,14 +35,16 @@ const Measures: React.FC = () => {
   const [isConfirmAddTask, setIsConfirmAddTask] = useState(false);
   const [addTasksuccessModal, setAddTaskSuccessModal] =
     useState<boolean>(false);
-    const [ accodionView, setAccodionView ] = useState();
+  const [accodionView, setAccodionView] = useState();
 
   const [planid, setPlanId] = useState();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const [addTherapistMeasuresPlan] = useMutation(
     ADD_THERAPIST_MEASURE_PLAN_ADD
   );
-  const [therapistMeasureSubmitTest] = useMutation(THERAPIST_MEASURE_SUBMIT_TEST)
+  const [therapistMeasureSubmitTest] = useMutation(
+    THERAPIST_MEASURE_SUBMIT_TEST
+  );
   /* istanbul ignore next */
   const patId = router?.query?.id as string;
 
@@ -163,8 +164,7 @@ const Measures: React.FC = () => {
         setIsConfirmationModel(true);
         break;
       case "takeTest":
-        return setAccodionView(value)
-
+        return setAccodionView(value);
     }
   };
 
@@ -221,58 +221,70 @@ const Measures: React.FC = () => {
     refetch();
   };
 
-  const onPressCancel = (value) => {
-    setAccodionView(undefined)
-  }
+  const onPressCancel = () => {
+    setAccodionView(undefined);
+  };
 
   const takeTestSubmit = async (formFields, callback) => {
-    console.log("formFields", formFields)
+    console.log("formFields", formFields);
     const { templateData, sessionNo, templateId, measureId } = formFields;
-    const { totalScore = 0 } = templateData || {}
+    const { totalScore = 0 } = templateData || {};
     const variables = {
       measureId,
       score: totalScore,
       templateData: JSON.stringify(templateData),
       sessionNo,
-      templateId
-    }
-    
+      templateId,
+    };
+
     try {
       await therapistMeasureSubmitTest({
         variables,
-        onCompleted: (data) => {
-          console.log("data", data)
+        onCompleted: () => {
+          confirmRef.current.showSuccess({
+            description: "Your test score has been saved successfully.",
+            handleOk,
+          });
           callback();
         },
       });
-
     } catch (e) {
       enqueueSnackbar("There is something wrong.", { variant: "error" });
     }
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
-    confirmRef.current.openConfirm({
-      confirmFunction: (callback) => takeTestSubmit(formFields, callback),
-      description: "Are you sure you want to create the measure?",
-      setSubmitting,
-    });
+    const { templateData } = formFields;
+    const { totalScore = 0, optionsQuestions } = templateData || {};
+    const isRadioResponse = optionsQuestions[0].labels.some(
+      (item) => item.answer === true
+    );
+    if (totalScore > 0 || isRadioResponse) {
+      confirmRef.current.openConfirm({
+        confirmFunction: (callback) => takeTestSubmit(formFields, callback),
+        description: "Are you sure you want to save the test score?",
+        setSubmitting,
+      });
+    } else {
+      enqueueSnackbar("Please select your score", { variant: "error" });
+      setSubmitting(false);
+    }
   };
 
   if (loadingMeasuresList) return <Loader visible={true} />;
 
   return (
     <>
-    <MeasureContent
-      listData={listData}
-      onClickCreateMeasure={handleCreateMeasure}
-      actionButtonClick={actionButtonClick}
-      accordionViewData={accodionView}
-      onPressAddPlan={handleOpenAddPlanModal}
-      onPressCancel={onPressCancel}
-      submitForm={handleSavePress}
-      confirmRef={confirmRef}
-    />
+      <MeasureContent
+        listData={listData}
+        onClickCreateMeasure={handleCreateMeasure}
+        actionButtonClick={actionButtonClick}
+        accordionViewData={accodionView}
+        onPressAddPlan={handleOpenAddPlanModal}
+        onPressCancel={onPressCancel}
+        submitForm={handleSavePress}
+        confirmRef={confirmRef}
+      />
 
       <CommonModal
         ref={modalRefAddPlan}

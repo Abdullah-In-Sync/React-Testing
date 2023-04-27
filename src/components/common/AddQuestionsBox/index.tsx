@@ -213,7 +213,7 @@ const AddQuestionsBox = (
           }
         </FieldArray>
         <ConfirmBoxModal
-          infoMessage="You cannot add more than 15 questions, Please delete a question to add a new question"
+          infoMessage="You cannot add more than 15 questions. Please delete a question to add a new question"
           confirmModalRef={confirmModalRef}
         />
       </Stack>
