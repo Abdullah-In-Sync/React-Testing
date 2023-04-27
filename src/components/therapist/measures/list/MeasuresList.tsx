@@ -19,7 +19,6 @@ const MeasuresList: React.FC<ViewProps> = ({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleTakeTest = (item) => {
-    console.log("item", item);
     const { score_date } = item;
     if (isAfter({ date: score_date }))
       actionButtonClick({ ...item, ...{ pressedIconButton: "takeTest" } });
@@ -29,7 +28,7 @@ const MeasuresList: React.FC<ViewProps> = ({
       });
   };
 
-  const accordionDetail = (item) => {
+  const accordionDetail = (item, i) => {
     const { score } = item;
     return (
       <Box className="accordionDetailWrapper">
@@ -43,6 +42,7 @@ const MeasuresList: React.FC<ViewProps> = ({
           <CommonButton
             variant="contained"
             className="scoreButton"
+            data-testid={`takeTest${i}`}
             onClick={() => handleTakeTest(item)}
           >
             Take Test
@@ -56,7 +56,7 @@ const MeasuresList: React.FC<ViewProps> = ({
     return (
       <Accordion
         title={title}
-        detail={() => accordionDetail(item)}
+        detail={() => accordionDetail(item, i)}
         index={i}
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />

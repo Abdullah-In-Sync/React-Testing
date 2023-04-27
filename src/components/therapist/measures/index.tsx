@@ -80,19 +80,6 @@ const Measures: React.FC = () => {
       pressedIconButton,
     } = selectedMeasure.current;
     setIsConfirmationModel(false);
-    console.debug({
-      variables: {
-        measure_id: _id,
-        update: {
-          description,
-          share_status: pressedIconButton == "share" ? 1 : share_status,
-          status: pressedIconButton == "delete" ? 0 : status,
-          template_data,
-          template_id,
-          title,
-        },
-      },
-    });
     updateMeasure({
       variables: {
         measure_id: _id,
@@ -115,7 +102,7 @@ const Measures: React.FC = () => {
       refetch,
     },
   ] = useLazyQuery<TherapistMeasuresData>(GET_THERAPIST_MEASURES_LIST, {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "cache-and-network",
   });
 
   const [updateMeasure] = useMutation<
@@ -222,11 +209,17 @@ const Measures: React.FC = () => {
   };
 
   const onPressCancel = () => {
-    setAccodionView(undefined);
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => {
+        setAccodionView(undefined);
+        callback();
+      },
+      description:
+        "Are you sure you want to cancel the measure without saving?",
+    });
   };
 
   const takeTestSubmit = async (formFields, callback) => {
-    console.log("formFields", formFields);
     const { templateData, sessionNo, templateId, measureId } = formFields;
     const { totalScore = 0 } = templateData || {};
     const variables = {
@@ -243,9 +236,11 @@ const Measures: React.FC = () => {
         onCompleted: () => {
           confirmRef.current.showSuccess({
             description: "Your test score has been saved successfully.",
-            handleOk,
+            handleOk: () => {
+              callback();
+              setAccodionView(undefined);
+            },
           });
-          callback();
         },
       });
     } catch (e) {
@@ -255,11 +250,11 @@ const Measures: React.FC = () => {
 
   const handleSavePress = (formFields, { setSubmitting }) => {
     const { templateData } = formFields;
-    const { totalScore = 0, optionsQuestions } = templateData || {};
-    const isRadioResponse = optionsQuestions[0].labels.some(
-      (item) => item.answer === true
-    );
-    if (totalScore > 0 || isRadioResponse) {
+    const { totalScore = 0 } = templateData || {};
+    // const isRadioResponse = optionsQuestions[0].labels.some(
+    //   (item) => item.answer === true
+    // );
+    if (totalScore > 0) {
       confirmRef.current.openConfirm({
         confirmFunction: (callback) => takeTestSubmit(formFields, callback),
         description: "Are you sure you want to save the test score?",

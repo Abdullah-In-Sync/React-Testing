@@ -45,10 +45,13 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const { templateData: { questions: questionsError } = {} } = errors;
 
   useEffect(() => {
-    const { tableFooter, totalScore } = allAnsColSum(templateData);
-    setFieldValue(`templateData.questions.footerRows`, tableFooter);
-    setFieldValue(`templateData.totalScore`, totalScore);
-  }, [templateData.questions.bodyRows]);
+    const setScore = () => {
+      const { tableFooter, totalScore } = allAnsColSum(templateData);
+      setFieldValue(`templateData.questions.footerRows`, tableFooter);
+      setFieldValue(`templateData.totalScore`, totalScore);
+    };
+    if (isResponse) setScore();
+  }, [templateData.questions.bodyRows, isResponse]);
 
   const onResponse = ({ name, columnName }) => {
     setFieldValue(`${name}.answer`, columnName);
@@ -71,6 +74,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
           onClick={() => onResponse({ name: rowIndex, columnName })}
         >
           <Typography
+            data-testid={`row_${rowIndex}_${columnName}`}
             className={`${answer === columnName ? "answerActive" : ""}`}
           >
             {value}

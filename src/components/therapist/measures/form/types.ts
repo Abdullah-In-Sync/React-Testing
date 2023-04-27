@@ -29,7 +29,7 @@ export interface CommonFormProps {
     formikHelper: FormikProps<InitialFormValues>
   ) => void;
   onPressCancel?: (value) => void;
-  measureData?: TherapistListMeasuresEntity;
+  measureData?: TherapistListMeasuresEntity | any;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
   isEdit?: boolean;

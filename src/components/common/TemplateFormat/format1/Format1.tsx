@@ -29,8 +29,11 @@ export default function Format1({
   const { templateData } = values;
 
   useEffect(() => {
-    setFieldValue(`templateData.totalScore`, allAnsColSum());
-  }, [templateData.questions]);
+    const setScore = () => {
+      setFieldValue(`templateData.totalScore`, allAnsColSum());
+    };
+    if (isResponse) setScore();
+  }, [templateData.questions, isResponse]);
 
   const allAnsColSum = () => {
     const { questions } = templateData;
