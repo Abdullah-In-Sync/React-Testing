@@ -24,14 +24,9 @@ export default function TherapyMainComponent() {
       component: <SafetyPlan />,
     },
     {
-      label: "Relapse Plan",
-      value: "relapse-plan",
-      component: <Relapse />,
-    },
-    {
-      label: "Homework",
-      value: "homework",
-      component: <Homework />,
+      label: "Measures",
+      value: "measures",
+      component: <Measures />,
     },
     {
       label: "Goals",
@@ -39,24 +34,30 @@ export default function TherapyMainComponent() {
       component: <Goals />,
     },
     {
+      label: "Tools",
+      value: "tools",
+      component: <Monitors />,
+    },
+    {
+      label: "Homework",
+      value: "homework",
+      component: <Homework />,
+    },
+    {
       label: "Resources",
       value: "resources",
       component: <Resources />,
     },
     {
+      label: "Relapse Plan",
+      value: "relapse-plan",
+      component: <Relapse />,
+    },
+
+    {
       label: "Feedback",
       value: "feddback",
       component: <Feedback />,
-    },
-    {
-      label: "Measures",
-      value: "measures",
-      component: <Measures />,
-    },
-    {
-      label: "Monitors",
-      value: "monitors",
-      component: <Monitors />,
     },
   ];
   return (
