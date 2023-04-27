@@ -146,6 +146,9 @@ export const useStyles = makeStyles((theme: Theme) => {
     },
     viewForm: {
       "& .autoCompeleteSessionWrapper": {
+        "& svg": {
+          color: theme.palette.primary.contrastText,
+        },
         "& label": {
           color: theme.palette.primary.contrastText,
         },
