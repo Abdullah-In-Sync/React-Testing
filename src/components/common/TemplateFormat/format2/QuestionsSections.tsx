@@ -181,7 +181,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
                       className={`${
-                        !isResponse && i === 0 ? "disbledFields" : ""
+                        isResponse && i === 0 ? "disbledFields" : ""
                       }`}
                     >
                       {inputTextField({

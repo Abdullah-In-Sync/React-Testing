@@ -8,7 +8,6 @@ type ViewProps = CommonFormProps & ModalRefs;
 
 const CreateMeasuersForm: React.FC<ViewProps> = ({
   submitForm,
-  organizationList,
   onPressCancel,
   confirmRef,
   infoModalRef,
@@ -29,7 +28,6 @@ const CreateMeasuersForm: React.FC<ViewProps> = ({
         children={(props: any) => (
           <CommonForm
             formikProps={props}
-            organizationList={organizationList}
             onPressCancel={onPressCancel}
             confirmRef={confirmRef}
             infoModalRef={infoModalRef}
