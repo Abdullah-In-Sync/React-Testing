@@ -42,11 +42,10 @@ export const useStyles = makeStyles((theme: Theme) => {
   };
 
   return {
-
     viewForm: {
       "& .autoCompeleteSessionWrapper": {
         "& .MuiAutocomplete-input": {
-          padding: 0
+          padding: 0,
         },
         "& svg": {
           color: theme.palette.primary.contrastText,

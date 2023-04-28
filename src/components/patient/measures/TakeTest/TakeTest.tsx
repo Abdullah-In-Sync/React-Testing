@@ -6,16 +6,17 @@ import CommonButton from "../../../common/Buttons/CommonButton";
 import ResponseForm from "../form/ResponseForm";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
-type ViewProps = CommonFormProps & ModalRefs & {
-  backButtonClick: () => void
-};
+type ViewProps = CommonFormProps &
+  ModalRefs & {
+    backButtonClick: () => void;
+  };
 
 const TakeTestForm: React.FC<ViewProps> = ({
   measureData,
   onPressCancel,
   submitForm,
   confirmRef,
-  backButtonClick
+  backButtonClick,
 }) => {
   const {
     _id: measureId,
@@ -53,16 +54,22 @@ const TakeTestForm: React.FC<ViewProps> = ({
     );
   };
 
-  return <>
-    <Box mb={1.5}>
-      <CommonButton data-testid="backButton"
-        variant="contained"
-        onClick={backButtonClick}
-        size="small"
-        startIcon={<ArrowBackAlt />}>Back</CommonButton>
-    </Box>
-    {commonform()}
-  </>;
+  return (
+    <>
+      <Box mb={1.5}>
+        <CommonButton
+          data-testid="backButton"
+          variant="contained"
+          onClick={backButtonClick}
+          size="small"
+          startIcon={<ArrowBackAlt />}
+        >
+          Back
+        </CommonButton>
+      </Box>
+      {commonform()}
+    </>
+  );
 };
 
 export default TakeTestForm;

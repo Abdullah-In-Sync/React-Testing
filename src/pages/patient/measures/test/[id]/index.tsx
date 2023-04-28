@@ -8,10 +8,13 @@ import Loader from "../../../../../components/common/Loader";
 import { ConfirmElement } from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
 import Layout from "../../../../../components/layout";
 import TakeTest from "../../../../../components/patient/measures/TakeTest/TakeTest";
-import { PATIENT_MEASURE_SUBMIT_TEST, PATIENT_VIEW_MEASURE } from "../../../../../graphql/Measure/graphql";
+import {
+  PATIENT_MEASURE_SUBMIT_TEST,
+  PATIENT_VIEW_MEASURE,
+} from "../../../../../graphql/Measure/graphql";
 import {
   PatientViewMeasuresData,
-  PatientSubmitTestData
+  PatientSubmitTestData,
 } from "../../../../../graphql/Measure/types";
 import withAuthentication from "../../../../../hoc/auth";
 
@@ -33,7 +36,7 @@ const MeasureTestPage: NextPage = () => {
     data: { patientViewMeasure: measureData = null } = {},
   } = useQuery<PatientViewMeasuresData>(PATIENT_VIEW_MEASURE, {
     variables: {
-      measureId
+      measureId,
     },
   });
 
@@ -48,7 +51,7 @@ const MeasureTestPage: NextPage = () => {
   };
 
   const takeTestSubmit = async (formFields, callback) => {
-    setLoader(true)
+    setLoader(true);
     const { templateData, sessionNo, templateId, measureId } = formFields;
     const { totalScore = 0 } = templateData || {};
     const variables = {
@@ -69,7 +72,7 @@ const MeasureTestPage: NextPage = () => {
     } catch (e) {
       enqueueSnackbar("There is something wrong.", { variant: "error" });
     } finally {
-      setLoader(false)
+      setLoader(false);
     }
   };
 
@@ -89,23 +92,25 @@ const MeasureTestPage: NextPage = () => {
   };
 
   const handleBackButton = () => {
-    router.back()
-  }
+    router.back();
+  };
 
   return (
-    !loadingMeasureData && <>
-      <Layout>
-        <ContentHeader title="Measures" />
-        <Loader visible={loadingMeasureData || loader} />
-        <TakeTest
-          backButtonClick={handleBackButton}
-          measureData={measureData}
-          onPressCancel={onPressCancel}
-          submitForm={submitForm}
-          confirmRef={confirmRef}
-        />
-      </Layout>
-    </>
+    !loadingMeasureData && (
+      <>
+        <Layout>
+          <ContentHeader title="Measures" />
+          <Loader visible={loadingMeasureData || loader} />
+          <TakeTest
+            backButtonClick={handleBackButton}
+            measureData={measureData}
+            onPressCancel={onPressCancel}
+            submitForm={submitForm}
+            confirmRef={confirmRef}
+          />
+        </Layout>
+      </>
+    )
   );
 };
 
