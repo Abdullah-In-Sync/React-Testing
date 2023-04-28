@@ -344,3 +344,64 @@ export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
     }
   }
 `;
+
+export const PATIENT_VIEW_MEASURE = gql`
+  query PatientViewMeasure($measureId: String!) {
+    patientViewMeasure(measure_id: $measureId) {
+      _id
+      description
+      created_date
+      patient_id
+      score
+      score_date
+      score_id
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      session_no
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
+export const PATIENT_MEASURE_SUBMIT_TEST = gql`
+  mutation PatientMeasureSubmitTest(
+    $measureId: String!
+    $score: Int!
+    $templateData: String!
+    $sessionNo: String
+    $templateId: String!
+  ) {
+    patientMeasureSubmitTest(
+      measure_id: $measureId
+      score: $score
+      template_data: $templateData
+      template_id: $templateId
+      session_no: $sessionNo
+    ) {
+      _id
+      added_by
+      created_date
+      measure_id
+      score
+      session_no
+      template_data
+      template_id
+      status
+    }
+  }
+`;

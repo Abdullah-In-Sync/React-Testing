@@ -240,3 +240,42 @@ export interface TherapistViewMeasures {
 export interface TherapistViewMeasuresData {
   therapistViewMeasure: TherapistListMeasuresEntity;
 }
+
+export interface PatientViewMeasuresData {
+  patientViewMeasure: PatientViewMeasure;
+}
+export interface PatientViewMeasure {
+  _id: string;
+  description: string;
+  created_date: string;
+  patient_id: string;
+  score: number;
+  score_date: string;
+  score_id: string;
+  scores_list?: null;
+  session_no: string;
+  share_status: number;
+  status: number;
+  template_data: string;
+  template_id: string;
+  therapist_id: string;
+  title: string;
+  updated_date: string;
+  __typename: string;
+}
+
+export interface PatientSubmitTestData {
+  patientMeasureSubmitTest: PatientMeasureSubmitTest;
+}
+export interface PatientMeasureSubmitTest {
+  _id: string;
+  added_by: string;
+  created_date: string;
+  measure_id: string;
+  score: number;
+  session_no: string;
+  template_data: string;
+  template_id: string;
+  status: number;
+  __typename: string;
+}
