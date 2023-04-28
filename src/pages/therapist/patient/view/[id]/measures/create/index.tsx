@@ -49,7 +49,7 @@ const CreateMeasures: NextPage = () => {
               });
             } else {
               confirmRef.current.showSuccess({
-                description: "Your measures has been created successfully.",
+                description: "Your measure has been created successfully.",
                 handleOk,
               });
             }
