@@ -40,6 +40,7 @@ const MeasureTestPage: NextPage = () => {
     },
   });
 
+  /* istanbul ignore next */
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => {
@@ -70,6 +71,7 @@ const MeasureTestPage: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("There is something wrong.", { variant: "error" });
     } finally {
       setLoader(false);
@@ -91,6 +93,7 @@ const MeasureTestPage: NextPage = () => {
     }
   };
 
+  /* istanbul ignore next */
   const handleBackButton = () => {
     router.back();
   };

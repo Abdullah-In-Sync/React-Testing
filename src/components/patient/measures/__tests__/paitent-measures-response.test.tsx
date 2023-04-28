@@ -177,6 +177,12 @@ describe("Therapist response measures", () => {
 
     expect(await screen.findByText(/Total WSAS Score/i)).toBeInTheDocument();
 
+    const submitFormButton = await screen.findByTestId("submitForm");
+    fireEvent.click(submitFormButton);
+
+    expect(
+      await screen.findByText(/Please select your score/i)
+    ).toBeInTheDocument();
     const templateFormatSelect = await screen.findByTestId(
       "templateData.questions.0.answer"
     );
@@ -197,7 +203,6 @@ describe("Therapist response measures", () => {
 
     fireEvent.click(optionsSelect[1]);
 
-    const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
 
     const confirmButton = await screen.findByRole("button", {
@@ -222,7 +227,12 @@ describe("Therapist response measures", () => {
         /Over the last 2 weeks how often have you been bothered by the following problems?/i
       )
     ).toBeInTheDocument();
+    const submitFormButton = await screen.findByTestId("submitForm");
+    fireEvent.click(submitFormButton);
 
+    expect(
+      await screen.findByText(/Please select your score/i)
+    ).toBeInTheDocument();
     const colAns = await screen.findByTestId(
       "row_templateData.questions.bodyRows.0_col3"
     );
@@ -234,7 +244,6 @@ describe("Therapist response measures", () => {
     );
     fireEvent.click(radioAns);
 
-    const submitFormButton = await screen.findByTestId("submitForm");
     fireEvent.click(submitFormButton);
 
     const confirmButton = await screen.findByRole("button", {

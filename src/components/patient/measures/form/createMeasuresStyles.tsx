@@ -44,6 +44,9 @@ export const useStyles = makeStyles((theme: Theme) => {
   return {
     viewForm: {
       "& .autoCompeleteSessionWrapper": {
+        "& .MuiInputLabel-shrink": {
+          top: "0 !important",
+        },
         "& .MuiAutocomplete-input": {
           padding: 0,
         },
@@ -52,6 +55,7 @@ export const useStyles = makeStyles((theme: Theme) => {
         },
         "& label": {
           color: theme.palette.primary.contrastText,
+          top: -10,
         },
         "& input": {
           color: theme.palette.primary.contrastText,
