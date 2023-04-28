@@ -69,7 +69,7 @@ const CreateMeasures: NextPage = () => {
               });
             } else {
               confirmRef.current.showSuccess({
-                description: "Your measures has been created successfully.",
+                description: "Your measure has been created successfully.",
                 handleOk,
               });
             }
@@ -105,7 +105,7 @@ const CreateMeasures: NextPage = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
-        "Are you sure you are canceling the measures without saving?",
+        "Are you sure you want to cancel the measure without saving?",
     });
   };
 

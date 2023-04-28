@@ -1,9 +1,6 @@
 import { FormikProps } from "formik";
 import { ForwardedRef } from "react";
-import {
-  AdminViewMeasureById,
-  TherapistListMeasuresEntity,
-} from "../../../../graphql/Measure/types";
+import { TherapistListMeasuresEntity } from "../../../../graphql/Measure/types";
 import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
 import { ConfirmElement } from "../../../common/TemplateFormat/ConfirmWrapper";
 import {
@@ -17,6 +14,8 @@ export interface InitialFormValues {
   orgId?: string;
   templateId: string | number;
   templateData: TemplateDataFormat1 | TemplateDataFormat2;
+  sessionNo?: string;
+  score?: number;
 }
 
 export interface ModalRefs {
@@ -29,11 +28,8 @@ export interface CommonFormProps {
     formData: InitialFormValues,
     formikHelper: FormikProps<InitialFormValues>
   ) => void;
-  organizationList?: Array<{
-    [key: string]: any;
-  }>;
-  onPressCancel?: () => void;
-  measureData?: AdminViewMeasureById | TherapistListMeasuresEntity;
+  onPressCancel?: (value) => void;
+  measureData?: TherapistListMeasuresEntity | any;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
   isEdit?: boolean;

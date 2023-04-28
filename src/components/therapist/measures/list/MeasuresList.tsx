@@ -1,9 +1,11 @@
 import { Box, Stack, Typography } from "@mui/material";
 import * as React from "react";
+import { useSnackbar } from "notistack";
 import { TherapistListMeasuresEntity } from "../../../../graphql/Measure/types";
 import { Accordion } from "../../../common/Accordion";
 import CommonButton from "../../../common/Buttons/CommonButton";
 import ActionsButtons from "./ActionsButtons";
+import { isAfter } from "../../../../utility/helper";
 
 type ViewProps = {
   listData: TherapistListMeasuresEntity[];
@@ -14,17 +16,35 @@ const MeasuresList: React.FC<ViewProps> = ({
   listData = [],
   actionButtonClick,
 }) => {
-  const accordionDetail = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleTakeTest = (item) => {
+    const { score_date } = item;
+    if (isAfter({ date: score_date }))
+      actionButtonClick({ ...item, ...{ pressedIconButton: "takeTest" } });
+    else
+      enqueueSnackbar("Today’s test has been taken already", {
+        variant: "info",
+      });
+  };
+
+  const accordionDetail = (item, i) => {
+    const { score } = item;
     return (
       <Box className="accordionDetailWrapper">
         <Box className="detailFirst">
-          <Typography variant="h6">Current Score: 0</Typography>
+          <Typography variant="h6">{`Current Score: ${score}`}</Typography>
         </Box>
         <Box className="detailSecond">
           <CommonButton variant="contained" className="scoreButton">
             View Scores
           </CommonButton>
-          <CommonButton variant="contained" className="scoreButton">
+          <CommonButton
+            variant="contained"
+            className="scoreButton"
+            data-testid={`takeTest${i}`}
+            onClick={() => handleTakeTest(item)}
+          >
             Take Test
           </CommonButton>
         </Box>
@@ -36,7 +56,7 @@ const MeasuresList: React.FC<ViewProps> = ({
     return (
       <Accordion
         title={title}
-        detail={accordionDetail}
+        detail={() => accordionDetail(item, i)}
         index={i}
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />

@@ -44,7 +44,7 @@ const CreateMeasures: NextPage = () => {
               therapistCreateMeasures: { duplicateNames },
             } = data;
             if (duplicateNames) {
-              enqueueSnackbar("This measure name already exist.", {
+              enqueueSnackbar("This measure’s name already exists.", {
                 variant: "error",
               });
             } else {
@@ -80,7 +80,7 @@ const CreateMeasures: NextPage = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
-        "Are you sure you are canceling the measures without saving?",
+        "Are you sure you want to cancel the measure without saving?",
     });
   };
 

@@ -3,6 +3,7 @@ import * as React from "react";
 import {
   GET_THERAPIST_MEASURES_LIST,
   UPDATE_THERAPIST_MEASURE,
+  THERAPIST_MEASURE_SUBMIT_TEST,
 } from "../../../graphql/Measure/graphql";
 import MeasureContent from "./MeasuresContent";
 import { useRouter } from "next/router";
@@ -25,18 +26,24 @@ import AddMeasuresPlanForm from "./AddMeasuresPlan";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../common/ConfirmationModal";
 import { SuccessModal } from "../../common/SuccessModal";
+import { ConfirmElement } from "../../common/TemplateFormat/ConfirmWrapper";
 
 const Measures: React.FC = () => {
+  const confirmRef = useRef<ConfirmElement>(null);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [isConfirmAddTask, setIsConfirmAddTask] = useState(false);
   const [addTasksuccessModal, setAddTaskSuccessModal] =
     useState<boolean>(false);
+  const [accodionView, setAccodionView] = useState();
 
   const [planid, setPlanId] = useState();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const [addTherapistMeasuresPlan] = useMutation(
     ADD_THERAPIST_MEASURE_PLAN_ADD
+  );
+  const [therapistMeasureSubmitTest] = useMutation(
+    THERAPIST_MEASURE_SUBMIT_TEST
   );
   /* istanbul ignore next */
   const patId = router?.query?.id as string;
@@ -73,19 +80,6 @@ const Measures: React.FC = () => {
       pressedIconButton,
     } = selectedMeasure.current;
     setIsConfirmationModel(false);
-    console.debug({
-      variables: {
-        measure_id: _id,
-        update: {
-          description,
-          share_status: pressedIconButton == "share" ? 1 : share_status,
-          status: pressedIconButton == "delete" ? 0 : status,
-          template_data,
-          template_id,
-          title,
-        },
-      },
-    });
     updateMeasure({
       variables: {
         measure_id: _id,
@@ -108,7 +102,7 @@ const Measures: React.FC = () => {
       refetch,
     },
   ] = useLazyQuery<TherapistMeasuresData>(GET_THERAPIST_MEASURES_LIST, {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "cache-and-network",
   });
 
   const [updateMeasure] = useMutation<
@@ -156,10 +150,10 @@ const Measures: React.FC = () => {
       case "delete":
         setIsConfirmationModel(true);
         break;
+      case "takeTest":
+        return setAccodionView(value);
     }
   };
-
-  if (loadingMeasuresList) return <Loader visible={true} />;
 
   /* istanbul ignore next */
   const receivePlanId = (value) => {
@@ -213,13 +207,78 @@ const Measures: React.FC = () => {
     /* istanbul ignore next */
     refetch();
   };
+
+  const onPressCancel = () => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => {
+        setAccodionView(undefined);
+        callback();
+      },
+      description:
+        "Are you sure you want to cancel the measure without saving?",
+    });
+  };
+
+  const takeTestSubmit = async (formFields, callback) => {
+    const { templateData, sessionNo, templateId, measureId } = formFields;
+    const { totalScore = 0 } = templateData || {};
+    const variables = {
+      measureId,
+      score: totalScore,
+      templateData: JSON.stringify(templateData),
+      sessionNo,
+      templateId,
+    };
+
+    try {
+      await therapistMeasureSubmitTest({
+        variables,
+        onCompleted: () => {
+          confirmRef.current.showSuccess({
+            description: "Your test score has been saved successfully.",
+            handleOk: () => {
+              callback();
+              setAccodionView(undefined);
+            },
+          });
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
+  const handleSavePress = (formFields, { setSubmitting }) => {
+    const { templateData } = formFields;
+    const { totalScore = 0 } = templateData || {};
+    // const isRadioResponse = optionsQuestions[0].labels.some(
+    //   (item) => item.answer === true
+    // );
+    if (totalScore > 0) {
+      confirmRef.current.openConfirm({
+        confirmFunction: (callback) => takeTestSubmit(formFields, callback),
+        description: "Are you sure you want to save the test score?",
+        setSubmitting,
+      });
+    } else {
+      enqueueSnackbar("Please select your score", { variant: "error" });
+      setSubmitting(false);
+    }
+  };
+
+  if (loadingMeasuresList) return <Loader visible={true} />;
+
   return (
     <>
       <MeasureContent
         listData={listData}
         onClickCreateMeasure={handleCreateMeasure}
         actionButtonClick={actionButtonClick}
+        accordionViewData={accodionView}
         onPressAddPlan={handleOpenAddPlanModal}
+        onPressCancel={onPressCancel}
+        submitForm={handleSavePress}
+        confirmRef={confirmRef}
       />
 
       <CommonModal

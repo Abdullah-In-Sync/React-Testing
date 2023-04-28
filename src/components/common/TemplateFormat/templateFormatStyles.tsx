@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
             border: 0,
             "& .editableInputWrapper": {
               display: "-webkit-inline-box",
-              inlineSize: "70px",
+              // inlineSize: "70px",
               overflowWrap: "break-word",
               "& .makeStyles-editableInput-6": {
                 fontSize: 14,
@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
                 margin: 0,
                 "& textarea": {
                   textAlign: "center",
-                  fontSize: 12,
+                  padding: "unset",
                 },
                 "& input": {
                   border: 0,
@@ -345,6 +345,28 @@ export const useStyles = makeStyles((theme: Theme) => ({
       },
       "& .deleteButtonWrapper button svg": {
         fontSize: "1.2rem",
+      },
+    },
+    "& tbody": {
+      "& td:not(:first-child)": {
+        textAlign: "center",
+      },
+    },
+    "& .viewValueWrapper": {
+      "& p": {
+        cursor: "pointer",
+      },
+
+      "& .answerActive": {
+        display: "block",
+        height: 35,
+        width: 35,
+        borderRadius: "50%",
+        border: "1px solid #000",
+        margin: "auto",
+        lineHeight: "35px",
+        textAlign: "center",
+        color: "black",
       },
     },
   },

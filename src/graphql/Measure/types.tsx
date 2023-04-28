@@ -196,6 +196,7 @@ export interface TherapistListMeasuresEntity {
   therapist_id: string;
   title: string;
   updated_date: string;
+  session_no: string;
   __typename: string;
 }
 

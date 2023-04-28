@@ -1,36 +1,46 @@
 import { Formik } from "formik";
 import React from "react";
-import CommonForm from "../form/CommonForm";
-import { measuresValidationSchema } from "../form/measuresValidationSchema";
+import ResponseForm from "../form/ResponseForm";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
 type ViewProps = CommonFormProps & ModalRefs;
 
-const CreateMeasuersForm: React.FC<ViewProps> = ({
-  submitForm,
+const TakeTestForm: React.FC<ViewProps> = ({
+  measureData,
   onPressCancel,
+  submitForm,
   confirmRef,
-  infoModalRef,
 }) => {
+  const {
+    _id: measureId,
+    title = "",
+    description = "",
+    template_id: templateId = "",
+    template_data = null,
+    session_no = "start",
+    score,
+  } = measureData || {};
+
   const initialValues = {
-    title: "",
-    description: "",
-    templateId: "",
-    templateData: null,
+    measureId,
+    title,
+    description,
+    templateId,
+    templateData: { ...JSON.parse(template_data), ...{ totalScore: score } },
+    sessionNo: session_no,
   };
 
   const commonform = () => {
     return (
       <Formik
-        validationSchema={measuresValidationSchema}
+        enableReinitialize
         initialValues={initialValues}
         onSubmit={submitForm}
         children={(props: any) => (
-          <CommonForm
+          <ResponseForm
             formikProps={props}
             onPressCancel={onPressCancel}
             confirmRef={confirmRef}
-            infoModalRef={infoModalRef}
           />
         )}
       />
@@ -40,4 +50,4 @@ const CreateMeasuersForm: React.FC<ViewProps> = ({
   return <>{commonform()}</>;
 };
 
-export default CreateMeasuersForm;
+export default TakeTestForm;
