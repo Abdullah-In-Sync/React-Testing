@@ -165,8 +165,8 @@ beforeEach(() => {
   });
 });
 
-describe("Therapist response measures", () => {
-  it("should render therapist format 1 response", async () => {
+describe("Paitent response measures", () => {
+  it("should render paitent format 1 response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "9776be15-4e15-4573-9c45-9868dad0e50a",
@@ -213,7 +213,7 @@ describe("Therapist response measures", () => {
     expect(pushMock).toHaveBeenCalledWith(`/patient/therapy/?tab=measures`);
   });
 
-  it("should render therapist format 2 response", async () => {
+  it("should render paitent format 2 response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "b8423205-7a90-4cd6-8324-65f8372880be",
