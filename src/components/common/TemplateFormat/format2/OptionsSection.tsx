@@ -83,7 +83,7 @@ const OptionsSection: React.FC<ViewProps> = ({
                   <FormControlLabel
                     key={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
                     data-testid={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
-                    value={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
+                    checked={labels[i].answer}
                     control={<Radio />}
                     label={""}
                     onClick={() =>
