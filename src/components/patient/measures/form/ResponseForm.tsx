@@ -14,7 +14,7 @@ import ConfirmWrapper from "../../../common/TemplateFormat/ConfirmWrapper";
 
 type ViewProps = CommonFormProps & ModalRefs;
 
-const getSessionOptions = () => {
+export const getSessionOptions = () => {
   const tempSession = [{ value: "start", label: "Start" }];
   for (let i = 1; i <= 50; i++) {
     tempSession.push({ value: i.toString(), label: `Session ${i}` });

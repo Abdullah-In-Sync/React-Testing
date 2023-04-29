@@ -405,3 +405,67 @@ export const PATIENT_MEASURE_SUBMIT_TEST = gql`
     }
   }
 `;
+
+export const GET_PAITENT_MEASURES_LIST = gql`
+  query PatientMeasureList {
+    patientMeasureList {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      score_id
+      session_no
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
+// query MyQuery {
+//   patientMeasureList {
+//     _id
+//     created_date
+//     description
+//     patient_id
+//     score
+//     score_date
+//     score_id
+//     session_no
+//     scores_list {
+//       _id
+//       added_by
+//       created_date
+//       measure_id
+//       score
+//       session_no
+//       status
+//       template_data
+//       template_id
+//     }
+//     share_status
+//     status
+//     template_data
+//     template_id
+//     therapist_id
+//     title
+//     updated_date
+//   }
+// }
