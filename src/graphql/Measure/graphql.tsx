@@ -439,33 +439,26 @@ export const GET_PAITENT_MEASURES_LIST = gql`
   }
 `;
 
-// query MyQuery {
-//   patientMeasureList {
-//     _id
-//     created_date
-//     description
-//     patient_id
-//     score
-//     score_date
-//     score_id
-//     session_no
-//     scores_list {
-//       _id
-//       added_by
-//       created_date
-//       measure_id
-//       score
-//       session_no
-//       status
-//       template_data
-//       template_id
-//     }
-//     share_status
-//     status
-//     template_data
-//     template_id
-//     therapist_id
-//     title
-//     updated_date
-//   }
-// }
+export const PATIENT_VIEW_SCORE = gql`
+  query PatientViewScore($scoreId: String!) {
+    patientViewScore(score_id: $scoreId) {
+      _id
+      description
+      score
+      score_date
+      score_detail {
+        added_by
+        _id
+        template_id
+        template_data
+        status
+        session_no
+        score
+        measure_id
+        created_date
+      }
+      session_no
+      title
+    }
+  }
+`;

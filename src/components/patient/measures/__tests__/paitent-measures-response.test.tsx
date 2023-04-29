@@ -210,8 +210,7 @@ describe("Therapist response measures", () => {
     });
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
-    const firstTitleText2 = await screen.findByText(/Total WSAS Score/i);
-    expect(firstTitleText2).toBeInTheDocument();
+    expect(pushMock).toHaveBeenCalledWith(`/patient/therapy/?tab=measures`);
   });
 
   it("should render therapist format 2 response", async () => {
@@ -252,7 +251,6 @@ describe("Therapist response measures", () => {
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
 
-    const firstTitleText2 = await screen.findByText(/15-21 severe anxiety./i);
-    expect(firstTitleText2).toBeInTheDocument();
+    expect(pushMock).toHaveBeenCalledWith(`/patient/therapy/?tab=measures`);
   });
 });

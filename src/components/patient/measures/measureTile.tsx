@@ -5,7 +5,7 @@ import { Accordion } from "../../common/Accordion";
 import { useStyles } from "./measureStyle";
 
 interface MeasureTileProps {
-  measure: PatientMeasureListEntity;
+  measure?: PatientMeasureListEntity;
   onClickTest?: (measure: PatientMeasureListEntity) => void;
   onClickScore?: (measure: PatientMeasureListEntity) => void;
 }

@@ -303,3 +303,29 @@ export interface PatientMeasureListEntity {
   updated_date: string;
   __typename: string;
 }
+
+export interface PatientViewScoreData {
+  patientViewScore: PatientViewScore;
+}
+export interface PatientViewScore {
+  _id: string;
+  description: string;
+  score: number;
+  score_date: string;
+  score_detail: ScoreDetail;
+  session_no: string;
+  title: string;
+  __typename: string;
+}
+export interface ScoreDetail {
+  added_by: string;
+  _id: string;
+  template_id: string;
+  template_data: string;
+  status: number;
+  session_no: string;
+  score: number;
+  measure_id: string;
+  created_date: string;
+  __typename: string;
+}

@@ -67,6 +67,7 @@ const MeasureTestPage: NextPage = () => {
       await patientMeasureSubmitTest({
         variables,
         onCompleted: () => {
+          router.push("/patient/therapy/?tab=measures");
           callback();
         },
       });

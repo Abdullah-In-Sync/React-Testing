@@ -11,22 +11,25 @@ type ViewProps = CommonFormProps &
     backButtonClick: () => void;
   };
 
-const TakeTestForm: React.FC<ViewProps> = ({
+const ViewResponse: React.FC<ViewProps> = ({
   measureData,
   onPressCancel,
-  submitForm,
   confirmRef,
   backButtonClick,
 }) => {
+  if (!measureData) return null;
+
   const {
-    _id: measureId,
-    title = "",
-    description = "",
-    template_id: templateId = "",
-    template_data = null,
-    session_no = "start",
-    score,
-  } = measureData || {};
+    score_detail: {
+      _id: measureId,
+      description = "",
+      template_id: templateId = "",
+      template_data = null,
+      session_no = "start",
+      score,
+    },
+    title,
+  } = measureData;
 
   const initialValues = {
     measureId,
@@ -40,15 +43,14 @@ const TakeTestForm: React.FC<ViewProps> = ({
   const commonform = () => {
     return (
       <Formik
-        enableReinitialize
         initialValues={initialValues}
-        onSubmit={submitForm}
+        onSubmit={null}
         children={(props: any) => (
           <ResponseForm
             formikProps={props}
             onPressCancel={onPressCancel}
             confirmRef={confirmRef}
-            isResponse={true}
+            isView={true}
           />
         )}
       />
@@ -73,4 +75,4 @@ const TakeTestForm: React.FC<ViewProps> = ({
   );
 };
 
-export default TakeTestForm;
+export default ViewResponse;

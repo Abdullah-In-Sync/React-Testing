@@ -12,7 +12,11 @@ import { CommonFormProps, ModalRefs } from "./types";
 // import { sessionOptions } from "../../../../lib/constants";
 import ConfirmWrapper from "../../../common/TemplateFormat/ConfirmWrapper";
 
-type ViewProps = CommonFormProps & ModalRefs;
+type ViewProps = CommonFormProps &
+  ModalRefs & {
+    isView?: boolean;
+    isResponse?: boolean;
+  };
 
 export const getSessionOptions = () => {
   const tempSession = [{ value: "start", label: "Start" }];
@@ -26,6 +30,8 @@ const ResponseForm: React.FC<ViewProps> = ({
   onPressCancel,
   formikProps,
   confirmRef,
+  isView,
+  isResponse,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const { templateId, description, title } = values;
@@ -44,7 +50,11 @@ const ResponseForm: React.FC<ViewProps> = ({
   /* istanbul ignore next */
   const sessionDropdown = () => {
     return (
-      <Box className="autoCompeleteSessionWrapper">
+      <Box
+        className={`autoCompeleteSessionWrapper ${
+          isView ? "disbledFields" : ""
+        }`}
+      >
         <CommonAutocomplete
           handleSelect={handleChangeSession}
           name={`sessionNo`}
@@ -58,7 +68,11 @@ const ResponseForm: React.FC<ViewProps> = ({
 
   return (
     <ConfirmWrapper ref={confirmRef}>
-      <Box className={`${styles.viewForm}`}>
+      <Box
+        className={`autoCompeleteSessionWrapper ${styles.viewForm} ${
+          isView ? "disbledFields" : ""
+        }`}
+      >
         <CardWithHeader label={title} rightComponent={sessionDropdown}>
           <CardContent>
             <Form>
@@ -70,32 +84,35 @@ const ResponseForm: React.FC<ViewProps> = ({
               {FormatTemplate && (
                 <FormatTemplate
                   formikProps={formikProps}
-                  isResponse
+                  isResponse={isResponse}
                   confirmRef={confirmRef}
+                  isView={isView}
                 />
               )}
-              <Box className="bottomActionButtonsWrapper">
-                <Box>
-                  <CommonButton
-                    type="submit"
-                    data-testid="submitForm"
-                    variant="contained"
-                    disabled={isSubmitting}
-                  >
-                    Save
-                  </CommonButton>
+              {!isView && (
+                <Box className="bottomActionButtonsWrapper">
+                  <Box>
+                    <CommonButton
+                      type="submit"
+                      data-testid="submitForm"
+                      variant="contained"
+                      disabled={isSubmitting}
+                    >
+                      Save
+                    </CommonButton>
+                  </Box>
+                  <Box>
+                    <CommonButton
+                      variant="contained"
+                      className="cancelButton"
+                      data-testid="cancelForm"
+                      onClick={onPressCancel}
+                    >
+                      Cancel
+                    </CommonButton>
+                  </Box>
                 </Box>
-                <Box>
-                  <CommonButton
-                    variant="contained"
-                    className="cancelButton"
-                    data-testid="cancelForm"
-                    onClick={onPressCancel}
-                  >
-                    Cancel
-                  </CommonButton>
-                </Box>
-              </Box>
+              )}
             </Form>
           </CardContent>
         </CardWithHeader>
