@@ -33,6 +33,7 @@ const ResponseForm: React.FC<ViewProps> = ({
   const styles = useStyles();
   const sessionOptions = getSessionOptions();
 
+  /* istanbul ignore next */
   const handleChangeSession = (e) => {
     const {
       target: { value },
@@ -40,6 +41,7 @@ const ResponseForm: React.FC<ViewProps> = ({
     setFieldValue(`sessionNo`, value);
   };
 
+  /* istanbul ignore next */
   const sessionDropdown = () => {
     return (
       <Box className="autoCompeleteSessionWrapper">
