@@ -50,7 +50,7 @@ const ResponseForm: React.FC<ViewProps> = ({
           name={`sessionNo`}
           initialOptions={sessionOptions}
           label="Enter Session"
-          defaultValue="start"
+          defaultValue={{ label: "Start", value: "start" }}
         />
       </Box>
     );

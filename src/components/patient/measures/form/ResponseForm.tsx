@@ -46,7 +46,6 @@ const ResponseForm: React.FC<ViewProps> = ({
 
   /* istanbul ignore next */
   const sessionDropdown = () => {
-    const label = !isView ? { label: "Enter Session" } : {};
     if (isView)
       return (
         sessionNo && (
@@ -73,7 +72,7 @@ const ResponseForm: React.FC<ViewProps> = ({
             handleSelect={handleChangeSession}
             name={`sessionNo`}
             initialOptions={sessionOptions}
-            {...label}
+            label="Enter Session"
             defaultValue={{ label: "Start", value: "start" }}
           />
         </Box>
