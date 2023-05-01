@@ -7,6 +7,7 @@ import { TherapistListMeasuresEntity } from "../../../graphql/Measure/types";
 import CommonButton from "../../common/Buttons/CommonButton";
 import TakeTest from "./TakeTest/TakeTest";
 import { CommonFormProps, ModalRefs } from "./form/types";
+import ViewScore from "./list/ViewScore";
 
 type ViewProps = {
   listData: TherapistListMeasuresEntity[];
@@ -15,6 +16,8 @@ type ViewProps = {
   onPressAddPlan?: () => void;
   accordionViewData: TherapistListMeasuresEntity;
   onPressCancel?: (value) => void;
+  accodionViewScore: any;
+  onPressCancelBack?: any;
 } & ModalRefs &
   CommonFormProps;
 
@@ -27,6 +30,8 @@ const MeasuresContent: React.FC<ViewProps> = ({
   onPressCancel,
   submitForm,
   confirmRef,
+  accodionViewScore,
+  onPressCancelBack,
 }) => {
   const styles = useStyles();
 
@@ -64,6 +69,13 @@ const MeasuresContent: React.FC<ViewProps> = ({
           onPressCancel={onPressCancel}
           submitForm={submitForm}
           confirmRef={confirmRef}
+        />
+      );
+    else if (accodionViewScore)
+      return (
+        <ViewScore
+          therapistViewScoreData={accodionViewScore}
+          onPressCancelBack={onPressCancelBack}
         />
       );
     else

@@ -4,6 +4,7 @@ import {
   GET_THERAPIST_MEASURES_LIST,
   UPDATE_THERAPIST_MEASURE,
   THERAPIST_MEASURE_SUBMIT_TEST,
+  GET_THERAPIST_MEASURES_SCORE_LIST,
 } from "../../../graphql/Measure/graphql";
 import MeasureContent from "./MeasuresContent";
 import { useRouter } from "next/router";
@@ -36,6 +37,9 @@ const Measures: React.FC = () => {
   const [addTasksuccessModal, setAddTaskSuccessModal] =
     useState<boolean>(false);
   const [accodionView, setAccodionView] = useState();
+
+  const [accodionViewScore, setAccodionViewScore] = useState();
+  const [measureId, setMeasureId] = useState("");
 
   const [planid, setPlanId] = useState();
   const modalRefAddPlan = useRef<ModalElement>(null);
@@ -123,6 +127,22 @@ const Measures: React.FC = () => {
       },
     });
 
+  const [getTherapistViewScoreData, { data: therapistViewScoreData }] =
+    useLazyQuery(GET_THERAPIST_MEASURES_SCORE_LIST, {
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        console.log("Koca: data ", data);
+      },
+    });
+
+  useEffect(() => {
+    getTherapistViewScoreData({
+      variables: {
+        measure_id: measureId,
+      },
+    });
+  }, [measureId]);
+
   useEffect(() => {
     getTherapistMeasuresList({
       variables: { patientId },
@@ -152,6 +172,9 @@ const Measures: React.FC = () => {
         break;
       case "takeTest":
         return setAccodionView(value);
+      case "viewscores":
+        setMeasureId(value._id);
+        return setAccodionViewScore(therapistViewScoreData);
     }
   };
 
@@ -219,6 +242,10 @@ const Measures: React.FC = () => {
     });
   };
 
+  const onPressCancelBack = () => {
+    setAccodionViewScore(undefined);
+  };
+
   const takeTestSubmit = async (formFields, callback) => {
     const { templateData, sessionNo, templateId, measureId } = formFields;
     const { totalScore = 0 } = templateData || {};
@@ -279,6 +306,8 @@ const Measures: React.FC = () => {
         onPressCancel={onPressCancel}
         submitForm={handleSavePress}
         confirmRef={confirmRef}
+        accodionViewScore={accodionViewScore}
+        onPressCancelBack={onPressCancelBack}
       />
 
       <CommonModal

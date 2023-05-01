@@ -254,6 +254,39 @@ export const UPDATE_THERAPIST_MEASURE = gql`
   }
 `;
 
+export const GET_THERAPIST_MEASURES_SCORE_LIST = gql`
+  query therapistViewScoreList($measure_id: String!) {
+    therapistViewScoreList(measure_id: $measure_id) {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      score_id
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      session_no
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
 export const THERAPIST_VIEW_MEASURE = gql`
   query TherapistViewMeasure($measureId: String!) {
     therapistViewMeasure(measure_id: $measureId) {
