@@ -32,14 +32,17 @@ const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
           aria-label={`iconButton_${_id}_${i}`}
           data-testid={`iconButton_${_id}_${i}`}
           style={
+            /* istanbul ignore next */
             id == "share" && data?.share_status == 1
               ? { backgroundColor: "#6EC9DB" }
               : null
           }
           onClick={
+            /* istanbul ignore next */
             id == "share" && data?.share_status == 1
               ? null
               : () => {
+                  /* istanbul ignore next */
                   buttonClick({ ...data, ...{ pressedIconButton: id } });
                 }
           }

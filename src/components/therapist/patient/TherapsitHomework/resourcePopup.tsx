@@ -24,9 +24,9 @@ interface ViewProps {
   setOpenResourceModal: any;
   popupData: any;
   onSearchData: any;
-  handleMyResourceData: any;
   assigneHomeworkResources: any;
-  handleMyFavouritesData: any;
+  handleMyRes: any;
+  handleMyFav: any;
 }
 
 const ResourcePopup: React.FC<ViewProps> = ({
@@ -34,8 +34,8 @@ const ResourcePopup: React.FC<ViewProps> = ({
   setOpenResourceModal,
   popupData,
   onSearchData,
-  handleMyResourceData,
-  handleMyFavouritesData,
+  handleMyRes,
+  handleMyFav,
   assigneHomeworkResources,
 }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -48,14 +48,6 @@ const ResourcePopup: React.FC<ViewProps> = ({
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
     onSearchData(event.target.value);
-  };
-
-  const handleMyRes = () => {
-    handleMyResourceData(1);
-  };
-
-  const handleMyFav = () => {
-    handleMyFavouritesData(1);
   };
 
   const setCheckBox = (data) => {
@@ -166,7 +158,6 @@ const ResourcePopup: React.FC<ViewProps> = ({
                 style={{
                   paddingLeft: "10px",
                   paddingRight: "10px",
-                  backgroundColor: "#6BA08E",
                   marginRight: "10px",
                 }}
                 onClick={handleMyRes}
@@ -180,7 +171,6 @@ const ResourcePopup: React.FC<ViewProps> = ({
                 style={{
                   paddingLeft: "10px",
                   paddingRight: "10px",
-                  backgroundColor: "#6BA08E",
                 }}
                 onClick={handleMyFav}
               >

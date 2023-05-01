@@ -47,14 +47,15 @@ const PatientHome = (props: propTypes) => {
       },
     });
 
-  console.log("Koca: homeDataData ", homeDataData);
-
   const appointmentDate = moment(
     homeDataData?.getPatientHomeData[0].appointment[0]?.app_date
   ).format("DD/MM/YY");
 
   const appStartTime =
     homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_start;
+
+  const sTime = homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_start;
+  console.log("Koca: sTime ", moment.utc(sTime).local());
 
   const appEndTime =
     homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_finish;
