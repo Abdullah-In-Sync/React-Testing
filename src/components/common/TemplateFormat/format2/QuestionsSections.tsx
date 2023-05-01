@@ -106,7 +106,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
               })}
             </TableCell>
           ))}
-          {!isView && !isResponse && <TableCell />}
+          <TableCell />
         </TableRow>
       </TableHead>
     );
@@ -152,6 +152,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   />
                 </TableCell>
               )}
+              {isView || (isResponse && <TableCell />)}
             </TableRow>
           );
         })}
@@ -180,11 +181,8 @@ const QuestionsSection: React.FC<ViewProps> = ({
                     <TableCell
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
-                      className={`${
-                        (!isView || !isResponse) && i === 0
-                          ? ""
-                          : "disbledFields"
-                      }`}
+                      className={`${!isResponse && i === 0 ? "" : "disbledFields"
+                        }`}
                     >
                       {inputTextField({
                         ...valueProps,
@@ -218,7 +216,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   else return null;
                 }
               })}
-              {!isView && !isResponse && outerIndex === 0 && <TableCell />}
+              {outerIndex === 0 && <TableCell />}
             </TableRow>
           );
         })}

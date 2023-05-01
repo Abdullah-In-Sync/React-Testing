@@ -1,42 +1,43 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   GET_THERAPIST_MEASURES_LIST,
-  UPDATE_THERAPIST_MEASURE,
-  THERAPIST_MEASURE_SUBMIT_TEST,
   GET_THERAPIST_MEASURES_SCORE_LIST,
+  THERAPIST_MEASURE_SUBMIT_TEST,
+  UPDATE_THERAPIST_MEASURE,
 } from "../../../graphql/Measure/graphql";
-import MeasureContent from "./MeasuresContent";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
   TherapistMeasuresData,
   UpdateTherapistMeasureRes,
   UpdateTherapistMeasureVars,
 } from "../../../graphql/Measure/types";
-import Loader from "../../common/Loader";
-import {
-  CommonModal,
-  ModalElement,
-} from "../../common/CustomModal/CommonModal";
 import {
   ADD_THERAPIST_MEASURE_PLAN_ADD,
   GET_THERAPIST_MEASURES_PLAN_LIST,
 } from "../../../graphql/SafetyPlan/graphql";
-import AddMeasuresPlanForm from "./AddMeasuresPlan";
-import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../common/ConfirmationModal";
+import {
+  CommonModal,
+  ModalElement,
+} from "../../common/CustomModal/CommonModal";
+import Loader from "../../common/Loader";
 import { SuccessModal } from "../../common/SuccessModal";
 import { ConfirmElement } from "../../common/TemplateFormat/ConfirmWrapper";
+import AddMeasuresPlanForm from "./AddMeasuresPlan";
+import MeasureContent from "./MeasuresContent";
 
 const Measures: React.FC = () => {
   const confirmRef = useRef<ConfirmElement>(null);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [isConfirmAddTask, setIsConfirmAddTask] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [addTasksuccessModal, setAddTaskSuccessModal] =
     useState<boolean>(false);
-  const [accodionView, setAccodionView] = useState();
+  const [accodionView, setAccodionView] = useState<any>();
 
   const [accodionViewScore, setAccodionViewScore] = useState();
   const [measureId, setMeasureId] = useState("");
@@ -171,7 +172,7 @@ const Measures: React.FC = () => {
         setIsConfirmationModel(true);
         break;
       case "takeTest":
-        return setAccodionView(value);
+        return setAccodionView({ data: value, type: pressedIconButton });
       case "viewscores":
         setMeasureId(value._id);
         return setAccodionViewScore(therapistViewScoreData);
@@ -237,8 +238,7 @@ const Measures: React.FC = () => {
         setAccodionView(undefined);
         callback();
       },
-      description:
-        "Are you sure you want to cancel the measure without saving?",
+      description: "Are you sure you want to cancel the test without saving?",
     });
   };
 
@@ -247,6 +247,7 @@ const Measures: React.FC = () => {
   };
 
   const takeTestSubmit = async (formFields, callback) => {
+    setLoader(true);
     const { templateData, sessionNo, templateId, measureId } = formFields;
     const { totalScore = 0 } = templateData || {};
     const variables = {
@@ -264,6 +265,7 @@ const Measures: React.FC = () => {
           confirmRef.current.showSuccess({
             description: "Your test score has been saved successfully.",
             handleOk: () => {
+              refetch();
               callback();
               setAccodionView(undefined);
             },
@@ -272,6 +274,8 @@ const Measures: React.FC = () => {
       });
     } catch (e) {
       enqueueSnackbar("There is something wrong.", { variant: "error" });
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -293,10 +297,17 @@ const Measures: React.FC = () => {
     }
   };
 
-  if (loadingMeasuresList) return <Loader visible={true} />;
+  const onHandleResponse = (v) => {
+    setAccodionView({ data: v, type: "viewResponse" });
+  };
+
+  const handleViewResponseBackClick = () => {
+    setAccodionView(undefined);
+  };
 
   return (
     <>
+      <Loader visible={loadingMeasuresList || loader} />
       <MeasureContent
         listData={listData}
         onClickCreateMeasure={handleCreateMeasure}
@@ -308,6 +319,8 @@ const Measures: React.FC = () => {
         confirmRef={confirmRef}
         accodionViewScore={accodionViewScore}
         onPressCancelBack={onPressCancelBack}
+        onViewResponseClick={onHandleResponse}
+        viewResponseBackClick={handleViewResponseBackClick}
       />
 
       <CommonModal

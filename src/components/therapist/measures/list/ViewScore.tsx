@@ -9,6 +9,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 type propTypes = {
   therapistViewScoreData?: any;
   onPressCancelBack?: any;
+  onViewResponseClick?: (v) => void;
 };
 
 export default function ViewScore(props: propTypes) {
@@ -59,7 +60,15 @@ export default function ViewScore(props: propTypes) {
       render: (val, record) => (
         <Button
           className={classes.viewResponseButton}
-          //  onClick={() => onViewResponseClick(record)}
+          onClick={() =>
+            props?.onViewResponseClick({
+              ...record,
+              ...{
+                title:
+                  props.therapistViewScoreData?.therapistViewScoreList?.title,
+              },
+            })
+          }
           color="primary"
           data-testid={`view-response-${record?._id}`}
         >
