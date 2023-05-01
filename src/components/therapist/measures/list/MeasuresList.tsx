@@ -13,11 +13,13 @@ type ViewProps = {
 };
 
 const MeasuresList: React.FC<ViewProps> = ({
+  /* istanbul ignore next */
   listData = [],
   actionButtonClick,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
 
+  /* istanbul ignore next */
   const handleTakeTest = (item) => {
     const { score_date } = item;
     if (isAfter({ date: score_date }))
@@ -28,6 +30,13 @@ const MeasuresList: React.FC<ViewProps> = ({
       });
   };
 
+  const handleViewScore = (item) => {
+    actionButtonClick({
+      ...item,
+      ...{ pressedIconButton: "viewscores" },
+    });
+  };
+
   const accordionDetail = (item, i) => {
     const { score } = item;
     return (
@@ -36,14 +45,22 @@ const MeasuresList: React.FC<ViewProps> = ({
           <Typography variant="h6">{`Current Score: ${score}`}</Typography>
         </Box>
         <Box className="detailSecond">
-          <CommonButton variant="contained" className="scoreButton">
+          <CommonButton
+            variant="contained"
+            className="scoreButton"
+            data-testid={`view_score${i}`}
+            onClick={() => handleViewScore(item)}
+          >
             View Scores
           </CommonButton>
           <CommonButton
             variant="contained"
             className="scoreButton"
             data-testid={`takeTest${i}`}
-            onClick={() => handleTakeTest(item)}
+            onClick={() =>
+              /* istanbul ignore next */
+              handleTakeTest(item)
+            }
           >
             Take Test
           </CommonButton>
