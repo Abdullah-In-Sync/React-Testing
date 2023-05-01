@@ -34,7 +34,7 @@ const TakeTestForm: React.FC<ViewProps> = ({
     description,
     templateId,
     templateData: { ...JSON.parse(template_data), ...{ totalScore: score } },
-    sessionNo: session_no,
+    sessionNo: session_no == "" ? "start" : session_no,
   };
 
   const commonform = () => {

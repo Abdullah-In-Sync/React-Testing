@@ -1,4 +1,4 @@
-import { Box, CardContent } from "@mui/material";
+import { Box, CardContent, Paper } from "@mui/material";
 import { Form } from "formik";
 import React from "react";
 import Formats from "../../../common/TemplateFormat";
@@ -34,36 +34,50 @@ const ResponseForm: React.FC<ViewProps> = ({
   isResponse,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
-  const { templateId, description, title } = values;
+  const { templateId, description, title, sessionNo } = values;
   const FormatTemplate = templateId ? Formats[templateId] : null;
   const styles = useStyles();
   const sessionOptions = getSessionOptions();
 
   /* istanbul ignore next */
-  const handleChangeSession = (e) => {
-    const {
-      target: { value },
-    } = e;
-    setFieldValue(`sessionNo`, value);
+  const handleChangeSession = (_, v) => {
+    setFieldValue(`sessionNo`, v.value);
   };
 
   /* istanbul ignore next */
   const sessionDropdown = () => {
-    return (
-      <Box
-        className={`autoCompeleteSessionWrapper ${
-          isView ? "disbledFields" : ""
-        }`}
-      >
-        <CommonAutocomplete
-          handleSelect={handleChangeSession}
-          name={`sessionNo`}
-          initialOptions={sessionOptions}
-          label="Enter Session"
-          defaultValue="start"
-        />
-      </Box>
-    );
+    const label = !isView ? { label: "Enter Session" } : {};
+    if (isView)
+      return (
+        sessionNo && (
+          <Box className="sessionBox">
+            <Paper elevation={0}>
+              <Typography>
+                {
+                  sessionOptions.filter((item) => item.value === sessionNo)[0]
+                    .label
+                }
+              </Typography>
+            </Paper>
+          </Box>
+        )
+      );
+    else
+      return (
+        <Box
+          className={`autoCompeleteSessionWrapper ${
+            isView ? "disbledFields" : ""
+          }`}
+        >
+          <CommonAutocomplete
+            handleSelect={handleChangeSession}
+            name={`sessionNo`}
+            initialOptions={sessionOptions}
+            {...label}
+            defaultValue={{ label: "Start", value: "start" }}
+          />
+        </Box>
+      );
   };
 
   return (

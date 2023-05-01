@@ -43,6 +43,17 @@ export const useStyles = makeStyles((theme: Theme) => {
 
   return {
     viewForm: {
+      "& .sessionBox": {
+        minWidth: 100,
+
+        textAlign: "center",
+        "& .MuiPaper-root": {
+          background: "transparent",
+          border: `1px solid ${theme.palette.primary.contrastText}`,
+          padding: 4,
+          color: theme.palette.primary.contrastText,
+        },
+      },
       "& .autoCompeleteSessionWrapper": {
         "& .MuiInputLabel-shrink": {
           top: "0 !important",
@@ -95,6 +106,7 @@ export const useStyles = makeStyles((theme: Theme) => {
           justifyContent: "unset",
         },
         borderRadius: "7px !important",
+        padding: "0px 20px",
       },
       "& .templateFromat1Wrapper": {
         "& .introSection": {

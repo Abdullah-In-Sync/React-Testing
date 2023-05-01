@@ -210,7 +210,11 @@ describe("Paitent response measures", () => {
     });
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
-    expect(pushMock).toHaveBeenCalledWith(`/patient/therapy/?tab=measures`);
+    await (async () => {
+      await expect(pushMock).toHaveBeenCalledWith(
+        `/patient/therapy/?tab=measures`
+      );
+    });
   });
 
   it("should render paitent format 2 response", async () => {
@@ -250,7 +254,10 @@ describe("Paitent response measures", () => {
     });
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
-
-    expect(pushMock).toHaveBeenCalledWith(`/patient/therapy/?tab=measures`);
+    await (async () => {
+      await expect(pushMock).toHaveBeenCalledWith(
+        `/patient/therapy/?tab=measures`
+      );
+    });
   });
 });

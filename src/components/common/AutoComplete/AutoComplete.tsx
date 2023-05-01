@@ -6,10 +6,10 @@ import { Field } from "formik";
 
 type Props = React.PropsWithChildren<{
   initialOptions?: any;
-  handleSelect?: (e) => void;
+  handleSelect?: (e, v) => void;
   label?: string;
   name?: string;
-  defaultValue?: string;
+  defaultValue?: { label: string; value: string };
 }>;
 
 const CommonAutocomplete: React.FC<Props> = ({
@@ -32,8 +32,11 @@ const CommonAutocomplete: React.FC<Props> = ({
       componentName={name}
       options={initialOptions}
       // noOptionsText="Enter to create a new option"
-      onSelect={handleSelect}
+      onChange={handleSelect}
       defaultValue={defaultValue}
+      getOptionLabel={(option) => {
+        return option.label;
+      }}
       // onInputChange={handleChange}
       renderInput={(params) => (
         <Field
