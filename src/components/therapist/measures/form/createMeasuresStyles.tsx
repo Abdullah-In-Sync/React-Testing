@@ -183,7 +183,7 @@ export const useStyles = makeStyles((theme: Theme) => {
       "& .MuiToolbar-root": {
         justifyContent: "space-between !important",
         "& .MuiAutocomplete-root": {
-          minWidth: 150,
+          minWidth: 160,
         },
       },
       "& .bottomActionButtonsWrapper": commonButtonWrapper,

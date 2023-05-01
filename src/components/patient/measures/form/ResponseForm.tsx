@@ -46,22 +46,20 @@ const ResponseForm: React.FC<ViewProps> = ({
 
   /* istanbul ignore next */
   const sessionDropdown = () => {
-    if (isView)
+    if (isView) {
+      const { label = "" } = sessionOptions.find(
+        (item) => item.value === sessionNo
+      );
       return (
         sessionNo && (
           <Box className="sessionBox">
             <Paper elevation={0}>
-              <Typography>
-                {
-                  sessionOptions.filter((item) => item.value === sessionNo)[0]
-                    .label
-                }
-              </Typography>
+              <Typography>{label}</Typography>
             </Paper>
           </Box>
         )
       );
-    else
+    } else
       return (
         <Box
           className={`autoCompeleteSessionWrapper ${

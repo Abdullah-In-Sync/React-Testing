@@ -46,26 +46,25 @@ const ResponseForm: React.FC<ViewProps> = ({
 
   /* istanbul ignore next */
   const sessionDropdown = () => {
-    if (isView)
+    if (isView) {
+      const { label = "" } = sessionOptions.find(
+        (item) => item.value === sessionNo
+      );
       return (
         sessionNo && (
           <Box className="sessionBox">
             <Paper elevation={0}>
-              <Typography>
-                {
-                  sessionOptions.filter((item) => item.value === sessionNo)[0]
-                    .label
-                }
-              </Typography>
+              <Typography>{label}</Typography>
             </Paper>
           </Box>
         )
       );
-    else
+    } else {
       return (
         <Box
-          className={`autoCompeleteSessionWrapper ${isView ? "disbledFields" : ""
-            }`}
+          className={`autoCompeleteSessionWrapper ${
+            isView ? "disbledFields" : ""
+          }`}
         >
           <CommonAutocomplete
             handleSelect={handleChangeSession}
@@ -76,13 +75,15 @@ const ResponseForm: React.FC<ViewProps> = ({
           />
         </Box>
       );
+    }
   };
 
   return (
     <ConfirmWrapper ref={confirmRef}>
       <Box
-        className={`autoCompeleteSessionWrapper ${styles.viewForm} ${isView ? "disbledFields" : ""
-          }`}
+        className={`autoCompeleteSessionWrapper ${styles.viewForm} ${
+          isView ? "disbledFields" : ""
+        }`}
       >
         <CardWithHeader label={title} rightComponent={sessionDropdown}>
           <CardContent>
