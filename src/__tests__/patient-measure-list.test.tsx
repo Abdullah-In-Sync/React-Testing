@@ -10,7 +10,7 @@ import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
 
 import Measure from "../components/patient/therapyPages/measures";
-import { GET_PATIENT_MEASURE_LIST } from "../graphql/Measure/graphql";
+import { GET_PAITENT_MEASURES_LIST } from "../graphql/Measure/graphql";
 import { useRouter } from "next/router";
 
 const pushMock = jest.fn();
@@ -25,52 +25,50 @@ const mocksData = [];
 
 mocksData.push({
   request: {
-    query: GET_PATIENT_MEASURE_LIST,
+    query: GET_PAITENT_MEASURES_LIST,
   },
   result: {
     data: {
-      getPatientMeasureList: [
+      patientMeasureList: [
         {
-          user_type: "therapist",
-          user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          _id: "785d651b-0399-49c2-abe0-27697873c5f5",
+          created_date: "2023-04-28T06:17:36.578Z",
+          description: "",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          score: 0,
+          score_date: "",
+          score_id: "",
+          session_no: "",
+          scores_list: null,
+          share_status: 1,
+          status: 1,
+          template_data:
+            '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[{"id":"lh1lsm2g","question":"quwston1","answer":0},{"id":"lh1lsqxg","question":"quest2","answer":0},{"id":"lh1lsv9x","question":"quest3","answer":0}],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional.","totalScore":0}',
+          template_id: "format1",
           therapist_id: "686802e5123a482681a680a673ef7f53",
-          status: 2,
-          patient_id: "1b112127af834c3e82f13daa3e84c495",
-          measure_cat_type: 1,
-          measure_cat_name: "test",
-          last_completed_date: null,
-          is_default: 0,
-          created_date: "2022-03-24T13:50:05.000Z",
-          _id: "1f48d0c3b8834d5a85836367bc6cb0b5",
-          __typename: "MeasureCat",
+          title: "testasdf",
+          updated_date: "2023-04-29T06:30:38.470Z",
+          __typename: "TherapistMeasures",
         },
         {
-          user_type: "therapist",
-          user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+          _id: "9776be15-4e15-4573-9c45-9868dad0e50a",
+          created_date: "2023-04-27T17:18:06.070Z",
+          description: "",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          score: 1,
+          score_date: "2023-04-28T10:31:29.016Z",
+          score_id: "3af0686b-e59e-4948-89ce-359f93d8e2f3",
+          session_no: "Session 4",
+          scores_list: null,
+          share_status: 1,
+          status: 1,
+          template_data:
+            '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[{"id":"lgze1k8e","question":"test","answer":0},{"id":"lgze1oqo","question":"test2","answer":0},{"id":"lgze1rsp","question":"test3","answer":0}],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional.","totalScore":0}',
+          template_id: "format1",
           therapist_id: "686802e5123a482681a680a673ef7f53",
-          status: 2,
-          patient_id: "c852c5de6ff14aee8a43804ea9d57ce3",
-          measure_cat_type: 1,
-          measure_cat_name: "measure for patient only",
-          last_completed_date: "2022-12-18T07:01:16.000Z",
-          is_default: 0,
-          created_date: "2022-04-29T06:08:23.000Z",
-          _id: "98392bff10104aa3a4aa3908141ec65a",
-          __typename: "MeasureCat",
-        },
-        {
-          user_type: "therapist",
-          user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          status: 2,
-          patient_id: "6605f4c3992c4fa691a1317c69054ae8",
-          measure_cat_type: 1,
-          measure_cat_name: "Ravi test",
-          last_completed_date: "2022-12-23T10:13:58.000Z",
-          is_default: 0,
-          created_date: "2022-12-23T10:10:39.000Z",
-          _id: "f7ebcd5b73874d2691bce97a70b6035f",
-          __typename: "MeasureCat",
+          title: "format21",
+          updated_date: "2023-04-28T10:31:29.016Z",
+          __typename: "TherapistMeasures",
         },
       ],
     },
@@ -112,32 +110,26 @@ describe("Measure list", () => {
   test("Renders measure list", async () => {
     await sut();
     await waitFor(async () => {
-      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
+      expect(screen.queryAllByTestId("list-tile").length).toEqual(2);
     });
     await waitFor(() =>
       fireEvent.click(
-        within(screen.queryAllByTestId("list-tile")[1]).getByTestId(
+        within(screen.queryAllByTestId("list-tile")[0]).getByTestId(
           "toggleContent"
         )
       )
     );
-    await waitFor(() =>
-      fireEvent.click(screen.queryByTestId("view-score-btn"))
-    );
 
-    expect(pushMock).toHaveBeenCalledWith(
-      `/patient/measures/score/98392bff10104aa3a4aa3908141ec65a`
-    );
     await waitFor(() => fireEvent.click(screen.queryByTestId("take-test-btn")));
     expect(pushMock).toHaveBeenCalledWith(
-      `/patient/measures/test/98392bff10104aa3a4aa3908141ec65a`
+      `/patient/measures/test/785d651b-0399-49c2-abe0-27697873c5f5`
     );
   });
 
   test("If score data is not available it will show the error popup", async () => {
     await sut();
     await waitFor(async () => {
-      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
+      expect(screen.queryAllByTestId("list-tile").length).toEqual(2);
     });
     await waitFor(() =>
       fireEvent.click(
@@ -160,11 +152,11 @@ describe("Measure list", () => {
   test("If test already token for today it will show the error popup", async () => {
     await sut();
     await waitFor(async () => {
-      expect(screen.queryAllByTestId("list-tile").length).toEqual(3);
+      expect(screen.queryAllByTestId("list-tile").length).toEqual(2);
     });
     await waitFor(() =>
       fireEvent.click(
-        within(screen.queryAllByTestId("list-tile")[2]).getByTestId(
+        within(screen.queryAllByTestId("list-tile")[1]).getByTestId(
           "toggleContent"
         )
       )
@@ -176,5 +168,13 @@ describe("Measure list", () => {
     ).toBeInTheDocument();
 
     await waitFor(() => fireEvent.click(screen.queryByTestId("SuccessOkBtn")));
+
+    await waitFor(() =>
+      fireEvent.click(screen.queryByTestId("view-score-btn"))
+    );
+
+    expect(pushMock).toHaveBeenCalledWith(
+      `/patient/measures/score/9776be15-4e15-4573-9c45-9868dad0e50a`
+    );
   });
 });

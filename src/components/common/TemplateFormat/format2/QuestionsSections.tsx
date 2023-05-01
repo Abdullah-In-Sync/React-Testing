@@ -67,7 +67,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
     type,
   }: any) => {
     const { answer } = row;
-    if (isResponse && value && type === "bodyCell")
+    if ((isView || isResponse) && value && type === "bodyCell")
       return (
         <Box
           className={`viewValueWrapper`}
@@ -161,7 +161,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
 
   const tableFooter = () => {
     return (
-      <TableFooter className={`${isResponse ? "disbledFields" : ""}`}>
+      <TableFooter>
         {footerRows.map((row, outerIndex) => {
           return (
             <TableRow
@@ -181,7 +181,9 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
                       className={`${
-                        isResponse && i === 0 ? "disbledFields" : ""
+                        (!isView || !isResponse) && i === 0
+                          ? ""
+                          : "disbledFields"
                       }`}
                     >
                       {inputTextField({
@@ -204,6 +206,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         key={column.id}
                         align={column.align}
                         colSpan={5}
+                        className="disbledFields"
                       >
                         {inputTextField({
                           ...valueProps,

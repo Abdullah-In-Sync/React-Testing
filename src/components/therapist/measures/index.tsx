@@ -332,7 +332,7 @@ const Measures: React.FC = () => {
       {isConfirmationModel && (
         <ConfirmationModal
           label={`Are you sure you want to ${selectedMeasure.current.pressedIconButton}
-      the Measures?`}
+      the Measure?`}
           onCancel={onClear}
           onConfirm={onConfirmSubmit}
         />

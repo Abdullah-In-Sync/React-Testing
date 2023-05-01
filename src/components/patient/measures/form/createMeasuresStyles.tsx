@@ -42,113 +42,22 @@ export const useStyles = makeStyles((theme: Theme) => {
   };
 
   return {
-    formWrapper: {
-      "& .fieldsBoxWrapperFirst": {
-        "& .MuiBox-root": {
-          paddingBottom: "1rem",
-        },
-      },
-      "& .fieldsBoxWrapper": {
-        paddingBottom: 10,
-        display: "flex",
-        [theme.breakpoints.down("sm")]: {},
-        [theme.breakpoints.down("md")]: {
-          flexDirection: "column",
-          marginBottom: "1rem",
-        },
-        [theme.breakpoints.up("lg")]: {},
-      },
-      "& .first": {
-        flex: 1,
-        "& .MuiBox-root": {
-          [theme.breakpoints.down("sm")]: {
-            width: "100%",
-            marginBottom: 10,
-          },
-          [theme.breakpoints.up("md")]: {
-            flexDirection: "column",
-            marginBottom: 10,
-            width: "100%",
-            "& .multiSelect": {
-              maxWidth: 900,
-            },
-          },
-          [theme.breakpoints.down("md")]: {
-            flexDirection: "column",
-            marginBottom: 10,
-            // width: "50%",
-            width: "100%",
-            "& .multiSelect": {
-              maxWidth: 900,
-            },
-          },
-          [theme.breakpoints.up("lg")]: {
-            flex: 1,
-            marginRight: "1rem",
-
-            maxWidth: 250,
-          },
-          [theme.breakpoints.down("lg")]: {
-            flex: 1,
-
-            marginRight: "1rem",
-            width: "100%",
-            "& .multiSelect": {
-              width: "100%",
-            },
-          },
-        },
-      },
-      "& .second": {
-        "& .selectFomatDropdown .MuiSelect-select": {
-          minWidth: 70,
-        },
-        "& .formatsOpenModalButtonWrapper": {
-          "& button": {
-            color: theme.palette.secondary.main,
-          },
-          [theme.breakpoints.down("sm")]: {},
-          [theme.breakpoints.down("md")]: {
-            paddingBottom: 10,
-          },
-          [theme.breakpoints.up("lg")]: {
-            paddingRight: 10,
-          },
-        },
-        "& .MuiBox-root": {
-          // flex: 2,
-        },
-        "& button": {
-          height: 38,
-        },
-        [theme.breakpoints.down("sm")]: {},
-        [theme.breakpoints.down("md")]: {
-          justifyContent: "flex-end",
-        },
-        [theme.breakpoints.up("lg")]: {
-          flex: 2,
-          textAlign: "right",
-          justifyContent: "flex-end",
-        },
-      },
-
-      "& .fieldBox": {
-        display: "flex",
-        flexWrap: "wrap",
-        [theme.breakpoints.down("sm")]: {},
-        [theme.breakpoints.down("md")]: {
-          flexDirection: "column",
-        },
-        [theme.breakpoints.up("lg")]: {},
-      },
-
-      "& .bottomActionButtonsWrapper": commonButtonWrapper,
-    },
     viewForm: {
-      "& .MuiInputLabel-shrink": {
-        top: "0 !important",
+      "& .sessionBox": {
+        minWidth: 100,
+
+        textAlign: "center",
+        "& .MuiPaper-root": {
+          background: "transparent",
+          border: `1px solid ${theme.palette.primary.contrastText}`,
+          padding: 4,
+          color: theme.palette.primary.contrastText,
+        },
       },
       "& .autoCompeleteSessionWrapper": {
+        "& .MuiInputLabel-shrink": {
+          top: "0 !important",
+        },
         "& .MuiAutocomplete-input": {
           padding: 0,
         },
@@ -197,6 +106,7 @@ export const useStyles = makeStyles((theme: Theme) => {
           justifyContent: "unset",
         },
         borderRadius: "7px !important",
+        padding: "0px 20px",
       },
       "& .templateFromat1Wrapper": {
         "& .introSection": {
