@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -9,6 +9,7 @@ import ReactFlow, {
   Node,
   Edge,
   MarkerType,
+  updateEdge,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Box } from "@mui/system";
@@ -16,10 +17,6 @@ import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 import { Button, Grid } from "@mui/material";
 import CropSquareIcon from "@mui/icons-material/CropSquare";
-
-const nodeType = {
-  selectorNode: TextUpdaterNode,
-};
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -29,6 +26,8 @@ interface TemplateArrowProps {
   onCancel?: any;
   nodesData?: Node[] | [];
   edgesData?: Edge[] | [];
+  mode?: string;
+  userType?: any;
 }
 
 const TemplateArrow: React.FC<TemplateArrowProps> = ({
@@ -36,11 +35,23 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   onCancel,
   nodesData = [],
   edgesData = [],
+  mode,
+  userType,
 }) => {
+  const nodeType = useMemo(
+    () => ({
+      selectorNode: (props) => (
+        <TextUpdaterNode userType={userType} {...props} />
+      ),
+    }),
+    []
+  );
+
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([...nodesData]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([...edgesData]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const edgeUpdateSuccessful = useRef(true);
   const onConnect = useCallback((params) => {
     params.type = "smoothstep";
     params.markerEnd = {
@@ -49,6 +60,22 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     setEdges((eds) => {
       return addEdge(params, eds);
     });
+  }, []);
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false;
+  }, []);
+
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true;
+    setEdges((els) => updateEdge(oldEdge, newConnection, els));
+  }, []);
+
+  const onEdgeUpdateEnd = useCallback((_, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    }
+
+    edgeUpdateSuccessful.current = true;
   }, []);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -100,20 +127,26 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
       ),
     },
   ];
+  const editStyle: any = {
+    display: "flex",
+    flexDirection: "row",
+    borderRadius: "7px",
+    marginBottom: "40px",
+    border: mode == "edit" ? "1px solid" : "1px solid #cecece",
+  };
 
+  if (mode == "edit") {
+    delete editStyle.borderRadius;
+    editStyle.padding = "8px";
+    editStyle.borderTop = "0px solid";
+    editStyle.borderColor = "#6BA08E";
+  }
   return (
     <>
-      <Box
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          border: "1px solid #cecece",
-          borderRadius: "7px",
-          marginBottom: "40px",
-        }}
-      >
+      <Box style={editStyle}>
         <ReactFlowProvider>
-          <SideBar iconItems={icons} />
+          {mode !== "edit" ? <SideBar iconItems={icons} /> : <></>}
+
           <Box
             style={{
               height: "500px",
@@ -133,6 +166,15 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               onInit={setReactFlowInstance}
               onDrop={onDrop}
               onDragOver={onDragOver}
+              onEdgeUpdate={
+                userType == "patient" ? undefined : onEdgeUpdateStart
+              }
+              onEdgeUpdateStart={
+                userType == "patient" ? undefined : onEdgeUpdate
+              }
+              onEdgeUpdateEnd={
+                userType == "patient" ? undefined : onEdgeUpdateEnd
+              }
               fitView
             >
               <Controls />
