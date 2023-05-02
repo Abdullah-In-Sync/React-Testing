@@ -25,64 +25,55 @@ const mocksData = [];
 mocksData.push({
   request: {
     query: VIEW_MEASURE_SCORE_BY_PATIENT,
+    variables: {
+      measure_id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
+    },
   },
   result: {
     data: {
-      viewMeasureScoreByPatient: {
-        scale_data: [
-          "[1673241390900, 0]",
-          "[1673003679646, 1]",
-          "[1672818347252, 1]",
-          "[1672818296759, 2]",
-          "[1672818289221, 2]",
-          "[1672817045519, 2]",
-          "[1672410699000, 0]",
-        ],
-        score_data: [
+      patientViewScoreList: {
+        _id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
+        created_date: "2023-04-08T05:24:52.126Z",
+        description: "update desc",
+        patient_id: "baa80cb429924a32977c6f855abf59dd",
+        score: 15,
+        score_date: "2023-04-21T10:49:38.889Z",
+        score_id: "6cd3c3d6-5e01-4f6b-b7bf-347ce616b4f7",
+        scores_list: [
           {
-            created_date: "2023-01-09T05:16:30.900Z",
-            _id: "0aba91bc-c611-4bc2-9221-48da110e01ff",
-            patmscore_value: "0",
-            __typename: "PatientMeasureScore",
+            _id: "f563640d-8cee-49a7-b9a6-ba656ab3ef45",
+            added_by: "therapist",
+            created_date: "2023-04-17T13:36:32.117Z",
+            measure_id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
+            score: 10,
+            session_no: null,
+            status: 1,
+            template_data: "testing json",
+            template_id: "template-1",
+            __typename: "PatMeasuresScores",
           },
           {
-            created_date: "2023-01-06T11:14:39.646Z",
-            _id: "18080a82-38bc-4e13-b8a1-06936a138676",
-            patmscore_value: "1",
-            __typename: "PatientMeasureScore",
-          },
-          {
-            created_date: "2023-01-04T07:45:47.252Z",
-            _id: "6829471c-a33b-4bb7-a30a-e43564eaa840",
-            patmscore_value: "1",
-            __typename: "PatientMeasureScore",
-          },
-          {
-            created_date: "2023-01-04T07:44:56.759Z",
-            _id: "90195ed0-27c6-457c-be09-4baec2ea681e",
-            patmscore_value: "2",
-            __typename: "PatientMeasureScore",
-          },
-          {
-            created_date: "2023-01-04T07:44:49.221Z",
-            _id: "989eaaa1-1804-4791-84b2-55b743da36ab",
-            patmscore_value: "2",
-            __typename: "PatientMeasureScore",
-          },
-          {
-            created_date: "2023-01-04T07:24:05.519Z",
-            _id: "11c03c36-6ed4-4ab3-967b-69a320e04386",
-            patmscore_value: "2",
-            __typename: "PatientMeasureScore",
-          },
-          {
-            created_date: "2022-12-30T14:31:39.000Z",
-            _id: "e2dedcb8409846acbacb69e3e5fe925e",
-            patmscore_value: "0",
-            __typename: "PatientMeasureScore",
+            _id: "6cd3c3d6-5e01-4f6b-b7bf-347ce616b4f7",
+            added_by: "therapist",
+            created_date: "2023-04-21T10:49:38.889Z",
+            measure_id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
+            score: 15,
+            session_no: "1",
+            status: 1,
+            template_data: "json 4",
+            template_id: "template-4",
+            __typename: "PatMeasuresScores",
           },
         ],
-        __typename: "viewMeasureScore",
+        session_no: "1",
+        share_status: 1,
+        status: 1,
+        template_data: "update json",
+        template_id: "template-3",
+        therapist_id: "686802e5123a482681a680a673ef7f53",
+        title: "update title",
+        updated_date: "2023-04-21T10:49:38.889Z",
+        __typename: "TherapistMeasures",
       },
     },
   },
@@ -131,10 +122,10 @@ describe("Measures score list", () => {
   test("on click view response redirect to response page", async () => {
     await sut();
     fireEvent.click(
-      screen.queryByTestId("view-response-0aba91bc-c611-4bc2-9221-48da110e01ff")
+      screen.queryByTestId("view-response-f563640d-8cee-49a7-b9a6-ba656ab3ef45")
     );
     expect(pushMock).toBeCalledWith(
-      "response/0aba91bc-c611-4bc2-9221-48da110e01ff"
+      "response/f563640d-8cee-49a7-b9a6-ba656ab3ef45"
     );
   });
 });

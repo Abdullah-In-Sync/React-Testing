@@ -58,15 +58,34 @@ export const UPDATE_MEASURE_SCORE_BY_PATIENT = gql`
 `;
 
 export const VIEW_MEASURE_SCORE_BY_PATIENT = gql`
-  query viewMeasureScoreByPatient($measureCatId: String!) {
-    viewMeasureScoreByPatient(measureCatId: $measureCatId) {
-      scale_data
-      measure_cat_name
-      score_data {
-        created_date
+  query patientViewScoreList($measure_id: String!) {
+    patientViewScoreList(measure_id: $measure_id) {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      score_id
+      scores_list {
         _id
-        patmscore_value
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
       }
+      session_no
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
     }
   }
 `;

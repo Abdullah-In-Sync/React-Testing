@@ -34,8 +34,8 @@ export default function TherapyMainComponent() {
       component: <Goals />,
     },
     {
-      label: "Tools",
-      value: "tools",
+      label: "Monitors",
+      value: "monitors",
       component: <Monitors />,
     },
     {

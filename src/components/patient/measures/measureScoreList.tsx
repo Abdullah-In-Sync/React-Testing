@@ -3,30 +3,36 @@ import { Box } from "@mui/system";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { FC, useMemo } from "react";
-import {
-  ScoreDatum,
-  ViewMeasureScoreByPatient,
-} from "../../../graphql/Measure/types";
+import { ScoreDatum } from "../../../graphql/Measure/types";
 import { LineChart } from "../../common/Chart/lineChart";
 import TableGenerator from "../../common/TableGenerator";
 import { useStyles } from "./measureStyle";
 
 interface MeasureScoreListProps {
-  measureScoreDetail: ViewMeasureScoreByPatient;
+  measureScoreDetail: any;
 }
 export const MeasureScoreList: FC<MeasureScoreListProps> = ({
   measureScoreDetail,
 }) => {
   const classes = useStyles();
   const router = useRouter();
+
   const { seriesX, seriesY } = useMemo(() => {
-    const scoreDetail = measureScoreDetail?.scale_data?.map((ele) =>
-      JSON.parse(ele)
-    );
-    const seriesX = scoreDetail?.map((e) => e[0]).reverse();
-    const seriesY = scoreDetail?.map((e) => e[1]).reverse();
-    return { seriesX, seriesY };
-  }, [measureScoreDetail]);
+    const scoreDetail = measureScoreDetail?.scores_list?.map((ele) => {
+      return {
+        score: ele.score,
+        created_date: ele.created_date,
+      };
+    });
+
+    const seriesY = scoreDetail?.map((e) => e.score)?.reverse();
+    const seriesX = scoreDetail?.map((e) => e.created_date)?.reverse();
+
+    return {
+      seriesX: seriesX || ["2030"],
+      seriesY: seriesY || [0],
+    };
+  }, [measureScoreDetail?.scores_list]);
 
   //**  TABLE DATA COLUMNS **//
   const fields = [
@@ -42,8 +48,8 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       render: (val) => moment(val).format("DD-MM-YYYY"),
     },
     {
-      columnName: measureScoreDetail?.measure_cat_name,
-      key: "patmscore_value",
+      columnName: measureScoreDetail?.title,
+      key: "score",
       visible: true,
       render: (val) => val,
     },
@@ -91,7 +97,7 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       >
         <TableGenerator
           fields={fields}
-          data={measureScoreDetail?.score_data}
+          data={measureScoreDetail?.scores_list}
           loader={false}
           dataCount={10}
           selectedRecords={[]}
