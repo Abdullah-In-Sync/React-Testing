@@ -152,6 +152,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   />
                 </TableCell>
               )}
+              {/* {(!isView && !isResponse) && <TableCell />} */}
             </TableRow>
           );
         })}
@@ -181,9 +182,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
                       className={`${
-                        (!isView || !isResponse) && i === 0
-                          ? ""
-                          : "disbledFields"
+                        !isResponse && i === 0 ? "" : "disbledFields"
                       }`}
                     >
                       {inputTextField({
