@@ -15,6 +15,7 @@ interface ViewProps {
 const ChooseScoreSection: React.FC<ViewProps> = ({
   formikProps,
   isResponse,
+  isView,
 }) => {
   const { values, errors, touched } = formikProps;
   const { templateData } = values;
@@ -24,7 +25,7 @@ const ChooseScoreSection: React.FC<ViewProps> = ({
       <FieldArray name="scores">
         {() =>
           templateData.scores.map((item, i) => {
-            const { label } = item;
+            const { label, value } = item;
             return (
               <Box className="scoreCardValue" key={`score_${i}`}>
                 <Box className="first">
@@ -34,15 +35,18 @@ const ChooseScoreSection: React.FC<ViewProps> = ({
                 </Box>
                 <Divider />
                 <Box className="editableInputWrapper">
-                  <FormikTextField
-                    autoFocus
-                    name={`templateData.scores.${i}.value`}
-                    id={`templateData.scores.${i}.value`}
-                    placeholder={"Type"}
-                    size="small"
-                    hideError
-                    multiline
-                  />
+                  {!isView && !isResponse ? (
+                    <FormikTextField
+                      name={`templateData.scores.${i}.value`}
+                      id={`templateData.scores.${i}.value`}
+                      placeholder={"Type"}
+                      size="small"
+                      hideError
+                      multiline
+                    />
+                  ) : (
+                    <Typography className="scoreText">{value}</Typography>
+                  )}
                 </Box>
               </Box>
             );

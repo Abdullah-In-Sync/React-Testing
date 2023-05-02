@@ -25,7 +25,7 @@ export const MeasureTile: FC<MeasureTileProps> = ({
     <Box className={classes.accordionWrapper}>
       <Accordion
         title={measure.title}
-        actionButtons={() => <SessionBoxLabel label={label} />}
+        actionButtons={<SessionBoxLabel label={label} />}
         detail={
           <>
             <Box data-testid="score" className={classes.scoreDiv}>
