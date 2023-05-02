@@ -2,9 +2,7 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
   IconButton,
   InputAdornment,
@@ -15,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import CardContent from "@mui/material/CardContent";
+
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
