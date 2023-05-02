@@ -45,6 +45,7 @@ const MeasureTestPage: NextPage = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => {
         callback();
+        router.push("/patient/therapy/?tab=measures");
       },
       description:
         "Are you sure you are canceling the response without submitting",
