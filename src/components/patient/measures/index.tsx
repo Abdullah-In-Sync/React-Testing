@@ -2,42 +2,35 @@ import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { GET_PATIENT_MEASURE_LIST } from "../../../graphql/Measure/graphql";
+import { GET_PAITENT_MEASURES_LIST } from "../../../graphql/Measure/graphql";
 import {
-  GetPatientMeasureListRes,
-  GetPatientMeasureListVars,
-  Measure,
+  PaitentListMeasureData,
+  PatientMeasureListEntity,
 } from "../../../graphql/Measure/types";
+import { isAfter } from "../../../utility/helper";
 import Loader from "../../common/Loader";
 import { SuccessModal } from "../../common/SuccessModal";
 import { MeasureTile } from "./measureTile";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface MeasureListProps {}
-
-const MeasureList: FC<MeasureListProps> = () => {
+const MeasureList: FC = () => {
   const router = useRouter();
   const [errorModal, setErrorModal] = useState(false);
   const [testErrorModal, setTestErrorModal] = useState(false);
 
-  const { data: measureListRes, loading } = useQuery<
-    GetPatientMeasureListRes,
-    GetPatientMeasureListVars
-  >(GET_PATIENT_MEASURE_LIST, {
-    fetchPolicy: "no-cache",
-  });
+  const { data: { patientMeasureList = null } = {}, loading } =
+    useQuery<PaitentListMeasureData>(GET_PAITENT_MEASURES_LIST, {
+      fetchPolicy: "no-cache",
+    });
 
-  const onClickTest = (measure: Measure) => {
-    const lastTestDate = measure?.last_completed_date?.split("T")[0];
-    const todayDate = new Date().toISOString().split("T")[0];
-    if (measure?.last_completed_date && lastTestDate == todayDate) {
-      setTestErrorModal(true);
-    } else {
+  const onClickTest = (measure: PatientMeasureListEntity) => {
+    const { score_date } = measure;
+    if (isAfter({ date: score_date }))
       router.push(`/patient/measures/test/${measure._id}`);
-    }
+    else setTestErrorModal(true);
   };
-  const onClickScore = (measure: Measure) => {
-    if (measure?.last_completed_date) {
+  const onClickScore = (measure: PatientMeasureListEntity) => {
+    const { score_date } = measure;
+    if (score_date && score_date != "") {
       router.push(`/patient/measures/score/${measure._id}`);
     } else {
       setErrorModal(true);
@@ -47,7 +40,7 @@ const MeasureList: FC<MeasureListProps> = () => {
   return (
     <>
       <Loader visible={loading} />
-      {measureListRes?.getPatientMeasureList?.map((measure) => (
+      {(patientMeasureList || []).map((measure) => (
         <MeasureTile
           measure={measure}
           onClickScore={onClickScore}

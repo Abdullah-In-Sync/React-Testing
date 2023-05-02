@@ -196,6 +196,7 @@ export interface TherapistListMeasuresEntity {
   therapist_id: string;
   title: string;
   updated_date: string;
+  session_no: string;
   __typename: string;
 }
 
@@ -238,4 +239,93 @@ export interface TherapistViewMeasures {
 }
 export interface TherapistViewMeasuresData {
   therapistViewMeasure: TherapistListMeasuresEntity;
+}
+
+export interface PatientViewMeasuresData {
+  patientViewMeasure: PatientViewMeasure;
+}
+export interface PatientViewMeasure {
+  _id: string;
+  description: string;
+  created_date: string;
+  patient_id: string;
+  score: number;
+  score_date: string;
+  score_id: string;
+  scores_list?: null;
+  session_no: string;
+  share_status: number;
+  status: number;
+  template_data: string;
+  template_id: string;
+  therapist_id: string;
+  title: string;
+  updated_date: string;
+  __typename: string;
+}
+
+export interface PatientSubmitTestData {
+  patientMeasureSubmitTest: PatientMeasureSubmitTest;
+}
+export interface PatientMeasureSubmitTest {
+  _id: string;
+  added_by: string;
+  created_date: string;
+  measure_id: string;
+  score: number;
+  session_no: string;
+  template_data: string;
+  template_id: string;
+  status: number;
+  __typename: string;
+}
+
+export interface PaitentListMeasureData {
+  patientMeasureList?: PatientMeasureListEntity[] | null;
+}
+
+export interface PatientMeasureListEntity {
+  _id: string;
+  created_date: string;
+  description: string;
+  patient_id: string;
+  score: number;
+  score_date: string;
+  score_id?: string | null;
+  session_no?: string | null;
+  scores_list?: null;
+  share_status: number;
+  status: number;
+  template_data: string;
+  template_id: string;
+  therapist_id: string;
+  title: string;
+  updated_date: string;
+  __typename: string;
+}
+
+export interface PatientViewScoreData {
+  patientViewScore: PatientViewScore;
+}
+export interface PatientViewScore {
+  _id: string;
+  description: string;
+  score: number;
+  score_date: string;
+  score_detail: ScoreDetail;
+  session_no: string;
+  title: string;
+  __typename: string;
+}
+export interface ScoreDetail {
+  added_by: string;
+  _id: string;
+  template_id: string;
+  template_data: string;
+  status: number;
+  session_no: string;
+  score: number;
+  measure_id: string;
+  created_date: string;
+  __typename: string;
 }

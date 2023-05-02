@@ -6,6 +6,7 @@ export interface Score {
 export interface Question {
   id: string;
   question: string;
+  answer?: number;
 }
 
 export interface Format1 {
@@ -13,6 +14,7 @@ export interface Format1 {
   scores?: Array<Score>;
   questions?: Array<Question>;
   description?: string;
+  totalScore?: number;
 }
 
 export interface Format2 {
@@ -31,4 +33,5 @@ export interface TemplateDataFormat2 {
 export interface TemplateFormat {
   data: Format1 | Format2;
   validationSchema?: any;
+  onResponse?: (value) => void;
 }

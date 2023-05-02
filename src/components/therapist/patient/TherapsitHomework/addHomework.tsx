@@ -8,6 +8,7 @@ import {
   Grid,
   IconButton,
   Link,
+  Stack,
   Typography,
   styled,
 } from "@mui/material";
@@ -34,6 +35,7 @@ import ConfirmBoxModal from "../../../common/ConfirmBoxModal";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import ResourcePopup from "./resourcePopup";
+import { useStyles } from "../../../common/AddQuestionsBox/addQuestionsBoxStyles";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -52,6 +54,7 @@ type propTypes = {
 
 function HomeworkDetails(props: propTypes) {
   const { user } = useAppContext();
+  const styles = useStyles();
   const orgId = user?.therapist_data?.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const confirmModalRef = useRef<ModalElement>(null);
@@ -76,7 +79,7 @@ function HomeworkDetails(props: propTypes) {
   const [ptHomeworkId, setPtHomeworkId] = useState("");
   const [ptShareId, setPtShareId] = useState("");
   const [myResource, setMyResource] = useState(0);
-  const [myFavourite, setMyFavourite] = useState(0);
+  const [myFavourites, setMyFavourites] = useState(0);
 
   const [openResourceModal, setOpenResourceModal] = useState(false);
   const [deleteTasksuccessModal, setDeleteTaskSuccessModal] =
@@ -168,7 +171,7 @@ function HomeworkDetails(props: propTypes) {
         orgId: orgId,
         searchText: searchValue,
         myResource: myResource,
-        myFav: myFavourite,
+        myFav: myFavourites,
       },
     });
   }, [
@@ -178,7 +181,7 @@ function HomeworkDetails(props: propTypes) {
     patientId,
     searchValue,
     myResource,
-    myFavourite,
+    myFavourites,
   ]);
 
   function refreshData() {
@@ -195,14 +198,6 @@ function HomeworkDetails(props: propTypes) {
 
   const handleSearchData = (data) => {
     setSearchValue(data);
-  };
-
-  const handleMyResourceData = (data) => {
-    setMyResource(data);
-  };
-
-  const handleMyFavouritesData = (data) => {
-    setMyFavourite(data);
   };
 
   const handleCreateInput = () => {
@@ -387,6 +382,20 @@ function HomeworkDetails(props: propTypes) {
     setCheckCompleteCheckbox(1);
   };
 
+  const handleMyRes = () => {
+    if (myFavourites === 1) {
+      setMyFavourites(0);
+    }
+    setMyResource((prevValue) => (prevValue === 1 ? 0 : 1));
+  };
+
+  const handleMyFav = () => {
+    if (myResource === 1) {
+      setMyResource(0);
+    }
+    setMyFavourites((prevValue) => (prevValue === 1 ? 0 : 1));
+  };
+
   return (
     <>
       <div>
@@ -458,6 +467,8 @@ function HomeworkDetails(props: propTypes) {
                 paddingRight: "15px",
                 color: "#6EC9DB",
                 fontWeight: "bold",
+                display: "flex",
+                textAlign: "start",
               }}
               data-testid="safety_ques"
             >
@@ -494,6 +505,8 @@ function HomeworkDetails(props: propTypes) {
                     paddingRight: "15px",
                     color: "#6EC9DB",
                     fontWeight: "bold",
+                    display: "flex",
+                    textAlign: "start",
                   }}
                   data-testid="safety_ques"
                 >
@@ -511,6 +524,8 @@ function HomeworkDetails(props: propTypes) {
                       paddingRight: "15px",
                       color: "#6EC9DB",
                       fontWeight: "bold",
+                      display: "flex",
+                      textAlign: "start",
                     }}
                     data-testid="safety_ques"
                   >
@@ -549,6 +564,8 @@ function HomeworkDetails(props: propTypes) {
                       color: "#6EC9DB",
                       fontWeight: "bold",
                       paddingTop: "10px",
+                      display: "flex",
+                      textAlign: "start",
                     }}
                     data-testid="safety_ques"
                   >
@@ -907,19 +924,21 @@ function HomeworkDetails(props: propTypes) {
         infoMessage="You cannot add more than 15 tasks, Please delete a task to add a new task"
         confirmModalRef={confirmModalRef}
       />
+      <Stack className={styles.questionsFieldsWrapper}>
+        <ConfirmBoxModal
+          infoMessage="Homework tasks cannot be added to older session, please add task to the next session."
+          confirmModalRef={confirmModalRefForOldHomework}
+        />
+      </Stack>
 
-      <ConfirmBoxModal
-        infoMessage="Homework tasks cannot be added to older session, please add task to the next session."
-        confirmModalRef={confirmModalRefForOldHomework}
-      />
       <ResourcePopup
         openResourceModal={openResourceModal}
         setOpenResourceModal={setOpenResourceModal}
         popupData={popupData}
         onSearchData={handleSearchData}
-        handleMyResourceData={handleMyResourceData}
-        handleMyFavouritesData={handleMyFavouritesData}
         assigneHomeworkResources={assigneHomeworkResources}
+        handleMyRes={handleMyRes}
+        handleMyFav={handleMyFav}
       />
     </>
   );

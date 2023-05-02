@@ -9,16 +9,27 @@ import * as templateTypes from "../types";
 interface ViewProps {
   formikProps: FormikProps<templateTypes.TemplateDataFormat1>;
   isView?: boolean;
+  isResponse?: boolean;
+  handleDelete?: () => void;
 }
 
-const IntroSection: React.FC<ViewProps> = ({ formikProps, isView }) => {
-  const { values, resetForm, errors, touched } = formikProps;
+const IntroSection: React.FC<ViewProps> = ({
+  formikProps,
+  isView,
+  isResponse,
+  handleDelete,
+}) => {
+  const { values, errors, touched } = formikProps;
   const { templateData } = values;
 
   if (templateData.intro === undefined) return null;
   else
     return (
-      <Box className="introSection commonFieldWrapper cSection">
+      <Box
+        className={`introSection commonFieldWrapper cSection ${
+          isResponse ? "disbledFields" : ""
+        }`}
+      >
         <Paper
           elevation={0}
           sx={{ p: "2px 4px", display: "flex", border: "1px solid #ccc" }}
@@ -33,16 +44,11 @@ const IntroSection: React.FC<ViewProps> = ({ formikProps, isView }) => {
               hideError
             />
           </Box>
-          {!isView && (
+          {!isView && !isResponse && (
             <DeleteButton
               i={"intro"}
               data-testId={"introDelete"}
-              onDelete={() => {
-                delete templateData.intro;
-                resetForm({
-                  values,
-                });
-              }}
+              onDelete={handleDelete}
             />
           )}
         </Paper>

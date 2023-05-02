@@ -17,7 +17,7 @@ export interface InitialFormValues {
 }
 
 export interface ModalRefs {
-  confirmRef?: ForwardedRef<ConfirmElement>;
+  confirmRef?: ForwardedRef<ConfirmElement> | any;
   infoModalRef?: ForwardedRef<ConfirmInfoElement>;
 }
 

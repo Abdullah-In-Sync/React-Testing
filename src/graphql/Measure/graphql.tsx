@@ -254,6 +254,39 @@ export const UPDATE_THERAPIST_MEASURE = gql`
   }
 `;
 
+export const GET_THERAPIST_MEASURES_SCORE_LIST = gql`
+  query therapistViewScoreList($measure_id: String!) {
+    therapistViewScoreList(measure_id: $measure_id) {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      score_id
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      session_no
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
 export const THERAPIST_VIEW_MEASURE = gql`
   query TherapistViewMeasure($measureId: String!) {
     therapistViewMeasure(measure_id: $measureId) {
@@ -313,6 +346,152 @@ export const THERAPIST_UPDATE_MEASURE = gql`
       template_data
       status
       share_status
+    }
+  }
+`;
+
+export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
+  mutation TherapistMeasureSubmitTest(
+    $measureId: String!
+    $score: Int!
+    $templateData: String!
+    $sessionNo: String
+    $templateId: String!
+  ) {
+    therapistMeasureSubmitTest(
+      measure_id: $measureId
+      score: $score
+      template_data: $templateData
+      template_id: $templateId
+      session_no: $sessionNo
+    ) {
+      _id
+      added_by
+      created_date
+      measure_id
+      score
+      session_no
+      template_data
+      template_id
+      status
+    }
+  }
+`;
+
+export const PATIENT_VIEW_MEASURE = gql`
+  query PatientViewMeasure($measureId: String!) {
+    patientViewMeasure(measure_id: $measureId) {
+      _id
+      description
+      created_date
+      patient_id
+      score
+      score_date
+      score_id
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      session_no
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
+export const PATIENT_MEASURE_SUBMIT_TEST = gql`
+  mutation PatientMeasureSubmitTest(
+    $measureId: String!
+    $score: Int!
+    $templateData: String!
+    $sessionNo: String
+    $templateId: String!
+  ) {
+    patientMeasureSubmitTest(
+      measure_id: $measureId
+      score: $score
+      template_data: $templateData
+      template_id: $templateId
+      session_no: $sessionNo
+    ) {
+      _id
+      added_by
+      created_date
+      measure_id
+      score
+      session_no
+      template_data
+      template_id
+      status
+    }
+  }
+`;
+
+export const GET_PAITENT_MEASURES_LIST = gql`
+  query PatientMeasureList {
+    patientMeasureList {
+      _id
+      created_date
+      description
+      patient_id
+      score
+      score_date
+      score_id
+      session_no
+      scores_list {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      share_status
+      status
+      template_data
+      template_id
+      therapist_id
+      title
+      updated_date
+    }
+  }
+`;
+
+export const PATIENT_VIEW_SCORE = gql`
+  query PatientViewScore($scoreId: String!) {
+    patientViewScore(score_id: $scoreId) {
+      _id
+      description
+      score
+      score_date
+      score_detail {
+        added_by
+        _id
+        template_id
+        template_data
+        status
+        session_no
+        score
+        measure_id
+        created_date
+      }
+      session_no
+      title
     }
   }
 `;

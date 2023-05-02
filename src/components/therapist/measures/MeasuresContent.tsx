@@ -5,19 +5,33 @@ import { useStyles } from "./measuresStyles";
 
 import { TherapistListMeasuresEntity } from "../../../graphql/Measure/types";
 import CommonButton from "../../common/Buttons/CommonButton";
+import TakeTest from "./TakeTest/TakeTest";
+import { CommonFormProps, ModalRefs } from "./form/types";
+import ViewScore from "./list/ViewScore";
 
 type ViewProps = {
   listData: TherapistListMeasuresEntity[];
   onClickCreateMeasure: () => void;
   actionButtonClick: (value) => void;
   onPressAddPlan?: () => void;
-};
+  accordionViewData: TherapistListMeasuresEntity;
+  onPressCancel?: (value) => void;
+  accodionViewScore: any;
+  onPressCancelBack?: any;
+} & ModalRefs &
+  CommonFormProps;
 
 const MeasuresContent: React.FC<ViewProps> = ({
   listData,
   onClickCreateMeasure,
   actionButtonClick,
   onPressAddPlan,
+  accordionViewData,
+  onPressCancel,
+  submitForm,
+  confirmRef,
+  accodionViewScore,
+  onPressCancelBack,
 }) => {
   const styles = useStyles();
 
@@ -47,10 +61,36 @@ const MeasuresContent: React.FC<ViewProps> = ({
     );
   };
 
+  const accordionView = () => {
+    if (accordionViewData)
+      return (
+        <TakeTest
+          measureData={accordionViewData}
+          onPressCancel={onPressCancel}
+          submitForm={submitForm}
+          confirmRef={confirmRef}
+        />
+      );
+    else if (accodionViewScore)
+      return (
+        <ViewScore
+          therapistViewScoreData={accodionViewScore}
+          onPressCancelBack={onPressCancelBack}
+        />
+      );
+    else
+      return (
+        <MeasuresList
+          listData={listData}
+          actionButtonClick={actionButtonClick}
+        />
+      );
+  };
+
   return (
     <Box className={styles.measuresWrapper}>
       {topHeader()}
-      <MeasuresList listData={listData} actionButtonClick={actionButtonClick} />
+      {accordionView()}
     </Box>
   );
 };
