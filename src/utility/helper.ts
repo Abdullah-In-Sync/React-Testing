@@ -14,3 +14,15 @@ export const isAfter = ({ days = 1, date }) => {
   const patientCreateDate = new Date(date);
   return Date.now() > patientCreateDate.getTime() + 24 * days * 60 * 60 * 1000;
 };
+
+export const getSessionOptions = () => {
+  const tempSession = [{ value: "start", label: "Start" }];
+  for (let i = 1; i <= 50; i++) {
+    tempSession.push({ value: i.toString(), label: `Session ${i}` });
+  }
+  return tempSession;
+};
+
+export const getfiterObject = (arrObj, filterValue) => {
+  return arrObj.find((item) => item.value == filterValue);
+};

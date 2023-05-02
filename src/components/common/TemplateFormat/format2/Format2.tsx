@@ -44,10 +44,12 @@ export default function Format1({
     callback();
   };
 
-  const handleDeleteOption = (i) => {
+  const handleDeleteOption = ({ i, item: { type } }) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => removeOption(callback, i),
-      description: `Are you sure you want to delete the description?`,
+      description: `Are you sure you want to delete the ${
+        type === "text" ? "description" : "question"
+      }?`,
     });
   };
 

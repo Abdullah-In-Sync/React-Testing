@@ -1,4 +1,4 @@
-import { Box, CardContent, Paper } from "@mui/material";
+import { Box, CardContent } from "@mui/material";
 import { Form } from "formik";
 import React from "react";
 import Formats from "../../../common/TemplateFormat";
@@ -10,6 +10,8 @@ import CommonButton from "../../../common/Buttons/CommonButton";
 import CardWithHeader from "../../../common/Cards/CardWithHeader";
 import { CommonFormProps, ModalRefs } from "./types";
 // import { sessionOptions } from "../../../../lib/constants";
+import { getSessionOptions, getfiterObject } from "../../../../utility/helper";
+import SessionBoxLabel from "../../../common/SessionLabel";
 import ConfirmWrapper from "../../../common/TemplateFormat/ConfirmWrapper";
 
 type ViewProps = CommonFormProps &
@@ -17,14 +19,6 @@ type ViewProps = CommonFormProps &
     isView?: boolean;
     isResponse?: boolean;
   };
-
-export const getSessionOptions = () => {
-  const tempSession = [{ value: "start", label: "Start" }];
-  for (let i = 1; i <= 50; i++) {
-    tempSession.push({ value: i.toString(), label: `Session ${i}` });
-  }
-  return tempSession;
-};
 
 const ResponseForm: React.FC<ViewProps> = ({
   onPressCancel,
@@ -47,18 +41,8 @@ const ResponseForm: React.FC<ViewProps> = ({
   /* istanbul ignore next */
   const sessionDropdown = () => {
     if (isView) {
-      const { label = "" } = sessionOptions.find(
-        (item) => item.value === sessionNo
-      );
-      return (
-        sessionNo && (
-          <Box className="sessionBox">
-            <Paper elevation={0}>
-              <Typography>{label}</Typography>
-            </Paper>
-          </Box>
-        )
-      );
+      const { label = null } = getfiterObject(sessionOptions, sessionNo);
+      return <SessionBoxLabel label={label} />;
     } else
       return (
         <Box
