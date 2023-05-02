@@ -8,16 +8,19 @@ import CommonButton from "../../common/Buttons/CommonButton";
 import TakeTest from "./TakeTest/TakeTest";
 import { CommonFormProps, ModalRefs } from "./form/types";
 import ViewScore from "./list/ViewScore";
+import ViewResponse from "./ViewResponse/ViewResponse";
 
 type ViewProps = {
   listData: TherapistListMeasuresEntity[];
   onClickCreateMeasure: () => void;
   actionButtonClick: (value) => void;
   onPressAddPlan?: () => void;
-  accordionViewData: TherapistListMeasuresEntity;
+  accordionViewData: { data: TherapistListMeasuresEntity; type: string };
   onPressCancel?: (value) => void;
   accodionViewScore: any;
   onPressCancelBack?: any;
+  onViewResponseClick?: (v) => void;
+  viewResponseBackClick?: () => void;
 } & ModalRefs &
   CommonFormProps;
 
@@ -32,6 +35,8 @@ const MeasuresContent: React.FC<ViewProps> = ({
   confirmRef,
   accodionViewScore,
   onPressCancelBack,
+  onViewResponseClick,
+  viewResponseBackClick,
 }) => {
   const styles = useStyles();
 
@@ -62,20 +67,34 @@ const MeasuresContent: React.FC<ViewProps> = ({
   };
 
   const accordionView = () => {
-    if (accordionViewData)
-      return (
-        <TakeTest
-          measureData={accordionViewData}
-          onPressCancel={onPressCancel}
-          submitForm={submitForm}
-          confirmRef={confirmRef}
-        />
-      );
-    else if (accodionViewScore)
+    if (accordionViewData) {
+      const { data, type } = accordionViewData;
+      switch (type) {
+        case "takeTest":
+          return (
+            <TakeTest
+              measureData={data}
+              onPressCancel={onPressCancel}
+              submitForm={submitForm}
+              confirmRef={confirmRef}
+            />
+          );
+        case "viewResponse":
+          return (
+            <ViewResponse
+              backButtonClick={viewResponseBackClick}
+              measureData={data}
+            />
+          );
+        default:
+          return null;
+      }
+    } else if (accodionViewScore)
       return (
         <ViewScore
           therapistViewScoreData={accodionViewScore}
           onPressCancelBack={onPressCancelBack}
+          onViewResponseClick={onViewResponseClick}
         />
       );
     else

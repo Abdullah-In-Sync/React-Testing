@@ -7,7 +7,11 @@ import {
   PaitentListMeasureData,
   PatientMeasureListEntity,
 } from "../../../graphql/Measure/types";
-import { isAfter } from "../../../utility/helper";
+import {
+  getSessionOptions,
+  getfiterObject,
+  isAfter,
+} from "../../../utility/helper";
 import Loader from "../../common/Loader";
 import { SuccessModal } from "../../common/SuccessModal";
 import { MeasureTile } from "./measureTile";
@@ -16,6 +20,7 @@ const MeasureList: FC = () => {
   const router = useRouter();
   const [errorModal, setErrorModal] = useState(false);
   const [testErrorModal, setTestErrorModal] = useState(false);
+  const sessionOptions = getSessionOptions();
 
   const { data: { patientMeasureList = null } = {}, loading } =
     useQuery<PaitentListMeasureData>(GET_PAITENT_MEASURES_LIST, {
@@ -45,6 +50,7 @@ const MeasureList: FC = () => {
           measure={measure}
           onClickScore={onClickScore}
           onClickTest={onClickTest}
+          sessionObj={getfiterObject(sessionOptions, measure?.session_no)}
         />
       ))}
       {errorModal && (

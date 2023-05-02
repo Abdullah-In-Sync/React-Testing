@@ -147,4 +147,17 @@ export const useStyles = makeStyles({
       backgroundColor: "#6ec9db",
     },
   },
+
+  accordionWrapper: {
+    "& .actionWrapper": {
+      display: "flex",
+      "& div": {
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+        padding: "0px 10px",
+        width: "100%",
+      },
+    },
+  },
 });
