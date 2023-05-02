@@ -81,7 +81,7 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
         justifyContent={"space-between"}
         style={{ fontWeight: 500, fontSize: "14px" }}
       >
-        <span>{measureScoreDetail?.measure_cat_name}</span>
+        <span>{measureScoreDetail?.title}</span>
       </Grid>
       <Box
         data-testid={"chart"}
