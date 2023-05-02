@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { PatientMeasureListEntity } from "../../graphql/Measure/types";
 import { MeasureTile } from "../patient/measures/measureTile";
+import theme from "../../styles/theme/theme";
+import { ThemeProvider } from "@mui/material";
 
 const measure: PatientMeasureListEntity = {
   _id: "785d651b-0399-49c2-abe0-27697873c5f5",
@@ -25,7 +27,11 @@ const measure: PatientMeasureListEntity = {
 
 describe("when rendered with a `visible` prop", () => {
   it("should visible or hide", async () => {
-    render(<MeasureTile measure={measure} />);
+    render(
+      <ThemeProvider theme={theme()}>
+        <MeasureTile measure={measure} />
+      </ThemeProvider>
+    );
 
     expect(screen.queryByTestId("name").textContent).toBe(measure.title);
 
