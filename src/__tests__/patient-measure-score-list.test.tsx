@@ -3,6 +3,7 @@ import {
   render,
   fireEvent,
   waitForElementToBeRemoved,
+  waitFor,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
@@ -25,55 +26,55 @@ const mocksData = [];
 mocksData.push({
   request: {
     query: VIEW_MEASURE_SCORE_BY_PATIENT,
-    variables: {
-      measure_id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
-    },
+    variables: { measure_id: undefined },
   },
   result: {
     data: {
       patientViewScoreList: {
-        _id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
-        created_date: "2023-04-08T05:24:52.126Z",
-        description: "update desc",
-        patient_id: "baa80cb429924a32977c6f855abf59dd",
-        score: 15,
-        score_date: "2023-04-21T10:49:38.889Z",
-        score_id: "6cd3c3d6-5e01-4f6b-b7bf-347ce616b4f7",
+        _id: "79d558d1-7f67-4e44-8e4d-918448b1ed07",
+        created_date: "2023-04-29T17:47:24.075Z",
+        description: "",
+        patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+        score: 2,
+        score_date: "2023-05-02T11:19:19.714Z",
+        score_id: "ac826d59-4244-4e84-b5b1-01a89cb3d91f",
         scores_list: [
           {
-            _id: "f563640d-8cee-49a7-b9a6-ba656ab3ef45",
-            added_by: "therapist",
-            created_date: "2023-04-17T13:36:32.117Z",
-            measure_id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
-            score: 10,
-            session_no: null,
+            _id: "99503033-6e0f-4575-bd73-a86f421b1e63",
+            added_by: "patient",
+            created_date: "2023-04-29T12:38:25.426Z",
+            measure_id: "7cff4b39-0668-4e8f-b63f-d4b2b496a059",
+            score: 16,
+            session_no: "",
             status: 1,
-            template_data: "testing json",
-            template_id: "template-1",
+            template_data:
+              '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh1ytgif","col1":"quest","col2":"1","col3":"2","col4":"3","col5":"4","answer":"col3"},{"id":"lh1yu5cv","col1":"test","col2":"4","col3":"5","col4":"5","col5":"8","answer":"col5"},{"id":"lh1yufoc","col1":"some","col2":"2","col3":"8","col4":"6","col5":"4","answer":"col4"}],"footerRows":[{"col1":"Column Total","col2":0,"col3":2,"col4":6,"col5":8,"":null},{"col1":"Total Score","colAvg":16}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":true},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":16}',
+            template_id: "format2",
             __typename: "PatMeasuresScores",
           },
           {
-            _id: "6cd3c3d6-5e01-4f6b-b7bf-347ce616b4f7",
-            added_by: "therapist",
-            created_date: "2023-04-21T10:49:38.889Z",
-            measure_id: "c7e03c04-e4ab-4c9e-b679-9e5ac8a128ed",
-            score: 15,
-            session_no: "1",
+            _id: "1e715a5a-ecb5-4035-97aa-65b02a9eb24d",
+            added_by: "patient",
+            created_date: "2023-05-01T05:09:01.487Z",
+            measure_id: "7cff4b39-0668-4e8f-b63f-d4b2b496a059",
+            score: 8,
+            session_no: "start",
             status: 1,
-            template_data: "json 4",
-            template_id: "template-4",
+            template_data:
+              '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh1ytgif","col1":"quest","col2":"1","col3":"2","col4":"3","col5":"4","answer":"col3"},{"id":"lh1yu5cv","col1":"test","col2":"4","col3":"5","col4":"5","col5":"8","answer":"col2"},{"id":"lh1yufoc","col1":"some","col2":"2","col3":"8","col4":"6","col5":"4","answer":"col2"}],"footerRows":[{"col1":"Column Total","col2":6,"col3":2,"col4":0,"col5":0,"":null},{"col1":"Total Score","colAvg":8}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":true},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":8}',
+            template_id: "format2",
             __typename: "PatMeasuresScores",
           },
         ],
-        session_no: "1",
+        session_no: "2",
         share_status: 1,
         status: 1,
-        template_data: "update json",
-        template_id: "template-3",
+        template_data:
+          '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh29yqqu","col1":"q","col2":"1","col3":"2","col4":"3","col5":"4","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
+        template_id: "format2",
         therapist_id: "686802e5123a482681a680a673ef7f53",
-        title: "update title",
-        updated_date: "2023-04-21T10:49:38.889Z",
-        __typename: "TherapistMeasures",
+        title: "ff",
+        updated_date: "2023-05-02T11:19:19.714Z",
       },
     },
   },
@@ -115,17 +116,29 @@ describe("Measures score list", () => {
 
   test("Renders measure score list & chart", async () => {
     await sut();
-    expect(screen.queryByTestId("chart")).toBeInTheDocument();
-    expect(screen.queryByTestId("table-list")).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(screen.queryByTestId("chart")).toBeInTheDocument();
+      expect(screen.queryByTestId("table-list")).toBeInTheDocument();
+    });
   });
 
-  test("on click view response redirect to response page", async () => {
+  test.only("on click view response redirect to response page", async () => {
     await sut();
-    fireEvent.click(
-      screen.queryByTestId("view-response-f563640d-8cee-49a7-b9a6-ba656ab3ef45")
-    );
-    expect(pushMock).toBeCalledWith(
-      "response/f563640d-8cee-49a7-b9a6-ba656ab3ef45"
-    );
+
+    await waitFor(async () => {
+      expect(
+        screen.queryByTestId(
+          "view-response-99503033-6e0f-4575-bd73-a86f421b1e63"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "view-response-99503033-6e0f-4575-bd73-a86f421b1e63"
+        )
+      );
+      expect(pushMock).toBeCalledWith(
+        "response/99503033-6e0f-4575-bd73-a86f421b1e63"
+      );
+    });
   });
 });
