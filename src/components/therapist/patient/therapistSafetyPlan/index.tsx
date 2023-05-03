@@ -29,6 +29,8 @@ interface ViewProps {
   planData?: object[];
   handleDeleteQuestion?: (v) => void;
   onPressDeletePlan?: (v) => void;
+  accordionOpen?: number;
+  handleAddIconButton?: (index: number, id: string) => void;
 }
 
 const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
@@ -45,6 +47,8 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
   planData,
   handleDeleteQuestion,
   onPressDeletePlan,
+  accordionOpen,
+  handleAddIconButton,
 }) => {
   return (
     <>
@@ -65,6 +69,8 @@ const TherapistSafetyPlanComponent: React.FC<ViewProps> = ({
         planData={planData}
         handleDeleteQuestion={handleDeleteQuestion}
         onPressDeletePlan={onPressDeletePlan}
+        accordionOpen={accordionOpen}
+        handleAddIconButton={handleAddIconButton}
       />
     </>
   );

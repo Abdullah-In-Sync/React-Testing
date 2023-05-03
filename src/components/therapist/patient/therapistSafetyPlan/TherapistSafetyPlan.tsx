@@ -17,21 +17,21 @@ import ViewResponse from "./viewResponse/ViewResponse";
 
 const TherapistSafetyPlanList = (safetyPlanList) => {
   const styles = useStyles();
-  const [accordionOpen, setAccordionOpen] = useState();
+  const { accordionOpen, handleAddIconButton } = safetyPlanList || {};
   const isEditable = (v) => {
     const { plan_owner, plan_type } = v;
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
-  const handleAddIconButton = async (index, id) => {
-    if (index !== accordionOpen) {
-      await safetyPlanList.fetchPlanData(id);
-      setAccordionOpen(index);
-    } else {
-      /* istanbul ignore next */
-      setAccordionOpen(undefined);
-    }
-  };
+  // const handleAddIconButton = async (index, id) => {
+  //   if (index !== accordionOpen) {
+  //     await safetyPlanList.fetchPlanData(id);
+  //     setAccordionOpen(index);
+  //   } else {
+  //     /* istanbul ignore next */
+  //     setAccordionOpen(undefined);
+  //   }
+  // };
   return (
     <>
       <Box
@@ -155,7 +155,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                           handleDeleteQuestion={
                             safetyPlanList.handleDeleteQuestion
                           }
-                          onPressCancel={() => setAccordionOpen(undefined)}
+                          onPressCancel={() => handleAddIconButton(k, v._id)}
                         />
                       </AccordionDetails>
                     )}

@@ -73,6 +73,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [deleteSafetyPlan] = useMutation(DELETE_THERAPIST_SAFETY_PLAN_QUESTION);
   const [deletePlane] = useMutation(DELETE_THERAPIST_SAFETY_PLAN);
 
+  const [accordionOpen, setAccordionOpen] = useState();
+
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
     storedFunction: null,
@@ -132,6 +134,17 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       },
     });
 
+  /* istanbul ignore next */
+  const handleAddIconButton = async (index, id) => {
+    /* istanbul ignore next */
+    if (index !== accordionOpen) {
+      await fetchPlanData(id);
+      setAccordionOpen(index);
+    } else {
+      setAccordionOpen(undefined);
+    }
+  };
+
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
     const { planDesc, planName } = formFields;
@@ -148,10 +161,14 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
+            const {
+              createTherapistSafetyPlan: { _id },
+            } = data;
             /* istanbul ignore next */
             setSuccessModal({
               description: "Your plan has been created successfully.",
             });
+            handleAddIconButton(0, _id);
             getSafetyPlanList({
               variables: { patientId: patId },
             });
@@ -498,6 +515,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             planData={planData}
             handleDeleteQuestion={handleDeleteQuestion}
             onPressDeletePlan={onPressDeletePlan}
+            handleAddIconButton={handleAddIconButton}
+            accordionOpen={accordionOpen}
           />
         </Box>
       </Box>
