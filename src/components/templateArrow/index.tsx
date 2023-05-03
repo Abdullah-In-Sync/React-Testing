@@ -41,7 +41,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const nodeType = useMemo(
     () => ({
       selectorNode: (props) => (
-        <TextUpdaterNode userType={userType} {...props} />
+        <TextUpdaterNode userType={userType} mode={mode} {...props} />
       ),
     }),
     []
@@ -135,7 +135,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     border: mode == "edit" ? "1px solid" : "1px solid #cecece",
   };
 
-  if (mode == "edit") {
+  if (mode == "edit" || mode == "patientView") {
     delete editStyle.borderRadius;
     editStyle.padding = "8px";
     editStyle.borderTop = "0px solid";
@@ -145,7 +145,11 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     <>
       <Box style={editStyle}>
         <ReactFlowProvider>
-          {mode !== "edit" ? <SideBar iconItems={icons} /> : <></>}
+          {mode !== "edit" && mode !== "patientView" ? (
+            <SideBar iconItems={icons} />
+          ) : (
+            <></>
+          )}
 
           <Box
             style={{
@@ -167,50 +171,58 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               onDrop={onDrop}
               onDragOver={onDragOver}
               onEdgeUpdate={
-                userType == "patient" ? undefined : onEdgeUpdateStart
+                userType == "patient" || mode == "patientView"
+                  ? undefined
+                  : onEdgeUpdateStart
               }
               onEdgeUpdateStart={
-                userType == "patient" ? undefined : onEdgeUpdate
+                userType == "patient" || mode == "patientView"
+                  ? undefined
+                  : onEdgeUpdate
               }
               onEdgeUpdateEnd={
-                userType == "patient" ? undefined : onEdgeUpdateEnd
+                userType == "patient" || mode == "patientView"
+                  ? undefined
+                  : onEdgeUpdateEnd
               }
               fitView
             >
-              <Controls />
+              {mode !== "edit" && mode !== "patientView" ? <Controls /> : <></>}
             </ReactFlow>
           </Box>
         </ReactFlowProvider>
       </Box>
-      <Grid container justifyContent={"center"}>
-        <Grid item padding={"63px 0px 94px 0px"}>
-          <Button
-            data-testid="tableTemplateSubmit"
-            variant="contained"
-            type="submit"
-            style={{
-              padding: "5px 79px 5px 79px",
-              fontSize: "20px",
-            }}
-            onClick={() => onSubmitHandle(nodes, edges)}
-          >
-            Submit
-          </Button>
-          <Button
-            data-testid="tableTemplateCancel"
-            color="secondary"
-            variant="contained"
-            style={{
-              margin: "0px 27px 0px 27px",
-              padding: "5px 79px 5px 79px",
-              fontSize: "20px",
-            }}
-            onClick={() => onCancel()}
-          >
-            Cancel
-          </Button>
+      {mode !== "patientView" && (
+        <Grid container justifyContent={"center"}>
+          <Grid item padding={"63px 0px 94px 0px"}>
+            <Button
+              data-testid="tableTemplateSubmit"
+              variant="contained"
+              type="submit"
+              style={{
+                padding: "5px 79px 5px 79px",
+                fontSize: "20px",
+              }}
+              onClick={() => onSubmitHandle(nodes, edges)}
+            >
+              Submit
+            </Button>
+            <Button
+              data-testid="tableTemplateCancel"
+              color="secondary"
+              variant="contained"
+              style={{
+                margin: "0px 27px 0px 27px",
+                padding: "5px 79px 5px 79px",
+                fontSize: "20px",
+              }}
+              onClick={() => onCancel()}
+            >
+              Cancel
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </>
   );
 };

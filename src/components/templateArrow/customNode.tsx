@@ -14,6 +14,7 @@ interface TextUpdaterNodeProps {
   data: Data;
   isConnectable: boolean;
   userType?: any;
+  mode?: string;
 }
 
 const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
@@ -21,6 +22,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   data,
   isConnectable,
   userType,
+  mode,
 }) => {
   const [label, setLabel] = useState<string>(data?.label);
   const [description, setDescription] = useState<string>(data?.description);
@@ -48,7 +50,11 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
     const filtered = nodes.filter((ele) => ele.id !== id);
     reactFlowInstance.setNodes([...filtered]);
   };
-  const opacity = userType == "patient" ? 0 : 1;
+  const opacity = userType == "patient" || mode == "patientView" ? 0 : 1;
+  let responseDisable = true;
+  if (userType == "patient") {
+    responseDisable = false;
+  }
 
   return (
     <Box
@@ -58,33 +64,40 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         background: "white",
       }}
       data-testid="arrow-template-test-1"
-      className={userType == "patient" ? "nodrag" : null}
+      className={
+        userType == "patient" || mode == "patientView" ? "nodrag" : null
+      }
     >
-      {userType !== "patient" && (
-        <Box onClick={() => OnDeleteNode(id)}>
-          <DeleteForeverIcon
-            style={{
-              position: "absolute",
-              left: "112px",
-              top: "-13px",
-              padding: "5px",
-              cursor: "pointer",
-              zIndex: 1000,
-            }}
-          />
-        </Box>
-      )}
+      {userType !== "patient" ||
+        (mode !== "patientView" && (
+          <Box onClick={() => OnDeleteNode(id)}>
+            <DeleteForeverIcon
+              style={{
+                position: "absolute",
+                left: "112px",
+                top: "-13px",
+                padding: "5px",
+                cursor: "pointer",
+                zIndex: 1000,
+              }}
+            />
+          </Box>
+        ))}
       <Handle
         type="target"
         id="c"
         position={Position.Top}
-        isConnectable={userType == "patient" ? false : isConnectable}
+        isConnectable={
+          userType == "patient" || mode == "patientView" ? false : isConnectable
+        }
         style={{ opacity: opacity }}
       />
       <Handle
         type="source"
         position={Position.Right}
-        isConnectable={userType == "patient" ? false : isConnectable}
+        isConnectable={
+          userType == "patient" || mode == "patientView" ? false : isConnectable
+        }
         style={{ opacity: opacity }}
       />
       <Box display={"flex"} flexDirection={"column"} gap={"5px"}>
@@ -95,7 +108,9 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           onChange={(e) => onChange(e)}
           placeholder="Enter title here"
           style={{ fontSize: "8px" }}
-          disabled={userType == "patient" ? true : false}
+          disabled={
+            userType == "patient" || mode == "patientView" ? true : false
+          }
         />
         <input
           id="text"
@@ -104,7 +119,9 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           onChange={(e) => onChange(e)}
           placeholder="Enter description here"
           style={{ fontSize: "8px" }}
-          disabled={userType == "patient" ? true : false}
+          disabled={
+            userType == "patient" || mode == "patientView" ? true : false
+          }
         />
         <input
           id="text"
@@ -113,21 +130,25 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           onChange={(e) => onChange(e)}
           placeholder="Response"
           style={{ fontSize: "8px" }}
-          disabled={userType == "patient" ? false : true}
+          disabled={responseDisable}
         />
       </Box>
       <Handle
         type="target"
         position={Position.Left}
         id="a"
-        isConnectable={userType == "patient" ? false : isConnectable}
+        isConnectable={
+          userType == "patient" || mode == "patientView" ? false : isConnectable
+        }
         style={{ opacity: opacity }}
       />
       <Handle
         type="source"
         position={Position.Bottom}
         id="b"
-        isConnectable={userType == "patient" ? false : isConnectable}
+        isConnectable={
+          userType == "patient" || mode == "patientView" ? false : isConnectable
+        }
         style={{ opacity: opacity }}
       />
     </Box>

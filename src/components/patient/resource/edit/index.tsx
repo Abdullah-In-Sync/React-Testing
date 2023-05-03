@@ -77,7 +77,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
           )}
         {templateDetail?.component_name == "ArrowTemplate" && (
           <TemplateArrow
-            mode="edit"
+            mode={`${mode == "patientView" ? "patientView" : "edit"}`}
             nodesData={JSON.parse(templateData).nodes}
             edgesData={JSON.parse(templateData).edges}
             onSubmit={onSubmit}
