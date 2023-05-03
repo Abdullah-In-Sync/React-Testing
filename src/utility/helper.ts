@@ -35,3 +35,17 @@ export const getfiterObject = (
   if (filterValue) return arrObj.find((item) => item.value == filterValue);
   else return {} as SessionObject;
 };
+
+export const getScoreGraphCoordinates = (scoresList) => {
+  const seriesX = [];
+  const seriesY = [];
+  scoresList.forEach((item) => {
+    const { created_date, score } = item;
+    seriesX.push(created_date);
+    seriesY.push(score);
+  });
+  return {
+    seriesX,
+    seriesY,
+  };
+};
