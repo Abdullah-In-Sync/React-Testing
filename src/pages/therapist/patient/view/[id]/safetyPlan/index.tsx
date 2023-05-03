@@ -159,7 +159,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       createTherapistSafetyPlan({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: async (data) => {
           if (data) {
             const {
               createTherapistSafetyPlan: { _id },
@@ -168,7 +168,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             setSuccessModal({
               description: "Your plan has been created successfully.",
             });
-            handleAddIconButton(0, _id);
+            await handleAddIconButton(0, _id);
             getSafetyPlanList({
               variables: { patientId: patId },
             });
