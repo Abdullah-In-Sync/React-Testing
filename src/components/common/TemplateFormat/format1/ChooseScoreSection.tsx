@@ -57,11 +57,7 @@ const ChooseScoreSection: React.FC<ViewProps> = ({
   };
 
   return (
-    <Box
-      className={`chooseScoreSection cSection ${
-        isResponse ? "disbledFields" : ""
-      }`}
-    >
+    <Box className={`chooseScoreSection cSection`}>
       <Box className="scoreCardWrapper">
         <Box className="scoreCardTextWrapper">
           <Typography>Choose your scores from</Typography>

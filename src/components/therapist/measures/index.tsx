@@ -40,7 +40,6 @@ const Measures: React.FC = () => {
   const [accodionView, setAccodionView] = useState<any>();
 
   const [accodionViewScore, setAccodionViewScore] = useState();
-  const [measureId, setMeasureId] = useState("");
 
   const [planid, setPlanId] = useState();
   const modalRefAddPlan = useRef<ModalElement>(null);
@@ -128,21 +127,16 @@ const Measures: React.FC = () => {
       },
     });
 
-  const [getTherapistViewScoreData, { data: therapistViewScoreData }] =
-    useLazyQuery(GET_THERAPIST_MEASURES_SCORE_LIST, {
+  const [getTherapistViewScoreData] = useLazyQuery(
+    GET_THERAPIST_MEASURES_SCORE_LIST,
+    {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
-        console.log("Koca: data ", data);
+        const { therapistViewScoreList = {} } = data || {};
+        setAccodionViewScore(therapistViewScoreList);
       },
-    });
-
-  useEffect(() => {
-    getTherapistViewScoreData({
-      variables: {
-        measure_id: measureId,
-      },
-    });
-  }, [measureId]);
+    }
+  );
 
   useEffect(() => {
     getTherapistMeasuresList({
@@ -164,18 +158,24 @@ const Measures: React.FC = () => {
     const { pressedIconButton, _id } = value;
     switch (pressedIconButton) {
       case "edit":
-        return router.push(
+        router.push(
           `/therapist/patient/view/${patientId}/measures/edit/${_id}`
         );
+        break;
       case "share":
       case "delete":
         setIsConfirmationModel(true);
         break;
       case "takeTest":
-        return setAccodionView({ data: value, type: pressedIconButton });
+        setAccodionView({ data: value, type: pressedIconButton });
+        break;
       case "viewscores":
-        setMeasureId(value._id);
-        return setAccodionViewScore(therapistViewScoreData);
+        getTherapistViewScoreData({
+          variables: {
+            measure_id: value._id,
+          },
+        });
+        break;
     }
   };
 
