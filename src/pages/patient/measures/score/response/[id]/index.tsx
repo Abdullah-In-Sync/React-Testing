@@ -23,6 +23,7 @@ const PatientResponsePage: NextPage = () => {
     variables: {
       scoreId,
     },
+    fetchPolicy: "network-only",
   });
 
   /* istanbul ignore next */

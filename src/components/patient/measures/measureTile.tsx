@@ -34,13 +34,13 @@ export const MeasureTile: FC<MeasureTileProps> = ({
             <Box>
               <Button
                 data-testid="view-score-btn"
-                className={classes.actionButton}
+                className={"actionButton"}
                 onClick={() => onClickScore(measure)}
               >
                 View score
               </Button>
               <Button
-                className={classes.actionButton}
+                className={"actionButton"}
                 style={{ marginLeft: "60px" }}
                 data-testid="take-test-btn"
                 onClick={() => onClickTest(measure)}
