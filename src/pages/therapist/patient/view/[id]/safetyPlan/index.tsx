@@ -415,12 +415,12 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       await updateTherapistSafetyPlanQuestions({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: async (data) => {
           if (data) {
             setSuccessModal({
               description: "Your question has been updated successfully.",
             });
-            fetchPlanData(planId);
+            await fetchPlanData(planId);
           }
         },
       });
@@ -487,8 +487,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         confirmObject: {
           description: "Are you sure you want to delete the question?",
         },
-        storedFunction: (callback) => {
-          callDeleteApi(questionId, successDeleteCallback, callback);
+        storedFunction: async (callback) => {
+          await callDeleteApi(questionId, successDeleteCallback, callback);
         },
       },
     });
