@@ -23,15 +23,6 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
-  // const handleAddIconButton = async (index, id) => {
-  //   if (index !== accordionOpen) {
-  //     await safetyPlanList.fetchPlanData(id);
-  //     setAccordionOpen(index);
-  //   } else {
-  //     /* istanbul ignore next */
-  //     setAccordionOpen(undefined);
-  //   }
-  // };
   return (
     <>
       <Box
