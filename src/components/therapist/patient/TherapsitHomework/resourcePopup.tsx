@@ -123,6 +123,7 @@ const ResourcePopup: React.FC<ViewProps> = ({
             <TextField
               id="search"
               variant="outlined"
+              size="small"
               placeholder="Search"
               value={searchValue}
               onChange={handleSearchChange}
@@ -145,7 +146,7 @@ const ResourcePopup: React.FC<ViewProps> = ({
                   </InputAdornment>
                 ),
               }}
-              style={{ height: "10px", width: "300px" }}
+              style={{ width: "250px" }}
             />
 
             <Box>

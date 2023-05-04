@@ -37,9 +37,9 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
   //**  TABLE DATA COLUMNS **//
   const fields = [
     {
-      columnName: "S. No.",
+      columnName: "Session no.",
       visible: true,
-      render: (val, record, index) => index + 1,
+      render: (_, record) => record.session_no,
     },
     {
       columnName: "Date",
