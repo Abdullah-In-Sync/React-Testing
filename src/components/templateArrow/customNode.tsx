@@ -68,21 +68,20 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         userType == "patient" || mode == "patientView" ? "nodrag" : null
       }
     >
-      {userType !== "patient" ||
-        (mode !== "patientView" && (
-          <Box onClick={() => OnDeleteNode(id)}>
-            <DeleteForeverIcon
-              style={{
-                position: "absolute",
-                left: "112px",
-                top: "-13px",
-                padding: "5px",
-                cursor: "pointer",
-                zIndex: 1000,
-              }}
-            />
-          </Box>
-        ))}
+      {userType !== "patient" && mode !== "patientView" && (
+        <Box onClick={() => OnDeleteNode(id)}>
+          <DeleteForeverIcon
+            style={{
+              position: "absolute",
+              left: "112px",
+              top: "-13px",
+              padding: "5px",
+              cursor: "pointer",
+              zIndex: 1000,
+            }}
+          />
+        </Box>
+      )}
       <Handle
         type="target"
         id="c"
