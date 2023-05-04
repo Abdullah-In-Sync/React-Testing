@@ -334,7 +334,7 @@ function HomeworkDetails(props: propTypes) {
           restype: 0,
           resource_id: resourceId,
         },
-        onCompleted: (data) => {
+        onCompleted: () => {
           setCompleteResourceAssignedModal(true);
         },
       });
