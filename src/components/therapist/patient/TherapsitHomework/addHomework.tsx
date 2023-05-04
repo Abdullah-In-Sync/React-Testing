@@ -335,7 +335,6 @@ function HomeworkDetails(props: propTypes) {
           resource_id: resourceId,
         },
         onCompleted: (data) => {
-          console.debug("Koca: Assigned data ", data);
           setCompleteResourceAssignedModal(true);
         },
       });
@@ -394,6 +393,21 @@ function HomeworkDetails(props: propTypes) {
       setMyResource(0);
     }
     setMyFavourites((prevValue) => (prevValue === 1 ? 0 : 1));
+  };
+
+  /* istanbul ignore next */
+  const addResourceFunction = () => {
+    const hasCompleteStatus = previousSessionTaskData.some(
+      (obj) => obj.complete_status === "1"
+    );
+
+    if (hasCompleteStatus) {
+      enqueueSnackbar("Resources cannot be attached to completed tasks.", {
+        variant: "error",
+      });
+    } else {
+      setOpenResourceModal(true);
+    }
   };
 
   return (
@@ -681,7 +695,7 @@ function HomeworkDetails(props: propTypes) {
 
                     <Button
                       onClick={() => {
-                        setOpenResourceModal(true);
+                        addResourceFunction();
                         setPtHomeworkId(data._id);
                         setPtShareId(data.ptshareres_id);
                       }}
