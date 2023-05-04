@@ -8,6 +8,8 @@ import {
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
+import { ThemeProvider } from "@mui/material";
+import theme from "../styles/theme/theme";
 
 import Measure from "../components/patient/therapyPages/measures";
 import { GET_PAITENT_MEASURES_LIST } from "../graphql/Measure/graphql";
@@ -78,9 +80,11 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <Measure />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <Measure />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
 

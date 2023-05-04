@@ -2,9 +2,7 @@ import {
   Box,
   Button,
   Card,
-  FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
   IconButton,
   InputAdornment,
@@ -15,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import CardContent from "@mui/material/CardContent";
+
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -71,7 +69,6 @@ const ResourcePopup: React.FC<ViewProps> = ({
             overflowY: "auto",
             bgcolor: "background.paper",
             borderRadius: "5px 5px 0 0",
-
             boxShadow: 24,
           }}
         >
@@ -183,29 +180,34 @@ const ResourcePopup: React.FC<ViewProps> = ({
             <Grid container spacing={3}>
               {popupData?.getPopupResourceList?.map((data, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card sx={{ maxWidth: 345 }}>
-                    <CardContent sx={{ overflowY: "auto" }}>
-                      <FormControl
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <FormGroup>
-                          <FormControlLabel
-                            data-testid={`resource_checkbox${index}`}
-                            control={<Radio />}
-                            onChange={() => setCheckBox(data)}
-                            label={""}
-                          />
-                        </FormGroup>
-                      </FormControl>
+                  <Card
+                    sx={{
+                      border: "1px solid #cecece",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    <FormControlLabel
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "flex-end",
+                      }}
+                      data-testid={`resource_checkbox${index}`}
+                      control={<Radio />}
+                      onChange={() => setCheckBox(data)}
+                      label={""}
+                    />
 
+                    <Box
+                      style={{
+                        paddingLeft: "15px",
+                        paddingRight: "15px",
+                        paddingBottom: "10px",
+                      }}
+                    >
                       <Box
                         sx={{
                           display: "flex",
-                          alignItems: "center",
                           justifyContent: "center",
                           bgcolor: "#6EC9DB",
                           borderRadius: "3px 3px 3px 3px",
@@ -237,7 +239,7 @@ const ResourcePopup: React.FC<ViewProps> = ({
                             : data.resource_desc}
                         </Typography>
                       </Tooltip>
-                    </CardContent>
+                    </Box>
                   </Card>
                 </Grid>
               ))}

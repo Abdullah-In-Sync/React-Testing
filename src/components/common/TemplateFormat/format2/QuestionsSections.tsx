@@ -16,7 +16,7 @@ import ErrorMessage from "../ErrorMessage";
 import * as templateTypes from "../types";
 
 import { Typography } from "@material-ui/core";
-import { useEffect } from "react";
+import { useCallback, useMemo } from "react";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import CommonButton from "../../Buttons/CommonButton";
 import ConfirmBoxModal from "../../ConfirmBoxModal";
@@ -44,12 +44,13 @@ const QuestionsSection: React.FC<ViewProps> = ({
   const { templateData: { questions: questionsTouched } = {} } = touched;
   const { templateData: { questions: questionsError } = {} } = errors;
 
-  useEffect(() => {
-    const setScore = () => {
-      const { tableFooter, totalScore } = allAnsColSum(templateData);
-      setFieldValue(`templateData.questions.footerRows`, tableFooter);
-      setFieldValue(`templateData.totalScore`, totalScore);
-    };
+  const setScore = useCallback(() => {
+    const { tableFooter, totalScore } = allAnsColSum(templateData);
+    setFieldValue(`templateData.questions.footerRows`, tableFooter);
+    setFieldValue(`templateData.totalScore`, totalScore);
+  }, [templateData.questions.bodyRows]);
+
+  useMemo(() => {
     if (isResponse) setScore();
   }, [templateData.questions.bodyRows, isResponse]);
 
@@ -127,6 +128,9 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   <TableCell
                     key={`tableBodyCell_${column.id}`}
                     align={column.align}
+                    className={`${
+                      isResponse && columnIndex === 0 ? "disbledFields" : ""
+                    }`}
                   >
                     {inputTextField({
                       ...value,
@@ -152,6 +156,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   />
                 </TableCell>
               )}
+              {/* {(!isView && !isResponse) && <TableCell />} */}
             </TableRow>
           );
         })}
@@ -181,9 +186,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
                       className={`${
-                        (!isView || !isResponse) && i === 0
-                          ? ""
-                          : "disbledFields"
+                        !isResponse && i === 0 ? "" : "disbledFields"
                       }`}
                     >
                       {inputTextField({

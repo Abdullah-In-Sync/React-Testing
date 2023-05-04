@@ -150,7 +150,7 @@ const OptionsSection: React.FC<ViewProps> = ({
                 <DeleteButton
                   i={`templateData.optionsQuestions.${i}.question`}
                   data-testId={`templateData.optionsQuestions.${i}.question`}
-                  onDelete={() => handleDeleteOption(i)}
+                  onDelete={() => handleDeleteOption({ i, item })}
                 />
               )}
               <Box className="inputBox">
