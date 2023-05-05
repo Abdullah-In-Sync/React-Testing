@@ -351,11 +351,9 @@ mocksData.push({
   },
   result: {
     data: {
-      data: {
-        createSafetyPlan: {
-          result: true,
-          __typename: "result",
-        },
+      createTherapistSafetyPlan: {
+        _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
+        __typename: "result",
       },
     },
   },

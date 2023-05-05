@@ -290,7 +290,7 @@ export const CREATE_THERAPIST_SAFETY_PLAN = gql`
       planName: $planName
       planDesc: $planDesc
     ) {
-      result
+      _id
     }
   }
 `;
