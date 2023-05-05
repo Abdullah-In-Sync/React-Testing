@@ -31,7 +31,6 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
-  const id = router?.query?.id as string;
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
   const resourceDetailUrl = `/patient/therapy/?tab=resources`;
 
