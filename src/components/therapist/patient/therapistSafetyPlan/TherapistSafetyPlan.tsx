@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
+import React from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ShareIcon from "@mui/icons-material/Share";
@@ -17,20 +17,11 @@ import ViewResponse from "./viewResponse/ViewResponse";
 
 const TherapistSafetyPlanList = (safetyPlanList) => {
   const styles = useStyles();
-  const [accordionOpen, setAccordionOpen] = useState();
+  const { accordionOpen, handleAddIconButton } = safetyPlanList || {};
   const isEditable = (v) => {
     const { plan_owner, plan_type } = v;
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
-  };
-  const handleAddIconButton = async (index, id) => {
-    if (index !== accordionOpen) {
-      await safetyPlanList.fetchPlanData(id);
-      setAccordionOpen(index);
-    } else {
-      /* istanbul ignore next */
-      setAccordionOpen(undefined);
-    }
   };
   return (
     <>
@@ -155,7 +146,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
                           handleDeleteQuestion={
                             safetyPlanList.handleDeleteQuestion
                           }
-                          onPressCancel={() => setAccordionOpen(undefined)}
+                          onPressCancel={() => handleAddIconButton(k, v._id)}
                         />
                       </AccordionDetails>
                     )}
