@@ -1,86 +1,90 @@
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@mui/system";
+import { useTheme } from "@mui/styles";
 
-export const useStyles = makeStyles((theme: Theme) => ({
-  formWrapper: {
-    padding: "1rem 0rem",
-    "& .bottomActionButtonsWrapper": {
-      display: "flex",
-      flexWrap: "wrap",
-      flex: "1",
-      justifyContent: "center",
-      padding: "10px 0px",
-      "& .MuiBox-root": {
-        [theme.breakpoints.down("sm")]: {
-          width: "100%",
-          marginBottom: 10,
+export const useStyles = makeStyles(() => {
+  const theme = useTheme() as Theme;
+  return {
+    formWrapper: {
+      padding: "1rem 0rem",
+      "& .bottomActionButtonsWrapper": {
+        display: "flex",
+        flexWrap: "wrap",
+        flex: "1",
+        justifyContent: "center",
+        padding: "10px 0px",
+        "& .MuiBox-root": {
+          [theme.breakpoints.down("sm")]: {
+            width: "100%",
+            marginBottom: 10,
+          },
+          [theme.breakpoints.up("md")]: {
+            padding: "0px 10px",
+          },
         },
-        [theme.breakpoints.up("md")]: {
-          padding: "0px 10px",
+        "& .cancelButton": {
+          background: theme.palette.secondary.main,
+        },
+        "& .MuiBox-root button": {
+          [theme.breakpoints.down("sm")]: {
+            width: "100%",
+          },
+          [theme.breakpoints.down("md")]: {},
+          [theme.breakpoints.up("lg")]: {
+            width: "12em",
+          },
         },
       },
-      "& .cancelButton": {
-        background: theme.palette.secondary.main,
-      },
-      "& .MuiBox-root button": {
-        [theme.breakpoints.down("sm")]: {
-          width: "100%",
+      "& .fieldsBoxWrapperFirst": {
+        "& .fieldBox": {
+          "& button": {
+            width: "unset",
+          },
+          textAlign: "right",
         },
-        [theme.breakpoints.down("md")]: {},
-        [theme.breakpoints.up("lg")]: {
-          width: "12em",
-        },
-      },
-    },
-    "& .fieldsBoxWrapperFirst": {
-      "& .fieldBox": {
-        "& button": {
-          width: "unset",
-        },
-        textAlign: "right",
-      },
-      marginBottom: "1rem",
-      "& .MuiBox-root": {
         marginBottom: "1rem",
+        "& .MuiBox-root": {
+          marginBottom: "1rem",
+        },
       },
     },
-  },
-  resouceDetailBoxWrapper: {
-    "& .buttonIconWrapper": {
-      flexDirection: "row",
-      justifyContent: "flex-end",
+    resouceDetailBoxWrapper: {
+      "& .buttonIconWrapper": {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+      },
+      "& .inputsWrapper": {},
+      "& .descriptionBoxWrapper": {
+        "& .label": {
+          color: theme.palette.primary.main,
+          fontWeight: "bold",
+          fontSize: "1rem",
+          paddingBottom: 3,
+        },
+        "& .MuiBox-root": {
+          padding: 10,
+          borderRadius: 10,
+          border: "1px solid",
+          borderColor: "#ccc",
+        },
+        "& .MuiBox-root p": {
+          fonSize: "0.8rem",
+          color: theme.palette.custom.contrastText,
+        },
+      },
     },
-    "& .inputsWrapper": {},
-    "& .descriptionBoxWrapper": {
-      "& .label": {
-        color: theme.palette.primary.main,
-        fontWeight: "bold",
-        fontSize: "1rem",
-        paddingBottom: 3,
-      },
-      "& .MuiBox-root": {
-        padding: 10,
-        borderRadius: 10,
-        border: "1px solid",
-        borderColor: "#ccc",
-      },
-      "& .MuiBox-root p": {
-        fonSize: "0.8rem",
-        color: theme.palette.custom.contrastText,
-      },
-    },
-  },
 
-  safetyPlanListWrapper: {
-    "& .Mui-expanded": {
-      borderRadius: "16px 16px 0px 0px",
+    safetyPlanListWrapper: {
+      "& .Mui-expanded": {
+        borderRadius: "16px 16px 0px 0px",
+      },
+      "& .MuiCollapse-entered": {
+        border: `1px solid #ccc`,
+        borderRadius: "0px 0px 16px 16px",
+      },
+      "& .active": {
+        background: `${theme.palette.primary.main} !important`,
+      },
     },
-    "& .MuiCollapse-entered": {
-      border: `1px solid #ccc`,
-      borderRadius: "0px 0px 16px 16px",
-    },
-    "& .active": {
-      background: `${theme.palette.primary.main} !important`,
-    },
-  },
-}));
+  };
+});

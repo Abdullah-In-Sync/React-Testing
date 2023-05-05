@@ -1,56 +1,60 @@
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@mui/system";
+import { useTheme } from "@mui/styles";
 
-export const useStyles = makeStyles((theme: Theme) => ({
-  modalC: {
-    "& .MuiTypography-root": {
-      background: theme.palette.primary.contrastText,
-      textAlign: "center",
-      height: "auto",
-      position: "relative",
-    },
-    "& .MuiTypography-root .MuiBox-root ": {
-      position: "absolute",
-      right: 0,
-      top: 0,
-      padding: 7,
-      color: theme.palette.custom.light,
-    },
-    "& .MuiTypography-root .MuiBox-root button": {
-      color: theme.palette.custom.light,
-    },
-    "& h2 button": {
-      color: theme.palette.primary.contrastText,
-      background: theme.palette.primary.main,
-      boxShadow: "unset",
-      borderRadius: "unset",
-      width: 30,
-      height: 25,
-      "& svg": {
-        fontSize: 20,
+export const useStyles = makeStyles(() => {
+  const theme = useTheme() as Theme;
+  return {
+    modalC: {
+      "& .MuiTypography-root": {
+        background: theme.palette.primary.contrastText,
+        textAlign: "center",
+        height: "auto",
+        position: "relative",
       },
-    },
-    "& h2 button:hover": {
-      color: theme.palette.primary.contrastText,
-      background: theme.palette.primary.main,
-    },
-    "& .confirmBox": {
-      textAlign: "center",
-      "& .confirmBoxFirst": {
+      "& .MuiTypography-root .MuiBox-root ": {
+        position: "absolute",
+        right: 0,
+        top: 0,
+        padding: 7,
+        color: theme.palette.custom.light,
+      },
+      "& .MuiTypography-root .MuiBox-root button": {
+        color: theme.palette.custom.light,
+      },
+      "& h2 button": {
+        color: theme.palette.primary.contrastText,
+        background: theme.palette.primary.main,
+        boxShadow: "unset",
+        borderRadius: "unset",
+        width: 30,
+        height: 25,
         "& svg": {
-          fontSize: "5em",
-          color: theme.palette.error.main,
+          fontSize: 20,
         },
       },
-      "& .confirmBoxSecond": {
-        padding: "0px 10px 10px 10px",
-        "& p": {
-          fontWeight: 600,
-        },
+      "& h2 button:hover": {
+        color: theme.palette.primary.contrastText,
+        background: theme.palette.primary.main,
       },
-      "& .confirmBoxThird": {
-        paddingTop: 5,
+      "& .confirmBox": {
+        textAlign: "center",
+        "& .confirmBoxFirst": {
+          "& svg": {
+            fontSize: "5em",
+            color: theme.palette.error.main,
+          },
+        },
+        "& .confirmBoxSecond": {
+          padding: "0px 10px 10px 10px",
+          "& p": {
+            fontWeight: 600,
+          },
+        },
+        "& .confirmBoxThird": {
+          paddingTop: 5,
+        },
       },
     },
-  },
-}));
+  };
+});
