@@ -73,6 +73,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [deleteSafetyPlan] = useMutation(DELETE_THERAPIST_SAFETY_PLAN_QUESTION);
   const [deletePlane] = useMutation(DELETE_THERAPIST_SAFETY_PLAN);
 
+  const [accordionOpen, setAccordionOpen] = useState();
+
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
     storedFunction: null,
@@ -132,6 +134,17 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       },
     });
 
+  /* istanbul ignore next */
+  const handleAddIconButton = async (index, id) => {
+    /* istanbul ignore next */
+    if (index !== accordionOpen) {
+      await fetchPlanData(id);
+      setAccordionOpen(index);
+    } else {
+      setAccordionOpen(undefined);
+    }
+  };
+
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
     const { planDesc, planName } = formFields;
@@ -146,12 +159,16 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       createTherapistSafetyPlan({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: async (data) => {
           if (data) {
+            const {
+              createTherapistSafetyPlan: { _id },
+            } = data;
             /* istanbul ignore next */
             setSuccessModal({
               description: "Your plan has been created successfully.",
             });
+            await handleAddIconButton(0, _id);
             getSafetyPlanList({
               variables: { patientId: patId },
             });
@@ -398,12 +415,12 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       await updateTherapistSafetyPlanQuestions({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: async (data) => {
           if (data) {
             setSuccessModal({
               description: "Your question has been updated successfully.",
             });
-            fetchPlanData(planId);
+            await fetchPlanData(planId);
           }
         },
       });
@@ -470,8 +487,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         confirmObject: {
           description: "Are you sure you want to delete the question?",
         },
-        storedFunction: (callback) => {
-          callDeleteApi(questionId, successDeleteCallback, callback);
+        storedFunction: async (callback) => {
+          await callDeleteApi(questionId, successDeleteCallback, callback);
         },
       },
     });
@@ -498,6 +515,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             planData={planData}
             handleDeleteQuestion={handleDeleteQuestion}
             onPressDeletePlan={onPressDeletePlan}
+            handleAddIconButton={handleAddIconButton}
+            accordionOpen={accordionOpen}
           />
         </Box>
       </Box>

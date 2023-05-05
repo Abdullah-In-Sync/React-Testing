@@ -149,6 +149,22 @@ export const useStyles = makeStyles({
   },
 
   accordionWrapper: {
+    "& .actionButton": {
+      backgroundColor: "#d8ecf0",
+      color: "#3cacbf",
+      paddingLeft: "20px",
+      paddingRight: "20px",
+      paddingTop: "5px",
+      paddingBottom: "5px",
+      fontSize: "14px",
+      fontWeight: "bold",
+      minWidth: "150px",
+      borderRadius: "4px",
+      textTransform: "initial",
+      "&:hover": {
+        backgroundColor: "#d8ecf0",
+      },
+    },
     "& .actionWrapper": {
       display: "flex",
       "& div": {

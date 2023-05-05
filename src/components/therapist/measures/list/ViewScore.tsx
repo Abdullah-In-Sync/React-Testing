@@ -26,9 +26,9 @@ export default function ViewScore(props: propTypes) {
   /* istanbul ignore next */
   const fields = [
     {
-      columnName: "S. No.",
+      columnName: "Session no.",
       visible: true,
-      render: (val, record, index) => index + 1,
+      render: (_, record) => record.session_no,
     },
     {
       columnName: "Date",
@@ -97,7 +97,7 @@ export default function ViewScore(props: propTypes) {
         <Box
           data-testid={"table-list"}
           margin={"30px 10px"}
-          className={classes.scoreTable}
+          className={"scoreTableWrapper"}
         >
           <TableGenerator
             fields={fields}
