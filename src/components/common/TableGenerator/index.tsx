@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import { withStyles } from "@mui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import React, { useEffect, useState } from "react";
 // import Loader from "../Loader";
 
