@@ -272,6 +272,7 @@ function HomeworkDetails(props: propTypes) {
         onCompleted: () => {
           setIsConfirm(false);
           setSuccessModal(true);
+          setInputs([]);
           refetch();
         },
       });
