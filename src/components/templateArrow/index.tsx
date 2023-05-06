@@ -141,11 +141,15 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     editStyle.borderTop = "0px solid";
     editStyle.borderColor = "#6BA08E";
   }
+  if (mode == "mobile") {
+    delete editStyle.border;
+    delete editStyle.padding;
+  }
   return (
     <>
       <Box style={editStyle}>
         <ReactFlowProvider>
-          {mode !== "edit" && mode !== "patientView" ? (
+          {mode !== "edit" && mode !== "patientView" && mode !== "mobile" ? (
             <SideBar iconItems={icons} />
           ) : (
             <></>
@@ -153,7 +157,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 
           <Box
             style={{
-              height: "500px",
+              height: mode == "mobile" ? window.innerHeight - 129 : "500px",
               width: "100%",
               alignItems: "center",
               marginRight: "5px",
@@ -192,7 +196,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
           </Box>
         </ReactFlowProvider>
       </Box>
-      {mode !== "patientView" && (
+      {mode !== "patientView" && mode !== "mobile" && (
         <Grid container justifyContent={"center"}>
           <Grid item padding={"63px 0px 94px 0px"}>
             <Button
@@ -221,6 +225,46 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               Cancel
             </Button>
           </Grid>
+        </Grid>
+      )}
+      {mode == "mobile" && (
+        <Grid container justifyContent={"center"}>
+          <Button
+            data-testid="ArrowMobileTemplateSave"
+            variant="contained"
+            type="submit"
+            style={{
+              padding: "15px 15px 15px 15px",
+              fontSize: "14px",
+              background: "#6EC9DB",
+              borderRadius: "30px",
+              minWidth: "160px",
+              marginRight: "31px",
+              lineHeight: "14px",
+              textAlign: "center",
+              letterSpacing: "0.0037em",
+            }}
+            onClick={() => onSubmitHandle(nodes, edges)}
+          >
+            Save
+          </Button>
+          <Button
+            data-testid="ArrowMobileTemplateCancel"
+            style={{
+              padding: "15px 15px 15px 15px",
+              fontSize: "16px",
+              boxSizing: "border-box",
+              border: "2px solid #6DA290",
+              borderRadius: "30px",
+              color: "#6DA290",
+              minWidth: "160px",
+              marginLeft: "31px",
+              lineHeight: "14px",
+            }}
+            onClick={() => onCancel()}
+          >
+            Cancel
+          </Button>
         </Grid>
       )}
     </>
