@@ -1,7 +1,10 @@
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@mui/system";
+import { useTheme } from "@mui/styles";
 
-export const useStyles = makeStyles((theme: Theme) => {
+export const useStyles = makeStyles(() => {
+  const theme = useTheme() as Theme;
+
   const commonButtonWrapper = {
     display: "flex",
     flexWrap: "wrap",
