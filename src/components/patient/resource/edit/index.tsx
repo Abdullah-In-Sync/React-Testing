@@ -8,6 +8,7 @@ import { templateComponents } from "./patientTemplateData";
 import * as PaitentTemplateInterface from "./patientTemplateEditInterface";
 
 import { useAppContext } from "../../../../contexts/AuthContext";
+import TemplateArrow from "../../../templateArrow";
 
 interface ViewProps {
   resourceData?: PaitentTemplateInterface.ResourceDataInterface;
@@ -30,9 +31,8 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
-  const id = router?.query?.id as string;
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
-  const resourceDetailUrl = `/patient/resource/${id}/?tabName=work-sheet`;
+  const resourceDetailUrl = `/patient/therapy/?tab=resources`;
 
   const TemplateDynamic = templateComponents[templateDetail?.component_name];
   const templateData =
@@ -63,13 +63,25 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
         backButtonClick={onPressBack ? onPressBack : handleBackButton}
         {...onClickViewProps}
       >
-        {staticTemplate && TemplateDynamic && (
-          <TemplateDynamic
-            mode={mode}
-            initialData={staticTemplate}
+        {staticTemplate &&
+          TemplateDynamic &&
+          templateDetail?.component_name == "TemplateTable" && (
+            <TemplateDynamic
+              mode={mode}
+              initialData={staticTemplate}
+              onSubmit={onSubmit}
+              userType={userType}
+              onCancel={() => router.push(resourceDetailUrl)}
+            />
+          )}
+        {templateDetail?.component_name == "ArrowTemplate" && (
+          <TemplateArrow
+            mode={`${mode == "patientView" ? "patientView" : "edit"}`}
+            nodesData={JSON.parse(templateData).nodes}
+            edgesData={JSON.parse(templateData).edges}
             onSubmit={onSubmit}
-            userType={userType}
             onCancel={() => router.push(resourceDetailUrl)}
+            userType={userType}
           />
         )}
       </BreadCrumbsWithBackButton>

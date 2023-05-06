@@ -270,6 +270,7 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
         resource_url
         download_resource_url
         resource_issmartdraw
+        template_data
       }
       disorder_detail {
         _id
@@ -279,6 +280,17 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
         _id
         model_name
       }
+      template_detail {
+        component_name
+        _id
+        created_date
+        name
+        updated_date
+        category
+      }
+      template_id
+      template_response
+      updated_date
     }
   }
 `;

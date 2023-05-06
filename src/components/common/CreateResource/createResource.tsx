@@ -348,8 +348,6 @@ export default function CreateResource(props: propTypes) {
   };
 
   const onSaveArrowTemplate = (arrowTemplateData: string) => {
-    console.log(selectedComponentType?.info?._id, "node/edges onsubmit");
-
     saveResource({
       ...formFields,
       templateData: arrowTemplateData,
@@ -658,11 +656,8 @@ export default function CreateResource(props: propTypes) {
       )}
       {selectedComponentType.type == "ArrowTemplate" && (
         <TemplateArrow
-          //  initialData={selectedComponentType.initialData}
-          // mode="edit"
           onSubmit={onSaveArrowTemplate}
           onCancel={onTemplateCancel}
-          // onPreview={onPreview}
         />
       )}
       {successModal && (

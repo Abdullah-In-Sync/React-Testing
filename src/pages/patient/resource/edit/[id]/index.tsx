@@ -68,7 +68,10 @@ const PatientEditTemplatePage: NextPage = () => {
         variables: {
           ptsharresId: id,
           update: {
-            template_response: JSON.stringify(value),
+            template_response:
+              templateDetail.component_name == "ArrowTemplate"
+                ? value
+                : JSON.stringify(value),
           },
         },
       });
@@ -85,7 +88,7 @@ const PatientEditTemplatePage: NextPage = () => {
   };
 
   const handleSuccessOk = () => {
-    router.push(`/patient/resource/?tabName=work-sheet`);
+    router.push(`/patient/therapy/?tab=resources`);
     setSuccessModal(false);
   };
 
