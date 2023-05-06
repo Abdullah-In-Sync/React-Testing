@@ -1,14 +1,20 @@
 import { MockedProvider } from "@apollo/client/testing";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import { UPDATE_RESOURCE_TEMPLATE_RESPONSE } from "../graphql/mutation/resource";
 import { GET_PATIENT_RESOURCE_TEMPLATE } from "../graphql/query/resource";
-import PatientEditTemplatePage from "../pages/patient/resource/edit/[id]/index";
+import PatientMobileArrowTemplatePage from "../pages/mobile/patient/preview/[token]/[id]";
 
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
+}));
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
 }));
 
 const mocksData = [];
@@ -16,31 +22,33 @@ const mocksData = [];
 mocksData.push({
   request: {
     query: GET_PATIENT_RESOURCE_TEMPLATE,
-    variables: { ptsharresId: "750a6993f61d4e58917e31e1244711f5" },
+    variables: { ptsharresId: "fec3807e-bd64-4607-aa82-ec08b31a17ba" },
   },
   result: {
     data: {
       getResourceDetailById: [
         {
-          created_date: "2022-12-14T09:23:49.062Z",
+          created_date: "2023-05-06T04:10:48.981Z",
           resource_data: [
             {
-              template_data:
-                '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[]}]}]}',
+              // eslint-disable-next-line prettier/prettier
+              template_data: "{\"nodes\":[{\"width\":117,\"height\":47,\"id\":\"dndnode_0\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":-18.462500000000006},\"data\":{\"label\":\"Trigger\"},\"positionAbsolute\":{\"x\":427,\"y\":-18.462500000000006},\"selected\":false,\"dragging\":false},{\"width\":117,\"height\":47,\"id\":\"dndnode_2\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":249.36875},\"data\":{\"label\":\"Behaviour\"},\"selected\":false,\"positionAbsolute\":{\"x\":427,\"y\":249.36875},\"dragging\":false},{\"width\":117,\"height\":47,\"id\":\"dndnode_3\",\"type\":\"selectorNode\",\"position\":{\"x\":251.5,\"y\":188.36874999999998},\"data\":{\"label\":\"Feeling\"},\"selected\":false,\"dragging\":false,\"positionAbsolute\":{\"x\":251.5,\"y\":188.36874999999998}}],\"edges\":[{\"source\":\"dndnode_0\",\"sourceHandle\":null,\"target\":\"dndnode_1\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0-dndnode_1c\",\"selected\":false},{\"source\":\"dndnode_0\",\"sourceHandle\":\"b\",\"target\":\"dndnode_2\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0b-dndnode_2c\"},{\"source\":\"dndnode_3\",\"sourceHandle\":null,\"target\":\"dndnode_0\",\"targetHandle\":\"a\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_3-dndnode_0a\",\"selected\":false}]}",
               resource_issmartdraw: "1",
-              resource_name: "test name",
+              resource_name: "Indi arrow",
               resource_type: 2,
-              template_id: "63774edbc553fac5d6a9bd74",
+              template_id: "6434fe98582849e2152d631c",
               __typename: "Resource",
             },
           ],
           template_detail: {
-            component_name: "TemplateTable",
-            category: "journal",
-            _id: "63774edbc553fac5d6a9bd74",
-            name: "Table Template",
+            component_name: "ArrowTemplate",
+            category: "Arrow Template",
+            _id: "6434fe98582849e2152d631c",
+            name: "Arrow Template",
             __typename: "Templates",
           },
+          // eslint-disable-next-line prettier/prettier
+            template_response: "{\"nodes\":[{\"width\":122,\"height\":66,\"id\":\"dndnode_0\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":-18.462500000000006},\"data\":{\"label\":\"Trigger\"},\"positionAbsolute\":{\"x\":427,\"y\":-18.462500000000006},\"selected\":false,\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_2\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":249.36875},\"data\":{\"label\":\"Behaviour\",\"patientResponse\":\"\"},\"selected\":false,\"positionAbsolute\":{\"x\":427,\"y\":249.36875},\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_3\",\"type\":\"selectorNode\",\"position\":{\"x\":251.5,\"y\":188.36874999999998},\"data\":{\"label\":\"Feeling\",\"patientResponse\":\"\"},\"selected\":false,\"dragging\":false,\"positionAbsolute\":{\"x\":251.5,\"y\":188.36874999999998}}],\"edges\":[{\"source\":\"dndnode_0\",\"sourceHandle\":null,\"target\":\"dndnode_1\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0-dndnode_1c\",\"selected\":false},{\"source\":\"dndnode_0\",\"sourceHandle\":\"b\",\"target\":\"dndnode_2\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0b-dndnode_2c\"},{\"source\":\"dndnode_3\",\"sourceHandle\":null,\"target\":\"dndnode_0\",\"targetHandle\":\"a\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_3-dndnode_0a\",\"selected\":false}]}",
           __typename: "Patshareresource",
         },
       ],
@@ -52,73 +60,19 @@ mocksData.push({
   request: {
     query: UPDATE_RESOURCE_TEMPLATE_RESPONSE,
     variables: {
-      ptsharresId: "750a6993f61d4e58917e31e1244711f5",
+      ptsharresId: "fec3807e-bd64-4607-aa82-ec08b31a17ba",
       update: {
-        template_response:
-          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
+        // eslint-disable-next-line prettier/prettier
+          template_response: "{\"nodes\":[{\"width\":122,\"height\":66,\"id\":\"dndnode_0\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":-18.462500000000006},\"data\":{\"label\":\"Trigger\"},\"positionAbsolute\":{\"x\":427,\"y\":-18.462500000000006},\"selected\":false,\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_2\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":249.36875},\"data\":{\"label\":\"Behaviour\",\"patientResponse\":\"\"},\"selected\":false,\"positionAbsolute\":{\"x\":427,\"y\":249.36875},\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_3\",\"type\":\"selectorNode\",\"position\":{\"x\":251.5,\"y\":188.36874999999998},\"data\":{\"label\":\"Feeling\",\"patientResponse\":\"updated_value\"},\"selected\":false,\"dragging\":false,\"positionAbsolute\":{\"x\":251.5,\"y\":188.36874999999998}}],\"edges\":[{\"source\":\"dndnode_0\",\"sourceHandle\":null,\"target\":\"dndnode_1\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0-dndnode_1c\",\"selected\":false},{\"source\":\"dndnode_0\",\"sourceHandle\":\"b\",\"target\":\"dndnode_2\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0b-dndnode_2c\"},{\"source\":\"dndnode_3\",\"sourceHandle\":null,\"target\":\"dndnode_0\",\"targetHandle\":\"a\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_3-dndnode_0a\",\"selected\":false}]}",
       },
     },
   },
   result: {
     data: {
       updatePatientResourceById: {
-        template_response:
-          '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"}]}]}',
-        _id: "750a6993f61d4e58917e31e1244711f5",
-      },
-    },
-  },
-});
-
-mocksData.push({
-  request: {
-    query: GET_PATIENT_RESOURCE_TEMPLATE,
-    variables: { ptsharresId: "750a6993f61d4e58917e31e1244711f5faling" },
-  },
-  result: {
-    data: {
-      getResourceDetailById: [
-        {
-          created_date: "2022-12-14T09:23:49.062Z",
-          resource_data: [
-            {
-              template_data:
-                '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
-              resource_issmartdraw: "1",
-              resource_name: "test name",
-              resource_type: 2,
-              template_id: "63774edbc553fac5d6a9bd74",
-              __typename: "Resource",
-            },
-          ],
-          template_detail: {
-            component_name: "TemplateTable",
-            category: "journal",
-            _id: "63774edbc553fac5d6a9bd74",
-            name: "Table Template",
-            __typename: "Templates",
-          },
-          __typename: "Patshareresource",
-        },
-      ],
-    },
-  },
-});
-
-mocksData.push({
-  request: {
-    query: UPDATE_RESOURCE_TEMPLATE_RESPONSE,
-    variables: {
-      ptsharresId: "750a6993f61d4e58917e31e1244711f5faling",
-      update: {
-        template_response: "test_",
-      },
-    },
-  },
-  result: {
-    data: {
-      updatePatientResourceById: {
-        template_response: "test_",
+        // eslint-disable-next-line prettier/prettier
+        template_response: "{\"nodes\":[{\"width\":122,\"height\":66,\"id\":\"dndnode_0\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":-18.462500000000006},\"data\":{\"label\":\"Trigger\"},\"positionAbsolute\":{\"x\":427,\"y\":-18.462500000000006},\"selected\":false,\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_2\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":249.36875},\"data\":{\"label\":\"Behaviour\",\"patientResponse\":\"\"},\"selected\":false,\"positionAbsolute\":{\"x\":427,\"y\":249.36875},\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_3\",\"type\":\"selectorNode\",\"position\":{\"x\":251.5,\"y\":188.36874999999998},\"data\":{\"label\":\"Feeling\",\"patientResponse\":\"updated_value\"},\"selected\":false,\"dragging\":false,\"positionAbsolute\":{\"x\":251.5,\"y\":188.36874999999998}}],\"edges\":[{\"source\":\"dndnode_0\",\"sourceHandle\":null,\"target\":\"dndnode_1\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0-dndnode_1c\",\"selected\":false},{\"source\":\"dndnode_0\",\"sourceHandle\":\"b\",\"target\":\"dndnode_2\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0b-dndnode_2c\"},{\"source\":\"dndnode_3\",\"sourceHandle\":null,\"target\":\"dndnode_0\",\"targetHandle\":\"a\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_3-dndnode_0a\",\"selected\":false}]}",
+        _id: "fec3807e-bd64-4607-aa82-ec08b31a17ba",
       },
     },
   },
@@ -128,74 +82,45 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
-        <PatientEditTemplatePage />
+        <PatientMobileArrowTemplatePage />
       </SnackbarProvider>
     </MockedProvider>
   );
 };
 
-describe("Patient view template page", () => {
-  it("should render patient view template", async () => {
+describe("Patient mobile view Arrow template page", () => {
+  it("should render patient mobile view Arrow template", async () => {
     (useRouter as jest.Mock).mockClear();
     const mockRouter = {
       push: jest.fn(),
     };
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
-        id: "750a6993f61d4e58917e31e1244711f5",
+        token: "huigxssjosidisshdh",
+        id: "fec3807e-bd64-4607-aa82-ec08b31a17ba",
       },
       ...mockRouter,
     }));
     await sut();
-    waitFor(async () => {
-      expect(screen.getAllByText(/test name/i)).toHaveLength(2);
-    });
-    const tableTemplateSubmitButton = await screen.findByTestId(
-      "tableTemplateSubmit"
+    const arrowTemplate = await screen.findAllByTestId("arrow-template-test-1");
+    expect(arrowTemplate.length).toEqual(3);
+    const ArrowTemplateSaveButton = await screen.findByTestId(
+      "ArrowMobileTemplateSave"
     );
-    expect(tableTemplateSubmitButton).toBeInTheDocument();
-    const inputRow = await screen.findByTestId("answer_rows[1].cells[0]");
+    expect(ArrowTemplateSaveButton).toBeInTheDocument();
+    const inputRow = await screen.findByTestId(
+      "arrow-template-response-input-dndnode_3"
+    );
     expect(inputRow).toBeInTheDocument();
     fireEvent.change(inputRow, {
       target: { value: "updated_value" },
     });
-    fireEvent.click(tableTemplateSubmitButton);
+    fireEvent.click(ArrowTemplateSaveButton);
     const successOkBtn = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(successOkBtn);
     expect(mockRouter.push).toHaveBeenCalledWith(
       "/patient/therapy/?tab=resources"
     );
     expect(successOkBtn).not.toBeInTheDocument();
-  });
-
-  it("Should display the view on eye button click", async () => {
-    await sut();
-    const eyeIconButton = screen.getByTestId("eyeIconButton");
-    expect(eyeIconButton).toBeInTheDocument();
-    const inputRow = await screen.findByTestId("answer_rows[1].cells[0]");
-    expect(inputRow).toBeInTheDocument();
-    fireEvent.change(inputRow, {
-      target: { value: "some text" },
-    });
-    fireEvent.click(eyeIconButton);
-    expect(await screen.getByTestId("view-text-input")).toHaveTextContent(
-      "some text"
-    );
-  });
-
-  it("should render submit exception", async () => {
-    (useRouter as jest.Mock).mockClear();
-    (useRouter as jest.Mock).mockImplementation(() => ({
-      query: {
-        id: "750a6993f61d4e58917e31e1244711f5faling",
-      },
-    }));
-    await sut();
-    fireEvent.click(await screen.findByTestId("tableTemplateSubmit"));
-    await waitFor(async () => {
-      expect(
-        screen.getAllByText(/Server error please try later./i)
-      ).toHaveLength(1);
-    });
   });
 });
