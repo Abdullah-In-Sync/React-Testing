@@ -3,7 +3,6 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import PatientEditTemplate from "../../../../../components/patient/resource/edit";
 import {
   ResourceDataInterface,
   TemplateDetailInterface,
