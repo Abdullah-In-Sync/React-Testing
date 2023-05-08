@@ -124,6 +124,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         />
         <input
           id="text"
+          data-testid={`arrow-template-response-input-${id}`}
           name="patientResponse"
           value={patientResponse}
           onChange={(e) => onChange(e)}
