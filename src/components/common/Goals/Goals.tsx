@@ -3,45 +3,53 @@ import {
   Button,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Stack,
+  TextField,
   Typography,
+  styled,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { editGoalsFormField } from "../../../utility/types/resource_types";
 import TextFieldComponent from "../TextField/TextFieldComponent";
-import SureModal from "../../admin/resource/SureModal";
 import Slider from "@mui/material/Slider";
 import {
   GET_PATIENTTHERAPY_DATA,
   GET_PATIENT_GOAL_DATA,
 } from "../../../graphql/query/common";
 import { useAppContext } from "../../../contexts/AuthContext";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Dayjs } from "dayjs";
+import ConfirmationModal from "../ConfirmationModal";
+import { useSnackbar } from "notistack";
+import { useStyles } from "../../therapist/patient/therapistGoals/style";
+import { PATIENT_ADD_UPDATE_GOALS } from "../../../graphql/mutation/patient";
+import moment from "moment";
 
 const defaultFormValue = {
   _id: "",
-  created_date: "",
-  patient_id: "",
+  ptgoal_mygoal: "",
+  ptgoal_reviewdate: "",
   ptgoal_achievementdate: "",
   ptgoal_achievementgoal: "",
-  ptgoal_audio: "",
-  ptgoal_file: "",
-  ptgoal_mygoal: "",
-  ptgoal_pregoal: "",
-  ptgoal_reviewdate: "",
-  ptgoal_status: "",
   ptgoal_success: "",
-  ptsession_id: "",
-  pttherapy_id: "",
-  therapist_id: "",
-  updated_date: "",
 };
 
+const IconButtonWrapper = styled(IconButton)(
+  () => `
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  margin-right: 5px;
+`
+);
+
 type propTypes = {
-  onSubmit?: any;
   setLoader: any;
 };
 
@@ -70,16 +78,29 @@ const marks = [
 ];
 
 const Goals = (props: propTypes) => {
+  const styles = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const patientId = sessionStorage.getItem("patient_id");
+
   /* istanbul ignore next */
   const { user: { patient_data: { therapist_id: therapistId } } = {} } =
     useAppContext();
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   const [therapy, setTherapy] = useState<string>("");
   const [goalIndex, setGoalIndex] = useState(null);
+  const [inputs, setInputs] = useState([]);
+  const [goalInput, setGoalInput] = useState("");
+  const [goalDate, setGoalDate] = React.useState<Dayjs | null>(null);
+  const [achivDate, setAchivDate] = React.useState<Dayjs | null>(null);
+  const [patientInputs, setpatientInputs] = useState();
+  const [sliderInputs, setSliderInputs] = useState();
+  const [isConfirmAddGoals, setIsAddGoals] = useState(false);
+  const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
 
   const [formFields, setFormFields] =
     useState<editGoalsFormField>(defaultFormValue);
+
+  // Mutation
+  const [addUpdateGoals] = useMutation(PATIENT_ADD_UPDATE_GOALS);
 
   //GraphQL Queries
   const [
@@ -98,7 +119,7 @@ const Goals = (props: propTypes) => {
     },
   });
 
-  const [getGoalsData, { loading: GoalsLoading, data: goalsData }] =
+  const [getGoalsData, { loading: GoalsLoading, data: goalsData, refetch }] =
     useLazyQuery(GET_PATIENT_GOAL_DATA, {
       onCompleted: (data) => {
         /* istanbul ignore next */
@@ -106,26 +127,24 @@ const Goals = (props: propTypes) => {
       },
     });
 
-  //Dropdown queries important
-
+  /* istanbul ignore next */
   const formValueInclude = (goalSuccess) => {
-    /* istanbul ignore next */
     if (goalSuccess == "0") {
       return 0;
     }
-    /* istanbul ignore next */
+
     if (goalSuccess == "1") {
       return 25;
     }
-    /* istanbul ignore next */
+
     if (goalSuccess == "2") {
       return 50;
     }
-    /* istanbul ignore next */
+
     if (goalSuccess == "3") {
       return 75;
     }
-    /* istanbul ignore next */
+
     if (goalSuccess == "4") {
       return 100;
     }
@@ -137,24 +156,6 @@ const Goals = (props: propTypes) => {
     props.setLoader(true);
     /* istanbul ignore next */
     setTherapy(event.target.value);
-  };
-
-  const handleSubmit = async (e, index: number) => {
-    e.preventDefault();
-    setGoalIndex(index);
-    setModalOpen(true);
-    /* istanbul ignore next */
-    if (!confirmSubmission) return;
-  };
-
-  const set2 = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-    index
-  ) => {
-    const formData = formFields[index];
-    let clonedObject: editGoalsFormField = { ...formData };
-    clonedObject = { ...clonedObject, ptgoal_achievementgoal: e.target.value };
-    setFormFields({ ...formFields, [index]: clonedObject });
   };
 
   useEffect(() => {
@@ -181,8 +182,131 @@ const Goals = (props: propTypes) => {
     props.setLoader(false);
   }, [therapy]);
 
+  const addInput = () => {
+    setInputs([...inputs, ""]);
+  };
+
   /* istanbul ignore next */
-  const goalChange = (event, index) => {
+  const deleteInput = (index) => {
+    const newInputs = [...inputs];
+    newInputs.splice(index, 1);
+    setInputs(newInputs);
+  };
+
+  const updateGoalInput = (index, value) => {
+    setGoalInput(value);
+  };
+
+  /* istanbul ignore next */
+  const goalChangeDate = (newValue: Dayjs | null) => {
+    /* istanbul ignore next */
+    setGoalDate(newValue);
+  };
+
+  const handlePatientInputChange = (index, value) => {
+    setpatientInputs(value);
+  };
+
+  const achivChangeDate = (newValue: Dayjs | null) => {
+    /* istanbul ignore next */
+    setAchivDate(newValue);
+  };
+
+  /* istanbul ignore next */
+  const goalAddSlider = (event) => {
+    let newValue;
+    const value = event.target.value;
+
+    switch (value) {
+      case 0:
+        newValue = 0;
+        break;
+      case 25:
+        newValue = 1;
+        break;
+      case 50:
+        newValue = 2;
+        break;
+      case 75:
+        newValue = 3;
+        break;
+      case 100:
+        newValue = 4;
+        break;
+    }
+
+    setSliderInputs(newValue);
+  };
+
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsAddGoals(false);
+  };
+
+  const handlerAddGoal = async () => {
+    try {
+      await addUpdateGoals({
+        variables: {
+          patient_id: patientId,
+          pttherapy_id: therapy,
+          achievement_date: achivDate,
+          achievement_goal: patientInputs,
+          goal_id: "",
+          goal_success: sliderInputs,
+          patient_goal: goalInput,
+          review_date: goalDate,
+        },
+        onCompleted: () => {
+          setIsAddGoals(false);
+          enqueueSnackbar("Your goal has been saved successfully.", {
+            variant: "success",
+            autoHideDuration: 2000,
+          });
+          refetch();
+          setInputs([]);
+          setpatientInputs(undefined);
+          setSliderInputs(undefined);
+          setGoalInput(undefined);
+          setAchivDate(undefined);
+          setGoalDate(undefined);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  /* istanbul ignore next */
+  const setGoalTextInput = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    index
+  ) => {
+    const formData = formFields[index];
+    let clonedObject: editGoalsFormField = { ...formData };
+    clonedObject = {
+      ...clonedObject,
+      ptgoal_mygoal: e.target.value,
+    };
+    setFormFields({ ...formFields, [index]: clonedObject });
+  };
+
+  /* istanbul ignore next */
+  const setAchievementTextInput = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    index
+  ) => {
+    const formData = formFields[index];
+    let clonedObject: editGoalsFormField = { ...formData };
+    clonedObject = {
+      ...clonedObject,
+      ptgoal_achievementgoal: e.target.value,
+    };
+    setFormFields({ ...formFields, [index]: clonedObject });
+  };
+
+  /* istanbul ignore next */
+  const goalSliderChange = (event, index) => {
     let newValue;
     const value = event.target.value;
     const formData = formFields[index];
@@ -209,295 +333,403 @@ const Goals = (props: propTypes) => {
     setFormFields({ ...formFields, [index]: clonedObject });
   };
 
+  const handlerUpdateGoal = async (formFields) => {
+    try {
+      await addUpdateGoals({
+        variables: {
+          patient_id: patientId,
+          pttherapy_id: therapy,
+          achievement_date: formFields.ptgoal_achievementdate,
+          achievement_goal: formFields.ptgoal_achievementgoal,
+          goal_id: formFields._id,
+          patient_goal: formFields.ptgoal_mygoal,
+          review_date: formFields.ptgoal_reviewdate,
+          goal_success: formFields.ptgoal_success,
+        },
+        onCompleted: () => {
+          setIsConfirmCompleteTask(false);
+          enqueueSnackbar("Your goal has been updated successfully.", {
+            variant: "success",
+            autoHideDuration: 2000,
+          });
+          refetch();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const handleSubmit = async (e, index: number) => {
+    e.preventDefault();
+    setGoalIndex(index);
+    setIsConfirmCompleteTask(true);
+
+    /* istanbul ignore next */
+    if (!isConfirmCompleteTask) return;
+  };
   return (
     <>
       <>
-        <form data-testid="goals-form" style={{ paddingBottom: "30px" }}>
-          <Box
-            style={{
-              padding: "20px",
-            }}
+        <Box style={{ textAlign: "right", paddingBottom: "10px" }}>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
+            <Select
+              labelId="lblSelectTherapy"
+              id="selectTherapy"
+              inputProps={{ "data-testid": "selectTherapy" }}
+              value={therapy}
+              autoWidth
+              label="Select Therapy"
+              onChange={onTherapyChange}
+            >
+              {
+                /* istanbul ignore next */
+                patientTherapryData &&
+                  patientTherapryData?.getPatientTherapy &&
+                  patientTherapryData?.getPatientTherapy.map((v: any) => {
+                    return (
+                      <MenuItem key={"therapy" + v._id} value={v._id}>
+                        {v.therapy_detail.therapy_name}/
+                        {v.disorder_detail.disorder_name}/
+                        {v.model_detail.model_name}
+                      </MenuItem>
+                    );
+                  })
+              }
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Box className={styles.addGoalButtonBox}>
+          <Button
+            className={styles.smallButton}
+            data-testid={"addGoalButton"}
+            variant="contained"
+            onClick={addInput}
+            disabled={inputs.length > 0}
           >
-            <Box style={{ textAlign: "right" }}>
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
-                <Select
-                  labelId="lblSelectTherapy"
-                  id="selectTherapy"
-                  inputProps={{ "data-testid": "selectTherapy" }}
-                  value={therapy}
-                  autoWidth
-                  label="Select Therapy"
-                  onChange={onTherapyChange}
-                >
-                  {patientTherapryData &&
-                    patientTherapryData?.getPatientTherapy &&
-                    patientTherapryData?.getPatientTherapy.map((v: any) => {
-                      return (
-                        <MenuItem key={"therapy" + v._id} value={v._id}>
-                          {v.therapy_detail.therapy_name}/
-                          {v.disorder_detail.disorder_name}/
-                          {v.model_detail.model_name}
-                        </MenuItem>
-                      );
-                    })}
-                </Select>
-              </FormControl>
-            </Box>
+            Add Goals
+          </Button>
+        </Box>
 
-            <Box data-testid="boxId">
-              {goalsData?.getPatientGoalList?.map((data, index) => (
-                <div>
-                  <Box
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6BA08E",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {index + 1 + ".Goal "}
-                  </Box>
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                      border: "1px solid #cecece",
-                      display: "grid",
-                    }}
-                    p={5}
-                    marginBottom={"25px"}
-                    borderRadius={"7px"}
-                  >
-                    <Grid container spacing={2} marginBottom={0}>
-                      <Grid item xs={12}>
-                        <TextFieldComponent
-                          name="ptgoal_mygoal"
-                          id="ptgoal_mygoal"
-                          value={formFields[index]?.ptgoal_mygoal}
-                          multiline
-                          rows={4}
-                          inputProps={{ "data-testid": "ptgoal_mygoal" }}
-                          fullWidth={true}
-                          className="form-control-bg"
-                          disabled={true}
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={0} marginBottom={0}>
-                      <Grid item xs={4}></Grid>
-                      <Grid
-                        item
-                        xs={4}
-                        style={{
-                          paddingLeft: "220px",
-                          paddingTop: "10px",
-                          color: "#6EC9DB",
-                          font: "bold",
-                        }}
-                      >
-                        <Typography>Review Date</Typography>
-                      </Grid>
-
-                      <Grid item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="ptgoal_reviewdate"
-                          id="ptgoal_reviewdate"
-                          value={formFields[index]?.ptgoal_reviewdate}
-                          fullWidth={true}
-                          inputProps={{ "data-testid": "ptgoal_reviewdate" }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={true}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Box>
-                  <Box
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6EC9DB",
-                      fontWeight: "bold",
-                    }}
+        <Box style={{ paddingBottom: "30px" }}>
+          {goalsData?.getPatientGoalList?.map((data, index) => (
+            <Box className={styles.outerBorder} borderRadius={"7px"}>
+              <Box key={index}>
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
                     data-testid="safety_ques"
                   >
-                    Achievement of Goal
-                  </Box>
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                      border: "1px solid #cecece",
-                      display: "grid",
+                    Goal {index + 1} (Added by {data.user_type})
+                  </Typography>
+
+                  <TextFieldComponent
+                    name="ptgoal_mygoal"
+                    id="ptgoal_mygoal"
+                    value={
+                      /* istanbul ignore next */
+                      formFields[index]?.ptgoal_mygoal
+                    }
+                    multiline
+                    rows={4}
+                    onChange={(e) =>
+                      /* istanbul ignore next */
+                      setGoalTextInput(e, index)
+                    }
+                    inputProps={{
+                      "data-testid": "ptgoal_mygoal",
                     }}
-                    p={5}
-                    marginBottom={"25px"}
-                    borderRadius={"7px"}
-                  >
-                    <Grid container spacing={2} marginBottom={0}>
-                      <Grid item xs={12}>
-                        <TextFieldComponent
-                          name="ptgoal_achievementgoal"
-                          id="ptgoal_achievementgoal"
-                          value={formFields[index]?.ptgoal_achievementgoal}
-                          multiline
-                          rows={4}
-                          onChange={(e) => set2(e, index)}
-                          inputProps={{
-                            "data-testid": "ptgoal_achievementgoal",
-                          }}
-                          fullWidth={true}
-                          className="form-control-bg"
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={0} marginBottom={0}>
-                      <Grid item xs={4}></Grid>
-                      <Grid
-                        item
-                        xs={4}
-                        style={{
-                          paddingLeft: "220px",
-                          paddingTop: "10px",
-                          color: "#6EC9DB",
-                          font: "bold",
-                        }}
-                      >
-                        <Typography>Review Date</Typography>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextFieldComponent
-                          required={true}
-                          name="ptgoal_achievementdate"
-                          id="ptgoal_achievementdate"
-                          value={formFields[index]?.ptgoal_achievementdate}
-                          fullWidth={true}
-                          inputProps={{
-                            "data-testid": "ptgoal_achievementdate",
-                          }}
-                          variant="outlined"
-                          className="form-control-bg"
-                          size="small"
-                          disabled={true}
-                        />
-                      </Grid>
-                    </Grid>
+                    fullWidth={true}
+                    className="form-control-bg"
+                  />
+
+                  <Box className={styles.datePicker}>
+                    <FormControl
+                      className={styles.patientSideDate}
+                      data-testid="goal_date"
+                    >
+                      {
+                        /* istanbul ignore next */
+                        formFields[index]?.ptgoal_reviewdate ? (
+                          <Typography style={{ padding: "8px" }}>
+                            {/* Goal Date: {formFields[index]?.ptgoal_reviewdate}{" "} */}
+                            Goal Date:{" "}
+                            {moment(
+                              formFields[index]?.ptgoal_reviewdate
+                            ).format("DD-MM-YYYY")}
+                          </Typography>
+                        ) : (
+                          <Typography style={{ padding: "8px" }}>
+                            No Date Added
+                          </Typography>
+                        )
+                      }
+                    </FormControl>
                   </Box>
-                  <Box
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6BA08E",
-                      fontWeight: "bold",
-                    }}
+
+                  <Box style={{ paddingRight: "10px" }}></Box>
+                </Box>
+
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
                     data-testid="safety_ques"
                   >
-                    Success of goal achievement
+                    Achievement of Goals
+                  </Typography>
+
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="ptgoal_achievementgoal"
+                      id="ptgoal_achievementgoal"
+                      value={
+                        /* istanbul ignore next */
+                        formFields[index]?.ptgoal_achievementgoal
+                      }
+                      multiline
+                      rows={4}
+                      onChange={(e) =>
+                        /* istanbul ignore next */
+                        setAchievementTextInput(e, index)
+                      }
+                      inputProps={{ "data-testid": "ptgoal_achievementgoal" }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
+                  </Grid>
+                  <Box className={styles.datePicker}>
+                    <FormControl
+                      className={styles.patientSideDate}
+                      data-testid="achievement_date"
+                    >
+                      {
+                        /* istanbul ignore next */
+                        formFields[index]?.ptgoal_achievementdate ? (
+                          <Typography style={{ padding: "8px" }}>
+                            Achievement Date:{" "}
+                            {moment(
+                              formFields[index]?.ptgoal_achievementdate
+                            ).format("DD-MM-YYYY")}
+                          </Typography>
+                        ) : (
+                          <Typography style={{ padding: "8px" }}>
+                            No Date Added
+                          </Typography>
+                        )
+                      }
+                    </FormControl>
                   </Box>
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                      border: "1px solid #cecece",
-                      display: "grid",
-                    }}
-                    p={5}
-                    marginBottom={"25px"}
-                    borderRadius={"7px"}
+                </Box>
+
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
                   >
+                    Success of Goal achievement
+                  </Typography>
+                  <Box className={styles.sliderBox} borderRadius={"7px"}>
                     <Slider
                       data-testid="ptgoal_success"
-                      key={`slider-${formValueInclude(
-                        formFields[index]?.ptgoal_success
-                      )}`}
-                      defaultValue={formValueInclude(
-                        formFields[index]?.ptgoal_success
-                      )}
+                      key={
+                        /* istanbul ignore next */
+                        `slider-${formValueInclude(
+                          formFields[index]?.ptgoal_success
+                        )}`
+                      }
+                      defaultValue={
+                        /* istanbul ignore next */
+                        formValueInclude(formFields[index]?.ptgoal_success)
+                      }
                       onChange={(event) =>
                         /* istanbul ignore next */
-                        goalChange(event, index)
+                        goalSliderChange(event, index)
                       }
                       step={25}
                       marks={marks}
                       valueLabelDisplay="off"
                     />
                   </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      p: 1,
-                      m: 1,
-                      bgcolor: "background.paper",
-                      borderRadius: 1,
-                      paddingTop: "50px",
-                    }}
-                  >
-                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                      <Button
-                        style={{
-                          paddingLeft: "50px",
-                          paddingRight: "50px",
-                          backgroundColor: "#6BA08E",
-                        }}
-                        data-testid={"safetyPlanSubmitButton_" + data?._id}
-                        variant="contained"
-                        onClick={(e) => {
-                          /* istanbul ignore next */
-                          handleSubmit(e, index);
-                        }}
-                      >
-                        Save Goals
-                      </Button>
-                    </Grid>
-                  </Box>
-                </div>
-              ))}
+                </Box>
+              </Box>
+              <Box className={styles.saveUpdateButton}>
+                <Button
+                  className={styles.largeButton}
+                  data-testid="upadteSaveGoalButton"
+                  variant="contained"
+                  onClick={(e) => {
+                    /* istanbul ignore next */
+                    handleSubmit(e, index);
+                  }}
+                >
+                  Update Save Goals
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </form>
-      </>
-      <>
-        <SureModal
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-          setConfirmSubmission={setConfirmSubmission}
-        >
-          <Typography
-            sx={{
-              fontWeight: "600",
-              textAlign: "center",
-              fontSize: "27px",
-            }}
-          >
-            Are you sure want to save Simple Goals
-          </Typography>
-          <Box marginTop="20px" display="flex" justifyContent="end">
-            <Button
-              variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="editGoalCancelButton"
-              onClick={() => {
-                setModalOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ marginLeft: "5px" }}
-              size="small"
-              data-testid="editGoalConfirmButton"
-              onClick={() => {
-                setModalOpen(false);
-                props.onSubmit(formFields[goalIndex]);
-                props.setLoader(false);
-              }}
-            >
-              Confirm
-            </Button>
-          </Box>
-        </SureModal>
+          ))}
+        </Box>
+
+        <Box style={{ paddingBottom: "30px" }}>
+          {inputs.map((input, index) => (
+            <Box className={styles.outerBorder} borderRadius={"7px"}>
+              <Box key={index}>
+                <Box className={styles.deleteButton}>
+                  <IconButtonWrapper
+                    aria-label="create"
+                    size="small"
+                    style={{ backgroundColor: "#6EC9DB" }}
+                  >
+                    <DeleteIcon
+                      style={{ color: "white" }}
+                      onClick={() =>
+                        /* istanbul ignore next */
+                        deleteInput(index)
+                      }
+                    />
+                  </IconButtonWrapper>
+                </Box>
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
+                  >
+                    Goal {index + 1} (Added by patient)
+                  </Typography>
+
+                  <TextFieldComponent
+                    name="resource_references"
+                    id="references"
+                    value={goalInput}
+                    multiline
+                    rows={4}
+                    onChange={(e) => updateGoalInput(index, e.target.value)}
+                    inputProps={{
+                      "data-testid": `addGoalTextInput${index}`,
+                    }}
+                    fullWidth={true}
+                    className="form-control-bg"
+                  />
+
+                  <Box className={styles.datePicker}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Stack spacing={1}>
+                        <DatePicker
+                          disableFuture
+                          inputFormat="DD-MM-YYYY"
+                          data-testid="StartDateBox"
+                          disabled={false}
+                          label="Goal Date"
+                          openTo="year"
+                          views={["year", "month", "day"]}
+                          value={goalDate}
+                          onChange={goalChangeDate}
+                          renderInput={(params) => <TextField {...params} />}
+                          className="form-control-bg"
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
+                  >
+                    Achievement of Goals
+                  </Typography>
+
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="resource_references"
+                      id="references"
+                      value={patientInputs}
+                      multiline
+                      rows={4}
+                      onChange={(e) =>
+                        handlePatientInputChange(index, e.target.value)
+                      }
+                      inputProps={{
+                        "data-testid": `addAchievementTextInput${index}`,
+                      }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
+                  </Grid>
+                  <Box className={styles.datePicker}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Stack spacing={1}>
+                        <DatePicker
+                          disableFuture
+                          inputFormat="DD-MM-YYYY"
+                          label="Achievement Date"
+                          openTo="year"
+                          views={["year", "month", "day"]}
+                          value={achivDate}
+                          onChange={achivChangeDate}
+                          renderInput={(params) => <TextField {...params} />}
+                          className="form-control-bg"
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
+                  >
+                    Success of Goal achievement
+                  </Typography>
+                  <Box className={styles.sliderBox} borderRadius={"7px"}>
+                    <Slider
+                      data-testid="ptgoal_success"
+                      onChange={(event) =>
+                        /* istanbul ignore next */
+                        goalAddSlider(event)
+                      }
+                      step={25}
+                      marks={marks}
+                      valueLabelDisplay="off"
+                    />
+                  </Box>
+                </Box>
+              </Box>
+              <Box className={styles.saveUpdateButton}>
+                <Button
+                  className={styles.largeButton}
+                  data-testid="addGoalSubmitButton"
+                  variant="contained"
+                  onClick={() => {
+                    setIsAddGoals(true);
+                  }}
+                >
+                  Save Goals
+                </Button>
+              </Box>
+            </Box>
+          ))}
+        </Box>
+
+        {isConfirmAddGoals && (
+          <ConfirmationModal
+            label="Are you sure, you want to save the Goal?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={handlerAddGoal}
+          />
+        )}
+
+        {isConfirmCompleteTask && (
+          <ConfirmationModal
+            label="Are you sure, you want to update the Goal?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={() => handlerUpdateGoal(formFields[goalIndex])}
+          />
+        )}
       </>
     </>
   );
