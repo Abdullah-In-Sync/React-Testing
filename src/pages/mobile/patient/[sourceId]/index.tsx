@@ -16,13 +16,6 @@ import Cookies from "js-cookie";
 interface MyPageProps {
   token: string;
 }
-export const getServerSideProps: GetServerSideProps<any> = async (context) => {
-  return {
-    props: {
-      token: context.req.headers?.myhelptoken,
-    },
-  };
-};
 
 const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -34,6 +27,7 @@ const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
   const router = useRouter();
 
   const id = router?.query?.sourceId as string;
+  console.log(id, "id");
   const [updateResourceTemplateResponse] = useMutation(
     UPDATE_RESOURCE_TEMPLATE_RESPONSE
   );
@@ -124,6 +118,14 @@ const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
       )}
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<any> = async (context) => {
+  return {
+    props: {
+      token: context.req.headers?.myhelptoken,
+    },
+  };
 };
 
 export default PatientMobileArrowTemplatePage;
