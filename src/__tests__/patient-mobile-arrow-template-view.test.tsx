@@ -56,28 +56,6 @@ mocksData.push({
   },
 });
 
-// mocksData.push({
-//   request: {
-//     query: UPDATE_RESOURCE_TEMPLATE_RESPONSE,
-//     variables: {
-//       ptsharresId: "fec3807e-bd64-4607-aa82-ec08b31a17ba",
-//       update: {
-//         // eslint-disable-next-line prettier/prettier
-//           template_response: "{\"nodes\":[{\"width\":122,\"height\":66,\"id\":\"dndnode_0\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":-18.462500000000006},\"data\":{\"label\":\"Trigger\"},\"positionAbsolute\":{\"x\":427,\"y\":-18.462500000000006},\"selected\":false,\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_2\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":249.36875},\"data\":{\"label\":\"Behaviour\",\"patientResponse\":\"\"},\"selected\":false,\"positionAbsolute\":{\"x\":427,\"y\":249.36875},\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_3\",\"type\":\"selectorNode\",\"position\":{\"x\":251.5,\"y\":188.36874999999998},\"data\":{\"label\":\"Feeling\",\"patientResponse\":\"updated_value\"},\"selected\":false,\"dragging\":false,\"positionAbsolute\":{\"x\":251.5,\"y\":188.36874999999998}}],\"edges\":[{\"source\":\"dndnode_0\",\"sourceHandle\":null,\"target\":\"dndnode_1\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0-dndnode_1c\",\"selected\":false},{\"source\":\"dndnode_0\",\"sourceHandle\":\"b\",\"target\":\"dndnode_2\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0b-dndnode_2c\"},{\"source\":\"dndnode_3\",\"sourceHandle\":null,\"target\":\"dndnode_0\",\"targetHandle\":\"a\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_3-dndnode_0a\",\"selected\":false}]}",
-//       },
-//     },
-//   },
-//   result: {
-//     data: {
-//       updatePatientResourceById: {
-//         // eslint-disable-next-line prettier/prettier
-//         template_response: "{\"nodes\":[{\"width\":122,\"height\":66,\"id\":\"dndnode_0\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":-18.462500000000006},\"data\":{\"label\":\"Trigger\"},\"positionAbsolute\":{\"x\":427,\"y\":-18.462500000000006},\"selected\":false,\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_2\",\"type\":\"selectorNode\",\"position\":{\"x\":427,\"y\":249.36875},\"data\":{\"label\":\"Behaviour\",\"patientResponse\":\"\"},\"selected\":false,\"positionAbsolute\":{\"x\":427,\"y\":249.36875},\"dragging\":false},{\"width\":122,\"height\":66,\"id\":\"dndnode_3\",\"type\":\"selectorNode\",\"position\":{\"x\":251.5,\"y\":188.36874999999998},\"data\":{\"label\":\"Feeling\",\"patientResponse\":\"updated_value\"},\"selected\":false,\"dragging\":false,\"positionAbsolute\":{\"x\":251.5,\"y\":188.36874999999998}}],\"edges\":[{\"source\":\"dndnode_0\",\"sourceHandle\":null,\"target\":\"dndnode_1\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0-dndnode_1c\",\"selected\":false},{\"source\":\"dndnode_0\",\"sourceHandle\":\"b\",\"target\":\"dndnode_2\",\"targetHandle\":\"c\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_0b-dndnode_2c\"},{\"source\":\"dndnode_3\",\"sourceHandle\":null,\"target\":\"dndnode_0\",\"targetHandle\":\"a\",\"type\":\"smoothstep\",\"markerEnd\":{\"type\":\"arrow\"},\"id\":\"reactflow__edge-dndnode_3-dndnode_0a\",\"selected\":false}]}",
-//         _id: "fec3807e-bd64-4607-aa82-ec08b31a17ba",
-//       },
-//     },
-//   },
-// });
-
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
