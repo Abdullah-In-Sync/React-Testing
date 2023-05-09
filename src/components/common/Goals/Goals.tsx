@@ -565,7 +565,7 @@ const Goals = (props: propTypes) => {
                     handleSubmit(e, index);
                   }}
                 >
-                  Update Save Goals
+                  Save Goals
                 </Button>
               </Box>
             </Box>
