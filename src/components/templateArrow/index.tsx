@@ -15,7 +15,7 @@ import "reactflow/dist/style.css";
 import { Box } from "@mui/system";
 import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Switch, Typography } from "@mui/material";
 import CropSquareIcon from "@mui/icons-material/CropSquare";
 
 let id = 0;
@@ -38,13 +38,15 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   mode,
   userType,
 }) => {
+  const [user, setUser] = useState(userType);
+  const [mod, setmod] = useState(mode);
   const nodeType = useMemo(
     () => ({
       selectorNode: (props) => (
-        <TextUpdaterNode userType={userType} mode={mode} {...props} />
+        <TextUpdaterNode userType={user} mode={mod} {...props} />
       ),
     }),
-    []
+    [user, mod]
   );
 
   const reactFlowWrapper = useRef(null);
@@ -52,6 +54,9 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState([...edgesData]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const edgeUpdateSuccessful = useRef(true);
+  const [toggled, setToggled] = useState<boolean>(false);
+  const [isPreview, setIsPreview] = useState<boolean>(false);
+
   const onConnect = useCallback((params) => {
     params.type = "smoothstep";
     params.markerEnd = {
@@ -117,6 +122,21 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     [reactFlowInstance]
   );
 
+  const onChangePreviewToggle = (event) => {
+    console.log(event, "onChangePreviewToggle");
+    setToggled(event.target.checked);
+    if (event.target.checked == true) {
+      setUser("patient");
+      setmod("edit");
+      setIsPreview(true);
+    }
+    if (event.target.checked == false) {
+      setUser(userType);
+      setmod(mode);
+      setIsPreview(true);
+    }
+  };
+
   const icons = [
     {
       componentName: "cropSquareIcon",
@@ -132,16 +152,17 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     flexDirection: "row",
     borderRadius: "7px",
     marginBottom: "40px",
-    border: mode == "edit" ? "1px solid" : "1px solid #cecece",
+    border: mod == "edit" ? "1px solid" : "1px solid #cecece",
   };
 
-  if (mode == "edit" || mode == "patientView") {
+  // eslint-disable-next-line prettier/prettier
+  if ((mod == "edit" || mod == "patientView") && !isPreview) {
     delete editStyle.borderRadius;
     editStyle.padding = "8px";
     editStyle.borderTop = "0px solid";
     editStyle.borderColor = "#6BA08E";
   }
-  if (mode == "mobile") {
+  if (mod == "mobile") {
     delete editStyle.border;
     delete editStyle.padding;
   }
@@ -149,7 +170,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     <>
       <Box style={editStyle}>
         <ReactFlowProvider>
-          {mode !== "edit" && mode !== "patientView" && mode !== "mobile" ? (
+          {mod !== "edit" &&
+          mod !== "patientView" &&
+          mod !== "mobile" &&
+          isPreview ? (
             <SideBar iconItems={icons} />
           ) : (
             <></>
@@ -157,7 +181,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 
           <Box
             style={{
-              height: mode == "mobile" ? window.innerHeight - 129 : "500px",
+              height: mod == "mobile" ? window.innerHeight - 129 : "500px",
               width: "100%",
               alignItems: "center",
               marginRight: "5px",
@@ -175,28 +199,53 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               onDrop={onDrop}
               onDragOver={onDragOver}
               onEdgeUpdate={
-                userType == "patient" || mode == "patientView"
+                user == "patient" || mod == "patientView"
                   ? undefined
                   : onEdgeUpdateStart
               }
               onEdgeUpdateStart={
-                userType == "patient" || mode == "patientView"
+                user == "patient" || mod == "patientView"
                   ? undefined
                   : onEdgeUpdate
               }
               onEdgeUpdateEnd={
-                userType == "patient" || mode == "patientView"
+                user == "patient" || mod == "patientView"
                   ? undefined
                   : onEdgeUpdateEnd
               }
               fitView
             >
-              {mode !== "edit" && mode !== "patientView" ? <Controls /> : <></>}
+              {mod !== "edit" && mod !== "patientView" ? <Controls /> : <></>}
             </ReactFlow>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              border: "1px solid #6EC9DB",
+              height: "39px",
+              width: "115px",
+              margin: "12px 16px 0px 0px",
+              borderRadius: "4px",
+            }}
+          >
+            <Typography
+              sx={{
+                fontWeight: "500",
+                textAlign: "center",
+                fontSize: "14px",
+                margin: "8px 0px 0px 3px",
+              }}
+            >
+              Preview
+            </Typography>
+            <Switch
+              checked={toggled}
+              onChange={(e) => onChangePreviewToggle(e)}
+            />
           </Box>
         </ReactFlowProvider>
       </Box>
-      {mode !== "patientView" && mode !== "mobile" && (
+      {mod !== "patientView" && mod !== "mobile" && (
         <Grid container justifyContent={"center"}>
           <Grid item padding={"63px 0px 94px 0px"}>
             <Button
@@ -227,7 +276,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
           </Grid>
         </Grid>
       )}
-      {mode == "mobile" && (
+      {mod == "mobile" && (
         <Grid container justifyContent={"center"}>
           <Button
             data-testid="ArrowMobileTemplateSave"
