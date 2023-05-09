@@ -454,7 +454,7 @@ export default function TherapistGoal(props: propTypes) {
                         views={["year", "month", "day"]}
                         value={
                           /* istanbul ignore next */
-                          formFields[index]?.ptgoal_reviewdate
+                          formFields[index]?.ptgoal_reviewdate || null
                         }
                         onChange={(newValue) =>
                           /* istanbul ignore next */
@@ -503,7 +503,7 @@ export default function TherapistGoal(props: propTypes) {
                         label="Achievement Date"
                         openTo="year"
                         views={["year", "month", "day"]}
-                        value={formFields[index].ptgoal_achievementdate}
+                        value={formFields[index].ptgoal_achievementdate || null}
                         onChange={(newValue) =>
                           /* istanbul ignore next */
                           getAchievementChangeDate(newValue, index)
