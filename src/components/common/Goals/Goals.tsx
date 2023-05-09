@@ -455,7 +455,6 @@ const Goals = (props: propTypes) => {
                         /* istanbul ignore next */
                         formFields[index]?.ptgoal_reviewdate ? (
                           <Typography style={{ padding: "8px" }}>
-                            {/* Goal Date: {formFields[index]?.ptgoal_reviewdate}{" "} */}
                             Goal Date:{" "}
                             {moment(
                               formFields[index]?.ptgoal_reviewdate
