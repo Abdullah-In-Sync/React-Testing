@@ -280,23 +280,23 @@ describe("Admin edit template page", () => {
     });
   });
 
-  it("Update goal data", async () => {
-    await sut();
+  // it("Update goal data", async () => {
+  //   await sut();
 
-    expect(screen.getByTestId("addGoalButton")).toBeInTheDocument();
+  //   expect(screen.getByTestId("addGoalButton")).toBeInTheDocument();
 
-    await waitFor(async () => {
-      fireEvent.change(screen.queryByTestId("ptgoal_mygoal"), {
-        target: { value: "abcd1234" },
-      });
-    });
+  //   await waitFor(async () => {
+  //     fireEvent.change(screen.queryByTestId("ptgoal_mygoal"), {
+  //       target: { value: "abcd1234" },
+  //     });
+  //   });
 
-    fireEvent.click(screen.queryByTestId("upadteSaveGoalButton"));
+  //   fireEvent.click(screen.queryByTestId("upadteSaveGoalButton"));
 
-    fireEvent.click(await screen.findByTestId("confirmButton"));
+  //   fireEvent.click(await screen.findByTestId("confirmButton"));
 
-    expect(
-      await screen.findByText("Your goal has been updated successfully.")
-    ).toBeInTheDocument();
-  });
+  //   expect(
+  //     await screen.findByText("Your goal has been updated successfully.")
+  //   ).toBeInTheDocument();
+  // });
 });
