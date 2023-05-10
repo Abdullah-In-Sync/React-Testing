@@ -27,7 +27,6 @@ const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
   const router = useRouter();
 
   const id = router?.query?.sourceId as string;
-  console.log(id, "id");
   const [updateResourceTemplateResponse] = useMutation(
     UPDATE_RESOURCE_TEMPLATE_RESPONSE
   );
