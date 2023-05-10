@@ -1,5 +1,5 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
@@ -14,7 +14,7 @@ import TemplateArrow from "../../../../components/templateArrow";
 import Cookies from "js-cookie";
 
 interface MyPageProps {
-  token: string;
+  token?: string;
 }
 
 const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
@@ -120,11 +120,11 @@ const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<any> = async (context) => {
+PatientMobileArrowTemplatePage.getInitialProps = async (
+  context
+): Promise<MyPageProps> => {
   return {
-    props: {
-      token: context.req.headers?.myhelptoken,
-    },
+    token: context.req.headers?.myhelptoken as string,
   };
 };
 
