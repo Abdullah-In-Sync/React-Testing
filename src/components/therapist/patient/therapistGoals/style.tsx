@@ -36,7 +36,7 @@ export const useStyles = makeStyles({
   },
   textStyle: {
     color: "#6EC9DB",
-    fontWeight: 700,
+    fontWeight: 600, // or "bold"
     paddingBottom: "5px",
   },
   sliderBox: {
