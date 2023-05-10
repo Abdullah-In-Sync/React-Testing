@@ -8,13 +8,14 @@ import InfoModal from "../../../common/CustomModal/InfoModal";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import Formats from "../../../common/TemplateFormat";
-import ConfirmWrapper from "../../../common/TemplateFormat/ConfirmWrapper";
+
 import InfoMessage from "../../../common/TemplateFormat/InfoMessage";
 import ViewFormatsModal from "../../../common/TemplateFormat/ViewFomatsModal";
 import formatData from "../../../common/TemplateFormat/templateFormatData";
 import { useStyles } from "./createMeasuresStyles";
 
 import { CommonFormProps, ModalRefs } from "../form/types";
+import ConfirmWrapper from "../../../common/ConfirmWrapper";
 
 type ViewProps = CommonFormProps & ModalRefs;
 

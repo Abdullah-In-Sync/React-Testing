@@ -42,6 +42,21 @@ export const defaultQuestionTypes = [
   },
 ];
 
+export const monitorQuestionTypes = [
+  {
+    id: "yes_or_no",
+    value: "Yes/No",
+  },
+  {
+    id: "hours",
+    value: "Hours",
+  },
+  {
+    id: "list",
+    value: "List",
+  },
+];
+
 export const questionTypes = [
   {
     id: "text",
