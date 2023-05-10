@@ -289,16 +289,14 @@ describe("Admin edit template page", () => {
       fireEvent.change(screen.queryByTestId("ptgoal_mygoal"), {
         target: { value: "abcd1234" },
       });
-
-      fireEvent.click(screen.queryByTestId("upadteSaveGoalButton"));
-
-      fireEvent.click(await screen.findByTestId("confirmButton"));
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Your goal has been updated successfully.")
-        ).toBeInTheDocument();
-      });
     });
+
+    fireEvent.click(screen.queryByTestId("upadteSaveGoalButton"));
+
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+
+    expect(
+      await screen.findByText("Your goal has been updated successfully.")
+    ).toBeInTheDocument();
   });
 });
