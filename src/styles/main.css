@@ -34,7 +34,7 @@
   background: #dadada52;
 }
 
-.myhelp-select-control>label {
+.myhelp-select-control > label {
   color: rgba(0, 0, 0, 0.38);
 }
 
@@ -86,7 +86,7 @@
   }
 }
 
-.invalid-input-message{
+.invalid-input-message {
   color: #ff1744 !important;
   font-weight: 400 !important;
   font-size: 0.75rem !important;
@@ -105,13 +105,19 @@
 .disbledFields input :focus-visible {
   outline: unset !important;
 }
-.ellipsisTextWrapper{
+.ellipsisTextWrapper {
   height: auto;
-min-height: 1.4375em;
-text-overflow: ellipsis;
-white-space: nowrap;
-overflow: hidden;
+  min-height: 1.4375em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
-p{
+p {
   font-size: 14px !important;
+}
+
+.button-small {
+  padding-left: "20px";
+  padding-right: "20px";
+  background-color: "red";
 }
