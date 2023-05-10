@@ -10,6 +10,7 @@ import TherapistFeedbackTabs from "../../../../feedback/FeedbackTabs";
 import TherapistRelapseIndex from "../relapse";
 import TherapyPatientHomeworkIndex from "../homework";
 import Measures from "../../../../../../components/therapist/measures";
+import TherapyPatientGoalsIndex from "../goals";
 
 type propTypes = {
   setTherapy: any;
@@ -41,8 +42,8 @@ export default function TherapyMainComponent(props: propTypes) {
     {
       label: "Goals",
       value: "goals",
-      //  component: < />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=goals`,
+      component: <TherapyPatientGoalsIndex setTherapy={setTherapy} />,
+      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=goals`,
     },
     {
       label: "Tools",
