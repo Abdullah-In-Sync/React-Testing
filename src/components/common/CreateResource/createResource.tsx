@@ -658,6 +658,7 @@ export default function CreateResource(props: propTypes) {
         <TemplateArrow
           onSubmit={onSaveArrowTemplate}
           onCancel={onTemplateCancel}
+          userType="fullAccess"
         />
       )}
       {successModal && (

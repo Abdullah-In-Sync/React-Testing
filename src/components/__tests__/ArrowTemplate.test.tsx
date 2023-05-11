@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Node, Edge } from "reactflow";
 import TemplateArrow from "../templateArrow";
 
@@ -67,12 +67,17 @@ const edges: Edge[] = [
 ];
 
 const sut = async () => {
-  render(<TemplateArrow nodesData={nodes} edgesData={edges} />);
+  render(
+    <TemplateArrow nodesData={nodes} edgesData={edges} userType="fullAccess" />
+  );
 };
 
 describe("When render a Arrow template", () => {
   it("should render 2 nodes and 2 edges", async () => {
     await sut();
     expect(screen.getAllByTestId("arrow-template-test-1").length).toEqual(2);
+    expect(
+      (await screen.findAllByTestId("arrow-preview-toggle")).length
+    ).toEqual(1);
   });
 });

@@ -126,8 +126,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     console.log(event, "onChangePreviewToggle");
     setToggled(event.target.checked);
     if (event.target.checked == true) {
-      setUser("patient");
-      setmod("edit");
+      setmod("patientView");
       setIsPreview(true);
     }
     if (event.target.checked == false) {
@@ -153,6 +152,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     borderRadius: "7px",
     marginBottom: "40px",
     border: mod == "edit" ? "1px solid" : "1px solid #cecece",
+    position: "relative",
   };
 
   // eslint-disable-next-line prettier/prettier
@@ -218,34 +218,39 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               {mod !== "edit" && mod !== "patientView" ? <Controls /> : <></>}
             </ReactFlow>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              border: "1px solid #6EC9DB",
-              height: "39px",
-              width: "115px",
-              margin: "12px 16px 0px 0px",
-              borderRadius: "4px",
-            }}
-          >
-            <Typography
+          {userType == "fullAccess" && (
+            <Box
               sx={{
-                fontWeight: "500",
-                textAlign: "center",
-                fontSize: "14px",
-                margin: "8px 0px 0px 3px",
+                display: "flex",
+                border: "1px solid #6EC9DB",
+                height: "39px",
+                width: "115px",
+                margin: "12px 16px 0px 0px",
+                borderRadius: "4px",
+                position: "absolute",
+                right: "11px",
               }}
             >
-              Preview
-            </Typography>
-            <Switch
-              checked={toggled}
-              onChange={(e) => onChangePreviewToggle(e)}
-            />
-          </Box>
+              <Typography
+                sx={{
+                  fontWeight: "500",
+                  textAlign: "center",
+                  fontSize: "14px",
+                  margin: "8px 0px 0px 3px",
+                }}
+              >
+                Preview
+              </Typography>
+              <Switch
+                data-testid="arrow-preview-toggle"
+                checked={toggled}
+                onChange={(e) => onChangePreviewToggle(e)}
+              />
+            </Box>
+          )}
         </ReactFlowProvider>
       </Box>
-      {mod !== "patientView" && mod !== "mobile" && (
+      {(mod !== "patientView" || isPreview) && mod !== "mobile" && (
         <Grid container justifyContent={"center"}>
           <Grid item padding={"63px 0px 94px 0px"}>
             <Button
