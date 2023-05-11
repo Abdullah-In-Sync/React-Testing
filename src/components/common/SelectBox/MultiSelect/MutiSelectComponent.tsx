@@ -27,7 +27,6 @@ type propTypes = {
   disabled?: boolean;
   showDefaultSelectOption?: boolean;
   multiSelect?: any;
-  placeholder?: string;
 };
 
 /* istanbul ignore next */
@@ -68,9 +67,6 @@ export default function MultiSelectComponent(props: propTypes) {
         multiple
         renderValue={(selected) => {
           let tempSelectedName = [];
-          if ((selected as Array<string>).length === 0 && props.placeholder) {
-            return <em>{props.placeholder}</em>;
-          }
           modifyOptions.forEach((el) => {
             if (((selected as Array<string>) || []).indexOf("all") > -1)
               tempSelectedName = ["All"];
@@ -84,9 +80,7 @@ export default function MultiSelectComponent(props: propTypes) {
         {/* {props.showDefaultSelectOption !== false && (
           <MenuItem value="">Select</MenuItem>
         )} */}
-        <MenuItem disabled value="">
-          <em>{props.placeholder}</em>
-        </MenuItem>
+
         {modifyOptions.map(({ id, value }) => (
           <MenuItem key={`${id}-${value}`} value={id}>
             <Checkbox
