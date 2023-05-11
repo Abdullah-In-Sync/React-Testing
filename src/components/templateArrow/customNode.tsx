@@ -24,6 +24,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   userType,
   mode,
 }) => {
+  const handleId = id.split("_")[1];
   const [label, setLabel] = useState<string>(data?.label);
   const [description, setDescription] = useState<string>(data?.description);
   const [patientResponse, setPatientResponse] = useState<string>(
@@ -82,23 +83,55 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           />
         </Box>
       )}
-      <Handle
-        type="target"
-        id="c"
-        position={Position.Top}
-        isConnectable={
-          userType == "patient" || mode == "patientView" ? false : isConnectable
-        }
-        style={{ opacity: opacity }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        isConnectable={
-          userType == "patient" || mode == "patientView" ? false : isConnectable
-        }
-        style={{ opacity: opacity }}
-      />
+      <Box>
+        <Handle
+          type="source"
+          id={`source_top${handleId}`}
+          position={Position.Top}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+        <Handle
+          type="target"
+          id={`target_top${handleId}`}
+          position={Position.Top}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+      </Box>
+      <Box>
+        <Handle
+          type="source"
+          id={`source_right${handleId}`}
+          position={Position.Right}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+        <Handle
+          type="target"
+          id={`target_right${handleId}`}
+          position={Position.Right}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+      </Box>
+
       <Box display={"flex"} flexDirection={"column"} gap={"5px"}>
         <input
           id="text"
@@ -133,24 +166,54 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           disabled={responseDisable}
         />
       </Box>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="a"
-        isConnectable={
-          userType == "patient" || mode == "patientView" ? false : isConnectable
-        }
-        style={{ opacity: opacity }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="b"
-        isConnectable={
-          userType == "patient" || mode == "patientView" ? false : isConnectable
-        }
-        style={{ opacity: opacity }}
-      />
+      <Box>
+        <Handle
+          type="source"
+          position={Position.Left}
+          id={`source_left${handleId}`}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+        <Handle
+          type="target"
+          position={Position.Left}
+          id={`target_left${handleId}`}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+      </Box>
+      <Box>
+        <Handle
+          type="source"
+          position={Position.Bottom}
+          id={`source_bottom${handleId}`}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+        <Handle
+          type="target"
+          position={Position.Bottom}
+          id={`target_bottom${handleId}`}
+          isConnectable={
+            userType == "patient" || mode == "patientView"
+              ? false
+              : isConnectable
+          }
+          style={{ opacity: opacity }}
+        />
+      </Box>
     </Box>
   );
 };
