@@ -59,7 +59,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 
   const onConnect = useCallback((params) => {
     params.type = "smoothstep";
-    params.markerEnd = {
+    params.markerStart = {
       type: MarkerType.Arrow,
     };
     setEdges((eds) => {

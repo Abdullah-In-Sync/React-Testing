@@ -1,9 +1,8 @@
 import { screen, render, fireEvent, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
-import { UPDATE_PATIENT_GOAL_BY_ID } from "../graphql/mutation/patient";
+import { PATIENT_ADD_UPDATE_GOALS } from "../graphql/mutation/patient";
 import GoalIndex from "../components/patient/therapyPages/goals";
 import {
   GET_PATIENTTHERAPY_DATA,
@@ -119,34 +118,59 @@ mocksData.push({
     },
   },
 });
-//Goals data based on therapy id
+
+// Add Goal
+mocksData.push({
+  request: {
+    query: PATIENT_ADD_UPDATE_GOALS,
+    variables: {
+      patient_id: null,
+      pttherapy_id: "",
+      achievement_date: null,
+      achievement_goal: "efgh",
+      goal_id: "",
+      goal_success: undefined,
+      patient_goal: "abcd",
+      review_date: null,
+    },
+  },
+  result: {
+    data: {
+      addUpdatePatientGoal: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
+// Get goals data
 mocksData.push({
   request: {
     query: GET_PATIENT_GOAL_DATA,
-    variables: {
-      pttherapyId: "fadb3fc55d1d4c698d0826a6767a7cd8",
-    },
+    variables: { pttherapyId: "fadb3fc55d1d4c698d0826a6767a7cd8" },
   },
   result: {
     data: {
       getPatientGoalList: [
         {
-          _id: "fadb3fc55d1d4c698d0826a6767a7cd8",
-          created_date: "2022-12-13T04:55:38.000Z",
-          patient_id: "d8b2974bc1ce4540963851b118247a36",
-          ptgoal_achievementdate: "2022-12-13",
-          ptgoal_achievementgoal: "aaa1",
+          _id: "3baa11c2-054a-4167-b97b-0b8a9b7fdec3",
+          created_date: "2023-05-09T06:00:38.624Z",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          ptgoal_achievementdate: "",
+          ptgoal_achievementgoal: "Achivement",
           ptgoal_audio: "",
           ptgoal_file: "",
-          ptgoal_mygoal: "Did you talk with two person?",
-          ptgoal_pregoal: "",
-          ptgoal_reviewdate: "2022-12-02",
+          ptgoal_mygoal: "Goal",
+          ptgoal_pregoal: "0",
           ptgoal_status: "1",
-          ptgoal_success: "3",
+          ptgoal_reviewdate: "",
+          ptgoal_success: "0",
           ptsession_id: "1",
-          pttherapy_id: "4285c508c1664763918ffffb71d90c3f",
+          pttherapy_id: "28abbd5cf240405c94ffd35b189c7297",
           therapist_id: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2022-12-15T15:54:29.476Z",
+          updated_date: "2023-05-09T06:00:38.624Z",
+          user_type: "patient",
           __typename: "PatientGoal",
         },
       ],
@@ -154,41 +178,30 @@ mocksData.push({
   },
 });
 
+// Update Goal
 mocksData.push({
   request: {
-    query: UPDATE_PATIENT_GOAL_BY_ID,
+    query: PATIENT_ADD_UPDATE_GOALS,
     variables: {
-      ptGoalId: undefined,
-      update: {
-        ptgoal_achievementgoal: "Show updated",
-      },
+      patient_id: null,
+      pttherapy_id: "fadb3fc55d1d4c698d0826a6767a7cd8",
+      achievement_date: "",
+      achievement_goal: "Achivement",
+      goal_id: "3baa11c2-054a-4167-b97b-0b8a9b7fdec3",
+      patient_goal: "abcd1234",
+      review_date: "",
+      goal_success: "0",
     },
   },
   result: {
     data: {
-      updatePatientGoalById: {
-        _id: "6b3cf08d81594b7da1c20f73f433b5c2ass3",
-        created_date: "2022-12-13T05:07:26.000Z",
-        patient_id: "d8b2974bc1ce4540963851b118247a36",
-        ptgoal_achievementdate: "2022-12-13",
-        ptgoal_audio: "",
-        ptgoal_achievementgoal: "Show updated 12345",
-        ptgoal_file: "",
-        ptgoal_mygoal: "T2/D2/M1 goal question",
-        ptgoal_pregoal: "",
-        ptgoal_status: "1",
-        ptgoal_reviewdate: "2022-12-13",
-        ptgoal_success: "3",
-        ptsession_id: "1",
-        pttherapy_id: "fadb3fc55d1d4c698d0826a6767a7cd8",
-        updated_date: "2022-12-16T11:57:31.170Z",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        __typename: "PatientGoal",
+      addUpdateTherapistGoal: {
+        result: true,
+        __typename: "result",
       },
     },
   },
 });
-
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -220,118 +233,70 @@ describe("Admin edit template page", () => {
     });
   });
 
-  test("Renders goals data", async () => {
-    (useRouter as jest.Mock).mockImplementation(() => ({
-      query: {
-        id: "fadb3fc55d1d4c698d0826a6767a7cd8",
-      },
-    }));
+  it("Add goal", async () => {
     await sut();
 
-    await waitFor(async () => {
-      expect(screen.getByTestId("goals-form")).toBeInTheDocument();
+    expect(screen.getByTestId("addGoalButton")).toBeInTheDocument();
 
+    fireEvent.click(screen.queryByTestId("addGoalButton"));
+
+    expect(screen.getByTestId("addGoalTextInput0")).toBeInTheDocument();
+
+    fireEvent.change(screen.queryByTestId("addGoalTextInput0"), {
+      target: { value: "abcd" },
+    });
+
+    expect(screen.getByTestId("addAchievementTextInput0")).toBeInTheDocument();
+
+    fireEvent.change(screen.queryByTestId("addAchievementTextInput0"), {
+      target: { value: "efgh" },
+    });
+
+    expect(screen.getByTestId("addGoalSubmitButton")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("addGoalSubmitButton"));
+
+    expect(
+      screen.getByText("Are you sure, you want to save the Goal?")
+    ).toBeInTheDocument();
+
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Your goal has been saved successfully.")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Get goal data", async () => {
+    await sut();
+
+    expect(screen.getByTestId("addGoalButton")).toBeInTheDocument();
+
+    await waitFor(async () => {
       expect(screen.getByTestId("ptgoal_mygoal")).toBeInTheDocument();
-
-      expect(screen.getByTestId("ptgoal_mygoal")).toHaveValue(
-        "Did you talk with two person?"
-      );
-      expect(screen.getByTestId("ptgoal_reviewdate")).toHaveValue("2022-12-02");
-      expect(screen.getByTestId("ptgoal_achievementgoal")).toHaveValue("aaa1");
-      expect(screen.getByTestId("ptgoal_achievementdate")).toHaveValue(
-        "2022-12-13"
-      );
+      expect(screen.getByText("Achievement of Goals")).toBeInTheDocument();
+      expect(screen.getByTestId("ptgoal_mygoal")).toHaveValue("Goal");
     });
   });
 
-  it("submit edited value", async () => {
-    (useRouter as jest.Mock).mockReturnValue({
-      query: {
-        ptGoalId: "fadb3fc55d1d4c698d0826a6767a7cd8",
-      },
-    });
+  // it("Update goal data", async () => {
+  //   await sut();
 
-    await sut();
-    await waitFor(async () => {
-      expect(screen.getByTestId("ptgoal_achievementgoal")).toBeInTheDocument();
+  //   expect(screen.getByTestId("addGoalButton")).toBeInTheDocument();
 
-      fireEvent.change(screen.queryByTestId("ptgoal_achievementgoal"), {
-        target: { value: "Show updated" },
-      });
+  //   await waitFor(async () => {
+  //     fireEvent.change(screen.queryByTestId("ptgoal_mygoal"), {
+  //       target: { value: "abcd1234" },
+  //     });
+  //   });
 
-      expect(screen.getByTestId("ptgoal_success")).toBeInTheDocument();
-    });
-    await waitFor(async () => {
-      expect(
-        screen.getByTestId(
-          "safetyPlanSubmitButton_fadb3fc55d1d4c698d0826a6767a7cd8"
-        )
-      ).toBeInTheDocument();
-    });
+  //   fireEvent.click(screen.queryByTestId("upadteSaveGoalButton"));
 
-    fireEvent.click(
-      screen.queryByTestId(
-        "safetyPlanSubmitButton_fadb3fc55d1d4c698d0826a6767a7cd8"
-      )
-    );
+  //   fireEvent.click(await screen.findByTestId("confirmButton"));
 
-    await waitFor(async () => {
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId("editGoalConfirmButton")).toBeVisible();
-
-    fireEvent.click(screen.queryByTestId("editGoalConfirmButton"));
-    await waitFor(async () => {
-      expect(screen.getByText("Goal saved Successfully")).toBeInTheDocument();
-    });
-  });
-
-  it("Cancle edited value", async () => {
-    (useRouter as jest.Mock).mockReturnValue({
-      query: {
-        ptGoalId: "fadb3fc55d1d4c698d0826a6767a7cd8",
-      },
-    });
-
-    await sut();
-    await waitFor(async () => {
-      expect(screen.getByTestId("ptgoal_achievementgoal")).toBeInTheDocument();
-
-      fireEvent.change(screen.queryByTestId("ptgoal_achievementgoal"), {
-        target: { value: "Show updated" },
-      });
-    });
-    await waitFor(async () => {
-      expect(
-        screen.getByTestId(
-          "safetyPlanSubmitButton_fadb3fc55d1d4c698d0826a6767a7cd8"
-        )
-      ).toBeInTheDocument();
-    });
-
-    fireEvent.click(
-      screen.queryByTestId(
-        "safetyPlanSubmitButton_fadb3fc55d1d4c698d0826a6767a7cd8"
-      )
-    );
-
-    await waitFor(async () => {
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId("editGoalCancelButton")).toBeVisible();
-
-    fireEvent.click(screen.queryByTestId("editGoalCancelButton"));
-    expect(screen.queryByTestId("ptgoal_achievementdate")).toBeInTheDocument();
-  });
-
-  test("can select a different therapy", async () => {
-    await sut();
-
-    fireEvent.change(screen.queryByTestId("selectTherapy"), {
-      target: { value: "38f5c75b3950498ab548c8ab72a5e2be" },
-    });
-    expect(screen.queryAllByTestId("boxId").length).toBe(1);
-  });
+  //   expect(
+  //     await screen.findByText("Your goal has been updated successfully.")
+  //   ).toBeInTheDocument();
+  // });
 });

@@ -78,3 +78,37 @@ export const ASSIGN_RESOURCE_HOMEWORK = gql`
     }
   }
 `;
+
+export const ADD_UPDATE_THERAPIST_GOALS = gql`
+  mutation (
+    $patient_id: String!
+    $pttherapy_id: String!
+    $achievement_date: String
+    $achievement_goal: String
+    $goal_id: String
+    $goal_success: Int
+    $patient_goal: String!
+    $review_date: String
+  ) {
+    addUpdateTherapistGoal(
+      patient_id: $patient_id
+      pttherapy_id: $pttherapy_id
+      achievement_date: $achievement_date
+      achievement_goal: $achievement_goal
+      goal_id: $goal_id
+      goal_success: $goal_success
+      patient_goal: $patient_goal
+      review_date: $review_date
+    ) {
+      result
+    }
+  }
+`;
+
+export const DELETE_THERAPIST_GOALS = gql`
+  mutation ($goal_id: String!, $patient_id: String!) {
+    deleteTherapistGoal(goal_id: $goal_id, patient_id: $patient_id) {
+      result
+    }
+  }
+`;

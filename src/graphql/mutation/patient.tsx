@@ -219,6 +219,30 @@ export const UPDATE_PATIENT_GOAL_BY_ID = gql`
   }
 `;
 
+export const PATIENT_ADD_UPDATE_GOALS = gql`
+  mutation (
+    $patient_goal: String!
+    $pttherapy_id: String!
+    $achievement_date: String
+    $achievement_goal: String
+    $goal_id: String
+    $goal_success: Int
+    $review_date: String
+  ) {
+    addUpdatePatientGoal(
+      patient_goal: $patient_goal
+      pttherapy_id: $pttherapy_id
+      achievement_date: $achievement_date
+      achievement_goal: $achievement_goal
+      goal_id: $goal_id
+      goal_success: $goal_success
+      review_date: $review_date
+    ) {
+      result
+    }
+  }
+`;
+
 export const UPDATE_PATIENT_HOME_BY_ID = gql`
   mutation ($appId: ID!) {
     cancelAppByPatient(appId: $appId) {
