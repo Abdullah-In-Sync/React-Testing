@@ -152,7 +152,7 @@ const AddQuestionsBox = (
                   {...questionStyle}
                 />
               </Box>
-              {dataObj.description && (
+              {dataObj.description !== undefined && (
                 <Box>
                   {isVisibleDescription(isEdit, questions[i].description) && (
                     <FormikTextField
@@ -191,7 +191,7 @@ const AddQuestionsBox = (
                       labelId={`questions.${i}.questionType`}
                       name={`questions.${i}.questionType`}
                       showDefaultSelectOption={false}
-                      label="Choose answer type"
+                      label="Choose answer type*"
                       options={questionTypes}
                       mappingKeys={["id", "value"]}
                       size="small"
