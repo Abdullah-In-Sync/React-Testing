@@ -25,9 +25,9 @@ import {
 } from "../../common/CustomModal/CommonModal";
 import Loader from "../../common/Loader";
 import { SuccessModal } from "../../common/SuccessModal";
-import { ConfirmElement } from "../../common/TemplateFormat/ConfirmWrapper";
 import AddMeasuresPlanForm from "./AddMeasuresPlan";
 import MeasureContent from "./MeasuresContent";
+import { ConfirmElement } from "../../common/ConfirmWrapper";
 
 const Measures: React.FC = () => {
   const confirmRef = useRef<ConfirmElement>(null);

@@ -29,6 +29,7 @@ type Props = React.PropsWithChildren<{
   handleEditQuestion?: boolean;
   toggleEditView?: (v) => void;
   isEditView?: number;
+  initialQuestionObj?: any;
 }>;
 
 const AddQuestionsBox = (
@@ -40,6 +41,9 @@ const AddQuestionsBox = (
     handleEditQuestion,
     isEditView,
     toggleEditView,
+    initialQuestionObj = {
+      data: { question: "", description: "", questionType: "" },
+    },
   }: Props,
   ref
 ) => {
@@ -47,11 +51,13 @@ const AddQuestionsBox = (
 
   const { values, setFieldValue, setFieldTouched } = formikProps;
   const confirmModalRef = useRef<ModalElement>(null);
+  const { data: dataObj = {}, question: questionStyle = {} } =
+    initialQuestionObj;
   useImperativeHandle(ref, () => ({
     onAddQuesionBox() {
       if (values.questions.length < 15) {
         const questions = [...values.questions];
-        questions.push({ question: "", description: "", questionType: "" });
+        questions.push(dataObj);
         setFieldValue("questions", questions);
       } else {
         confirmModalRef.current?.open();
@@ -121,84 +127,91 @@ const AddQuestionsBox = (
       ? isEditView !== i + 1 && questionId
       : false;
     return (
-      <Card key={`questionCard_${i}`} className={`questionCard`}>
-        <CardContent>
-          {isEditable && (
-            <Box className="deleteButtonWrapper">
-              {handleEditQuestion && questionId && editButton({ i: i + 1 })}
-              {deleteButton({ i, questionId })}
-            </Box>
-          )}
-          <Box
-            key={i}
-            className={`questionBoxWrapper ${isEdit ? "disbledFields" : ""}`}
-          >
-            <Box>
-              <FormikTextField
-                name={`questions.${i}.question`}
-                id={`questions.${i}.question`}
-                fullWidth={true}
-                inputProps={{ "data-testid": `questions.${i}.question` }}
-                variant="outlined"
-                size="small"
-                {...(isEdit ? {} : { label: "Type question here" })}
-              />
-            </Box>
-            <Box>
-              {isVisibleDescription(isEdit, questions[i].description) && (
+      questionType !== "emoji" && (
+        <Card key={`questionCard_${i}`} className={`questionCard`}>
+          <CardContent>
+            {isEditable && (
+              <Box className="deleteButtonWrapper">
+                {handleEditQuestion && questionId && editButton({ i: i + 1 })}
+                {deleteButton({ i, questionId })}
+              </Box>
+            )}
+            <Box
+              key={i}
+              className={`questionBoxWrapper ${isEdit ? "disbledFields" : ""}`}
+            >
+              <Box>
                 <FormikTextField
-                  name={`questions.${i}.description`}
-                  id={`questions.${i}.description`}
-                  label={`${
-                    isEdit
-                      ? "Description"
-                      : "Type your question description here"
-                  }`}
+                  name={`questions.${i}.question`}
+                  id={`questions.${i}.question`}
                   fullWidth={true}
-                  inputProps={{ "data-testid": `questions.${i}.description` }}
+                  inputProps={{ "data-testid": `questions.${i}.question` }}
                   variant="outlined"
-                  multiline
-                  {...(isEdit ? {} : { rows: 5 })}
+                  size="small"
+                  {...(isEdit ? {} : { label: "Type question here" })}
+                  {...questionStyle}
                 />
+              </Box>
+              {dataObj.description !== undefined && (
+                <Box>
+                  {isVisibleDescription(isEdit, questions[i].description) && (
+                    <FormikTextField
+                      name={`questions.${i}.description`}
+                      id={`questions.${i}.description`}
+                      label={`${
+                        isEdit
+                          ? "Description"
+                          : "Type your question description here"
+                      }`}
+                      fullWidth={true}
+                      inputProps={{
+                        "data-testid": `questions.${i}.description`,
+                      }}
+                      variant="outlined"
+                      multiline
+                      {...(isEdit ? {} : { rows: 5 })}
+                    />
+                  )}
+                </Box>
               )}
-            </Box>
-            <Box>
-              {handleEditQuestion && questionId && (
-                <QuestionResponse
-                  i={i}
-                  formikProps={formikProps}
-                  item={item}
-                  isEditView={isEditView}
-                />
-              )}
-              {!isEdit && (
-                <Box className="selectChooseAnswerTypeWrapper">
-                  <FormikSelectDropdown
-                    onChange={(e) => onChangeQuestionType(e, i)}
-                    id={`questions.${i}.questionType`}
-                    labelId={`questions.${i}.questionType`}
-                    name={`questions.${i}.questionType`}
-                    showDefaultSelectOption={false}
-                    label="Choose answer type"
-                    options={questionTypes}
-                    mappingKeys={["id", "value"]}
-                    size="small"
-                    extraProps={{
-                      "data-testid": `questions.${i}.questionType`,
-                    }}
+              <Box>
+                {handleEditQuestion && questionId && (
+                  <QuestionResponse
+                    i={i}
+                    formikProps={formikProps}
+                    item={item}
+                    isEditView={isEditView}
                   />
-                </Box>
-              )}
+                )}
+                {!isEdit && (
+                  <Box className="selectChooseAnswerTypeWrapper">
+                    <FormikSelectDropdown
+                      onChange={(e) => onChangeQuestionType(e, i)}
+                      id={`questions.${i}.questionType`}
+                      labelId={`questions.${i}.questionType`}
+                      name={`questions.${i}.questionType`}
+                      showDefaultSelectOption={false}
+                      label="Choose answer type*"
+                      options={questionTypes}
+                      mappingKeys={["id", "value"]}
+                      size="small"
+                      extraProps={{
+                        "data-testid": `questions.${i}.questionType`,
+                      }}
+                    />
+                  </Box>
+                )}
 
-              {!isEdit && (questionType == "list" || questionType == "2") && (
-                <Box className="autoCompleteWrapper">
-                  <AutoCompleteList i={i} formikProps={formikProps} />
-                </Box>
-              )}
+                {!isEdit && (questionType == "list" || questionType == "2") && (
+                  <Box className="autoCompleteWrapper">
+                    <AutoCompleteList i={i} formikProps={formikProps} />
+                  </Box>
+                )}
+              </Box>
             </Box>
-          </Box>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )
     );
   };
 

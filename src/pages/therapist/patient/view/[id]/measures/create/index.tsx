@@ -6,10 +6,11 @@ import { useRef, useState } from "react";
 import ContentHeader from "../../../../../../../components/common/ContentHeader";
 import { ConfirmInfoElement } from "../../../../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../../../../components/common/Loader";
-import { ConfirmElement } from "../../../../../../../components/common/TemplateFormat/ConfirmWrapper";
+
 import Layout from "../../../../../../../components/layout";
 import CreateMeasuresComponent from "../../../../../../../components/therapist/measures/create/CreateMeasures";
 import { THERAPIST_CREATE_MEASURES } from "../../../../../../../graphql/Measure/graphql";
+import { ConfirmElement } from "../../../../../../../components/common/ConfirmWrapper";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();

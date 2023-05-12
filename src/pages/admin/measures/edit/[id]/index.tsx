@@ -7,7 +7,6 @@ import EditMeasuresComponent from "../../../../../components/admin/measures/edit
 import ContentHeader from "../../../../../components/common/ContentHeader";
 import { ConfirmInfoElement } from "../../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../../components/common/Loader";
-import { ConfirmElement } from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
 import Layout from "../../../../../components/layout";
 import {
   AdMIN_VIEW_MEASURE,
@@ -19,6 +18,7 @@ import {
   ViewMeasureData,
 } from "../../../../../graphql/Measure/types";
 import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
+import { ConfirmElement } from "../../../../../components/common/ConfirmWrapper";
 
 const CreateMeasures: NextPage = () => {
   const router = useRouter();

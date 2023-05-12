@@ -1,20 +1,12 @@
 import { FormikProps } from "formik";
 import { ForwardedRef } from "react";
-import { AdminViewMeasureById } from "../../../../graphql/Measure/types";
 import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
-
-import {
-  TemplateDataFormat1,
-  TemplateDataFormat2,
-} from "../../../common/TemplateFormat/types";
 import { ConfirmElement } from "../../../common/ConfirmWrapper";
 
 export interface InitialFormValues {
-  title: string;
-  description: string;
+  name: string;
   orgId: string;
-  templateId: string | number;
-  templateData: TemplateDataFormat1 | TemplateDataFormat2;
+  questions: string | number;
 }
 
 export interface ModalRefs {
@@ -31,8 +23,6 @@ export interface CommonFormProps {
     [key: string]: any;
   }>;
   onPressCancel?: () => void;
-  measureData?: AdminViewMeasureById;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
-  isEdit?: boolean;
 }
