@@ -50,11 +50,13 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
 
   useEffect(() => {
     const handleEvent = (event) => {
-      Cookies.set("myhelptoken", event.detail.token);
-      Cookies.set("user_type", "patient");
-      getPatientResourceTemplate({
-        variables: { ptsharresId: id },
-      });
+      if (event?.detail?.token) {
+        Cookies.set("myhelptoken", event.detail.token);
+        Cookies.set("user_type", "patient");
+        getPatientResourceTemplate({
+          variables: { ptsharresId: id },
+        });
+      }
     };
     window.addEventListener("message", handleEvent);
     return () => {
