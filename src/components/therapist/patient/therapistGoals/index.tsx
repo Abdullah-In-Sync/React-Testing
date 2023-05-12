@@ -350,6 +350,7 @@ export default function TherapistGoal(props: propTypes) {
     setIsConfirmCompleteTask(false);
     /* istanbul ignore next */
     setIsAddGoals(false);
+    setIsConfirmDeleteGoal(false);
   };
 
   /* istanbul ignore next */
@@ -712,14 +713,14 @@ export default function TherapistGoal(props: propTypes) {
       </Box>
       {isConfirmAddGoals && (
         <ConfirmationModal
-          label="Are you sure, you want to save the Goal?"
+          label="Are you sure you want to save the goal?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handlerAddGoal}
         />
       )}
       {isConfirmCompleteTask && (
         <ConfirmationModal
-          label="Are you sure, you want to update the Goal?"
+          label="Are you sure you want to update the goal?"
           onCancel={clearIsConfirmCancel}
           onConfirm={() => handlerUpdateGoal(formFields[goalIndex])}
         />
@@ -727,7 +728,7 @@ export default function TherapistGoal(props: propTypes) {
 
       {isConfirmDelete && (
         <ConfirmationModal
-          label="Are you sure, you want to delete the Goal?"
+          label="Are you sure you want to delete the goal?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handleDeleteGoal}
         />

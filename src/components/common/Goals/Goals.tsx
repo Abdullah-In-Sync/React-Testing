@@ -716,7 +716,7 @@ const Goals = (props: propTypes) => {
 
         {isConfirmAddGoals && (
           <ConfirmationModal
-            label="Are you sure, you want to save the Goal?"
+            label="Are you sure you want to save the goal?"
             onCancel={clearIsConfirmCancel}
             onConfirm={handlerAddGoal}
           />
@@ -724,7 +724,7 @@ const Goals = (props: propTypes) => {
 
         {isConfirmCompleteTask && (
           <ConfirmationModal
-            label="Are you sure, you want to update the Goal?"
+            label="Are you sure you want to update the goal?"
             onCancel={clearIsConfirmCancel}
             onConfirm={() => handlerUpdateGoal(formFields[goalIndex])}
           />
