@@ -5,7 +5,7 @@ import { useSnackbar } from "notistack";
 import { useRef, useState } from "react";
 import ContentHeader from "../../../../../components/common/ContentHeader";
 import Loader from "../../../../../components/common/Loader";
-import { ConfirmElement } from "../../../../../components/common/TemplateFormat/ConfirmWrapper";
+
 import Layout from "../../../../../components/layout";
 import TakeTest from "../../../../../components/patient/measures/TakeTest/TakeTest";
 import {
@@ -17,6 +17,7 @@ import {
   PatientSubmitTestData,
 } from "../../../../../graphql/Measure/types";
 import withAuthentication from "../../../../../hoc/auth";
+import { ConfirmElement } from "../../../../../components/common/ConfirmWrapper";
 
 const MeasureTestPage: NextPage = () => {
   const router = useRouter();

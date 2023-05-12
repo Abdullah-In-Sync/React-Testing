@@ -12,7 +12,7 @@ import { CommonFormProps, ModalRefs } from "./types";
 
 import { getSessionOptions, getfiterObject } from "../../../../utility/helper";
 import SessionBoxLabel from "../../../common/SessionLabel";
-import ConfirmWrapper from "../../../common/TemplateFormat/ConfirmWrapper";
+import ConfirmWrapper from "../../../common/ConfirmWrapper";
 
 type ViewProps = CommonFormProps &
   ModalRefs & {

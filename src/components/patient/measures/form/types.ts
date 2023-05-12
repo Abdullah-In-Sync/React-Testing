@@ -2,11 +2,11 @@ import { FormikProps } from "formik";
 import { ForwardedRef } from "react";
 import { TherapistListMeasuresEntity } from "../../../../graphql/Measure/types";
 import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
-import { ConfirmElement } from "../../../common/TemplateFormat/ConfirmWrapper";
 import {
   TemplateDataFormat1,
   TemplateDataFormat2,
 } from "../../../common/TemplateFormat/types";
+import { ConfirmElement } from "../../../common/ConfirmWrapper";
 
 export interface InitialFormValues {
   title: string;

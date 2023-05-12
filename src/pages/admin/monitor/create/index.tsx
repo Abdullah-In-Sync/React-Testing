@@ -3,22 +3,23 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
-import CreateMeasuresComponent from "../../../../components/admin/measures/create/CreateMeasures";
+import CreateMonitorComponent from "../../../../components/admin/monitor/create/CreateMonitor";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import { ConfirmInfoElement } from "../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../components/common/Loader";
+
 import Layout from "../../../../components/layout";
-import { CREATE_MEASURE_TEMPLATE } from "../../../../graphql/Measure/graphql";
+import { ADMIN_CREATE_MONITOR } from "../../../../graphql/Monitor/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { ConfirmElement } from "../../../../components/common/ConfirmWrapper";
 
-const CreateMeasures: NextPage = () => {
+const CreateMonitor: NextPage = () => {
   const router = useRouter();
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
-  const [createMeasures] = useMutation(CREATE_MEASURE_TEMPLATE);
+  const [createMonitor] = useMutation(ADMIN_CREATE_MONITOR);
 
   const [
     getOrgList,
@@ -43,60 +44,50 @@ const CreateMeasures: NextPage = () => {
 
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
-    const { orgId, description, templateData, templateId, title } = formFields;
+    const { orgId, name, questions } = formFields;
 
     const variables = {
-      title,
-      description: description,
+      name,
       orgId: selectedOrgIds(orgId),
-      templateData: JSON.stringify(templateData),
-      templateId: templateId,
+      questions: JSON.stringify(questions),
     };
 
+    console.debug("variables-->", variables);
+
     try {
-      await createMeasures({
+      await createMonitor({
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
-            const {
-              adminCreateMeasures: { duplicateNames },
-            } = data;
+            // const {
+            //   adminCreateMeasures: { duplicateNames },
+            // } = data;
 
-            if (duplicateNames) {
-              infoModalRef.current.openConfirm({
-                data: { duplicateNames, measureText: title },
-              });
-            } else {
-              confirmRef.current.showSuccess({
-                description: "Your measure has been created successfully.",
-                handleOk,
-              });
-            }
+            // if (duplicateNames) {
+            //   infoModalRef.current.openConfirm({
+            //     data: { duplicateNames, measureText: name },
+            //   });
+            // }
             doneCallback();
           }
         },
       });
     } catch (e) {
-      /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      /* istanbul ignore next */
       doneCallback();
     } finally {
-      /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
     }
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
-      description: "Are you sure you want to create the measure?",
+      description: "Are you sure you want to create the monitor?",
       setSubmitting,
     });
   };
@@ -104,8 +95,7 @@ const CreateMeasures: NextPage = () => {
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
-      description:
-        "Are you sure you want to cancel the measure without saving?",
+      description: "Are you sure you are canceling the monitor without saving?",
     });
   };
 
@@ -115,17 +105,12 @@ const CreateMeasures: NextPage = () => {
     callback();
   };
 
-  /* istanbul ignore next */
-  const handleOk = () => {
-    router.push(`/admin/measures`);
-  };
-
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
-        <ContentHeader title="Create Measures" />
-        <CreateMeasuresComponent
+        <ContentHeader title="Create Monitor" />
+        <CreateMonitorComponent
           organizationList={organizationList}
           submitForm={handleSavePress}
           onPressCancel={onPressCancel}
@@ -137,4 +122,4 @@ const CreateMeasures: NextPage = () => {
   );
 };
 
-export default CreateMeasures;
+export default CreateMonitor;
