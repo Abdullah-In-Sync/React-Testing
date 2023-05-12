@@ -13,11 +13,7 @@ import Loader from "../../../../components/common/Loader";
 import TemplateArrow from "../../../../components/templateArrow";
 import Cookies from "js-cookie";
 
-interface MyPageProps {
-  token?: string;
-}
-
-const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
+const PatientMobileArrowTemplatePage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(true);
   const [resourceData, setRecourceData] = useState<ResourceDataInterface>();
@@ -53,14 +49,18 @@ const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
   );
 
   useEffect(() => {
-    Cookies.set("myhelptoken", token);
-    Cookies.set("user_type", "patient");
-    if (token !== undefined) {
+    const handleEvent = (event) => {
+      Cookies.set("myhelptoken", event.detail.token);
+      Cookies.set("user_type", "patient");
       getPatientResourceTemplate({
         variables: { ptsharresId: id },
       });
-    }
-  }, [token]);
+    };
+    window.addEventListener("message", handleEvent);
+    return () => {
+      window.removeEventListener("message", handleEvent);
+    };
+  }, []);
 
   const handleSubmitTemplateData = async (value) => {
     setLoader(true);
@@ -117,14 +117,6 @@ const PatientMobileArrowTemplatePage: NextPage<MyPageProps> = ({ token }) => {
       )}
     </>
   );
-};
-
-PatientMobileArrowTemplatePage.getInitialProps = async (
-  context
-): Promise<MyPageProps> => {
-  return {
-    token: context.req.headers?.myhelptoken as string,
-  };
 };
 
 export default PatientMobileArrowTemplatePage;
