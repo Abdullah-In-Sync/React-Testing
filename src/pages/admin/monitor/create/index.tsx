@@ -52,8 +52,6 @@ const CreateMonitor: NextPage = () => {
       questions: JSON.stringify(questions),
     };
 
-    console.debug("variables-->", variables);
-
     try {
       await createMonitor({
         variables,

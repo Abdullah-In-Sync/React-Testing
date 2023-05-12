@@ -191,4 +191,18 @@ describe("Admin create monitor", () => {
     fireEvent.click(cancelButton);
     expect(cancelButton).not.toBeInTheDocument();
   });
+
+  it("should render emoji selection", async () => {
+    await sut();
+    const emojiSecondButton = await screen.findByTestId("edit-emoji-1");
+    fireEvent.click(emojiSecondButton);
+    const inputCatption = await screen.findByTestId("caption-1");
+    const emojiSaveButton = await screen.findByTestId("save-emoji-button-1");
+    expect(emojiSaveButton).toBeInTheDocument();
+    fireEvent.change(inputCatption, {
+      target: { value: "emoji text" },
+    });
+    fireEvent.click(emojiSaveButton);
+    expect(await screen.findByText(/emoji text/i)).toBeInTheDocument();
+  });
 });

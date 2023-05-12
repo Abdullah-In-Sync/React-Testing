@@ -1,12 +1,21 @@
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import React from "react";
 import CommonForm from "../form/CommonForm";
 import { monitorValidationSchema } from "../form/monitorValidationSchema";
-import { ModalRefs } from "../form/types";
 
-type ViewProps = any & ModalRefs;
+import { defalutEmojis } from "../../../../lib/constants";
+import { InitialFormValues, ModalRefs } from "../form/types";
 
-const CreateMonitorForm: React.FC<ViewProps> = ({
+interface ViewProps {
+  submitForm?: (
+    formData: InitialFormValues,
+    formikHelper: FormikProps<InitialFormValues>
+  ) => void;
+  organizationList?: object[];
+  onPressCancel?: () => void;
+}
+
+const CreateMonitorForm: React.FC<ViewProps & ModalRefs> = ({
   submitForm,
   organizationList,
   onPressCancel,
@@ -20,8 +29,7 @@ const CreateMonitorForm: React.FC<ViewProps> = ({
       {
         question: "",
         questionType: "emoji",
-        questionOption:
-          '[{"code":"code1","text":"very sad"},{"code":"code2","text":"very good"}]',
+        questionOption: defalutEmojis,
       },
     ],
   };
