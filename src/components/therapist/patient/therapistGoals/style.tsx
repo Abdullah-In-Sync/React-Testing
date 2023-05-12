@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles({
   addGoalButtonBox: {
@@ -36,7 +36,7 @@ export const useStyles = makeStyles({
   },
   textStyle: {
     color: "#6EC9DB",
-    fontWeight: "600",
+    fontWeight: 600, // or "bold"
     paddingBottom: "5px",
   },
   sliderBox: {
