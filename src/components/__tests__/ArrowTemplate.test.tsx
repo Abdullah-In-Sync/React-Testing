@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { Node, Edge } from "reactflow";
 import TemplateArrow from "../templateArrow";
 
