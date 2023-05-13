@@ -11,17 +11,17 @@ import EmojiPicker, {
   Theme,
 } from "emoji-picker-react";
 import { useState } from "react";
-import CommonButton from "../../../common/Buttons/CommonButton";
-import { CommonModal } from "../../../common/CustomModal/CommonModal";
-import TextFieldCustom from "../../../common/TextField/TextFieldCustom";
-import { useStyles } from "./createMeasuresStyles";
+import CommonButton from "../Buttons/CommonButton";
+import { CommonModal } from "../CustomModal/CommonModal";
+import TextFieldCustom from "../TextField/TextFieldCustom";
+import { useStyles } from "./editEmojiModalStyles";
 
 interface ViewProps {
   confirmModalRef?: any;
   handleEmojiSave?: (v, i) => void;
 }
 
-const ConfirmBoxModal = React.forwardRef<EmojisModalElement, ViewProps>(
+const EditEmojiModal = React.forwardRef<EmojisModalElement, ViewProps>(
   ({ confirmModalRef, handleEmojiSave }, ref) => {
     const [emojiIndex, setEmojiIndex] = useState();
     const [codeObj, setCodeObj] = useState(undefined);
@@ -45,7 +45,6 @@ const ConfirmBoxModal = React.forwardRef<EmojisModalElement, ViewProps>(
 
     const handleEmojiClick = (v) => {
       const { unified } = v;
-      console.log("unified", unified);
       setCodeObj({ ...codeObj, ...{ code: unified } });
     };
 
@@ -138,6 +137,6 @@ const ConfirmBoxModal = React.forwardRef<EmojisModalElement, ViewProps>(
   }
 );
 
-export default ConfirmBoxModal;
+export default EditEmojiModal;
 
 export type EmojisModalElement = { resetEmoji: (v) => void };

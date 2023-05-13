@@ -9,19 +9,17 @@ import { monitorQuestionTypes } from "../../../../lib/constants";
 import AddQuestionsBox from "../../../common/AddQuestionsBox";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
-import EditEmojiModal, { EmojisModalElement } from "./EditEmojiModal";
 import { InitialFormValues } from "./types";
 import { FormikProps } from "formik";
+import EditEmojiModal, {
+  EmojisModalElement,
+} from "../../../common/EditEmojiModal";
 
 type ViewProps = {
   formikProps: FormikProps<InitialFormValues>;
-  handleDeleteQuestion: (v) => void;
 };
 
-const AddQuestionSection: React.FC<ViewProps> = ({
-  formikProps,
-  handleDeleteQuestion,
-}) => {
+const AddQuestionSection: React.FC<ViewProps> = ({ formikProps }) => {
   const questionFieldscRef = useRef(null);
   const confirmModalRef = useRef<ModalElement>(null);
   const upperModalRef = useRef<EmojisModalElement>(null);
@@ -98,7 +96,6 @@ const AddQuestionSection: React.FC<ViewProps> = ({
         <AddQuestionsBox
           isEditable={true}
           formikProps={formikProps}
-          handleDeleteQuestion={handleDeleteQuestion}
           ref={questionFieldscRef}
           initialQuestionObj={{
             data: { question: "", questionType: "" },

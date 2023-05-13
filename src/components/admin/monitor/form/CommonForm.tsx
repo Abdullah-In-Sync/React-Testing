@@ -23,7 +23,6 @@ const CommonForm: React.FC<ViewProps> = ({
   formikProps,
   confirmRef,
   infoModalRef,
-  handleDeleteQuestion,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
   const modalRefFormatsView = useRef<ModalElement>(null);
@@ -89,10 +88,7 @@ const CommonForm: React.FC<ViewProps> = ({
                   </Box>
                 </Box>
 
-                <AddQuestionSection
-                  formikProps={formikProps}
-                  handleDeleteQuestion={handleDeleteQuestion}
-                />
+                <AddQuestionSection formikProps={formikProps} />
                 <Box className="bottomActionButtonsWrapper">
                   <Box>
                     <CommonButton

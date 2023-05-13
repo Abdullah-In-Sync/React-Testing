@@ -18,11 +18,14 @@ export const useStyles = makeStyles(() => {
           padding: 10,
         },
         flex: 1,
-        display: "flex",
+
         border: `1px solid ${theme.palette.secondary.main}`,
         borderRadius: 5,
-
         marginBottom: 10,
+
+        [theme.breakpoints.up("md")]: {
+          display: "flex",
+        },
       },
 
       "& .fieldsBoxWrapperSecond": {
@@ -39,6 +42,7 @@ export const useStyles = makeStyles(() => {
           "& .emojisWrapper": {
             display: "flex",
             flex: 1,
+            flexWrap: "wrap",
             "& .emojisBox": {
               padding: 20,
               margin: "5px 7px 0px 0px",
@@ -55,6 +59,9 @@ export const useStyles = makeStyles(() => {
               "& img": {
                 width: "unset !important",
                 height: "unset !important",
+              },
+              "& p": {
+                color: "black",
               },
               "& .editEmojiButtonWrapper": {
                 position: "absolute",
@@ -116,47 +123,6 @@ export const useStyles = makeStyles(() => {
           //   width: "10em",
           // },
         },
-      },
-    },
-    emojisPickerWrapper: {
-      "& .epr-header": {
-        display: "none",
-      },
-      "& .epr-emoji-category-label": {
-        display: "none !important",
-      },
-      "& .emojis": {
-        display: "flex",
-        flex: 1,
-        justifyContent: "space-between",
-        background: "#F5F5F5",
-
-        // alignItems: "center",
-        "& > div:first-child": {
-          flex: 1,
-          paddingLeft: 10,
-          borderRadius: "5px 0px 0px 5px",
-          border: "1px solid rgba(0, 0, 0, 0.1)",
-          display: "flex",
-          alignItems: "center",
-        },
-        "& > div:nth-child(2)": {
-          cursor: "pointer",
-          padding: 10,
-          background: theme.palette.secondary.main,
-          color: theme.palette.primary.light,
-          border: `1px solid ${theme.palette.secondary.main}`,
-          display: "flex",
-          alignItems: "center",
-          borderRadius: "0px 5px 5px 0px",
-        },
-      },
-      "& > div": {
-        padding: "5px 0px",
-      },
-      "& .saveButtonWrapper": {
-        paddingTop: 10,
-        textAlign: "center",
       },
     },
   };
