@@ -1,5 +1,5 @@
 import { MockedProvider } from "@apollo/client/testing";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import { GET_PATIENT_RESOURCE_TEMPLATE } from "../graphql/query/resource";
@@ -61,10 +61,14 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <SnackbarProvider>
-        <PatientMobileArrowTemplatePage token="styoerhecbd" />
+        <PatientMobileArrowTemplatePage />
       </SnackbarProvider>
     </MockedProvider>
   );
+};
+
+type MyEventData = {
+  token: string;
 };
 
 describe("Patient mobile view Arrow template page", () => {
@@ -80,6 +84,13 @@ describe("Patient mobile view Arrow template page", () => {
       ...mockRouter,
     }));
     await sut();
+    const eventData: MyEventData = {
+      token: "sasfdgh",
+    };
+    const myEvent = new CustomEvent<MyEventData>("message", {
+      detail: eventData,
+    });
+    fireEvent(window, myEvent);
     const arrowTemplate = await screen.findAllByTestId("arrow-template-test-1");
     expect(arrowTemplate.length).toEqual(3);
   });
