@@ -46,10 +46,19 @@ const CreateMonitor: NextPage = () => {
     setLoader(true);
     const { orgId, name, questions } = formFields;
 
+    const modifyQuestions = questions.map((item) => {
+      const { question, questionType, questionOption } = item;
+      return {
+        question,
+        question_type: questionType,
+        question_option: questionOption,
+      };
+    });
+
     const variables = {
       name,
       orgId: selectedOrgIds(orgId),
-      questions: JSON.stringify(questions),
+      questions: JSON.stringify(modifyQuestions),
     };
 
     try {
