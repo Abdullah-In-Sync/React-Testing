@@ -256,7 +256,7 @@ describe("Admin edit template page", () => {
     fireEvent.click(screen.queryByTestId("addGoalSubmitButton"));
 
     expect(
-      screen.getByText("Are you sure, you want to save the Goal?")
+      screen.getByText("Are you sure you want to save the goal?")
     ).toBeInTheDocument();
 
     fireEvent.click(await screen.findByTestId("confirmButton"));

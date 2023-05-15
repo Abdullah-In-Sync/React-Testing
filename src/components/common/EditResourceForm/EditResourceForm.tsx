@@ -890,12 +890,11 @@ export default function EditForm(props: propTypes) {
         )}
         {selectedComponentType.type == "ArrowTemplate" && (
           <TemplateArrow
-            //  initialData={selectedComponentType.initialData}
-            // mode="edit"
             nodesData={selectedComponentType.initialData.nodes}
             edgesData={selectedComponentType.initialData.edges}
             onSubmit={onSaveArrowTemplate}
             onCancel={onTemplateCancel}
+            userType="fullAccess"
           />
         )}
       </Box>
