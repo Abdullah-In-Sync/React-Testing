@@ -170,7 +170,7 @@ export default function TherapistGoal(props: propTypes) {
     let clonedObject: editGoalsFormField = { ...formData };
     clonedObject = {
       ...clonedObject,
-      ptgoal_reviewdate: dayjs(date).format("DD-MM-YYYY"),
+      ptgoal_reviewdate: dayjs(date).format("MM-DD-YYYY"),
     };
     setFormFields({ ...formFields, [index]: clonedObject });
   };
@@ -181,7 +181,7 @@ export default function TherapistGoal(props: propTypes) {
     let clonedObject: editGoalsFormField = { ...formData };
     clonedObject = {
       ...clonedObject,
-      ptgoal_achievementdate: dayjs(date).format("DD-MM-YYYY"),
+      ptgoal_achievementdate: dayjs(date).format("MM-DD-YYYY"),
     };
     setFormFields({ ...formFields, [index]: clonedObject });
   };
@@ -593,7 +593,7 @@ export default function TherapistGoal(props: propTypes) {
                   className={styles.textStyle}
                   data-testid="safety_ques"
                 >
-                  Goal {index + 1} (Added by therapist)
+                  Goal (Added by therapist)
                 </Typography>
 
                 <TextFieldComponent
@@ -615,7 +615,7 @@ export default function TherapistGoal(props: propTypes) {
                     <Stack spacing={1}>
                       <DatePicker
                         disableFuture
-                        inputFormat="DD-MM-YYYY"
+                        inputFormat="MM-DD-YYYY"
                         data-testid="StartDateBox"
                         disabled={false}
                         label="Goal Date"
@@ -661,7 +661,7 @@ export default function TherapistGoal(props: propTypes) {
                     <Stack spacing={1}>
                       <DatePicker
                         disableFuture
-                        inputFormat="DD-MM-YYYY"
+                        inputFormat="MM-DD-YYYY"
                         label="Achievement Date"
                         openTo="year"
                         views={["year", "month", "day"]}

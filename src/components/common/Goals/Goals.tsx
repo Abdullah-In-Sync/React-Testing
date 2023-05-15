@@ -595,7 +595,7 @@ const Goals = (props: propTypes) => {
                     className={styles.textStyle}
                     data-testid="safety_ques"
                   >
-                    Goal {index + 1} (Added by patient)
+                    Goal (Added by patient)
                   </Typography>
 
                   <TextFieldComponent
