@@ -6,13 +6,13 @@ import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import InfoModal from "../../../common/CustomModal/InfoModal";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
-import InfoMessage from "../../../common/TemplateFormat/InfoMessage";
 import ViewFormatsModal from "../../../common/TemplateFormat/ViewFomatsModal";
 import { useStyles } from "./createMeasuresStyles";
 
 import ConfirmWrapper from "../../../common/ConfirmWrapper";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
+import InfoMessageView from "../../../common/InfoMessageView";
 import AddQuestionSection from "./AddQuestionSection";
 
 type ViewProps = CommonFormProps & ModalRefs;
@@ -117,7 +117,7 @@ const CommonForm: React.FC<ViewProps> = ({
         </Card>
         <ViewFormatsModal modalRefFormatsView={modalRefFormatsView} />
         <InfoModal ref={infoModalRef}>
-          <InfoMessage />
+          <InfoMessageView />
         </InfoModal>
       </ConfirmWrapper>
     </>

@@ -122,7 +122,7 @@ describe("Measures score list", () => {
     });
   });
 
-  test.only("on click view response redirect to response page", async () => {
+  test("on click view response redirect to response page", async () => {
     await sut();
 
     await waitFor(async () => {

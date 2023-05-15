@@ -58,15 +58,19 @@ const CreateMonitor: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
-            // const {
-            //   adminCreateMeasures: { duplicateNames },
-            // } = data;
+            const {
+              adminCreateMonitor: { duplicateNames },
+            } = data;
 
-            // if (duplicateNames) {
-            //   infoModalRef.current.openConfirm({
-            //     data: { duplicateNames, measureText: name },
-            //   });
-            // }
+            if (duplicateNames) {
+              infoModalRef.current.openConfirm({
+                data: {
+                  duplicateNames,
+                  message:
+                    "This monitor already exists in the given organisation!",
+                },
+              });
+            }
             doneCallback();
           }
         },

@@ -48,7 +48,7 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       render: (val) => moment(val).format("DD-MM-YYYY"),
     },
     {
-      columnName: measureScoreDetail?.title,
+      columnName: "Score",
       key: "score",
       visible: true,
       render: (val) => val,

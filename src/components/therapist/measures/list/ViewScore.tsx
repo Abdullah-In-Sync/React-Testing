@@ -37,7 +37,7 @@ export default function ViewScore(props: propTypes) {
       render: (val) => moment(val).format("DD-MM-YYYY"),
     },
     {
-      columnName: title,
+      columnName: "Score",
       key: "score",
       visible: true,
       render: (val) => val,
