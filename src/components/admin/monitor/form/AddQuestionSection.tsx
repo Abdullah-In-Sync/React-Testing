@@ -1,34 +1,60 @@
 import { Box, Button, IconButton, Stack } from "@mui/material";
 import React, { useRef } from "react";
 
+import { Typography } from "@material-ui/core";
 import EditIcon from "@mui/icons-material/Edit";
 import MoodIcon from "@mui/icons-material/Mood";
 import { Emoji } from "emoji-picker-react";
 import { monitorQuestionTypes } from "../../../../lib/constants";
 import AddQuestionsBox from "../../../common/AddQuestionsBox";
+import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
+import { InitialFormValues } from "./types";
+import { FormikProps } from "formik";
+import EditEmojiModal, {
+  EmojisModalElement,
+} from "../../../common/EditEmojiModal";
 
-type ViewProps = any;
+type ViewProps = {
+  formikProps: FormikProps<InitialFormValues>;
+};
 
-const AddQuestionSection: React.FC<ViewProps> = ({
-  formikProps,
-  handleDeleteQuestion,
-}) => {
+const AddQuestionSection: React.FC<ViewProps> = ({ formikProps }) => {
   const questionFieldscRef = useRef(null);
+  const confirmModalRef = useRef<ModalElement>(null);
+  const upperModalRef = useRef<EmojisModalElement>(null);
+  const {
+    values: { questions = [] },
+    setFieldValue,
+  } = formikProps;
 
   const emojiBox = () => {
-    return (
+    const { questionOption = [] } = questions[0];
+    return questionOption.map((item, i) => (
       <Stack className="emojisBox">
-        <Box className="deleteButtonWrapper">
-          <IconButton aria-label="delete" size="small">
+        <Box className="editEmojiButtonWrapper">
+          <IconButton
+            aria-label="edit-emoji"
+            size="small"
+            data-testid={`edit-emoji-${i}`}
+            onClick={() => {
+              upperModalRef.current?.resetEmoji({ item, i });
+            }}
+          >
             <EditIcon fontSize="inherit" />
           </IconButton>
         </Box>
         <Box>
-          <Emoji unified="1f603" />
+          <Emoji unified={item.code} />
+          <Typography>{item.text}</Typography>
         </Box>
       </Stack>
-    );
+    ));
+  };
+
+  const handleEmojiSave = (value, emojiIndex) => {
+    setFieldValue(`questions.${0}.questionOption.${emojiIndex}`, value);
+    confirmModalRef.current?.close();
   };
 
   return (
@@ -54,13 +80,7 @@ const AddQuestionSection: React.FC<ViewProps> = ({
           <label>
             <MoodIcon /> Select Emoji Scale*
           </label>
-          <Box className="emojisWrapper">
-            {emojiBox()}
-            {emojiBox()}
-            {emojiBox()}
-            {emojiBox()}
-            {emojiBox()}
-          </Box>
+          <Box className="emojisWrapper">{emojiBox()}</Box>
         </Box>
       </Box>
       <Box className="addQuestionSection">
@@ -73,11 +93,9 @@ const AddQuestionSection: React.FC<ViewProps> = ({
             Add Question
           </Button>
         </Box>
-
         <AddQuestionsBox
           isEditable={true}
           formikProps={formikProps}
-          handleDeleteQuestion={handleDeleteQuestion}
           ref={questionFieldscRef}
           initialQuestionObj={{
             data: { question: "", questionType: "" },
@@ -86,6 +104,11 @@ const AddQuestionSection: React.FC<ViewProps> = ({
           questionTypes={monitorQuestionTypes}
         />
       </Box>
+      <EditEmojiModal
+        handleEmojiSave={handleEmojiSave}
+        confirmModalRef={confirmModalRef}
+        ref={upperModalRef}
+      />
     </>
   );
 };

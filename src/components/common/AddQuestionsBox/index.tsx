@@ -24,7 +24,7 @@ type Props = React.PropsWithChildren<{
     }[];
   }>;
   isEditable?: boolean;
-  handleDeleteQuestion: (v) => void;
+  handleDeleteQuestion?: (v) => void;
   questionTypes?: Array<any>;
   handleEditQuestion?: boolean;
   toggleEditView?: (v) => void;

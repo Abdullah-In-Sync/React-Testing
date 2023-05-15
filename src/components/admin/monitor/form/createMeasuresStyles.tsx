@@ -18,11 +18,14 @@ export const useStyles = makeStyles(() => {
           padding: 10,
         },
         flex: 1,
-        display: "flex",
+
         border: `1px solid ${theme.palette.secondary.main}`,
         borderRadius: 5,
-
         marginBottom: 10,
+
+        [theme.breakpoints.up("md")]: {
+          display: "flex",
+        },
       },
 
       "& .fieldsBoxWrapperSecond": {
@@ -39,6 +42,7 @@ export const useStyles = makeStyles(() => {
           "& .emojisWrapper": {
             display: "flex",
             flex: 1,
+            flexWrap: "wrap",
             "& .emojisBox": {
               padding: 20,
               margin: "5px 7px 0px 0px",
@@ -56,7 +60,10 @@ export const useStyles = makeStyles(() => {
                 width: "unset !important",
                 height: "unset !important",
               },
-              "& .deleteButtonWrapper": {
+              "& p": {
+                color: "black",
+              },
+              "& .editEmojiButtonWrapper": {
                 position: "absolute",
                 right: 0,
                 top: 0,

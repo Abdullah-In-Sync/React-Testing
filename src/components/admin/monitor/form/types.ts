@@ -6,7 +6,7 @@ import { ConfirmElement } from "../../../common/ConfirmWrapper";
 export interface InitialFormValues {
   name: string;
   orgId: string;
-  questions: string | number;
+  questions: any;
 }
 
 export interface ModalRefs {

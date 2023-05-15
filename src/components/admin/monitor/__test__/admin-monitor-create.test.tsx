@@ -40,6 +40,22 @@ mocksData.push({
           therapy: "Therapy",
           __typename: "Organization",
         },
+        {
+          _id: "org2",
+          contract:
+            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>",
+          created_date: "2022-12-05T09:47:11.000Z",
+          logo: "",
+          logo_url: null,
+          name: "actions.dev-myhelp",
+          panel_color: "#6ec9db",
+          patient: "Patient",
+          patient_plural: "Patients",
+          side_menu_color: "#6ec9db",
+          therapist: "Therapist",
+          therapy: "Therapy",
+          __typename: "Organization",
+        },
       ],
     },
   },
@@ -58,10 +74,37 @@ mocksData.push({
   result: {
     data: {
       data: {
-        createSafetyPlan: {
+        adminCreateMonitor: {
           result: true,
           __typename: "result",
         },
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_CREATE_MONITOR,
+    variables: {
+      name: "test",
+      orgId: "org2",
+      questions:
+        '[{"question":"test des","questionType":"emoji","questionOption":[{"code":"1f644","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]}]',
+    },
+  },
+  result: {
+    data: {
+      adminCreateMonitor: {
+        duplicateNames: [
+          {
+            _id: "517fa21a82c0464a92aaae90ae0d5c59",
+            name: "portal.dev-myhelp",
+            __typename: "OrgDetails",
+          },
+        ],
+        result: false,
+        __typename: "adminResult",
       },
     },
   },
@@ -79,7 +122,7 @@ const sut = async () => {
   );
 };
 
-const fillUpperForm = async () => {
+const fillUpperForm = async (orgId = 1) => {
   const dropdownSelect = await screen.findByTestId(/actions.dev-myhelp/i);
   expect(dropdownSelect).toBeInTheDocument();
 
@@ -104,7 +147,7 @@ const fillUpperForm = async () => {
   const listbox = within(screen.getByRole("presentation")).getByRole("listbox");
   const options = within(listbox).getAllByRole("option");
 
-  fireEvent.click(options[1]);
+  fireEvent.click(options[orgId]);
 };
 
 const fillQuestionForm = async () => {
@@ -140,7 +183,7 @@ const fillQuestionForm = async () => {
 
 const submitForm = async () => {
   await sut();
-  await fillUpperForm();
+  await fillUpperForm(2);
   const submitFormButton = await screen.findByTestId("submitForm");
   fireEvent.click(submitFormButton);
 };
@@ -190,5 +233,29 @@ describe("Admin create monitor", () => {
     expect(cancelButton).toBeInTheDocument();
     fireEvent.click(cancelButton);
     expect(cancelButton).not.toBeInTheDocument();
+  });
+
+  it("should render emoji selection", async () => {
+    await sut();
+    const emojiSecondButton = await screen.findByTestId("edit-emoji-1");
+    fireEvent.click(emojiSecondButton);
+    const inputCatption = await screen.findByTestId("caption-1");
+    const emojiSaveButton = await screen.findByTestId("save-emoji-button-1");
+    expect(emojiSaveButton).toBeInTheDocument();
+    fireEvent.change(inputCatption, {
+      target: { value: "emoji text" },
+    });
+    fireEvent.click(emojiSaveButton);
+    expect(await screen.findByText(/emoji text/i)).toBeInTheDocument();
+  });
+
+  it("should render duplicate modal", async () => {
+    await submitForm();
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    const okButton = await screen.findByTestId("OkButton");
+    expect(okButton).toBeInTheDocument();
+    fireEvent.click(okButton);
   });
 });
