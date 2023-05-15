@@ -68,7 +68,7 @@ mocksData.push({
       name: "test",
       orgId: "2301536c4d674b3598814174d8f19593",
       questions:
-        '[{"question":"test des","questionType":"emoji","questionOption":"[{\\"code\\":\\"code1\\",\\"text\\":\\"very sad\\"},{\\"code\\":\\"code2\\",\\"text\\":\\"very good\\"}]"}]',
+        '[{"question":"test des","question_type":"emoji","question_option":"[{\\"code\\":\\"code1\\",\\"text\\":\\"very sad\\"},{\\"code\\":\\"code2\\",\\"text\\":\\"very good\\"}]"}]',
     },
   },
   result: {
@@ -90,7 +90,7 @@ mocksData.push({
       name: "test",
       orgId: "org2",
       questions:
-        '[{"question":"test des","questionType":"emoji","questionOption":[{"code":"1f644","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]}]',
+        '[{"question":"test des","question_type":"emoji","question_option":[{"code":"1f644","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]}]',
     },
   },
   result: {
