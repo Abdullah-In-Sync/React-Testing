@@ -170,7 +170,7 @@ export default function TherapistGoal(props: propTypes) {
     let clonedObject: editGoalsFormField = { ...formData };
     clonedObject = {
       ...clonedObject,
-      ptgoal_reviewdate: dayjs(date).format("DD-MM-YYYY"),
+      ptgoal_reviewdate: dayjs(date).format("MM-DD-YYYY"),
     };
     setFormFields({ ...formFields, [index]: clonedObject });
   };
@@ -181,7 +181,7 @@ export default function TherapistGoal(props: propTypes) {
     let clonedObject: editGoalsFormField = { ...formData };
     clonedObject = {
       ...clonedObject,
-      ptgoal_achievementdate: dayjs(date).format("DD-MM-YYYY"),
+      ptgoal_achievementdate: dayjs(date).format("MM-DD-YYYY"),
     };
     setFormFields({ ...formFields, [index]: clonedObject });
   };
@@ -350,6 +350,7 @@ export default function TherapistGoal(props: propTypes) {
     setIsConfirmCompleteTask(false);
     /* istanbul ignore next */
     setIsAddGoals(false);
+    setIsConfirmDeleteGoal(false);
   };
 
   /* istanbul ignore next */
@@ -592,7 +593,7 @@ export default function TherapistGoal(props: propTypes) {
                   className={styles.textStyle}
                   data-testid="safety_ques"
                 >
-                  Goal {index + 1} (Added by therapist)
+                  Goal (Added by therapist)
                 </Typography>
 
                 <TextFieldComponent
@@ -614,7 +615,7 @@ export default function TherapistGoal(props: propTypes) {
                     <Stack spacing={1}>
                       <DatePicker
                         disableFuture
-                        inputFormat="DD-MM-YYYY"
+                        inputFormat="MM-DD-YYYY"
                         data-testid="StartDateBox"
                         disabled={false}
                         label="Goal Date"
@@ -660,7 +661,7 @@ export default function TherapistGoal(props: propTypes) {
                     <Stack spacing={1}>
                       <DatePicker
                         disableFuture
-                        inputFormat="DD-MM-YYYY"
+                        inputFormat="MM-DD-YYYY"
                         label="Achievement Date"
                         openTo="year"
                         views={["year", "month", "day"]}
@@ -701,7 +702,14 @@ export default function TherapistGoal(props: propTypes) {
                 data-testid="addGoalSubmitButton"
                 variant="contained"
                 onClick={() => {
-                  setIsAddGoals(true);
+                  /* istanbul ignore next */
+                  if (goalInput.length) {
+                    setIsAddGoals(true);
+                  } else {
+                    enqueueSnackbar("Goal input cannot be blank", {
+                      variant: "error",
+                    });
+                  }
                 }}
               >
                 Save Goals
@@ -712,14 +720,14 @@ export default function TherapistGoal(props: propTypes) {
       </Box>
       {isConfirmAddGoals && (
         <ConfirmationModal
-          label="Are you sure, you want to save the Goal?"
+          label="Are you sure you want to save the goal?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handlerAddGoal}
         />
       )}
       {isConfirmCompleteTask && (
         <ConfirmationModal
-          label="Are you sure, you want to update the Goal?"
+          label="Are you sure you want to update the goal?"
           onCancel={clearIsConfirmCancel}
           onConfirm={() => handlerUpdateGoal(formFields[goalIndex])}
         />
@@ -727,7 +735,7 @@ export default function TherapistGoal(props: propTypes) {
 
       {isConfirmDelete && (
         <ConfirmationModal
-          label="Are you sure, you want to delete the Goal?"
+          label="Are you sure you want to delete the goal?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handleDeleteGoal}
         />
