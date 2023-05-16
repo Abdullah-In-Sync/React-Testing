@@ -170,10 +170,8 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     <>
       <Box style={editStyle}>
         <ReactFlowProvider>
-          {mod !== "edit" &&
-          mod !== "patientView" &&
-          mod !== "mobile" &&
-          isPreview ? (
+          {(mod !== "edit" && mod !== "patientView" && mod !== "mobile") ||
+          (userType == "fullAccess" && !isPreview) ? (
             <SideBar iconItems={icons} />
           ) : (
             <></>
