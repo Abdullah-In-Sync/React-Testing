@@ -15,3 +15,30 @@ export const ADMIN_CREATE_MONITOR = gql`
     }
   }
 `;
+
+export const GET_ADMIN_MONITOR_LIST = gql`
+  query adminMonitorList(
+    $limit: Int
+    $pageNo: Int
+    $orgId: String
+    $searchText: String
+  ) {
+    adminMonitorList(
+      limit: $limit
+      pageNo: $pageNo
+      org_id: $orgId
+      name: $searchText
+    ) {
+      data {
+        _id
+        created_date
+        name
+        org_id
+        organization_name
+        status
+        updated_date
+      }
+      total
+    }
+  }
+`;

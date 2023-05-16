@@ -1,53 +1,24 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
-import MeasuresComponent from "../../../components/admin/measures";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import {
-  ADMIN_UPDATE_MEASURE,
-  GET_ADMIN_MEASURES_LIST,
-} from "../../../graphql/Measure/graphql";
-
-import {
-  UpdateMeasureByIdResponse,
-  UpdateMeasureByIdVars,
-} from "../../../graphql/Measure/types";
-import { useRouter } from "next/router";
-import ConfirmationModal from "../../../components/common/ConfirmationModal";
-import { SuccessModal } from "../../../components/common/SuccessModal";
-import { useSnackbar } from "notistack";
+import { GET_ADMIN_MONITOR_LIST } from "../../../graphql/Monitor/graphql";
 import MonitorComponent from "../../../components/admin/monitor";
 
 const MonitorListPage: NextPage = () => {
-  const router = useRouter();
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
-  const { enqueueSnackbar } = useSnackbar();
-  const [isConfirm, setIsConfirm] = useState<any>({
-    status: false,
-    storedFunction: null,
-    setSubmitting: null,
-    cancelStatus: false,
-    confirmObject: {
-      description: "",
-    },
-  });
-  const [successModal, setSuccessModal] = useState<any>();
-  const [updateMeasure] = useMutation<
-    UpdateMeasureByIdResponse,
-    UpdateMeasureByIdVars
-  >(ADMIN_UPDATE_MEASURE);
 
   useEffect(() => {
     getOrgList();
-    getAdminMeasuresList({
+    getAdminMonitorList({
       variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
     });
   }, []);
@@ -64,12 +35,12 @@ const MonitorListPage: NextPage = () => {
   });
 
   const [
-    getAdminMeasuresList,
+    getAdminMonitorList,
     {
-      loading: loadingMeasuresList,
-      data: { adminMeasuresList: listData = {} } = {},
+      loading: loadingMonitorList,
+      data: { adminMonitorList: listData = {} } = {},
     },
-  ] = useLazyQuery(GET_ADMIN_MEASURES_LIST, {
+  ] = useLazyQuery(GET_ADMIN_MONITOR_LIST, {
     fetchPolicy: "cache-and-network",
     onCompleted: () => {
       /* istanbul ignore next */
@@ -84,7 +55,7 @@ const MonitorListPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getAdminMeasuresList({
+    getAdminMonitorList({
       variables: {
         limit: rowsLimit,
         pageNo: newPage + 1,
@@ -103,7 +74,7 @@ const MonitorListPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getAdminMeasuresList({
+    getAdminMonitorList({
       variables: {
         limit: +event.target.value,
         pageNo: initialPageNo,
@@ -119,7 +90,7 @@ const MonitorListPage: NextPage = () => {
 
   const onChangeSearchInput = (e) => {
     setSearchInputValue(() => {
-      getAdminMeasuresList({
+      getAdminMonitorList({
         variables: {
           limit: rowsLimit,
           searchText: e.target.value,
@@ -140,7 +111,7 @@ const MonitorListPage: NextPage = () => {
         : {};
 
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
-    getAdminMeasuresList({
+    getAdminMonitorList({
       variables: {
         limit: rowsLimit,
         pageNo: initialPageNo,
@@ -152,83 +123,27 @@ const MonitorListPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
-  const handleDeleteMeasure = async (id, doneCallback) => {
-    setLoader(true);
-    try {
-      await updateMeasure({
-        variables: {
-          measureId: id,
-          update: {
-            status: 0,
-          },
-        },
-        onCompleted: () => {
-          setSuccessModal({
-            description: "Your measure has been deleted successfully.",
-          });
-          getAdminMeasuresList({
-            variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
-          });
-        },
-      });
-    } catch (e) {
-      setLoader(false);
-      enqueueSnackbar("Something is wrong", { variant: "error" });
-    } finally {
-      doneCallback();
-      setLoader(false);
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  const handleDeleteMeasure = async (id, doneCallback) => {};
 
-  const onPressSideButton = () => {
-    router.push(`/admin/measures/create`);
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onPressSideButton = () => {};
 
   /* istanbul ignore next */
-  const handleActionButtonClick = (value) => {
-    const { pressedIconButton, _id } = value;
-    switch (pressedIconButton) {
-      case "edit":
-        return router.push(`/admin/measures/edit/${_id}`);
-      case "view":
-        return router.push(`/admin/measures/view/${_id}`);
-      case "delete":
-        return onPressDeleteMeasure(_id);
-    }
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  const handleActionButtonClick = (value) => {};
 
-  const onPressDeleteMeasure = (id) => {
-    setIsConfirm({
-      status: true,
-      confirmObject: {
-        description: "Are you sure you want to delete the measure?",
-      },
-      storedFunction: (callback) => handleDeleteMeasure(id, callback),
-    });
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  const onPressDeleteMeasure = (id) => {};
 
-  const clearIsConfirm = () => {
-    setIsConfirm({
-      status: false,
-      storedFunction: null,
-      setSubmitting: null,
-      cancelStatus: false,
-    });
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  const clearIsConfirm = () => {};
 
-  const onConfirmSubmit = () => {
-    isConfirm.storedFunction(() => {
-      setIsConfirm({
-        status: false,
-        storedFunction: null,
-        setSubmitting: null,
-      });
-    });
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  const onConfirmSubmit = () => {};
 
-  const handleOk = () => {
-    setSuccessModal(undefined);
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  const handleOk = () => {};
 
   return (
     <>
@@ -236,7 +151,7 @@ const MonitorListPage: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Monitor" />
         <MonitorComponent
-          measuresList={listData}
+          monitorList={listData}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
@@ -246,25 +161,10 @@ const MonitorListPage: NextPage = () => {
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          loadingMeasuresList={loadingMeasuresList}
+          loadingMonitorList={loadingMonitorList}
           pageActionButtonClick={handleActionButtonClick}
           onPressSideButton={onPressSideButton}
         />
-        {isConfirm.status && (
-          <ConfirmationModal
-            label={isConfirm.confirmObject.description}
-            onCancel={clearIsConfirm}
-            onConfirm={onConfirmSubmit}
-          />
-        )}
-        {successModal && (
-          <SuccessModal
-            isOpen={Boolean(successModal)}
-            title="Successful"
-            description={successModal.description}
-            onOk={handleOk}
-          />
-        )}
       </Layout>
     </>
   );

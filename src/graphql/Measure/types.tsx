@@ -133,7 +133,6 @@ export interface DataEntity {
   template_id: string;
   __typename: string;
 }
-
 export interface UpdateMeasureByIdVars {
   measureId: string;
   update: UpdateMeasure;

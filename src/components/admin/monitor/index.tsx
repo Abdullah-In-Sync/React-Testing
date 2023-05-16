@@ -1,11 +1,11 @@
 import React from "react";
-import * as measuresInterface from "../../../graphql/Measure/types";
+import * as monitorInterface from "../../../graphql/Monitor/types";
 import Filter from "../../common/Filter";
 import CommonTable from "../../common/CommonTable";
-import measuresData from "./data";
+import monitorHeaderData from "./data";
 
 interface ViewProps {
-  measuresList?: measuresInterface.AdminMeasuresList | null;
+  monitorList?: monitorInterface.AdminMonitorList | null;
   pageActionButtonClick: (value) => void;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
@@ -16,12 +16,12 @@ interface ViewProps {
   organizationList?: object[];
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
-  loadingMeasuresList?: boolean;
+  loadingMonitorList?: boolean;
   onPressSideButton?: () => void;
 }
 
 const MonitorComponent: React.FC<ViewProps> = ({
-  measuresList,
+  monitorList,
   pageActionButtonClick,
   onPageChange,
   onSelectPageDropdown,
@@ -32,7 +32,7 @@ const MonitorComponent: React.FC<ViewProps> = ({
   organizationList,
   selectFilterOptions,
   onChangeFilterDropdown,
-  loadingMeasuresList,
+  loadingMonitorList,
   onPressSideButton,
 }) => {
   return (
@@ -43,19 +43,19 @@ const MonitorComponent: React.FC<ViewProps> = ({
         organizationList={organizationList}
         selectFilterOptions={selectFilterOptions}
         onChangeFilterDropdown={onChangeFilterDropdown}
-        sideButtonLabel={"Create Measures"}
+        sideButtonLabel={"Create Monitor"}
         onPressSideButton={onPressSideButton}
         hidePlanType
       />
       <CommonTable
-        data={{ list: measuresList.data, total: measuresList.total }}
+        data={{ list: monitorList.data, total: monitorList.total }}
         pageActionButtonClick={pageActionButtonClick}
         onPageChange={onPageChange}
         onSelectPageDropdown={onSelectPageDropdown}
         tableCurentPage={tableCurentPage}
         rowsLimit={rowsLimit}
-        loading={loadingMeasuresList}
-        headerData={measuresData.measuresListHeader}
+        loading={loadingMonitorList}
+        headerData={monitorHeaderData.monitorListHeader}
       />
     </>
   );
