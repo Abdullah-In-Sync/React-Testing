@@ -78,6 +78,8 @@ const AddQuestionsBox = (
         callback: () => {
           removeBox(i);
         },
+        formFields: values,
+        i,
       });
     else removeBox(i);
   };
