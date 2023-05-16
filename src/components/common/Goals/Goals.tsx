@@ -704,7 +704,14 @@ const Goals = (props: propTypes) => {
                   data-testid="addGoalSubmitButton"
                   variant="contained"
                   onClick={() => {
-                    setIsAddGoals(true);
+                    /* istanbul ignore next */
+                    if (goalInput.length) {
+                      setIsAddGoals(true);
+                    } else {
+                      enqueueSnackbar("Goal input cannot be blank", {
+                        variant: "error",
+                      });
+                    }
                   }}
                 >
                   Save Goals
