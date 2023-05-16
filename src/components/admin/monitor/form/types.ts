@@ -25,4 +25,5 @@ export interface CommonFormProps {
   onPressCancel?: () => void;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
+  edit?: boolean;
 }
