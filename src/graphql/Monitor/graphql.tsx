@@ -56,3 +56,11 @@ export const ADMIN_UPDATE_MONITOR = gql`
     }
   }
 `;
+
+export const ADMIN_DELETE_MONITOR_QUESTION = gql`
+  mutation AdminDeleteMonitorQs($questionId: ID!) {
+    adminDeleteMonitorQs(question_id: $questionId) {
+      _id
+    }
+  }
+`;

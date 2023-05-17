@@ -35,7 +35,7 @@ const AddQuestionSection: React.FC<ViewProps> = ({
   const emojiBox = () => {
     const { questionOption = [] } = questions[0];
     return questionOption.map((item, i) => (
-      <Stack className="emojisBox">
+      <Stack key={`emojiOption_${i}`} className="emojisBox">
         <Box className="editEmojiButtonWrapper">
           <IconButton
             aria-label="edit-emoji"
