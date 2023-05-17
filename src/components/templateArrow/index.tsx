@@ -125,11 +125,11 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const onChangePreviewToggle = (event) => {
     console.log(event, "onChangePreviewToggle");
     setToggled(event.target.checked);
-    if (event.target.checked == true) {
+    if (event.target.checked) {
       setmod("patientView");
       setIsPreview(true);
     }
-    if (event.target.checked == false) {
+    if (!event.target.checked) {
       setUser(userType);
       setmod(mode);
       setIsPreview(true);
@@ -155,7 +155,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     position: "relative",
   };
 
-  // eslint-disable-next-line prettier/prettier
   if ((mod == "edit" || mod == "patientView") && !isPreview) {
     delete editStyle.borderRadius;
     editStyle.padding = "8px";
@@ -170,10 +169,8 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     <>
       <Box style={editStyle}>
         <ReactFlowProvider>
-          {mod !== "edit" &&
-          mod !== "patientView" &&
-          mod !== "mobile" &&
-          isPreview ? (
+          {(mod !== "edit" && mod !== "patientView" && mod !== "mobile") ||
+          (userType == "fullAccess" && !isPreview) ? (
             <SideBar iconItems={icons} />
           ) : (
             <></>
