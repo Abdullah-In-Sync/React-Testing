@@ -48,21 +48,16 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     }
   );
 
-  useEffect(() => {
-    const handleEvent = (event) => {
-      if (event?.detail?.token) {
-        Cookies.set("myhelptoken", event.detail.token);
-        Cookies.set("user_type", "patient");
-        getPatientResourceTemplate({
-          variables: { ptsharresId: id },
-        });
-      }
-    };
-    window.addEventListener("message", handleEvent);
-    return () => {
-      window.removeEventListener("message", handleEvent);
-    };
-  }, []);
+
+  const handleToken = (event) => {
+    if (event?.target?.value) {
+      Cookies.set("myhelptoken", event?.target?.value);
+      Cookies.set("user_type", "patient");
+      getPatientResourceTemplate({
+        variables: { ptsharresId: id },
+      });
+    }
+  };
 
   const handleSubmitTemplateData = async (value) => {
     setLoader(true);
@@ -81,10 +76,9 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
         },
       });
       if (updatePatientResourceById) {
-        window.postMessage({
-          eventName: "submitSuccess",
-          data: updatePatientResourceById,
-        });
+        //to send event to mobile app
+        const cancelData = {msg: "", type: "success", data: updatePatientResourceById}
+        console.log(cancelData)
       }
     } catch {
       enqueueSnackbar("Server error please try later.", { variant: "error" });
@@ -94,10 +88,9 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const oncancelEvent = () => {
-    window.postMessage({
-      eventName: "cancel",
-      data: null,
-    });
+    //to send event to mobile app
+    const cancelData = {msg: "", type: "cancel"}
+    console.log(cancelData)
   };
   const templateData =
     templateResponse && templateResponse !== ""
@@ -106,6 +99,7 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
 
   return (
     <>
+      <input id="token" type="hidden" onClick={handleToken} />
       <Loader visible={loader} />
       {templateDetail?.component_name == "ArrowTemplate" && (
         <TemplateArrow
