@@ -1,16 +1,8 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
-import { GET_SAFETY_PLAN_LIST_FOR_THERAPIST } from "../graphql/SafetyPlan/graphql";
-import TherapistSafetyPlanIndex from "../pages/therapist/patient/view/[id]/safetyPlan";
 import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_THRAPIST_MY_MONITOR_LIST } from "../graphql/query/patient";
