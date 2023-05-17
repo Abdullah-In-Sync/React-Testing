@@ -9,19 +9,27 @@ import { GET_ADMIN_MONITOR_LIST } from "../../../graphql/Monitor/graphql";
 import MonitorComponent from "../../../components/admin/monitor";
 
 const MonitorListPage: NextPage = () => {
-  const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
-  const [searchInputValue, setSearchInputValue] = useState();
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     getOrgList();
-    getAdminMonitorList({
-      variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
-    });
   }, []);
+
+  useEffect(() => {
+    getAdminMonitorList({
+      variables: {
+        limit: rowsLimit,
+        pageNo: page,
+        searchText: searchInputValue,
+        ...selectFilterOptions,
+      },
+    });
+  }, [rowsLimit, selectFilterOptions, tableCurentPage, searchInputValue, page]);
 
   const [
     getOrgList,
@@ -49,82 +57,29 @@ const MonitorListPage: NextPage = () => {
   });
 
   const onPageChange = (event?: any, newPage?: number) => {
-    /* istanbul ignore next */
-    const searchText =
-      searchInputValue && searchInputValue !== ""
-        ? { searchText: searchInputValue }
-        : {};
-    /* istanbul ignore next */
-    getAdminMonitorList({
-      variables: {
-        limit: rowsLimit,
-        pageNo: newPage + 1,
-        ...searchText,
-        ...selectFilterOptions,
-      },
-    });
+    setPage(newPage + 1);
     /* istanbul ignore next */
     setTableCurrentPage(newPage);
   };
 
   const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
     /* istanbul ignore next */
-    const searchText =
-      searchInputValue && searchInputValue !== ""
-        ? { searchText: searchInputValue }
-        : {};
-    /* istanbul ignore next */
-    getAdminMonitorList({
-      variables: {
-        limit: +event.target.value,
-        pageNo: initialPageNo,
-        ...searchText,
-        ...selectFilterOptions,
-      },
-    });
-    /* istanbul ignore next */
     setRowsLimit(+event.target.value);
     /* istanbul ignore next */
     setTableCurrentPage(0);
   };
 
-  const onChangeSearchInput = (e) => {
-    setSearchInputValue(() => {
-      getAdminMonitorList({
-        variables: {
-          limit: rowsLimit,
-          searchText: e.target.value,
-          pageNo: initialPageNo,
-          ...selectFilterOptions,
-        },
-      });
-      setTableCurrentPage(0);
-      return e.target.value;
-    });
-  };
-
-  const onChangeFilterDropdown = (e) => {
+  const onChangeFilterDropdown = async (e) => {
     const temp = selectFilterOptions;
-    const searchText =
-      searchInputValue && searchInputValue !== ""
-        ? { searchText: searchInputValue }
-        : {};
-
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
-    getAdminMonitorList({
-      variables: {
-        limit: rowsLimit,
-        pageNo: initialPageNo,
-        ...searchText,
-        ...temp,
-      },
-    });
-    setTableCurrentPage(0);
     setSelectFilterOptions({ ...temp });
+    setTableCurrentPage(0);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  const handleDeleteMeasure = async (id, doneCallback) => {};
+  const onChangeSearchInput = (e) => {
+    setSearchInputValue(e.target.value);
+    setTableCurrentPage(0);
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const onPressSideButton = () => {};
@@ -132,18 +87,6 @@ const MonitorListPage: NextPage = () => {
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   const handleActionButtonClick = (value) => {};
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  const onPressDeleteMeasure = (id) => {};
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  const clearIsConfirm = () => {};
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  const onConfirmSubmit = () => {};
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  const handleOk = () => {};
 
   return (
     <>
