@@ -8,8 +8,6 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  Stack,
-  TextField,
   Typography,
   styled,
 } from "@mui/material";
@@ -24,9 +22,6 @@ import {
 } from "../../../graphql/query/common";
 import { useAppContext } from "../../../contexts/AuthContext";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
 import ConfirmationModal from "../ConfirmationModal";
 import { useSnackbar } from "notistack";
 import { useStyles } from "../../therapist/patient/therapistGoals/style";
@@ -89,8 +84,6 @@ const Goals = (props: propTypes) => {
   const [goalIndex, setGoalIndex] = useState(null);
   const [inputs, setInputs] = useState([]);
   const [goalInput, setGoalInput] = useState("");
-  const [goalDate, setGoalDate] = React.useState<Dayjs | null>(null);
-  const [achivDate, setAchivDate] = React.useState<Dayjs | null>(null);
   const [patientInputs, setpatientInputs] = useState();
   const [sliderInputs, setSliderInputs] = useState();
   const [isConfirmAddGoals, setIsAddGoals] = useState(false);
@@ -197,19 +190,8 @@ const Goals = (props: propTypes) => {
     setGoalInput(value);
   };
 
-  /* istanbul ignore next */
-  const goalChangeDate = (newValue: Dayjs | null) => {
-    /* istanbul ignore next */
-    setGoalDate(newValue);
-  };
-
   const handlePatientInputChange = (index, value) => {
     setpatientInputs(value);
-  };
-
-  const achivChangeDate = (newValue: Dayjs | null) => {
-    /* istanbul ignore next */
-    setAchivDate(newValue);
   };
 
   /* istanbul ignore next */
@@ -249,12 +231,10 @@ const Goals = (props: propTypes) => {
         variables: {
           patient_id: patientId,
           pttherapy_id: therapy,
-          achievement_date: achivDate,
           achievement_goal: patientInputs,
           goal_id: "",
           goal_success: sliderInputs,
           patient_goal: goalInput,
-          review_date: goalDate,
         },
         onCompleted: () => {
           setIsAddGoals(false);
@@ -267,8 +247,6 @@ const Goals = (props: propTypes) => {
           setpatientInputs(undefined);
           setSliderInputs(undefined);
           setGoalInput(undefined);
-          setAchivDate(undefined);
-          setGoalDate(undefined);
         },
       });
     } catch (e) {
@@ -611,26 +589,6 @@ const Goals = (props: propTypes) => {
                     fullWidth={true}
                     className="form-control-bg"
                   />
-
-                  <Box className={styles.datePicker}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <Stack spacing={1}>
-                        <DatePicker
-                          disableFuture
-                          inputFormat="DD-MM-YYYY"
-                          data-testid="StartDateBox"
-                          disabled={false}
-                          label="Goal Date"
-                          openTo="year"
-                          views={["year", "month", "day"]}
-                          value={goalDate}
-                          onChange={goalChangeDate}
-                          renderInput={(params) => <TextField {...params} />}
-                          className="form-control-bg"
-                        />
-                      </Stack>
-                    </LocalizationProvider>
-                  </Box>
                 </Box>
 
                 <Box className={styles.outerBorder} borderRadius={"7px"}>
@@ -658,23 +616,6 @@ const Goals = (props: propTypes) => {
                       className="form-control-bg"
                     />
                   </Grid>
-                  <Box className={styles.datePicker}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <Stack spacing={1}>
-                        <DatePicker
-                          disableFuture
-                          inputFormat="DD-MM-YYYY"
-                          label="Achievement Date"
-                          openTo="year"
-                          views={["year", "month", "day"]}
-                          value={achivDate}
-                          onChange={achivChangeDate}
-                          renderInput={(params) => <TextField {...params} />}
-                          className="form-control-bg"
-                        />
-                      </Stack>
-                    </LocalizationProvider>
-                  </Box>
                 </Box>
 
                 <Box className={styles.outerBorder} borderRadius={"7px"}>
