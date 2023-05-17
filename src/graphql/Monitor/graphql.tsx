@@ -42,3 +42,12 @@ export const GET_ADMIN_MONITOR_LIST = gql`
     }
   }
 `;
+
+export const THERAPIST_CREATE_MONITOR = gql`
+  mutation ($name: String!, $questions: String!) {
+    therapistCreateMonitor(name: $name, questions: $questions) {
+      message
+      status
+    }
+  }
+`;

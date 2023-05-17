@@ -71,6 +71,20 @@ export const GET_PROFILE_DATA = gql`
   }
 `;
 
+export const GET_THRAPIST_MY_MONITOR_LIST = gql`
+  query MyQuery {
+    therapistMyMonitorList {
+      _id
+      created_date
+      name
+      org_id
+      status
+      therapist_id
+      updated_date
+    }
+  }
+`;
+
 export const GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API = gql`
   query getMasterData($name: String!) {
     getMasterData(name: $name) {
