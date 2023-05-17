@@ -126,12 +126,10 @@ mocksData.push({
     variables: {
       patient_id: null,
       pttherapy_id: "",
-      achievement_date: null,
       achievement_goal: "efgh",
       goal_id: "",
       goal_success: undefined,
       patient_goal: "abcd",
-      review_date: null,
     },
   },
   result: {
