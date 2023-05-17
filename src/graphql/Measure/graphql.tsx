@@ -258,6 +258,7 @@ export const GET_THERAPIST_MEASURES_LIST = gql`
       therapist_id
       title
       updated_date
+      added_by
     }
   }
 `;
