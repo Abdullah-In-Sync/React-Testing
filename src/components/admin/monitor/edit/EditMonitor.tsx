@@ -48,6 +48,7 @@ const EditMonitorForm: React.FC<ViewProps & ModalRefs> = ({
   const commonform = () => {
     return (
       <Formik
+        enableReinitialize
         validationSchema={monitorValidationSchema}
         initialValues={initialValues}
         onSubmit={submitForm}

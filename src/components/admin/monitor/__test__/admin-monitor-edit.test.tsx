@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack";
 import {
   ADMIN_UPDATE_MONITOR,
   ADMIN_VIEW_MONITOR,
+  ADMIN_DELETE_MONITOR_QUESTION,
 } from "../../../../graphql/Monitor/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 
@@ -139,6 +140,23 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADMIN_DELETE_MONITOR_QUESTION,
+    variables: {
+      questionId: "f1969129-3032-469e-8ce5-f0658437683f",
+    },
+  },
+  result: {
+    data: {
+      adminDeleteMonitorQs: {
+        _id: "768be1cb-8635-4c22-8643-4aa6b83f2989",
+        __typename: "adminViewMonitor",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -169,5 +187,19 @@ describe("Admin edit monitor", () => {
     const confirmButton = await screen.findByTestId("confirmButton");
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
+  });
+
+  it("should render delete question", async () => {
+    await sut();
+    const firstQuesDeleteButton = await screen.findByTestId(
+      "iconButtonQuestion_1"
+    );
+    fireEvent.click(firstQuesDeleteButton);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Question successfully deleted./i)
+    ).toBeInTheDocument();
   });
 });

@@ -13,6 +13,7 @@ import Layout from "../../../../../components/layout";
 import {
   ADMIN_UPDATE_MONITOR,
   ADMIN_VIEW_MONITOR,
+  ADMIN_DELETE_MONITOR_QUESTION,
 } from "../../../../../graphql/Monitor/graphql";
 import { AdminMonitorView } from "../../../../../graphql/Monitor/types";
 import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
@@ -26,6 +27,7 @@ const EditMonitor: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [updateMonitor] = useMutation(ADMIN_UPDATE_MONITOR);
+  const [delteMonitorQuestion] = useMutation(ADMIN_DELETE_MONITOR_QUESTION);
 
   const [
     getOrgList,
@@ -39,8 +41,12 @@ const EditMonitor: NextPage = () => {
 
   const [
     getMonitorData,
-    { data: { adminViewMonitorById: monitorViewData = null } = {} },
+    {
+      data: { adminViewMonitorById: monitorViewData = null } = {},
+      refetch: refetchMonitorViewData,
+    },
   ] = useLazyQuery<AdminMonitorView>(ADMIN_VIEW_MONITOR, {
+    fetchPolicy: "cache-and-network",
     onCompleted: () => {
       setLoader(false);
     },
@@ -79,6 +85,7 @@ const EditMonitor: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
+            refetchMonitorViewData();
             doneCallback();
           }
         },
@@ -116,18 +123,46 @@ const EditMonitor: NextPage = () => {
     callback();
   };
 
-  // const removeQuestion = async (callback, {questionId, formFields, i: questionIndex}) => {
-  //   setLoader(true);
-  //   formFields["questions"][questionIndex]["status"] = 0
-  //   submitForm(formFields, callback)
-  // }
+  const removeQuestion = async (
+    callback,
+    { questionId, callback: questionCallback }
+  ) => {
+    setLoader(true);
+    console.debug(questionId);
+    try {
+      await delteMonitorQuestion({
+        variables: {
+          questionId,
+        },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => {
+          console.debug("data", data);
+          if (data) {
+            callback();
+            questionCallback();
+            enqueueSnackbar("Question successfully deleted.", {
+              variant: "success",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    } finally {
+      setLoader(false);
+    }
+  };
 
-  // const handleDeleteQuestion = (value) => {
-  //   confirmRef.current.openConfirm({
-  //     confirmFunction: (callback) => removeQuestion(callback, value),
-  //     description: "Are you sure you want to delete the question?",
-  //   });
-  // };
+  const handleDeleteQuestion = (value) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => removeQuestion(callback, value),
+      description: "Are you sure you want to delete the question?",
+    });
+  };
 
   return (
     <>
@@ -141,6 +176,7 @@ const EditMonitor: NextPage = () => {
           confirmRef={confirmRef}
           infoModalRef={infoModalRef}
           data={monitorViewData}
+          handleDeleteQuestion={handleDeleteQuestion}
         />
       </Layout>
     </>
