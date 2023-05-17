@@ -12,6 +12,7 @@ import Layout from "../../../../components/layout";
 import { ADMIN_CREATE_MONITOR } from "../../../../graphql/Monitor/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { ConfirmElement } from "../../../../components/common/ConfirmWrapper";
+import { modifyQuestions } from "../../../../utility/helper";
 
 const CreateMonitor: NextPage = () => {
   const router = useRouter();
@@ -46,19 +47,10 @@ const CreateMonitor: NextPage = () => {
     setLoader(true);
     const { orgId, name, questions } = formFields;
 
-    const modifyQuestions = questions.map((item) => {
-      const { question, questionType, questionOption } = item;
-      return {
-        question,
-        question_type: questionType,
-        question_option: questionOption,
-      };
-    });
-
     const variables = {
       name,
       orgId: selectedOrgIds(orgId),
-      questions: JSON.stringify(modifyQuestions),
+      questions: JSON.stringify(modifyQuestions(questions)),
     };
 
     try {
