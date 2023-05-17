@@ -305,8 +305,8 @@ export default function TherapistGoal(props: propTypes) {
           setpatientInputs(undefined);
           setSliderInputs(undefined);
           setGoalInput(undefined);
-          setAchivDate(undefined);
-          setGoalDate(undefined);
+          setAchivDate(null);
+          setGoalDate(null);
         },
       });
     } catch (e) {
