@@ -128,7 +128,6 @@ const EditMonitor: NextPage = () => {
     { questionId, callback: questionCallback }
   ) => {
     setLoader(true);
-    console.debug(questionId);
     try {
       await delteMonitorQuestion({
         variables: {
@@ -136,7 +135,6 @@ const EditMonitor: NextPage = () => {
         },
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          console.debug("data", data);
           if (data) {
             callback();
             questionCallback();
