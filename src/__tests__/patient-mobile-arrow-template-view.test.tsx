@@ -67,10 +67,6 @@ const sut = async () => {
   );
 };
 
-type MyEventData = {
-  token: string;
-};
-
 describe("Patient mobile view Arrow template page", () => {
   it("should render patient mobile view Arrow template", async () => {
     (useRouter as jest.Mock).mockClear();
@@ -84,13 +80,12 @@ describe("Patient mobile view Arrow template page", () => {
       ...mockRouter,
     }));
     await sut();
-    const eventData: MyEventData = {
-      token: "sasfdgh",
-    };
-    const myEvent = new CustomEvent<MyEventData>("message", {
-      detail: eventData,
+    const tokenInput = screen.getByTestId("tokenInput");
+    expect(tokenInput).toBeInTheDocument();
+    fireEvent.change(tokenInput, {
+      target: { value: "sasfdgh" },
     });
-    fireEvent(window, myEvent);
+    fireEvent.click(tokenInput);
     const arrowTemplate = await screen.findAllByTestId("arrow-template-test-1");
     expect(arrowTemplate.length).toEqual(3);
   });
