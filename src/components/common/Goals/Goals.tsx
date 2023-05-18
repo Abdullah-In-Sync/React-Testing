@@ -116,7 +116,7 @@ const Goals = (props: propTypes) => {
     useLazyQuery(GET_PATIENT_GOAL_DATA, {
       onCompleted: (data) => {
         /* istanbul ignore next */
-        setFormFields(data?.getPatientGoalList);
+        setFormFields(data?.patientGoalList);
       },
     });
 
@@ -168,7 +168,7 @@ const Goals = (props: propTypes) => {
     props.setLoader(true);
     if (therapy) {
       getGoalsData({
-        variables: { pttherapyId: therapy },
+        variables: { pttherapy_id: therapy },
       });
     }
 
@@ -393,7 +393,7 @@ const Goals = (props: propTypes) => {
         </Box>
 
         <Box style={{ paddingBottom: "30px" }}>
-          {goalsData?.getPatientGoalList?.map((data, index) => (
+          {goalsData?.patientGoalList?.map((data, index) => (
             <Box className={styles.outerBorder} borderRadius={"7px"}>
               <Box key={index}>
                 <Box className={styles.outerBorder} borderRadius={"7px"}>
@@ -462,6 +462,7 @@ const Goals = (props: propTypes) => {
                     <TextFieldComponent
                       name="ptgoal_achievementgoal"
                       id="ptgoal_achievementgoal"
+                      placeholder={"Write somenthing about achievement"}
                       value={
                         /* istanbul ignore next */
                         formFields[index]?.ptgoal_achievementgoal
@@ -604,6 +605,7 @@ const Goals = (props: propTypes) => {
                       name="resource_references"
                       id="references"
                       value={patientInputs}
+                      placeholder={"Write somenthing about achievement"}
                       multiline
                       rows={4}
                       onChange={(e) =>
