@@ -481,6 +481,7 @@ export default function TherapistGoal(props: propTypes) {
                   <TextFieldComponent
                     name="ptgoal_achievementgoal"
                     id="ptgoal_achievementgoal"
+                    placeholder={"Write somenthing about achievement"}
                     value={
                       /* istanbul ignore next */
                       formFields[index]?.ptgoal_achievementgoal
@@ -644,6 +645,7 @@ export default function TherapistGoal(props: propTypes) {
                     name="resource_references"
                     id="references"
                     value={patientInputs}
+                    placeholder={"Write somenthing about achievement"}
                     multiline
                     rows={4}
                     onChange={(e) =>

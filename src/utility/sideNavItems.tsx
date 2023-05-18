@@ -140,7 +140,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 15,
       label: "Monitor",
-      path: Link + "/superadmin/monitor/list",
+      path: "/admin/monitor",
       icon: <EqualizerIcon />,
     },
     {
