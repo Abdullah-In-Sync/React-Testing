@@ -96,7 +96,7 @@ export const useStyles = makeStyles(() => {
         "& > div:first-child": {
           "& .MuiBox-root": {
             border: "1px solid #ccc",
-            height: 70,
+            minHeight: 70,
             borderRadius: 5,
             padding: 10,
           },
@@ -112,7 +112,7 @@ export const useStyles = makeStyles(() => {
           marginBottom: 10,
           "& > div:first-child": {
             border: "1px solid #ccc",
-            height: 70,
+            minHeight: 70,
             borderRadius: 5,
             padding: 10,
             marginBottom: 10,
