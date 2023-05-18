@@ -4,7 +4,7 @@ import { Typography } from "@material-ui/core";
 import EditIcon from "@mui/icons-material/Edit";
 import MoodIcon from "@mui/icons-material/Mood";
 import { Emoji } from "emoji-picker-react";
-import { useStyles } from "./createMeasuresStyles";
+import { useStyles } from "./createMonitorStyles";
 
 type ViewProps = {
   question?: any;

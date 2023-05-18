@@ -2,7 +2,7 @@ import ArrowBackAlt from "@mui/icons-material/ArrowBack";
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import CommonButton from "../../../common/Buttons/CommonButton";
-import { useStyles } from "./createMeasuresStyles";
+import { useStyles } from "./createMonitorStyles";
 import { monitorQuestionTypeLabel } from "../../../../lib/constants";
 import { csvDecode } from "../../../../utility/helper";
 import EmojiListBox from "./EmojiListBox";

@@ -6,7 +6,7 @@ import InfoModal from "../../../common/CustomModal/InfoModal";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 
-import { useStyles } from "./createMeasuresStyles";
+import { useStyles } from "./createMonitorStyles";
 
 import ConfirmWrapper from "../../../common/ConfirmWrapper";
 import { CommonFormProps, ModalRefs } from "../form/types";
