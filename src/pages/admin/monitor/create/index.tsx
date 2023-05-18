@@ -71,6 +71,8 @@ const CreateMonitor: NextPage = () => {
                     "This monitor already exists in the given organisation!",
                 },
               });
+            } else {
+              router.push("/admin/monitor");
             }
             doneCallback();
           }
@@ -110,7 +112,7 @@ const CreateMonitor: NextPage = () => {
 
   return (
     <>
-      <Layout boxStyle={{ height: "100vh" }}>
+      <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Create Monitor" />
         <CreateMonitorComponent

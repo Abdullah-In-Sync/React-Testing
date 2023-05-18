@@ -1,19 +1,15 @@
-import { Box, Button, IconButton, Stack } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useRef } from "react";
-
-import { Typography } from "@material-ui/core";
-import EditIcon from "@mui/icons-material/Edit";
-import MoodIcon from "@mui/icons-material/Mood";
-import { Emoji } from "emoji-picker-react";
+import { FormikProps } from "formik";
 import { monitorQuestionTypes } from "../../../../lib/constants";
 import AddQuestionsBox from "../../../common/AddQuestionsBox";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
-import FormikTextField from "../../../common/FormikFields/FormikTextField";
-import { InitialFormValues } from "./types";
-import { FormikProps } from "formik";
 import EditEmojiModal, {
   EmojisModalElement,
 } from "../../../common/EditEmojiModal";
+import FormikTextField from "../../../common/FormikFields/FormikTextField";
+import EmojiListBox from "./EmojiListBox";
+import { InitialFormValues } from "./types";
 
 type ViewProps = {
   formikProps: FormikProps<InitialFormValues>;
@@ -31,30 +27,6 @@ const AddQuestionSection: React.FC<ViewProps> = ({
     values: { questions = [] },
     setFieldValue,
   } = formikProps;
-
-  const emojiBox = () => {
-    const { questionOption = [] } = questions[0];
-    return questionOption.map((item, i) => (
-      <Stack key={`emojiOption_${i}`} className="emojisBox">
-        <Box className="editEmojiButtonWrapper">
-          <IconButton
-            aria-label="edit-emoji"
-            size="small"
-            data-testid={`edit-emoji-${i}`}
-            onClick={() => {
-              upperModalRef.current?.resetEmoji({ item, i });
-            }}
-          >
-            <EditIcon fontSize="inherit" />
-          </IconButton>
-        </Box>
-        <Box>
-          <Emoji unified={item.code} />
-          <Typography>{item.text}</Typography>
-        </Box>
-      </Stack>
-    ));
-  };
 
   const handleEmojiSave = (value, emojiIndex) => {
     setFieldValue(`questions.${0}.questionOption.${emojiIndex}`, value);
@@ -80,12 +52,7 @@ const AddQuestionSection: React.FC<ViewProps> = ({
             autoComplete="off"
           />
         </Box>
-        <Box className="emojisWrapperBox">
-          <label>
-            <MoodIcon /> Select Emoji Scale*
-          </label>
-          <Box className="emojisWrapper">{emojiBox()}</Box>
-        </Box>
+        <EmojiListBox question={questions[0]} upperModalRef={upperModalRef} />
       </Box>
       <Box className="addQuestionSection">
         <Box className="addQuestionButtonWrapper">

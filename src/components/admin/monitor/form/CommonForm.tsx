@@ -1,12 +1,11 @@
 import { Box, Card, CardContent, Stack } from "@mui/material";
 import { Form } from "formik";
-import React, { useRef } from "react";
+import React from "react";
 import CommonButton from "../../../common/Buttons/CommonButton";
-import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import InfoModal from "../../../common/CustomModal/InfoModal";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
-import ViewFormatsModal from "../../../common/TemplateFormat/ViewFomatsModal";
+
 import { useStyles } from "./createMeasuresStyles";
 
 import ConfirmWrapper from "../../../common/ConfirmWrapper";
@@ -27,7 +26,6 @@ const CommonForm: React.FC<ViewProps> = ({
   edit,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
-  const modalRefFormatsView = useRef<ModalElement>(null);
   const styles = useStyles();
   const csvDecode = (csvString) => {
     return csvString ? csvString.split(",") : [];
@@ -121,7 +119,6 @@ const CommonForm: React.FC<ViewProps> = ({
             </Stack>
           </CardContent>
         </Card>
-        <ViewFormatsModal modalRefFormatsView={modalRefFormatsView} />
         <InfoModal ref={infoModalRef}>
           <InfoMessageView />
         </InfoModal>

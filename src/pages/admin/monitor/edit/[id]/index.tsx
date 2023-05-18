@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import ContentHeader from "../../../../../components/common/ContentHeader";
 import { ConfirmInfoElement } from "../../../../../components/common/CustomModal/InfoModal";
 import Loader from "../../../../../components/common/Loader";
-
 import EditMonitorForm from "../../../../../components/admin/monitor/edit/EditMonitor";
 import { ConfirmElement } from "../../../../../components/common/ConfirmWrapper";
 import Layout from "../../../../../components/layout";
@@ -41,10 +40,7 @@ const EditMonitor: NextPage = () => {
 
   const [
     getMonitorData,
-    {
-      data: { adminViewMonitorById: monitorViewData = null } = {},
-      refetch: refetchMonitorViewData,
-    },
+    { data: { adminViewMonitorById: monitorViewData = null } = {} },
   ] = useLazyQuery<AdminMonitorView>(ADMIN_VIEW_MONITOR, {
     fetchPolicy: "cache-and-network",
     onCompleted: () => {
@@ -85,7 +81,7 @@ const EditMonitor: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           if (data) {
-            refetchMonitorViewData();
+            router.push(`/admin/monitor`);
             doneCallback();
           }
         },
@@ -164,7 +160,7 @@ const EditMonitor: NextPage = () => {
 
   return (
     <>
-      <Layout boxStyle={{ height: "100vh" }}>
+      <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Edit Monitor" />
         <EditMonitorForm
