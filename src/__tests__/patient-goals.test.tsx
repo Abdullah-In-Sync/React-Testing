@@ -146,11 +146,11 @@ mocksData.push({
 mocksData.push({
   request: {
     query: GET_PATIENT_GOAL_DATA,
-    variables: { pttherapyId: "fadb3fc55d1d4c698d0826a6767a7cd8" },
+    variables: { pttherapy_id: "fadb3fc55d1d4c698d0826a6767a7cd8" },
   },
   result: {
     data: {
-      getPatientGoalList: [
+      patientGoalList: [
         {
           _id: "3baa11c2-054a-4167-b97b-0b8a9b7fdec3",
           created_date: "2023-05-09T06:00:38.624Z",
