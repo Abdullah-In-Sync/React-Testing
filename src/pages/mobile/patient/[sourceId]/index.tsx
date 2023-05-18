@@ -2,7 +2,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ResourceDataInterface,
   TemplateDetailInterface,
@@ -48,7 +48,6 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     }
   );
 
-
   const handleToken = (event) => {
     if (event?.target?.value) {
       Cookies.set("myhelptoken", event?.target?.value);
@@ -77,8 +76,12 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
       });
       if (updatePatientResourceById) {
         //to send event to mobile app
-        const cancelData = {msg: "", type: "success", data: updatePatientResourceById}
-        console.log(cancelData)
+        const cancelData = {
+          msg: "",
+          type: "success",
+          data: updatePatientResourceById,
+        };
+        console.log(cancelData);
       }
     } catch {
       enqueueSnackbar("Server error please try later.", { variant: "error" });
@@ -89,8 +92,8 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
 
   const oncancelEvent = () => {
     //to send event to mobile app
-    const cancelData = {msg: "", type: "cancel"}
-    console.log(cancelData)
+    const cancelData = { msg: "", type: "cancel" };
+    console.log(cancelData);
   };
   const templateData =
     templateResponse && templateResponse !== ""
@@ -99,7 +102,12 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
 
   return (
     <>
-      <input id="token" type="hidden" onClick={handleToken} />
+      <input
+        id="token"
+        data-testid="tokenInput"
+        type="hidden"
+        onClick={handleToken}
+      />
       <Loader visible={loader} />
       {templateDetail?.component_name == "ArrowTemplate" && (
         <TemplateArrow
