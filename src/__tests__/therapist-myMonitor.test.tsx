@@ -1,12 +1,13 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_THRAPIST_MY_MONITOR_LIST } from "../graphql/query/patient";
 import TherapyMyMonitorList from "../pages/therapist/patient/view/[id]/monitors/myMonitor";
+import { DELETE_THERAPIST_MY_MONITOR } from "../graphql/mutation/therapist";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -32,6 +33,21 @@ mocksData.push({
           __typename: "TherapistMonitors",
         },
       ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_MY_MONITOR,
+    variables: { monitor_id: "ce3b10f2-e867-4606-a9ab-634af57e280d" },
+  },
+  result: {
+    data: {
+      deleteTherapistMonitor: {
+        deleted: true,
+        __typename: "DeleteMonitor",
+      },
     },
   },
 });
@@ -79,6 +95,25 @@ describe("Therapist patient safety plan", () => {
     await waitFor(async () => {
       expect(screen.getByTestId("name")).toBeInTheDocument();
       // expect(screen.getByTestId("planTypeSelect")).toBeInTheDocument();
+    });
+  });
+
+  it("Delete Homework task", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("button-edit-icon")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("button-edit-icon"));
+
+      expect(
+        screen.getByText("Are you sure you want to delete the monitor?")
+      ).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(
+        screen.getByText("Monitor deleted successfully")
+      ).toBeInTheDocument();
     });
   });
 });
