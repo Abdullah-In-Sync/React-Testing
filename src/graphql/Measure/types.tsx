@@ -133,7 +133,6 @@ export interface DataEntity {
   template_id: string;
   __typename: string;
 }
-
 export interface UpdateMeasureByIdVars {
   measureId: string;
   update: UpdateMeasure;
@@ -197,7 +196,7 @@ export interface TherapistListMeasuresEntity {
   title: string;
   updated_date: string;
   session_no: string;
-  __typename: string;
+  added_by?: string;
 }
 
 export interface UpdateTherapistMeasureVars {

@@ -90,7 +90,7 @@ mocksData.push({
       name: "test",
       orgId: "org2",
       questions:
-        '[{"question":"test des","question_type":"emoji","question_option":[{"code":"1f644","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]}]',
+        '[{"question":"test des","question_type":"emoji","question_option":"[{\\"code\\":\\"1f644\\",\\"text\\":\\"Very Sad\\"},{\\"code\\":\\"1f641\\",\\"text\\":\\"Sad\\"},{\\"code\\":\\"1f642\\",\\"text\\":\\"Fine\\"},{\\"code\\":\\"1f60a\\",\\"text\\":\\"Happy\\"},{\\"code\\":\\"1f604\\",\\"text\\":\\"Very Happy\\"}]"}]',
     },
   },
   result: {

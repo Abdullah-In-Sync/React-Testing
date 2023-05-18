@@ -49,3 +49,37 @@ export const getScoreGraphCoordinates = (scoresList) => {
     seriesY,
   };
 };
+
+type QuestionObject = {
+  question: string;
+  questionType: string;
+  questionOption: object[];
+  questionId?: string;
+  status?: number;
+};
+
+export const modifyQuestions = (questions: QuestionObject[]) =>
+  questions.map((item) => {
+    const { question, questionType, questionOption, questionId, status } = item;
+
+    const tempQuestionObj = {
+      ...{
+        question,
+        question_type: questionType,
+      },
+      ...(questionId ? { question_id: questionId } : {}),
+      ...(status !== undefined ? { status } : {}),
+    };
+
+    switch (questionType) {
+      case "emoji":
+        return {
+          ...tempQuestionObj,
+          ...{ question_option: JSON.stringify(questionOption) },
+        };
+      case "list":
+        return { ...tempQuestionObj, ...{ question_option: questionOption } };
+      default:
+        return tempQuestionObj;
+    }
+  });

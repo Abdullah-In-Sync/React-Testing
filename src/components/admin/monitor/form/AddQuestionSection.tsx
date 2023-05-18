@@ -17,9 +17,13 @@ import EditEmojiModal, {
 
 type ViewProps = {
   formikProps: FormikProps<InitialFormValues>;
+  handleDeleteQuestion?: (v) => void;
 };
 
-const AddQuestionSection: React.FC<ViewProps> = ({ formikProps }) => {
+const AddQuestionSection: React.FC<ViewProps> = ({
+  formikProps,
+  handleDeleteQuestion,
+}) => {
   const questionFieldscRef = useRef(null);
   const confirmModalRef = useRef<ModalElement>(null);
   const upperModalRef = useRef<EmojisModalElement>(null);
@@ -31,7 +35,7 @@ const AddQuestionSection: React.FC<ViewProps> = ({ formikProps }) => {
   const emojiBox = () => {
     const { questionOption = [] } = questions[0];
     return questionOption.map((item, i) => (
-      <Stack className="emojisBox">
+      <Stack key={`emojiOption_${i}`} className="emojisBox">
         <Box className="editEmojiButtonWrapper">
           <IconButton
             aria-label="edit-emoji"
@@ -102,6 +106,7 @@ const AddQuestionSection: React.FC<ViewProps> = ({ formikProps }) => {
             question: { multiline: true, rows: 4 },
           }}
           questionTypes={monitorQuestionTypes}
+          handleDeleteQuestion={handleDeleteQuestion}
         />
       </Box>
       <EditEmojiModal

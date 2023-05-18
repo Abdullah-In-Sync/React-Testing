@@ -22,10 +22,11 @@ const iconButtonsData = [
 ];
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
-  const { _id } = data;
+  const { _id, added_by } = data;
   const iconButtons = () => {
     return iconButtonsData.map((item, i) => {
       const { id, icon: Icon } = item;
+      if (added_by !== "therapist" && id === "edit") return null;
       return (
         <Box
           key={`iconButton_${_id}_${i}`}
