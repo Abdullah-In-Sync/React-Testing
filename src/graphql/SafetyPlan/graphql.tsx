@@ -231,6 +231,27 @@ export const GET_THERAPIST_SAFETY_PLAN_LIST = gql`
   }
 `;
 
+export const GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST = gql`
+  query patientListForMonitor($monitor_id: String!) {
+    patientListForMonitor(monitor_id: $monitor_id) {
+      _id
+      moniter_detail {
+        _id
+        added_by
+        created_date
+        name
+        org_id
+        patient_id
+        status
+        therapist_id
+        updated_date
+      }
+      patient_firstname
+      patient_lastname
+    }
+  }
+`;
+
 export const GET_THERAPIST_MEASURES_PLAN_LIST = gql`
   query MyQuery {
     therapistGetAdminMeasures {

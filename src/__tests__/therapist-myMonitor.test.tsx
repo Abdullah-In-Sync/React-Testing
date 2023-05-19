@@ -7,7 +7,11 @@ import theme from "../styles/theme/theme";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_THRAPIST_MY_MONITOR_LIST } from "../graphql/query/patient";
 import TherapyMyMonitorList from "../pages/therapist/patient/view/[id]/monitors/myMonitor";
-import { DELETE_THERAPIST_MY_MONITOR } from "../graphql/mutation/therapist";
+import {
+  DELETE_THERAPIST_MY_MONITOR,
+  SHARE_THERAPIST_MY_MONITOR,
+} from "../graphql/mutation/therapist";
+import { GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST } from "../graphql/SafetyPlan/graphql";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -52,6 +56,44 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST,
+    variables: { monitor_id: "ce3b10f2-e867-4606-a9ab-634af57e280d" },
+  },
+  result: {
+    data: {
+      patientListForMonitor: [
+        {
+          _id: "003de6cefb794d90ad1fecc00b9e8da9",
+          moniter_detail: null,
+          patient_firstname: "patient name",
+          patient_lastname: "last",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: SHARE_THERAPIST_MY_MONITOR,
+    variables: {
+      monitor_id: "ce3b10f2-e867-4606-a9ab-634af57e280d",
+      patient_id: "003de6cefb794d90ad1fecc00b9e8da9",
+    },
+  },
+  result: {
+    data: {
+      shareTherapistMonitor: {
+        message: "Monitor Shared Successfully",
+        status: true,
+        __typename: "TherapistMonitorResult",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -84,7 +126,7 @@ describe("Therapist patient safety plan", () => {
     });
   });
 
-  it("should render safety plan data", async () => {
+  it("should render monitor data", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "7a27dc00d48bf983fdcd4b0762ebd",
@@ -94,11 +136,10 @@ describe("Therapist patient safety plan", () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getByTestId("name")).toBeInTheDocument();
-      // expect(screen.getByTestId("planTypeSelect")).toBeInTheDocument();
     });
   });
 
-  it("Delete Homework task", async () => {
+  it("Delete monitor", async () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getByTestId("button-edit-icon")).toBeInTheDocument();
@@ -114,6 +155,40 @@ describe("Therapist patient safety plan", () => {
       expect(
         screen.getByText("Monitor deleted successfully")
       ).toBeInTheDocument();
+    });
+  });
+
+  it("Share monitor", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("share-button-icon")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("share-button-icon"));
+    });
+
+    await waitFor(async () => {
+      const dropdownInput = screen.getByLabelText("Select Patient");
+
+      fireEvent.mouseDown(dropdownInput);
+
+      await waitFor(async () => {
+        const firstOption = screen.getByRole("option", {
+          name: /patient name/i,
+        });
+        fireEvent.click(firstOption);
+      });
+
+      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+
+      expect(
+        screen.getByText("Are you sure you want to share the monitor?")
+      ).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(screen.getByText("Plan shared Successfully")).toBeInTheDocument();
     });
   });
 });

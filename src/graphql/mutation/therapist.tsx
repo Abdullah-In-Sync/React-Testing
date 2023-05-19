@@ -43,6 +43,15 @@ export const DELETE_THERAPIST_MY_MONITOR = gql`
   }
 `;
 
+export const SHARE_THERAPIST_MY_MONITOR = gql`
+  mutation ($monitor_id: String!, $patient_id: String!) {
+    shareTherapistMonitor(monitor_id: $monitor_id, patient_id: $patient_id) {
+      message
+      status
+    }
+  }
+`;
+
 export const COMPLETE_HOMEWORK = gql`
   mutation (
     $complete_status: Int!

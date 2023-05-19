@@ -83,7 +83,7 @@ const TherapistCreateMonitor: NextPage = () => {
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
-        <ContentHeader title="Therapist Create Monitor" />
+        <ContentHeader title="Create Monitor" />
         <TherapistCreateMonitorForm
           submitForm={handleSavePress}
           onPressCancel={onPressCancel}
