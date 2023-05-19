@@ -58,31 +58,29 @@ const FormShareBox: React.FC<ViewProps> = ({
                   }
                 }}
                 renderOption={(props, option) => (
-                  <Box sx={{ justifyContent: "space-between" }}>
+                  <>
                     <Box
-                      style={{
-                        display: "flex",
-                      }}
+                      style={{ display: "flex", flex: 1, width: "100%" }}
                       {...props}
                     >
-                      <span style={{ alignItems: "flex-start" }}>
-                        {option.patient_firstname}
-                      </span>
+                      <Box style={{ flex: 1 }}>{option.patient_firstname}</Box>
                       <Box>
                         {option.moniter_detail !== null && (
-                          <span
+                          <Box
                             style={{
                               color: "#6EC9DB",
-                              //   marginLeft: "50px",
-                              alignItems: "flex-end",
+                              fontSize: "20px",
                             }}
                           >
                             ●
-                          </span>
+                          </Box>
                         )}
                       </Box>
                     </Box>
-                  </Box>
+                    <Box>
+                      <hr style={{ borderTop: "1px ", width: "100%" }} />
+                    </Box>
+                  </>
                 )}
                 renderInput={(params) => (
                   <TextField
