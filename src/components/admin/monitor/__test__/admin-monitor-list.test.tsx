@@ -4,7 +4,10 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import theme from "../../../../styles/theme/theme";
-import { GET_ADMIN_MONITOR_LIST } from "../../../../graphql/Monitor/graphql";
+import {
+  ADMIN_UPDATE_MONITOR,
+  GET_ADMIN_MONITOR_LIST,
+} from "../../../../graphql/Monitor/graphql";
 import MonitorListPage from "../../../../pages/admin/monitor";
 
 jest.mock("next/router", () => ({
@@ -134,6 +137,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_MONITOR,
+    variables: {
+      monitorId: "8fc88c5b-836b-44c7-84fb-541be843ce89",
+      update: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateMonitorById: {
+        status: 0,
+        _id: "8fc88c5b-836b-44c7-84fb-541be843ce89",
+        __typename: "adminViewMonitor",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -173,5 +197,20 @@ const selectFromOrganizationDropdown = async () => {
 describe("Admin monitor list", () => {
   it("should render admin monitor list with filter data", async () => {
     await selectFromOrganizationDropdown();
+  });
+
+  it("delete monitor from list", async () => {
+    await sut();
+    const deleteButton = await screen.findByTestId(
+      "iconButton_delete_8fc88c5b-836b-44c7-84fb-541be843ce89"
+    );
+    expect(deleteButton).toBeInTheDocument();
+    fireEvent.click(deleteButton);
+
+    const approveDeleteBtn = screen.getByTestId("confirmButton");
+    expect(approveDeleteBtn).toBeInTheDocument();
+    fireEvent.click(approveDeleteBtn);
+
+    expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
   });
 });
