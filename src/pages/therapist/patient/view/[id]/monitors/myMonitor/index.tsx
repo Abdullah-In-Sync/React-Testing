@@ -118,7 +118,9 @@ const TherapyMyMonitorList: any = () => {
         onCompleted: () => {
           /* istanbul ignore next */
           setIsConfirmShareTask(false);
-          enqueueSnackbar("Plan shared Successfully", { variant: "success" });
+          enqueueSnackbar("Monitor shared Successfully", {
+            variant: "success",
+          });
           getTherapistMonitorSharePatientList({
             variables: { monitor_id: shareMonitorId },
           });
