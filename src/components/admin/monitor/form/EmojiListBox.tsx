@@ -15,28 +15,31 @@ const EmojiListBox: React.FC<ViewProps> = ({ question, upperModalRef }) => {
   const styles = useStyles();
   const emojiBox = () => {
     const { questionOption = [] } = question;
-    return questionOption.map((item, i) => (
-      <Stack key={`emojiOption_${i}`} className="emojisBox">
-        {upperModalRef && (
-          <Box className="editEmojiButtonWrapper">
-            <IconButton
-              aria-label="edit-emoji"
-              size="small"
-              data-testid={`edit-emoji-${i}`}
-              onClick={() => {
-                upperModalRef.current?.resetEmoji({ item, i });
-              }}
-            >
-              <EditIcon fontSize="inherit" />
-            </IconButton>
+    return (
+      Array.isArray(questionOption) &&
+      questionOption.map((item, i) => (
+        <Stack key={`emojiOption_${i}`} className="emojisBox">
+          {upperModalRef && (
+            <Box className="editEmojiButtonWrapper">
+              <IconButton
+                aria-label="edit-emoji"
+                size="small"
+                data-testid={`edit-emoji-${i}`}
+                onClick={() => {
+                  upperModalRef.current?.resetEmoji({ item, i });
+                }}
+              >
+                <EditIcon fontSize="inherit" />
+              </IconButton>
+            </Box>
+          )}
+          <Box>
+            <Emoji unified={item.code} />
+            <Typography>{item.text}</Typography>
           </Box>
-        )}
-        <Box>
-          <Emoji unified={item.code} />
-          <Typography>{item.text}</Typography>
-        </Box>
-      </Stack>
-    ));
+        </Stack>
+      ))
+    );
   };
 
   return (
