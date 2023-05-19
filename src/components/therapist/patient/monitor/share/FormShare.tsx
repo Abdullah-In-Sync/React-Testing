@@ -69,6 +69,7 @@ const FormShareBox: React.FC<ViewProps> = ({
                           <Box
                             style={{
                               color: "#6EC9DB",
+                              fontSize: "20px",
                             }}
                           >
                             ●
@@ -77,7 +78,7 @@ const FormShareBox: React.FC<ViewProps> = ({
                       </Box>
                     </Box>
                     <Box>
-                      <hr style={{ borderTop: "1px  black", width: "100%" }} />
+                      <hr style={{ borderTop: "1px ", width: "100%" }} />
                     </Box>
                   </>
                 )}
