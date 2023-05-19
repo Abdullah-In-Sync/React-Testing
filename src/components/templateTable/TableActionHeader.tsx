@@ -1,6 +1,6 @@
 import { MoreHoriz } from "@mui/icons-material";
 import { Grid } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { FormikProps } from "formik";
 import { FC, useRef } from "react";
 import { ActionMenu } from "../common/Menu";
