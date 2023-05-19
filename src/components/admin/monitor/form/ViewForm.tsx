@@ -6,18 +6,21 @@ import { useStyles } from "./createMonitorStyles";
 import { monitorQuestionTypeLabel } from "../../../../lib/constants";
 import { csvDecode } from "../../../../utility/helper";
 import EmojiListBox from "./EmojiListBox";
+import { ViewMonitorType } from "./types";
 
-type ViewProps = any;
+type ViewProps = {
+  values: ViewMonitorType;
+  handleBackClick: () => void;
+};
 
 const ViewForm: React.FC<ViewProps> = ({ values, handleBackClick }) => {
   const { name, organizationName, questions } = values;
-  // const {   isSubmitting, setFieldValue } = formikProps;
   const styles = useStyles();
 
   const listOptionNameList = (questionOptions) => {
-    return questionOptions.map((value) => {
+    return questionOptions.map((value, i) => {
       return (
-        <Box>
+        <Box key={`listOption_${i}`}>
           <span>{value}</span>
         </Box>
       );
@@ -25,10 +28,10 @@ const ViewForm: React.FC<ViewProps> = ({ values, handleBackClick }) => {
   };
 
   const questionsList = () => {
-    return questions.map(({ question, questionType, questionOption }) => {
+    return questions.map(({ question, questionType, questionOption }, i) => {
       return (
         questionType !== "emoji" && (
-          <Box className="questionWrapper">
+          <Box className="questionWrapper" key={`monitorQestion_${i}`}>
             <Box>{question}</Box>
             <Box>{monitorQuestionTypeLabel[questionType]}</Box>
             {questionType === "list" && (

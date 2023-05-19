@@ -27,3 +27,17 @@ export interface CommonFormProps {
   handleDeleteQuestion?: (v) => void;
   edit?: boolean;
 }
+
+export interface Questions {
+  questionId?: string;
+  question?: string;
+  questionType?: string;
+  questionOption?: any;
+}
+
+export interface ViewMonitorType {
+  name: string;
+  orgId: string;
+  questions: Questions[];
+  organizationName;
+}
