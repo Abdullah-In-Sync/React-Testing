@@ -13,7 +13,7 @@ import {
   ModalRefs,
 } from "../../../../admin/monitor/form/types";
 import AddQuestionSection from "../../../../admin/monitor/form/AddQuestionSection";
-import { useStyles } from "../../../../admin/monitor/form/createMeasuresStyles";
+import { useStyles } from "../../../../admin/monitor/form/createMonitorStyles";
 
 type ViewProps = CommonFormProps & ModalRefs;
 

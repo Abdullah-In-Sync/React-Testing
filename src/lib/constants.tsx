@@ -57,6 +57,12 @@ export const monitorQuestionTypes = [
   },
 ];
 
+export const monitorQuestionTypeLabel = {
+  yes_or_no: "Yes/No",
+  hours: "Hours",
+  list: "List",
+};
+
 export const questionTypes = [
   {
     id: "text",

@@ -7,8 +7,10 @@ import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import { GET_ADMIN_MONITOR_LIST } from "../../../graphql/Monitor/graphql";
 import MonitorComponent from "../../../components/admin/monitor";
+import { useRouter } from "next/router";
 
 const MonitorListPage: NextPage = () => {
+  const router = useRouter();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -82,11 +84,22 @@ const MonitorListPage: NextPage = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onPressSideButton = () => {};
+  const onPressSideButton = () => {
+    router.push("/admin/monitor/create");
+  };
 
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  const handleActionButtonClick = (value) => {};
+  const handleActionButtonClick = (value) => {
+    const { _id, pressedIconButton } = value;
+    console.log("value", value);
+    switch (pressedIconButton) {
+      case "edit":
+        return router.push(`/admin/monitor/edit/${_id}`);
+      case "view":
+        return router.push(`/admin/monitor/view/${_id}`);
+    }
+  };
 
   return (
     <>

@@ -83,3 +83,7 @@ export const modifyQuestions = (questions: QuestionObject[]) =>
         return tempQuestionObj;
     }
   });
+
+export const csvDecode = (csvString) => {
+  return csvString ? csvString.split(",") : [];
+};
