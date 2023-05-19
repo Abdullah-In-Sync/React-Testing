@@ -1,28 +1,51 @@
-import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
+import {
+  DELETE_THERAPIST_MY_MONITOR,
+  SHARE_THERAPIST_MY_MONITOR,
+} from "../../../../../../../graphql/mutation/therapist";
+import { useSnackbar } from "notistack";
+import ConfirmationModal from "../../../../../../../components/common/ConfirmationModal";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_THRAPIST_MY_MONITOR_LIST } from "../../../../../../../graphql/query/patient";
 import Loader from "../../../../../../../components/common/Loader";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import { Accordion } from "../../../../../../../components/common/Accordion";
-import { Button, IconButton, Typography } from "@material-ui/core";
-import { useRouter } from "next/router";
-import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import { DELETE_THERAPIST_MY_MONITOR } from "../../../../../../../graphql/mutation/therapist";
-import { useSnackbar } from "notistack";
-import ConfirmationModal from "../../../../../../../components/common/ConfirmationModal";
+import ShareIcon from "@mui/icons-material/Share";
+import {
+  CommonModal,
+  ModalElement,
+} from "../../../../../../../components/common/CustomModal/CommonModal";
+import { GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST } from "../../../../../../../graphql/SafetyPlan/graphql";
+import SharePlanForm from "../../../../../../../components/therapist/patient/monitor/share/SharePlanForm";
 
 const TherapyMyMonitorList: any = () => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const modalRefAddPlan = useRef<ModalElement>(null);
+
+  /* istanbul ignore next */
+  const handleOpenAddPlanModal = useCallback(
+    () => modalRefAddPlan.current?.open(),
+    []
+  );
+  const handleCloseAddPlanModal = useCallback(() => {
+    /* istanbul ignore next */
+    modalRefAddPlan.current?.close();
+  }, []);
+
   /* istanbul ignore next */
   const id = router?.query.id as string;
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirmDeleteTask, setIsConfirmDeleteTask] = useState(false);
   const [deleteMonitorId, setDeleteMonitorId] = useState("");
+  const [shareMonitorId, setShareMonitorId] = useState("");
+  const [isConfirmShareTask, setIsConfirmShareTask] = useState(false);
+  const [isSetSharedPatientIds, setIsSetSharedPatientIds] = useState("");
 
   const [deleteMyMonitor] = useMutation(DELETE_THERAPIST_MY_MONITOR);
+  const [shareMyMonitor] = useMutation(SHARE_THERAPIST_MY_MONITOR);
 
   const [getTherapistMonitorList, { data: monitorListData, refetch }] =
     useLazyQuery(GET_THRAPIST_MY_MONITOR_LIST, {
@@ -32,9 +55,23 @@ const TherapyMyMonitorList: any = () => {
       },
     });
 
+  const [
+    getTherapistMonitorSharePatientList,
+    { data: monitorSharePatientListData },
+  ] = useLazyQuery(GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST, {
+    fetchPolicy: "network-only",
+    onCompleted: () => {
+      /* istanbul ignore next */
+      setLoader(false);
+    },
+  });
+
   useEffect(() => {
     getTherapistMonitorList();
-  }, []);
+    getTherapistMonitorSharePatientList({
+      variables: { monitor_id: shareMonitorId },
+    });
+  }, [shareMonitorId]);
 
   /* istanbul ignore next */
   const onPressCreateMonitorButton = () => {
@@ -44,6 +81,7 @@ const TherapyMyMonitorList: any = () => {
   /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirmDeleteTask(false);
+    setIsConfirmShareTask(false);
   };
 
   const handleDeleteMyMonitor = async () => {
@@ -51,7 +89,6 @@ const TherapyMyMonitorList: any = () => {
       await deleteMyMonitor({
         variables: {
           monitor_id: deleteMonitorId,
-          // pthomework_id: deleteTaskId,
         },
         onCompleted: () => {
           setIsConfirmDeleteTask(false);
@@ -64,6 +101,38 @@ const TherapyMyMonitorList: any = () => {
     } catch (e) {
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const receivePatientIds = (value) => {
+    setIsSetSharedPatientIds(value);
+  };
+
+  const handlerSharePlan = async () => {
+    try {
+      await shareMyMonitor({
+        variables: {
+          monitor_id: shareMonitorId,
+          patient_id: isSetSharedPatientIds,
+        },
+        onCompleted: () => {
+          /* istanbul ignore next */
+          setIsConfirmShareTask(false);
+          enqueueSnackbar("Monitor shared Successfully", {
+            variant: "success",
+          });
+          getTherapistMonitorSharePatientList({
+            variables: { monitor_id: shareMonitorId },
+          });
+        },
+      });
+      /* istanbul ignore next */
+      handleCloseAddPlanModal();
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
     }
   };
   return (
@@ -125,14 +194,17 @@ const TherapyMyMonitorList: any = () => {
                         </IconButton>
                         <IconButton
                           size="small"
-                          data-testid={`button-edit-icon_$`}
+                          data-testid={`share-button-icon`}
                           style={{
                             backgroundColor: "#fff",
                             width: "unset",
                             marginRight: "10px",
                             marginBottom: "10px",
                           }}
-                          // onClick={(e) => safetyPlanList.onPressEditPlan(e, v)}
+                          onClick={() => {
+                            setShareMonitorId(v._id);
+                            handleOpenAddPlanModal();
+                          }}
                         >
                           <ShareIcon
                             style={{ fontSize: "15px", color: "black" }}
@@ -150,7 +222,8 @@ const TherapyMyMonitorList: any = () => {
               )
         }
       </Box>
-      <>
+
+      <Box>
         {isConfirmDeleteTask && (
           <ConfirmationModal
             label="Are you sure you want to delete the monitor?"
@@ -158,7 +231,27 @@ const TherapyMyMonitorList: any = () => {
             onConfirm={handleDeleteMyMonitor}
           />
         )}
-      </>
+      </Box>
+
+      <CommonModal
+        ref={modalRefAddPlan}
+        headerTitleText="Share Monitor"
+        maxWidth="sm"
+      >
+        <SharePlanForm
+          onPressSubmit={() => setIsConfirmShareTask(true)}
+          therapistSafetyPlanList={monitorSharePatientListData}
+          receivePlanId={receivePatientIds}
+        />
+      </CommonModal>
+
+      {isConfirmShareTask && (
+        <ConfirmationModal
+          label="Are you sure you want to share the monitor?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={handlerSharePlan}
+        />
+      )}
     </>
   );
 };
