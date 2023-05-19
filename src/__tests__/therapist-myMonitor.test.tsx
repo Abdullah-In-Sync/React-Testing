@@ -188,7 +188,9 @@ describe("Therapist patient safety plan", () => {
 
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
-      expect(screen.getByText("Plan shared Successfully")).toBeInTheDocument();
+      expect(
+        screen.getByText("Monitor shared Successfully")
+      ).toBeInTheDocument();
     });
   });
 });
