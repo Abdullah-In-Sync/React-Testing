@@ -119,11 +119,13 @@ const TherapyMyMonitorList: any = () => {
           /* istanbul ignore next */
           setIsConfirmShareTask(false);
           enqueueSnackbar("Plan shared Successfully", { variant: "success" });
+          getTherapistMonitorSharePatientList({
+            variables: { monitor_id: shareMonitorId },
+          });
         },
       });
       /* istanbul ignore next */
       handleCloseAddPlanModal();
-      refetch();
     } catch (e) {
       /* istanbul ignore next */
       setLoader(false);
