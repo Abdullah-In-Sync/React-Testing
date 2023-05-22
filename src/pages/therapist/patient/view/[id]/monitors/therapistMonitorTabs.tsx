@@ -3,8 +3,13 @@ import React from "react";
 import TherapyTabsGenerator from "../../../../../../components/common/TabsGenerator/TherapyTabGenerator";
 import ContentHeader from "../../../../../../components/common/ContentHeader";
 import TherapyMyMonitorList from "./myMonitor";
+import { useRouter } from "next/router";
 
 export default function TherapistMonotorTabs() {
+  const router = useRouter();
+  const {
+    query: { tab = "", id },
+  } = router;
   const tabs = [
     {
       label: "Patient Monitor",
@@ -21,7 +26,10 @@ export default function TherapistMonotorTabs() {
   return (
     <>
       <ContentHeader title="Monitor" />
-      <TherapyTabsGenerator tabsList={tabs} activeTabs="" />
+      <TherapyTabsGenerator
+        tabsList={tabs}
+        tabLabel={`/therapist/patient/view/${id}/?tab=${tab}&subTab1=`}
+      />
     </>
   );
 }

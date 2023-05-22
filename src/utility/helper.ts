@@ -87,3 +87,7 @@ export const modifyQuestions = (questions: QuestionObject[]) =>
 export const csvDecode = (csvString) => {
   return csvString ? csvString.split(",") : [];
 };
+
+export const csvEncode = (csvStringArray) => {
+  return csvStringArray.join(", ");
+};

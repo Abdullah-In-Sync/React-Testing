@@ -100,7 +100,7 @@ const EditMonitor: NextPage = () => {
   const handleSavePress = (formFields, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
-      description: "‘Are you sure you want to update the monitor?",
+      description: "Are you sure you want to update the monitor?",
       setSubmitting,
     });
   };

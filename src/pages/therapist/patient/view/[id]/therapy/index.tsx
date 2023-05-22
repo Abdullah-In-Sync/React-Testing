@@ -20,6 +20,9 @@ export default function TherapyMainComponent(props: propTypes) {
   const setTherapy = props.setTherapy;
   const router = useRouter();
   const patId = router?.query.id as string;
+  const {
+    query: { id },
+  } = router;
   const tabs = [
     {
       label: "Safety Plan",
@@ -75,10 +78,18 @@ export default function TherapyMainComponent(props: propTypes) {
       component: <TherapistFeedbackTabs setTherapy={setTherapy} />,
     },
   ];
+  const activeTabs = {
+    feedback: "&subTab1=therapist-feedback",
+    monitor: "&subTab1=my-monitor",
+  };
   return (
     <Box>
       <Box data-testid="patientViewTherapyTab" style={{ paddingTop: "30px" }}>
-        <TherapyTabsGenerator tabsList={tabs} activeTabs="" />
+        <TherapyTabsGenerator
+          tabsList={tabs}
+          activeTabs={activeTabs}
+          tabLabel={`/therapist/patient/view/${id}/?tab=`}
+        />
       </Box>
     </Box>
   );
