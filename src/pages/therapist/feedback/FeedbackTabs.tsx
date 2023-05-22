@@ -5,6 +5,7 @@ import { Box } from "@mui/material";
 import TherapyTabsGenerator from "../../../components/common/TabsGenerator/TherapyTabGenerator";
 import ClientFeedback from "./ClientFeedback";
 import ContentHeader from "../../../components/common/ContentHeader";
+import { useRouter } from "next/router";
 
 type propTypes = {
   setTherapy: any;
@@ -12,17 +13,20 @@ type propTypes = {
 
 export default function TherapistFeedbackTabs(props: propTypes) {
   const setTherapy = props.setTherapy;
-
+  const router = useRouter();
+  const {
+    query: { tab = "", id },
+  } = router;
   const tabs = [
     {
       label: "Therapist Feedback",
-      value: "feedback",
+      value: "therapist-feedback",
       component: <TherapyPatientFeedback setTherapy={setTherapy} />,
     },
 
     {
       label: "Client Feedback",
-      value: "resources",
+      value: "client-feedback",
       component: <ClientFeedback therapyId={setTherapy} />,
     },
   ];
@@ -31,7 +35,10 @@ export default function TherapistFeedbackTabs(props: propTypes) {
       <ContentHeader title="Feedback" />
 
       <Box data-testid="patientViewTherapyTab">
-        <TherapyTabsGenerator tabsList={tabs} activeTabs="" />
+        <TherapyTabsGenerator
+          tabsList={tabs}
+          tabLabel={`/therapist/patient/view/${id}/?tab=${tab}&subTab1=`}
+        />
       </Box>
     </Box>
   );

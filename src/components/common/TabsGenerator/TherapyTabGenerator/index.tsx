@@ -22,48 +22,28 @@ const TabPanel = (props) => {
 
 type propTypes = {
   tabsList: any;
-  activeTabs: any;
+  activeTabs?: any;
   editable?: boolean;
   onTabChange?: any;
   loadFromUrl?: boolean;
+  tabLabel?: string;
 };
 
 const TherapyTabsGenerator = (props: propTypes) => {
   const router = useRouter();
-  const { tabsList, activeTabs, editable, onTabChange, loadFromUrl } = props;
-  const [activeTab, setActiveTab] = useState(activeTabs);
+  const { tabsList, activeTabs = "", editable, tabLabel = "?tab=" } = props;
+  const [activeTab, setActiveTab] = useState<Array<string>>([]);
+  const { query: { tab = "", subTab1 = "" } = {} } = router || {};
 
-  const tabType = router?.query.tab as string;
-
-  const handleTabChange = (_, newValue) => {
-    if (loadFromUrl) router.push(`?tab=${newValue}`);
-    else setActiveTab(newValue);
+  const handleTabChange = async (_, newValue) => {
+    const { [newValue]: tabName = "" } = activeTabs || {};
+    router.push(`${tabLabel}${newValue}${tabName}`);
+    if (!activeTab.includes(newValue)) setActiveTab([newValue]);
   };
 
   useEffect(() => {
-    if (router?.query.tabName) {
-      setActiveTab(router.query.tabName);
-    }
-  }, []);
-
-  useEffect(() => {
-    /* istanbul ignore next */
-    onTabChange?.(activeTab);
-    const redirectUrl =
-      tabsList &&
-      tabsList?.find((list) => list.value === activeTab)?.redirectUrl;
-    /* istanbul ignore next */
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-      // router?.push(redirectUrl);
-    }
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (tabType) {
-      setActiveTab(tabType);
-    }
-  }, [activeTabs]);
+    setActiveTab([tab as string, subTab1 as string]);
+  }, [tab, subTab1]);
 
   return (
     <div style={{ overflowX: "hidden", minHeight: 500 }}>
@@ -90,7 +70,7 @@ const TherapyTabsGenerator = (props: propTypes) => {
           aria-label="dashboard"
         >
           {tabsList.map(({ label, value }) => {
-            const isActive = value.toLowerCase() === activeTab.toLowerCase();
+            const isActive = activeTab.includes(value);
             return (
               <Tab
                 style={{
@@ -118,7 +98,7 @@ const TherapyTabsGenerator = (props: propTypes) => {
 
       {tabsList.map(
         ({ value, component }) =>
-          activeTab === value && (
+          activeTab.includes(value) && (
             <TabPanel key={value} value={value} index={value}>
               {component}
             </TabPanel>
