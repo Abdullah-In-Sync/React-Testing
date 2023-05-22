@@ -19,6 +19,7 @@ import {
 } from "../../../../../../../components/common/CustomModal/CommonModal";
 import { GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST } from "../../../../../../../graphql/SafetyPlan/graphql";
 import SharePlanForm from "../../../../../../../components/therapist/patient/monitor/share/SharePlanForm";
+import ViewMyMonitor from "../../../../../../../components/therapist/patient/monitor/viewMyMonitor";
 
 const TherapyMyMonitorList: any = () => {
   const router = useRouter();
@@ -171,7 +172,9 @@ const TherapyMyMonitorList: any = () => {
                     key={`according-${v.name}`}
                     title={`${v.name}`}
                     marginBottom={"20px !important"}
-                    // detail={(toggleAccordion) => {}}
+                    detail={() => {
+                      return <ViewMyMonitor monitorId={v._id} />;
+                    }}
                     actionButtons={
                       <>
                         <IconButton
