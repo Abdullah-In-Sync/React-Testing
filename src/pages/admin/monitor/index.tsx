@@ -92,7 +92,6 @@ const MonitorListPage: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   const handleActionButtonClick = (value) => {
     const { _id, pressedIconButton } = value;
-    console.log("value", value);
     switch (pressedIconButton) {
       case "edit":
         return router.push(`/admin/monitor/edit/${_id}`);
