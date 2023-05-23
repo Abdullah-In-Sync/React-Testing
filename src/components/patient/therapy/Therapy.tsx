@@ -6,7 +6,7 @@ import Feedback from "../../../components/patient/therapyPages/feedback";
 import Goals from "../../../components/patient/therapyPages/goals";
 import Homework from "../../../components/patient/therapyPages/homework";
 import Measures from "../../../components/patient/therapyPages/measures";
-import Monitors from "../../../components/patient/therapyPages/monitoring";
+import Monitors from "../../../components/patient/therapyPages/monitors";
 import Relapse from "../../../components/patient/therapyPages/relapse";
 import Resources from "../../../components/patient/therapyPages/resource";
 import SafetyPlan from "../../../components/patient/therapyPages/safetyPlan";

@@ -80,7 +80,6 @@ const TherapyTabsGenerator = (props: propTypes) => {
                   margin: "3px 5px",
                   color: "white",
                   backgroundColor: isActive ? "#689c8b" : "#6EC9DB",
-
                   borderRadius: "5px",
                   height: 37,
                   fontSize: "14px",

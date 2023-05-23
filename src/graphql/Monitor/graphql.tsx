@@ -100,3 +100,19 @@ export const ADMIN_DELETE_MONITOR_QUESTION = gql`
     }
   }
 `;
+
+export const GET_PATIENT_MONITOR_LIST = gql`
+  query PatientMonitorList {
+    patientMonitorList {
+      _id
+      added_by
+      created_date
+      name
+      org_id
+      patient_id
+      therapist_id
+      status
+      updated_date
+    }
+  }
+`;
