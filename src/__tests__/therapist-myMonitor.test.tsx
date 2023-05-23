@@ -11,7 +11,10 @@ import {
   DELETE_THERAPIST_MY_MONITOR,
   SHARE_THERAPIST_MY_MONITOR,
 } from "../graphql/mutation/therapist";
-import { GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST } from "../graphql/SafetyPlan/graphql";
+import {
+  GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST,
+  GET_THERAPIST_MY_MONITOR_VIEW,
+} from "../graphql/SafetyPlan/graphql";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -35,6 +38,77 @@ mocksData.push({
           therapist_id: "686802e5123a482681a680a673ef7f53",
           updated_date: "2023-05-16T08:32:21.097Z",
           __typename: "TherapistMonitors",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_MY_MONITOR_VIEW,
+
+    variables: { monitor_id: "ce3b10f2-e867-4606-a9ab-634af57e280d" },
+  },
+  result: {
+    data: {
+      viewMonitorById: [
+        {
+          _id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
+          created_date: "2023-05-22T10:37:33.186Z",
+          monitor_question: [
+            {
+              _id: "0ca281a3-04b1-4240-aec3-21c5b2cf5ba7",
+              created_date: "2023-05-22T10:37:33.216Z",
+              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
+              question: "Emogi qustion",
+              question_option:
+                "[{code=1f97a, text=Very Sad}, {code=1f641, text=Sad}, {code=1f642, text=Fine}, {code=1f60a, text=Happy}, {code=1f604, text=Very Happy}]",
+              question_type: "emoji",
+              status: 1,
+              updated_date: "2023-05-22T10:37:33.216Z",
+              __typename: "TherapistMonitorsQues",
+            },
+            {
+              _id: "c95eb765-65cf-4d81-981c-cee7bab90fe5",
+              created_date: "2023-05-22T10:37:33.222Z",
+              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
+              question: "Yes no question",
+              question_option: "",
+              question_type: "yes_or_no",
+              status: 1,
+              updated_date: "2023-05-22T10:37:33.222Z",
+              __typename: "TherapistMonitorsQues",
+            },
+            {
+              _id: "2fb608fe-6d45-430c-a241-c8128cab2b15",
+              created_date: "2023-05-22T10:37:33.228Z",
+              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
+              question: "List question",
+              question_option: "apple,ballon,Cattail ,mincauionscnsvsv",
+              question_type: "list",
+              status: 1,
+              updated_date: "2023-05-22T10:37:33.228Z",
+              __typename: "TherapistMonitorsQues",
+            },
+            {
+              _id: "3b336bc2-fdc1-4c4a-9092-491caec1960a",
+              created_date: "2023-05-22T10:37:33.233Z",
+              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
+              question: "Hours question ",
+              question_option: "",
+              question_type: "hours",
+              status: 1,
+              updated_date: "2023-05-22T10:37:33.233Z",
+              __typename: "TherapistMonitorsQues",
+            },
+          ],
+          name: "Style test monitor name",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          status: 1,
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          updated_date: "2023-05-22T10:37:33.186Z",
+          __typename: "TherapistViewMonitors",
         },
       ],
     },
@@ -136,6 +210,25 @@ describe("Therapist patient safety plan", () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getByTestId("name")).toBeInTheDocument();
+    });
+  });
+
+  it("should render view accordian data", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd",
+      },
+    }));
+
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("toggleContent")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("toggleContent"));
+      expect(screen.getByText("Monitor question*")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByText("Emogi qustion")).toBeInTheDocument();
     });
   });
 
