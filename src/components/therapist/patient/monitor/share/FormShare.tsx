@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Tooltip } from "@mui/material";
 import { Form } from "formik";
 import { Autocomplete } from "@mui/lab";
 import * as React from "react";
@@ -26,73 +26,74 @@ const FormShareBox: React.FC<ViewProps> = ({
     return (
       <Stack className={styles.formWrapper}>
         <Form>
-          <div className="fieldsBoxWrapperFirst">
-            <div>
-              <Autocomplete
-                multiple
-                fullWidth={true}
-                data-testid="relapsePlanDropdown"
-                id="name"
-                value={
-                  therapistSafetyPlanList &&
-                  therapistSafetyPlanList.patientListForMonitor
-                    ? therapistSafetyPlanList.patientListForMonitor.filter(
-                        (option) => planId.includes(option._id)
-                      )
-                    : []
+          <div>
+            <Autocomplete
+              multiple
+              fullWidth={true}
+              data-testid="relapsePlanDropdown"
+              id="name"
+              value={
+                therapistSafetyPlanList &&
+                therapistSafetyPlanList.patientListForMonitor
+                  ? therapistSafetyPlanList.patientListForMonitor.filter(
+                      (option) => planId.includes(option._id)
+                    )
+                  : []
+              }
+              options={
+                (therapistSafetyPlanList &&
+                  therapistSafetyPlanList.patientListForMonitor) ||
+                []
+              }
+              getOptionLabel={(option) => option.patient_firstname}
+              onChange={(e, newValue) => {
+                if (newValue) {
+                  const selectedValues = newValue
+                    .filter((value) => value.moniter_detail == null) // Filter out options with null moniter_detail
+                    .map((value) => value._id);
+                  setPlanId(selectedValues);
+                  onChangePlanId(selectedValues.join(","));
+                } else {
+                  setPlanId([]);
+                  onChangePlanId("");
                 }
-                options={
-                  (therapistSafetyPlanList &&
-                    therapistSafetyPlanList.patientListForMonitor) ||
-                  []
-                }
-                getOptionLabel={(option) => option.patient_firstname}
-                onChange={(e, newValue) => {
-                  if (newValue) {
-                    const selectedValues = newValue.map((value) => value._id);
-                    setPlanId(selectedValues);
-                    onChangePlanId(selectedValues.join(","));
-                  } else {
-                    setPlanId([]);
-                    onChangePlanId("");
-                  }
-                }}
-                renderOption={(props, option) => (
-                  <>
-                    <Box
-                      style={{ display: "flex", flex: 1, width: "100%" }}
-                      {...props}
-                    >
-                      <Box style={{ flex: 1 }}>{option.patient_firstname}</Box>
-                      <Box>
-                        {option.moniter_detail !== null && (
-                          <Box
-                            style={{
-                              color: "#6EC9DB",
-                              fontSize: "20px",
-                            }}
-                          >
+              }}
+              renderOption={(props, option) => (
+                <>
+                  <Box
+                    style={{ display: "flex", flex: 1, width: "100%" }}
+                    {...props}
+                  >
+                    <Box style={{ flex: 1 }}>{option.patient_firstname}</Box>
+
+                    <Box>
+                      {option.moniter_detail !== null && (
+                        <Tooltip
+                          title={"Monitor is already shared with patient"}
+                          arrow
+                        >
+                          <Box style={{ color: "#6EC9DB", fontSize: "20px" }}>
                             ●
                           </Box>
-                        )}
-                      </Box>
+                        </Tooltip>
+                      )}
                     </Box>
-                    <Box>
-                      <hr style={{ borderTop: "1px ", width: "100%" }} />
-                    </Box>
-                  </>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select Patient"
-                    variant="outlined"
-                    size="small"
-                    className="form-control-bg"
-                  />
-                )}
-              />
-            </div>
+                  </Box>
+                  <Box>
+                    <hr style={{ borderTop: "1px", width: "100%" }} />
+                  </Box>
+                </>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Patient"
+                  variant="outlined"
+                  size="small"
+                  className="form-control-bg"
+                />
+              )}
+            />
           </div>
 
           <div className="bottomActionButtonsWrapper">

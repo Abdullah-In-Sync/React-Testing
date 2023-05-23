@@ -252,6 +252,30 @@ export const GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST = gql`
   }
 `;
 
+export const GET_THERAPIST_MY_MONITOR_VIEW = gql`
+  query viewMonitorById($monitor_id: String!) {
+    viewMonitorById(monitor_id: $monitor_id) {
+      _id
+      created_date
+      monitor_question {
+        _id
+        created_date
+        monitor_id
+        question
+        question_option
+        question_type
+        status
+        updated_date
+      }
+      name
+      org_id
+      status
+      therapist_id
+      updated_date
+    }
+  }
+`;
+
 export const GET_THERAPIST_MEASURES_PLAN_LIST = gql`
   query MyQuery {
     therapistGetAdminMeasures {
