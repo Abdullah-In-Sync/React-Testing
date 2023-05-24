@@ -27,7 +27,7 @@ const TherapistCreateMonitor: NextPage = () => {
       return {
         question,
         question_type: questionType,
-        question_option: questionOption,
+        question_option: JSON.stringify(questionOption),
       };
     });
 

@@ -36,35 +36,6 @@ export default function ViewMyMonitor(props: propTypes) {
 
   const myMonitorQuestion = myMonitorView?.viewMonitorById[0]?.monitor_question;
 
-  const apiResponse = String(
-    myMonitorView?.viewMonitorById[0]?.monitor_question[0].question_option
-  );
-
-  const trimmedResponse = apiResponse?.slice(1, -1);
-
-  const responseArray = trimmedResponse?.split("}, {");
-
-  const convertedArray = [];
-
-  for (const responseObject of responseArray) {
-    const trimmedObject = responseObject.replace("{", "").replace("}", "");
-
-    const keyValuePairArray = trimmedObject.split(", ");
-
-    const convertedObject = {};
-
-    for (const keyValuePair of keyValuePairArray) {
-      const [key, value] = keyValuePair.split("=");
-      convertedObject[key] = value;
-    }
-
-    convertedArray.push(convertedObject);
-  }
-
-  const modifyedApiEmojiValue = {
-    questionOption: convertedArray,
-  };
-
   return (
     <>
       <Stack>
@@ -76,8 +47,11 @@ export default function ViewMyMonitor(props: propTypes) {
               <Box className={styles.outerBorder}>{data.question}</Box>
 
               {data.question_type === "emoji" && (
-                // <EmojiListBox question={data.question_option} />
-                <EmojiListBox question={modifyedApiEmojiValue} />
+                <EmojiListBox
+                  question={{
+                    questionOption: JSON.parse(data.question_option),
+                  }}
+                />
               )}
 
               <Box style={{ paddingTop: "10px" }}>
