@@ -74,13 +74,16 @@ export default function ViewMyMonitor(props: propTypes) {
                 <>
                   <Box className={styles.questionTypeBoxStyle}>List</Box>
                   <Box className={styles.listOptionOuterBorder}>
-                    <div style={{ display: "flex", flexDirection: "row" }}>
-                      {data.question_option.split(",").map((option, index) => (
-                        <div key={index} className={styles.optionWrapper}>
-                          {option}
-                        </div>
-                      ))}
-                    </div>
+                    <Box style={{ display: "flex", flexDirection: "row" }}>
+                      {data.question_option
+                        .replace(/"/g, "")
+                        .split(",")
+                        .map((option, index) => (
+                          <Box key={index} className={styles.optionWrapper}>
+                            {option}
+                          </Box>
+                        ))}
+                    </Box>
                   </Box>
                   <hr className={styles.line} />
                 </>
