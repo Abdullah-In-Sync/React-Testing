@@ -56,14 +56,19 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   if (userType == "patient") {
     responseDisable = false;
   }
+  const editStyle: any = {
+    border: "1px solid #eee",
+    padding: "5px",
+    background: "white",
+  };
+  if (userType == "patient" || mode == "patientView") {
+    editStyle.border = "1px solid #3ABAD3";
+    editStyle.borderRadius = "5px";
+  }
 
   return (
     <Box
-      style={{
-        border: "1px solid #eee",
-        padding: "5px",
-        background: "white",
-      }}
+      style={editStyle}
       data-testid="arrow-template-test-1"
       className={
         userType == "patient" || mode == "patientView" ? "nodrag" : null
