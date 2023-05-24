@@ -54,60 +54,38 @@ mocksData.push({
     data: {
       viewMonitorById: [
         {
-          _id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
-          created_date: "2023-05-22T10:37:33.186Z",
+          _id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
+          created_date: "2023-05-24T08:30:38.333Z",
           monitor_question: [
             {
-              _id: "0ca281a3-04b1-4240-aec3-21c5b2cf5ba7",
-              created_date: "2023-05-22T10:37:33.216Z",
-              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
-              question: "Emogi qustion",
+              _id: "4c62d6d3-aaa2-4cd2-abd4-1e0b309ac163",
+              created_date: "2023-05-24T08:30:38.341Z",
+              monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
+              question: "kbk",
               question_option:
-                "[{code=1f97a, text=Very Sad}, {code=1f641, text=Sad}, {code=1f642, text=Fine}, {code=1f60a, text=Happy}, {code=1f604, text=Very Happy}]",
+                '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
               question_type: "emoji",
               status: 1,
-              updated_date: "2023-05-22T10:37:33.216Z",
+              updated_date: "2023-05-24T08:30:38.341Z",
               __typename: "TherapistMonitorsQues",
             },
             {
-              _id: "c95eb765-65cf-4d81-981c-cee7bab90fe5",
-              created_date: "2023-05-22T10:37:33.222Z",
-              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
-              question: "Yes no question",
-              question_option: "",
-              question_type: "yes_or_no",
-              status: 1,
-              updated_date: "2023-05-22T10:37:33.222Z",
-              __typename: "TherapistMonitorsQues",
-            },
-            {
-              _id: "2fb608fe-6d45-430c-a241-c8128cab2b15",
-              created_date: "2023-05-22T10:37:33.228Z",
-              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
-              question: "List question",
-              question_option: "apple,ballon,Cattail ,mincauionscnsvsv",
+              _id: "4c951016-4d73-4be8-817b-4ddd7e30d2c5",
+              created_date: "2023-05-24T08:30:38.345Z",
+              monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
+              question: "hvhk",
+              question_option: '"a,b,c,d"',
               question_type: "list",
               status: 1,
-              updated_date: "2023-05-22T10:37:33.228Z",
-              __typename: "TherapistMonitorsQues",
-            },
-            {
-              _id: "3b336bc2-fdc1-4c4a-9092-491caec1960a",
-              created_date: "2023-05-22T10:37:33.233Z",
-              monitor_id: "1f2d1ab7-980a-465c-8f87-b3b6d3372ca5",
-              question: "Hours question ",
-              question_option: "",
-              question_type: "hours",
-              status: 1,
-              updated_date: "2023-05-22T10:37:33.233Z",
+              updated_date: "2023-05-24T08:30:38.345Z",
               __typename: "TherapistMonitorsQues",
             },
           ],
-          name: "Style test monitor name",
+          name: "vjj",
           org_id: "517fa21a82c0464a92aaae90ae0d5c59",
           status: 1,
           therapist_id: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2023-05-22T10:37:33.186Z",
+          updated_date: "2023-05-24T08:30:38.333Z",
           __typename: "TherapistViewMonitors",
         },
       ],
@@ -228,7 +206,7 @@ describe("Therapist patient safety plan", () => {
     });
 
     await waitFor(async () => {
-      expect(screen.getByText("Emogi qustion")).toBeInTheDocument();
+      expect(screen.getByText("kbk")).toBeInTheDocument();
     });
   });
 
