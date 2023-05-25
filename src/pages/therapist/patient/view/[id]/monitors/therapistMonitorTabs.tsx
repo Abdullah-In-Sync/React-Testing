@@ -4,6 +4,7 @@ import TherapyTabsGenerator from "../../../../../../components/common/TabsGenera
 import ContentHeader from "../../../../../../components/common/ContentHeader";
 import TherapyMyMonitorList from "./myMonitor";
 import { useRouter } from "next/router";
+import TherapyPatientMonitorList from "./patientMonitor";
 
 export default function TherapistMonotorTabs() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function TherapistMonotorTabs() {
     {
       label: "Patient Monitor",
       value: "patient-monitor",
-      // component: <TherapyMyMonitorList />,
+      component: <TherapyPatientMonitorList />,
     },
 
     {
