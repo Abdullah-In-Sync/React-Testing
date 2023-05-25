@@ -25,7 +25,7 @@ mocksData.push({
     variables: {
       name: "name",
       questions:
-        '[{"question":"Description","question_type":"emoji","question_option":[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]},{"question":"test","question_type":"yes_or_no","question_option":""}]',
+        '[{"question":"Description","question_type":"emoji","question_option":"[{\\"code\\":\\"1f97a\\",\\"text\\":\\"Very Sad\\"},{\\"code\\":\\"1f641\\",\\"text\\":\\"Sad\\"},{\\"code\\":\\"1f642\\",\\"text\\":\\"Fine\\"},{\\"code\\":\\"1f60a\\",\\"text\\":\\"Happy\\"},{\\"code\\":\\"1f604\\",\\"text\\":\\"Very Happy\\"}]"},{"question":"test","question_type":"yes_or_no","question_option":"\\"\\""}]',
     },
   },
   result: {
@@ -107,7 +107,7 @@ describe("Admin create monitor", () => {
     });
     await waitFor(async () => {
       expect(
-        screen.getByText("Monitor created Successfully")
+        screen.getByText("Monitor created successfully")
       ).toBeInTheDocument();
     });
   });
