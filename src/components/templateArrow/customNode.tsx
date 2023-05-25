@@ -65,6 +65,8 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         border: "1px solid #eee",
         padding: "5px",
         background: "white",
+        width: "100%",
+        height: "100%",
       }}
       data-testid="arrow-template-test-1"
       className={
@@ -85,7 +87,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           <DeleteForeverIcon
             style={{
               position: "absolute",
-              left: "116px",
+              right: "-9px",
               top: "-16px",
               padding: "5px",
               cursor: "pointer",
@@ -143,7 +145,13 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         />
       </Box>
 
-      <Box display={"flex"} flexDirection={"column"} gap={"5px"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        gap={"5px"}
+        style={{ height: "100%", width: "100%" }}
+        justifyContent={"space-evenly"}
+      >
         <input
           id="text"
           name="title"
