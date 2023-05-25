@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import Loader from "../../../../../../../components/common/Loader";
 import { Box, Button, Typography } from "@mui/material";
-import { useStyles } from "./style";
 import { GET_THERAPIST_PATIENT_MONITOR_LIST } from "../../../../../../../graphql/SafetyPlan/graphql";
 
 const TherapyPatientMonitorList: any = () => {
-  const classes = useStyles();
   const patientId = sessionStorage.getItem("patient_id");
   const [loader, setLoader] = useState<boolean>(true);
 
@@ -27,9 +25,19 @@ const TherapyPatientMonitorList: any = () => {
   return (
     <>
       <Loader visible={loader} />
-      <Box className={classes.addMonitorButtonBox}>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "10px",
+        }}
+      >
         <Button
-          className={classes.addMonitorButtonStyle}
+          style={{
+            backgroundColor: "#6EC9DB",
+            color: "white",
+            textTransform: "none",
+          }}
           data-testid="addResourceSubmitButton"
           variant="contained"
           //   onClick={onPressCreateMonitorButton}
@@ -38,24 +46,54 @@ const TherapyPatientMonitorList: any = () => {
         </Button>
       </Box>
       {monitorListData?.therapistMonitorList?.map((data) => (
-        <Box className={classes.customBox}>
+        <Box
+          style={{
+            width: "100%",
+            height: "65px",
+            background: "#7EBCA7",
+            border: "1px solid #7EBCA7",
+            borderRadius: "8px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}
+        >
           <Typography
             data-testid="patientMonitorName"
-            className={classes.typography}
+            style={{
+              textAlign: "center",
+              padding: "20px",
+              color: "White",
+              fontWeight: 700,
+            }}
           >
             {data.name}
           </Typography>
           <Box style={{ marginLeft: "auto", padding: "20px" }}>
             <Button
               data-testid="viewResponseButton"
-              className={classes.viewResponseButton}
+              style={{
+                backgroundColor: "white",
+                color: "#7EBCA7",
+                fontWeight: 700,
+                paddingLeft: "20px",
+                paddingRight: "20px",
+                marginRight: "10px",
+              }}
               variant="outlined"
             >
               View Response
             </Button>
             <Button
               data-testid="completeButton"
-              className={classes.completeButton}
+              style={{
+                backgroundColor: "white",
+                color: "#7EBCA7",
+                fontWeight: 700,
+                paddingLeft: "30px",
+                paddingRight: "30px",
+              }}
               variant="outlined"
             >
               Complete
