@@ -1,6 +1,7 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
 import { render, screen } from "@testing-library/react";
+import { SnackbarProvider } from "notistack";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import PatientMonitorsList from "../../therapyPages/monitors";
 
@@ -24,15 +25,7 @@ mocksData.push({
       patientMonitorList: [
         {
           _id: "a90330fd-5655-4904-bb7e-60a3db1ea3d5",
-          added_by: "therapist",
-          created_date: "2023-05-23T05:51:31.692Z",
           name: "Final testing",
-          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          therapist_id: null,
-          status: 1,
-          updated_date: "2023-05-23T05:51:31.692Z",
-          __typename: "PatientMonitors",
         },
       ],
     },
@@ -43,7 +36,9 @@ const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <ThemeProvider theme={theme()}>
-        <PatientMonitorsList />
+        <SnackbarProvider>
+          <PatientMonitorsList />
+        </SnackbarProvider>
       </ThemeProvider>
     </MockedProvider>
   );

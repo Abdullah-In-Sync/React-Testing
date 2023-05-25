@@ -23,19 +23,24 @@ const MonitorsList: React.FC<ViewProps> = ({
     return monitors.map((item, index) => {
       const { name } = item;
       return (
-        <Stack key={`monitoring_list_item_${index}`}>
+        <Stack key={`monitoring_list_item_${index}`} className="monitorWrapper">
           <Box className={"monitor"}>
             <Box className="cl1">
               <Typography>{name}</Typography>
             </Box>
             <Box className="cl2">
               <CommonButton
+                data-testid={`viewResponseButton_${index}`}
                 variant="contained"
                 onClick={viewResponseButtonClick}
               >
                 View Response
               </CommonButton>
-              <CommonButton variant="contained" onClick={completeButtonClick}>
+              <CommonButton
+                data-testid={`completeButton_${index}`}
+                variant="contained"
+                onClick={() => completeButtonClick(item)}
+              >
                 Complete
               </CommonButton>
             </Box>

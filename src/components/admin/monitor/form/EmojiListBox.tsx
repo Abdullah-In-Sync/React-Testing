@@ -9,16 +9,28 @@ import { useStyles } from "./createMonitorStyles";
 type ViewProps = {
   question?: any;
   upperModalRef?: any;
+  onClickEmoji?: any;
 };
 
-const EmojiListBox: React.FC<ViewProps> = ({ question, upperModalRef }) => {
+const EmojiListBox: React.FC<ViewProps> = ({
+  question,
+  upperModalRef,
+  onClickEmoji,
+}) => {
   const styles = useStyles();
   const emojiBox = () => {
     const { questionOption = [] } = question;
     return (
       Array.isArray(questionOption) &&
       questionOption.map((item, i) => (
-        <Stack key={`emojiOption_${i}`} className="emojisBox">
+        <Stack
+          key={`emojiOption_${i}`}
+          data-testid={`emojiOption_${i}`}
+          className={`emojisBox emojiWrapper_${i} ${
+            question.answer === item.text ? "active" : ""
+          }`}
+          onClick={() => onClickEmoji && onClickEmoji(item)}
+        >
           {upperModalRef && (
             <Box className="editEmojiButtonWrapper">
               <IconButton
@@ -45,9 +57,11 @@ const EmojiListBox: React.FC<ViewProps> = ({ question, upperModalRef }) => {
   return (
     <>
       <Box className={styles.emojisWrapperBox}>
-        <label>
-          <MoodIcon /> Select Emoji Scale*
-        </label>
+        {!onClickEmoji && (
+          <label>
+            <MoodIcon /> Select Emoji Scale*
+          </label>
+        )}
         <Box className="emojisWrapper">{emojiBox()}</Box>
       </Box>
     </>
