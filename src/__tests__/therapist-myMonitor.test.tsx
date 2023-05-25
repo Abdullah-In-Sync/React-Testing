@@ -74,7 +74,7 @@ mocksData.push({
               created_date: "2023-05-24T08:30:38.345Z",
               monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
               question: "hvhk",
-              question_option: '"a,b,c,d"',
+              question_option: "a,b,c,d",
               question_type: "list",
               status: 1,
               updated_date: "2023-05-24T08:30:38.345Z",
