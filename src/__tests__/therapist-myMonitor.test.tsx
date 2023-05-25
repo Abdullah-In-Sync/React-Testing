@@ -58,22 +58,10 @@ mocksData.push({
           created_date: "2023-05-24T08:30:38.333Z",
           monitor_question: [
             {
-              _id: "4c62d6d3-aaa2-4cd2-abd4-1e0b309ac163",
-              created_date: "2023-05-24T08:30:38.341Z",
-              monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
-              question: "kbk",
-              question_option:
-                '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
-              question_type: "emoji",
-              status: 1,
-              updated_date: "2023-05-24T08:30:38.341Z",
-              __typename: "TherapistMonitorsQues",
-            },
-            {
               _id: "4c951016-4d73-4be8-817b-4ddd7e30d2c5",
               created_date: "2023-05-24T08:30:38.345Z",
               monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
-              question: "hvhk",
+              question: "Question type 1",
               question_option: "a,b,c,d",
               question_type: "list",
               status: 1,
@@ -206,7 +194,7 @@ describe("Therapist patient safety plan", () => {
     });
 
     await waitFor(async () => {
-      expect(screen.getByText("kbk")).toBeInTheDocument();
+      expect(screen.getByText("Question type 1")).toBeInTheDocument();
     });
   });
 
