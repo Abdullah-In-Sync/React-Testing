@@ -116,3 +116,46 @@ export const GET_PATIENT_MONITOR_LIST = gql`
     }
   }
 `;
+
+export const PATIENT_VIEW_MONITOR = gql`
+  query PatientViewMonitor($monitorId: ID!) {
+    patientViewMonitor(monitor_id: $monitorId) {
+      updated_date
+      _id
+      added_by
+      created_date
+      name
+      org_id
+      patient_id
+      share_status
+      status
+      therapist_id
+      questions {
+        updated_date
+        status
+        question_type
+        question_option
+        question
+        monitor_id
+        created_date
+        answers_list {
+          _id
+          answer
+          created_date
+          monitor_id
+          question_id
+        }
+        answer
+        _id
+      }
+    }
+  }
+`;
+
+export const PATIENT_SUBMIT_MONITOR = gql`
+  mutation PatientSubmitMonitor($monitorId: ID!, $questions: String!) {
+    patientSubmitMonitor(monitor_id: $monitorId, questions: $questions) {
+      _id
+    }
+  }
+`;

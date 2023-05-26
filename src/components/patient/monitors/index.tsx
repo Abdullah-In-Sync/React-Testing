@@ -3,7 +3,6 @@ import * as React from "react";
 import { useStyles } from "./monitorsStyles";
 
 import { PatientMonitorList } from "../../../graphql/Monitor/types";
-import ContentHeader from "../../common/ContentHeader";
 import MonitorsList from "../../common/MonitorListItem";
 interface ViewProps {
   monitoringList: PatientMonitorList[];
@@ -11,13 +10,20 @@ interface ViewProps {
   completeButtonClick?: (V) => void;
 }
 
-const MonitorsComponent: React.FC<ViewProps> = ({ monitoringList }) => {
+const MonitorsComponent: React.FC<ViewProps> = ({
+  monitoringList,
+  viewResponseButtonClick,
+  completeButtonClick,
+}) => {
   const styles = useStyles();
   return (
     <Stack className={styles.monitorsListMain}>
-      <ContentHeader title="Monitors" />
       <Stack>
-        <MonitorsList monitors={monitoringList} />
+        <MonitorsList
+          monitors={monitoringList}
+          viewResponseButtonClick={viewResponseButtonClick}
+          completeButtonClick={completeButtonClick}
+        />
       </Stack>
     </Stack>
   );
