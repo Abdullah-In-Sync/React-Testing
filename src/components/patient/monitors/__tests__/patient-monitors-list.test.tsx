@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import PatientMonitorsList from "../../therapyPages/monitors";
+import { useRouter } from "next/router";
 
 import { GET_PATIENT_MONITOR_LIST } from "../../../../graphql/Monitor/graphql";
 import theme from "../../../../styles/theme/theme";
@@ -60,6 +61,11 @@ beforeEach(() => {
 });
 
 describe("Paitent view response measures", () => {
+  (useRouter as jest.Mock).mockReturnValue({
+    query: {
+      tab: "monitors",
+    },
+  });
   it("should render paitent format 1 response", async () => {
     await sut();
     expect(await screen.findAllByText(/Final testing/i)).toHaveLength(1);
