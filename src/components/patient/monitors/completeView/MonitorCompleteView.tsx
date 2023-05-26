@@ -28,7 +28,9 @@ const MonitorCompleteView: React.FC<any> = ({
   const styles = useStyles();
 
   React.useEffect(() => {
-    setSelectedListTypeArray([]);
+    if (selectedListTypeArray.length > 0) {
+      setSelectedListTypeArray([]);
+    }
   }, [questionsData]);
 
   const actionButtons = (isSubmitting) => {
