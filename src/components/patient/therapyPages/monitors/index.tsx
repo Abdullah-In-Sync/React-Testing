@@ -83,15 +83,16 @@ const PatientMonitorsListPage: NextPage = () => {
             enqueueSnackbar("Response successfully submitted.", {
               variant: "success",
             });
-            // router.back();
             router.push(`therapy/?tab=monitors`);
             doneCallback();
           }
+          setLoader(false);
         },
       });
     } catch (e) {
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
+      setLoader(false);
     }
   };
 
@@ -121,15 +122,7 @@ const PatientMonitorsListPage: NextPage = () => {
   };
 
   const backPress = () => {
-    const currentMonitorIndex = patientMonitorList.findIndex(
-      (item) => item._id === monitorId
-    );
-    if (currentMonitorIndex > 0) {
-      const prevMonitor = patientMonitorList[currentMonitorIndex - 1];
-      router.push(
-        `therapy/?tab=monitors&view=complete&monitorId=${prevMonitor._id}`
-      );
-    }
+    router.push(`therapy/?tab=monitors`);
   };
 
   const currentView = () => {
@@ -159,9 +152,9 @@ const PatientMonitorsListPage: NextPage = () => {
 
   return (
     <>
-      <Loader visible={loader} />
       <ContentHeader title="Monitor" color={"primary.main"} />
       {!monitorsListLoading && currentView()}
+      <Loader visible={loader} />
     </>
   );
 };

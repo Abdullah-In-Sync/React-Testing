@@ -341,8 +341,6 @@ describe("Paitent monitor response submit", () => {
     await sut();
     const backButton = await screen.findByTestId("backMonitorBtn");
     fireEvent.click(backButton);
-    expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=complete&monitorId=list-item-1"
-    );
+    expect(pushMock).toHaveBeenCalledWith("therapy/?tab=monitors");
   });
 });
