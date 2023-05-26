@@ -30,10 +30,12 @@ const PatientMonitorsListPage: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    setLoader(true);
-    getMonitorData({
-      variables: { monitorId },
-    });
+    if (monitorId) {
+      setLoader(true);
+      getMonitorData({
+        variables: { monitorId },
+      });
+    }
   }, [monitorId]);
 
   const [
