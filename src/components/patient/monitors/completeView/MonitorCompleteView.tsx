@@ -27,6 +27,10 @@ const MonitorCompleteView: React.FC<any> = ({
   const [selectedListTypeArray, setSelectedListTypeArray] = useState([]);
   const styles = useStyles();
 
+  React.useEffect(() => {
+    setSelectedListTypeArray([]);
+  }, [questionsData]);
+
   const actionButtons = (isSubmitting) => {
     return (
       <Stack className="bottomButtonsWrapper">
@@ -242,7 +246,7 @@ const MonitorCompleteView: React.FC<any> = ({
   };
 
   return (
-    <Stack className={`${styles.completeWrapper} disable-text-selection`}>
+    <Stack className={`${styles.completeWrapper}`}>
       <CardWithHeader label={name}>
         <Stack className={styles.completeListWrapper}>
           {questionsData.length > 0

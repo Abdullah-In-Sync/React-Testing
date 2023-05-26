@@ -125,11 +125,12 @@ export const useStyles = makeStyles(() => {
       },
     },
     completeWrapper: {
-      padding: "16px 0px",
+      // padding: "16px 0px",
       "& > div:first-child": {
         borderColor: `${theme.palette.secondary.main} !important`,
         border: "1px solid",
         borderRadius: 10,
+        minHeight: "70vh",
         "& header": {
           borderRadius: 7,
           boxShadow: "unset",
