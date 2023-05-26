@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { Box } from "@mui/material";
 import { useState } from "react";
-import { Handle, Position, useReactFlow, Node } from "reactflow";
+import { Handle, Position, useReactFlow, Node, NodeResizer } from "reactflow";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface Data {
@@ -15,6 +15,7 @@ interface TextUpdaterNodeProps {
   isConnectable: boolean;
   userType?: any;
   mode?: string;
+  selected: boolean;
 }
 
 const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
@@ -23,6 +24,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   isConnectable,
   userType,
   mode,
+  selected,
 }) => {
   const handleId = id.split("_")[1];
   const [label, setLabel] = useState<string>(data?.label);
@@ -63,6 +65,8 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         border: "1px solid #eee",
         padding: "5px",
         background: "white",
+        width: "100%",
+        height: "100%",
       }}
       data-testid="arrow-template-test-1"
       className={
@@ -70,12 +74,21 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
       }
     >
       {userType !== "patient" && mode !== "patientView" && (
+        <NodeResizer
+          color="#6EC9DB"
+          isVisible={selected}
+          minWidth={128}
+          minHeight={30}
+          keepAspectRatio={true}
+        />
+      )}
+      {userType !== "patient" && mode !== "patientView" && (
         <Box onClick={() => OnDeleteNode(id)}>
           <DeleteForeverIcon
             style={{
               position: "absolute",
-              left: "112px",
-              top: "-13px",
+              right: "-9px",
+              top: "-16px",
               padding: "5px",
               cursor: "pointer",
               zIndex: 1000,
@@ -132,7 +145,13 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         />
       </Box>
 
-      <Box display={"flex"} flexDirection={"column"} gap={"5px"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        gap={"5px"}
+        style={{ height: "100%", width: "100%" }}
+        justifyContent={"space-evenly"}
+      >
         <input
           id="text"
           name="title"
