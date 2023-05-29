@@ -94,6 +94,61 @@ export const GET_PROFILE_DROPDOWN_DATA_BY_MASTER_DATA_API = gql`
     }
   }
 `;
+export const GET_PROFILE_DATA_FOR_THERAPIST = gql`
+  query getPatientDetailById($patient_id: String!) {
+    getPatientDetailById(patient_id: $patient_id) {
+      _id
+      addressline1
+      addressline2
+      birthdate
+      city
+      created_date
+      email
+      family_name
+      home_no
+      hos_id
+      kin_addressline1
+      kin_addressline2
+      kin_city
+      kin_contact_no
+      kin_email_address
+      kin_name
+      kin_postal
+      kin_relationship
+      nhsno
+      org_id
+      patient_availability
+      patient_consent
+      patient_contract
+      patient_education
+      patient_employment
+      patient_ethnic_group
+      patient_firstname
+      patient_gender
+      patient_gpaddress
+      patient_gpaddressline2
+      patient_gpcity
+      patient_gpcontactno
+      patient_gpemailaddress
+      patient_gpname
+      patient_gppostalcode
+      patient_gpsurgeryname
+      patient_illness_ability
+      patient_lang
+      patient_lastname
+      patient_marrital
+      patient_no
+      patient_physical_health
+      patient_sexuality
+      patient_status
+      phone_number
+      postal_code
+      religion
+      therapist_id
+      user_id
+    }
+  }
+`;
 
 export const GET_PATIENT_HOMEWORK_LIST = gql`
   query GetHomeworksByPatientId($therapyId: ID!) {
