@@ -27,7 +27,7 @@ const TherapistCreateMonitor: NextPage = () => {
       return {
         question,
         question_type: questionType,
-        question_option: questionOption,
+        question_option: JSON.stringify(questionOption),
       };
     });
 
@@ -39,12 +39,12 @@ const TherapistCreateMonitor: NextPage = () => {
         },
         onCompleted: (data) => {
           if (data.therapistCreateMonitor.status === true) {
-            enqueueSnackbar("Monitor created Successfully", {
+            enqueueSnackbar("Monitor created successfully", {
               variant: "success",
             });
             router.back();
           } else {
-            enqueueSnackbar("Monitor already created", {
+            enqueueSnackbar(`This monitor's name already exists`, {
               variant: "error",
             });
           }

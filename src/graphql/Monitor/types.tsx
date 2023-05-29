@@ -47,3 +47,18 @@ export interface MonitorDataEntity {
   updated_date: string;
   __typename: string;
 }
+
+export interface PatientMonitorListData {
+  patientMonitorList?: PatientMonitorList[] | null;
+}
+export interface PatientMonitorList {
+  _id: string;
+  added_by: string;
+  created_date: string;
+  name: string;
+  org_id: string;
+  patient_id: string;
+  therapist_id?: null;
+  status: number;
+  updated_date: string;
+}

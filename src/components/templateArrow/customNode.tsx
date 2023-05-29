@@ -1,8 +1,11 @@
 /* istanbul ignore file */
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { Handle, Position, useReactFlow, Node } from "reactflow";
+import { Handle, Position, useReactFlow, Node, NodeResizer } from "reactflow";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useStyles } from "./arrowTemplateStyles";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
+import { Tooltip } from "@material-ui/core";
 
 interface Data {
   label: string;
@@ -15,6 +18,7 @@ interface TextUpdaterNodeProps {
   isConnectable: boolean;
   userType?: any;
   mode?: string;
+  selected: boolean;
 }
 
 const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
@@ -23,7 +27,9 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   isConnectable,
   userType,
   mode,
+  selected,
 }) => {
+  const styles = useStyles();
   const handleId = id.split("_")[1];
   const [label, setLabel] = useState<string>(data?.label);
   const [description, setDescription] = useState<string>(data?.description);
@@ -32,15 +38,16 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   );
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const onChange = (event: any) => {
     const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
-    if (event.target.name == "title") {
+    if (event.target.id == "title") {
       nodes[getNodeIndex].data.label = event.target.value;
       setLabel(event.target.value);
-    } else if (event.target.name == "description") {
+    } else if (event.target.id == "description") {
       nodes[getNodeIndex].data.description = event.target.value;
       setDescription(event.target.value);
-    } else if (event.target.name == "patientResponse") {
+    } else if (event.target.id == "patientResponse") {
       nodes[getNodeIndex].data.patientResponse = event.target.value;
       setPatientResponse(event.target.value);
     }
@@ -56,36 +63,26 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   if (userType == "patient") {
     responseDisable = false;
   }
-  const editStyle: any = {
-    border: "1px solid #eee",
-    padding: "5px",
-    background: "white",
-  };
-  if (userType == "patient" || mode == "patientView") {
-    editStyle.border = "1px solid #3ABAD3";
-    editStyle.borderRadius = "5px";
-  }
 
   return (
     <Box
-      style={editStyle}
       data-testid="arrow-template-test-1"
-      className={
-        userType == "patient" || mode == "patientView" ? "nodrag" : null
-      }
+      className={`${styles.nodeStyle} ${
+        userType == "patient" || mode == "patientView" ? " nodrag" : null
+      }`}
     >
       {userType !== "patient" && mode !== "patientView" && (
+        <NodeResizer
+          color="#6EC9DB"
+          isVisible={selected}
+          minWidth={200}
+          minHeight={30}
+          keepAspectRatio={true}
+        />
+      )}
+      {userType !== "patient" && mode !== "patientView" && (
         <Box onClick={() => OnDeleteNode(id)}>
-          <DeleteForeverIcon
-            style={{
-              position: "absolute",
-              left: "112px",
-              top: "-13px",
-              padding: "5px",
-              cursor: "pointer",
-              zIndex: 1000,
-            }}
-          />
+          <DeleteForeverIcon className={styles.deleteIconStyle} />
         </Box>
       )}
       <Box>
@@ -136,41 +133,105 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           style={{ opacity: opacity }}
         />
       </Box>
+      {userType == "patient" || mode == "patientView" ? (
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap={"8px"}
+          style={{ height: "100%", width: "100%" }}
+          justifyContent={"space-evenly"}
+        >
+          <Tooltip title={label} placement="top">
+            <Typography
+              id="text"
+              placeholder="Enter Title"
+              className={styles.textAreaTitleStyle}
+              noWrap={true}
+            >
+              {label}
+            </Typography>
+          </Tooltip>
+          {!description ? (
+            <></>
+          ) : (
+            <Tooltip title={description} placement="top">
+              <Typography
+                id="description"
+                className={styles.textAreaDescriptionStyle}
+                noWrap={true}
+              >
+                {description}
+              </Typography>
+            </Tooltip>
+          )}
 
-      <Box display={"flex"} flexDirection={"column"} gap={"5px"}>
-        <input
-          id="text"
-          name="title"
-          value={label}
-          onChange={(e) => onChange(e)}
-          placeholder="Enter title here"
-          style={{ fontSize: "8px" }}
-          disabled={
-            userType == "patient" || mode == "patientView" ? true : false
-          }
-        />
-        <input
-          id="text"
-          name="description"
-          value={description}
-          onChange={(e) => onChange(e)}
-          placeholder="Enter description here"
-          style={{ fontSize: "8px" }}
-          disabled={
-            userType == "patient" || mode == "patientView" ? true : false
-          }
-        />
-        <input
-          id="text"
-          data-testid={`arrow-template-response-input-${id}`}
-          name="patientResponse"
-          value={patientResponse}
-          onChange={(e) => onChange(e)}
-          placeholder="Response"
-          style={{ fontSize: "8px" }}
-          disabled={responseDisable}
-        />
-      </Box>
+          <TextareaAutosize
+            id="text"
+            data-testid={`arrow-template-response-input-${id}`}
+            name="patientResponse"
+            value={patientResponse}
+            onChange={(e) => onChange(e)}
+            placeholder="Response"
+            disabled={responseDisable}
+            minRows={3}
+            className={styles.responseStyle}
+          />
+        </Box>
+      ) : (
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap={"8px"}
+          style={{ height: "100%", width: "100%" }}
+          justifyContent={"space-evenly"}
+        >
+          <TextareaAutosize
+            id="title"
+            name="title"
+            value={label}
+            onChange={(e) => onChange(e)}
+            placeholder="Enter Title"
+            className={styles.textAreaTitleStyle}
+            minRows={1}
+            disabled={
+              userType == "patient" || mode == "patientView" ? true : false
+            }
+          />
+          {(userType == "patient" || mode == "patientView") && !description ? (
+            <></>
+          ) : (
+            <TextareaAutosize
+              id="description"
+              name="description"
+              value={description}
+              onChange={(e) => onChange(e)}
+              placeholder="Enter Description"
+              className={styles.textAreaDescriptionStyle}
+              style={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+              minRows={3}
+              disabled={
+                userType == "patient" || mode == "patientView" ? true : false
+              }
+            />
+          )}
+
+          <TextareaAutosize
+            id="patientResponse"
+            data-testid={`arrow-template-response-input-${id}`}
+            name="patientResponse"
+            value={patientResponse}
+            onChange={(e) => onChange(e)}
+            placeholder="Response"
+            disabled={responseDisable}
+            minRows={3}
+            className={styles.responseStyle}
+          />
+        </Box>
+      )}
+
       <Box>
         <Handle
           type="source"

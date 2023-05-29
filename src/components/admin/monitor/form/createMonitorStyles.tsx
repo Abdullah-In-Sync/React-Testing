@@ -6,6 +6,9 @@ export const useStyles = makeStyles(() => {
   const theme = useTheme() as Theme;
   return {
     emojisWrapperBox: {
+      "& .active": {
+        background: "#FFF3D3",
+      },
       paddingTop: 10,
       color: theme.palette.secondary.main,
       "& label": {
