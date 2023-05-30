@@ -13,6 +13,7 @@ type Props = React.PropsWithChildren<{
   nexButtonClick?: () => void;
   onClickView?: () => void;
   activeBoxBorder?: boolean;
+  mode?: string;
 }>;
 
 /* istanbul ignore next */
@@ -24,6 +25,7 @@ const BreadCrumbsWithBackButton = ({
   onClickView,
   activeBoxBorder,
   nexButtonClick,
+  mode
 }: Props) => {
   const styles = useStyles();
 
@@ -68,6 +70,7 @@ const BreadCrumbsWithBackButton = ({
         label={heading}
         onClickView={onClickView}
         activeBoxBorder={activeBoxBorder}
+        mode={mode}
       >
         {children}
       </CardWithHeader>
