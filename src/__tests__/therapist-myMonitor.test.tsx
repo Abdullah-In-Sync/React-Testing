@@ -223,33 +223,33 @@ describe("Therapist patient safety plan", () => {
       expect(screen.getByTestId("share-button-icon")).toBeInTheDocument();
 
       fireEvent.click(screen.queryByTestId("share-button-icon"));
-    });
-
-    await waitFor(async () => {
-      const dropdownInput = screen.getByLabelText("Select Patient");
-
-      fireEvent.mouseDown(dropdownInput);
 
       await waitFor(async () => {
-        const firstOption = screen.getByRole("option", {
-          name: /patient name/i,
+        const dropdownInput = screen.getByLabelText("Select Patient");
+
+        fireEvent.mouseDown(dropdownInput);
+
+        await waitFor(async () => {
+          const firstOption = screen.getByRole("option", {
+            name: /patient name/i,
+          });
+          fireEvent.click(firstOption);
         });
-        fireEvent.click(firstOption);
+
+        expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("addSubmitForm"));
+
+        expect(
+          screen.getByText("Are you sure you want to share the monitor?")
+        ).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+
+        expect(
+          screen.getByText("Monitor shared successfully")
+        ).toBeInTheDocument();
       });
-
-      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
-
-      fireEvent.click(screen.queryByTestId("addSubmitForm"));
-
-      expect(
-        screen.getByText("Are you sure you want to share the monitor?")
-      ).toBeInTheDocument();
-
-      fireEvent.click(screen.queryByTestId("confirmButton"));
-
-      expect(
-        screen.getByText("Monitor shared successfully")
-      ).toBeInTheDocument();
     });
   });
 });
