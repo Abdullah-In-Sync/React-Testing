@@ -38,7 +38,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   );
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const onChange = (event: any) => {
     const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
     if (event.target.id == "title") {
@@ -63,7 +62,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   if (userType == "patient") {
     responseDisable = false;
   }
-
   return (
     <Box
       data-testid="arrow-template-test-1"
@@ -133,73 +131,64 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           style={{ opacity: opacity }}
         />
       </Box>
-      {userType == "patient" || mode == "patientView" ? (
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          gap={"8px"}
-          style={{ height: "100%", width: "100%" }}
-          justifyContent={"space-evenly"}
-        >
-          <Tooltip title={label} placement="top">
-            <Typography
-              id="text"
-              placeholder="Enter Title"
-              className={styles.textAreaTitleStyle}
-              noWrap={true}
-            >
-              {label}
-            </Typography>
-          </Tooltip>
-          {!description ? (
-            <></>
-          ) : (
-            <Tooltip title={description} placement="top">
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        gap={"8px"}
+        style={{ height: "100%", width: "100%" }}
+      >
+        {userType == "patient" || mode == "patientView" ? (
+          <>
+            <Tooltip title={label} placement="top">
               <Typography
-                id="description"
-                className={styles.textAreaDescriptionStyle}
+                id="title"
+                placeholder="Enter Title"
+                className={styles.textAreaTitleStyle}
                 noWrap={true}
               >
-                {description}
+                {label}
               </Typography>
             </Tooltip>
-          )}
+            {!description ? (
+              <></>
+            ) : (
+              <Tooltip title={description} placement="top">
+                <Typography
+                  id="description"
+                  className={styles.textAreaDescriptionStyle}
+                  noWrap={true}
+                >
+                  {description}
+                </Typography>
+              </Tooltip>
+            )}
 
-          <TextareaAutosize
-            id="text"
-            data-testid={`arrow-template-response-input-${id}`}
-            name="patientResponse"
-            value={patientResponse}
-            onChange={(e) => onChange(e)}
-            placeholder="Response"
-            disabled={responseDisable}
-            minRows={3}
-            className={styles.responseStyle}
-          />
-        </Box>
-      ) : (
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          gap={"8px"}
-          style={{ height: "100%", width: "100%" }}
-          justifyContent={"space-evenly"}
-        >
-          <TextareaAutosize
-            id="title"
-            name="title"
-            value={label}
-            onChange={(e) => onChange(e)}
-            placeholder="Enter Title"
-            className={styles.textAreaTitleStyle}
-            minRows={1}
-            disabled={
-              userType == "patient" || mode == "patientView" ? true : false
-            }
-          />
-          {(userType == "patient" || mode == "patientView") && !description ? (
-            <></>
-          ) : (
+            <TextareaAutosize
+              id="patientResponse"
+              data-testid={`arrow-template-response-input-${id}`}
+              name="patientResponse"
+              value={patientResponse}
+              onChange={(e) => onChange(e)}
+              placeholder="Response"
+              disabled={responseDisable}
+              minRows={3}
+              className={styles.responseStyle}
+            />
+          </>
+        ) : (
+          <>
+            <TextareaAutosize
+              id="title"
+              name="title"
+              value={label}
+              onChange={(e) => onChange(e)}
+              placeholder="Enter Title"
+              className={styles.textAreaTitleStyle}
+              minRows={1}
+              disabled={
+                userType == "patient" || mode == "patientView" ? true : false
+              }
+            />
             <TextareaAutosize
               id="description"
               name="description"
@@ -207,31 +196,26 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               onChange={(e) => onChange(e)}
               placeholder="Enter Description"
               className={styles.textAreaDescriptionStyle}
-              style={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
               minRows={3}
               disabled={
                 userType == "patient" || mode == "patientView" ? true : false
               }
             />
-          )}
 
-          <TextareaAutosize
-            id="patientResponse"
-            data-testid={`arrow-template-response-input-${id}`}
-            name="patientResponse"
-            value={patientResponse}
-            onChange={(e) => onChange(e)}
-            placeholder="Response"
-            disabled={responseDisable}
-            minRows={3}
-            className={styles.responseStyle}
-          />
-        </Box>
-      )}
-
+            <TextareaAutosize
+              id="patientResponse"
+              data-testid={`arrow-template-response-input-${id}`}
+              name="patientResponse"
+              value={patientResponse}
+              onChange={(e) => onChange(e)}
+              placeholder="Response"
+              disabled={responseDisable}
+              minRows={3}
+              className={styles.responseStyle}
+            />
+          </>
+        )}
+      </Box>
       <Box>
         <Handle
           type="source"

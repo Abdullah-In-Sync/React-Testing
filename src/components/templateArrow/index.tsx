@@ -115,6 +115,12 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
         data: {
           label: "",
         },
+        width: 298,
+        height: 248,
+        style: {
+          width: 298,
+          height: 248,
+        },
       };
 
       setNodes((nds) => nds.concat(newNode));
