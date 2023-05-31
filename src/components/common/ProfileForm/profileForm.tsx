@@ -80,6 +80,7 @@ type propTypes = {
   disabled?: any;
   userType?: any;
   setEditable: any;
+  therapistProfileData?: any;
 };
 
 const maritalStausOption = [
@@ -181,6 +182,18 @@ export default function ProfileForm(props: propTypes) {
         }
       },
     });
+
+  useEffect(() => {
+    if (props.therapistProfileData?.getPatientDetailById) {
+      setFormFields(props.therapistProfileData?.getPatientDetailById);
+      setHealthValue(
+        props.therapistProfileData?.getPatientDetailById.patient_physical_health
+      );
+      setIlnessValue(
+        props.therapistProfileData?.getPatientDetailById.patient_illness_ability
+      );
+    }
+  }, [props.therapistProfileData?.getPatientDetailById]);
 
   useEffect(() => {
     props.setLoader(true);
@@ -365,7 +378,7 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
+                      required={false}
                       id="patientGenderSelect"
                       labelId="patientGender"
                       name="patient_gender"
@@ -1239,8 +1252,10 @@ export default function ProfileForm(props: propTypes) {
                     data-testid="editCancleSubmitButton"
                     variant="contained"
                     onClick={() => {
-                      // cancleFunction();
                       setFormFields(profileData?.getProfileById);
+                      setFormFields(
+                        props.therapistProfileData?.getPatientDetailById
+                      );
                       props.setEditable(false);
                     }}
                     style={{
