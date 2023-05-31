@@ -6,7 +6,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Field, FieldArray, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import * as React from "react";
 import { useState } from "react";
 import { csvDecode, csvEncode } from "../../../../utility/helper";
@@ -15,6 +15,7 @@ import CardWithHeader from "../../../common/Cards/CardWithHeader";
 import { MesageTextDisplay } from "../../../common/MessageTextDisplay/MessageTextDisplay";
 import RadioButton from "../../../common/radioButton/RadioButton";
 import { useStyles } from "../monitorsStyles";
+import { monitorCompleteViewValidationSchema } from "./validationSchemaCompleteMonitor";
 
 const MonitorCompleteView: React.FC<any> = ({
   monitorData,
@@ -167,6 +168,11 @@ const MonitorCompleteView: React.FC<any> = ({
             setFieldValue(`questions.${i}.answer`, v.text);
           }}
         />
+        <ErrorMessage
+          name={`questions.${i}.answer`}
+          component="div"
+          className="invalid-input-message"
+        />
       </>
     );
   };
@@ -238,6 +244,7 @@ const MonitorCompleteView: React.FC<any> = ({
       initialValues.questions && (
         <Formik
           enableReinitialize
+          validationSchema={monitorCompleteViewValidationSchema}
           initialValues={initialValues}
           key={`monitoring_complete_form`}
           onSubmit={onSubmit}

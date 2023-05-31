@@ -62,3 +62,33 @@ export interface PatientMonitorList {
   status: number;
   updated_date: string;
 }
+
+export interface PatientViewMonitorData {
+  patientViewMonitor: PatientViewMonitor;
+}
+
+export interface PatientViewMonitor {
+  _id?: string;
+  added_by?: string;
+  created_date?: string;
+  name?: string;
+  questions?: PatientViewMonitorQuestionsEntity[] | null;
+}
+export interface PatientViewMonitorQuestionsEntity {
+  status: number;
+  question_type: string;
+  question_option: string;
+  question: string;
+  monitor_id: string;
+  created_date: string;
+  answers_list?: PatientViewMonitorAnswersListEntity[] | null;
+  answer: string;
+  _id: string;
+}
+export interface PatientViewMonitorAnswersListEntity {
+  _id: string;
+  answer: string;
+  created_date: string;
+  monitor_id: string;
+  question_id: string;
+}
