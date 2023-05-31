@@ -119,7 +119,7 @@ const TherapyMyMonitorList: any = () => {
         onCompleted: () => {
           /* istanbul ignore next */
           setIsConfirmShareTask(false);
-          enqueueSnackbar("Monitor shared Successfully", {
+          enqueueSnackbar("Monitor shared successfully", {
             variant: "success",
           });
           getTherapistMonitorSharePatientList({

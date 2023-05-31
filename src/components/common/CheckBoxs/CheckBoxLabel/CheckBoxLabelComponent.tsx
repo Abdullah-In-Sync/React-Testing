@@ -8,7 +8,7 @@ type propTypes = {
   label: any;
   name: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inputProps?: any;
   extraProps?: any;
   placement?: "start" | "end" | "top" | "bottom";

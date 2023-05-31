@@ -24,13 +24,22 @@ const TherapistCreateMonitor: NextPage = () => {
 
     const modifyQuestions = questions.map((item) => {
       const { question, questionType, questionOption } = item;
+      const modifiedQuestionOption =
+        questionType === "emoji"
+          ? JSON.stringify(questionOption)
+          : questionOption;
+
       return {
         question,
         question_type: questionType,
-        question_option: JSON.stringify(questionOption),
+        question_option: modifiedQuestionOption,
       };
     });
 
+    console.debug("Create variable", {
+      name,
+      questions: JSON.stringify(modifyQuestions),
+    });
     try {
       await createMonitor({
         variables: {

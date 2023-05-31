@@ -4,6 +4,7 @@ import { Autocomplete } from "@mui/lab";
 import * as React from "react";
 import { useStyles } from "../../therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import { Box } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 
 interface ViewProps {
   buttonClick?: (value) => void;
@@ -21,6 +22,7 @@ const FormShareBox: React.FC<ViewProps> = ({
   const styles = useStyles();
 
   const formBox = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [planId, setPlanId] = React.useState<string[]>([]);
 
     return (
@@ -101,7 +103,15 @@ const FormShareBox: React.FC<ViewProps> = ({
               <Button
                 data-testid="addSubmitForm"
                 variant="contained"
-                onClick={onPressSubmit}
+                onClick={() => {
+                  if (planId.length) {
+                    onPressSubmit();
+                  } else {
+                    enqueueSnackbar("Patient can not be empty.", {
+                      variant: "error",
+                    });
+                  }
+                }}
               >
                 Share
               </Button>
