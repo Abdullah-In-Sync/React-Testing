@@ -1,3 +1,5 @@
+import moment from "moment";
+
 type SessionObject = {
   label: string;
   value: string;
@@ -90,4 +92,8 @@ export const csvDecode = (csvString) => {
 
 export const csvEncode = (csvStringArray) => {
   return csvStringArray.join(", ");
+};
+
+export const formatDate = (isoDate) => {
+  return moment(isoDate.toISOString()).format("YYYY-MM-DD");
 };

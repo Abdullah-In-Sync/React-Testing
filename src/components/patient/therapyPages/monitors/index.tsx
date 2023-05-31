@@ -1,28 +1,35 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
-import { useEffect, useRef, useState } from "react";
-import Loader from "../../../common/Loader";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
+import { useEffect, useRef, useState } from "react";
+import Loader from "../../../common/Loader";
 
+import moment from "moment";
 import {
   GET_PATIENT_MONITOR_LIST,
-  PATIENT_VIEW_MONITOR,
   PATIENT_SUBMIT_MONITOR,
+  PATIENT_VIEW_MONITOR,
 } from "../../../../graphql/Monitor/graphql";
-import MonitorsComponent from "../../monitors";
-import { PatientMonitorListData } from "../../../../graphql/Monitor/types";
-import MonitorCompleteView from "../../monitors/completeView/MonitorCompleteView";
+import {
+  PatientMonitorListData,
+  PatientViewMonitorData,
+} from "../../../../graphql/Monitor/types";
+import { formatDate } from "../../../../utility/helper";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import ContentHeader from "../../../common/ContentHeader";
+import MonitorsComponent from "../../monitors";
+import MonitorCompleteView from "../../monitors/completeView/MonitorCompleteView";
+import MonitorViewResponse from "../../monitors/viewResponse/MonitorViewResponse";
 
 const PatientMonitorsListPage: NextPage = () => {
+  const initialDate = "2022-03-02";
   const [loader, setLoader] = useState<boolean>(true);
   const confirmRef = useRef<ConfirmElement>(null);
   const router = useRouter();
   const [submitMonitorResponse] = useMutation(PATIENT_SUBMIT_MONITOR);
   const { enqueueSnackbar } = useSnackbar();
-  const { query: { view, monitorId } = {} } = router;
+  const { query: { view, monitorId, startDate, endDate } = {} } = router;
 
   useEffect(() => {
     setLoader(true);
@@ -33,10 +40,10 @@ const PatientMonitorsListPage: NextPage = () => {
     if (monitorId) {
       setLoader(true);
       getMonitorData({
-        variables: { monitorId },
+        variables: { monitorId, startDate, endDate },
       });
     }
-  }, [monitorId]);
+  }, [monitorId, startDate, endDate]);
 
   const [
     getPatientMonitorList,
@@ -51,13 +58,14 @@ const PatientMonitorsListPage: NextPage = () => {
   const [
     getMonitorData,
     {
-      data: { patientViewMonitor: monitorViewData = null } = {},
+      data: { patientViewMonitor: monitorViewData = undefined } = {},
       loading: viewMonitorLoading,
     },
-  ] = useLazyQuery<any>(PATIENT_VIEW_MONITOR, {
+  ] = useLazyQuery<PatientViewMonitorData>(PATIENT_VIEW_MONITOR, {
     onCompleted: () => {
       setLoader(false);
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const submitForm = async (formFields, doneCallback) => {
@@ -98,11 +106,6 @@ const PatientMonitorsListPage: NextPage = () => {
     }
   };
 
-  const completeButtonClick = (v) => {
-    const { _id } = v;
-    router.push(`therapy/?tab=monitors&view=complete&monitorId=${_id}`);
-  };
-
   const handleSubmit = (formFields, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => submitForm(formFields, callback),
@@ -127,6 +130,33 @@ const PatientMonitorsListPage: NextPage = () => {
     router.push(`therapy/?tab=monitors`);
   };
 
+  const completeButtonClick = (v) => {
+    const { _id } = v;
+    router.push(`therapy/?tab=monitors&view=complete&monitorId=${_id}`);
+  };
+
+  const viewResponseButtonClick = (v) => {
+    const { _id } = v;
+    const nEndDate = moment().format("YYYY-MM-DD");
+    const nStartDate = initialDate;
+    router.push(
+      `therapy/?tab=monitors&view=viewResponse&monitorId=${_id}&startDate=${nStartDate}&endDate=${nEndDate}`
+    );
+  };
+
+  const handleRangeGoButton = (v) => {
+    const { fromDate, toDate } = v;
+    const nEndDate = formatDate(toDate);
+    const nStartDate = formatDate(fromDate);
+    router.push(
+      `therapy/?tab=monitors&view=viewResponse&monitorId=${monitorId}&startDate=${nStartDate}&endDate=${nEndDate}`
+    );
+  };
+
+  // const handleBackBttonPress = () => {
+  //   router.back();
+  // }
+
   const currentView = () => {
     switch (view) {
       case "complete":
@@ -141,11 +171,20 @@ const PatientMonitorsListPage: NextPage = () => {
             />
           </ConfirmWrapper>
         );
+      case "viewResponse":
+        return (
+          <MonitorViewResponse
+            monitorData={monitorViewData}
+            initialDate={initialDate}
+            handleRangeGoButton={handleRangeGoButton}
+            onBackButtonPress={backPress}
+          />
+        );
       default:
         return (
           <MonitorsComponent
             monitoringList={patientMonitorList}
-            viewResponseButtonClick={null}
+            viewResponseButtonClick={viewResponseButtonClick}
             completeButtonClick={completeButtonClick}
           />
         );
