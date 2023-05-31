@@ -98,103 +98,102 @@ export const UPDATE_PROFILE_DATA = gql`
   }
 `;
 
-// export const UPDATE_PROFILE_DATA = gql`
-//   mutation (
-//     $groupName: String!
-//     $firstName: String
-//     $dob: String
-//     $city: String
-//     $addressLine2: String
-//     $addressLine1: String
-//     $homeNo: String
-//     $kinAddressLine1: String
-//     $kinAddressLine2: String
-//     $kinCity: String
-//     $kinContactNo: String
-//     $kinEmailAddress: String
-//     $kinName: String
-//     $kinPostal: String
-//     $kinRelationship: String
-//     $lastName: String
-//     $nhsNo: String
-//     $postalCode: String
-//     $religion: String
-//     $update: UpdatePatientInput!
-//   ) {
-//     updateProfileById(
-//       groupName: $groupName
-//       firstName: $firstName
-//       dob: $dob
-//       city: $city
-//       addressLine2: $addressLine2
-//       addressLine1: $addressLine1
-//       homeNo: $homeNo
-//       kinAddressLine1: $kinAddressLine1
-//       kinAddressLine2: $kinAddressLine2
-//       kinCity: $kinCity
-//       kinContactNo: $kinContactNo
-//       kinEmailAddress: $kinEmailAddress
-//       kinName: $kinName
-//       kinPostal: $kinPostal
-//       kinRelationship: $kinRelationship
-//       lastName: $lastName
-//       nhsNo: $nhsNo
-//       postalCode: $postalCode
-//       religion: $religion
-//       update: $update
-//     ) {
-//       _id
-//       addressline1
-//       addressline2
-//       birthdate
-//       city
-//       created_date
-//       email
-//       family_name
-//       home_no
-//       hos_id
-//       kin_addressline1
-//       kin_addressline2
-//       kin_city
-//       kin_contact_no
-//       kin_email_address
-//       kin_name
-//       kin_postal
-//       kin_relationship
-//       nhsno
-//       org_id
-//       patient_availability
-//       patient_consent
-//       patient_contract
-//       patient_education
-//       patient_employment
-//       patient_ethnic_group
-//       patient_firstname
-//       patient_gender
-//       patient_gpaddress
-//       patient_gpaddressline2
-//       patient_gpcity
-//       patient_gpcontactno
-//       patient_gpemailaddress
-//       patient_gpname
-//       patient_gpsurgeryname
-//       patient_gppostalcode
-//       patient_illness_ability
-//       patient_lang
-//       patient_lastname
-//       patient_marrital
-//       patient_no
-//       patient_physical_health
-//       patient_sexuality
-//       patient_status
-//       phone_number
-//       postal_code
-//       religion
-//       therapist_id
-//       user_id
-//     }
-//   }
-// `;
+export const UPDATE_PROFILE_DATA_FROM_THERAPIST = gql`
+  mutation (
+    $address_line1: String
+    $address_line2: String
+    $birthdate: String
+    $first_name: String
+    $home_no: String
+    $kin_addressline1: String
+    $kin_addressline2: String
+    $kin_city: String
+    $kin_contact: String
+    $kin_email_address: String
+    $kin_name: String
+    $kin_postal: String
+    $kin_relationship: String
+    $last_name: String
+    $nhs_no: String
+    $patient_city: String
+    $patient_id: String
+    $postal_code: String
+    $religon: String
+    $updateData: UpdatePatientInput!
+  ) {
+    updatePatientProfileById(
+      address_line1: $address_line1
+      address_line2: $address_line2
+      birthdate: $birthdate
+      first_name: $first_name
+      home_no: $home_no
+      kin_addressline1: $kin_addressline1
+      kin_addressline2: $kin_addressline2
+      kin_city: $kin_city
+      kin_contact: $kin_contact
+      kin_email_address: $kin_email_address
+      kin_name: $kin_name
+      kin_postal: $kin_postal
+      kin_relationship: $kin_relationship
+      last_name: $last_name
+      nhs_no: $nhs_no
+      patient_city: $patient_city
+      patient_id: $patient_id
+      postal_code: $postal_code
+      religon: $religon
+      updateData: $updateData
+    ) {
+      _id
+      addressline1
+      addressline2
+      birthdate
+      city
+      created_date
+      email
+      family_name
+      home_no
+      hos_id
+      kin_addressline1
+      kin_addressline2
+      kin_city
+      kin_contact_no
+      kin_email_address
+      kin_postal
+      kin_relationship
+      nhsno
+      org_id
+      patient_availability
+      patient_consent
+      patient_contract
+      patient_education
+      user_id
+      therapist_id
+      postal_code
+      religion
+      phone_number
+      patient_status
+      patient_sexuality
+      patient_physical_health
+      patient_no
+      patient_marrital
+      patient_lastname
+      patient_lang
+      patient_illness_ability
+      patient_gpsurgeryname
+      patient_gppostalcode
+      patient_gpname
+      patient_gpemailaddress
+      patient_gpcontactno
+      patient_gpcity
+      patient_gpaddressline2
+      patient_gpaddress
+      patient_gender
+      patient_firstname
+      patient_ethnic_group
+      patient_employment
+    }
+  }
+`;
 
 export const UPDATE_PATIENT_GOAL_BY_ID = gql`
   mutation ($ptGoalId: ID!, $update: UpdatePatientGoalInput!) {

@@ -32,7 +32,7 @@ const MonitorsList: React.FC<ViewProps> = ({
               <CommonButton
                 data-testid={`viewResponseButton_${index}`}
                 variant="contained"
-                onClick={viewResponseButtonClick}
+                onClick={() => viewResponseButtonClick(item)}
               >
                 View Response
               </CommonButton>

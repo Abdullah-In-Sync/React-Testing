@@ -60,13 +60,13 @@ beforeEach(() => {
   });
 });
 
-describe("Paitent view response measures", () => {
+describe("Paitent monitors list", () => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
       tab: "monitors",
     },
   });
-  it("should render paitent format 1 response", async () => {
+  it("should render paitent monitor list", async () => {
     await sut();
     expect(await screen.findAllByText(/Final testing/i)).toHaveLength(1);
   });

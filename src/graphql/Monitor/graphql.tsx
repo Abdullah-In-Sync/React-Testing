@@ -118,8 +118,16 @@ export const GET_PATIENT_MONITOR_LIST = gql`
 `;
 
 export const PATIENT_VIEW_MONITOR = gql`
-  query PatientViewMonitor($monitorId: ID!) {
-    patientViewMonitor(monitor_id: $monitorId) {
+  query PatientViewMonitor(
+    $monitorId: ID!
+    $startDate: String
+    $endDate: String
+  ) {
+    patientViewMonitor(
+      monitor_id: $monitorId
+      start_date: $startDate
+      end_date: $endDate
+    ) {
       updated_date
       _id
       added_by
