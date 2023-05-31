@@ -10,6 +10,7 @@ import {
 } from "../../../../graphql/Monitor/graphql";
 import theme from "../../../../styles/theme/theme";
 import PatientMonitorsList from "../../therapyPages/monitors/";
+import moment from "moment";
 const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -297,7 +298,9 @@ describe("Paitent monitor view response", () => {
     );
     fireEvent.click(viewResponseButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=viewResponse&monitorId=list-item-1&startDate=2022-03-02&endDate=2023-05-30"
+      `therapy/?tab=monitors&view=viewResponse&monitorId=list-item-1&startDate=2022-03-02&endDate=${moment().format(
+        "YYYY-MM-DD"
+      )}`
     );
   });
 
