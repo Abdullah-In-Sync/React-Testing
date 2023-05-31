@@ -26,6 +26,7 @@ interface ViewProps {
   monitorData: PatientViewMonitor;
   handleRangeGoButton: (v) => void;
   initialDate: string;
+  endDate?: string;
   onBackButtonPress: () => void;
 }
 
@@ -33,13 +34,13 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
   monitorData: viewResponseData = {},
   handleRangeGoButton,
   initialDate,
+  endDate,
   onBackButtonPress,
 }) => {
   const styles = useStyles();
   const { questions: ansResponseData = [], name } = viewResponseData;
   const filterQuesAnsData = monitorHelper.filterQuesType(ansResponseData);
   const emojisVerticalImage = (lineData, emojis) => {
-    console.log("lineData", lineData);
     const modifyEmojis = emojis.reverse();
     const isPositionExist = (v) => {
       return lineData.some((nitem) => nitem.label === v.text);
@@ -272,6 +273,7 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
         </Box>
         <Box>
           <RangeDatePicker
+            endDate={endDate}
             initialDate={initialDate}
             onGoButton={handleRangeGoButton}
           />

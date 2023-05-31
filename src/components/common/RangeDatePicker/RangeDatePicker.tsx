@@ -9,13 +9,18 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 type ViewProps = React.PropsWithChildren<{
   onGoButton: (v) => void;
   initialDate: string;
+  endDate?: string;
 }>;
 
-const RangeDatePicker: React.FC<ViewProps> = ({ onGoButton, initialDate }) => {
+const RangeDatePicker: React.FC<ViewProps> = ({
+  onGoButton,
+  initialDate,
+  endDate,
+}) => {
   const [fromDate, setFromDate] = React.useState<Dayjs | null>(
     dayjs(initialDate)
   );
-  const [toDate, setToDate] = React.useState<Dayjs | null>(dayjs());
+  const [toDate, setToDate] = React.useState<Dayjs | null>(dayjs(endDate));
 
   return (
     <Stack alignItems={"center"} flexDirection="row" justifyContent="flex-end">
