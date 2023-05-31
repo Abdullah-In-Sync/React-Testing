@@ -29,8 +29,7 @@ const PatientMonitorsListPage: NextPage = () => {
   const router = useRouter();
   const [submitMonitorResponse] = useMutation(PATIENT_SUBMIT_MONITOR);
   const { enqueueSnackbar } = useSnackbar();
-  const { query: { view, monitorId, startDate = initialDate, endDate } = {} } =
-    router;
+  const { query: { view, monitorId, startDate, endDate } = {} } = router;
 
   useEffect(() => {
     setLoader(true);
@@ -176,7 +175,7 @@ const PatientMonitorsListPage: NextPage = () => {
         return (
           <MonitorViewResponse
             monitorData={monitorViewData}
-            initialDate={startDate as string}
+            initialDate={(startDate || initialDate) as string}
             handleRangeGoButton={handleRangeGoButton}
             onBackButtonPress={backPress}
             endDate={endDate as string}
