@@ -136,6 +136,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         flexDirection={"column"}
         gap={"8px"}
         style={{ height: "100%", width: "100%" }}
+        justifyContent={"space-evenly"}
       >
         {userType == "patient" || mode == "patientView" ? (
           <>
