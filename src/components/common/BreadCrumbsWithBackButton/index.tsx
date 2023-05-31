@@ -25,7 +25,7 @@ const BreadCrumbsWithBackButton = ({
   onClickView,
   activeBoxBorder,
   nexButtonClick,
-  mode
+  mode,
 }: Props) => {
   const styles = useStyles();
 
