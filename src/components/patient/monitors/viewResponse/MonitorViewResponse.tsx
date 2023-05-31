@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import * as React from "react";
-//   import * as monitoringTypes from "./types";
 
 import moment from "moment";
 import CardWithHeader from "../../../common/Cards/CardWithHeader";
@@ -50,10 +49,10 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
         {modifyEmojis
           .filter((emojisValue) => isPositionExist(emojisValue))
           .map((item, i) => {
-            const { _id, code } = item;
+            const { code } = item;
             return (
               <ImageListItem
-                key={_id}
+                key={`emojiWrapper_${i}`}
                 data-testid={`vEmoji_${i}`}
                 className="vImgIcon"
               >
@@ -71,7 +70,11 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
         {emojis.map((item, i) => {
           const { text, code } = item;
           return (
-            <Box key={i} data-testid={`${i}`} className="vImgIconWraper">
+            <Box
+              key={`emojiWrapper_${i}`}
+              data-testid={`${i}`}
+              className="vImgIconWraper"
+            >
               <Emoji unified={code} />
               <Typography>{text}</Typography>
             </Box>

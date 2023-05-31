@@ -19,7 +19,7 @@ export const useStyles = makeStyles(() => {
       "& .questionBoxWrapper": {
         "& .emojisBox": {
           cursor: "pointer",
-          minWidth: 200,
+          minWidth: 150,
         },
         "& .questionBox": {
           padding: 10,
