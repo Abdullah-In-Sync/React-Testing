@@ -16,6 +16,8 @@ interface TextUpdaterNodeProps {
   userType?: any;
   mode?: string;
   selected: boolean;
+  isOpen?: boolean;
+  onClose?: any;
 }
 
 const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
@@ -25,6 +27,8 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   userType,
   mode,
   selected,
+  isOpen,
+  onClose
 }) => {
   const handleId = id.split("_")[1];
   const [label, setLabel] = useState<string>(data?.label);

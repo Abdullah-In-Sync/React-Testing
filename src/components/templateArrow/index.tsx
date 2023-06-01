@@ -17,6 +17,7 @@ import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 import { Button, Grid, Switch, Typography } from "@mui/material";
 import CropSquareIcon from "@mui/icons-material/CropSquare";
+import ArrowTemplatePopup from "../common/popupArrowTemplate/arrowTemplatePopup";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -40,10 +41,17 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 }) => {
   const [user, setUser] = useState(userType);
   const [mod, setmod] = useState(mode);
+  const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
   const nodeType = useMemo(
     () => ({
       selectorNode: (props) => (
-        <TextUpdaterNode userType={user} mode={mod} {...props} />
+        <TextUpdaterNode
+          userType={user}
+          mode={mod}
+          isOpen={isOpenPopup}
+          onClose={onClosePopup}
+          {...props}
+        />
       ),
     }),
     [user, mod]
@@ -134,6 +142,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
       setmod(mode);
       setIsPreview(true);
     }
+  };
+
+  const onClosePopup = () => {
+    setIsOpenPopup(false);
   };
 
   const icons = [
@@ -317,6 +329,9 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
             Cancel
           </Button>
         </Grid>
+      )}
+      {isOpenPopup && (
+        <ArrowTemplatePopup isOpen={isOpenPopup} onClose={onClosePopup} />
       )}
     </>
   );
