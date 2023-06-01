@@ -202,7 +202,6 @@ const TherapyPatientMonitorList: any = () => {
   return (
     <>
       <Loader visible={loader} />
-
       {!monitorsListLoading && currentView()}
     </>
   );
