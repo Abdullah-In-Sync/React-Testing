@@ -167,3 +167,80 @@ export const PATIENT_SUBMIT_MONITOR = gql`
     }
   }
 `;
+
+export const GET_THERAPIST_PATIENT_MONITOR_LIST = gql`
+  query therapistMonitorList($patient_id: String!) {
+    therapistMonitorList(patient_id: $patient_id) {
+      _id
+      added_by
+      created_date
+      name
+      org_id
+      patient_id
+      status
+      therapist_id
+      updated_date
+    }
+  }
+`;
+
+export const THERAPIST_VIEW_MONITOR = gql`
+  query TherapistViewMonitor(
+    $patientId: String!
+    $monitorId: ID!
+    $startDate: String
+    $endDate: String
+  ) {
+    therapistViewMonitor(
+      patient_id: $patientId
+      monitor_id: $monitorId
+      sdate: $startDate
+      edate: $endDate
+    ) {
+      updated_date
+      _id
+      added_by
+      created_date
+      name
+      org_id
+      patient_id
+      share_status
+      status
+      therapist_id
+      questions {
+        updated_date
+        status
+        question_type
+        question_option
+        question
+        monitor_id
+        created_date
+        answers_list {
+          _id
+          answer
+          created_date
+          monitor_id
+          question_id
+        }
+        answer
+        _id
+      }
+    }
+  }
+`;
+
+export const THERAPIST_SUBMIT_MONITOR = gql`
+  mutation TherapistSubmitMonitor(
+    $monitorId: ID!
+    $patientId: String!
+    $questions: String!
+  ) {
+    therapistSubmitMonitor(
+      monitor_id: $monitorId
+      patient_id: $patientId
+      questions: $questions
+    ) {
+      _id
+    }
+  }
+`;

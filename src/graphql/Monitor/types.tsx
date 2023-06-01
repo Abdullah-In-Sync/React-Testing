@@ -92,3 +92,11 @@ export interface PatientViewMonitorAnswersListEntity {
   monitor_id: string;
   question_id: string;
 }
+
+export interface TherapistMonitorListData {
+  therapistMonitorList?: PatientMonitorList[] | null;
+}
+
+export interface TherapistViewMonitorData {
+  therapistViewMonitor: PatientViewMonitor;
+}

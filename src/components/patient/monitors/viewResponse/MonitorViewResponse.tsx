@@ -176,7 +176,7 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
       return (
         <Box
           key={`listOption_${i}`}
-          className={`${value === answer ? "active" : ""}`}
+          className={`${csvDecode(answer).indexOf(value) > -1 ? "active" : ""}`}
         >
           <span>{value}</span>
         </Box>

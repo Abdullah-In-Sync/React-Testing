@@ -91,7 +91,7 @@ export const csvDecode = (csvString) => {
 };
 
 export const csvEncode = (csvStringArray) => {
-  return csvStringArray.join(", ");
+  return csvStringArray.join(",");
 };
 
 export const formatDate = (isoDate) => {
