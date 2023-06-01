@@ -8,13 +8,13 @@ import TherapistProfileAgreement from "../profileAgreemet";
 export default function TherapyPersonalInfoTabs() {
   const router = useRouter();
   const {
-    query: { tab = "personal-info" },
+    query: { tab = "details" },
   } = router;
 
   const tabs = [
     {
-      label: "Personal Info",
-      value: "personal-info",
+      label: "Details",
+      value: "details",
       component: <TherapistProfileDetails />,
     },
     {
