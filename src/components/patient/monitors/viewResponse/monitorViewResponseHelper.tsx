@@ -89,6 +89,40 @@ export const totalAnsCount = (data: {
   return tempData;
 };
 
+/**
+ * Total count of date wise sorted answers
+ * @param {Object[]} questionOption - emojis code and text array object
+ * @return {Object[]} draw emoji in chart using canvas
+ */
+export const emojisLineChartPlugins = (
+  questionOption
+): { id: string; afterDatasetDraw: (v) => void }[] => {
+  return [
+    {
+      id: "emoji",
+      afterDatasetDraw: (chart) => {
+        const { ctx } = chart;
+        const xAxis = chart.scales["x"];
+        const yAxis = chart.scales["y"];
+        yAxis.height += 15;
+        yAxis.ticks.forEach((item, index) => {
+          const { value } = item;
+          const { code } = questionOption[value - 1] || {};
+          if (code) {
+            const y = yAxis.getPixelForTick(index);
+            ctx.font = "30px serif";
+            ctx.fillText(
+              String.fromCodePoint(parseInt(code, 16)),
+              xAxis.left - 40,
+              y + 10
+            );
+          }
+        });
+      },
+    },
+  ];
+};
+
 /* ----------- Graphs/Chart generator functions ----------- */
 
 /**

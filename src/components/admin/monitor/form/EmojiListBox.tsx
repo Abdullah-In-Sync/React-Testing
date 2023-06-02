@@ -3,8 +3,8 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import EditIcon from "@mui/icons-material/Edit";
 import MoodIcon from "@mui/icons-material/Mood";
-import { Emoji } from "emoji-picker-react";
 import { useStyles } from "./createMonitorStyles";
+import Emoji from "../../../common/Emoji";
 
 type ViewProps = {
   question?: any;
@@ -46,7 +46,9 @@ const EmojiListBox: React.FC<ViewProps> = ({
             </Box>
           )}
           <Box>
-            <Emoji unified={item.code} />
+            <Box p={1}>
+              <Emoji unified={item.code} size={60} />
+            </Box>
             <Typography>{item.text}</Typography>
           </Box>
         </Stack>

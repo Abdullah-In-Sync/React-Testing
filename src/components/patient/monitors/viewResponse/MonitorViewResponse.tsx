@@ -1,10 +1,4 @@
-import {
-  Box,
-  ImageList,
-  ImageListItem,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import * as React from "react";
 
 import moment from "moment";
@@ -13,10 +7,10 @@ import BarChart from "../../../common/charts/BarChart";
 import LineChart from "../../../common/charts/LineChart";
 import { useStyles } from "../monitorsStyles";
 
-import { Emoji } from "emoji-picker-react";
 import { PatientViewMonitor } from "../../../../graphql/Monitor/types";
 import { csvDecode } from "../../../../utility/helper";
 import CommonButton from "../../../common/Buttons/CommonButton";
+import Emoji from "../../../common/Emoji";
 import { MesageTextDisplay } from "../../../common/MessageTextDisplay/MessageTextDisplay";
 import RangeDatePicker from "../../../common/RangeDatePicker/RangeDatePicker";
 import * as monitorHelper from "./monitorViewResponseHelper";
@@ -39,30 +33,6 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
   const styles = useStyles();
   const { questions: ansResponseData = [], name } = viewResponseData;
   const filterQuesAnsData = monitorHelper.filterQuesType(ansResponseData);
-  const emojisVerticalImage = (lineData, emojis) => {
-    const modifyEmojis = emojis.reverse();
-    const isPositionExist = (v) => {
-      return lineData.some((nitem) => nitem.label === v.text);
-    };
-    return (
-      <ImageList cols={1} className="emojListWrapper">
-        {modifyEmojis
-          .filter((emojisValue) => isPositionExist(emojisValue))
-          .map((item, i) => {
-            const { code } = item;
-            return (
-              <ImageListItem
-                key={`emojiWrapper_${i}`}
-                data-testid={`vEmoji_${i}`}
-                className="vImgIcon"
-              >
-                <Emoji unified={code} />
-              </ImageListItem>
-            );
-          })}
-      </ImageList>
-    );
-  };
 
   const emojisHorizontalImage = (emojis) => {
     return (
@@ -98,7 +68,7 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
     const emojisLine = monitorHelper.generateEmojiLineData(
       filterQuesAnsData["emoji"]
     );
-
+    const questionOptionArray = JSON.parse(question_option);
     return (
       <Stack>
         <Stack>{labelBox(que)}</Stack>
@@ -110,16 +80,22 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
                 : "emojisLineChart"
             }`}
           >
-            {emojisVerticalImage(
-              emojisLine["datasets"][0]["data"],
-              JSON.parse(question_option)
-            )}
             <LineChart
               data={emojisLine}
               displayY={false}
               displayYlabel={true}
               grid={{ display: false }}
-              yTicks={{ min: 0, stepSize: 0 }}
+              plugins={monitorHelper.emojisLineChartPlugins(
+                questionOptionArray
+              )}
+              yAxis={{ suggestedMin: 1, suggestedMax: 5 }}
+              yTicks={{ min: 0, stepSize: 0, precision: false }}
+              xTicks={{ padding: 10 }}
+              layout={{
+                padding: {
+                  top: 20,
+                },
+              }}
             />
           </Box>
           <Stack className="emojiPieChartWrapper">

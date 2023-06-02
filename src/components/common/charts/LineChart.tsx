@@ -29,9 +29,14 @@ const LineChart = ({
   displayYlabel,
   grid = {},
   yTicks = {},
+  xTicks = {},
+  yAxis,
+  plugins,
+  layout,
 }: any) => {
   const chartRef = useRef(null);
   const lineOptions = {
+    layout: layout,
     maintainAspectRatio: false,
     responsive: true,
     plugins: {
@@ -48,19 +53,27 @@ const LineChart = ({
     },
     scales: {
       y: {
-        grid,
-        ticks: {
-          ...{
-            display: displayY,
-            beginAtZero: true,
+        ...{
+          grid,
+          ticks: {
+            ...{
+              display: displayY,
+              beginAtZero: true,
+              tickWidth: 0,
+              tickLength: 0,
+            },
+            ...yTicks,
           },
-          ...yTicks,
         },
+        ...yAxis,
       },
       x: {
         ticks: {
-          display: true,
-          beginAtZero: true,
+          ...{
+            display: true,
+            beginAtZero: true,
+          },
+          ...xTicks,
         },
       },
     },
@@ -68,7 +81,12 @@ const LineChart = ({
 
   return (
     <div className="canvas-container">
-      <Line options={lineOptions} data={data} ref={chartRef} />
+      <Line
+        options={lineOptions}
+        data={data}
+        ref={chartRef}
+        plugins={plugins}
+      />
     </div>
   );
 };
