@@ -4,7 +4,6 @@ import * as React from "react";
 
 import EmojiPicker, {
   Categories,
-  Emoji,
   EmojiStyle,
   SkinTonePickerLocation,
   SuggestionMode,
@@ -15,6 +14,7 @@ import CommonButton from "../Buttons/CommonButton";
 import { CommonModal } from "../CustomModal/CommonModal";
 import TextFieldCustom from "../TextField/TextFieldCustom";
 import { useStyles } from "./editEmojiModalStyles";
+import Emoji from "../Emoji";
 
 interface ViewProps {
   confirmModalRef?: any;

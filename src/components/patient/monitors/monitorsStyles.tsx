@@ -19,7 +19,7 @@ export const useStyles = makeStyles(() => {
       "& .questionBoxWrapper": {
         "& .emojisBox": {
           cursor: "pointer",
-          minWidth: 200,
+          minWidth: 150,
         },
         "& .questionBox": {
           padding: 10,
@@ -156,7 +156,12 @@ export const useStyles = makeStyles(() => {
       },
 
       "& .emojiPieChartWrapper": {
-        width: "60vw",
+        [theme.breakpoints.up("lg")]: {
+          width: "60vw",
+        },
+        [theme.breakpoints.down("md")]: {
+          overflowX: "scroll",
+        },
         padding: "10px",
         alignItems: "center",
         "& .MuiBox-root": {

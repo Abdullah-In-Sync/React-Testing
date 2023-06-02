@@ -1,13 +1,14 @@
 /* istanbul ignore file */
-import React, { useEffect, useState } from "react";
-import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
   return (
     <div
+      className="mb20"
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}

@@ -2,31 +2,35 @@ import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-import { useAppContext } from "../../../../contexts/AuthContext";
-import PatientMonitorsList from "../../therapyPages/monitors";
+import { useAppContext } from "../../../../../contexts/AuthContext";
 import { useRouter } from "next/router";
+import theme from "../../../../../styles/theme/theme";
 import {
-  GET_PATIENT_MONITOR_LIST,
-  PATIENT_SUBMIT_MONITOR,
-  PATIENT_VIEW_MONITOR,
-} from "../../../../graphql/Monitor/graphql";
-import theme from "../../../../styles/theme/theme";
+  THERAPIST_SUBMIT_MONITOR,
+  THERAPIST_VIEW_MONITOR,
+  GET_THERAPIST_PATIENT_MONITOR_LIST,
+} from "../../../../../graphql/Monitor/graphql";
+import TherapyPatientMonitorList from "..";
+
 const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
 }));
-jest.mock("../../../../contexts/AuthContext");
+jest.mock("../../../../../contexts/AuthContext");
 
 const mocksData = [];
 
 mocksData.push({
   request: {
-    query: GET_PATIENT_MONITOR_LIST,
+    query: GET_THERAPIST_PATIENT_MONITOR_LIST,
+    variables: {
+      patient_id: "patient-id",
+    },
   },
   result: {
     data: {
-      patientMonitorList: [
+      therapistMonitorList: [
         {
           _id: "list-item-1",
           name: "Check 2",
@@ -46,14 +50,15 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: PATIENT_VIEW_MONITOR,
+    query: THERAPIST_VIEW_MONITOR,
     variables: {
+      patientId: "patient-id",
       monitorId: "list-item-1",
     },
   },
   result: {
     data: {
-      patientViewMonitor: {
+      therapistViewMonitor: {
         name: "Check 2",
         questions: [
           {
@@ -77,14 +82,15 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: PATIENT_VIEW_MONITOR,
+    query: THERAPIST_VIEW_MONITOR,
     variables: {
       monitorId: "list-item-2",
+      patientId: "patient-id",
     },
   },
   result: {
     data: {
-      patientViewMonitor: {
+      therapistViewMonitor: {
         _id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
         created_date: "2023-05-24T11:31:07.074Z",
         name: "Chech 1",
@@ -178,14 +184,15 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: PATIENT_VIEW_MONITOR,
+    query: THERAPIST_VIEW_MONITOR,
     variables: {
       monitorId: "list-item-3",
+      patientId: "patient-id",
     },
   },
   result: {
     data: {
-      patientViewMonitor: {
+      therapistViewMonitor: {
         name: "Check 3",
         questions: [
           {
@@ -209,16 +216,17 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: PATIENT_SUBMIT_MONITOR,
+    query: THERAPIST_SUBMIT_MONITOR,
     variables: {
       monitorId: "list-item-2",
+      patientId: "patient-id",
       questions:
         '[{"question_id":"09135bf3-1fd2-469c-885c-aaaa197a212a","answer":"Very Happy"},{"question_id":"d88effbc-e120-4bc4-816b-003a7d4f863a","answer":12},{"question_id":"aeab669b-14f6-4308-8e0f-75aaec02dfc0","answer":"jhghg"},{"question_id":"e122153a-1bbf-42d5-a0fb-2d9311354a26","answer":",khvb"},{"question_id":"92ad10f8-f782-4198-8c21-96a2122b07f9","answer":"yes"}]',
     },
   },
   result: {
     data: {
-      patientSubmitMonitor: {
+      therapistSubmitMonitor: {
         _id: "list-item-2",
       },
     },
@@ -230,7 +238,7 @@ const sut = async () => {
     <MockedProvider mocks={mocksData} addTypename={false}>
       <ThemeProvider theme={theme()}>
         <SnackbarProvider>
-          <PatientMonitorsList />
+          <TherapyPatientMonitorList />
         </SnackbarProvider>
       </ThemeProvider>
     </MockedProvider>
@@ -242,21 +250,27 @@ beforeEach(() => {
     isAuthenticated: true,
     user: {
       _id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-      user_type: "patient",
+      user_type: "therapist",
       parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
       perm_ids: "9,10,14,21,191,65,66",
       user_status: "1",
       created_date: "2021-12-20 16:20:55",
       updated_date: "2021-12-20 16:20:55",
+      therapist_data: {
+        _id: "therapist_id",
+        org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+      },
     },
   });
 });
 
-describe("Paitent monitor response submit", () => {
-  it("should render patient monitor list", async () => {
+describe("Therapist monitor response submit", () => {
+  it("should render therapist patient monitor list", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
-        tab: "monitors",
+        id: "patient-id",
+        tab: "monitor",
+        subTab1: "patient-monitor",
       },
       push: pushMock,
     });
@@ -265,16 +279,18 @@ describe("Paitent monitor response submit", () => {
     const completeButton = await screen.findByTestId("completeButton_0");
     fireEvent.click(completeButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=complete&monitorId=list-item-1"
+      "patient-id/?tab=monitor&&subTab1=patient-monitor&view=complete&monitorId=list-item-1"
     );
   });
 
   it("should submit monitor view response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
-        tab: "monitors",
+        id: "patient-id",
+        tab: "monitor",
         monitorId: "list-item-2",
         view: "complete",
+        subTab1: "patient-monitor",
       },
       push: pushMock,
     });
@@ -313,9 +329,11 @@ describe("Paitent monitor response submit", () => {
   it("should render next monitor view", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
-        tab: "monitors",
+        id: "patient-id",
+        tab: "monitor",
         monitorId: "list-item-1",
         view: "complete",
+        subTab1: "patient-monitor",
       },
       push: pushMock,
     });
@@ -325,22 +343,26 @@ describe("Paitent monitor response submit", () => {
     fireEvent.click(nextButton);
 
     expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=complete&monitorId=list-item-2"
+      "patient-id/?tab=monitor&subTab1=patient-monitor&view=complete&monitorId=list-item-2"
     );
   });
 
   it("should render back monitor view", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
-        tab: "monitors",
+        id: "patient-id",
+        tab: "monitor",
         monitorId: "list-item-2",
         view: "complete",
+        subTab1: "patient-monitor",
       },
       push: pushMock,
     });
     await sut();
     const backButton = await screen.findByTestId("backMonitorBtn");
     fireEvent.click(backButton);
-    expect(pushMock).toHaveBeenCalledWith("therapy/?tab=monitors");
+    expect(pushMock).toHaveBeenCalledWith(
+      "patient-id/?tab=monitor&subTab1=patient-monitor"
+    );
   });
 });
