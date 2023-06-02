@@ -38,6 +38,7 @@ export const useStyles = makeStyles(() => {
           },
           "& p": {
             color: "black",
+            margin: "12px 0px 0px 0px !important",
           },
           "& .editEmojiButtonWrapper": {
             position: "absolute",

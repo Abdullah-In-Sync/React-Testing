@@ -16,8 +16,8 @@ import { Box } from "@mui/system";
 import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 import { Button, Grid, Switch, Typography } from "@mui/material";
-import CropSquareIcon from "@mui/icons-material/CropSquare";
 import ArrowTemplatePopup from "../common/popupArrowTemplate/arrowTemplatePopup";
+import Image from "next/image";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -123,6 +123,12 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
         data: {
           label: "",
         },
+        width: 298,
+        height: 248,
+        style: {
+          width: 298,
+          height: 248,
+        },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -152,26 +158,25 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     {
       componentName: "cropSquareIcon",
       icon: (
-        <CropSquareIcon
-          style={{ padding: "2px", cursor: "pointer", fontSize: "30px" }}
-        />
+        <Image alt="My Help" src="/images/Vector.png" height="21" width="27" />
       ),
     },
   ];
   const editStyle: any = {
     display: "flex",
     flexDirection: "row",
-    borderRadius: "7px",
+    borderRadius: "8px",
     marginBottom: "40px",
-    border: mod == "edit" ? "1px solid" : "1px solid #cecece",
+    border: mod == "edit" ? "1px solid #7EBCA7" : "1px solid #25282B",
     position: "relative",
   };
 
   if ((mod == "edit" || mod == "patientView") && !isPreview) {
-    delete editStyle.borderRadius;
-    editStyle.padding = "8px";
-    editStyle.borderTop = "0px solid";
-    editStyle.borderColor = "#6BA08E";
+    // editStyle.margin = "0px 20px 0px 20px";
+    // editStyle.borderTop = "0px solid";
+    // editStyle.borderColor = "#6BA08E";
+    editStyle.borderRadius = "0px 0px 8px 8px";
+    editStyle.borderTop = "unset";
   }
   if (mod == "mobile") {
     delete editStyle.border;
@@ -190,7 +195,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 
           <Box
             style={{
-              height: mod == "mobile" ? window.innerHeight - 129 : "500px",
+              height: mod == "mobile" ? window.innerHeight - 129 : "660px",
               width: "100%",
               alignItems: "center",
               marginRight: "5px",

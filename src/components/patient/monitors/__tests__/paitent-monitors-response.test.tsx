@@ -213,7 +213,8 @@ mocksData.push({
     variables: {
       monitorId: "list-item-2",
       questions:
-        '[{"question_id":"09135bf3-1fd2-469c-885c-aaaa197a212a","answer":"Very Happy"},{"question_id":"d88effbc-e120-4bc4-816b-003a7d4f863a","answer":12},{"question_id":"aeab669b-14f6-4308-8e0f-75aaec02dfc0","answer":"jhghg"},{"question_id":"e122153a-1bbf-42d5-a0fb-2d9311354a26","answer":",khvb"},{"question_id":"92ad10f8-f782-4198-8c21-96a2122b07f9","answer":"yes"}]',
+        // eslint-disable-next-line prettier/prettier
+      "[{\"question_id\":\"09135bf3-1fd2-469c-885c-aaaa197a212a\",\"answer\":\"Very Happy\"},{\"question_id\":\"d88effbc-e120-4bc4-816b-003a7d4f863a\",\"answer\":12},{\"question_id\":\"aeab669b-14f6-4308-8e0f-75aaec02dfc0\",\"answer\":\"jhghg\"},{\"question_id\":\"e122153a-1bbf-42d5-a0fb-2d9311354a26\",\"answer\":\",khvb\"},{\"question_id\":\"92ad10f8-f782-4198-8c21-96a2122b07f9\",\"answer\":\"yes\"}]",
     },
   },
   result: {
