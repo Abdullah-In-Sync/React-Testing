@@ -31,7 +31,6 @@ export const useStyles = makeStyles(() => {
           },
         },
       },
-
       "& .questionBoxWrapper:first-child": {
         "& .answerBox": {
           "& div:first-child": {
