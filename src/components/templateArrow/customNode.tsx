@@ -136,32 +136,33 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
         flexDirection={"column"}
         gap={"8px"}
         style={{ height: "100%", width: "100%" }}
-        justifyContent={"space-evenly"}
       >
         {userType == "patient" || mode == "patientView" ? (
           <>
-            <Tooltip title={label} placement="top">
-              <Typography
-                id="title"
-                placeholder="Enter Title"
-                className={styles.textAreaTitleStyle}
-                noWrap={true}
-              >
-                {label}
-              </Typography>
-            </Tooltip>
+            <Box className={`${styles.textWrapper} ${styles.flexShink}`}>
+              <Tooltip title={label} placement="top">
+                <Typography
+                  id="title"
+                  placeholder="Enter Title"
+                  className={styles.typographyTitleStyle}
+                >
+                  {label}
+                </Typography>
+              </Tooltip>
+            </Box>
             {!description ? (
               <></>
             ) : (
-              <Tooltip title={description} placement="top">
-                <Typography
-                  id="description"
-                  className={styles.textAreaDescriptionStyle}
-                  noWrap={true}
-                >
-                  {description}
-                </Typography>
-              </Tooltip>
+              <Box className={styles.textWrapper}>
+                <Tooltip title={description} placement="top">
+                  <Typography
+                    id="description"
+                    className={styles.typographyDescriptionStyle}
+                  >
+                    {description}
+                  </Typography>
+                </Tooltip>
+              </Box>
             )}
 
             <TextareaAutosize
@@ -172,7 +173,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               onChange={(e) => onChange(e)}
               placeholder="Response"
               disabled={responseDisable}
-              minRows={3}
               className={styles.responseStyle}
             />
           </>
@@ -185,7 +185,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               onChange={(e) => onChange(e)}
               placeholder="Enter Title"
               className={styles.textAreaTitleStyle}
-              minRows={1}
               disabled={
                 userType == "patient" || mode == "patientView" ? true : false
               }
@@ -197,7 +196,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               onChange={(e) => onChange(e)}
               placeholder="Enter Description"
               className={styles.textAreaDescriptionStyle}
-              minRows={3}
               disabled={
                 userType == "patient" || mode == "patientView" ? true : false
               }
@@ -211,7 +209,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               onChange={(e) => onChange(e)}
               placeholder="Response"
               disabled={responseDisable}
-              minRows={3}
               className={styles.responseStyle}
             />
           </>

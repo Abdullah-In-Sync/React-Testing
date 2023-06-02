@@ -17,6 +17,39 @@ export const useStyles = makeStyles({
     cursor: "pointer",
     zIndex: 1000,
   },
+  textWrapper: {
+    border: "1px solid #3ABAD3",
+    overflow: "hidden",
+    overflowY: "auto",
+    borderRadius: "4px",
+  },
+  flexShink: {
+    flexShrink: 1.6,
+    minHeight: "37px",
+  },
+  typographyTitleStyle: {
+    whiteSpace: "normal",
+    color: "#3ABAD3",
+    fontFamily: "Montserrat",
+    fontSize: "14px",
+    fontWeight: 700,
+    lineHeight: "15px",
+    letterSpacing: "0em",
+    textAlign: "left",
+    padding: "10px",
+  },
+  typographyDescriptionStyle: {
+    whiteSpace: "normal",
+    fontFamily: "Montserrat",
+    fontSize: "12px",
+    fontWeight: 500,
+    lineHeight: "13px",
+    letterSpacing: "0em",
+    color: "#3ABAD3",
+    padding: "10px",
+    overflow: "hidden",
+    overflowY: "auto",
+  },
 
   textAreaTitleStyle: {
     whiteSpace: "normal",
@@ -33,8 +66,6 @@ export const useStyles = makeStyles({
     marginRight: "unset",
     resize: "none",
     outline: "none",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
     "&::-webkit-input-placeholder": {
       color: "#3ABAD3",
     },
@@ -53,8 +84,8 @@ export const useStyles = makeStyles({
   },
 
   textAreaDescriptionStyle: {
-    whiteSpace: "normal",
     border: "1px solid #3ABAD3",
+    whiteSpace: "normal",
     borderRadius: "4px",
     fontFamily: "Montserrat",
     fontSize: "12px",
@@ -67,8 +98,6 @@ export const useStyles = makeStyles({
     marginRight: "unset",
     resize: "none",
     outline: "none",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
     "&::-webkit-input-placeholder": {
       color: "#3ABAD3",
     },
@@ -87,6 +116,7 @@ export const useStyles = makeStyles({
   },
 
   responseStyle: {
+    minHeight: "54px !important",
     border: "1px solid #25282B",
     borderRadius: "4px",
     resize: "none",
