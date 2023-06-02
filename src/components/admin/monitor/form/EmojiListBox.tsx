@@ -46,7 +46,7 @@ const EmojiListBox: React.FC<ViewProps> = ({
             </Box>
           )}
           <Box>
-            <Box p={1}>
+            <Box>
               <Emoji unified={item.code} size={60} />
             </Box>
             <Typography>{item.text}</Typography>
