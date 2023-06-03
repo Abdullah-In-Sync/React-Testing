@@ -1,105 +1,99 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { Theme } from "@mui/system";
+import theme from "../../../styles/theme/theme";
 
-export const useStyles = makeStyles({
-  modelStyle: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    outline: "none",
-  },
-  modelBox: {
-    width: "759px",
-    height: "463px",
-    background: "#FFFFFF",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-    borderRadius: "10px",
-    position: "relative",
-  },
-  childBox: {
-    position: "absolute",
-    right: "24.28px",
-    top: "24.28px",
-    cursor: "pointer",
-    zIndex: 1000,
-  },
+export const useStyles = makeStyles(() => {
+  const mainTheme = theme({ panel_color: "#3ABAD3" }) as Theme;
+  return {
+    modelStyle: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      outline: "none",
+    },
+    modelBox: {
+      background: mainTheme.palette.primary.contrastText,
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      borderRadius: "10px",
+      position: "relative",
+      maxWidth: "759px",
+    },
+    childBox: {
+      position: "absolute",
+      right: "24.28px",
+      top: "24.28px",
+      cursor: "pointer",
+      zIndex: 1000,
+    },
 
-  labelTitle: {
-    fontFamily: "Montserrat",
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: "20px",
-    letterSpacing: "0em",
-    textAlign: "left",
-    marginLeft: "20px",
-    marginTop: "39px",
-  },
+    textWrapper: {
+      border: "1px solid",
+      color: mainTheme.palette.primary.main,
+      borderRadius: "4px",
+      fontFamily: "Montserrat",
+      fontStyle: "normal",
+      lineHeight: "110%",
+    },
 
-  labelDescription: {
-    fontFamily: "Montserrat",
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: "20px",
-    marginLeft: "20px",
-    marginTop: "20px",
-    marginBottom: "12px",
-  },
+    labelWrapper: {
+      fontFamily: "Montserrat",
+      fontSize: "16px",
+      fontWeight: 600,
+      lineHeight: "20px",
+      marginLeft: "20px",
+    },
 
-  resLabel: {
-    fontFamily: "Montserrat",
-    fontSize: "16px",
-    fontWeight: 600,
-    lineHeight: "20px",
-    marginLeft: "20px",
-    marginTop: "20px",
-  },
+    labelTitle: {
+      letterSpacing: "0em",
+      textAlign: "left",
+      marginTop: "39px",
+    },
 
-  titleTypo: {
-    border: "1px solid #3ABAD3",
-    color: "#3ABAD3",
-    borderRadius: "4px",
-    padding: "10px 6px 5px 12px",
-    margin: "12px 20px 0px 20px",
-    minHeight: "58px",
-    fontFamily: "Montserrat",
-    fontStyle: "normal",
-    fontWeight: 700,
-    fontSize: "14px",
-    lineHeight: "110%",
-  },
+    labelDescription: {
+      marginTop: "20px",
+      marginBottom: "12px",
+    },
 
-  desTypo: {
-    border: "1px solid #3ABAD3",
-    color: "#3ABAD3",
-    borderRadius: "4px",
-    padding: "10px 5px 5px 10px",
-    margin: "12px 20px 0px 20px",
-    minHeight: "80px",
-    fontFamily: "Montserrat",
-    fontStyle: "normal",
-    fontWeight: 500,
-    fontSize: "12px",
-    lineHeight: "110%",
-  },
+    resLabel: {
+      marginTop: "20px",
+    },
 
-  resTextarea: {
-    color: "#25282B",
-    border: "1px solid #25282B4D",
-    padding: "5px",
-    minHeight: "54px",
-    minWidth: "719px",
-    resize: "none",
-    margin: "12px 20px 0px 20px",
-    borderRadius: "4px",
-    outline: "none",
-  },
+    titleTypo: {
+      padding: "10px 6px 5px 12px",
+      margin: "12px 20px 0px 20px",
+      minHeight: "58px",
+      fontWeight: 700,
+      fontSize: "14px",
+    },
 
-  buttonStyle: {
-    padding: "6px 1px 6px 1px",
-    color: "#FFFFFF",
-    width: "93px",
-    height: "36px",
-    background: "#6EC9DB",
-    borderRadius: "4px",
-    margin: "19px 333px 24px",
-  },
+    desTypo: {
+      padding: "10px 5px 5px 10px",
+      margin: "12px 20px 0px 20px",
+      minHeight: "80px",
+      fontWeight: 500,
+      fontSize: "12px",
+    },
+
+    resTextarea: {
+      color: "#25282B",
+      border: "1px solid #25282B4D",
+      padding: "5px",
+      minHeight: "54px",
+      minWidth: "719px",
+      resize: "none",
+      margin: "12px 20px 0px 20px",
+      borderRadius: "4px",
+      outline: "none",
+    },
+
+    buttonStyle: {
+      padding: "6px 1px 6px 1px",
+      color: mainTheme.palette.primary.contrastText,
+      width: "93px",
+      height: "36px",
+      background: mainTheme.palette.primary.main,
+      borderRadius: "4px",
+      margin: "19px 333px 24px",
+    },
+  };
 });

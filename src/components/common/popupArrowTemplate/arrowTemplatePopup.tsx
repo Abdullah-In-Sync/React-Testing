@@ -9,6 +9,8 @@ interface ArrowTemplatePopupProps {
   isOpen: boolean;
   onClose: any;
   submitResponse: any;
+  title: string;
+  description: string;
   response: any;
 }
 
@@ -16,6 +18,8 @@ const ArrowTemplatePopup: React.FC<ArrowTemplatePopupProps> = ({
   isOpen,
   onClose,
   submitResponse,
+  title,
+  description,
   response,
 }) => {
   const styles = useStyles();
@@ -40,21 +44,34 @@ const ArrowTemplatePopup: React.FC<ArrowTemplatePopupProps> = ({
             width="14.24"
           />
         </Box>
-        <Typography className={styles.labelTitle}>Title</Typography>
-        <Typography className={styles.titleTypo}>
-          Proper diet you have to follow
+        <Typography className={`${styles.labelTitle} ${styles.labelWrapper}`}>
+          Title
         </Typography>
-        <Typography className={styles.labelDescription}>Description</Typography>
-        <Typography className={styles.desTypo}>
-          This will help you to increase your stamina and improve vitality
+        <Typography className={`${styles.titleTypo} ${styles.textWrapper}`}>
+          {title}
         </Typography>
-        <Typography className={styles.resLabel}>Response*</Typography>
+        <Typography
+          className={`${styles.labelDescription} ${styles.labelWrapper}`}
+        >
+          Description
+        </Typography>
+        <Typography className={`${styles.desTypo} ${styles.textWrapper}`}>
+          {description}
+        </Typography>
+        <Typography className={`${styles.resLabel} ${styles.labelWrapper}`}>
+          Response*
+        </Typography>
         <TextareaAutosize
           value={responseInput}
           onChange={(e) => onChangeInput(e)}
           className={styles.resTextarea}
         />
-        <Button onClick={onSubmit} className={styles.buttonStyle}>
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={onSubmit}
+          className={styles.buttonStyle}
+        >
           Submit
         </Button>
       </Box>
