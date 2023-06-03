@@ -6,6 +6,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useStyles } from "./arrowTemplateStyles";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { Tooltip } from "@material-ui/core";
+import ArrowTemplatePopup from "../common/popupArrowTemplate/arrowTemplatePopup";
 
 interface Data {
   label: string;
@@ -19,8 +20,6 @@ interface TextUpdaterNodeProps {
   userType?: any;
   mode?: string;
   selected: boolean;
-  isOpen?: boolean;
-  onClose?: any;
 }
 
 const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
@@ -30,8 +29,6 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   userType,
   mode,
   selected,
-  isOpen,
-  onClose
 }) => {
   const styles = useStyles();
   const handleId = id.split("_")[1];
@@ -40,6 +37,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   const [patientResponse, setPatientResponse] = useState<string>(
     data?.patientResponse
   );
+  const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
   const onChange = (event: any) => {
@@ -50,11 +48,14 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
     } else if (event.target.id == "description") {
       nodes[getNodeIndex].data.description = event.target.value;
       setDescription(event.target.value);
-    } else if (event.target.id == "patientResponse") {
-      nodes[getNodeIndex].data.patientResponse = event.target.value;
-      setPatientResponse(event.target.value);
     }
 
+    reactFlowInstance.setNodes([...nodes]);
+  };
+  const onUpdateResponse = (response: string) => {
+    const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
+    nodes[getNodeIndex].data.patientResponse = response;
+    setPatientResponse(response);
     reactFlowInstance.setNodes([...nodes]);
   };
   const OnDeleteNode = (id) => {
@@ -66,6 +67,15 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   if (userType == "patient") {
     responseDisable = false;
   }
+
+  const onClosePopup = () => {
+    setIsOpenPopup(false);
+  };
+
+  const onOpenPopup = () => {
+    setIsOpenPopup(true);
+  };
+
   return (
     <Box
       data-testid="arrow-template-test-1"
@@ -176,8 +186,9 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               value={patientResponse}
               onChange={(e) => onChange(e)}
               placeholder="Response"
-              disabled={responseDisable}
               className={styles.responseStyle}
+              onClick={onOpenPopup}
+              readOnly={true}
             />
           </>
         ) : (
@@ -266,6 +277,14 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           style={{ opacity: opacity }}
         />
       </Box>
+      {isOpenPopup && (
+        <ArrowTemplatePopup
+          isOpen={isOpenPopup}
+          onClose={onClosePopup}
+          submitResponse={onUpdateResponse}
+          response={patientResponse}
+        />
+      )}
     </Box>
   );
 };

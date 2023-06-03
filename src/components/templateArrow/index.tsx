@@ -16,7 +16,6 @@ import { Box } from "@mui/system";
 import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 import { Button, Grid, Switch, Typography } from "@mui/material";
-import ArrowTemplatePopup from "../common/popupArrowTemplate/arrowTemplatePopup";
 import Image from "next/image";
 
 let id = 0;
@@ -41,17 +40,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
 }) => {
   const [user, setUser] = useState(userType);
   const [mod, setmod] = useState(mode);
-  const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
   const nodeType = useMemo(
     () => ({
       selectorNode: (props) => (
-        <TextUpdaterNode
-          userType={user}
-          mode={mod}
-          isOpen={isOpenPopup}
-          onClose={onClosePopup}
-          {...props}
-        />
+        <TextUpdaterNode userType={user} mode={mod} {...props} />
       ),
     }),
     [user, mod]
@@ -150,10 +142,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     }
   };
 
-  const onClosePopup = () => {
-    setIsOpenPopup(false);
-  };
-
   const icons = [
     {
       componentName: "cropSquareIcon",
@@ -172,9 +160,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   };
 
   if ((mod == "edit" || mod == "patientView") && !isPreview) {
-    // editStyle.margin = "0px 20px 0px 20px";
-    // editStyle.borderTop = "0px solid";
-    // editStyle.borderColor = "#6BA08E";
     editStyle.borderRadius = "0px 0px 8px 8px";
     editStyle.borderTop = "unset";
   }
@@ -334,9 +319,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
             Cancel
           </Button>
         </Grid>
-      )}
-      {isOpenPopup && (
-        <ArrowTemplatePopup isOpen={isOpenPopup} onClose={onClosePopup} />
       )}
     </>
   );
