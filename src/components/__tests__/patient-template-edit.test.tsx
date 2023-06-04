@@ -101,4 +101,20 @@ describe("When render a paitent template edit", () => {
     await arrowSut();
     expect(screen.getAllByTestId("arrow-template-test-1").length).toEqual(3);
   });
+  it("should open popup on click square of Arrow template", async () => {
+    await arrowSut();
+    const square = screen.getAllByTestId("arrow-template-test-1");
+    fireEvent.click(square[0]);
+    const popup = screen.getByTestId("responsePopup");
+    expect(popup).toBeInTheDocument();
+    const responseInput = screen.getByTestId("responsePopupInput");
+    expect(responseInput).toBeInTheDocument();
+    fireEvent.change(responseInput, {
+      target: { value: "testPopup" },
+    });
+    const submitBtn = await screen.getByTestId("responsePopupSubmitBtn");
+    expect(submitBtn).toBeInTheDocument();
+    fireEvent.click(submitBtn);
+    expect(await screen.findByText(/testPopup/i)).toBeInTheDocument();
+  });
 });

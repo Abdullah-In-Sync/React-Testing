@@ -35,7 +35,7 @@ const ArrowTemplatePopup: React.FC<ArrowTemplatePopupProps> = ({
   };
   return (
     <Modal open={isOpen} onClose={onClose} className={styles.modelStyle}>
-      <Box className={styles.modelBox}>
+      <Box data-testid={"responsePopup"} className={styles.modelBox}>
         <Box onClick={onClose} className={styles.childBox}>
           <Image
             alt="My Help"
@@ -62,11 +62,13 @@ const ArrowTemplatePopup: React.FC<ArrowTemplatePopupProps> = ({
           Response*
         </Typography>
         <TextareaAutosize
+          data-testid={"responsePopupInput"}
           value={responseInput}
           onChange={(e) => onChangeInput(e)}
           className={styles.resTextarea}
         />
         <Button
+          data-testid={"responsePopupSubmitBtn"}
           variant="contained"
           type="submit"
           onClick={onSubmit}
