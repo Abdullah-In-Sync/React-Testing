@@ -9,7 +9,10 @@ import React, {
 import { CommonModal } from "../CustomModal/CommonModal";
 import { useStyles } from "./commonModalStyles";
 
-type ViewProps = React.PropsWithChildren & any;
+type ViewProps = React.PropsWithChildren<{
+  maxWidth?: any;
+  className?: string;
+}>;
 
 const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
   (props, ref): JSX.Element => {
