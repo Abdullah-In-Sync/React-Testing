@@ -62,6 +62,9 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
         ]}
         backButtonClick={onPressBack ? onPressBack : handleBackButton}
         {...onClickViewProps}
+        mode={
+          templateDetail?.component_name == "ArrowTemplate" ? "arrowView" : ""
+        }
       >
         {staticTemplate &&
           TemplateDynamic &&

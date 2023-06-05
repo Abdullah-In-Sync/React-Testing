@@ -11,6 +11,7 @@ type propTypes = {
   simpleHeader?: boolean;
   activeBoxBorder?: boolean;
   rightComponent?: any;
+  mode?: string;
 };
 
 const CardWithHeader = (props: propTypes) => {
@@ -22,6 +23,7 @@ const CardWithHeader = (props: propTypes) => {
     simpleHeader,
     activeBoxBorder,
     rightComponent,
+    mode,
   } = props || {};
   return (
     <div
@@ -53,7 +55,13 @@ const CardWithHeader = (props: propTypes) => {
         </Toolbar>
       </AppBar>
       <Box
-        className={activeBoxBorder ? `header-box active-border` : "header-box"}
+        className={
+          mode == "arrowView"
+            ? ""
+            : activeBoxBorder
+            ? `header-box active-border`
+            : "header-box"
+        }
       >
         {children}
       </Box>

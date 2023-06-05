@@ -355,16 +355,16 @@ export default function ProfileForm(props: propTypes) {
                         <DatePicker
                           InputProps={{
                             sx: {
-                              height: "40px",
+                              height: "37px",
                             },
                           }}
                           disableFuture
                           // inputFormat="DD-MM-YYYY"
                           disabled={props.disabled}
-                          label="Date of Birth"
+                          label="Date of Birth*"
                           openTo="year"
                           views={["year", "month", "day"]}
-                          value={formFields?.birthdate}
+                          value={formFields?.birthdate || null}
                           onChange={changeDate}
                           renderInput={(params) => <TextField {...params} />}
                           className="form-control-bg"
@@ -400,7 +400,6 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
                       id="patientSexuality"
                       labelId="patientSexuality"
                       name="patient_sexuality"
@@ -423,7 +422,6 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
                       id="patientMaritalStatus"
                       labelId="patientMaritalStatus"
                       name="patient_marrital"
@@ -443,7 +441,6 @@ export default function ProfileForm(props: propTypes) {
                 <Grid container spacing={2} marginBottom={5}>
                   <Grid item xs={4}>
                     <TextFieldComponent
-                      required={true}
                       name="nhsno"
                       id="nhs_no"
                       label="NHS No."
@@ -459,7 +456,6 @@ export default function ProfileForm(props: propTypes) {
                   </Grid>
                   <Grid item xs={4}>
                     <TextFieldComponent
-                      required={true}
                       name="patient_lang"
                       id="language"
                       label="Language"
@@ -476,7 +472,6 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
                       id="region"
                       labelId="region"
                       name="religion"
@@ -501,7 +496,6 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
                       id="education"
                       labelId="education"
                       name="patient_education"
@@ -523,7 +517,6 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
                       id="employment"
                       labelId="employment"
                       name="patient_employment"
@@ -546,7 +539,6 @@ export default function ProfileForm(props: propTypes) {
                   <Grid item xs={4}>
                     <SingleSelectComponent
                       fullWidth={true}
-                      required={true}
                       id="employment"
                       labelId="employment"
                       name="patient_ethnic_group"

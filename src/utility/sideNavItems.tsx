@@ -100,6 +100,12 @@ export const superadmin_routes: RoutesType[] = [
       icon: <LibraryBooksIcon />,
     },
     {
+      key: 15,
+      label: "Assesment",
+      path: "/admin/assessment",
+      icon: <EqualizerIcon />,
+    },
+    {
       key: 9,
       label: "Formulation",
       path: Link + "/superadmin/formulationmodel",
