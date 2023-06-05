@@ -6,6 +6,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useStyles } from "./arrowTemplateStyles";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { Tooltip } from "@material-ui/core";
+import ArrowTemplatePopup from "../common/popupArrowTemplate/arrowTemplatePopup";
 
 interface Data {
   label: string;
@@ -16,7 +17,7 @@ interface TextUpdaterNodeProps {
   id: string;
   data: Data;
   isConnectable: boolean;
-  userType?: any;
+  userType?: string;
   mode?: string;
   selected: boolean;
 }
@@ -36,6 +37,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   const [patientResponse, setPatientResponse] = useState<string>(
     data?.patientResponse
   );
+  const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
   const onChange = (event: any) => {
@@ -46,11 +48,14 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
     } else if (event.target.id == "description") {
       nodes[getNodeIndex].data.description = event.target.value;
       setDescription(event.target.value);
-    } else if (event.target.id == "patientResponse") {
-      nodes[getNodeIndex].data.patientResponse = event.target.value;
-      setPatientResponse(event.target.value);
     }
 
+    reactFlowInstance.setNodes([...nodes]);
+  };
+  const onUpdateResponse = (response: string) => {
+    const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
+    nodes[getNodeIndex].data.patientResponse = response;
+    setPatientResponse(response);
     reactFlowInstance.setNodes([...nodes]);
   };
   const OnDeleteNode = (id) => {
@@ -62,207 +67,229 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   if (userType == "patient") {
     responseDisable = false;
   }
+
+  const onClosePopup = () => {
+    setIsOpenPopup(false);
+  };
+
+  const onOpenPopup = () => {
+    setIsOpenPopup(true);
+  };
+
   return (
-    <Box
-      data-testid="arrow-template-test-1"
-      className={`${styles.nodeStyle} ${
-        userType == "patient" || mode == "patientView" ? " nodrag" : null
-      }`}
-    >
-      {userType !== "patient" && mode !== "patientView" && (
-        <NodeResizer
-          color="#6EC9DB"
-          isVisible={selected}
-          minWidth={200}
-          minHeight={30}
-          keepAspectRatio={true}
-        />
-      )}
-      {userType !== "patient" && mode !== "patientView" && (
-        <Box onClick={() => OnDeleteNode(id)}>
-          <DeleteForeverIcon className={styles.deleteIconStyle} />
-        </Box>
-      )}
-      <Box>
-        <Handle
-          type="source"
-          id={`source_top${handleId}`}
-          position={Position.Top}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-        <Handle
-          type="target"
-          id={`target_top${handleId}`}
-          position={Position.Top}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-      </Box>
-      <Box>
-        <Handle
-          type="source"
-          id={`source_right${handleId}`}
-          position={Position.Right}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-        <Handle
-          type="target"
-          id={`target_right${handleId}`}
-          position={Position.Right}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-      </Box>
+    <>
       <Box
-        display={"flex"}
-        flexDirection={"column"}
-        gap={"8px"}
-        style={{ height: "100%", width: "100%" }}
+        onClick={userType == "patient" ? onOpenPopup : undefined}
+        data-testid="arrow-template-test-1"
+        className={`${styles.nodeStyle} ${
+          userType == "patient" || mode == "patientView" ? " nodrag" : null
+        }`}
       >
-        {userType == "patient" || mode == "patientView" ? (
-          <>
-            <Box className={`${styles.textWrapper} ${styles.flexShink}`}>
-              <Tooltip title={label} placement="top">
-                <Typography
-                  id="title"
-                  placeholder="Enter Title"
-                  className={styles.typographyTitleStyle}
-                >
-                  {label}
-                </Typography>
-              </Tooltip>
-            </Box>
-            {!description ? (
-              <></>
-            ) : (
-              <Box className={styles.textWrapper}>
-                <Tooltip title={description} placement="top">
+        {userType !== "patient" && mode !== "patientView" && (
+          <NodeResizer
+            color="#6EC9DB"
+            isVisible={selected}
+            minWidth={200}
+            minHeight={30}
+            keepAspectRatio={true}
+          />
+        )}
+        {userType !== "patient" && mode !== "patientView" && (
+          <Box onClick={() => OnDeleteNode(id)}>
+            <DeleteForeverIcon className={styles.deleteIconStyle} />
+          </Box>
+        )}
+        <Box>
+          <Handle
+            type="source"
+            id={`source_top${handleId}`}
+            position={Position.Top}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+          <Handle
+            type="target"
+            id={`target_top${handleId}`}
+            position={Position.Top}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+        </Box>
+        <Box>
+          <Handle
+            type="source"
+            id={`source_right${handleId}`}
+            position={Position.Right}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+          <Handle
+            type="target"
+            id={`target_right${handleId}`}
+            position={Position.Right}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+        </Box>
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          gap={"8px"}
+          style={{ height: "100%", width: "100%" }}
+        >
+          {userType == "patient" || mode == "patientView" ? (
+            <>
+              <Box className={`${styles.textWrapper} ${styles.flexShink}`}>
+                <Tooltip title={label} placement="top">
                   <Typography
-                    id="description"
-                    className={styles.typographyDescriptionStyle}
+                    id="title"
+                    placeholder="Enter Title"
+                    className={styles.typographyTitleStyle}
                   >
-                    {description}
+                    {label}
                   </Typography>
                 </Tooltip>
               </Box>
-            )}
+              {!description ? (
+                <></>
+              ) : (
+                <Box className={styles.textWrapper}>
+                  <Tooltip title={description} placement="top">
+                    <Typography
+                      id="description"
+                      className={styles.typographyDescriptionStyle}
+                    >
+                      {description}
+                    </Typography>
+                  </Tooltip>
+                </Box>
+              )}
 
-            <TextareaAutosize
-              id="patientResponse"
-              data-testid={`arrow-template-response-input-${id}`}
-              name="patientResponse"
-              value={patientResponse}
-              onChange={(e) => onChange(e)}
-              placeholder="Response"
-              disabled={responseDisable}
-              className={styles.responseStyle}
-            />
-          </>
-        ) : (
-          <>
-            <TextareaAutosize
-              id="title"
-              name="title"
-              value={label}
-              onChange={(e) => onChange(e)}
-              placeholder="Enter Title"
-              className={styles.textAreaTitleStyle}
-              disabled={
-                userType == "patient" || mode == "patientView" ? true : false
-              }
-            />
-            <TextareaAutosize
-              id="description"
-              name="description"
-              value={description}
-              onChange={(e) => onChange(e)}
-              placeholder="Enter Description"
-              className={styles.textAreaDescriptionStyle}
-              disabled={
-                userType == "patient" || mode == "patientView" ? true : false
-              }
-            />
+              <TextareaAutosize
+                id="patientResponse"
+                data-testid={`arrow-template-response-input-${id}`}
+                name="patientResponse"
+                value={patientResponse}
+                onChange={(e) => onChange(e)}
+                placeholder="Response"
+                className={styles.responseStyle}
+                readOnly={true}
+              />
+            </>
+          ) : (
+            <>
+              <TextareaAutosize
+                id="title"
+                name="title"
+                value={label}
+                onChange={(e) => onChange(e)}
+                placeholder="Enter Title"
+                className={styles.textAreaTitleStyle}
+                disabled={
+                  userType == "patient" || mode == "patientView" ? true : false
+                }
+              />
+              <TextareaAutosize
+                id="description"
+                name="description"
+                value={description}
+                onChange={(e) => onChange(e)}
+                placeholder="Enter Description"
+                className={styles.textAreaDescriptionStyle}
+                disabled={
+                  userType == "patient" || mode == "patientView" ? true : false
+                }
+              />
 
-            <TextareaAutosize
-              id="patientResponse"
-              data-testid={`arrow-template-response-input-${id}`}
-              name="patientResponse"
-              value={patientResponse}
-              onChange={(e) => onChange(e)}
-              placeholder="Response"
-              disabled={responseDisable}
-              className={styles.responseStyle}
-            />
-          </>
-        )}
+              <TextareaAutosize
+                id="patientResponse"
+                data-testid={`arrow-template-response-input-${id}`}
+                name="patientResponse"
+                value={patientResponse}
+                onChange={(e) => onChange(e)}
+                placeholder="Response"
+                disabled={responseDisable}
+                className={styles.responseStyle}
+              />
+            </>
+          )}
+        </Box>
+        <Box>
+          <Handle
+            type="source"
+            position={Position.Left}
+            id={`source_left${handleId}`}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+          <Handle
+            type="target"
+            position={Position.Left}
+            id={`target_left${handleId}`}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+        </Box>
+        <Box>
+          <Handle
+            type="source"
+            position={Position.Bottom}
+            id={`source_bottom${handleId}`}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+          <Handle
+            type="target"
+            position={Position.Bottom}
+            id={`target_bottom${handleId}`}
+            isConnectable={
+              userType == "patient" || mode == "patientView"
+                ? false
+                : isConnectable
+            }
+            style={{ opacity: opacity }}
+          />
+        </Box>
       </Box>
-      <Box>
-        <Handle
-          type="source"
-          position={Position.Left}
-          id={`source_left${handleId}`}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
+      {isOpenPopup && (
+        <ArrowTemplatePopup
+          isOpen={isOpenPopup}
+          onClose={onClosePopup}
+          submitResponse={onUpdateResponse}
+          title={label}
+          description={description}
+          response={patientResponse}
         />
-        <Handle
-          type="target"
-          position={Position.Left}
-          id={`target_left${handleId}`}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-      </Box>
-      <Box>
-        <Handle
-          type="source"
-          position={Position.Bottom}
-          id={`source_bottom${handleId}`}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-        <Handle
-          type="target"
-          position={Position.Bottom}
-          id={`target_bottom${handleId}`}
-          isConnectable={
-            userType == "patient" || mode == "patientView"
-              ? false
-              : isConnectable
-          }
-          style={{ opacity: opacity }}
-        />
-      </Box>
-    </Box>
+      )}
+    </>
   );
 };
 

@@ -160,9 +160,6 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   };
 
   if ((mod == "edit" || mod == "patientView") && !isPreview) {
-    // editStyle.margin = "0px 20px 0px 20px";
-    // editStyle.borderTop = "0px solid";
-    // editStyle.borderColor = "#6BA08E";
     editStyle.borderRadius = "0px 0px 8px 8px";
     editStyle.borderTop = "unset";
   }
