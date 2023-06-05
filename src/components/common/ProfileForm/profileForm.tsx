@@ -355,13 +355,13 @@ export default function ProfileForm(props: propTypes) {
                         <DatePicker
                           InputProps={{
                             sx: {
-                              height: "40px",
+                              height: "37px",
                             },
                           }}
                           disableFuture
                           // inputFormat="DD-MM-YYYY"
                           disabled={props.disabled}
-                          label="Date of Birth"
+                          label="Date of Birth*"
                           openTo="year"
                           views={["year", "month", "day"]}
                           value={formFields?.birthdate || null}

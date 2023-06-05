@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProfileForm from "../../../../../../../components/common/ProfileForm/profileForm";
 import { GET_PROFILE_DATA_FOR_THERAPIST } from "../../../../../../../graphql/query/patient";
 import { styled } from "@mui/material/styles";
-import { IconButton, Box } from "@mui/material";
+import { IconButton, Box, Typography } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import { patientEditProfileFormFeild } from "../../../../../../../utility/types/resource_types";
 import { UPDATE_PROFILE_DATA_FROM_THERAPIST } from "../../../../../../../graphql/mutation/patient";
@@ -133,20 +133,41 @@ export default function TherapistProfileDetails() {
         <Box
           style={{
             marginRight: "10px",
+            paddingTop: "10px",
           }}
         >
-          <Box style={{ display: "flex", justifyContent: "flex-end" }}>
-            <IconButtonWrapper
-              aria-label="create"
-              size="small"
-              onClick={() => {
-                setEditable(true);
+          {editable ? (
+            <Box
+              sx={{
+                backgroundColor: "#689C8B",
+                borderRadius: "10px 10px 0 0",
+                paddingBottom: "13px",
               }}
-              data-testid="edit-icon-button"
             >
-              <CreateIcon style={{ color: "#ffff" }} />
-            </IconButtonWrapper>
-          </Box>
+              <div
+                style={{
+                  padding: "14px 0 0 30px",
+                }}
+              >
+                <Typography sx={{ color: "white", fontWeight: "bold" }}>
+                  Edit Personal Info
+                </Typography>
+              </div>
+            </Box>
+          ) : (
+            <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+              <IconButtonWrapper
+                aria-label="create"
+                size="small"
+                onClick={() => {
+                  setEditable(true);
+                }}
+                data-testid="edit-icon-button"
+              >
+                <CreateIcon style={{ color: "#ffff" }} />
+              </IconButtonWrapper>
+            </Box>
+          )}
         </Box>
         <ProfileForm
           therapistProfileData={therapistProfileData}

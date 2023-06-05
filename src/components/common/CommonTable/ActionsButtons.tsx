@@ -19,6 +19,10 @@ const iconButtonsData = [
     id: "delete",
     icon: require("@mui/icons-material/DeleteSharp").default,
   },
+  {
+    id: "share",
+    icon: require("@mui/icons-material/Share").default,
+  },
 ];
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
