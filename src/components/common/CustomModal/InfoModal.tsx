@@ -12,6 +12,7 @@ import { useStyles } from "./commonModalStyles";
 type ViewProps = React.PropsWithChildren<{
   maxWidth?: any;
   className?: string;
+  headerTitleText?: string;
 }>;
 
 const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
