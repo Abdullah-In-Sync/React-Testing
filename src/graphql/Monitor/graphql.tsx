@@ -244,3 +244,25 @@ export const THERAPIST_SUBMIT_MONITOR = gql`
     }
   }
 `;
+
+export const THERAPIST_ADMIN_MONITOR_LIST = gql`
+  query AdminViewMonitorById($orgId: String!) {
+    getAdminMonitorList(org_id: $orgId) {
+      status
+      organization_name
+      org_id
+      name
+      created_date
+      _id
+    }
+  }
+`;
+
+export const THERAPIST_ADD_MONITOR = gql`
+  mutation TherapistAddMonitor($monitorId: String!, $patientId: String!) {
+    therapistAddMonitor(monitor_id: $monitorId, patient_id: $patientId) {
+      message
+      status
+    }
+  }
+`;
