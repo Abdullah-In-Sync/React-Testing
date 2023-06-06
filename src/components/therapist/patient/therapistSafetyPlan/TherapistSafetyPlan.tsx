@@ -19,8 +19,9 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
   const styles = useStyles();
   const { accordionOpen, handleAddIconButton } = safetyPlanList || {};
   const isEditable = (v) => {
-    const { plan_owner, plan_type } = v;
-    if (plan_type !== "fixed" || plan_owner === "therapist") return true;
+    const { plan_owner, plan_type, share_status } = v;
+    if ((plan_type !== "fixed" || plan_owner === "therapist") && !share_status)
+      return true;
     else return false;
   };
   return (
