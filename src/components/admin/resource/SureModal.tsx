@@ -6,15 +6,16 @@ import { Box } from "@mui/system";
 
 const SureModal = (props) => {
   const theme = useTheme();
-  const { modalOpen, setModalOpen } = props;
+  const { modalOpen, setModalOpen, mode } = props;
   return (
     <div>
       <Modal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}
+        mode={mode}
         testid="sureModal"
       >
-        <Grid container>
+        <Grid container justifyContent={mode == "mobile" ? "center" : "normal"}>
           <Grid item md={12}>
             <Box
               display="flex"

@@ -79,7 +79,9 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   return (
     <>
       <Box
-        onClick={userType == "patient" ? onOpenPopup : undefined}
+        onClick={
+          userType == "patient" || mode == "mobile" ? onOpenPopup : undefined
+        }
         data-testid="arrow-template-test-1"
         className={`${styles.nodeStyle} ${
           userType == "patient" || mode == "patientView" ? " nodrag" : null
@@ -287,6 +289,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
           title={label}
           description={description}
           response={patientResponse}
+          mode={mode == "mobile" ? "mobile" : ""}
         />
       )}
     </>
