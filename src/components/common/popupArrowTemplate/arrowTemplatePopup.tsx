@@ -26,11 +26,9 @@ const ArrowTemplatePopup: React.FC<ArrowTemplatePopupProps> = ({
 }) => {
   const styles = useStyles();
   const [responseInput, setResponseInput] = useState(response);
-  const [error, setError] = useState(false);
 
   const onChangeInput = (event: any) => {
     setResponseInput(event.target.value);
-    setError(false);
   };
   const onSubmit = () => {
     submitResponse(responseInput);
