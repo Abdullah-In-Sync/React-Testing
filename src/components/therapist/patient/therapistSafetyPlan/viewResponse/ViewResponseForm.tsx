@@ -100,22 +100,20 @@ const CommonForm: React.FC<ViewProps> = ({
         if (!isPatientResponse && patient_answer) setIsPatientResponse(true);
 
         return (
-          patient_answer && (
-            <Stack className={styles.resouceDetailBoxWrapper}>
-              <Stack className="inputsWrapper">
-                <Stack className="descriptionBoxWrapper">
-                  <label className="label">{`${i + 1}. ${safety_ques}`}</label>
-                  {safety_additional_details && (
-                    <Typography
-                      pl={1.7}
-                      pb={0.7}
-                    >{`${safety_additional_details}`}</Typography>
-                  )}
-                  <Box>{answers(item)}</Box>
-                </Stack>
+          <Stack className={styles.resouceDetailBoxWrapper}>
+            <Stack className="inputsWrapper">
+              <Stack className="descriptionBoxWrapper">
+                <label className="label">{`${i + 1}. ${safety_ques}`}</label>
+                {safety_additional_details && (
+                  <Typography
+                    pl={1.7}
+                    pb={0.7}
+                  >{`${safety_additional_details}`}</Typography>
+                )}
+                <Box>{answers(item)}</Box>
               </Stack>
             </Stack>
-          )
+          </Stack>
         );
       }
     );

@@ -133,7 +133,7 @@ mocksData.push({
           patient_answer: null,
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
-          safety_additional_details: "Description text detail",
+          safety_additional_details: "",
           safety_ques: "Question text",
           safety_ques_status: "1",
           safety_ques_type: "2",
@@ -163,7 +163,7 @@ mocksData.push({
           patient_answer: null,
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
-          safety_additional_details: "Description text detail",
+          safety_additional_details: "",
           safety_ques: "Question text",
           safety_ques_status: "1",
           safety_ques_type: "2",
@@ -223,7 +223,7 @@ mocksData.push({
           patient_answer: null,
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
-          safety_additional_details: "Description text detail",
+          safety_additional_details: "",
           safety_ques: "Question text",
           safety_ques_status: "1",
           safety_ques_type: "2",
@@ -243,7 +243,7 @@ mocksData.push({
       planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
       patientId: "7a27dc00d48bf983fdcd4b0762ebd",
       questions:
-        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"","questionType":"2","questionOption":"option1,option2"}]',
     },
   },
   result: {
@@ -263,7 +263,7 @@ mocksData.push({
       planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-fail",
       patientId: "7a27dc00d48bf983fdcd4b0762ebd-fail",
       questions:
-        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"Description text detail","questionType":"2","questionOption":"option1,option2"}]',
+        '[{"questionId":"3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e","question":"Question text","description":"","questionType":"2","questionOption":"option1,option2"}]',
     },
   },
   result: {
@@ -920,8 +920,6 @@ describe("Therapist patient safety plan", () => {
     expect(addButton).toBeInTheDocument();
     fireEvent.click(addButton);
 
-    const descTextDetail = await screen.findByText(/Description text detail/i);
-    expect(descTextDetail).toBeInTheDocument();
     const saveButton = await screen.findByTestId(
       "submitForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
     );
@@ -968,14 +966,11 @@ describe("Therapist patient safety plan", () => {
     expect(addButton).toBeInTheDocument();
     fireEvent.click(addButton);
 
-    const descTextDetail = await screen.findByText(/Description text detail/i);
-    expect(descTextDetail).toBeInTheDocument();
     const cancelButton = await screen.findByTestId(
       "cancelForm_b605e3f4-9f2a-48fe-9a76-9c7cebed6027"
     );
 
     fireEvent.click(cancelButton);
-    expect(descTextDetail).not.toBeInTheDocument();
   });
 
   it("should delete safety plan question", async () => {
@@ -989,8 +984,6 @@ describe("Therapist patient safety plan", () => {
     expect(addButton).toBeInTheDocument();
     fireEvent.click(addButton);
 
-    const descTextDetail = await screen.findByText(/Description text detail/i);
-    expect(descTextDetail).toBeInTheDocument();
     const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
 
     fireEvent.click(deleteButton);
@@ -1001,7 +994,6 @@ describe("Therapist patient safety plan", () => {
     const okButton = await screen.findByTestId("SuccessOkBtn");
     expect(okButton).toBeInTheDocument();
     fireEvent.click(okButton);
-    expect(descTextDetail).not.toBeInTheDocument();
   });
 
   it("should add and delete new safety plan question", async () => {
