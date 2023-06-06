@@ -136,12 +136,11 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   /* istanbul ignore next */
   const handleAddIconButton = async (index, id) => {
+    setAccordionOpen(undefined);
     /* istanbul ignore next */
     if (index !== accordionOpen) {
       await fetchPlanData(id);
       setAccordionOpen(index);
-    } else {
-      setAccordionOpen(undefined);
     }
   };
 

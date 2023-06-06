@@ -66,6 +66,7 @@ export const useStyles = makeStyles(() => {
           borderRadius: 10,
           border: "1px solid",
           borderColor: "#ccc",
+          minHeight: 40,
         },
         "& .MuiBox-root p": {
           fonSize: "0.8rem",
