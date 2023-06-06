@@ -140,6 +140,7 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
               data={monitorHelper.generateLineHoursData(
                 filterQuesAnsData["hours"]["data"]
               )}
+              yTicks={{ precision: false }}
             />
           </Box>
         </Stack>

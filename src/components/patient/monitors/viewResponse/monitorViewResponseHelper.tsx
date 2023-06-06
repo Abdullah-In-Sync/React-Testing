@@ -113,7 +113,7 @@ export const emojisLineChartPlugins = (
             ctx.font = "30px serif";
             ctx.fillText(
               String.fromCodePoint(parseInt(code, 16)),
-              xAxis.left - 40,
+              xAxis.left - 43,
               y + 10
             );
           }

@@ -9,11 +9,21 @@ import React, {
 import { CommonModal } from "../CustomModal/CommonModal";
 import { useStyles } from "./commonModalStyles";
 
-type ViewProps = React.PropsWithChildren;
+type ViewProps = React.PropsWithChildren<{
+  maxWidth?: any;
+  className?: string;
+  headerTitleText?: string;
+}>;
 
 const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
-  ({ children }, ref): JSX.Element => {
+  (props, ref): JSX.Element => {
     const styles = useStyles();
+    const {
+      children,
+      maxWidth = "sm",
+      className = styles.modalC,
+      ...rest
+    } = props;
     const [data, setData] = useState();
     const modalRef = useRef<any>(null);
 
@@ -21,6 +31,10 @@ const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
       openConfirm({ data }) {
         setData(data);
         modalRef.current.open();
+      },
+      close() {
+        setData(undefined);
+        modalRef.current.close();
       },
     }));
 
@@ -32,7 +46,7 @@ const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
     };
 
     return (
-      <CommonModal ref={modalRef} maxWidth="sm" className={styles.modalC}>
+      <CommonModal ref={modalRef} {...{ maxWidth, className }} {...rest}>
         {elementWithProps()}
       </CommonModal>
     );
@@ -47,4 +61,5 @@ type OpenConfirmPram = {
 
 export type ConfirmInfoElement = {
   openConfirm: ({ data }: OpenConfirmPram) => void;
+  close: () => void;
 };
