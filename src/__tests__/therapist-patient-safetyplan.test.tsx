@@ -110,6 +110,7 @@ mocksData.push({
           patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
           plan_type: "custom",
           __typename: "patientSafetyPlans",
+          share_status: 1,
         },
       ],
     },
@@ -1051,7 +1052,7 @@ describe("Therapist patient safety plan", () => {
     expect(serverError).toBeInTheDocument();
   });
 
-  it("should load patient reponse", async () => {
+  it("should load patient response", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
