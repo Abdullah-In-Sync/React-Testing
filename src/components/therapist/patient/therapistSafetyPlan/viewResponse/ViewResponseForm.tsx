@@ -96,8 +96,8 @@ const CommonForm: React.FC<ViewProps> = ({
         },
         i
       ) => {
-        const { patient_answer, safety_additional_details, safety_ques } = item;
-        if (!isPatientResponse && patient_answer) setIsPatientResponse(true);
+        const { safety_additional_details, safety_ques } = item;
+        if (!isPatientResponse && !isEditable) setIsPatientResponse(true);
 
         return (
           !isEditable && (
