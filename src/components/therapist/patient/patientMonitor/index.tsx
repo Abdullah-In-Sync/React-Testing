@@ -3,8 +3,11 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
+import { useAppContext } from "../../../../contexts/AuthContext";
 import {
   GET_THERAPIST_PATIENT_MONITOR_LIST,
+  THERAPIST_ADD_MONITOR,
+  THERAPIST_ADMIN_MONITOR_LIST,
   THERAPIST_SUBMIT_MONITOR,
   THERAPIST_VIEW_MONITOR,
 } from "../../../../graphql/Monitor/graphql";
@@ -14,6 +17,7 @@ import {
 } from "../../../../graphql/Monitor/types";
 import { formatDate } from "../../../../utility/helper";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
+import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
 import Loader from "../../../common/Loader";
 import MonitorsComponent from "../../../patient/monitors";
 import MonitorCompleteView from "../../../patient/monitors/completeView/MonitorCompleteView";
@@ -22,17 +26,49 @@ import MonitorListWrapper from "./monitors/MonitorListWrapper";
 
 const TherapyPatientMonitorList: any = () => {
   const initialDate = "2022-03-02";
+  const modalRefAddMonitor = useRef<ConfirmInfoElement>(null);
+  const { user = {} } = useAppContext();
+  const { therapist_data: { org_id: orgId = undefined } = {} } = user;
   const router = useRouter();
   const { query: { id: patientId, view, monitorId, startDate, endDate } = {} } =
     router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [submitMonitorResponse] = useMutation(THERAPIST_SUBMIT_MONITOR);
+  const [submitAddMonitorApi] = useMutation(THERAPIST_ADD_MONITOR);
   const { enqueueSnackbar } = useSnackbar();
+
+  const [getTherapistAdminMonitorList] = useLazyQuery(
+    THERAPIST_ADMIN_MONITOR_LIST,
+    {
+      fetchPolicy: "cache-and-network",
+      onCompleted: (data) => {
+        /* istanbul ignore next */
+        setLoader(false);
+        if (data) {
+          const { getAdminMonitorList = [] } = data;
+
+          modalRefAddMonitor?.current?.openConfirm({
+            data: getAdminMonitorList,
+          });
+        }
+        setLoader(false);
+      },
+      onError: () => {
+        enqueueSnackbar("Server error.", {
+          variant: "error",
+        });
+      },
+    }
+  );
 
   const [
     getTherapistPatientMonitorList,
-    { data: { therapistMonitorList = [] } = {}, loading: monitorsListLoading },
+    {
+      data: { therapistMonitorList = [] } = {},
+      loading: monitorsListLoading,
+      refetch: therapistPatientMonitorListRefetch,
+    },
   ] = useLazyQuery<TherapistMonitorListData>(
     GET_THERAPIST_PATIENT_MONITOR_LIST,
     {
@@ -84,6 +120,34 @@ const TherapyPatientMonitorList: any = () => {
             });
             backPress();
             doneCallback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+      setLoader(false);
+    }
+  };
+
+  const submitAddMonitorForm = async (formFields, doneCallback) => {
+    try {
+      await submitAddMonitorApi({
+        variables: { ...formFields, ...{ patientId } },
+        onCompleted: (data) => {
+          const {
+            therapistAddMonitor: { status, message },
+          } = data;
+          if (status) {
+            enqueueSnackbar("Monitor successfully added.", {
+              variant: "success",
+            });
+            therapistPatientMonitorListRefetch();
+            backPress();
+            doneCallback();
+          } else {
+            enqueueSnackbar(message, { variant: "error" });
           }
           setLoader(false);
         },
@@ -162,6 +226,21 @@ const TherapyPatientMonitorList: any = () => {
     );
   };
 
+  const onClickMonitor = () => {
+    setLoader(true);
+    getTherapistAdminMonitorList({
+      variables: { orgId },
+    });
+  };
+
+  const handlePressAddMonitor = (formFields, { setSubmitting }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => submitAddMonitorForm(formFields, callback),
+      description: "Are you sure you want to add the monitor?",
+      setSubmitting,
+    });
+  };
+
   const currentView = () => {
     switch (view) {
       case "complete":
@@ -188,13 +267,19 @@ const TherapyPatientMonitorList: any = () => {
         );
       default:
         return (
-          <MonitorListWrapper>
-            <MonitorsComponent
-              monitoringList={therapistMonitorList}
-              viewResponseButtonClick={viewResponseButtonClick}
-              completeButtonClick={completeButtonClick}
-            />
-          </MonitorListWrapper>
+          <ConfirmWrapper ref={confirmRef}>
+            <MonitorListWrapper
+              modalRefAddMonitor={modalRefAddMonitor}
+              onPressAddMonitor={handlePressAddMonitor}
+              onClickMonitor={onClickMonitor}
+            >
+              <MonitorsComponent
+                monitoringList={therapistMonitorList}
+                viewResponseButtonClick={viewResponseButtonClick}
+                completeButtonClick={completeButtonClick}
+              />
+            </MonitorListWrapper>
+          </ConfirmWrapper>
         );
     }
   };
