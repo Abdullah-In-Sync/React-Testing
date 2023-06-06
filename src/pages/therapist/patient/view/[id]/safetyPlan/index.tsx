@@ -108,7 +108,10 @@ const TherapistSafetyPlanIndex: NextPage = () => {
 
   const [
     getSafetyPlanById,
-    { data: { viewPatientSafetyPlanById: planData = null } = {} } = {},
+    {
+      data: { viewPatientSafetyPlanById: planData = null } = {},
+      error: getSafetyPlanByIdError = undefined,
+    } = {},
   ] = useLazyQuery(VIEW_PATIENT_SAFETY_PLAN_BY_ID, {
     fetchPolicy: "network-only",
     onCompleted: () => {
@@ -515,7 +518,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             handleDeleteQuestion={handleDeleteQuestion}
             onPressDeletePlan={onPressDeletePlan}
             handleAddIconButton={handleAddIconButton}
-            accordionOpen={accordionOpen}
+            accordionOpen={!getSafetyPlanByIdError && accordionOpen}
           />
         </Box>
       </Box>
