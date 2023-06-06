@@ -287,12 +287,12 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
             variant="contained"
             type="submit"
             style={{
-              padding: "15px 15px 15px 15px",
+              padding: "15px",
               fontSize: "14px",
               background: "#6EC9DB",
               borderRadius: "30px",
-              minWidth: "160px",
-              marginRight: "31px",
+              minWidth: "162px",
+              marginRight: "16px",
               lineHeight: "14px",
               textAlign: "center",
               letterSpacing: "0.0037em",
@@ -304,14 +304,14 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
           <Button
             data-testid="ArrowMobileTemplateCancel"
             style={{
-              padding: "15px 15px 15px 15px",
+              padding: "15px",
               fontSize: "16px",
               boxSizing: "border-box",
               border: "2px solid #6DA290",
               borderRadius: "30px",
               color: "#6DA290",
-              minWidth: "160px",
-              marginLeft: "31px",
+              minWidth: "162px",
+              marginLeft: "16px",
               lineHeight: "14px",
             }}
             onClick={() => onCancel()}
