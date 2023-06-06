@@ -24,7 +24,11 @@ export default function BasicModal(props) {
     setModalOpen,
     shouldCloseOnBackgroundClick = true,
     closeOnEscape = false,
+    mode,
   } = props;
+  if (mode == "mobile") {
+    style.width = 336;
+  }
 
   /* istanbul ignore next */
   const handleClose = (event, reason) => {

@@ -11,12 +11,17 @@ export const useStyles = makeStyles(() => {
       justifyContent: "center",
       outline: "none",
     },
+
+    mobileModelStyle: {
+      margin: "0px 19px",
+    },
     modelBox: {
       background: mainTheme.palette.primary.contrastText,
       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
       borderRadius: "10px",
       position: "relative",
       maxWidth: "759px",
+      minWidth: "342px",
     },
     childBox: {
       position: "absolute",
@@ -79,11 +84,18 @@ export const useStyles = makeStyles(() => {
       border: "1px solid #25282B4D",
       padding: "5px",
       minHeight: "54px",
-      minWidth: "719px",
+      minWidth: "335px",
       resize: "none",
       margin: "12px 20px 0px 20px",
       borderRadius: "4px",
       outline: "none",
+    },
+
+    mobilePopupResArea: {
+      minWidth: "304px",
+    },
+    webPopupResArea: {
+      minWidth: "719px",
     },
 
     buttonStyle: {
@@ -93,6 +105,11 @@ export const useStyles = makeStyles(() => {
       height: "36px",
       background: mainTheme.palette.primary.main,
       borderRadius: "4px",
+    },
+    buttonMobile: {
+      margin: "13px 124.5px 18px 124.5px",
+    },
+    buttonWebStyle: {
       margin: "19px 333px 24px",
     },
   };
