@@ -12,6 +12,7 @@ import { GET_PATIENT_RESOURCE_TEMPLATE } from "../../../../graphql/query/resourc
 import Loader from "../../../../components/common/Loader";
 import TemplateArrow from "../../../../components/templateArrow";
 import Cookies from "js-cookie";
+import ConfirmationModal from "../../../../components/common/ConfirmationModal";
 
 const PatientMobileArrowTemplatePage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -21,6 +22,10 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     useState<TemplateDetailInterface>();
   const [templateResponse, setTemplateResponse] = useState<string>();
   const router = useRouter();
+  const [isConfirm, setIsConfirm] = useState({
+    confirm: false,
+    data: "",
+  });
 
   const id = router?.query?.sourceId as string;
   const [updateResourceTemplateResponse] = useMutation(
@@ -59,6 +64,20 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const handleSubmitTemplateData = async (value) => {
+    setIsConfirm({
+      confirm: true,
+      data: value,
+    });
+  };
+
+  const clearIsConfirm = () => {
+    setIsConfirm({
+      confirm: false,
+      data: "",
+    });
+  };
+
+  const onConfirmSubmit = async () => {
     setLoader(true);
     try {
       const {
@@ -69,8 +88,8 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
           update: {
             template_response:
               templateDetail.component_name == "ArrowTemplate"
-                ? value
-                : JSON.stringify(value),
+                ? isConfirm.data
+                : JSON.stringify(isConfirm.data),
           },
         },
       });
@@ -87,6 +106,10 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     } finally {
       setLoader(false);
+      setIsConfirm({
+        confirm: false,
+        data: "",
+      });
     }
   };
 
@@ -117,6 +140,15 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
           onSubmit={handleSubmitTemplateData}
           onCancel={oncancelEvent}
           userType="patient"
+        />
+      )}
+      {isConfirm.confirm && (
+        <ConfirmationModal
+          label="Are you sure?"
+          description="you want to save response"
+          onCancel={clearIsConfirm}
+          onConfirm={onConfirmSubmit}
+          mode="mobile"
         />
       )}
     </>

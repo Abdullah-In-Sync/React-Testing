@@ -8,6 +8,7 @@ interface ViewProps {
   onCancel?: () => void;
   onConfirm?: () => void;
   onOk?: () => void;
+  mode?: string;
 }
 
 const ConfirmationModal: React.FC<ViewProps> = ({
@@ -16,11 +17,12 @@ const ConfirmationModal: React.FC<ViewProps> = ({
   label,
   description,
   onOk,
+  mode,
 }) => {
   return (
     <div data-testid="openFileUpload">
       <>
-        <SureModal modalOpen={true}>
+        <SureModal modalOpen={true} mode={mode}>
           <Typography
             variant="subtitle1"
             sx={{

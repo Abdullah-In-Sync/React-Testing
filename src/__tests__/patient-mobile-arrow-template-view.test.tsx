@@ -88,5 +88,24 @@ describe("Patient mobile view Arrow template page", () => {
     fireEvent.click(tokenInput);
     const arrowTemplate = await screen.findAllByTestId("arrow-template-test-1");
     expect(arrowTemplate.length).toEqual(3);
+    fireEvent.click(arrowTemplate[0]);
+    const popup = screen.getByTestId("responsePopup");
+    expect(popup).toBeInTheDocument();
+    const responseInput = screen.getByTestId("responsePopupInput");
+    expect(responseInput).toBeInTheDocument();
+    fireEvent.change(responseInput, {
+      target: { value: "testPopup" },
+    });
+    const submitBtn = await screen.getByTestId("responsePopupSubmitBtn");
+    expect(submitBtn).toBeInTheDocument();
+    fireEvent.click(submitBtn);
+    expect(await screen.findByText(/testPopup/i)).toBeInTheDocument();
+    const saveBtn = await screen.findByTestId("ArrowMobileTemplateSave");
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    const confirmBtn = await screen.getByTestId("confirmButton");
+    expect(confirmBtn).toBeInTheDocument();
+    const cancelBtn = await screen.getByTestId("cancelButton");
+    expect(cancelBtn).toBeInTheDocument();
   });
 });
