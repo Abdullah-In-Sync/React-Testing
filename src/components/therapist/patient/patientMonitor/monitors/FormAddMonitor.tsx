@@ -22,7 +22,8 @@ const FormAddMonitor: React.FC<
               showDefaultSelectOption={false}
               label="Select Monitor"
               options={data}
-              mappingKeys={["_id", "name"]}
+              className="addMonitorDropdown"
+              mappingKeys={["_id", "name", "patient_monitor"]}
               size="small"
               extraProps={{ "data-testid": `addMonitorDropdown` }}
             />

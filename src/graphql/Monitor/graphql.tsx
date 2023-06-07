@@ -246,14 +246,17 @@ export const THERAPIST_SUBMIT_MONITOR = gql`
 `;
 
 export const THERAPIST_ADMIN_MONITOR_LIST = gql`
-  query AdminViewMonitorById($orgId: String!) {
-    getAdminMonitorList(org_id: $orgId) {
+  query GetAdminMonitorList($orgId: String!, $patientId: String!) {
+    getAdminMonitorList(org_id: $orgId, patient_id: $patientId) {
       status
       organization_name
       org_id
       name
       created_date
       _id
+      patient_monitor {
+        _id
+      }
     }
   }
 `;
