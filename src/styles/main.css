@@ -134,3 +134,22 @@ p {
 .mb20 {
   margin-bottom: 20px !important;
 }
+
+
+.selectOptionActive::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #69b6d5;
+  text-align: right;
+  position: absolute;
+  right: 10px;
+  vertical-align: middle;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+ }

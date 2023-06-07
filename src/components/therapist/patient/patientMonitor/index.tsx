@@ -229,7 +229,7 @@ const TherapyPatientMonitorList: any = () => {
   const onClickMonitor = () => {
     setLoader(true);
     getTherapistAdminMonitorList({
-      variables: { orgId },
+      variables: { orgId, patientId },
     });
   };
 

@@ -25,6 +25,7 @@ mocksData.push({
     query: THERAPIST_ADMIN_MONITOR_LIST,
     variables: {
       orgId: "517fa21a82c0464a92aaae90ae0d5c59",
+      patientId: "patient-id",
     },
   },
   result: {

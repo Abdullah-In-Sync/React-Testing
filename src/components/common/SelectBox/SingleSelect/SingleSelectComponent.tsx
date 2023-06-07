@@ -19,18 +19,24 @@ type propTypes = {
   size: "small" | "medium";
   disabled?: boolean;
   showDefaultSelectOption?: boolean;
+  menuItemClassName?: string;
 };
 
 /* istanbul ignore next */
 export type Option = {
   id: any;
   value: string;
+  activeKey?: string;
 };
 
 /* istanbul ignore next */
 const mapping = (options: Option[], keys = []) => {
   return options.reduce((mappingOptions: Option[], option) => {
-    mappingOptions.push({ id: option[keys[0]], value: option[keys[1]] });
+    mappingOptions.push({
+      id: option[keys[0]],
+      value: option[keys[1]],
+      activeKey: option[keys[2]],
+    });
     return mappingOptions;
   }, []);
 };
@@ -59,13 +65,19 @@ export default function SingleSelectComponent(props: propTypes) {
         {props.showDefaultSelectOption !== false && (
           <MenuItem value="">Select</MenuItem>
         )}
-        {mapping(props.options, props.mappingKeys).map(({ id, value }) => {
-          return (
-            <MenuItem key={`${id}-${value}`} value={id}>
-              {value}
-            </MenuItem>
-          );
-        })}
+        {mapping(props.options, props.mappingKeys).map(
+          ({ id, value, activeKey }) => {
+            return (
+              <MenuItem
+                className={activeKey && "selectOptionActive"}
+                key={`${id}-${value}`}
+                value={id}
+              >
+                {value}
+              </MenuItem>
+            );
+          }
+        )}
       </Select>
     </FormControl>
   );
