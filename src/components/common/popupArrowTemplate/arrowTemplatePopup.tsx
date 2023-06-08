@@ -58,14 +58,19 @@ const ArrowTemplatePopup: React.FC<ArrowTemplatePopupProps> = ({
         <Typography className={`${styles.titleTypo} ${styles.textWrapper}`}>
           {title}
         </Typography>
-        <Typography
-          className={`${styles.labelDescription} ${styles.labelWrapper}`}
-        >
-          Description
-        </Typography>
-        <Typography className={`${styles.desTypo} ${styles.textWrapper}`}>
-          {description}
-        </Typography>
+        {description && (
+          <>
+            <Typography
+              className={`${styles.labelDescription} ${styles.labelWrapper}`}
+            >
+              Description
+            </Typography>
+            <Typography className={`${styles.desTypo} ${styles.textWrapper}`}>
+              {description}
+            </Typography>
+          </>
+        )}
+
         <Typography className={`${styles.resLabel} ${styles.labelWrapper}`}>
           Response
         </Typography>

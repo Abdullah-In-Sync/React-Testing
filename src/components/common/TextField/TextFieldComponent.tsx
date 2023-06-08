@@ -22,11 +22,13 @@ type propTypes = {
   disabled?: boolean;
   autoComplete?: string;
   placeholder?: string;
+  style?: any;
 };
 
 export default function TextFieldComponent(props: propTypes) {
   return (
     <TextField
+      style={props.style}
       fullWidth={props.fullWidth}
       className={props.className}
       required={props.required}

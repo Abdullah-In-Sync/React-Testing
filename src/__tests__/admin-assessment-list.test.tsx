@@ -1,8 +1,11 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-import { GET_ADMIN_ASSESSMENT_LIST } from "../graphql/assessment/graphql";
+import {
+  ADMIN_CREATE_ASSESSMENT,
+  GET_ADMIN_ASSESSMENT_LIST,
+} from "../graphql/assessment/graphql";
 import theme from "../styles/theme/theme";
 import AssessmentListPage from "../pages/admin/assessment";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
@@ -27,7 +30,7 @@ mocksData.push({
           created_date: "2021-12-31 05:54:13",
           logo: "20211231055413__rest_easy.png",
           logo_url: null,
-          name: "resteasy.dev-myhelp",
+          name: "I am organization",
           panel_color: "#6ec9db",
           patient: "Patient",
           patient_plural: "patients",
@@ -70,6 +73,22 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADMIN_CREATE_ASSESSMENT,
+    variables: { name: "Namelkmsllvslm", org_id: undefined },
+  },
+  result: {
+    data: {
+      adminCreateAssessment: {
+        duplicateNames: null,
+        result: true,
+        __typename: "adminResult",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -82,13 +101,61 @@ const sut = async () => {
   );
 };
 
-describe("Admin monitor list", () => {
-  it("delete monitor from list", async () => {
+describe("Admin Assessment list", () => {
+  it("Assessment list", async () => {
     await sut();
 
     await waitFor(async () => {
       expect(screen.getByText("Name of Assessment")).toBeInTheDocument();
       expect(screen.getByText("test assessment")).toBeInTheDocument();
+    });
+  });
+  it("delete monitor from list", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("createPlanButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("createPlanButton"));
+
+      expect(screen.getByText("Create assessment")).toBeInTheDocument();
+      expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("patient_firstname"), {
+        target: { value: "Namelkmsllvslm" },
+      });
+
+      const selectElement = screen.getByTestId(
+        "select_organisation1"
+      ) as HTMLSelectElement;
+      expect(screen.getByTestId("select_organisation1")).toBeInTheDocument();
+
+      // await waitFor(async () => {
+      //   expect(screen.getByText("I am organization")).toBeInTheDocument();
+      // });
+
+      fireEvent.change(selectElement, { target: { selectedIndex: 1 } });
+
+      // expect(selectElement.selectedIndex).toBe(0);
+      // console.debug(
+      //   "Koca: expect(selectElement.selectedIndex).toBe(0); ",
+      //   expect(selectElement.selectedIndex).toBe(0)
+      // );
+
+      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Are you sure you want to create the assessment?")
+        ).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(
+        screen.getByText("Assessment created successfully!")
+      ).toBeInTheDocument();
     });
   });
 });
