@@ -75,7 +75,7 @@ export default function SingleSelectComponent(props: propTypes) {
         {mapping(props.options, props.mappingKeys).map(
           ({ id, value, activeKey }) => {
             return activeKey && props?.toolTipText ? (
-              <Tooltip title={`${props.toolTipText}`} placement="top">
+              <Tooltip title={`${props.toolTipText}`} placement="bottom-end">
                 <MenuItem
                   className={activeKey && "selectOptionActive"}
                   key={`${id}-${value}`}
