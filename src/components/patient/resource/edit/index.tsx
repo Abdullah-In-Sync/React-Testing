@@ -19,6 +19,8 @@ interface ViewProps {
   mode?: string;
   onPressBack?: () => void;
   resourceDetailUrl?: string;
+  arrowTemplatedefaultIsPreview?: boolean;
+  defaultUserType?: string;
 }
 
 const PaitentTemplateEdit: React.FC<ViewProps> = ({
@@ -30,6 +32,8 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   mode,
   onPressBack,
   resourceDetailUrl = `/patient/therapy/?tab=resources`,
+  arrowTemplatedefaultIsPreview,
+  defaultUserType,
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
@@ -80,12 +84,13 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
           )}
         {templateDetail?.component_name == "ArrowTemplate" && (
           <TemplateArrow
-            mode={`${mode == "patientView" ? "patientView" : "edit"}`}
+            mode={"patientView"}
             nodesData={JSON.parse(templateData).nodes}
             edgesData={JSON.parse(templateData).edges}
             onSubmit={onSubmit}
             onCancel={() => router.push(resourceDetailUrl)}
-            userType={userType}
+            userType={defaultUserType ? defaultUserType : userType}
+            defaultIsPreview={arrowTemplatedefaultIsPreview}
           />
         )}
       </BreadCrumbsWithBackButton>

@@ -82,6 +82,8 @@ const PatientEditTemplatePage: NextPage = () => {
           templateResponse={templateResponse}
           onSubmit={handleSubmitTemplateData}
           resourceDetailUrl={`/therapist/resource/${resourceId}/${patientId}`}
+          arrowTemplatedefaultIsPreview={true}
+          defaultUserType={"patient"}
         />
       </Layout>
     </>
