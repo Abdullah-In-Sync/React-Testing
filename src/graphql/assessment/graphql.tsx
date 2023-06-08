@@ -26,3 +26,15 @@ export const GET_ADMIN_ASSESSMENT_LIST = gql`
     }
   }
 `;
+
+export const ADMIN_CREATE_ASSESSMENT = gql`
+  mutation adminCreateAssessment($org_id: String!, $name: String!) {
+    adminCreateAssessment(org_id: $org_id, name: $name) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
