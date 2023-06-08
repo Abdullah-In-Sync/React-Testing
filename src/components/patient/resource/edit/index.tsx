@@ -18,6 +18,7 @@ interface ViewProps {
   onClickView?: () => void;
   mode?: string;
   onPressBack?: () => void;
+  resourceDetailUrl?: string;
 }
 
 const PaitentTemplateEdit: React.FC<ViewProps> = ({
@@ -28,11 +29,11 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   onClickView,
   mode,
   onPressBack,
+  resourceDetailUrl = `/patient/therapy/?tab=resources`,
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
-  const resourceDetailUrl = `/patient/therapy/?tab=resources`;
 
   const TemplateDynamic = templateComponents[templateDetail?.component_name];
   const templateData =

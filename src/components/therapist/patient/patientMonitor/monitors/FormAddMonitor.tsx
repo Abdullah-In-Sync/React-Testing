@@ -26,6 +26,7 @@ const FormAddMonitor: React.FC<
               mappingKeys={["_id", "name", "patient_monitor"]}
               size="small"
               extraProps={{ "data-testid": `addMonitorDropdown` }}
+              toolTipText="This monitor is already added"
             />
           </Box>
         </Box>
