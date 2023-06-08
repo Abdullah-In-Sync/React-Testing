@@ -1,34 +1,45 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import AssessmentComponent from "../../../components/admin/assessement";
-import { GET_ADMIN_ASSESSMENT_LIST } from "../../../graphql/assessment/graphql";
+import {
+  ADMIN_CREATE_ASSESSMENT,
+  GET_ADMIN_ASSESSMENT_LIST,
+} from "../../../graphql/assessment/graphql";
+import {
+  CommonModal,
+  ModalElement,
+} from "../../../components/common/CustomModal/CommonModal";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import CreateAssessmentForm from "../../../components/admin/assessement/createAssessment/CreateAssessmentForm";
+import { useSnackbar } from "notistack";
+import InfoModal, {
+  ConfirmInfoElement,
+} from "../../../components/common/CustomModal/InfoModal";
+import InfoMessageView from "../../../components/common/InfoMessageView";
 
 const AssessmentListPage: NextPage = () => {
+  const modalRefAddPlan = useRef<ModalElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
+
   //   const router = useRouter();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
+  const [isConfirmShareTask, setIsConfirmShareTask] = useState(false);
+  const [orgIds, setOrgIds] = useState();
+  const infoModalRef = useRef<ConfirmInfoElement>(null);
+  const [name, setName] = useState("");
   const [page, setPage] = useState(1);
-  //   const { enqueueSnackbar } = useSnackbar();
-  //   const [isConfirm, setIsConfirm] = useState<any>({
-  //     status: false,
-  //     storedFunction: null,
-  //     setSubmitting: null,
-  //     cancelStatus: false,
-  //     confirmObject: {
-  //       description: "",
-  //     },
-  //   });
-  //   const [successModal, setSuccessModal] = useState<any>();
 
-  //   const [updateMonitor] = useMutation(ADMIN_UPDATE_MONITOR);
+  // Mutation
+  const [createAssessment] = useMutation(ADMIN_CREATE_ASSESSMENT);
 
   useEffect(() => {
     getOrgList();
@@ -61,6 +72,7 @@ const AssessmentListPage: NextPage = () => {
     {
       loading: loadingMonitorList,
       data: { adminAssessmentList: listData = {} } = {},
+      refetch,
     },
   ] = useLazyQuery(GET_ADMIN_ASSESSMENT_LIST, {
     fetchPolicy: "cache-and-network",
@@ -101,87 +113,76 @@ const AssessmentListPage: NextPage = () => {
     setPage(1);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  //   const onPressSideButton = () => {
-  //     router.push("/admin/monitor/create");
-  //   };
-
-  //   const handleDeleteMeasure = async (id: string, doneCallback) => {
-  //     setLoader(true);
-  //     try {
-  //       await updateMonitor({
-  //         variables: {
-  //           monitorId: id,
-  //           update: {
-  //             status: 0,
-  //           },
-  //         },
-  //         fetchPolicy: "network-only",
-  //         onCompleted: () => {
-  //           setSuccessModal({
-  //             description: "Your monitor has been deleted successfully.",
-  //           });
-  //           getAdminAssessmentList({
-  //             variables: { limit: rowsLimit, pageNo: page },
-  //           });
-  //         },
-  //       });
-  //     } catch (e) {
-  //       setLoader(false);
-  //       enqueueSnackbar("Something is wrong", { variant: "error" });
-  //     } finally {
-  //       doneCallback();
-  //       setLoader(false);
-  //     }
-  //   };
-
-  //   const onPressDeleteMeasure = (id) => {
-  //     setIsConfirm({
-  //       status: true,
-  //       confirmObject: {
-  //         description: "Are you sure you want to delete the monitor?",
-  //       },
-  //       storedFunction: (callback) => handleDeleteMeasure(id, callback),
-  //     });
-  //   };
+  /* istanbul ignore next */
+  const handleOpenCreateAssessmentModal = useCallback(
+    () => modalRefAddPlan.current?.open(),
+    []
+  );
+  const handleCloseCreateAssessmentModal = useCallback(() => {
+    /* istanbul ignore next */
+    modalRefAddPlan.current?.close();
+  }, []);
 
   /* istanbul ignore next */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  //   const handleActionButtonClick = (value) => {
-  //     const { _id, pressedIconButton } = value;
-  //     switch (pressedIconButton) {
-  //       case "edit":
-  //         return router.push(`/admin/monitor/edit/${_id}`);
-  //       case "view":
-  //         return router.push(`/admin/monitor/view/${_id}`);
-  //       case "delete":
-  //         return onPressDeleteMeasure(_id);
-  //     }
-  //   };
+  const receivePlanIds = (value) => {
+    const formattedValue = value.join(",");
+    setOrgIds(formattedValue);
+  };
 
-  //   const clearIsConfirm = () => {
-  //     setIsConfirm({
-  //       status: false,
-  //       storedFunction: null,
-  //       setSubmitting: null,
-  //       cancelStatus: false,
-  //     });
-  //   };
+  const onChangeName = (value) => {
+    /* istanbul ignore next */
+    setName(value);
+  };
 
-  //   const onConfirmSubmit = () => {
-  //     isConfirm.storedFunction(() => {
-  //       setIsConfirm({
-  //         status: false,
-  //         storedFunction: null,
-  //         setSubmitting: null,
-  //       });
-  //     });
-  //   };
+  /* istanbul ignore next */
+  const handleDeleteHomeworkTask = async () => {
+    try {
+      await createAssessment({
+        variables: {
+          name: name,
+          org_id: orgIds,
+        },
+        onCompleted: (data) => {
+          if (data) {
+            const {
+              adminCreateAssessment: { duplicateNames },
+            } = data;
 
-  //   const handleOk = () => {
-  //     setSuccessModal(undefined);
-  //   };
+            if (duplicateNames) {
+              setIsConfirmShareTask(false);
 
+              infoModalRef.current.openConfirm({
+                data: {
+                  duplicateNames,
+                  message:
+                    "This assessment already exists in the following organisation!",
+                },
+              });
+            } else {
+              handleCloseCreateAssessmentModal();
+              setIsConfirmShareTask(false);
+              refetch();
+              setName(undefined);
+              setOrgIds(undefined);
+
+              enqueueSnackbar("Assessment created successfully!", {
+                variant: "success",
+              });
+            }
+            //   doneCallback();
+          }
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  /* istanbul ignore next */
+  const clearIsConfirmCancel = () => {
+    setIsConfirmShareTask(false);
+  };
   return (
     <>
       <Layout>
@@ -200,23 +201,33 @@ const AssessmentListPage: NextPage = () => {
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingMonitorList={loadingMonitorList}
           // pageActionButtonClick={"handleActionButtonClick"}
-          //   onPressSideButton={onPressSideButton}
+          onPressSideButton={handleOpenCreateAssessmentModal}
         />
-        {/* {isConfirm.status && (
+
+        <CommonModal
+          ref={modalRefAddPlan}
+          headerTitleText="Create assessment"
+          maxWidth="sm"
+        >
+          <CreateAssessmentForm
+            onPressSubmit={() => setIsConfirmShareTask(true)}
+            organizationList={organizationList}
+            receivePlanId={receivePlanIds}
+            receiveName={onChangeName}
+          />
+        </CommonModal>
+
+        {isConfirmShareTask && (
           <ConfirmationModal
-            label={isConfirm.confirmObject.description}
-            onCancel={clearIsConfirm}
-            onConfirm={onConfirmSubmit}
+            label="Are you sure you want to create the assessment?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={handleDeleteHomeworkTask}
           />
         )}
-        {successModal && (
-          <SuccessModal
-            isOpen={Boolean(successModal)}
-            title="Successful"
-            description={successModal.description}
-            onOk={handleOk}
-          />
-        )} */}
+
+        <InfoModal ref={infoModalRef}>
+          <InfoMessageView />
+        </InfoModal>
       </Layout>
     </>
   );
