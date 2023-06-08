@@ -61,6 +61,23 @@ export const UPDATE_RESOURCE_TEMPLATE_RESPONSE = gql`
   }
 `;
 
+export const THERAPIST_UPDATE_RESOURCE_TEMPLATE_RESPONSE = gql`
+  mutation (
+    $ptsharresId: ID!
+    $patientId: String
+    $update: UpdatePatientResourceInput!
+  ) {
+    updatePatientResourceById(
+      ptsharresId: $ptsharresId
+      patient_id: $patientId
+      update: $update
+    ) {
+      template_response
+      _id
+    }
+  }
+`;
+
 export const UPDATE_RESOURCE_BY_ID = gql`
   mutation ($resourceId: ID!, $update: UpdateResourceInput!) {
     updateResourceById(resourceId: $resourceId, update: $update) {
