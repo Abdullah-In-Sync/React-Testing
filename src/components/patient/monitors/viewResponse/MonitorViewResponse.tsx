@@ -94,6 +94,7 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
               layout={{
                 padding: {
                   top: 20,
+                  left: 20,
                 },
               }}
             />
