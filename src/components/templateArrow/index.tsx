@@ -28,6 +28,7 @@ interface TemplateArrowProps {
   edgesData?: Edge[] | [];
   mode?: string;
   userType?: any;
+  defaultIsPreview?: boolean;
 }
 
 const TemplateArrow: React.FC<TemplateArrowProps> = ({
@@ -37,6 +38,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   edgesData = [],
   mode,
   userType,
+  defaultIsPreview = false,
 }) => {
   const [user, setUser] = useState(userType);
   const [mod, setmod] = useState(mode);
@@ -55,7 +57,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const edgeUpdateSuccessful = useRef(true);
   const [toggled, setToggled] = useState<boolean>(false);
-  const [isPreview, setIsPreview] = useState<boolean>(false);
+  const [isPreview, setIsPreview] = useState<boolean>(defaultIsPreview);
 
   const onConnect = useCallback((params) => {
     params.type = "smoothstep";

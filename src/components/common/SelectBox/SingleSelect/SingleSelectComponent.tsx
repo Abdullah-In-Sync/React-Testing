@@ -1,5 +1,11 @@
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Tooltip,
+} from "@mui/material";
 import React from "react";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 /* istanbul ignore next */
 type propTypes = {
@@ -20,6 +26,7 @@ type propTypes = {
   disabled?: boolean;
   showDefaultSelectOption?: boolean;
   menuItemClassName?: string;
+  toolTipText?: string;
 };
 
 /* istanbul ignore next */
@@ -67,12 +74,18 @@ export default function SingleSelectComponent(props: propTypes) {
         )}
         {mapping(props.options, props.mappingKeys).map(
           ({ id, value, activeKey }) => {
-            return (
-              <MenuItem
-                className={activeKey && "selectOptionActive"}
-                key={`${id}-${value}`}
-                value={id}
-              >
+            return activeKey && props?.toolTipText ? (
+              <Tooltip title={`${props.toolTipText}`} placement="bottom-end">
+                <MenuItem
+                  className={activeKey && "selectOptionActive"}
+                  key={`${id}-${value}`}
+                  value={id}
+                >
+                  {value}
+                </MenuItem>
+              </Tooltip>
+            ) : (
+              <MenuItem key={`${id}-${value}`} value={id}>
                 {value}
               </MenuItem>
             );

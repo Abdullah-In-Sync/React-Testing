@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import { GET_PATH_RESOURCE_BY_ID } from "../graphql/query/resource";
 import TherapistTemplatePage from "../pages/therapist/resource/view/[patientId]/[resourceId]";
+import { THERAPIST_UPDATE_RESOURCE_TEMPLATE_RESPONSE } from "../graphql/mutation/resource";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -122,6 +123,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: THERAPIST_UPDATE_RESOURCE_TEMPLATE_RESPONSE,
+    variables: {
+      ptsharresId: "a07c58d9-d37c-4e96-960d-103b663b67e4",
+      patientId: "9620ebf9279946678d4c5d64bdb973ed",
+      update: {
+        template_response: `{"nodes":[{"width":117,"height":47,"id":"dndnode_0","type":"selectorNode","position":{"x":59.30750201810424,"y":-50.70601716319272},"data":{"label":"Hello","description":"Description"},"selected":false,"dragging":false,"positionAbsolute":{"x":59.30750201810424,"y":-50.70601716319272}},{"width":117,"height":47,"id":"dndnode_1","type":"selectorNode","position":{"x":236.37648951359785,"y":1.723111663163266},"data":{"label":"2nd hello","description":"2nd description"},"selected":false,"dragging":false,"positionAbsolute":{"x":236.37648951359785,"y":1.723111663163266}}],"edges":[{"source":"dndnode_0","sourceHandle":null,"target":"dndnode_1","targetHandle":"c","type":"smoothstep","markerEnd":{"type":"arrow"},"id":"reactflow__edge-dndnode_0-dndnode_1c"}]}`,
+      },
+    },
+  },
+  result: {
+    data: {
+      updatePatientResourceById: {
+        result: true,
+        _id: "a07c58d9-d37c-4e96-960d-103b663b67e4",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -176,5 +198,33 @@ describe("Therapist view template page", () => {
     expect(arrowTemplate.length).toEqual(2);
     fireEvent.click(backButton);
     expect(mockRouter.back).toHaveBeenCalled();
+  });
+
+  it("should render therapist patient response", async () => {
+    (useRouter as jest.Mock).mockClear();
+    const mockRouter = {
+      back: jest.fn(),
+      push: jest.fn(),
+    };
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        patientId: "9620ebf9279946678d4c5d64bdb973ed",
+        resourceId: "10873f5d-91d6-4855-8aa5-56c48c51e68e",
+      },
+      ...mockRouter,
+    }));
+    await sut();
+
+    const submitButton = await screen.findByTestId("tableTemplateSubmit");
+
+    fireEvent.click(submitButton);
+    expect(
+      await screen.findByText(
+        /Patient worksheet has been submitted successfully./i
+      )
+    ).toBeInTheDocument();
+    const cancelButton = await screen.findByTestId("tableTemplateCancel");
+    fireEvent.click(cancelButton);
+    expect(mockRouter.push).toHaveBeenCalled();
   });
 });
