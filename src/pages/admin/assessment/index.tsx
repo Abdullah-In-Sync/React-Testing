@@ -9,6 +9,7 @@ import AssessmentComponent from "../../../components/admin/assessement";
 import {
   ADMIN_CREATE_ASSESSMENT,
   GET_ADMIN_ASSESSMENT_LIST,
+  ADMIN_SHARE_ASSESSMENT,
 } from "../../../graphql/assessment/graphql";
 import {
   CommonModal,
@@ -21,9 +22,11 @@ import InfoModal, {
   ConfirmInfoElement,
 } from "../../../components/common/CustomModal/InfoModal";
 import InfoMessageView from "../../../components/common/InfoMessageView";
+import ShareAssessmentForm from "../../../components/admin/assessement/shareAssessment/ShareAssessmentForm";
 
 const AssessmentListPage: NextPage = () => {
   const modalRefAddPlan = useRef<ModalElement>(null);
+  const shareInfoModalRef = useRef<ModalElement>(null);
   const { enqueueSnackbar } = useSnackbar();
 
   //   const router = useRouter();
@@ -34,12 +37,16 @@ const AssessmentListPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [isConfirmShareTask, setIsConfirmShareTask] = useState(false);
   const [orgIds, setOrgIds] = useState();
+  const [shareOrgIds, setShareOrgIds] = useState();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [name, setName] = useState("");
   const [page, setPage] = useState(1);
+  const [isConfirmShare, setIsConfirmShare] = useState(false);
+  const [selectAssessment, setSelectAssessment] = useState("");
 
   // Mutation
   const [createAssessment] = useMutation(ADMIN_CREATE_ASSESSMENT);
+  const [shareAssessment] = useMutation(ADMIN_SHARE_ASSESSMENT);
 
   useEffect(() => {
     getOrgList();
@@ -129,6 +136,11 @@ const AssessmentListPage: NextPage = () => {
     setOrgIds(formattedValue);
   };
 
+  const receiveSharePlanIds = (value) => {
+    const formattedValue = value.join(",");
+    setShareOrgIds(formattedValue);
+  };
+
   const onChangeName = (value) => {
     /* istanbul ignore next */
     setName(value);
@@ -179,9 +191,69 @@ const AssessmentListPage: NextPage = () => {
     }
   };
 
+  const handleShareAssessment = async () => {
+    try {
+      await shareAssessment({
+        variables: {
+          assessment_id: selectAssessment,
+          org_id: shareOrgIds,
+        },
+        onCompleted: (data) => {
+          if (data) {
+            const {
+              adminShareAssessment: { duplicateNames },
+            } = data;
+
+            if (duplicateNames) {
+              setIsConfirmShare(false);
+              shareInfoModalRef.current?.close();
+
+              // infoModalRef.current.openConfirm({
+              //   data: {
+              //     duplicateNames,
+              //     message:
+              //       "This assessment already Shared in the following organisation!",
+              //   },
+              // });
+            } else {
+              shareInfoModalRef.current?.close();
+              setIsConfirmShare(false);
+              refetch();
+              setSelectAssessment(undefined);
+              setShareOrgIds(undefined);
+
+              enqueueSnackbar("Assessment shared successfully!", {
+                variant: "success",
+              });
+            }
+          }
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
   /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirmShareTask(false);
+  };
+
+  const clearIsConfirmShareCancel = () => {
+    setIsConfirmShare(false);
+  };
+
+  const onPressShareAssignment = (assignmentId) => {
+    setSelectAssessment(assignmentId);
+    shareInfoModalRef.current?.open();
+  };
+  const handleActionButtonClick = (value) => {
+    const { _id, pressedIconButton } = value;
+    switch (pressedIconButton) {
+      case "share":
+        return onPressShareAssignment(_id);
+    }
   };
   return (
     <>
@@ -200,13 +272,13 @@ const AssessmentListPage: NextPage = () => {
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingMonitorList={loadingMonitorList}
-          // pageActionButtonClick={"handleActionButtonClick"}
+          pageActionButtonClick={handleActionButtonClick}
           onPressSideButton={handleOpenCreateAssessmentModal}
         />
 
         <CommonModal
           ref={modalRefAddPlan}
-          headerTitleText="Create assessment"
+          headerTitleText={"Create assessment"}
           maxWidth="sm"
         >
           <CreateAssessmentForm
@@ -217,11 +289,26 @@ const AssessmentListPage: NextPage = () => {
           />
         </CommonModal>
 
+        <ShareAssessmentForm
+          isOpen={shareInfoModalRef}
+          onPressSubmit={() => setIsConfirmShare(true)}
+          organizationList={organizationList}
+          receivePlanId={receiveSharePlanIds}
+          headerTitleText={"Share assessment"}
+        />
+
         {isConfirmShareTask && (
           <ConfirmationModal
             label="Are you sure you want to create the assessment?"
             onCancel={clearIsConfirmCancel}
             onConfirm={handleDeleteHomeworkTask}
+          />
+        )}
+        {isConfirmShare && (
+          <ConfirmationModal
+            label="Are you sure you want to share the assessment?"
+            onCancel={clearIsConfirmShareCancel}
+            onConfirm={handleShareAssessment}
           />
         )}
 

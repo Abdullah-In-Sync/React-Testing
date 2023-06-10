@@ -38,3 +38,15 @@ export const ADMIN_CREATE_ASSESSMENT = gql`
     }
   }
 `;
+
+export const ADMIN_SHARE_ASSESSMENT = gql`
+  mutation adminShareAssessment($assessment_id: String!, $org_id: String!) {
+    adminShareAssessment(assessment_id: $assessment_id, org_id: $org_id) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
