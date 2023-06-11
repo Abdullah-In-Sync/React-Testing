@@ -27,6 +27,27 @@ export const GET_ADMIN_ASSESSMENT_LIST = gql`
   }
 `;
 
+export const GET_ADMIN_ASSESSMENT_DATA_BY_ID = gql`
+  query adminViewAssessment($assessment_id: ID!) {
+    adminViewAssessment(assessment_id: $assessment_id) {
+      _id
+      category {
+        _id
+        assessment_id
+        created_date
+        name
+        status
+        updated_date
+      }
+      created_date
+      name
+      org_id
+      status
+      updated_date
+    }
+  }
+`;
+
 export const ADMIN_CREATE_ASSESSMENT = gql`
   mutation adminCreateAssessment($org_id: String!, $name: String!) {
     adminCreateAssessment(org_id: $org_id, name: $name) {
@@ -35,6 +56,30 @@ export const ADMIN_CREATE_ASSESSMENT = gql`
         name
       }
       result
+    }
+  }
+`;
+
+export const ADMIN_DELETE_AND_UPDATE_ASSESSMENT = gql`
+  mutation adminUpdateAssessment(
+    $assessment_id: ID!
+    $update: UpdateMonitorInput
+  ) {
+    adminUpdateAssessment(assessment_id: $assessment_id, update: $update) {
+      _id
+      category {
+        _id
+        assessment_id
+        created_date
+        name
+        status
+        updated_date
+      }
+      created_date
+      org_id
+      name
+      status
+      updated_date
     }
   }
 `;
