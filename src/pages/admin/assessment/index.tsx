@@ -23,9 +23,11 @@ import InfoModal, {
   ConfirmInfoElement,
 } from "../../../components/common/CustomModal/InfoModal";
 import InfoMessageView from "../../../components/common/InfoMessageView";
+import { useRouter } from "next/router";
 import EditAssessmentForm from "../../../components/admin/assessement/editAssessment/EditAssessmentForm";
 
 const AssessmentListPage: NextPage = () => {
+  const router = useRouter();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const modalRefEditAssessment = useRef<ModalElement>(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -307,7 +309,11 @@ const AssessmentListPage: NextPage = () => {
       setEditDeleteName(name);
       setEditDeleteOrgId(org_id);
     }
+    if (pressedIconButton === "view") {
+      router.push(`/admin/assessment/view/${_id}`);
+    }
   };
+
   return (
     <>
       <Layout>
