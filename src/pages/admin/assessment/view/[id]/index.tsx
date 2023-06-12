@@ -28,6 +28,7 @@ const ViewAssessmentPage: NextPage = () => {
     {
       data: { adminViewAssessment: assessmentViewData = undefined } = {},
       refetch: refetchAssessmentData,
+      loading: assessmentLoading,
     },
   ] = useLazyQuery<AssessmentViewData>(ADMIN_VIEW_ASSESSMENT, {
     fetchPolicy: "cache-and-network",
@@ -105,6 +106,7 @@ const ViewAssessmentPage: NextPage = () => {
           infoModalRef={infoModalRef}
           onPressAddCategory={onPressAddCategory}
           confirmRef={confirmRef}
+          assessmentLoading={assessmentLoading}
         />
       </Layout>
     </>

@@ -9,6 +9,7 @@ import { ViewAssessmentProps } from "./ViewAssessment";
 const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
   data,
   actionButtonClick,
+  assessmentLoading,
 }) => {
   const { category = [] } = data as AdminViewAssessment;
 
@@ -25,7 +26,7 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
   };
 
   const accordionList = () => {
-    if (category.length <= 0)
+    if (category.length <= 0 && !assessmentLoading)
       return <MesageTextDisplay message="No data Found." />;
 
     return category.map((item, i) => {
