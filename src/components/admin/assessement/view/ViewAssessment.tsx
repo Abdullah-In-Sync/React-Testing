@@ -17,6 +17,7 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
   infoModalRef,
   onPressAddCategory,
   confirmRef,
+  assessmentLoading,
 }) => {
   const styles = useStyles();
   return (
@@ -38,7 +39,10 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
           </Box>
         </Stack>
         <Stack className="row2">
-          <ViewAssessmentList data={data} />
+          <ViewAssessmentList
+            data={data}
+            assessmentLoading={assessmentLoading}
+          />
         </Stack>
       </Stack>
 
@@ -63,4 +67,5 @@ export interface ViewAssessmentProps {
   infoModalRef?: ForwardedRef<ConfirmInfoElement>;
   onPressAddCategory?: () => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
+  assessmentLoading?: boolean;
 }

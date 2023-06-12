@@ -83,7 +83,7 @@ beforeEach(() => {
 });
 
 describe("Admin assessment category list", () => {
-  it("should render admin assessment category list", async () => {
+  it("should render admin assessment category list and add new assessment category", async () => {
     await sut();
     const firstRecordName = await screen.findByText(/test/i);
     expect(firstRecordName).toBeInTheDocument();
@@ -107,5 +107,3 @@ describe("Admin assessment category list", () => {
     ).toBeInTheDocument();
   });
 });
-
-//cancelButton
