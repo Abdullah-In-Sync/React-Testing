@@ -2,26 +2,28 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@mui/system";
 import { useTheme } from "@mui/styles";
 
+export const commonModalWrapperObj = (theme) => ({
+  "& .MuiTypography-root": {
+    background: theme.palette.primary.main,
+    color: theme.palette.custom.light,
+    textAlign: "center",
+  },
+  "& .MuiTypography-root .MuiBox-root ": {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    padding: 10,
+    color: theme.palette.custom.light,
+  },
+  "& .MuiTypography-root .MuiBox-root button": {
+    color: theme.palette.custom.light,
+  },
+});
+
 export const useStyles = makeStyles(() => {
   const theme = useTheme() as Theme;
   return {
-    commonModalWrapper: {
-      "& .MuiTypography-root": {
-        background: theme.palette.primary.main,
-        color: theme.palette.custom.light,
-        textAlign: "center",
-      },
-      "& .MuiTypography-root .MuiBox-root ": {
-        position: "absolute",
-        right: 0,
-        top: 0,
-        padding: 10,
-        color: theme.palette.custom.light,
-      },
-      "& .MuiTypography-root .MuiBox-root button": {
-        color: theme.palette.custom.light,
-      },
-    },
+    commonModalWrapper: commonModalWrapperObj(theme),
     modalC: {
       "& .MuiTypography-root": {
         background: theme.palette.primary.contrastText,

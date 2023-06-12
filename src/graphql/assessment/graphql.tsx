@@ -38,3 +38,29 @@ export const ADMIN_CREATE_ASSESSMENT = gql`
     }
   }
 `;
+
+export const ADMIN_VIEW_ASSESSMENT = gql`
+  query AdminViewAssessment($assessmentId: ID!) {
+    adminViewAssessment(assessment_id: $assessmentId) {
+      _id
+      category {
+        _id
+        assessment_id
+        created_date
+        name
+        status
+      }
+      created_date
+      name
+      org_id
+    }
+  }
+`;
+
+export const ADMIN_ADD_CATEGORY = gql`
+  mutation AdminCreateAssessmentCategory($assessmentId: ID!, $name: String!) {
+    adminCreateAssessmentCategory(assessment_id: $assessmentId, name: $name) {
+      _id
+    }
+  }
+`;

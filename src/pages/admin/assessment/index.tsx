@@ -21,8 +21,10 @@ import InfoModal, {
   ConfirmInfoElement,
 } from "../../../components/common/CustomModal/InfoModal";
 import InfoMessageView from "../../../components/common/InfoMessageView";
+import { useRouter } from "next/router";
 
 const AssessmentListPage: NextPage = () => {
+  const router = useRouter();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -183,6 +185,16 @@ const AssessmentListPage: NextPage = () => {
   const clearIsConfirmCancel = () => {
     setIsConfirmShareTask(false);
   };
+
+  const handleActionButtonClick = (v) => {
+    const { pressedIconButton, _id } = v;
+    switch (pressedIconButton) {
+      case "view":
+        return router.push(`/admin/assessment/view/${_id}`);
+      default:
+        return;
+    }
+  };
   return (
     <>
       <Layout>
@@ -200,7 +212,7 @@ const AssessmentListPage: NextPage = () => {
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingMonitorList={loadingMonitorList}
-          // pageActionButtonClick={"handleActionButtonClick"}
+          pageActionButtonClick={handleActionButtonClick}
           onPressSideButton={handleOpenCreateAssessmentModal}
         />
 

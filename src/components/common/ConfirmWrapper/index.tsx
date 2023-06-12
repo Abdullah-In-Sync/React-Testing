@@ -5,8 +5,7 @@ import { SuccessModal } from "../../../components/common/SuccessModal";
 type Props = React.PropsWithChildren<OpenConfirmPram>;
 
 const ConfirmWrapper = forwardRef(({ children }: Props, ref): JSX.Element => {
-  const [successModal, setSuccessModal] = useState<any>();
-  const [isConfirm, setIsConfirm] = useState<any>({
+  const modalInitialVal = {
     status: false,
     storedFunction: null,
     setSubmitting: null,
@@ -14,7 +13,9 @@ const ConfirmWrapper = forwardRef(({ children }: Props, ref): JSX.Element => {
     confirmObject: {
       description: "",
     },
-  });
+  };
+  const [successModal, setSuccessModal] = useState<any>();
+  const [isConfirm, setIsConfirm] = useState<any>(modalInitialVal);
 
   useImperativeHandle(ref, () => ({
     openConfirm({ confirmFunction, description, setSubmitting }) {
@@ -35,6 +36,9 @@ const ConfirmWrapper = forwardRef(({ children }: Props, ref): JSX.Element => {
         description,
         handleOk,
       });
+    },
+    close() {
+      setIsConfirm(modalInitialVal);
     },
   }));
 
@@ -99,4 +103,5 @@ type OpenSuccessParam = {
 export type ConfirmElement = {
   openConfirm: ({ confirmFunction, description }: OpenConfirmPram) => void;
   showSuccess: ({ handleOk, description }: OpenSuccessParam) => void;
+  close?: () => void;
 };
