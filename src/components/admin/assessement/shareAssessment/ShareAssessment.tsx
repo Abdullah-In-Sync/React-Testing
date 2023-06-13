@@ -74,7 +74,10 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
   return (
     <Stack>
       <Form>
-        <Box style={{ margin: "43px 37px 0px 36px" }}>
+        <Box
+          data-testid="share_select_popup"
+          style={{ margin: "43px 37px 0px 36px" }}
+        >
           <FormControl
             style={{
               width: "100%",
@@ -89,13 +92,14 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
               Select organisation
             </InputLabel>
             <Select
-              data-testid="select_organisation1"
+              data-testid="share_organisation_select_list"
               name="select_organisation"
               label="Select_Organisation"
               multiple
               value={selected}
               onChange={handleChange}
               onOpen={handleBlur}
+              inputProps={{ "data-testid": "select_share_input" }}
               MenuProps={{
                 PaperProps: {
                   style: {
@@ -134,7 +138,11 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 <Typography data-testid={`checkbox123`}>Select All</Typography>
               </MenuItem>
               {organizationList.map((option) => (
-                <MenuItem key={option._id} value={option._id}>
+                <MenuItem
+                  data-testid={`shareOrg_${option._id}`}
+                  key={option._id}
+                  value={option._id}
+                >
                   <ListItemIcon>
                     <Checkbox
                       data-testid={`checkbox12345${option._id}`}

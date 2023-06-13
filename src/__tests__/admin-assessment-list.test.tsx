@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import {
   ADMIN_CREATE_ASSESSMENT,
+  ADMIN_SHARE_ASSESSMENT,
   GET_ADMIN_ASSESSMENT_LIST,
 } from "../graphql/assessment/graphql";
 import theme from "../styles/theme/theme";
@@ -41,6 +42,22 @@ mocksData.push({
           therapy: "Therapys",
           __typename: "Organization",
         },
+        {
+          _id: "d1f2bbd3-3388-4ca2-9d68-55b95574a269",
+          contract: "Contract",
+          created_date: "2022-12-22T06:26:48.828Z",
+          logo: "20221228124410__admin_platform_-_preview_template.PNG",
+          logo_url: null,
+          name: "admin resource draw5",
+          panel_color: "3",
+          patient: "Pat",
+          patient_plural: "Patis",
+          patient_welcome_email: "Therapy",
+          side_menu_color: "4",
+          therapist: "Ther",
+          therapy: "Therap",
+          __typename: "Organization",
+        },
       ],
     },
   },
@@ -65,8 +82,18 @@ mocksData.push({
             updated_date: "2023-05-18T16:13:22.678Z",
             __typename: "AdminAssessment",
           },
+          {
+            _id: "3e863ee6-be44-4dcb-86ea-7141b91333eb",
+            created_date: "2023-06-08T05:47:21.372Z",
+            name: "Final test All",
+            org_id: "b121273b-f0a9-4c24-89d2-796439923543",
+            organization_name: "Name",
+            status: 1,
+            updated_date: "2023-06-08T05:47:21.372Z",
+            __typename: "AdminAssessment",
+          },
         ],
-        total: 1,
+        total: 2,
         __typename: "adminAssessments",
       },
     },
@@ -81,6 +108,25 @@ mocksData.push({
   result: {
     data: {
       adminCreateAssessment: {
+        duplicateNames: null,
+        result: true,
+        __typename: "adminResult",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_SHARE_ASSESSMENT,
+    variables: {
+      assessment_id: "5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d",
+      org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
+    },
+  },
+  result: {
+    data: {
+      adminShareAssessment: {
         duplicateNames: null,
         result: true,
         __typename: "adminResult",
@@ -155,6 +201,35 @@ describe("Admin Assessment list", () => {
 
       expect(
         screen.getByText("Assessment created successfully!")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Share assessment", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_share_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_share_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+        )
+      );
+      expect(screen.getByText("Share assessment")).toBeInTheDocument();
+      expect(screen.getByTestId("share_select_popup")).toBeInTheDocument();
+
+      const selectElement = screen.getByTestId(
+        "share_organisation_select_list"
+      ) as HTMLSelectElement;
+      fireEvent.change(selectElement, { target: { selectedIndex: 1 } });
+      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+      expect(
+        screen.getByText("organization cannot be empty")
       ).toBeInTheDocument();
     });
   });
