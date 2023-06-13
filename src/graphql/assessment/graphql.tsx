@@ -109,3 +109,17 @@ export const GET_ADMIN_ASSESSMENT_DATA_BY_ID = gql`
     }
   }
 `;
+
+export const ADMIN_UPDATE_ASSESSMENT_CATEGORY = gql`
+  mutation AdminUpdateAssessmentCategory(
+    $categoryId: ID!
+    $updateCat: UpdateAssessCatInput
+  ) {
+    adminUpdateAssessmentCategory(
+      category_id: $categoryId
+      updateCat: $updateCat
+    ) {
+      _id
+    }
+  }
+`;

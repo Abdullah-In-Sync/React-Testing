@@ -18,6 +18,7 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
   onPressAddCategory,
   confirmRef,
   assessmentLoading,
+  actionButtonClick,
 }) => {
   const styles = useStyles();
   return (
@@ -42,6 +43,7 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
           <ViewAssessmentList
             data={data}
             assessmentLoading={assessmentLoading}
+            actionButtonClick={actionButtonClick}
           />
         </Stack>
       </Stack>

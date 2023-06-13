@@ -10,14 +10,16 @@ import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import {
   ADMIN_ADD_CATEGORY,
+  ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
 } from "../../../../../graphql/assessment/graphql";
 import { AssessmentViewData } from "../../../../../graphql/assessment/types";
-
+//ADMIN_UPDATE_ASSESSMENT_CATEGORY
 const ViewAssessmentPage: NextPage = () => {
   const router = useRouter();
   const { query: { id: assessmentId } = {} } = router;
   const [addCategory] = useMutation(ADMIN_ADD_CATEGORY);
+  const [updateCategory] = useMutation(ADMIN_UPDATE_ASSESSMENT_CATEGORY);
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
@@ -47,7 +49,7 @@ const ViewAssessmentPage: NextPage = () => {
     router.back();
   };
 
-  const onSubmit = async (formFields, callback) => {
+  const onAddCategorySubmit = async (formFields, callback) => {
     setLoader(true);
     try {
       await addCategory({
@@ -75,6 +77,38 @@ const ViewAssessmentPage: NextPage = () => {
     }
   };
 
+  const onUpdateCategorySubmit = async (formFields, callback) => {
+    setLoader(true);
+    const { name, categoryId } = formFields;
+    try {
+      await updateCategory({
+        variables: {
+          categoryId,
+          updateCat: {
+            name,
+            status: 1,
+          },
+        },
+        onCompleted: (data) => {
+          if (data) {
+            refetchAssessmentData();
+            enqueueSnackbar("Assessment category updated successfully.", {
+              variant: "success",
+            });
+            callback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
   const submitCallback = () => {
     confirmRef.current.close();
     infoModalRef.current.close();
@@ -82,7 +116,7 @@ const ViewAssessmentPage: NextPage = () => {
 
   const handleSubmitForm = (v, { setSubmitting }) => {
     confirmRef.current.openConfirm({
-      confirmFunction: () => onSubmit(v, submitCallback),
+      confirmFunction: () => onAddCategorySubmit(v, submitCallback),
       description: "Are you sure you want to add the category?",
       setSubmitting,
     });
@@ -96,6 +130,36 @@ const ViewAssessmentPage: NextPage = () => {
     });
   };
 
+  const handleUpdateSubmitForm = (v, { setSubmitting }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () => onUpdateCategorySubmit(v, submitCallback),
+      description: "Are you sure you want to update the category?",
+      setSubmitting,
+    });
+  };
+
+  const onPressEditCategory = (value) => {
+    infoModalRef.current.openConfirm({
+      data: {
+        value,
+        onSubmit: (v, formikProps) =>
+          handleUpdateSubmitForm(
+            { ...v, ...{ categoryId: value?._id } },
+            formikProps
+          ),
+      },
+    });
+  };
+
+  const actionButtonClick = (v) => {
+    const { pressedIconButton } = v;
+    switch (pressedIconButton) {
+      case "edit":
+        return onPressEditCategory(v);
+      default:
+    }
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -107,6 +171,7 @@ const ViewAssessmentPage: NextPage = () => {
           onPressAddCategory={onPressAddCategory}
           confirmRef={confirmRef}
           assessmentLoading={assessmentLoading}
+          actionButtonClick={actionButtonClick}
         />
       </Layout>
     </>

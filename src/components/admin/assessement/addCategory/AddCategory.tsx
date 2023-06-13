@@ -13,9 +13,11 @@ export const validationSchema = Yup.object().shape({
   name: Yup.string().required("Category name is required"),
 });
 
-const AddCategory: React.FC<ViewProps> = ({ data: { onSubmit } = {} }) => {
+const AddCategory: React.FC<ViewProps> = ({
+  data: { onSubmit, value: { name = "" } = {} } = {},
+}) => {
   const initialValues = {
-    name: "",
+    name,
   };
 
   const commonform = () => {
