@@ -109,6 +109,37 @@ const ViewAssessmentPage: NextPage = () => {
     }
   };
 
+  const onDeleteCategorySubmit = async (formFields, callback) => {
+    setLoader(true);
+    const { _id } = formFields;
+    try {
+      await updateCategory({
+        variables: {
+          categoryId: _id,
+          updateCat: {
+            status: 0,
+          },
+        },
+        onCompleted: (data) => {
+          if (data) {
+            refetchAssessmentData();
+            enqueueSnackbar("Assessment category deleted successfully.", {
+              variant: "success",
+            });
+            callback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
   const submitCallback = () => {
     confirmRef.current.close();
     infoModalRef.current.close();
@@ -138,6 +169,13 @@ const ViewAssessmentPage: NextPage = () => {
     });
   };
 
+  const handleDeleteCategory = (v) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () => onDeleteCategorySubmit(v, submitCallback),
+      description: "Are you sure you want to delete the category?",
+    });
+  };
+
   const onPressEditCategory = (value) => {
     infoModalRef.current.openConfirm({
       data: {
@@ -152,11 +190,17 @@ const ViewAssessmentPage: NextPage = () => {
     });
   };
 
+  const onPressDeleteCategory = (value) => {
+    handleDeleteCategory(value);
+  };
+
   const actionButtonClick = (v) => {
     const { pressedIconButton } = v;
     switch (pressedIconButton) {
       case "edit":
         return onPressEditCategory(v);
+      case "delete":
+        return onPressDeleteCategory(v);
       default:
     }
   };
