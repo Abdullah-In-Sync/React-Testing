@@ -14,7 +14,7 @@ import {
   ADMIN_VIEW_ASSESSMENT,
 } from "../../../../../graphql/assessment/graphql";
 import { AssessmentViewData } from "../../../../../graphql/assessment/types";
-//ADMIN_UPDATE_ASSESSMENT_CATEGORY
+
 const ViewAssessmentPage: NextPage = () => {
   const router = useRouter();
   const { query: { id: assessmentId } = {} } = router;
@@ -147,6 +147,7 @@ const ViewAssessmentPage: NextPage = () => {
             { ...v, ...{ categoryId: value?._id } },
             formikProps
           ),
+        headerTitleText: "Edit Category",
       },
     });
   };
