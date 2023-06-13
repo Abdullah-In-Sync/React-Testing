@@ -22,9 +22,11 @@ const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
       children,
       maxWidth = "sm",
       className = styles.modalC,
+      headerTitleText,
       ...rest
     } = props;
-    const [data, setData] = useState();
+    const [data, setData] = useState<any>();
+    const { headerTitleText: modalTitle = headerTitleText } = data || {};
     const modalRef = useRef<any>(null);
 
     useImperativeHandle(ref, () => ({
@@ -46,7 +48,12 @@ const InfoModal = forwardRef<ConfirmInfoElement, ViewProps>(
     };
 
     return (
-      <CommonModal ref={modalRef} {...{ maxWidth, className }} {...rest}>
+      <CommonModal
+        ref={modalRef}
+        {...{ maxWidth, className }}
+        headerTitleText={modalTitle}
+        {...rest}
+      >
         {elementWithProps()}
       </CommonModal>
     );

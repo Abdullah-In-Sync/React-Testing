@@ -4,7 +4,8 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import {
   ADMIN_CREATE_ASSESSMENT,
-  ADMIN_SHARE_ASSESSMENT,
+  ADMIN_DELETE_AND_UPDATE_ASSESSMENT,
+  GET_ADMIN_ASSESSMENT_DATA_BY_ID,
   GET_ADMIN_ASSESSMENT_LIST,
 } from "../graphql/assessment/graphql";
 import theme from "../styles/theme/theme";
@@ -102,6 +103,34 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: ADMIN_DELETE_AND_UPDATE_ASSESSMENT,
+    variables: {
+      assessment_id: "5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d",
+      update: {
+        name: "test assessment",
+        org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateAssessment: {
+        _id: "8f761767-0674-43be-b59d-a0207782b7e3",
+        category: null,
+        created_date: "2023-06-08T05:47:22.260Z",
+        org_id: "65a7ffb0-3c45-47ea-91bb-89e36ea5fe6f",
+        name: "Final test All",
+        status: 0,
+        updated_date: "2023-06-08T11:43:42.134Z",
+        __typename: "adminViewAssessment",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: ADMIN_CREATE_ASSESSMENT,
     variables: { name: "Namelkmsllvslm", org_id: undefined },
   },
@@ -118,23 +147,53 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: ADMIN_SHARE_ASSESSMENT,
-    variables: {
-      assessment_id: "5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d",
-      org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
-    },
+    query: GET_ADMIN_ASSESSMENT_DATA_BY_ID,
+    variables: { assessment_id: "5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d" },
   },
   result: {
     data: {
-      adminShareAssessment: {
-        duplicateNames: null,
-        result: true,
-        __typename: "adminResult",
+      adminViewAssessment: {
+        _id: "58b6e46b-01ec-4d2e-a874-0d03baec3262",
+        category: [],
+        created_date: "2023-06-09T05:53:45.902Z",
+        name: "re create updated",
+        org_id: "2301536c4d674b3598814174d8f19593",
+        status: 1,
+        updated_date: "2023-06-09T06:05:18.175Z",
+        __typename: "adminViewAssessment",
       },
     },
   },
 });
 
+// Re using api for edit assessent
+mocksData.push({
+  request: {
+    query: ADMIN_DELETE_AND_UPDATE_ASSESSMENT,
+    variables: {
+      assessment_id: "5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d",
+      update: {
+        name: "Update the name and submit",
+        org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
+        status: 1,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateAssessment: {
+        _id: "8f761767-0674-43be-b59d-a0207782b7e3",
+        category: null,
+        created_date: "2023-06-08T05:47:22.260Z",
+        org_id: "65a7ffb0-3c45-47ea-91bb-89e36ea5fe6f",
+        name: "Final test All",
+        status: 0,
+        updated_date: "2023-06-08T11:43:42.134Z",
+        __typename: "adminViewAssessment",
+      },
+    },
+  },
+});
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -156,7 +215,7 @@ describe("Admin Assessment list", () => {
       expect(screen.getByText("test assessment")).toBeInTheDocument();
     });
   });
-  it("delete monitor from list", async () => {
+  it("Creat assessment", async () => {
     await sut();
 
     await waitFor(async () => {
@@ -175,18 +234,7 @@ describe("Admin Assessment list", () => {
       ) as HTMLSelectElement;
       expect(screen.getByTestId("select_organisation1")).toBeInTheDocument();
 
-      // await waitFor(async () => {
-      //   expect(screen.getByText("I am organization")).toBeInTheDocument();
-      // });
-
       fireEvent.change(selectElement, { target: { selectedIndex: 1 } });
-
-      // expect(selectElement.selectedIndex).toBe(0);
-      // console.debug(
-      //   "Koca: expect(selectElement.selectedIndex).toBe(0); ",
-      //   expect(selectElement.selectedIndex).toBe(0)
-      // );
-
       expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
 
       fireEvent.click(screen.queryByTestId("addSubmitForm"));
@@ -205,32 +253,87 @@ describe("Admin Assessment list", () => {
     });
   });
 
-  it("Share assessment", async () => {
+  it("delete assessment from list", async () => {
     await sut();
 
     await waitFor(async () => {
       expect(
         screen.getByTestId(
-          "iconButton_share_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+          "iconButton_delete_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
         )
       ).toBeInTheDocument();
+
       fireEvent.click(
         screen.queryByTestId(
-          "iconButton_share_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+          "iconButton_delete_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
         )
       );
-      expect(screen.getByText("Share assessment")).toBeInTheDocument();
-      expect(screen.getByTestId("share_select_popup")).toBeInTheDocument();
 
-      const selectElement = screen.getByTestId(
-        "share_organisation_select_list"
-      ) as HTMLSelectElement;
-      fireEvent.change(selectElement, { target: { selectedIndex: 1 } });
-      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+      await waitFor(async () => {
+        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Assessment deleted sucessfully!")
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("Creat assessment", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("createPlanButton")).toBeInTheDocument();
       expect(
-        screen.getByText("organization cannot be empty")
+        screen.getByTestId(
+          "iconButton_edit_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+        )
       ).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+        )
+      );
+
+      expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
+
+      await waitFor(async () => {
+        // expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
+        expect(screen.getByTestId("patient_firstname")).toHaveValue(
+          "re create updated"
+        );
+
+        fireEvent.change(screen.queryByTestId("patient_firstname"), {
+          target: { value: "Update the name and submit" },
+        });
+      });
+
+      // fireEvent.change(screen.queryByTestId("patient_firstname"), {
+      //   target: { value: "Namelkmsllvslm" },
+      // });
+
+      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Are you sure you want to update the assessment?")
+        ).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Assessment edit sucessfully!")
+        ).toBeInTheDocument();
+      });
     });
   });
 });
