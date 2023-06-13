@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import {
   ADMIN_ADD_CATEGORY,
+  ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
 } from "../../../../graphql/assessment/graphql";
 import AssessmentListPage from "../../../../pages/admin/assessment/view/[id]";
@@ -32,7 +33,7 @@ mocksData.push({
         _id: "e4f31884-d419-4aa0-adcb-2b81dfbd8f8c",
         category: [
           {
-            _id: "9f873b3f-ff1e-402c-92e6-99ef066f3272",
+            _id: "cat1",
             assessment_id: "e4f31884-d419-4aa0-adcb-2b81dfbd8f8c",
             name: "test",
             status: 1,
@@ -56,6 +57,26 @@ mocksData.push({
     data: {
       adminCreateAssessmentCategory: {
         _id: "e4f31884-d419-4aa0-adcb-2b81dfbd8f8c",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_ASSESSMENT_CATEGORY,
+    variables: {
+      categoryId: "cat1",
+      updateCat: {
+        name: "test",
+        status: 1,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateAssessmentCategory: {
+        _id: "cat1",
       },
     },
   },
@@ -104,6 +125,30 @@ describe("Admin assessment category list", () => {
     fireEvent.click(confirmButton);
     expect(
       await screen.findByText(/Assessment category added successfully./i)
+    ).toBeInTheDocument();
+  });
+
+  it("should update assessment category", async () => {
+    await sut();
+    const firstRecordName = await screen.findByText(/test/i);
+    expect(firstRecordName).toBeInTheDocument();
+    const editButton1 = await screen.findByTestId("iconButton_cat1_0");
+    fireEvent.click(editButton1);
+    const nameInput = await screen.findByTestId("categoryName");
+    fireEvent.change(nameInput, {
+      target: { value: "test" },
+    });
+
+    const submitButton = await screen.findByTestId("addAssessmentSubmit");
+    fireEvent.click(submitButton);
+    const cancelButton = await screen.findByTestId("cancelButton");
+    fireEvent.click(cancelButton);
+    expect(cancelButton).not.toBeInTheDocument();
+    fireEvent.click(submitButton);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Assessment category updated successfully./i)
     ).toBeInTheDocument();
   });
 });
