@@ -4,9 +4,11 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import {
+  ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
   ADMIN_ADD_CATEGORY,
   ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
+  ADMIN_VIEW_ASSESSMENT_QUESTIONS,
 } from "../../../../graphql/assessment/graphql";
 import AssessmentListPage from "../../../../pages/admin/assessment/view/[id]";
 import theme from "../../../../styles/theme/theme";
@@ -19,6 +21,45 @@ jest.mock("next/router", () => ({
 const pushMock = jest.fn();
 
 const mocksData = [];
+mocksData.push({
+  request: {
+    query: ADMIN_VIEW_ASSESSMENT_QUESTIONS,
+    variables: {
+      categoryId: "cat1",
+    },
+  },
+  result: {
+    data: {
+      adminAssessmentViewQs: [
+        {
+          _id: "quesid-1",
+          category_id: "cat1",
+          question: "ques1",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
+    variables: {
+      categoryId: "cat1",
+      question: '[{"question_id":"quesid-1","question":"text update"}]',
+    },
+  },
+  result: {
+    data: {
+      adminAssessmentAddQs: [
+        {
+          _id: "quesid-1",
+          __typename: "adminAssessmentQs",
+        },
+      ],
+    },
+  },
+});
 
 mocksData.push({
   request: {
@@ -150,5 +191,32 @@ describe("Admin assessment category list", () => {
     expect(
       await screen.findByText(/Assessment category updated successfully./i)
     ).toBeInTheDocument();
+  });
+
+  it("should add and update assessment questions", async () => {
+    await sut();
+    const firstRecordName = await screen.findByText(/test/i);
+    expect(firstRecordName).toBeInTheDocument();
+
+    const toggleContent0 = await screen.findByTestId("toggleContent0");
+    fireEvent.click(toggleContent0);
+    const question1 = await screen.findByTestId("questions.0.question");
+    expect(question1).toBeInTheDocument();
+    fireEvent.change(question1, {
+      target: { value: "text update" },
+    });
+    const submitButton = await screen.findByTestId("submitAddQuestion");
+    fireEvent.click(submitButton);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Questions saved successfully./i)
+    ).toBeInTheDocument();
+
+    const cancelButton = await screen.findByTestId("cancelAddQuestion");
+    fireEvent.click(cancelButton);
+    const qconfirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(qconfirmButton);
+    expect(cancelButton).not.toBeInTheDocument();
   });
 });

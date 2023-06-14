@@ -1,7 +1,11 @@
 import { Box } from "@material-ui/core";
 import { Stack } from "@mui/material";
+import { FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
-import { AdminViewAssessment } from "../../../../graphql/assessment/types";
+import {
+  AdminAssessmentViewQsEntity,
+  AdminViewAssessment,
+} from "../../../../graphql/assessment/types";
 import CommonButton from "../../../common/Buttons/CommonButton";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import ContentHeader from "../../../common/ContentHeader";
@@ -9,6 +13,7 @@ import InfoModal, {
   ConfirmInfoElement,
 } from "../../../common/CustomModal/InfoModal";
 import AddCategory from "../addCategory/AddCategory";
+import { InitialQuesionsFormValues } from "../addUpdateCategoryQuestion/AddUpdateCategoryQuestion";
 import ViewAssessmentList from "./ViewAssessmentList";
 import { useStyles } from "./viewAssessmentStyles";
 
@@ -19,6 +24,9 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
   confirmRef,
   assessmentLoading,
   actionButtonClick,
+  onAssessmentCategoryQuestionSubmit,
+  handleToggleContent,
+  assessmentQuestionsViewData,
 }) => {
   const styles = useStyles();
   return (
@@ -44,6 +52,12 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
             data={data}
             assessmentLoading={assessmentLoading}
             actionButtonClick={actionButtonClick}
+            onAssessmentCategoryQuestionSubmit={
+              onAssessmentCategoryQuestionSubmit
+            }
+            handleToggleContent={handleToggleContent}
+            assessmentQuestionsViewData={assessmentQuestionsViewData}
+            confirmRef={confirmRef}
           />
         </Stack>
       </Stack>
@@ -70,4 +84,11 @@ export interface ViewAssessmentProps {
   onPressAddCategory?: () => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
   assessmentLoading?: boolean;
+  handleToggleContent?: any;
+  assessmentQuestionsViewData?: AdminAssessmentViewQsEntity[];
+  onAssessmentCategoryQuestionSubmit?: (
+    formData: InitialQuesionsFormValues,
+    formikHelper: FormikProps<InitialQuesionsFormValues>,
+    value
+  ) => void | any;
 }

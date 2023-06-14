@@ -1,9 +1,9 @@
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { Box } from "@material-ui/core";
-import { FC, useState } from "react";
-import { useStyles } from "./accordionStyle";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import { FC, ReactElement, cloneElement, useState } from "react";
+import { useStyles } from "./accordionStyle";
 
 type Props = {
   title?: string | ReactJSXElement;
@@ -11,6 +11,7 @@ type Props = {
   actionButtons?: any;
   marginBottom?: string;
   index?: number;
+  handleToggleContent?: (v) => void;
 };
 
 export const Accordion: FC<Props> = ({
@@ -19,12 +20,21 @@ export const Accordion: FC<Props> = ({
   actionButtons,
   marginBottom,
   index = "",
+  handleToggleContent,
 }) => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleContent = () => {
-    setIsOpen(!isOpen);
+    if (handleToggleContent && !isOpen)
+      handleToggleContent(() => setIsOpen(true));
+    else setIsOpen(!isOpen);
+  };
+
+  const detailElement = () => {
+    return cloneElement(detail as ReactElement<any>, {
+      toggleContent,
+    });
   };
 
   return (
@@ -64,7 +74,9 @@ export const Accordion: FC<Props> = ({
       </Box>
       {isOpen && (
         <Box className={classes.contentWrapper}>
-          {typeof detail === "function" ? detail(toggleContent) : detail}
+          {typeof detail === "function"
+            ? detail(toggleContent)
+            : detailElement()}
         </Box>
       )}
     </Box>

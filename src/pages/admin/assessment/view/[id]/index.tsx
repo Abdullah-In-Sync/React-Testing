@@ -9,17 +9,25 @@ import { ConfirmInfoElement } from "../../../../../components/common/CustomModal
 import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import {
+  ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
   ADMIN_ADD_CATEGORY,
   ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
+  ADMIN_VIEW_ASSESSMENT_QUESTIONS,
 } from "../../../../../graphql/assessment/graphql";
-import { AssessmentViewData } from "../../../../../graphql/assessment/types";
+import {
+  AdminAssessmentViewQsData,
+  AssessmentViewData,
+} from "../../../../../graphql/assessment/types";
 
 const ViewAssessmentPage: NextPage = () => {
   const router = useRouter();
   const { query: { id: assessmentId } = {} } = router;
   const [addCategory] = useMutation(ADMIN_ADD_CATEGORY);
   const [updateCategory] = useMutation(ADMIN_UPDATE_ASSESSMENT_CATEGORY);
+  const [addAssessmentCategoryQuestion] = useMutation(
+    ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION
+  );
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
@@ -37,6 +45,18 @@ const ViewAssessmentPage: NextPage = () => {
     onCompleted: () => {
       setLoader(false);
     },
+  });
+
+  const [
+    getAssesssmentQuestions,
+    {
+      data: {
+        adminAssessmentViewQs: assessmentQuestionsViewData = undefined,
+      } = {},
+      refetch: refetchAssessmentQuestions,
+    },
+  ] = useLazyQuery<AdminAssessmentViewQsData>(ADMIN_VIEW_ASSESSMENT_QUESTIONS, {
+    fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -109,6 +129,42 @@ const ViewAssessmentPage: NextPage = () => {
     }
   };
 
+  const onAddCategoryQuestionSubmit = async (
+    formFields,
+    { _id: categoryId },
+    callback,
+    setSubmitting
+  ) => {
+    setLoader(true);
+    const { questions } = formFields;
+    try {
+      await addAssessmentCategoryQuestion({
+        variables: {
+          categoryId,
+          question: JSON.stringify(questions),
+        },
+        onCompleted: (data) => {
+          const { adminAssessmentAddQs } = data;
+          if (adminAssessmentAddQs) {
+            refetchAssessmentQuestions();
+            enqueueSnackbar("Questions saved successfully.", {
+              variant: "success",
+            });
+            callback();
+            setSubmitting(false);
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
   const submitCallback = () => {
     confirmRef.current.close();
     infoModalRef.current.close();
@@ -161,6 +217,36 @@ const ViewAssessmentPage: NextPage = () => {
     }
   };
 
+  const onAssessmentCategoryQuestionSubmit = (
+    v,
+    { setSubmitting },
+    categoryData
+  ) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        onAddCategoryQuestionSubmit(
+          v,
+          categoryData,
+          submitCallback,
+          setSubmitting
+        ),
+      description: "Are you sure you want to save the question?",
+      setSubmitting,
+    });
+  };
+
+  const handleToggleContent = (callback, categoryData) => {
+    setLoader(true);
+    const { _id: categoryId } = categoryData;
+    getAssesssmentQuestions({
+      variables: { categoryId },
+      onCompleted: () => {
+        callback();
+        setLoader(false);
+      },
+    });
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -173,6 +259,11 @@ const ViewAssessmentPage: NextPage = () => {
           confirmRef={confirmRef}
           assessmentLoading={assessmentLoading}
           actionButtonClick={actionButtonClick}
+          onAssessmentCategoryQuestionSubmit={
+            onAssessmentCategoryQuestionSubmit
+          }
+          handleToggleContent={handleToggleContent}
+          assessmentQuestionsViewData={assessmentQuestionsViewData}
         />
       </Layout>
     </>

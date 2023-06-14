@@ -13,3 +13,12 @@ export interface Category {
   _id?: string;
   name?: string;
 }
+
+export interface AdminAssessmentViewQsData {
+  adminAssessmentViewQs?: AdminAssessmentViewQsEntity[] | null | undefined;
+}
+export interface AdminAssessmentViewQsEntity {
+  _id?: string;
+  category_id?: string;
+  question?: string;
+}
