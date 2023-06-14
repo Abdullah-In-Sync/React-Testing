@@ -79,6 +79,12 @@ mocksData.push({
             name: "test",
             status: 1,
           },
+          {
+            _id: "cat2",
+            assessment_id: "e4f31884-d419-4aa0-adcb-2b81dfbd8f8c",
+            name: "delCate",
+            status: 1,
+          },
         ],
         name: "test-case-assessment",
       },
@@ -117,6 +123,26 @@ mocksData.push({
   result: {
     data: {
       adminUpdateAssessmentCategory: {
+        _id: "cat1",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_ASSESSMENT_CATEGORY,
+    variables: {
+      categoryId: "cat2",
+      updateCat: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateAssessmentCategory: {
+        __typename: "adminAssessmentCategory",
         _id: "cat1",
       },
     },
@@ -218,5 +244,19 @@ describe("Admin assessment category list", () => {
     const qconfirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(qconfirmButton);
     expect(cancelButton).not.toBeInTheDocument();
+  });
+
+  it("should delete assessment category", async () => {
+    await sut();
+    const categoryName = await screen.findByText(/delCate/i);
+    expect(categoryName).toBeInTheDocument();
+    const deleteBtn = await screen.findByTestId("iconButton_cat2_1");
+    fireEvent.click(deleteBtn);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Assessment category deleted successfully./i)
+    ).toBeInTheDocument();
   });
 });
