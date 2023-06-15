@@ -19,24 +19,30 @@ interface ViewProps {
     value
   ) => void;
   assessmentId?: string;
-  categoryData?: Category;
+  categoryData?: Category | any;
   assessmentQuestionsViewData?: AdminAssessmentViewQsEntity[];
   confirmRef?: ForwardedRef<ConfirmElement> | any;
   toggleContent?: any;
 }
 
 export const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Category name is required"),
+  questions: Yup.array().of(
+    Yup.object().shape({
+      question: Yup.string().required("Question is required"),
+    })
+  ),
 });
 
 const AddUpdateCategoryQuestion: React.FC<ViewProps> = (vprops) => {
   const {
     onAssessmentCategoryQuestionSubmit,
     categoryData,
-    assessmentQuestionsViewData: questions = [],
     confirmRef,
     toggleContent,
   } = vprops;
+
+  const { assessmentQuestionsViewData: questions = [] } = categoryData;
+
   const modifyQuestions = questions.map((item) => ({
     question_id: item._id,
     question: item.question,
@@ -61,6 +67,7 @@ const AddUpdateCategoryQuestion: React.FC<ViewProps> = (vprops) => {
     return (
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
         enableReinitialize
         onSubmit={(
           v,

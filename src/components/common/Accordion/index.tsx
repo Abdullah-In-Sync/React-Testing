@@ -2,7 +2,7 @@ import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import { Box } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { FC, ReactElement, cloneElement, useState } from "react";
+import { FC, ReactElement, cloneElement, useEffect, useState } from "react";
 import { useStyles } from "./accordionStyle";
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
   marginBottom?: string;
   index?: number;
   handleToggleContent?: (v) => void;
+  defaultIsOpen?: boolean;
 };
 
 export const Accordion: FC<Props> = ({
@@ -21,13 +22,17 @@ export const Accordion: FC<Props> = ({
   marginBottom,
   index = "",
   handleToggleContent,
+  defaultIsOpen = false,
 }) => {
   const classes = useStyles();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultIsOpen);
+
+  useEffect(() => {
+    if (defaultIsOpen !== isOpen) setIsOpen(defaultIsOpen);
+  }, [defaultIsOpen]);
 
   const toggleContent = () => {
-    if (handleToggleContent && !isOpen)
-      handleToggleContent(() => setIsOpen(true));
+    if (handleToggleContent) handleToggleContent(() => setIsOpen(true));
     else setIsOpen(!isOpen);
   };
 

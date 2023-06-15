@@ -32,6 +32,7 @@ const ViewAssessmentPage: NextPage = () => {
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
+  const [assessmentCategoryategory, setAssessmentCategory] = useState<any>();
 
   const [
     getAssesssmentData,
@@ -42,8 +43,10 @@ const ViewAssessmentPage: NextPage = () => {
     },
   ] = useLazyQuery<AssessmentViewData>(ADMIN_VIEW_ASSESSMENT, {
     fetchPolicy: "cache-and-network",
-    onCompleted: () => {
+    onCompleted: (data) => {
+      const { adminViewAssessment } = data;
       setLoader(false);
+      setAssessmentCategory(adminViewAssessment);
     },
   });
 
@@ -275,16 +278,23 @@ const ViewAssessmentPage: NextPage = () => {
     });
   };
 
-  const handleToggleContent = (callback, categoryData) => {
+  const handleToggleContent = (_, categoryData, i) => {
     setLoader(true);
     const { _id: categoryId } = categoryData;
-    getAssesssmentQuestions({
-      variables: { categoryId },
-      onCompleted: () => {
-        callback();
-        setLoader(false);
-      },
-    });
+    const t = JSON.parse(JSON.stringify(assessmentViewData));
+    if (assessmentCategoryategory.category[i]["assessmentQuestionsViewData"]) {
+      setAssessmentCategory({ ...assessmentViewData });
+      setLoader(false);
+    } else
+      getAssesssmentQuestions({
+        variables: { categoryId },
+        onCompleted: (data) => {
+          const { adminAssessmentViewQs } = data;
+          t.category[i]["assessmentQuestionsViewData"] = adminAssessmentViewQs;
+          setAssessmentCategory({ ...assessmentCategoryategory, ...t });
+          setLoader(false);
+        },
+      });
   };
 
   return (
@@ -292,7 +302,7 @@ const ViewAssessmentPage: NextPage = () => {
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
         <ViewAssessment
-          data={assessmentViewData}
+          data={assessmentCategoryategory}
           handleBackClick={handleBackClick}
           infoModalRef={infoModalRef}
           onPressAddCategory={onPressAddCategory}

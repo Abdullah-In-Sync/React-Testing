@@ -13,12 +13,12 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
   assessmentLoading,
   onAssessmentCategoryQuestionSubmit,
   handleToggleContent,
-  assessmentQuestionsViewData,
   confirmRef,
 }) => {
   const { category = [] } = data as AdminViewAssessment;
 
   const accordion = ({ title, item, i }) => {
+    const { assessmentQuestionsViewData } = item;
     return (
       <Accordion
         detail={
@@ -31,9 +31,12 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
             confirmRef={confirmRef}
           />
         }
-        handleToggleContent={(callback) => handleToggleContent(callback, item)}
+        handleToggleContent={(callback) =>
+          handleToggleContent(callback, item, i)
+        }
         title={title}
         index={i}
+        defaultIsOpen={Boolean(assessmentQuestionsViewData)}
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />
         }
