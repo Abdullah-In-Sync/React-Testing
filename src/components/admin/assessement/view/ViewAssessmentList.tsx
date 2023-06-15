@@ -3,6 +3,7 @@ import React from "react";
 import { AdminViewAssessment } from "../../../../graphql/assessment/types";
 import { Accordion } from "../../../common/Accordion";
 import { MesageTextDisplay } from "../../../common/MessageTextDisplay/MessageTextDisplay";
+import AddUpdateCategoryQuestion from "../addUpdateCategoryQuestion/AddUpdateCategoryQuestion";
 import ActionsButtons from "./ActionsButtons";
 import { ViewAssessmentProps } from "./ViewAssessment";
 
@@ -10,14 +11,32 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
   data,
   actionButtonClick,
   assessmentLoading,
+  onAssessmentCategoryQuestionSubmit,
+  handleToggleContent,
+  confirmRef,
 }) => {
   const { category = [] } = data as AdminViewAssessment;
 
   const accordion = ({ title, item, i }) => {
+    const { assessmentQuestionsViewData } = item;
     return (
       <Accordion
+        detail={
+          <AddUpdateCategoryQuestion
+            onAssessmentCategoryQuestionSubmit={
+              onAssessmentCategoryQuestionSubmit
+            }
+            categoryData={item}
+            assessmentQuestionsViewData={assessmentQuestionsViewData}
+            confirmRef={confirmRef}
+          />
+        }
+        handleToggleContent={(callback) =>
+          handleToggleContent(callback, item, i)
+        }
         title={title}
         index={i}
+        defaultIsOpen={Boolean(assessmentQuestionsViewData)}
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />
         }

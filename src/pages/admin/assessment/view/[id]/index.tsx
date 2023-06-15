@@ -9,21 +9,30 @@ import { ConfirmInfoElement } from "../../../../../components/common/CustomModal
 import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import {
+  ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
   ADMIN_ADD_CATEGORY,
   ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
+  ADMIN_VIEW_ASSESSMENT_QUESTIONS,
 } from "../../../../../graphql/assessment/graphql";
-import { AssessmentViewData } from "../../../../../graphql/assessment/types";
+import {
+  AdminAssessmentViewQsData,
+  AssessmentViewData,
+} from "../../../../../graphql/assessment/types";
 
 const ViewAssessmentPage: NextPage = () => {
   const router = useRouter();
   const { query: { id: assessmentId } = {} } = router;
   const [addCategory] = useMutation(ADMIN_ADD_CATEGORY);
   const [updateCategory] = useMutation(ADMIN_UPDATE_ASSESSMENT_CATEGORY);
+  const [addAssessmentCategoryQuestion] = useMutation(
+    ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION
+  );
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
+  const [assessmentCategoryategory, setAssessmentCategory] = useState<any>();
 
   const [
     getAssesssmentData,
@@ -34,9 +43,23 @@ const ViewAssessmentPage: NextPage = () => {
     },
   ] = useLazyQuery<AssessmentViewData>(ADMIN_VIEW_ASSESSMENT, {
     fetchPolicy: "cache-and-network",
-    onCompleted: () => {
+    onCompleted: (data) => {
+      const { adminViewAssessment } = data;
       setLoader(false);
+      setAssessmentCategory(adminViewAssessment);
     },
+  });
+
+  const [
+    getAssesssmentQuestions,
+    {
+      data: {
+        adminAssessmentViewQs: assessmentQuestionsViewData = undefined,
+      } = {},
+      refetch: refetchAssessmentQuestions,
+    },
+  ] = useLazyQuery<AdminAssessmentViewQsData>(ADMIN_VIEW_ASSESSMENT_QUESTIONS, {
+    fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -109,24 +132,29 @@ const ViewAssessmentPage: NextPage = () => {
     }
   };
 
-  const onDeleteCategorySubmit = async (formFields, callback) => {
+  const onAddCategoryQuestionSubmit = async (
+    formFields,
+    { _id: categoryId },
+    callback,
+    setSubmitting
+  ) => {
     setLoader(true);
-    const { _id } = formFields;
+    const { questions } = formFields;
     try {
-      await updateCategory({
+      await addAssessmentCategoryQuestion({
         variables: {
-          categoryId: _id,
-          updateCat: {
-            status: 0,
-          },
+          categoryId,
+          question: JSON.stringify(questions),
         },
         onCompleted: (data) => {
-          if (data) {
-            refetchAssessmentData();
-            enqueueSnackbar("Assessment category deleted successfully.", {
+          const { adminAssessmentAddQs } = data;
+          if (adminAssessmentAddQs) {
+            refetchAssessmentQuestions();
+            enqueueSnackbar("Questions saved successfully.", {
               variant: "success",
             });
             callback();
+            setSubmitting(false);
           }
           setLoader(false);
         },
@@ -169,13 +197,6 @@ const ViewAssessmentPage: NextPage = () => {
     });
   };
 
-  const handleDeleteCategory = (v) => {
-    confirmRef.current.openConfirm({
-      confirmFunction: () => onDeleteCategorySubmit(v, submitCallback),
-      description: "Are you sure you want to delete the category?",
-    });
-  };
-
   const onPressEditCategory = (value) => {
     infoModalRef.current.openConfirm({
       data: {
@@ -190,8 +211,42 @@ const ViewAssessmentPage: NextPage = () => {
     });
   };
 
-  const onPressDeleteCategory = (value) => {
-    handleDeleteCategory(value);
+  const onDeleteCategorySubmit = async (formFields, callback) => {
+    setLoader(true);
+    const { _id } = formFields;
+    try {
+      await updateCategory({
+        variables: {
+          categoryId: _id,
+          updateCat: {
+            status: 0,
+          },
+        },
+        onCompleted: (data) => {
+          if (data) {
+            refetchAssessmentData();
+            enqueueSnackbar("Assessment category deleted successfully.", {
+              variant: "success",
+            });
+            callback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
+  const handleDeleteCategory = (v) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () => onDeleteCategorySubmit(v, submitCallback),
+      description: "Are you sure you want to delete the category?",
+    });
   };
 
   const actionButtonClick = (v) => {
@@ -200,9 +255,46 @@ const ViewAssessmentPage: NextPage = () => {
       case "edit":
         return onPressEditCategory(v);
       case "delete":
-        return onPressDeleteCategory(v);
+        return handleDeleteCategory(v);
       default:
     }
+  };
+
+  const onAssessmentCategoryQuestionSubmit = (
+    v,
+    { setSubmitting },
+    categoryData
+  ) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        onAddCategoryQuestionSubmit(
+          v,
+          categoryData,
+          submitCallback,
+          setSubmitting
+        ),
+      description: "Are you sure you want to save the question?",
+      setSubmitting,
+    });
+  };
+
+  const handleToggleContent = (_, categoryData, i) => {
+    setLoader(true);
+    const { _id: categoryId } = categoryData;
+    const t = JSON.parse(JSON.stringify(assessmentViewData));
+    if (assessmentCategoryategory.category[i]["assessmentQuestionsViewData"]) {
+      setAssessmentCategory({ ...assessmentViewData });
+      setLoader(false);
+    } else
+      getAssesssmentQuestions({
+        variables: { categoryId },
+        onCompleted: (data) => {
+          const { adminAssessmentViewQs } = data;
+          t.category[i]["assessmentQuestionsViewData"] = adminAssessmentViewQs;
+          setAssessmentCategory({ ...assessmentCategoryategory, ...t });
+          setLoader(false);
+        },
+      });
   };
 
   return (
@@ -210,13 +302,18 @@ const ViewAssessmentPage: NextPage = () => {
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
         <ViewAssessment
-          data={assessmentViewData}
+          data={assessmentCategoryategory}
           handleBackClick={handleBackClick}
           infoModalRef={infoModalRef}
           onPressAddCategory={onPressAddCategory}
           confirmRef={confirmRef}
           assessmentLoading={assessmentLoading}
           actionButtonClick={actionButtonClick}
+          onAssessmentCategoryQuestionSubmit={
+            onAssessmentCategoryQuestionSubmit
+          }
+          handleToggleContent={handleToggleContent}
+          assessmentQuestionsViewData={assessmentQuestionsViewData}
         />
       </Layout>
     </>
