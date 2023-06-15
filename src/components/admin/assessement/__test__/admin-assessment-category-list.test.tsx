@@ -4,9 +4,11 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import {
+  ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
   ADMIN_ADD_CATEGORY,
   ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
+  ADMIN_VIEW_ASSESSMENT_QUESTIONS,
 } from "../../../../graphql/assessment/graphql";
 import AssessmentListPage from "../../../../pages/admin/assessment/view/[id]";
 import theme from "../../../../styles/theme/theme";
@@ -19,6 +21,45 @@ jest.mock("next/router", () => ({
 const pushMock = jest.fn();
 
 const mocksData = [];
+mocksData.push({
+  request: {
+    query: ADMIN_VIEW_ASSESSMENT_QUESTIONS,
+    variables: {
+      categoryId: "cat1",
+    },
+  },
+  result: {
+    data: {
+      adminAssessmentViewQs: [
+        {
+          _id: "quesid-1",
+          category_id: "cat1",
+          question: "ques1",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
+    variables: {
+      categoryId: "cat1",
+      question: '[{"question_id":"quesid-1","question":"text update"}]',
+    },
+  },
+  result: {
+    data: {
+      adminAssessmentAddQs: [
+        {
+          _id: "quesid-1",
+          __typename: "adminAssessmentQs",
+        },
+      ],
+    },
+  },
+});
 
 mocksData.push({
   request: {
@@ -36,6 +77,12 @@ mocksData.push({
             _id: "cat1",
             assessment_id: "e4f31884-d419-4aa0-adcb-2b81dfbd8f8c",
             name: "test",
+            status: 1,
+          },
+          {
+            _id: "cat2",
+            assessment_id: "e4f31884-d419-4aa0-adcb-2b81dfbd8f8c",
+            name: "delCate",
             status: 1,
           },
         ],
@@ -76,6 +123,26 @@ mocksData.push({
   result: {
     data: {
       adminUpdateAssessmentCategory: {
+        _id: "cat1",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_ASSESSMENT_CATEGORY,
+    variables: {
+      categoryId: "cat2",
+      updateCat: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateAssessmentCategory: {
+        __typename: "adminAssessmentCategory",
         _id: "cat1",
       },
     },
@@ -149,6 +216,47 @@ describe("Admin assessment category list", () => {
     fireEvent.click(confirmButton);
     expect(
       await screen.findByText(/Assessment category updated successfully./i)
+    ).toBeInTheDocument();
+  });
+
+  it("should add and update assessment questions", async () => {
+    await sut();
+    const firstRecordName = await screen.findByText(/test/i);
+    expect(firstRecordName).toBeInTheDocument();
+
+    const toggleContent0 = await screen.findByTestId("toggleContent0");
+    fireEvent.click(toggleContent0);
+    const question1 = await screen.findByTestId("questions.0.question");
+    expect(question1).toBeInTheDocument();
+    fireEvent.change(question1, {
+      target: { value: "text update" },
+    });
+    const submitButton = await screen.findByTestId("submitAddQuestion");
+    fireEvent.click(submitButton);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Questions saved successfully./i)
+    ).toBeInTheDocument();
+
+    const cancelButton = await screen.findByTestId("cancelAddQuestion");
+    fireEvent.click(cancelButton);
+    const qconfirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(qconfirmButton);
+    expect(cancelButton).not.toBeInTheDocument();
+  });
+
+  it("should delete assessment category", async () => {
+    await sut();
+    const categoryName = await screen.findByText(/delCate/i);
+    expect(categoryName).toBeInTheDocument();
+    const deleteBtn = await screen.findByTestId("iconButton_cat2_1");
+    fireEvent.click(deleteBtn);
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Assessment category deleted successfully./i)
     ).toBeInTheDocument();
   });
 });

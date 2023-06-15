@@ -134,3 +134,24 @@ export const ADMIN_SHARE_ASSESSMENT = gql`
     }
   }
 `;
+
+export const ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION = gql`
+  mutation AdminAssessmentAddQs($categoryId: ID!, $question: String!) {
+    adminAssessmentAddQs(category_id: $categoryId, question: $question) {
+      _id
+    }
+  }
+`;
+
+export const ADMIN_VIEW_ASSESSMENT_QUESTIONS = gql`
+  query AdminAssessmentViewQs($categoryId: ID!) {
+    adminAssessmentViewQs(category_id: $categoryId) {
+      _id
+      category_id
+      created_date
+      question
+      status
+      updated_date
+    }
+  }
+`;
