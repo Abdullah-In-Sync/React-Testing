@@ -6,7 +6,6 @@ import Layout from "../../../../../components/layout";
 import { addAndEditOrganizationFormFields } from "../../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import Loader from "../../../../../components/common/Loader";
-import withAuthentication from "../../../../../hoc/auth";
 import AddEditOrganization from "../../../../../components/common/Organization/addEditOrganization";
 import { UPDATE_ORG_BY_ID } from "../../../../../graphql/mutation/admin";
 import { SuccessModal } from "../../../../../components/common/SuccessModal";
@@ -69,6 +68,9 @@ const Index = () => {
             contract: formFields.contract,
             patient_welcome_email: formFields.patient_welcome_email,
             logo: formFields.file_name,
+            model_id: formFields.model_id,
+            therapy_id: formFields.therapy_id,
+            disorder_id: formFields.disorder_id,
           },
         },
         onCompleted: (data) => {
@@ -114,4 +116,4 @@ const Index = () => {
   );
 };
 
-export default withAuthentication(Index, ["admin"]);
+export default Index;

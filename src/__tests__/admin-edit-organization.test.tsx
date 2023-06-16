@@ -7,7 +7,12 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import EditOrganization from "../pages/admin/organization/edit/[id]/index";
 import { GET_ORGANIZATION_DETAIL_BY_ID } from "../graphql/query/organization";
-import { UPDATE_ORG_BY_ID } from "../graphql/mutation/admin";
+import {
+  GET_DISORDER_LIST_BY_THERAPY_ID,
+  GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
+  GET_THERAPIST_LIST_BY_ORG_ID,
+  UPDATE_ORG_BY_ID,
+} from "../graphql/mutation/admin";
 
 const pushMock = jest.fn();
 
@@ -44,6 +49,9 @@ mocksData.push({
         side_menu_color: "A",
         therapist: "A",
         therapy: "A",
+        therapy_id: "dcf9b080dce34879a54208d0ecfdc168",
+        disorder_id: "59c60ab89afb4923b09e242fc3f99f97",
+        model_id: "ade64d00d726478aaee1e59b09c129ba",
       },
     },
   },
@@ -86,6 +94,9 @@ mocksData.push({
         patient_welcome_email:
           "<p>Welcome to MyHelp</p><p>Your details have been given by [THERAPIST_NAME] to provide you access with the MyHelp platform. The platform will support your therapy allowing you to share information between yourself and your therapist. We have created the MyHelp platform to support both therapist&#x27;s and patients in their pursuit of a smoother therapy process.</p><p>MyHelp empowers therapist&#x27;s throughout the entire process and delivers personalised care with the aim to improve patient outcomes. Simultaneously, patients can access their own platform to access key information to support their progress and communicate more efficiently with their therapist. We believe the MyHelp platform will enhance the therapeutic relationship in order to deliver better results. In order to access your private area of the MyHelp platform you will need to:</p><p>Visit the website: https://portal.dev-myhelp.co.uk/</p><p>Enter the access details: Username – your email address, Password – Happ1ness</p><p>We recommend that you change your password by clicking the icon in the right hand corner to something personal and more memorable.</p><p>Now you have access to your personal therapy guide, which will be developed with the support of your therapist over the period of your therapy This will allow you to access the information and resources now and in the future.</p><p>If you have any other questions then please email info@myhelp.co.uk and we will endeavor to get back to you within 24 hours.</p><p>Thank you,</p><p>MyHelp Team.</p><p>P.S. Need help getting started? Please have a look at our help documentation or just reply to this email with any questions or issues you may have. The MyHelp support team is available to help with the platform only. Unfortunately, we do not provide mental health services and cannot support you in this respect. Please contact your therapist in such cases.</p>",
         logo: "test.pdf",
+        model_id: "",
+        therapy_id: "",
+        disorder_id: "",
       },
     },
   },
@@ -107,6 +118,80 @@ mocksData.push({
         therapy: "Therapy",
         __typename: "Organization",
       },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_LIST_BY_ORG_ID,
+  },
+  result: {
+    data: {
+      getTherapyListByOrgId: [
+        {
+          _id: "dcf9b080dce34879a54208d0ecfdc168",
+          created_date: "2022-10-28T08:58:24.000Z",
+          org_id: "2301536c4d674b3598814174d8f19593",
+          therapy_name: "rest therapy",
+          therapy_status: 1,
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_LIST_BY_THERAPY_ID,
+    variables: {
+      therapyId: "dcf9b080dce34879a54208d0ecfdc168",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByTherapyId: [
+        {
+          _id: "59c60ab89afb4923b09e242fc3f99f97",
+          created_date: "2022-10-28T08:58:40.000Z",
+          disorder_name: "rest-order",
+          disorder_status: 1,
+          therapy_detail: null,
+          therapy_id: "dcf9b080dce34879a54208d0ecfdc168",
+          updated_date: null,
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "DisorderData",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
+    variables: {
+      disorderId: "59c60ab89afb4923b09e242fc3f99f97",
+    },
+  },
+  result: {
+    data: {
+      getModelDisorderList: [
+        {
+          _id: "ade64d00d726478aaee1e59b09c129ba",
+          created_date: "2022-10-28T08:58:57.000Z",
+          disorder_id: "59c60ab89afb4923b09e242fc3f99f97",
+          model_name: "rest-model",
+          model_status: 1,
+          updated_date: null,
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "DisorderModelData",
+        },
+      ],
     },
   },
 });
@@ -164,6 +249,18 @@ describe("Admin edit resource page", () => {
       expect(screen.getByTestId("patient_plural")).toHaveValue("A");
 
       expect(screen.getByTestId("therapy")).toHaveValue("A");
+
+      expect(screen.getByTestId("therapy_id")).toHaveValue(
+        "dcf9b080dce34879a54208d0ecfdc168"
+      );
+
+      expect(screen.getByTestId("disorder_id")).toHaveValue(
+        "59c60ab89afb4923b09e242fc3f99f97"
+      );
+
+      expect(screen.getByTestId("model_id")).toHaveValue(
+        "ade64d00d726478aaee1e59b09c129ba"
+      );
 
       expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
       expect(screen.getByTestId("edit-upload-file")).toBeInTheDocument();

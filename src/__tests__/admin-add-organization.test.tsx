@@ -4,7 +4,12 @@ import { MockedProvider } from "@apollo/client/testing";
 import AddOrganization from "../pages/admin/organization/add";
 import { GET_UPLOAD_LOGO_URL } from "../graphql/query/resource";
 import { useAppContext } from "../contexts/AuthContext";
-import { ADD_ORGANIZATION_DATA } from "../graphql/mutation/admin";
+import {
+  ADD_ORGANIZATION_DATA,
+  GET_DISORDER_LIST_BY_THERAPY_ID,
+  GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
+  GET_THERAPIST_LIST_BY_ORG_ID,
+} from "../graphql/mutation/admin";
 import * as s3 from "../lib/helpers/s3";
 import { useRouter } from "next/router";
 jest.mock("next/router", () => ({
@@ -52,6 +57,9 @@ mocksData.push({
       patientWelcomeEmail:
         "<p>Welcome to MyHelp</p><p>Your details have been given by [THERAPIST_NAME] to provide you access with the MyHelp platform. The platform will support your therapy allowing you to share information between yourself and your therapist. We have created the MyHelp platform to support both therapist&#x27;s and patients in their pursuit of a smoother therapy process.</p><p>MyHelp empowers therapist&#x27;s throughout the entire process and delivers personalised care with the aim to improve patient outcomes. Simultaneously, patients can access their own platform to access key information to support their progress and communicate more efficiently with their therapist. We believe the MyHelp platform will enhance the therapeutic relationship in order to deliver better results. In order to access your private area of the MyHelp platform you will need to:</p><p>Visit the website: https://portal.dev-myhelp.co.uk/</p><p>Enter the access details: Username – your email address, Password – Happ1ness</p><p>We recommend that you change your password by clicking the icon in the right hand corner to something personal and more memorable.</p><p>Now you have access to your personal therapy guide, which will be developed with the support of your therapist over the period of your therapy This will allow you to access the information and resources now and in the future.</p><p>If you have any other questions then please email info@myhelp.co.uk and we will endeavor to get back to you within 24 hours.</p><p>Thank you,</p><p>MyHelp Team.</p><p>P.S. Need help getting started? Please have a look at our help documentation or just reply to this email with any questions or issues you may have. The MyHelp support team is available to help with the platform only. Unfortunately, we do not provide mental health services and cannot support you in this respect. Please contact your therapist in such cases.</p>",
       logo: "invalid.pdf",
+      model_id: "ade64d00d726478aaee1e59b09c129ba",
+      therapy_id: "dcf9b080dce34879a54208d0ecfdc168",
+      disorder_id: "59c60ab89afb4923b09e242fc3f99f97",
     },
   },
   result: {
@@ -72,6 +80,80 @@ mocksData.push({
         therapy: "therapy",
         __typename: "Organization",
       },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_LIST_BY_ORG_ID,
+  },
+  result: {
+    data: {
+      getTherapyListByOrgId: [
+        {
+          _id: "dcf9b080dce34879a54208d0ecfdc168",
+          created_date: "2022-10-28T08:58:24.000Z",
+          org_id: "2301536c4d674b3598814174d8f19593",
+          therapy_name: "rest therapy",
+          therapy_status: 1,
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_LIST_BY_THERAPY_ID,
+    variables: {
+      therapyId: "dcf9b080dce34879a54208d0ecfdc168",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByTherapyId: [
+        {
+          _id: "59c60ab89afb4923b09e242fc3f99f97",
+          created_date: "2022-10-28T08:58:40.000Z",
+          disorder_name: "rest-order",
+          disorder_status: 1,
+          therapy_detail: null,
+          therapy_id: "dcf9b080dce34879a54208d0ecfdc168",
+          updated_date: null,
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "DisorderData",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
+    variables: {
+      disorderId: "59c60ab89afb4923b09e242fc3f99f97",
+    },
+  },
+  result: {
+    data: {
+      getModelDisorderList: [
+        {
+          _id: "ade64d00d726478aaee1e59b09c129ba",
+          created_date: "2022-10-28T08:58:57.000Z",
+          disorder_id: "59c60ab89afb4923b09e242fc3f99f97",
+          model_name: "rest-model",
+          model_status: 1,
+          updated_date: null,
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          user_type: "admin",
+          __typename: "DisorderModelData",
+        },
+      ],
     },
   },
 });
@@ -136,74 +218,105 @@ describe("Admin add resource page", () => {
     jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
 
     await sut();
-    expect(screen.getByTestId("organization-add-form")).toBeInTheDocument();
-
-    fireEvent.change(screen.queryByTestId("name"), {
-      target: { value: "name" },
-    });
-
-    fireEvent.change(screen.queryByTestId("panel_color"), {
-      target: { value: "panel_color" },
-    });
-
-    fireEvent.change(screen.queryByTestId("side_menu_color"), {
-      target: { value: "side_menu_color" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient"), {
-      target: { value: "patient" },
-    });
-
-    fireEvent.change(screen.queryByTestId("therapist"), {
-      target: { value: "therapist" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_plural"), {
-      target: { value: "patient_plural" },
-    });
-
-    fireEvent.change(screen.queryByTestId("therapy"), {
-      target: { value: "therapy" },
-    });
 
     await waitFor(async () => {
-      fireEvent.change(screen.getByTestId("resource_file_upload"), {
-        target: { files: [file] },
+      expect(screen.getByTestId("organization-add-form")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("name"), {
+        target: { value: "name" },
       });
-    });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("addOrganizationSubmitButton"));
-    });
+      fireEvent.change(screen.queryByTestId("panel_color"), {
+        target: { value: "panel_color" },
+      });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    await waitFor(async () => {
-      expect(
-        screen.getByTestId("addOrganizationConfirmButton")
-      ).toBeInTheDocument();
-    });
+      fireEvent.change(screen.queryByTestId("side_menu_color"), {
+        target: { value: "side_menu_color" },
+      });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("addOrganizationConfirmButton"));
-    });
+      fireEvent.change(screen.queryByTestId("patient"), {
+        target: { value: "patient" },
+      });
 
-    await waitFor(async () => {
-      expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-    });
+      fireEvent.change(screen.queryByTestId("therapist"), {
+        target: { value: "therapist" },
+      });
 
-    await waitFor(async () => {
-      expect(
-        screen.getByText("Organisation added Successfully")
-      ).toBeInTheDocument();
-    });
+      fireEvent.change(screen.queryByTestId("patient_plural"), {
+        target: { value: "patient_plural" },
+      });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
+      fireEvent.change(screen.queryByTestId("therapy"), {
+        target: { value: "therapy" },
+      });
+
+      fireEvent.change(screen.queryByTestId("therapy_id"), {
+        target: { value: "dcf9b080dce34879a54208d0ecfdc168" },
+      });
+      expect(screen.queryByTestId("therapy_id").getAttribute("value")).toBe(
+        "dcf9b080dce34879a54208d0ecfdc168"
+      );
+
+      fireEvent.change(screen.queryByTestId("disorder_id"), {
+        target: { value: "59c60ab89afb4923b09e242fc3f99f97" },
+      });
+      expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
+        "59c60ab89afb4923b09e242fc3f99f97"
+      );
+
+      fireEvent.change(screen.queryByTestId("model_id"), {
+        target: { value: "ade64d00d726478aaee1e59b09c129ba" },
+      });
+      expect(screen.queryByTestId("model_id").getAttribute("value")).toBe(
+        "ade64d00d726478aaee1e59b09c129ba"
+      );
+
+      await waitFor(async () => {
+        fireEvent.change(screen.getByTestId("resource_file_upload"), {
+          target: { files: [file] },
+        });
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.queryByTestId("addOrganizationSubmitButton")
+        ).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("addOrganizationSubmitButton"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByTestId("addOrganizationConfirmButton")
+        ).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("addOrganizationConfirmButton"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Organisation added Successfully")
+        ).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
+      });
+      expect(mockRouter.push).toHaveBeenCalledWith("/admin/organization/list");
     });
-    expect(mockRouter.push).toHaveBeenCalledWith("/admin/organization/list");
   });
 
-  it("Add Organization while click on cancle button.", async () => {
+  it("Cancle Organization with valid data", async () => {
     const mockRouter = {
       push: jest.fn(),
     };
@@ -216,59 +329,90 @@ describe("Admin add resource page", () => {
     jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
 
     await sut();
-    expect(screen.getByTestId("organization-add-form")).toBeInTheDocument();
-
-    fireEvent.change(screen.queryByTestId("name"), {
-      target: { value: "name" },
-    });
-
-    fireEvent.change(screen.queryByTestId("panel_color"), {
-      target: { value: "panel_color" },
-    });
-
-    fireEvent.change(screen.queryByTestId("side_menu_color"), {
-      target: { value: "side_menu_color" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient"), {
-      target: { value: "patient" },
-    });
-
-    fireEvent.change(screen.queryByTestId("therapist"), {
-      target: { value: "therapist" },
-    });
-
-    fireEvent.change(screen.queryByTestId("patient_plural"), {
-      target: { value: "patient_plural" },
-    });
-
-    fireEvent.change(screen.queryByTestId("therapy"), {
-      target: { value: "therapy" },
-    });
 
     await waitFor(async () => {
-      fireEvent.change(screen.getByTestId("resource_file_upload"), {
-        target: { files: [file] },
+      expect(screen.getByTestId("organization-add-form")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("name"), {
+        target: { value: "name" },
       });
-    });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("addOrganizationSubmitButton"));
-    });
+      fireEvent.change(screen.queryByTestId("panel_color"), {
+        target: { value: "panel_color" },
+      });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    await waitFor(async () => {
-      expect(
-        screen.getByTestId("addOrganizationCancleButton")
-      ).toBeInTheDocument();
-    });
+      fireEvent.change(screen.queryByTestId("side_menu_color"), {
+        target: { value: "side_menu_color" },
+      });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("addOrganizationCancleButton"));
-    });
+      fireEvent.change(screen.queryByTestId("patient"), {
+        target: { value: "patient" },
+      });
 
-    await waitFor(async () => {
-      expect(screen.queryByTestId("name")).toBeInTheDocument();
+      fireEvent.change(screen.queryByTestId("therapist"), {
+        target: { value: "therapist" },
+      });
+
+      fireEvent.change(screen.queryByTestId("patient_plural"), {
+        target: { value: "patient_plural" },
+      });
+
+      fireEvent.change(screen.queryByTestId("therapy"), {
+        target: { value: "therapy" },
+      });
+
+      fireEvent.change(screen.queryByTestId("therapy_id"), {
+        target: { value: "dcf9b080dce34879a54208d0ecfdc168" },
+      });
+      expect(screen.queryByTestId("therapy_id").getAttribute("value")).toBe(
+        "dcf9b080dce34879a54208d0ecfdc168"
+      );
+
+      fireEvent.change(screen.queryByTestId("disorder_id"), {
+        target: { value: "59c60ab89afb4923b09e242fc3f99f97" },
+      });
+      expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
+        "59c60ab89afb4923b09e242fc3f99f97"
+      );
+
+      fireEvent.change(screen.queryByTestId("model_id"), {
+        target: { value: "ade64d00d726478aaee1e59b09c129ba" },
+      });
+      expect(screen.queryByTestId("model_id").getAttribute("value")).toBe(
+        "ade64d00d726478aaee1e59b09c129ba"
+      );
+
+      await waitFor(async () => {
+        fireEvent.change(screen.getByTestId("resource_file_upload"), {
+          target: { files: [file] },
+        });
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.queryByTestId("addOrganizationSubmitButton")
+        ).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("addOrganizationSubmitButton"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByTestId("addOrganizationCancleButton")
+        ).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+        fireEvent.click(screen.queryByTestId("addOrganizationCancleButton"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.queryByTestId("name")).toBeInTheDocument();
+      });
     });
   });
 });
