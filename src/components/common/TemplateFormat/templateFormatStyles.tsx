@@ -17,11 +17,13 @@ export const useStyles = makeStyles(() => {
             display: "flex",
             flex: 1,
             "& .scoreCardValue": {
+              minWidth: 80,
               flex: 1,
               textAlign: "center",
               padding: "0px 5px",
               border: 0,
               "& .editableInputWrapper": {
+                width: "100%",
                 "& .scoreText": {
                   lineHeight: 1.1,
                 },

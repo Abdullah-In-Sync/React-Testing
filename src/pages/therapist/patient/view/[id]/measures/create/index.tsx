@@ -70,11 +70,18 @@ const CreateMeasures: NextPage = () => {
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
-    confirmRef.current.openConfirm({
-      confirmFunction: (callback) => submitForm(formFields, callback),
-      description: "Are you sure you want to create the measure?",
-      setSubmitting,
-    });
+    const { templateData: { questions = [] } = {} } = formFields;
+    if (questions.length <= 0) {
+      setSubmitting(false);
+      enqueueSnackbar("Please add a question.", {
+        variant: "error",
+      });
+    } else
+      confirmRef.current.openConfirm({
+        confirmFunction: (callback) => submitForm(formFields, callback),
+        description: "Are you sure you want to create the measure?",
+        setSubmitting,
+      });
   };
 
   const onPressCancel = () => {
