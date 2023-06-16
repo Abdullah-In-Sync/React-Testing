@@ -14,6 +14,7 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
   onAssessmentCategoryQuestionSubmit,
   handleToggleContent,
   confirmRef,
+  handleDeleteQuestion,
 }) => {
   const { category = [] } = data as AdminViewAssessment;
 
@@ -29,6 +30,7 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
             categoryData={item}
             assessmentQuestionsViewData={assessmentQuestionsViewData}
             confirmRef={confirmRef}
+            handleDeleteQuestion={handleDeleteQuestion}
           />
         }
         handleToggleContent={(callback) =>

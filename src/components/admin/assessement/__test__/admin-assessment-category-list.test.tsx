@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack";
 import {
   ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION,
   ADMIN_ADD_CATEGORY,
+  ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION,
   ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
   ADMIN_VIEW_ASSESSMENT_QUESTIONS,
@@ -149,6 +150,25 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION,
+    variables: {
+      questionId: "quesid-1",
+      updateQuestions: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminAssessmentUpdateQs: {
+        _id: "quesid-1",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -244,6 +264,18 @@ describe("Admin assessment category list", () => {
     const qconfirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(qconfirmButton);
     expect(cancelButton).not.toBeInTheDocument();
+  });
+
+  it("should delete assessment questions", async () => {
+    await sut();
+    const toggleContent0 = await screen.findByTestId("toggleContent0");
+    fireEvent.click(toggleContent0);
+    const deleteQuestion1 = await screen.findByTestId("iconButtonQuestion_0");
+    expect(deleteQuestion1).toBeInTheDocument();
+    fireEvent.click(deleteQuestion1);
+    expect(
+      await screen.findByText(/Question deleted successfully./i)
+    ).toBeInTheDocument();
   });
 
   it("should delete assessment category", async () => {

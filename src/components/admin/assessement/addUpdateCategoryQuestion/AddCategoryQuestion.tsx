@@ -11,7 +11,7 @@ import { useStyles } from "./addUpdateCategoryQuestionStyles";
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
     questions: {
-      questionId?: string;
+      question_id?: string;
       question?: string;
     }[];
   }>;
@@ -81,7 +81,7 @@ const AddCategoryQuestion = (
 
   const questionBox = ({ i }: any) => {
     const { questions = [] } = values;
-    const { questionId } = questions[i] || {};
+    const { question_id: questionId } = questions[i] || {};
 
     return (
       <Card key={`questionCard_${i}`} className={`questionCard`}>

@@ -14,6 +14,7 @@ import {
   ADMIN_UPDATE_ASSESSMENT_CATEGORY,
   ADMIN_VIEW_ASSESSMENT,
   ADMIN_VIEW_ASSESSMENT_QUESTIONS,
+  ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION,
 } from "../../../../../graphql/assessment/graphql";
 import {
   AdminAssessmentViewQsData,
@@ -27,6 +28,9 @@ const ViewAssessmentPage: NextPage = () => {
   const [updateCategory] = useMutation(ADMIN_UPDATE_ASSESSMENT_CATEGORY);
   const [addAssessmentCategoryQuestion] = useMutation(
     ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION
+  );
+  const [deleteCategoryQuestion] = useMutation(
+    ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION
   );
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
@@ -155,6 +159,38 @@ const ViewAssessmentPage: NextPage = () => {
             });
             callback();
             setSubmitting(false);
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
+  const onDeleteCategoryQuestion = async (formFields) => {
+    const { questionId, callback } = formFields;
+    console.debug("formfields", questionId);
+    setLoader(true);
+    try {
+      await deleteCategoryQuestion({
+        variables: {
+          questionId,
+          updateQuestions: {
+            status: 0,
+          },
+        },
+        onCompleted: (data) => {
+          const { adminAssessmentUpdateQs } = data;
+          if (adminAssessmentUpdateQs) {
+            enqueueSnackbar("Question deleted successfully.", {
+              variant: "success",
+            });
+            callback();
           }
           setLoader(false);
         },
@@ -297,6 +333,10 @@ const ViewAssessmentPage: NextPage = () => {
       });
   };
 
+  const handleDeleteQuestion = (v) => {
+    onDeleteCategoryQuestion(v);
+  };
+
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
@@ -314,6 +354,7 @@ const ViewAssessmentPage: NextPage = () => {
           }
           handleToggleContent={handleToggleContent}
           assessmentQuestionsViewData={assessmentQuestionsViewData}
+          handleDeleteQuestion={handleDeleteQuestion}
         />
       </Layout>
     </>
