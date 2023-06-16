@@ -123,6 +123,17 @@ export const ADMIN_UPDATE_ASSESSMENT_CATEGORY = gql`
     }
   }
 `;
+export const ADMIN_SHARE_ASSESSMENT = gql`
+  mutation adminShareAssessment($assessment_id: String!, $org_id: String!) {
+    adminShareAssessment(assessment_id: $assessment_id, org_id: $org_id) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
 
 export const ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION = gql`
   mutation AdminAssessmentAddQs($categoryId: ID!, $question: String!) {
@@ -155,6 +166,16 @@ export const ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION = gql`
       updateQs: $updateQuestions
     ) {
       _id
+    }
+  }
+`;
+
+export const GET_ORGANISATION_SHARED_LIST = gql`
+  query getOrganisationSharedList($name: String!, $share_type: String!) {
+    getOrganisationSharedList(name: $name, share_type: $share_type) {
+      _id
+      is_shared
+      name
     }
   }
 `;
