@@ -22,3 +22,13 @@ export interface AdminAssessmentViewQsEntity {
   category_id?: string;
   question?: string;
 }
+
+export interface OrgList {
+  _id: string;
+  is_shared?: boolean;
+  name?: string;
+}
+
+export interface GetOrganisationSharedList {
+  getOrganisationSharedList: OrgList[];
+}

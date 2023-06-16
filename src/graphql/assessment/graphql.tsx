@@ -155,3 +155,13 @@ export const ADMIN_VIEW_ASSESSMENT_QUESTIONS = gql`
     }
   }
 `;
+
+export const GET_ORGANISATION_SHARED_LIST = gql`
+  query getOrganisationSharedList($name: String!, $share_type: String!) {
+    getOrganisationSharedList(name: $name, share_type: $share_type) {
+      _id
+      is_shared
+      name
+    }
+  }
+`;

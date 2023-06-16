@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-import { Button, Stack, Checkbox, FormHelperText } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Stack,
+  Checkbox,
+  FormHelperText,
+  Tooltip,
+} from "@mui/material";
 import { Form } from "formik";
-import { Box, Typography } from "@material-ui/core";
+import { Box, Typography, makeStyles } from "@material-ui/core";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -9,30 +15,68 @@ import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-
-interface Organization {
-  _id: string;
-  name: string;
-}
+import { useLazyQuery } from "@apollo/client";
+import { GET_ORGANISATION_SHARED_LIST } from "../../../../graphql/assessment/graphql";
 
 interface ViewProps {
   buttonClick?: (value: any) => void;
   onPressSubmit?: () => void;
-  organizationList?: Organization[];
+  selectAssessmentName: string;
   setPlanId?: any;
   onChangePlanId?: any;
 }
 
+const useStyles = makeStyles(() => ({
+  customTooltip: {
+    height: "48px",
+    maxWidth: "353px",
+    padding: "14px 16px 19px 16px",
+    fontFamily: "Montserrat",
+    fontSize: "12px",
+    fontWeight: 600,
+    lineHeight: "15px",
+    letterSpacing: "0em",
+    textAlign: "left",
+    borderRadius: "4px",
+  },
+}));
+
 const ShareAssessmentModel: React.FC<ViewProps> = ({
   onPressSubmit,
-  organizationList,
+  selectAssessmentName,
   onChangePlanId,
 }) => {
+  const classes = useStyles();
   const [selected, setSelected] = useState<string | string[]>([]);
   const [hasError, setHasError] = useState(false);
+  const [selectableOrg, setSelectableOrg] = useState([]);
+
+  const [
+    getOrgSharedList,
+    { data: { getOrganisationSharedList: organizationList = [] } = {} },
+  ] = useLazyQuery(GET_ORGANISATION_SHARED_LIST, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      const selectable = data.getOrganisationSharedList.filter(
+        (org) => !org.is_shared
+      );
+      setSelectableOrg(selectable);
+      console.log(data.getOrganisationSharedList, "on complete");
+      /* istanbul ignore next */
+      // setLoader(false);
+    },
+  });
+  useEffect(() => {
+    getOrgSharedList({
+      variables: {
+        name: selectAssessmentName,
+        share_type: "assessment",
+      },
+    });
+  }, []);
 
   const isAllSelected =
-    organizationList.length > 0 && selected.length === organizationList.length;
+    selectableOrg.length > 0 && selected.length === selectableOrg.length;
 
   const handleChange = (event: SelectChangeEvent<string | string[]>) => {
     setHasError(false);
@@ -40,9 +84,9 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
 
     if (value[value.length - 1] === "all") {
       const updatedSelected =
-        selected.length === organizationList.length
+        selected.length === selectableOrg.length
           ? []
-          : organizationList.map((org) => org._id);
+          : selectableOrg.map((org) => org._id);
 
       setSelected(updatedSelected);
       onChangePlanId(updatedSelected);
@@ -137,21 +181,55 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 </ListItemIcon>
                 <Typography data-testid={`checkbox123`}>Select All</Typography>
               </MenuItem>
-              {organizationList.map((option) => (
-                <MenuItem
-                  data-testid={`shareOrg_${option._id}`}
-                  key={option._id}
-                  value={option._id}
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      data-testid={`checkbox12345${option._id}`}
-                      checked={selected.indexOf(option._id) > -1}
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={option.name} />
-                </MenuItem>
-              ))}
+              {organizationList.map((option) =>
+                option.is_shared ? (
+                  <Tooltip
+                    title="Assessment is already shared with this organisation"
+                    disableHoverListener={!option.is_shared}
+                    classes={{ tooltip: classes.customTooltip }}
+                  >
+                    <MenuItem
+                      data-testid={`shareOrg_${option._id}`}
+                      key={option._id}
+                      value={option._id}
+                      disabled={option.is_shared}
+                      sx={{
+                        "&.Mui-disabled": {
+                          pointerEvents: "all",
+                        },
+                      }}
+                    >
+                      <ListItemIcon>
+                        <Checkbox
+                          data-testid={`checkbox12345${option._id}`}
+                          checked={selected.indexOf(option._id) > -1}
+                        />
+                      </ListItemIcon>
+                      <ListItemText primary={option.name} />
+                    </MenuItem>
+                  </Tooltip>
+                ) : (
+                  <MenuItem
+                    data-testid={`shareOrg_${option._id}`}
+                    key={option._id}
+                    value={option._id}
+                    disabled={option.is_shared}
+                    sx={{
+                      "&.Mui-disabled": {
+                        pointerEvents: "all",
+                      },
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Checkbox
+                        data-testid={`checkbox12345${option._id}`}
+                        checked={selected.indexOf(option._id) > -1}
+                      />
+                    </ListItemIcon>
+                    <ListItemText primary={option.name} />
+                  </MenuItem>
+                )
+              )}
             </Select>
             {hasError && (
               <FormHelperText

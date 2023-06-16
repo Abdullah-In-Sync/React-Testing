@@ -8,7 +8,7 @@ interface ViewProps {
   submitForm?: any;
   onPressSubmit?: () => void;
   setPlanId?: any;
-  organizationList?: any;
+  selectAssessmentName: string;
   receivePlanId: any;
   isOpen: any;
   headerTitleText: string;
@@ -23,7 +23,7 @@ const ShareAssessmentForm: React.FC<ViewProps> = ({
   submitForm,
   onPressSubmit,
   setPlanId,
-  organizationList,
+  selectAssessmentName,
   receivePlanId,
   isOpen,
   headerTitleText,
@@ -49,7 +49,7 @@ const ShareAssessmentForm: React.FC<ViewProps> = ({
           onSubmit={submitForm}
           children={() => (
             <ShareAssessmentModel
-              organizationList={organizationList}
+              selectAssessmentName={selectAssessmentName}
               setPlanId={setPlanId}
               onChangePlanId={onChangePlanId}
               onPressSubmit={onPressSubmit}

@@ -55,6 +55,7 @@ const AssessmentListPage: NextPage = () => {
   const [editDeleteOrgId, setEditDeleteOrgId] = useState("");
   const [isConfirmShare, setIsConfirmShare] = useState(false);
   const [selectAssessment, setSelectAssessment] = useState("");
+  const [selectAssessmentName, setSelectAssessmentName] = useState<string>(",");
 
   // Mutation
   const [createAssessment] = useMutation(ADMIN_CREATE_ASSESSMENT);
@@ -313,14 +314,6 @@ const AssessmentListPage: NextPage = () => {
             if (duplicateNames) {
               setIsConfirmShare(false);
               shareInfoModalRef.current?.close();
-
-              // infoModalRef.current.openConfirm({
-              //   data: {
-              //     duplicateNames,
-              //     message:
-              //       "This assessment already Shared in the following organisation!",
-              //   },
-              // });
             } else {
               shareInfoModalRef.current?.close();
               setIsConfirmShare(false);
@@ -368,15 +361,16 @@ const AssessmentListPage: NextPage = () => {
       router.push(`/admin/assessment/view/${_id}`);
     }
     if (pressedIconButton == "share") {
-      return onPressShareAssignment(_id);
+      return onPressShareAssignment(_id, name);
     }
   };
   const clearIsConfirmShareCancel = () => {
     setIsConfirmShare(false);
   };
 
-  const onPressShareAssignment = (assignmentId) => {
+  const onPressShareAssignment = (assignmentId, name) => {
     setSelectAssessment(assignmentId);
+    setSelectAssessmentName(name);
     shareInfoModalRef.current?.open();
   };
   return (
@@ -430,7 +424,7 @@ const AssessmentListPage: NextPage = () => {
         <ShareAssessmentForm
           isOpen={shareInfoModalRef}
           onPressSubmit={() => setIsConfirmShare(true)}
-          organizationList={organizationList}
+          selectAssessmentName={selectAssessmentName}
           receivePlanId={receiveSharePlanIds}
           headerTitleText={"Share assessment"}
         />
