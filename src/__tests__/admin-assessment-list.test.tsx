@@ -1,12 +1,21 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import {
   ADMIN_CREATE_ASSESSMENT,
   ADMIN_DELETE_AND_UPDATE_ASSESSMENT,
+  ADMIN_SHARE_ASSESSMENT,
   GET_ADMIN_ASSESSMENT_DATA_BY_ID,
   GET_ADMIN_ASSESSMENT_LIST,
+  GET_ORGANISATION_SHARED_LIST,
 } from "../graphql/assessment/graphql";
 import theme from "../styles/theme/theme";
 import AssessmentListPage from "../pages/admin/assessment";
@@ -194,6 +203,76 @@ mocksData.push({
     },
   },
 });
+
+//for assessment share
+mocksData.push({
+  request: {
+    query: GET_ORGANISATION_SHARED_LIST,
+    variables: {
+      name: "test assessment",
+      share_type: "assessment",
+    },
+  },
+  result: {
+    data: {
+      getOrganisationSharedList: [
+        {
+          _id: "4b82eac1-6e57-4666-bce3-3b358a7f5ed1",
+          is_shared: false,
+          name: "A",
+          __typename: "ShareOrganization",
+        },
+        {
+          _id: "df139464-0f74-4532-a489-c87e5b64144e",
+          is_shared: true,
+          name: "Add org editedkdjnsk",
+          __typename: "ShareOrganization",
+        },
+        {
+          _id: "22e18602-147d-499e-85fd-8b265e412411",
+          is_shared: true,
+          name: "Add refactor 1",
+          __typename: "ShareOrganization",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_SHARE_ASSESSMENT,
+    variables: {
+      assessment_id: "5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d",
+      org_id: "4b82eac1-6e57-4666-bce3-3b358a7f5ed1",
+    },
+  },
+  result: {
+    data: {
+      adminShareAssessment: {
+        duplicateNames: null,
+        result: true,
+        __typename: "adminResult",
+      },
+    },
+  },
+});
+
+export const clickSelect = async (element: HTMLElement) => {
+  const button = await within(element).findByRole("button");
+  expect(button).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.mouseDown(button);
+  });
+  const listBox = await screen.findByRole("listbox");
+  expect(listBox).toBeInTheDocument();
+  const selectOption = await screen.findByTestId(
+    "shareOrg_4b82eac1-6e57-4666-bce3-3b358a7f5ed1"
+  );
+  expect(selectOption).toBeInTheDocument();
+  fireEvent.click(selectOption);
+};
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -334,6 +413,41 @@ describe("Admin Assessment list", () => {
           screen.getByText("Assessment edit sucessfully!")
         ).toBeInTheDocument();
       });
+    });
+  });
+
+  it("Share assessment from list", async () => {
+    await sut();
+    const shareBtn = await screen.findByTestId(
+      "iconButton_share_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+    );
+    expect(shareBtn).toBeInTheDocument();
+    fireEvent.click(shareBtn);
+    const saveBtn = await screen.findByTestId("addSubmitForm");
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    expect(
+      screen.getByText("organisation cannot be empty")
+    ).toBeInTheDocument();
+
+    const select = await screen.findByTestId("share_organisation_select_list");
+    expect(select).toBeInTheDocument();
+    await clickSelect(select);
+
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Are you sure you want to share the assessment?")
+      ).toBeInTheDocument();
+    });
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("confirmButton"));
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Assessment shared successfully!")
+      ).toBeInTheDocument();
     });
   });
 });

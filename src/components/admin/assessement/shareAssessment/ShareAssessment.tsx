@@ -193,6 +193,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                       key={option._id}
                       value={option._id}
                       disabled={option.is_shared}
+                      aria-label={option.name}
                       sx={{
                         "&.Mui-disabled": {
                           pointerEvents: "all",
@@ -240,7 +241,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                   font: "Montserrat",
                 }}
               >
-                organization cannot be empty
+                organisation cannot be empty
               </FormHelperText>
             )}
           </FormControl>
