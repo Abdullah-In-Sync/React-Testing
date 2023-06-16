@@ -1,12 +1,12 @@
 import { Formik, FormikProps } from "formik";
-import React, { ForwardedRef } from "react";
+import React from "react";
 import * as Yup from "yup";
 import {
+  AdminAssessmentViewQsData,
   AdminAssessmentViewQsEntity,
   Category,
 } from "../../../../graphql/assessment/types";
 import AddUpdateCategoryQuestionForm from "./AddUpdateCategoryQuestionForm";
-import { ConfirmElement } from "../../../common/ConfirmWrapper";
 
 export interface InitialQuesionsFormValues {
   questions: object[];
@@ -19,10 +19,13 @@ interface ViewProps {
     value
   ) => void;
   assessmentId?: string;
-  categoryData?: Category | any;
+  categoryData?: Category & {
+    assessmentQuestionsViewData: AdminAssessmentViewQsData;
+  };
   assessmentQuestionsViewData?: AdminAssessmentViewQsEntity[];
-  confirmRef?: ForwardedRef<ConfirmElement> | any;
+  confirmRef?: any;
   toggleContent?: any;
+  handleDeleteQuestion?: (v) => void;
 }
 
 export const validationSchema = Yup.object().shape({
@@ -39,11 +42,12 @@ const AddUpdateCategoryQuestion: React.FC<ViewProps> = (vprops) => {
     categoryData,
     confirmRef,
     toggleContent,
+    handleDeleteQuestion,
   } = vprops;
 
   const { assessmentQuestionsViewData: questions = [] } = categoryData;
 
-  const modifyQuestions = questions.map((item) => ({
+  const modifyQuestions = (questions as Array<any>).map((item) => ({
     question_id: item._id,
     question: item.question,
   }));
@@ -76,7 +80,11 @@ const AddUpdateCategoryQuestion: React.FC<ViewProps> = (vprops) => {
           onAssessmentCategoryQuestionSubmit(v, formikHelperProps, categoryData)
         }
         children={(props) => (
-          <AddUpdateCategoryQuestionForm {...props} onCancel={handleOnCancel} />
+          <AddUpdateCategoryQuestionForm
+            {...props}
+            onCancel={handleOnCancel}
+            handleDeleteQuestion={handleDeleteQuestion}
+          />
         )}
       />
     );

@@ -15,7 +15,7 @@ export interface Category {
 }
 
 export interface AdminAssessmentViewQsData {
-  adminAssessmentViewQs?: AdminAssessmentViewQsEntity[] | null | undefined;
+  adminAssessmentViewQs: AdminAssessmentViewQsEntity[] | null;
 }
 export interface AdminAssessmentViewQsEntity {
   _id?: string;

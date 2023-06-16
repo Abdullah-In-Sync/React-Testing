@@ -144,3 +144,17 @@ export const ADMIN_VIEW_ASSESSMENT_QUESTIONS = gql`
     }
   }
 `;
+
+export const ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION = gql`
+  mutation AdminAssessmentUpdateQs(
+    $questionId: ID!
+    $updateQuestions: UpdateAssessQsInput
+  ) {
+    adminAssessmentUpdateQs(
+      question_id: $questionId
+      updateQs: $updateQuestions
+    ) {
+      _id
+    }
+  }
+`;

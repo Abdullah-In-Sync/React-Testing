@@ -11,6 +11,7 @@ const AddUpdateCategoryQuestionForm: React.FC<any> = (formikProps) => {
     isSubmitting,
     onCancel,
     values: { questions },
+    handleDeleteQuestion,
   } = formikProps;
   const questionFieldscRef = useRef(null);
   const styles = useStyles();
@@ -31,6 +32,7 @@ const AddUpdateCategoryQuestionForm: React.FC<any> = (formikProps) => {
           <AddCategoryQuestion
             formikProps={formikProps}
             ref={questionFieldscRef}
+            handleDeleteQuestion={handleDeleteQuestion}
           />
         </Box>
 

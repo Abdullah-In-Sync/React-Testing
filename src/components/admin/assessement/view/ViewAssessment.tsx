@@ -27,6 +27,7 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
   onAssessmentCategoryQuestionSubmit,
   handleToggleContent,
   assessmentQuestionsViewData,
+  handleDeleteQuestion,
 }) => {
   const styles = useStyles();
   return (
@@ -58,6 +59,7 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
             handleToggleContent={handleToggleContent}
             assessmentQuestionsViewData={assessmentQuestionsViewData}
             confirmRef={confirmRef}
+            handleDeleteQuestion={handleDeleteQuestion}
           />
         </Stack>
       </Stack>
@@ -90,5 +92,6 @@ export interface ViewAssessmentProps {
     formData: InitialQuesionsFormValues,
     formikHelper: FormikProps<InitialQuesionsFormValues>,
     value
-  ) => void | any;
+  ) => void;
+  handleDeleteQuestion?: (v) => void;
 }
