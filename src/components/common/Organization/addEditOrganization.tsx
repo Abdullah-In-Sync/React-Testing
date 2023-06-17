@@ -236,8 +236,7 @@ export default function AddEditOrganization(props: propTypes) {
   const [getTherapistList, { data: therapistDropdownData }] = useLazyQuery(
     GET_THERAPIST_LIST_BY_ORG_ID,
     {
-      onCompleted: (data) => {
-        console.debug("Koca: therapy dropdown data ", data);
+      onCompleted: () => {
         /* istanbul ignore next */
         props.setLoader(false);
       },
@@ -254,8 +253,6 @@ export default function AddEditOrganization(props: propTypes) {
     }
   );
 
-  // console.log("Koca: disorderDropdownData ", disorderDropdownData);
-
   const [getModelList, { data: modelDropdownData }] = useLazyQuery(
     GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
     {
@@ -266,38 +263,24 @@ export default function AddEditOrganization(props: propTypes) {
     }
   );
 
-  // console.log("Koca: modelDropdownData ", modelDropdownData);
-
   useEffect(() => {
     getTherapistList();
 
-    // if (selectedTherapistId.length) {
-    console.debug("getDisordorList variable", {
-      therapyId: selectedTherapistId,
-    });
-    getDisordorList({
-      variables: { therapyId: selectedTherapistId },
-    });
-    // }
+    if (selectedTherapistId.length) {
+      getDisordorList({
+        variables: { therapyId: selectedTherapistId },
+      });
+    }
 
-    // if (selectedDisorerId.length) {
-    console.debug("getModelList variable", {
-      disorderId: selectedDisorerId,
-    });
-    getModelList({
-      variables: { disorderId: selectedDisorerId },
-    });
-    // }
+    if (selectedDisorerId.length) {
+      getModelList({
+        variables: { disorderId: selectedDisorerId },
+      });
+    }
   }, [selectedDisorerId, selectedTherapistId]);
 
   useEffect(() => {
     if (props?.orgData) {
-      // getTherapistList({
-      //   variables: {
-      //     orgId: props.orgData?.viewOrganizationById._id,
-      //   },
-      // });
-
       getTherapistList();
 
       getDisordorList({
