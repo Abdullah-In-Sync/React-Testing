@@ -219,101 +219,107 @@ describe("Admin add resource page", () => {
 
     await sut();
 
+    // await waitFor(async () => {
+    expect(screen.getByTestId("organization-add-form")).toBeInTheDocument();
+
+    fireEvent.change(screen.queryByTestId("name"), {
+      target: { value: "name" },
+    });
+
+    fireEvent.change(screen.queryByTestId("panel_color"), {
+      target: { value: "panel_color" },
+    });
+
+    fireEvent.change(screen.queryByTestId("side_menu_color"), {
+      target: { value: "side_menu_color" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient"), {
+      target: { value: "patient" },
+    });
+
+    fireEvent.change(screen.queryByTestId("therapist"), {
+      target: { value: "therapist" },
+    });
+
+    fireEvent.change(screen.queryByTestId("patient_plural"), {
+      target: { value: "patient_plural" },
+    });
+
+    fireEvent.change(screen.queryByTestId("therapy"), {
+      target: { value: "therapy" },
+    });
+
     await waitFor(async () => {
-      expect(screen.getByTestId("organization-add-form")).toBeInTheDocument();
-
-      fireEvent.change(screen.queryByTestId("name"), {
-        target: { value: "name" },
-      });
-
-      fireEvent.change(screen.queryByTestId("panel_color"), {
-        target: { value: "panel_color" },
-      });
-
-      fireEvent.change(screen.queryByTestId("side_menu_color"), {
-        target: { value: "side_menu_color" },
-      });
-
-      fireEvent.change(screen.queryByTestId("patient"), {
-        target: { value: "patient" },
-      });
-
-      fireEvent.change(screen.queryByTestId("therapist"), {
-        target: { value: "therapist" },
-      });
-
-      fireEvent.change(screen.queryByTestId("patient_plural"), {
-        target: { value: "patient_plural" },
-      });
-
-      fireEvent.change(screen.queryByTestId("therapy"), {
-        target: { value: "therapy" },
-      });
-
       fireEvent.change(screen.queryByTestId("therapy_id"), {
         target: { value: "dcf9b080dce34879a54208d0ecfdc168" },
       });
       expect(screen.queryByTestId("therapy_id").getAttribute("value")).toBe(
         "dcf9b080dce34879a54208d0ecfdc168"
       );
+    });
 
+    await waitFor(async () => {
       fireEvent.change(screen.queryByTestId("disorder_id"), {
         target: { value: "59c60ab89afb4923b09e242fc3f99f97" },
       });
       expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
         "59c60ab89afb4923b09e242fc3f99f97"
       );
+    });
 
+    await waitFor(async () => {
       fireEvent.change(screen.queryByTestId("model_id"), {
         target: { value: "ade64d00d726478aaee1e59b09c129ba" },
       });
       expect(screen.queryByTestId("model_id").getAttribute("value")).toBe(
         "ade64d00d726478aaee1e59b09c129ba"
       );
-
-      await waitFor(async () => {
-        fireEvent.change(screen.getByTestId("resource_file_upload"), {
-          target: { files: [file] },
-        });
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.queryByTestId("addOrganizationSubmitButton")
-        ).toBeInTheDocument();
-
-        fireEvent.click(screen.queryByTestId("addOrganizationSubmitButton"));
-      });
-
-      await waitFor(async () => {
-        expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByTestId("addOrganizationConfirmButton")
-        ).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("addOrganizationConfirmButton"));
-      });
-
-      await waitFor(async () => {
-        expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Organisation added Successfully")
-        ).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
-      });
-      expect(mockRouter.push).toHaveBeenCalledWith("/admin/organization/list");
     });
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.queryByTestId("addOrganizationSubmitButton")
+      ).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("addOrganizationSubmitButton"));
+    });
+
+    await waitFor(async () => {
+      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId("addOrganizationConfirmButton")
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addOrganizationConfirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Organisation added Successfully")
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
+    });
+    expect(mockRouter.push).toHaveBeenCalledWith("/admin/organization/list");
+    // });
   });
 
   it("Cancle Organization with valid data", async () => {
