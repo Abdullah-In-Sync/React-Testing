@@ -26,8 +26,10 @@ export const GET_ORGANIZATION_DETAIL_BY_ID = gql`
       _id
       contract
       created_date
+      disorder_id
       logo
       logo_url
+      model_id
       name
       panel_color
       patient
@@ -36,6 +38,7 @@ export const GET_ORGANIZATION_DETAIL_BY_ID = gql`
       side_menu_color
       therapist
       therapy
+      therapy_id
     }
   }
 `;

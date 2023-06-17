@@ -6,10 +6,9 @@ import Layout from "../../../../components/layout";
 import { addAndEditOrganizationFormFields } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import Loader from "../../../../components/common/Loader";
-import withAuthentication from "../../../../hoc/auth";
-import AddEditOrganization from "../../../../components/common/Organization/addEditOrganization";
 import { ADD_ORGANIZATION_DATA } from "../../../../graphql/mutation/admin";
 import { SuccessModal } from "../../../../components/common/SuccessModal";
+import AddEditOrganization from "../../../../components/common/Organization/addEditOrganization";
 
 const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -40,6 +39,9 @@ const Index = () => {
           contract: formFields.contract,
           patientWelcomeEmail: formFields.patient_welcome_email,
           logo: formFields.file_name,
+          model_id: formFields.model_id,
+          therapy_id: formFields.therapy_id,
+          disorder_id: formFields.disorder_id,
         },
         onCompleted: (data) => {
           if (data && data.createOrganization) {
@@ -83,4 +85,4 @@ const Index = () => {
   );
 };
 
-export default withAuthentication(Index, ["admin"]);
+export default Index;

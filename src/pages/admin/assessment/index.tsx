@@ -67,11 +67,13 @@ const AssessmentListPage: NextPage = () => {
   useEffect(() => {
     getOrgList();
 
-    getAssessmentDataById({
-      variables: {
-        assessment_id: editDeleteAssessmentId,
-      },
-    });
+    if (editDeleteAssessmentId.length) {
+      getAssessmentDataById({
+        variables: {
+          assessment_id: editDeleteAssessmentId,
+        },
+      });
+    }
 
     getAdminAssessmentList({
       variables: {
@@ -284,7 +286,7 @@ const AssessmentListPage: NextPage = () => {
         onCompleted: () => {
           setIsConfirmEditAssessment(false);
           handleCloseEditAssessmentModal();
-          enqueueSnackbar("Assessment edit sucessfully!", {
+          enqueueSnackbar("Assessment updates successfully!", {
             variant: "success",
           });
           refetch();
