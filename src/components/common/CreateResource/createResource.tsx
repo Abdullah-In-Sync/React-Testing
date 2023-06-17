@@ -64,7 +64,7 @@ export default function CreateResource(props: propTypes) {
     disorderId: "",
     modelId: "",
     resourceAvailOnlyme: "0",
-    resourceAvailTherapist: "1",
+    resourceAvailTherapist: "0",
     resourceFilename: "",
     resourceName: "",
     resourceType: null,
@@ -253,8 +253,8 @@ export default function CreateResource(props: propTypes) {
     e.preventDefault();
     /* istanbul ignore next */
     if (
-      !formFields?.resourceAvailOnlyme &&
-      !formFields?.resourceAvailTherapist
+      formFields?.resourceAvailOnlyme == "0" &&
+      formFields?.resourceAvailTherapist == "0"
     ) {
       enqueueSnackbar("Please select availability of resource", {
         variant: "error",
@@ -265,6 +265,10 @@ export default function CreateResource(props: propTypes) {
     setTemplateModal(true);
     /* istanbul ignore next */
     if (!confirmSubmission) return;
+  };
+
+  const scrollDown = () => {
+    window.scroll(0, 1040);
   };
 
   const onTemplateSelect = (values: any) => {
@@ -282,6 +286,9 @@ export default function CreateResource(props: propTypes) {
         type: values.component_name,
         info: values,
       });
+      setTimeout(() => {
+        scrollDown();
+      }, 500);
     }
   };
   /* istanbul ignore next */
@@ -313,7 +320,9 @@ export default function CreateResource(props: propTypes) {
     });
 
     setDimensionModal(false);
-    window.scrollBy(0, 300);
+    setTimeout(() => {
+      scrollDown();
+    }, 500);
   };
 
   const onTemplateSave = (
