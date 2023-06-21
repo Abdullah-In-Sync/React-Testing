@@ -17,7 +17,7 @@ const theme = (props?: any) => {
   const { panel_color } = props || {};
   return createTheme({
     typography: {
-      fontFamily: "Montserrat",
+      fontFamily: "Montserrat !important",
       subtitle2: {
         fontStyle: "normal",
         fontWeight: 700,

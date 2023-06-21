@@ -3,13 +3,13 @@ import { ThemeProvider } from "@mui/material";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
-import theme from "../styles/theme/theme";
+import TherapistPatientAssessment from "../components/therapist/patient/Assessment";
 import { useAppContext } from "../contexts/AuthContext";
-import TherapistAssessmentMain from "../pages/therapist/patient/view/[id]/assessment";
 import {
   THERAPIST_ADD_ASSESSMENT,
   THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST,
 } from "../graphql/assessment/graphql";
+import theme from "../styles/theme/theme";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -64,7 +64,7 @@ const sut = async () => {
     <MockedProvider mocks={mocksData} addTypename={false}>
       <ThemeProvider theme={theme()}>
         <SnackbarProvider>
-          <TherapistAssessmentMain />
+          <TherapistPatientAssessment />
         </SnackbarProvider>
       </ThemeProvider>
     </MockedProvider>
