@@ -20,6 +20,7 @@ import TherapyMainComponent from "./therapy";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
+import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
 
 interface Props {
   children: React.ReactNode;
@@ -98,8 +99,8 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     {
       label: "Assessment",
       value: "assessment",
-      //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=assessment`,
+      component: <TherapistPatientAssessment />,
+      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=assessment`,
     },
     {
       label: "Therapy",

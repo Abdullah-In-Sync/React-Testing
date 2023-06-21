@@ -22,3 +22,26 @@ export interface AdminAssessmentViewQsEntity {
   category_id?: string;
   question?: string;
 }
+
+export interface Data {
+  therapistGetPatientAssessment: TherapistGetPatientAssessment;
+}
+
+export interface TherapistGetPatientAssessment {
+  risk: string;
+  overall_assesment_text: string;
+  list?: ListEntity[] | null;
+  therapies?: TherapiesEntity[] | null;
+  __typename: string;
+}
+export interface ListEntity {
+  name: string;
+  _id: string;
+  __typename: string;
+}
+export interface TherapiesEntity {
+  _id: string;
+  pttherapy_session: string;
+  pttherapy_status: number;
+  __typename: string;
+}
