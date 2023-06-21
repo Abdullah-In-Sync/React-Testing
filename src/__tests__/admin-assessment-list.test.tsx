@@ -427,7 +427,7 @@ describe("Admin Assessment list", () => {
     expect(saveBtn).toBeInTheDocument();
     fireEvent.click(saveBtn);
     expect(
-      screen.getByText("organisation cannot be empty")
+      screen.getByText("Organisation cannot be empty")
     ).toBeInTheDocument();
 
     const select = await screen.findByTestId("share_organisation_select_list");
