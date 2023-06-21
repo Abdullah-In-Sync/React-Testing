@@ -28,6 +28,7 @@ interface CrudFormProps {
   dynamicForm?: any;
   viewData?: any;
   submitButtonDisabled?: boolean;
+  page?: string;
 }
 
 const CrudForm = ({
@@ -37,6 +38,7 @@ const CrudForm = ({
   onFieldChange,
   values = {},
   mode = "Add",
+  page,
 }: CrudFormProps) => {
   const [fieldValues, setFieldValues] = useState<any>({});
 
@@ -66,10 +68,17 @@ const CrudForm = ({
     e.preventDefault();
     onsubmit(fieldValues);
   };
+  const formulationStyle = {
+    boxStyle: {
+      width: "202px",
+      Height: "45px",
+      marginTop: "1px",
+    },
+  };
   return (
     <div>
       <form onSubmit={onSubmit} data-testid="crudForm">
-        <Box>
+        <Box style={page == "formulation" ? formulationStyle.boxStyle : {}}>
           <FieldsLayout
             fields={fields}
             values={values}
