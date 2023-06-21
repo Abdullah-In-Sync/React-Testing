@@ -38,7 +38,7 @@ const TherapistPatientAssessmentList: React.FC<any> = ({
         <Box>
           <CommonButton
             className=""
-            data-testid="addMonitorBtn"
+            data-testid="addAssessmentButton"
             variant="contained"
             onClick={onClickAddAssessment}
             size="small"

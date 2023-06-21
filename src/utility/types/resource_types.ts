@@ -57,6 +57,9 @@ export type addAndEditOrganizationFormFields = {
   therapist?: string;
   therapy?: string;
   file_name?: string;
+  model_id?: string;
+  therapy_id?: string;
+  disorder_id?: string;
 };
 
 export type editTemplatesFormField = {

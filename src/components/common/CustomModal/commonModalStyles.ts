@@ -18,6 +18,19 @@ export const commonModalWrapperObj = (theme) => ({
   "& .MuiTypography-root .MuiBox-root button": {
     color: theme.palette.custom.light,
   },
+  "& .MuiOutlinedInput-input": {
+    padding: 10,
+  },
+  "& .MuiOutlinedInput-root.Mui-focused": {
+    "& > fieldset": {
+      borderColor: theme.palette.primary.main,
+    },
+  },
+  "& .MuiOutlinedInput-root:hover": {
+    "& > fieldset": {
+      borderColor: theme.palette.primary.main,
+    },
+  },
 });
 
 export const useStyles = makeStyles(() => {

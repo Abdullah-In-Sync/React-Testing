@@ -208,3 +208,56 @@ export const THERAPIST_GET_PATIENT_ASSESSMENT = gql`
     }
   }
 `;
+
+export const GET_ORGANISATION_SHARED_LIST = gql`
+  query getOrganisationSharedList($name: String!, $share_type: String!) {
+    getOrganisationSharedList(name: $name, share_type: $share_type) {
+      _id
+      is_shared
+      name
+    }
+  }
+`;
+
+// export const THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST = gql`
+//   query getAdminAssessmentList() {
+//     getAdminAssessmentList() {
+//      _id
+//     name
+//     organization_name
+//     org_id
+//     created_date
+//     status
+//     updated_date
+//     }
+//   }
+// `;
+
+export const THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST = gql`
+  query getAdminAssessmentList {
+    getAdminAssessmentList {
+      _id
+      name
+      organization_name
+      org_id
+      created_date
+      status
+      updated_date
+    }
+  }
+`;
+
+export const THERAPIST_ADD_ASSESSMENT = gql`
+  mutation therapistAddAssessment(
+    $assessment_id: String!
+    $patient_id: String!
+  ) {
+    therapistAddAssessment(
+      assessment_id: $assessment_id
+      patient_id: $patient_id
+    ) {
+      message
+      result
+    }
+  }
+`;

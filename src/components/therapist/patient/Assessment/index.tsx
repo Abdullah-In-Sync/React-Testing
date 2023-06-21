@@ -15,9 +15,12 @@ import {
   GetRisksListData,
   TherapistGetPatientAssessmentData,
 } from "../../../../graphql/assessment/types";
+import TherapistAssessmentMain from "../../../../pages/therapist/patient/view/[id]/assessment";
+import { ModalElement } from "../../../common/CustomModal/CommonModal";
 
 const TherapistPatientAssessment: any = () => {
   const router = useRouter();
+  const modalRefAddAssessment = useRef<ModalElement>(null);
   const { query: { id: patientId } = {} } = router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
@@ -42,13 +45,14 @@ const TherapistPatientAssessment: any = () => {
     {
       data: {
         therapistGetPatientAssessment: {
-          list: assessmentListData = undefined,
+          list: assessmentListData = [],
           overall_assesment_text: overallAssesmentText = undefined,
           risk = undefined,
           therapies = [],
         } = {},
       } = {},
       loading: assessmentListLoading,
+      refetch: reFetchAssessmentList,
     },
   ] = useLazyQuery<TherapistGetPatientAssessmentData>(
     THERAPIST_GET_PATIENT_ASSESSMENT,
@@ -120,24 +124,31 @@ const TherapistPatientAssessment: any = () => {
     });
   };
 
+  const handleAddAssessment = () => {
+    modalRefAddAssessment.current?.open();
+  };
+
   return (
     <>
       <Loader visible={loader} />
-      {!assessmentListLoading && (
-        <TherapistPatientOverallAssessment
-          risksListData={risksListData}
-          onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
-          {...{
-            overallAssesmentText,
-            pttherapySession,
-            risk,
-            assessmentListData,
-            risksListLoading,
-            assessmentListLoading,
-            confirmRef,
-          }}
-        />
-      )}
+      <TherapistPatientOverallAssessment
+        risksListData={risksListData}
+        onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
+        onClickAddAssessment={handleAddAssessment}
+        {...{
+          overallAssesmentText,
+          pttherapySession,
+          risk,
+          assessmentListData,
+          risksListLoading,
+          assessmentListLoading,
+          confirmRef,
+        }}
+      />
+      <TherapistAssessmentMain
+        modalRefAddAssessment={modalRefAddAssessment}
+        reFetchAssessmentList={reFetchAssessmentList}
+      />
     </>
   );
 };

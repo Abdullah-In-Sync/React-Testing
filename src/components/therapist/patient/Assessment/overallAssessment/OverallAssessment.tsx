@@ -18,6 +18,7 @@ const TherapistPatientOverallAssessment: React.FC<
   risk,
   risksListLoading,
   assessmentListData,
+  onClickAddAssessment,
 }) => {
   const modifyRisk = risk
     ? risksListData
@@ -57,7 +58,10 @@ const TherapistPatientOverallAssessment: React.FC<
 
   return (
     <>
-      <TherapistPatientAssessmentList assessmentListData={assessmentListData} />
+      <TherapistPatientAssessmentList
+        assessmentListData={assessmentListData}
+        onClickAddAssessment={onClickAddAssessment}
+      />
       {!risksListLoading && commonform()}
     </>
   );
@@ -86,4 +90,6 @@ export interface TherapistPatientAssessmentProps {
   risk?: string;
   formikProps?: FormikProps<InitialFormValues>;
   assessmentListData?: any;
+  onClickAddAssessment?: () => void;
+  assessmentListLoading?: boolean;
 }

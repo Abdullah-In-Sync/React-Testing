@@ -4,7 +4,7 @@ import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import { TextEncoder, TextDecoder } from "util";
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_UPLOAD_LOGO_URL } from "../../../graphql/query/resource";
 import { useSnackbar } from "notistack";
 import TextFieldComponent from "../../common/TextField/TextFieldComponent";
@@ -16,6 +16,12 @@ import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import { convertToHTML } from "draft-convert";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import dynamic from "next/dynamic";
+import SingleSelectComponent from "../SelectBox/SingleSelect/SingleSelectComponent";
+import {
+  GET_DISORDER_LIST_BY_THERAPY_ID,
+  GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
+  GET_THERAPIST_LIST_BY_ORG_ID,
+} from "../../../graphql/mutation/admin";
 
 const Editor: any = dynamic(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
@@ -36,6 +42,9 @@ const defaultFormValue = {
   therapist: "",
   therapy: "",
   file_name: "",
+  model_id: "",
+  therapy_id: "",
+  disorder_id: "",
 };
 
 /* istanbul ignore next */
@@ -51,6 +60,10 @@ export default function AddEditOrganization(props: propTypes) {
     useState<addAndEditOrganizationFormFields>(defaultFormValue);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const [selectedTherapistId, setSelectedTherapistId] = useState("");
+  const [selectedDisorerId, setSelectedDisorderId] = useState("");
+
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   //Contract
@@ -189,6 +202,100 @@ export default function AddEditOrganization(props: propTypes) {
       setFormFields(data);
     }
   }, [props.orgData]);
+
+  const handleChangeTherapy = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const fieldName = e.target.name;
+    const value = e.target.value;
+
+    setSelectedTherapistId(value);
+
+    setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
+  };
+
+  const handleChangeDisoder = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const fieldName = e.target.name;
+    const value = e.target.value;
+    setSelectedDisorderId(value);
+
+    setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
+  };
+
+  const handleChangeModel = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const fieldName = e.target.name;
+    const value = e.target.value;
+
+    setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
+  };
+
+  const [getTherapistList, { data: therapistDropdownData }] = useLazyQuery(
+    GET_THERAPIST_LIST_BY_ORG_ID,
+    {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    }
+  );
+
+  const [getDisordorList, { data: disorderDropdownData }] = useLazyQuery(
+    GET_DISORDER_LIST_BY_THERAPY_ID,
+    {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    }
+  );
+
+  const [getModelList, { data: modelDropdownData }] = useLazyQuery(
+    GET_MODLE_DISORDER_LIST_BY_DISORDER_ID,
+    {
+      onCompleted: () => {
+        /* istanbul ignore next */
+        props.setLoader(false);
+      },
+    }
+  );
+
+  useEffect(() => {
+    getTherapistList();
+
+    if (selectedTherapistId.length) {
+      getDisordorList({
+        variables: { therapyId: selectedTherapistId },
+      });
+    }
+
+    if (selectedDisorerId.length) {
+      getModelList({
+        variables: { disorderId: selectedDisorerId },
+      });
+    }
+  }, [selectedDisorerId, selectedTherapistId]);
+
+  useEffect(() => {
+    if (props?.orgData) {
+      getTherapistList();
+
+      getDisordorList({
+        variables: {
+          therapyId: props.orgData?.viewOrganizationById.therapy_id,
+        },
+      });
+
+      getModelList({
+        variables: {
+          disorderId: props.orgData?.viewOrganizationById.disorder_id,
+        },
+      });
+    }
+  }, [props.orgData]);
   return (
     <>
       <Box
@@ -291,6 +398,80 @@ export default function AddEditOrganization(props: propTypes) {
                   variant="outlined"
                   className="form-control-bg"
                   size="small"
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2} marginBottom={5}>
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="patientGenderSelect"
+                  labelId="patientGender"
+                  name="therapy_id"
+                  value={formFields?.therapy_id}
+                  label="Select Therapy"
+                  onChange={handleChangeTherapy}
+                  inputProps={{ "data-testid": "therapy_id" }}
+                  options={
+                    (therapistDropdownData &&
+                      therapistDropdownData?.getTherapyListByOrgId) ||
+                    []
+                  }
+                  mappingKeys={["_id", "therapy_name"]}
+                  size="small"
+                  className="form-control-bg"
+                  disabled={props.orgData}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="patientSexuality"
+                  labelId="patientSexuality"
+                  name="disorder_id"
+                  value={formFields?.disorder_id}
+                  label="
+                  Select Disorder"
+                  onChange={handleChangeDisoder}
+                  inputProps={{ "data-testid": "disorder_id" }}
+                  options={
+                    (disorderDropdownData &&
+                      disorderDropdownData?.getDisorderByTherapyId) ||
+                    []
+                  }
+                  // options={[]}
+                  mappingKeys={["_id", "disorder_name"]}
+                  size="small"
+                  className="form-control-bg"
+                  disabled={props.orgData}
+                />
+              </Grid>
+
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="patientMaritalStatus"
+                  labelId="patientMaritalStatus"
+                  name="model_id"
+                  value={formFields?.model_id}
+                  label="Select Modal"
+                  onChange={handleChangeModel}
+                  inputProps={{ "data-testid": "model_id" }}
+                  options={
+                    (modelDropdownData &&
+                      modelDropdownData?.getModelDisorderList) ||
+                    []
+                  }
+                  // options={[]}
+                  // mappingKeys={["id", "value"]}
+                  mappingKeys={["_id", "model_name"]}
+                  size="small"
+                  className="form-control-bg"
+                  disabled={props.orgData}
                 />
               </Grid>
             </Grid>

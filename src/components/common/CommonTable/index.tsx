@@ -82,34 +82,39 @@ const CommonTable: React.FC<ViewProps> = ({
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {(list || []).map((row, i) => {
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={`tableRow_${i}`}
-                >
-                  {columns(headerData).map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format
-                          ? column.format(
-                              row,
-                              pageActionButtonClick,
-                              tableCurentPage * rowsLimit + i
-                            )
-                          : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-            {messageTable()}
-          </TableBody>
+
+          {loading ? (
+            messageTable()
+          ) : (
+            <TableBody>
+              {(list || []).map((row, i) => {
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={`tableRow_${i}`}
+                  >
+                    {columns(headerData).map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format
+                            ? column.format(
+                                row,
+                                pageActionButtonClick,
+                                tableCurentPage * rowsLimit + i
+                              )
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+              {messageTable()}
+            </TableBody>
+          )}
         </Table>
 
         <TablePagination

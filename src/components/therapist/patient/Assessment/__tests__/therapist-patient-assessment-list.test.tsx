@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
-import TherapyPatientMonitorList from "../TherapistAssessment";
+import TherapyPatientMonitorList from "..";
 import { useAppContext } from "../../../../../contexts/AuthContext";
 import {
   GET_RISKS_LIST,

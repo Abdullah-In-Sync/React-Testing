@@ -57,3 +57,13 @@ export interface GetRisksListEntity {
   status: number;
   __typename: string;
 }
+
+export interface OrgList {
+  _id: string;
+  is_shared?: boolean;
+  name?: string;
+}
+
+export interface GetOrganisationSharedList {
+  getOrganisationSharedList: OrgList[];
+}
