@@ -123,6 +123,17 @@ export const ADMIN_UPDATE_ASSESSMENT_CATEGORY = gql`
     }
   }
 `;
+export const ADMIN_SHARE_ASSESSMENT = gql`
+  mutation adminShareAssessment($assessment_id: String!, $org_id: String!) {
+    adminShareAssessment(assessment_id: $assessment_id, org_id: $org_id) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
 
 export const ADMIN_ADD_ASSESSMENT_CATEGORY_QUESSTION = gql`
   mutation AdminAssessmentAddQs($categoryId: ID!, $question: String!) {
