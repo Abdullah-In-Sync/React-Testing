@@ -1,22 +1,9 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
-import { useSnackbar } from "notistack";
 
 // GRAPHQL
-import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
-import {
-  GET_RESOURCE_DATA,
-  GET_DISORDER_MODEL_LIST,
-  GET_CATEGORY,
-  GET_UNAPPROVE_RESOURCE,
-} from "../../../graphql/query/resource";
-import {
-  ADD_FAVOURITE,
-  DELETE_RESOURCE,
-  REMOVE_FAVOURITE,
-  APPROVE_RESOURCE,
-} from "../../../graphql/mutation/resource";
+import { useLazyQuery } from "@apollo/client";
 
 // MUI COMPONENTS
 import Layout from "../../../components/layout";
@@ -41,14 +28,10 @@ import CrudForm from "../../../components/common/CrudForm";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
-import {
-  GetFormulationList,
-  GetFormulationListVars,
-} from "../../../graphql/formulation/types";
 import { GET_FORMULATION_LIST } from "../../../graphql/formulation/graphql";
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
+import { ShareOutlined } from "@mui/icons-material";
 
-// COMPONENT STYLES
 const crudButtons = {
   display: "flex",
   alignItems: "center",
@@ -61,11 +44,12 @@ const IconButtonWrapper = styled(IconButton)(
   () => `
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
   margin-right: 5px;
+  background-color: #6EC9DB;
+  color: #FFFFFF;
 `
 );
 
-const Resource: NextPage = () => {
-  // COMPONENT STATE
+const Formulation: NextPage = () => {
   const [filterValue, setFilterValue] = useState<any>({});
   const [dataList, setDataList] = useState<any>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -75,46 +59,29 @@ const Resource: NextPage = () => {
     user: { _id: adminId },
   } = useAppContext();
 
-  // GRAPHQL
-  const {
-    loading,
-    data: dataListData,
-    refetch,
-  } = useQuery<GetFormulationList, GetFormulationListVars>(
-    GET_FORMULATION_LIST,
-    {
+  useEffect(() => {
+    getFormulationList({
       variables: {
         my_fav: myFavourite,
         my_formulation: myFormulation,
         search_text: searchText,
       },
-    }
-  );
-
-  useEffect(() => {
-    // do some checking here to ensure data exist
-    /* istanbul ignore next */
-    if (!loading && dataListData) {
-      console.log(dataListData, "dataListData");
-      /* istanbul ignore next */
-      if (dataListData?.getFormulationList == null) {
-        console.log(
-          dataListData?.getFormulationList,
-          "dataListData?.getFormulationList"
-        );
-        setDataList([]);
-      } else {
-        setDataList(dataListData?.getFormulationList);
-      }
-    }
-  }, [dataListData]);
-
-  useEffect(() => {
-    refetch();
+    });
   }, [searchText, myFavourite, myFormulation]);
 
-  //**  TABLE DATA COLUMNS **//
-  /* istanbul ignore next */
+  const [getFormulationList, { loading: loading }] = useLazyQuery(
+    GET_FORMULATION_LIST,
+    {
+      fetchPolicy: "cache-and-network",
+      onCompleted: (data) => {
+        setDataList(data.getFormulationList);
+        /* istanbul ignore next */
+      },
+      onError: () => {
+        setDataList([]);
+      },
+    }
+  );
 
   const fields = [
     {
@@ -145,23 +112,26 @@ const Resource: NextPage = () => {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButtonWrapper aria-label="create" size="small">
-            <NextLink href={"/admin/resource/edit/" + value._id} passHref>
-              <CreateIcon />
-            </NextLink>
-          </IconButtonWrapper>
+          {value?.user_id == adminId && (
+            <>
+              <IconButtonWrapper
+                data-testid={"deleteIcon_" + value?._id}
+                aria-label="delete"
+                size="small"
+              >
+                <DeleteIcon />
+              </IconButtonWrapper>
+              <IconButtonWrapper aria-label="create" size="small">
+                <NextLink href={""} passHref>
+                  <CreateIcon />
+                </NextLink>
+              </IconButtonWrapper>
+            </>
+          )}
           <IconButtonWrapper aria-label="favorite" size="small">
             <FavoriteBorderIcon
               data-testid={"fav_" + value?._id}
               id={"fav_" + value?._id}
-              onClick={() =>
-                addFavour(
-                  value?._id,
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
-                    ? value?.fav_res_detail[0]._id
-                    : ""
-                )
-              }
               sx={{
                 color:
                   value?.fav_res_detail && value?.fav_res_detail.length > 0
@@ -170,20 +140,18 @@ const Resource: NextPage = () => {
               }}
             />
           </IconButtonWrapper>
-
-          {value?.user_id == adminId && (
-            <IconButtonWrapper
-              onClick={() => {
-                setModalOpen(true);
-                setResourceId(value?._id);
+          <IconButtonWrapper aria-label="favorite" size="small">
+            <ShareOutlined
+              data-testid={"fav_" + value?._id}
+              id={"fav_" + value?._id}
+              sx={{
+                color:
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
+                    ? "red"
+                    : "",
               }}
-              data-testid={"deleteIcon_" + value?._id}
-              aria-label="delete"
-              size="small"
-            >
-              <DeleteIcon />
-            </IconButtonWrapper>
-          )}
+            />
+          </IconButtonWrapper>
         </>
       ),
     },
@@ -338,4 +306,4 @@ const Resource: NextPage = () => {
   );
 };
 
-export default withAuthentication(Resource, ["admin"]);
+export default withAuthentication(Formulation, ["admin"]);

@@ -63,7 +63,6 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
       setSelectableOrg(selectable);
       console.log(data.getOrganisationSharedList, "on complete");
       /* istanbul ignore next */
-      // setLoader(false);
     },
   });
   useEffect(() => {
@@ -181,9 +180,10 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 </ListItemIcon>
                 <Typography data-testid={`checkbox123`}>Select All</Typography>
               </MenuItem>
-              {organizationList.map((option) =>
+              {organizationList.map((option, i) =>
                 option.is_shared ? (
                   <Tooltip
+                    key={i}
                     title="Assessment is already shared with this organisation"
                     disableHoverListener={!option.is_shared}
                     classes={{ tooltip: classes.customTooltip }}
