@@ -9,7 +9,10 @@ type Props = React.PropsWithChildren<{
   handleSelect?: (e, v) => void;
   label?: string;
   name?: string;
-  defaultValue?: { label: string; value: string };
+  defaultValue?: any;
+  multiple?: boolean;
+  freeSolo?: boolean;
+  isOptionEqualToValue?: any;
 }>;
 
 const CommonAutocomplete: React.FC<Props> = ({
@@ -18,6 +21,7 @@ const CommonAutocomplete: React.FC<Props> = ({
   label = "",
   name,
   defaultValue,
+  ...rest
 }) => {
   // const [inputValue, setInputValue] = React.useState("");
   // const [options, setOptions] = React.useState(initialOptions);
@@ -38,6 +42,7 @@ const CommonAutocomplete: React.FC<Props> = ({
         return option.label;
       }}
       // onInputChange={handleChange}
+      {...rest}
       renderInput={(params) => (
         <Field
           fullWidth

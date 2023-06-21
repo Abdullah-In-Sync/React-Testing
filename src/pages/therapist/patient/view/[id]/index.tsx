@@ -12,15 +12,15 @@ import InputLabel from "@mui/material/InputLabel";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Loader from "../../../../../components/common/Loader";
-import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
 import Layout from "../../../../../components/layout";
+import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
 import { Link } from "../../../../../lib/helpers/common";
 
-import TherapyMainComponent from "./therapy";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
+import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
-import TherapistAssessmentMain from "./assessment";
+import TherapyMainComponent from "./therapy";
 
 interface Props {
   children: React.ReactNode;
@@ -99,7 +99,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     {
       label: "Assessment",
       value: "assessment",
-      component: <TherapistAssessmentMain />,
+      component: <TherapistPatientAssessment />,
       // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=assessment`,
     },
     {

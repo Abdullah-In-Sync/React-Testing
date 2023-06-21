@@ -1,20 +1,19 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
+import { CommonModal } from "../../../../../../components/common/CustomModal/CommonModal";
+import TherapistAddAssessmentForm from "../../../../../../components/therapist/assessment/therapistAddAssessment/TherapistAddAssessmentForm";
 import {
   THERAPIST_ADD_ASSESSMENT,
   THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST,
 } from "../../../../../../graphql/assessment/graphql";
-import {
-  CommonModal,
-  ModalElement,
-} from "../../../../../../components/common/CustomModal/CommonModal";
-import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
-import TherapistAddAssessmentForm from "../../../../../../components/therapist/assessment/therapistAddAssessment/TherapistAddAssessmentForm";
-import { Box, Button } from "@mui/material";
 
-const TherapistAssessmentMain: React.FC = () => {
+const TherapistAssessmentMain: React.FC<any> = ({
+  modalRefAddAssessment,
+  reFetchAssessmentList,
+}) => {
   const { enqueueSnackbar } = useSnackbar();
   const patientId = sessionStorage.getItem("patient_id");
 
@@ -38,15 +37,15 @@ const TherapistAssessmentMain: React.FC = () => {
   }, []);
 
   /* istanbul ignore next */
-  const modalRefAddAssessment = useRef<ModalElement>(null);
+  // const modalRefAddAssessment = useRef<ModalElement>(null);
 
-  /* istanbul ignore next */
-  const handleOpenCreateAssessmentModal = useCallback(
-    () => modalRefAddAssessment.current?.open(),
-    []
-  );
+  // /* istanbul ignore next */
+  // const handleOpenCreateAssessmentModal = useCallback(
+  //   () => modalRefAddAssessment.current?.open(),
+  //   []
+  // );
 
-  /* istanbul ignore next */
+  // /* istanbul ignore next */
   const handleCloseCreateAssessmentModal = useCallback(
     () => modalRefAddAssessment.current?.close(),
     []
@@ -65,6 +64,7 @@ const TherapistAssessmentMain: React.FC = () => {
           patient_id: patientId,
         },
         onCompleted: () => {
+          reFetchAssessmentList();
           setIsConfirmAdd(false);
           handleCloseCreateAssessmentModal();
 
@@ -90,7 +90,7 @@ const TherapistAssessmentMain: React.FC = () => {
 
   return (
     <>
-      <Box
+      {/* <Box
         style={{
           display: "flex",
           justifyContent: "flex-end",
@@ -113,7 +113,7 @@ const TherapistAssessmentMain: React.FC = () => {
         >
           Add Assessment
         </Button>
-      </Box>
+      </Box> */}
 
       <CommonModal
         ref={modalRefAddAssessment}

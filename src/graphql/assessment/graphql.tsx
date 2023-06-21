@@ -170,6 +170,56 @@ export const ADMIN_DELETE_AND_UPDATE_ASSESSMENT_QUESTION = gql`
   }
 `;
 
+export const GET_RISKS_LIST = gql`
+  query GetRisksList {
+    getRisksList {
+      _id
+      name
+      status
+    }
+  }
+`;
+
+export const THERAPIST_SUBMIT_ASSESSMENT = gql`
+  mutation TherapistSubmitAssessment(
+    $patientId: String!
+    $overallAssesmentText: String!
+    $pttherapySession: String!
+    $risk: String
+  ) {
+    therapistSubmitAssessment(
+      overall_assesment_text: $overallAssesmentText
+      patient_id: $patientId
+      pttherapy_session: $pttherapySession
+      risk: $risk
+    ) {
+      overall_assesment_text
+      risk
+      therapies {
+        _id
+      }
+    }
+  }
+`;
+
+export const THERAPIST_GET_PATIENT_ASSESSMENT = gql`
+  query TherapistGetPatientAssessment($patientId: String!) {
+    therapistGetPatientAssessment(patient_id: $patientId) {
+      risk
+      overall_assesment_text
+      list {
+        name
+        _id
+      }
+      therapies {
+        _id
+        pttherapy_session
+        pttherapy_status
+      }
+    }
+  }
+`;
+
 export const GET_ORGANISATION_SHARED_LIST = gql`
   query getOrganisationSharedList($name: String!, $share_type: String!) {
     getOrganisationSharedList(name: $name, share_type: $share_type) {
