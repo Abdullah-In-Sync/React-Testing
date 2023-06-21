@@ -11,6 +11,10 @@ import { ConfirmElement } from "../../../common/ConfirmWrapper";
 import Loader from "../../../common/Loader";
 import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
 import { csvEncode } from "../../../../utility/helper";
+import {
+  GetRisksListData,
+  TherapistGetPatientAssessmentData,
+} from "../../../../graphql/assessment/types";
 
 const TherapistPatientAssessment: any = () => {
   const router = useRouter();
@@ -26,7 +30,7 @@ const TherapistPatientAssessment: any = () => {
       data: { getRisksList: risksListData = undefined } = {},
       loading: risksListLoading,
     },
-  ] = useLazyQuery<any>(GET_RISKS_LIST, {
+  ] = useLazyQuery<GetRisksListData>(GET_RISKS_LIST, {
     onCompleted: () => {
       setLoader(false);
     },
@@ -46,12 +50,15 @@ const TherapistPatientAssessment: any = () => {
       } = {},
       loading: assessmentListLoading,
     },
-  ] = useLazyQuery<any>(THERAPIST_GET_PATIENT_ASSESSMENT, {
-    onCompleted: () => {
-      setLoader(false);
-    },
-    fetchPolicy: "cache-and-network",
-  });
+  ] = useLazyQuery<TherapistGetPatientAssessmentData>(
+    THERAPIST_GET_PATIENT_ASSESSMENT,
+    {
+      onCompleted: () => {
+        setLoader(false);
+      },
+      fetchPolicy: "cache-and-network",
+    }
+  );
 
   const { pttherapy_session: pttherapySession } =
     therapies.length > 0
@@ -85,7 +92,7 @@ const TherapistPatientAssessment: any = () => {
         onCompleted: (data) => {
           const { therapistSubmitAssessment } = data;
           if (therapistSubmitAssessment) {
-            enqueueSnackbar("Overall assessment successfully added.", {
+            enqueueSnackbar("Overall assessment submitted successfully.", {
               variant: "success",
             });
             doneCallback();
@@ -95,7 +102,6 @@ const TherapistPatientAssessment: any = () => {
       });
     } catch (e) {
       /* istanbul ignore next */
-      console.log("eeeeeee", e);
       enqueueSnackbar("Something is wrong", { variant: "error" });
       setLoader(false);
     }
@@ -120,12 +126,12 @@ const TherapistPatientAssessment: any = () => {
       {!assessmentListLoading && (
         <TherapistPatientOverallAssessment
           risksListData={risksListData}
-          assessmentListData={assessmentListData}
           onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
           {...{
             overallAssesmentText,
             pttherapySession,
             risk,
+            assessmentListData,
             risksListLoading,
             assessmentListLoading,
             confirmRef,

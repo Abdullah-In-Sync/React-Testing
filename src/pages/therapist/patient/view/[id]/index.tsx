@@ -20,7 +20,7 @@ import TherapyMainComponent from "./therapy";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
-import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
+import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment/TherapistAssessment";
 
 interface Props {
   children: React.ReactNode;

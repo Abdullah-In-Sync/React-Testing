@@ -9,6 +9,7 @@ export const useStyles = makeStyles(() => {
   };
   return {
     formWrapper: {
+      padding: "10px 0 0 0",
       "& .MuiOutlinedInput-root.Mui-focused": {
         "& > fieldset": {
           borderColor: theme.palette.primary.main,
@@ -22,7 +23,6 @@ export const useStyles = makeStyles(() => {
       "& .impTxt": {
         color: theme.palette.error.main,
       },
-      padding: "20px 0 0 0",
       "& label": {
         fontSize: 15,
         fontWeight: "bold",
@@ -47,7 +47,6 @@ export const useStyles = makeStyles(() => {
           "& .MuiOutlinedInput-root": {
             background: "#dadada52",
           },
-
           ...commonRow,
         },
         "& .formRow3": {
@@ -63,6 +62,12 @@ export const useStyles = makeStyles(() => {
           ...commonRow,
         },
       },
+    },
+    headerWrapper: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 5,
     },
     listTitleWrapper: {
       border: `1px solid ${theme.palette.primary.main}`,

@@ -23,8 +23,8 @@ export interface AdminAssessmentViewQsEntity {
   question?: string;
 }
 
-export interface Data {
-  therapistGetPatientAssessment: TherapistGetPatientAssessment;
+export interface TherapistGetPatientAssessmentData {
+  therapistGetPatientAssessment: TherapistGetPatientAssessment | undefined;
 }
 
 export interface TherapistGetPatientAssessment {
@@ -34,14 +34,26 @@ export interface TherapistGetPatientAssessment {
   therapies?: TherapiesEntity[] | null;
   __typename: string;
 }
+
 export interface ListEntity {
   name: string;
   _id: string;
   __typename: string;
 }
+
 export interface TherapiesEntity {
   _id: string;
   pttherapy_session: string;
   pttherapy_status: number;
+  __typename: string;
+}
+
+export interface GetRisksListData {
+  getRisksList?: GetRisksListEntity[] | null;
+}
+export interface GetRisksListEntity {
+  _id: string;
+  name: string;
+  status: number;
   __typename: string;
 }

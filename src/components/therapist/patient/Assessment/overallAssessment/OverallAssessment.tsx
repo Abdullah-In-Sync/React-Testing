@@ -1,21 +1,23 @@
-import { Formik } from "formik";
-import React from "react";
+import { Formik, FormikProps } from "formik";
+import React, { ForwardedRef } from "react";
+import { GetRisksListEntity } from "../../../../../graphql/assessment/types";
+import { csvDecode } from "../../../../../utility/helper";
+import { ConfirmElement } from "../../../../common/ConfirmWrapper";
 import OverallAssessmentForm from "./OverallAssessmentForm";
 import TherapistPatientAssessmentList from "./TherapistPatientAssessmentList";
-import { csvDecode } from "../../../../../utility/helper";
 import { therapistAssessmentValidationSchema } from "./assessmentValidationSchema";
 
-const TherapistPatientOverallAssessment: React.FC<any> = ({
-  organizationList,
-  onPressCancel,
-  confirmRef,
-  infoModalRef,
-  risksListData = [],
+const TherapistPatientOverallAssessment: React.FC<
+  TherapistPatientAssessmentProps
+> = ({
   onSubmitTherapistAssessment,
+  confirmRef,
+  risksListData = [],
   overallAssesmentText = "",
   pttherapySession,
   risk,
   risksListLoading,
+  assessmentListData,
 }) => {
   const modifyRisk = risk
     ? risksListData
@@ -45,10 +47,7 @@ const TherapistPatientOverallAssessment: React.FC<any> = ({
         children={(props: any) => (
           <OverallAssessmentForm
             formikProps={props}
-            organizationList={organizationList}
-            onPressCancel={onPressCancel}
             confirmRef={confirmRef}
-            infoModalRef={infoModalRef}
             risksListData={risksListData}
           />
         )}
@@ -58,10 +57,33 @@ const TherapistPatientOverallAssessment: React.FC<any> = ({
 
   return (
     <>
-      <TherapistPatientAssessmentList risksListData={risksListData} />
+      <TherapistPatientAssessmentList assessmentListData={assessmentListData} />
       {!risksListLoading && commonform()}
     </>
   );
 };
 
 export default TherapistPatientOverallAssessment;
+
+interface InitialFormValues {
+  overallAssesmentText: string;
+  pttherapySession: string | number;
+  risks: any;
+}
+
+export interface TherapistPatientAssessmentProps {
+  actionButtonClick?: (v) => void;
+  onPressAddAssessment?: () => void;
+  confirmRef?: ForwardedRef<ConfirmElement>;
+  risksListLoading?: boolean;
+  onSubmitTherapistAssessment?: (
+    formData: InitialFormValues,
+    formikHelper: FormikProps<InitialFormValues>
+  ) => void;
+  risksListData?: GetRisksListEntity[];
+  overallAssesmentText?: string;
+  pttherapySession?: string;
+  risk?: string;
+  formikProps?: FormikProps<InitialFormValues>;
+  assessmentListData?: any;
+}

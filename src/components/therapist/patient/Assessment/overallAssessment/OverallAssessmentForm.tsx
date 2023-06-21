@@ -6,8 +6,9 @@ import CommonButton from "../../../../common/Buttons/CommonButton";
 import ConfirmWrapper from "../../../../common/ConfirmWrapper";
 import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 import { useStyles } from "../patientAssessmentStyles";
+import { TherapistPatientAssessmentProps } from "./OverallAssessment";
 
-const OverallAssessmentForm: React.FC<any> = ({
+const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
   formikProps,
   confirmRef,
   risksListData = [],
