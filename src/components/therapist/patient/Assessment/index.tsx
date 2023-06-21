@@ -121,6 +121,7 @@ const TherapistPatientAssessment: any = () => {
       confirmFunction: () =>
         submitAssessmentApi(v, () => submitCallback(setSubmitting)),
       description: "Are you sure you want to update the assessment?",
+      setSubmitting,
     });
   };
 
