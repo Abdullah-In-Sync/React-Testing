@@ -241,7 +241,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                   font: "Montserrat",
                 }}
               >
-                organisation cannot be empty
+                Organisation cannot be empty
               </FormHelperText>
             )}
           </FormControl>
