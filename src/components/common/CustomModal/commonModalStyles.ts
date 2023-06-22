@@ -21,6 +21,9 @@ export const commonModalWrapperObj = (theme) => ({
   "& .MuiOutlinedInput-input": {
     padding: 10,
   },
+  "& .MuiOutlinedInput-root": {
+    height: 38,
+  },
   "& .MuiOutlinedInput-root.Mui-focused": {
     "& > fieldset": {
       borderColor: theme.palette.primary.main,
