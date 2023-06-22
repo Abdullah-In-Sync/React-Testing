@@ -40,6 +40,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
+import Formulation from "../formulation";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -147,6 +148,7 @@ const Resource: NextPage = () => {
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [approveResource] = useMutation(APPROVE_RESOURCE);
+  const [isFormulation, setIsFormulation] = useState<boolean>(false);
   const {
     user: { _id: adminId },
   } = useAppContext();
@@ -500,7 +502,7 @@ const Resource: NextPage = () => {
       <Layout>
         <ContentHeader title="Library" />
         <Grid container spacing={2}>
-          <Grid item xs={3}>
+          <Grid item xs={3} style={{ opacity: isFormulation ? 0 : 1 }}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -517,11 +519,35 @@ const Resource: NextPage = () => {
           </Grid>
           <Grid item xs={9}>
             <Box sx={crudButtons}>
-              <AddButton
-                href="/v2/admin/formulation"
-                className="mr-3"
-                label="Formulation"
-              />
+              <Button
+                className={`text-white`}
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  bottom: "4px",
+                  height: "35px",
+                  marginLeft: "8px",
+                  minWidth: "144px",
+                }}
+                onClick={() => setIsFormulation(false)}
+              >
+                Resource
+              </Button>
+              <Button
+                className={`text-white`}
+                {...(isFormulation ? { color: "secondary" } : {})}
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  height: "35px",
+                  minWidth: "144px",
+                  bottom: "4px",
+                  marginLeft: "8px",
+                }}
+                onClick={() => setIsFormulation(true)}
+              >
+                Formulation
+              </Button>
               <Button
                 className={`text-white`}
                 variant="contained"
@@ -567,81 +593,86 @@ const Resource: NextPage = () => {
             </Box>
           </Grid>
         </Grid>
+        {isFormulation ? (
+          <Formulation />
+        ) : (
+          <>
+            <CrudForm
+              fields={filterList}
+              onFieldChange={(value) => {
+                /* istanbul ignore next */
+                handleFilterChange(value);
+              }}
+              values={filterValue}
+            />
 
-        <CrudForm
-          fields={filterList}
-          onFieldChange={(value) => {
-            /* istanbul ignore next */
-            handleFilterChange(value);
-          }}
-          values={filterValue}
-        />
-
-        <Box>
-          <Loader visible={loading || unapproveLoading} />
-          <CardGenerator data={dataList} fields={fields} />
-        </Box>
-        <ApproveSureModal
-          modalOpen={approveModal}
-          setModalOpen={setApproveModal}
-        >
-          <Box marginTop="20px" display="flex" justifyContent="end">
-            <Button
-              variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="approveResourceModalCancelButton"
-              onClick={() => {
-                setApproveModal(false);
-              }}
+            <Box>
+              <Loader visible={loading || unapproveLoading} />
+              <CardGenerator data={dataList} fields={fields} />
+            </Box>
+            <ApproveSureModal
+              modalOpen={approveModal}
+              setModalOpen={setApproveModal}
             >
-              Cancel
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ marginLeft: "5px" }}
-              size="small"
-              data-testid="approveResourceModalConfirmButton"
-              disabled={isMutating}
-              onClick={() => {
-                setApproveModal(false);
-                handleApprove(resourceId);
-              }}
-            >
-              Confirm
-            </Button>
-          </Box>
-        </ApproveSureModal>
-        <DeleteSureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
-          <Box marginTop="20px" display="flex" justifyContent="end">
-            <Button
-              variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="deleteResourceModalCancelButton"
-              onClick={() => {
-                setModalOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ marginLeft: "5px" }}
-              size="small"
-              data-testid="deleteResourceModalConfirmButton"
-              disabled={isMutating}
-              onClick={() => {
-                setModalOpen(false);
-                handleDelete(resourceId);
-              }}
-            >
-              Confirm
-            </Button>
-          </Box>
-        </DeleteSureModal>
+              <Box marginTop="20px" display="flex" justifyContent="end">
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  size="small"
+                  data-testid="approveResourceModalCancelButton"
+                  onClick={() => {
+                    setApproveModal(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="error"
+                  variant="contained"
+                  sx={{ marginLeft: "5px" }}
+                  size="small"
+                  data-testid="approveResourceModalConfirmButton"
+                  disabled={isMutating}
+                  onClick={() => {
+                    setApproveModal(false);
+                    handleApprove(resourceId);
+                  }}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            </ApproveSureModal>
+            <DeleteSureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
+              <Box marginTop="20px" display="flex" justifyContent="end">
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  size="small"
+                  data-testid="deleteResourceModalCancelButton"
+                  onClick={() => {
+                    setModalOpen(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="error"
+                  variant="contained"
+                  sx={{ marginLeft: "5px" }}
+                  size="small"
+                  data-testid="deleteResourceModalConfirmButton"
+                  disabled={isMutating}
+                  onClick={() => {
+                    setModalOpen(false);
+                    handleDelete(resourceId);
+                  }}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            </DeleteSureModal>
+          </>
+        )}
       </Layout>
     </>
   );
