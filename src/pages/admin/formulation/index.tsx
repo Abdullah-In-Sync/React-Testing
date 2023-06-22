@@ -25,7 +25,6 @@ import { GET_FORMULATION_LIST } from "../../../graphql/formulation/graphql";
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
 import { ShareOutlined } from "@mui/icons-material";
 
-
 const IconButtonWrapper = styled(IconButton)(
   () => `
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
