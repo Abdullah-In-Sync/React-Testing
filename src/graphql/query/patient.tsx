@@ -267,3 +267,49 @@ export const GET_PATIENT_MONITOR_ANS_BY_ID = gql`
     }
   }
 `;
+
+export const GET_PATIENT_ASSESSMENT_LIST = gql`
+  query MyQuery {
+    patientAssessmentList {
+      _id
+      category {
+        _id
+        assessment_id
+        created_date
+        name
+        patient_id
+        status
+        share_status
+        updated_date
+      }
+      created_date
+      name
+      patient_id
+      status
+      updated_date
+    }
+  }
+`;
+
+export const GET_PATIENT_ASSESSMENT_CATOGARY_LIST_BY_ASSESSMENT_ID = gql`
+  query patientAssessmentCategoryList($assessment_id: String!) {
+    patientAssessmentCategoryList(assessment_id: $assessment_id) {
+      _id
+      category {
+        _id
+        assessment_id
+        created_date
+        name
+        patient_id
+        share_status
+        status
+        updated_date
+      }
+      created_date
+      name
+      patient_id
+      status
+      updated_date
+    }
+  }
+`;
