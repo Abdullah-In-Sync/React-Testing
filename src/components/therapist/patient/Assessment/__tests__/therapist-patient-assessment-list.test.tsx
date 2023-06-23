@@ -9,6 +9,7 @@ import {
   GET_RISKS_LIST,
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
+  THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
   THERAPIST_VIEW_ASSESSMENT,
 } from "../../../../../graphql/assessment/graphql";
 import theme from "../../../../../styles/theme/theme";
@@ -86,7 +87,7 @@ mocksData.push({
         name: "test assessment",
         category: [
           {
-            _id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
+            _id: "cat1",
             assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
             name: "update category",
             patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
@@ -118,9 +119,25 @@ mocksData.push({
   },
 });
 
-// {
-//   "assessmentId": "57450002-c884-4c4a-9b32-4c536135231d"
-// }
+mocksData.push({
+  request: {
+    query: THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
+    variables: {
+      categoryId: "cat1",
+      patientId: "patient-id",
+      updateCat: {
+        share_status: 1,
+      },
+    },
+  },
+  result: {
+    data: {
+      therapistUpdateAssessmentCat: {
+        _id: "6429593c-6525-4b5c-88f2-004c419d8975",
+      },
+    },
+  },
+});
 
 const sut = async () => {
   render(
@@ -195,9 +212,15 @@ describe("Therapist patient add assessment", () => {
     });
     await sut();
     expect(await screen.findByText(/update category/i)).toBeInTheDocument();
+
+    const shareBtn = await screen.findByTestId("iconButton_cat1_0");
+    fireEvent.click(shareBtn);
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Assessment shared successfully./i)
+    ).toBeInTheDocument();
   });
 });
-
-// assessment_list_item_0
-
-// mainTab=assessment&assessmentView=clinical-assessment&assessmentId=57450002-c884-4c4a-9b32-4c536135231d

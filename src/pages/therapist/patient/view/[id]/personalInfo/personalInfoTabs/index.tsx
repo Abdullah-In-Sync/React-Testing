@@ -8,7 +8,7 @@ import TherapistProfileAgreement from "../profileAgreemet";
 export default function TherapyPersonalInfoTabs() {
   const router = useRouter();
   const {
-    query: { tab = "details" },
+    query: { id, mainTab },
   } = router;
 
   const tabs = [
@@ -23,13 +23,17 @@ export default function TherapyPersonalInfoTabs() {
       component: <TherapistProfileAgreement />,
     },
   ];
+
   return (
     <Box
       style={{ paddingTop: "20px" }}
       data-testid="patientViewTherapyTab"
       className="therapyTabsWrapper"
     >
-      <TherapyTabsGenerator tabsList={tabs} activeTabs={tab} loadFromUrl />
+      <TherapyTabsGenerator
+        tabsList={tabs}
+        tabLabel={`/therapist/patient/view/${id}/?mainTab=${mainTab}&tab=`}
+      />
     </Box>
   );
 }
