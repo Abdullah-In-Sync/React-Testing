@@ -21,7 +21,7 @@ export default function TherapyMainComponent(props: propTypes) {
   const router = useRouter();
   const patId = router?.query.id as string;
   const {
-    query: { id },
+    query: { id, mainTab },
   } = router;
   const tabs = [
     {
@@ -88,9 +88,11 @@ export default function TherapyMainComponent(props: propTypes) {
         <TherapyTabsGenerator
           tabsList={tabs}
           activeTabs={activeTabs}
-          tabLabel={`/therapist/patient/view/${id}/?tab=`}
+          tabLabel={`/therapist/patient/view/${id}/?mainTab=${mainTab}&tab=`}
         />
       </Box>
     </Box>
   );
 }
+
+// mainTab
