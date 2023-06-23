@@ -279,7 +279,7 @@ describe("Therapist monitor response submit", () => {
     const completeButton = await screen.findByTestId("completeButton_0");
     fireEvent.click(completeButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "patient-id/?mainTab=therapy&tab=monitor&&subTab1=patient-monitor&view=complete&monitorId=list-item-1"
+      "patient-id/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=complete&monitorId=list-item-1"
     );
   });
 
