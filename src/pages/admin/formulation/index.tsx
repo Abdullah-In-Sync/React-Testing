@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
-import type { NextPage } from "next";
 import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
 import { useLazyQuery } from "@apollo/client";
-
-// MUI COMPONENTS
-import Layout from "../../../components/layout";
-import ContentHeader from "../../../components/common/ContentHeader";
 import {
   IconButton,
   Box,
@@ -22,8 +17,6 @@ import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { AddButton } from "../../../components/common/Buttons";
-import Grid from "@mui/material/Grid";
 import CrudForm from "../../../components/common/CrudForm";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
@@ -31,14 +24,6 @@ import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_FORMULATION_LIST } from "../../../graphql/formulation/graphql";
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
 import { ShareOutlined } from "@mui/icons-material";
-
-const crudButtons = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "end",
-  marginBottom: 1,
-  flexDirection: "row",
-};
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -49,7 +34,7 @@ const IconButtonWrapper = styled(IconButton)(
 `
 );
 
-const Formulation: NextPage = () => {
+const Formulation = () => {
   const [filterValue, setFilterValue] = useState<any>({});
   const [dataList, setDataList] = useState<any>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -202,106 +187,48 @@ const Formulation: NextPage = () => {
 
   return (
     <>
-      <Layout>
-        <ContentHeader title="Library" />
-        <Grid container spacing={2}>
-          <Grid item xs={9} style={{ marginLeft: "391px" }}>
-            <Box sx={crudButtons}>
-              <AddButton
-                href="/v2/admin/formulation"
-                className="mr-3"
-                label="Formulation"
-              />
-              <Button
-                className={`text-white`}
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  bottom: "4px",
-                  height: "35px",
-                  marginLeft: "8px",
-                }}
-                data-testid="approveresourcelist"
-                onClick={() => {
-                  handleFilterChange({ mode: "approve_resource" });
-                }}
-              >
-                Approve Resource
-              </Button>
-
-              <div style={{ paddingLeft: "8px" }}>
-                <Button
-                  className={`text-white`}
-                  variant="contained"
-                  sx={{
-                    textTransform: "none",
-                    bottom: "4px",
-                    height: "35px",
-                  }}
-                  data-testid="templateList"
-                  href={"/v2/admin/resource/template/list"}
-                >
-                  Templates
-                </Button>
-              </div>
-              <AddButton
-                href="/v2/admin/resource/add"
-                className="mr-3"
-                label="Add Resource"
-              />
-              <AddButton
-                href="/v2/admin/resource/create"
-                className="mr-3"
-                label="Create Resource"
-              />
-            </Box>
-          </Grid>
-        </Grid>
-
-        <Box
-          display={"flex"}
-          style={{ marginBottom: "25px" }}
-          gap={2}
-          alignItems={"center"}
-        >
-          <TextField
-            style={{
-              marginBottom: "2px",
-            }}
-            variant="outlined"
-            placeholder="Search"
-            onChange={
-              /* istanbul ignore next */
-              (e) => setSearchText(e.target.value)
-            }
-            InputProps={{
-              style: {
-                width: "192px",
-                height: "36.7px",
-              },
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <CrudForm
-            fields={filterList}
-            onFieldChange={(value) => {
-              /* istanbul ignore next */
-              handleFilterChange(value);
-            }}
-            values={filterValue}
-            page="formulation"
-          />
-        </Box>
-
-        <Box>
-          <Loader visible={loading} />
-          <FormulationCardGenerator data={dataList} fields={fields} />
-        </Box>
-      </Layout>
+      <Box
+        display={"flex"}
+        style={{ marginBottom: "25px" }}
+        gap={2}
+        alignItems={"center"}
+      >
+        <TextField
+          style={{
+            marginBottom: "2px",
+          }}
+          variant="outlined"
+          placeholder="Search"
+          onChange={
+            /* istanbul ignore next */
+            (e) => setSearchText(e.target.value)
+          }
+          InputProps={{
+            style: {
+              width: "192px",
+              height: "36.7px",
+            },
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <CrudForm
+          fields={filterList}
+          onFieldChange={(value) => {
+            /* istanbul ignore next */
+            handleFilterChange(value);
+          }}
+          values={filterValue}
+          page="formulation"
+        />
+      </Box>
+      <Box>
+        <Loader visible={loading} />
+        <FormulationCardGenerator data={dataList} fields={fields} />
+      </Box>
     </>
   );
 };
