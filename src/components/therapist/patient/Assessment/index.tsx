@@ -15,6 +15,7 @@ import { csvEncode } from "../../../../utility/helper";
 import {
   GetRisksListData,
   TherapistGetPatientAssessmentData,
+  TherapistviewAssessmentData,
 } from "../../../../graphql/assessment/types";
 import TherapistAssessmentMain from "../../../../pages/therapist/patient/view/[id]/assessment";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
@@ -38,7 +39,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
       } = {},
       loading: therapistViewAssessmentLoading,
     },
-  ] = useLazyQuery<any>(THERAPIST_VIEW_ASSESSMENT, {
+  ] = useLazyQuery<TherapistviewAssessmentData>(THERAPIST_VIEW_ASSESSMENT, {
     onCompleted: () => {
       setLoader(false);
     },

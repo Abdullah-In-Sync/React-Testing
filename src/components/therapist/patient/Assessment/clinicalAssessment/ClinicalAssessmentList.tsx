@@ -3,10 +3,10 @@ import React from "react";
 import { Accordion } from "../../../../common/Accordion";
 import { MesageTextDisplay } from "../../../../common/MessageTextDisplay/MessageTextDisplay";
 import ActionsButtons from "./ActionsButtons";
+import { ClinicalAssessmentProps } from "./ClinicalAssessment";
 
-const ClinicalAssessmentList: React.FC<any> = ({
+const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   actionButtonClick,
-  assessmentLoading,
   handleToggleContent = null,
   categoryListData,
 }) => {
@@ -28,7 +28,7 @@ const ClinicalAssessmentList: React.FC<any> = ({
   };
 
   const accordionList = () => {
-    if (categoryListData.length <= 0 && !assessmentLoading)
+    if (categoryListData.length <= 0)
       return <MesageTextDisplay message="No data Found." />;
 
     return categoryListData.map((item, i) => {

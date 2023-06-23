@@ -67,3 +67,23 @@ export interface OrgList {
 export interface GetOrganisationSharedList {
   getOrganisationSharedList: OrgList[];
 }
+
+export interface TherapistviewAssessmentData {
+  therapistviewAssessment: TherapistviewAssessment;
+}
+export interface TherapistviewAssessment {
+  _id: string;
+  name: string;
+  patient_id: string;
+  status: number;
+  updated_date: string;
+  category?: CategoryEntity[] | null;
+}
+export interface CategoryEntity {
+  _id: string;
+  assessment_id: string;
+  name: string;
+  patient_id: string;
+  share_status: number;
+  status: number;
+}

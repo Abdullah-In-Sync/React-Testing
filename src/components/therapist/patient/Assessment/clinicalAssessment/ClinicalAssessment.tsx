@@ -6,6 +6,7 @@ import { ConfirmElement } from "../../../../common/ConfirmWrapper";
 import ContentHeader from "../../../../common/ContentHeader";
 import { useStyles } from "../patientAssessmentStyles";
 import ClinicalAssessmentList from "./ClinicalAssessmentList";
+import { CategoryEntity } from "../../../../../graphql/assessment/types";
 
 const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   handleToggleContent,
@@ -13,7 +14,6 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   onPressBack,
   onPressSummaryView,
 }) => {
-  console.log("categoryListData", categoryListData);
   const styles = useStyles();
   return (
     <>
@@ -55,7 +55,7 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
 export default ClinicalAssessment;
 
 export interface ClinicalAssessmentProps {
-  categoryListData?: any;
+  categoryListData?: CategoryEntity[];
   handleBackClick?: () => void;
   actionButtonClick?: (v) => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
