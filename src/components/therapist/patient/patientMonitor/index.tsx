@@ -177,7 +177,7 @@ const TherapyPatientMonitorList: any = () => {
   const completeButtonClick = (v) => {
     const { _id } = v;
     router.push(
-      `${patientId}/?tab=monitor&&subTab1=patient-monitor&view=complete&monitorId=${_id}`
+      `${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=complete&monitorId=${_id}`
     );
   };
 
@@ -198,14 +198,16 @@ const TherapyPatientMonitorList: any = () => {
       if (therapistMonitorList.length > nextMonitorIndex) {
         const nextMonitor = therapistMonitorList[nextMonitorIndex];
         router.push(
-          `${patientId}/?tab=monitor&subTab1=patient-monitor&view=complete&monitorId=${nextMonitor._id}`
+          `${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=complete&monitorId=${nextMonitor._id}`
         );
       }
     }
   };
 
   const backPress = () => {
-    router.push(`${patientId}/?tab=monitor&subTab1=patient-monitor`);
+    router.push(
+      `${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor`
+    );
   };
 
   const handleRangeGoButton = (v) => {
@@ -213,7 +215,7 @@ const TherapyPatientMonitorList: any = () => {
     const nEndDate = formatDate(toDate);
     const nStartDate = formatDate(fromDate);
     router.push(
-      `${patientId}/?tab=monitor&subTab1=patient-monitor&view=viewResponse&monitorId=${monitorId}&startDate=${nStartDate}&endDate=${nEndDate}`
+      `${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=viewResponse&monitorId=${monitorId}&startDate=${nStartDate}&endDate=${nEndDate}`
     );
   };
 
@@ -222,7 +224,7 @@ const TherapyPatientMonitorList: any = () => {
     const nEndDate = moment().format("YYYY-MM-DD");
     const nStartDate = initialDate;
     router.push(
-      `${patientId}/?tab=monitor&subTab1=patient-monitor&view=viewResponse&monitorId=${_id}&startDate=${nStartDate}&endDate=${nEndDate}`
+      `${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=viewResponse&monitorId=${_id}&startDate=${nStartDate}&endDate=${nEndDate}`
     );
   };
 

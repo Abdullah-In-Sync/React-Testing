@@ -163,7 +163,7 @@ describe("Patient view template page", () => {
     const successOkBtn = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(successOkBtn);
     expect(mockRouter.push).toHaveBeenCalledWith(
-      "/patient/therapy/?tab=resources"
+      "/patient/therapy/?mainTab=therapy&tab=resources"
     );
     expect(successOkBtn).not.toBeInTheDocument();
   });
