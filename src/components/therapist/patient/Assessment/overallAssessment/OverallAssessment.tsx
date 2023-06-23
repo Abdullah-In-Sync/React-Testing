@@ -41,7 +41,7 @@ const TherapistPatientOverallAssessment: React.FC<
     return (
       <Formik
         validationSchema={therapistAssessmentValidationSchema({
-          lastSessionNo: pttherapySession || 1,
+          lastSessionNo: pttherapySession || 0,
         })}
         initialValues={initialValues}
         onSubmit={onSubmitTherapistAssessment}

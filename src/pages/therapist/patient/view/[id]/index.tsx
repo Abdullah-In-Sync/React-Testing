@@ -4,6 +4,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Theme,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -21,6 +22,7 @@ import TabsGeneratorTherapistPatient from "../../../../../components/common/Tabs
 import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
+import { useTheme } from "@mui/styles";
 
 interface Props {
   children: React.ReactNode;
@@ -32,6 +34,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   patientId,
   loader: pLoader,
 }) => {
+  const theme = useTheme() as Theme;
   const [therapy, setTherapy] = useState<string>("pt_therapy_id");
   const [loader, setLoader] = useState<boolean>(pLoader);
 
@@ -173,7 +176,27 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
                 {patientData.patient_name}
               </Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                "& .MuiOutlinedInput-root": {
+                  height: 38,
+                },
+                "& .MuiOutlinedInput-root.Mui-focused": {
+                  "& > fieldset": {
+                    borderColor: theme.palette.primary.main,
+                  },
+                },
+                "& .MuiOutlinedInput-root:hover": {
+                  "& > fieldset": {
+                    borderColor: theme.palette.primary.main,
+                  },
+                },
+              }}
+            >
               <FormControl
                 sx={{ mt: 3, minWidth: 120, maxWidth: "100%" }}
                 size="small"
