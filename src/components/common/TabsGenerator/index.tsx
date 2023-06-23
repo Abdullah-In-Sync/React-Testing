@@ -29,9 +29,12 @@ const TabsGenerator = (props: propTypes) => {
   const router = useRouter();
   const { tabsList, activeTabs, editable, onTabChange } = props;
   const [activeTab, setActiveTab] = useState(activeTabs);
+  const { query: { index = activeTabs } = {} } = router || {};
+  const tabLabel = "&index=";
 
   const handleTabChange = (_, newValue) => {
-    setActiveTab(newValue);
+    router.push(`?tab=resources${tabLabel}${newValue}`);
+    if (!activeTab.includes(newValue)) setActiveTab(newValue);
   };
 
   useEffect(() => {
@@ -39,6 +42,9 @@ const TabsGenerator = (props: propTypes) => {
       setActiveTab(router.query.tabName);
     }
   }, []);
+  useEffect(() => {
+    setActiveTab(index);
+  }, [index]);
 
   useEffect(() => {
     onTabChange?.(activeTab);

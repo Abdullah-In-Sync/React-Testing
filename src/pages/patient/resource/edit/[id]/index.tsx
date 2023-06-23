@@ -88,8 +88,11 @@ const PatientEditTemplatePage: NextPage = () => {
   };
 
   const handleSuccessOk = () => {
-    router.push(`/patient/therapy/?tab=resources`);
+    router.back();
     setSuccessModal(false);
+  };
+  const onPressBack = () => {
+    router.back();
   };
 
   return (
@@ -106,6 +109,7 @@ const PatientEditTemplatePage: NextPage = () => {
           onSubmit={handleSubmitTemplateData}
           onClickView={handleViewOpen}
           mode={`${isViewEnabled ? "patientView" : "edit"}`}
+          onPressBack={onPressBack}
         />
         {successModal && (
           <SuccessModal
