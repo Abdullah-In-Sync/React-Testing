@@ -8,6 +8,7 @@ import ContentHeader from "../../../../common/ContentHeader";
 const TherapistPatientAssessmentList: React.FC<any> = ({
   assessmentListData = [],
   onClickAddAssessment,
+  handleClickAssement,
 }) => {
   const styles = useStyles();
   const assessmentList = () => {
@@ -17,6 +18,8 @@ const TherapistPatientAssessmentList: React.FC<any> = ({
         <Stack
           className={styles.listTitleWrapper}
           key={`assessment_list_item_${index}`}
+          onClick={() => handleClickAssement(item)}
+          data-testid={`assessment_list_item_${index}`}
         >
           <Box>
             <Typography>{title}</Typography>

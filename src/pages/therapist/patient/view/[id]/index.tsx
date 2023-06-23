@@ -17,12 +17,12 @@ import Layout from "../../../../../components/layout";
 import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
 import { Link } from "../../../../../lib/helpers/common";
 
+import { useTheme } from "@mui/styles";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
-import { useTheme } from "@mui/styles";
 
 interface Props {
   children: React.ReactNode;
@@ -45,6 +45,9 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   const router = useRouter();
   const patId = router?.query.id as string;
+  const {
+    query: { id },
+  } = router;
 
   /* istanbul ignore next */
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
@@ -243,13 +246,18 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
-              activeTabs="therapy"
+              tabLabel={`/therapist/patient/view/${id}/?mainTab=`}
+              defaultTabs={defaultTabs}
             />
           </Box>
         </Box>
       </Layout>
     </>
   );
+};
+
+const defaultTabs = {
+  therapy: "&tab=safety-plan",
 };
 
 export default MainWraperTherapyPatient;

@@ -19,6 +19,7 @@ const TherapistPatientOverallAssessment: React.FC<
   risksListLoading,
   assessmentListData,
   onClickAddAssessment,
+  handleClickAssement,
 }) => {
   const modifyRisk = risk
     ? risksListData
@@ -61,6 +62,7 @@ const TherapistPatientOverallAssessment: React.FC<
       <TherapistPatientAssessmentList
         assessmentListData={assessmentListData}
         onClickAddAssessment={onClickAddAssessment}
+        handleClickAssement={handleClickAssement}
       />
       {!risksListLoading && commonform()}
     </>
@@ -92,4 +94,5 @@ export interface TherapistPatientAssessmentProps {
   assessmentListData?: any;
   onClickAddAssessment?: () => void;
   assessmentListLoading?: boolean;
+  handleClickAssement?: (v) => void;
 }

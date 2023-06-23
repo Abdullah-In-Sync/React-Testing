@@ -3,14 +3,12 @@ import { Form } from "formik";
 import React from "react";
 import CommonAutocomplete from "../../../../common/AutoComplete/AutoComplete";
 import CommonButton from "../../../../common/Buttons/CommonButton";
-import ConfirmWrapper from "../../../../common/ConfirmWrapper";
 import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 import { useStyles } from "../patientAssessmentStyles";
 import { TherapistPatientAssessmentProps } from "./OverallAssessment";
 
 const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
   formikProps,
-  confirmRef,
   risksListData = [],
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
@@ -31,7 +29,7 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
 
   return (
     <Stack className={styles.formWrapper}>
-      <ConfirmWrapper ref={confirmRef}>
+      <>
         <label>Overall Assessment</label>
         <Form className="form">
           <Box className="formRow1">
@@ -99,7 +97,7 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
             </CommonButton>
           </Box>
         </Form>
-      </ConfirmWrapper>
+      </>
     </Stack>
   );
 };

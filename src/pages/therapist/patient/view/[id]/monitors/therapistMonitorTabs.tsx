@@ -9,7 +9,7 @@ import TherapyPatientMonitorList from "../../../../../../components/therapist/pa
 export default function TherapistMonotorTabs() {
   const router = useRouter();
   const {
-    query: { tab = "", id },
+    query: { tab = "", id, mainTab },
   } = router;
   const tabs = [
     {
@@ -29,7 +29,7 @@ export default function TherapistMonotorTabs() {
       <ContentHeader title="Monitor" />
       <TherapyTabsGenerator
         tabsList={tabs}
-        tabLabel={`/therapist/patient/view/${id}/?tab=${tab}&subTab1=`}
+        tabLabel={`/therapist/patient/view/${id}/?mainTab=${mainTab}&tab=${tab}&subTab1=`}
       />
     </>
   );

@@ -70,6 +70,7 @@ export const useStyles = makeStyles(() => {
       marginTop: 5,
     },
     listTitleWrapper: {
+      cursor: "pointer",
       border: `1px solid ${theme.palette.primary.main}`,
       background: theme.palette.primary.main,
       borderRadius: 5,
@@ -87,6 +88,34 @@ export const useStyles = makeStyles(() => {
       "& p": {
         color: theme.palette.primary.contrastText,
         fontWeight: "bold",
+      },
+    },
+    clinicalAssessmentWrapper: {
+      "& .row1": {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 0px",
+      },
+      "& .row2": {
+        "& .actionWrapper": {
+          display: "flex",
+          "& .actionButton ": {
+            cursor: "pointer",
+            height: 23,
+            width: 23,
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+            background: "#fff",
+            borderRadius: "50%",
+            marginRight: 10,
+            "& svg": {
+              fontSize: 15,
+              color: "black",
+            },
+          },
+        },
       },
     },
   };
