@@ -6,6 +6,8 @@ import { useAppContext } from "../contexts/AuthContext";
 import MainWraperTherapyPatient from "../pages/therapist/patient/view/[id]";
 import { useRouter } from "next/router";
 import TherapyMainComponent from "../pages/therapist/patient/view/[id]/therapy";
+import { ThemeProvider } from "@mui/material";
+import theme from "../styles/theme/theme";
 
 jest.mock("../contexts/AuthContext");
 jest.mock("next/router", () => ({
@@ -219,13 +221,15 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <MainWraperTherapyPatient
-          children={""}
-          patientId={undefined}
-          loader={false}
-        />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <MainWraperTherapyPatient
+            children={""}
+            patientId={undefined}
+            loader={false}
+          />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   //   await waitForElementToBeRemoved(() =>

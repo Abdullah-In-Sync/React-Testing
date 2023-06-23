@@ -6,26 +6,45 @@ import {
   GET_RISKS_LIST,
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
+  THERAPIST_VIEW_ASSESSMENT,
 } from "../../../../graphql/assessment/graphql";
-import { ConfirmElement } from "../../../common/ConfirmWrapper";
+import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import Loader from "../../../common/Loader";
 import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
 import { csvEncode } from "../../../../utility/helper";
 import {
   GetRisksListData,
   TherapistGetPatientAssessmentData,
+  TherapistviewAssessmentData,
 } from "../../../../graphql/assessment/types";
 import TherapistAssessmentMain from "../../../../pages/therapist/patient/view/[id]/assessment";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
+import ClinicalAssessment from "./clinicalAssessment/ClinicalAssessment";
 
-const TherapistPatientAssessment: any = () => {
+const TherapistPatientAssessmentList: React.FC = () => {
   const router = useRouter();
   const modalRefAddAssessment = useRef<ModalElement>(null);
-  const { query: { id: patientId } = {} } = router;
+  const { query: { id: patientId, assessmentView, assessmentId } = {} } =
+    router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
   const { enqueueSnackbar } = useSnackbar();
+
+  const [
+    getTherapistViewAssessment,
+    {
+      data: {
+        therapistviewAssessment: { category: categoryListData = [] } = {},
+      } = {},
+      loading: therapistViewAssessmentLoading,
+    },
+  ] = useLazyQuery<TherapistviewAssessmentData>(THERAPIST_VIEW_ASSESSMENT, {
+    onCompleted: () => {
+      setLoader(false);
+    },
+    fetchPolicy: "cache-and-network",
+  });
 
   const [
     getRisksListData,
@@ -70,11 +89,19 @@ const TherapistPatientAssessment: any = () => {
       : ({} as { pttherapy_session: string });
 
   useEffect(() => {
+    getRisksListData();
     getAssessmentListData({
       variables: { patientId },
     });
-    getRisksListData();
   }, []);
+
+  useEffect(() => {
+    setLoader(true);
+    if (assessmentId)
+      getTherapistViewAssessment({
+        variables: { assessmentId },
+      });
+  }, [assessmentId]);
 
   const submitAssessmentApi = async (formFields, doneCallback) => {
     const { risks, overallAssesmentText, pttherapySession } = formFields;
@@ -121,6 +148,7 @@ const TherapistPatientAssessment: any = () => {
       confirmFunction: () =>
         submitAssessmentApi(v, () => submitCallback(setSubmitting)),
       description: "Are you sure you want to update the assessment?",
+      setSubmitting,
     });
   };
 
@@ -128,29 +156,60 @@ const TherapistPatientAssessment: any = () => {
     modalRefAddAssessment.current?.open();
   };
 
+  const handleClickAssement = (item) => {
+    const { _id: assessmentId } = item;
+    router.push(
+      `/therapist/patient/view/${patientId}/?mainTab=assessment&assessmentView=clinical-assessment&assessmentId=${assessmentId}`
+    );
+  };
+
+  const onPressBack = () => {
+    router.back();
+  };
+
+  const currentView = () => {
+    switch (assessmentView) {
+      case "clinical-assessment":
+        return (
+          !therapistViewAssessmentLoading && (
+            <ClinicalAssessment {...{ onPressBack, categoryListData }} />
+          )
+        );
+      default:
+        return (
+          !assessmentListLoading && (
+            <>
+              <TherapistPatientOverallAssessment
+                risksListData={risksListData}
+                onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
+                onClickAddAssessment={handleAddAssessment}
+                {...{
+                  overallAssesmentText,
+                  pttherapySession,
+                  risk,
+                  assessmentListData,
+                  risksListLoading,
+                  assessmentListLoading,
+                  confirmRef,
+                  handleClickAssement,
+                }}
+              />
+              <TherapistAssessmentMain
+                modalRefAddAssessment={modalRefAddAssessment}
+                reFetchAssessmentList={reFetchAssessmentList}
+              />
+            </>
+          )
+        );
+    }
+  };
+
   return (
-    <>
+    <ConfirmWrapper ref={confirmRef}>
       <Loader visible={loader} />
-      <TherapistPatientOverallAssessment
-        risksListData={risksListData}
-        onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
-        onClickAddAssessment={handleAddAssessment}
-        {...{
-          overallAssesmentText,
-          pttherapySession,
-          risk,
-          assessmentListData,
-          risksListLoading,
-          assessmentListLoading,
-          confirmRef,
-        }}
-      />
-      <TherapistAssessmentMain
-        modalRefAddAssessment={modalRefAddAssessment}
-        reFetchAssessmentList={reFetchAssessmentList}
-      />
-    </>
+      {currentView()}
+    </ConfirmWrapper>
   );
 };
 
-export default TherapistPatientAssessment;
+export default TherapistPatientAssessmentList;

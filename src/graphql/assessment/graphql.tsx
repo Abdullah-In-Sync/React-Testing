@@ -230,20 +230,6 @@ export const GET_ORGANISATION_SHARED_LIST = gql`
   }
 `;
 
-// export const THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST = gql`
-//   query getAdminAssessmentList() {
-//     getAdminAssessmentList() {
-//      _id
-//     name
-//     organization_name
-//     org_id
-//     created_date
-//     status
-//     updated_date
-//     }
-//   }
-// `;
-
 export const THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST = gql`
   query getAdminAssessmentList {
     getAdminAssessmentList {
@@ -269,6 +255,29 @@ export const THERAPIST_ADD_ASSESSMENT = gql`
     ) {
       message
       result
+    }
+  }
+`;
+
+export const THERAPIST_VIEW_ASSESSMENT = gql`
+  query TherapistviewAssessment($assessmentId: ID!) {
+    therapistviewAssessment(assessment_id: $assessmentId) {
+      _id
+      created_date
+      name
+      patient_id
+      status
+      updated_date
+      category {
+        _id
+        assessment_id
+        created_date
+        name
+        patient_id
+        share_status
+        status
+        updated_date
+      }
     }
   }
 `;

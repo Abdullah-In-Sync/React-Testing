@@ -4,6 +4,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Theme,
   Typography,
 } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -16,6 +17,7 @@ import Layout from "../../../../../components/layout";
 import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
 import { Link } from "../../../../../lib/helpers/common";
 
+import { useTheme } from "@mui/styles";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
@@ -32,6 +34,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   patientId,
   loader: pLoader,
 }) => {
+  const theme = useTheme() as Theme;
   const [therapy, setTherapy] = useState<string>("pt_therapy_id");
   const [loader, setLoader] = useState<boolean>(pLoader);
 
@@ -42,6 +45,9 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   const router = useRouter();
   const patId = router?.query.id as string;
+  const {
+    query: { id },
+  } = router;
 
   /* istanbul ignore next */
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
@@ -173,7 +179,27 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
                 {patientData.patient_name}
               </Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                "& .MuiOutlinedInput-root": {
+                  height: 38,
+                },
+                "& .MuiOutlinedInput-root.Mui-focused": {
+                  "& > fieldset": {
+                    borderColor: theme.palette.primary.main,
+                  },
+                },
+                "& .MuiOutlinedInput-root:hover": {
+                  "& > fieldset": {
+                    borderColor: theme.palette.primary.main,
+                  },
+                },
+              }}
+            >
               <FormControl
                 sx={{ mt: 3, minWidth: 120, maxWidth: "100%" }}
                 size="small"
@@ -220,13 +246,18 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
-              activeTabs="therapy"
+              tabLabel={`/therapist/patient/view/${id}/?mainTab=`}
+              defaultTabs={defaultTabs}
             />
           </Box>
         </Box>
       </Layout>
     </>
   );
+};
+
+const defaultTabs = {
+  therapy: "&tab=safety-plan",
 };
 
 export default MainWraperTherapyPatient;
