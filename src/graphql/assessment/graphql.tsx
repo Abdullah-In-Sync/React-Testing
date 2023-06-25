@@ -281,3 +281,19 @@ export const THERAPIST_VIEW_ASSESSMENT = gql`
     }
   }
 `;
+
+export const THERAPIST_UPDATE_ASSESSMENT_CATEGORY = gql`
+  mutation TherapistUpdateAssessmentCat(
+    $categoryId: String!
+    $patientId: String!
+    $updateCat: UpdateTherapistAssessCatInput
+  ) {
+    therapistUpdateAssessmentCat(
+      category_id: $categoryId
+      updateCat: $updateCat
+      patient_id: $patientId
+    ) {
+      _id
+    }
+  }
+`;

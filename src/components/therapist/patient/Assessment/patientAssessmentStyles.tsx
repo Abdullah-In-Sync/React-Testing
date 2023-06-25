@@ -97,6 +97,9 @@ export const useStyles = makeStyles(() => {
         alignItems: "center",
         padding: "10px 0px",
       },
+      "& .share_1": {
+        background: `${theme.palette.primary.main} !important`,
+      },
       "& .row2": {
         "& .actionWrapper": {
           display: "flex",

@@ -88,7 +88,7 @@ const PatientEditTemplatePage: NextPage = () => {
   };
 
   const handleSuccessOk = () => {
-    router.push(`/patient/therapy/?tab=resources`);
+    router.push(`/patient/therapy/?mainTab=therapy&tab=resources`);
     setSuccessModal(false);
   };
 

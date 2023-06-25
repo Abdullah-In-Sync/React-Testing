@@ -14,7 +14,7 @@ const iconButtonsData = [
 ];
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick = null }) => {
-  const { _id } = data;
+  const { _id, share_status } = data;
   const iconButtons = () => {
     return iconButtonsData.map((item, i) => {
       const { id, icon: Icon } = item;
@@ -26,7 +26,7 @@ const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick = null }) => {
           onClick={() => {
             buttonClick({ ...data, ...{ pressedIconButton: id } });
           }}
-          className="actionButton"
+          className={`actionButton ${id}_${share_status}`}
         >
           <Icon />
         </Box>

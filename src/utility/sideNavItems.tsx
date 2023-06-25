@@ -312,7 +312,7 @@ export const patient_routes: RoutesType[] = [
   {
     key: 4,
     label: "Therapy",
-    path: "/patient/therapy/?tab=safety-plan",
+    path: "/patient/therapy/?mainTab=therapy&tab=safety-plan",
     icon: <NewspaperIcon />,
     type: "THERAPY",
   },

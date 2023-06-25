@@ -298,7 +298,7 @@ describe("Paitent monitor view response", () => {
     );
     fireEvent.click(viewResponseButton);
     expect(pushMock).toHaveBeenCalledWith(
-      `therapy/?tab=monitors&view=viewResponse&monitorId=list-item-1&startDate=2022-03-02&endDate=${moment().format(
+      `therapy/?mainTab=therapy&tab=monitors&view=viewResponse&monitorId=list-item-1&startDate=2022-03-02&endDate=${moment().format(
         "YYYY-MM-DD"
       )}`
     );
@@ -320,7 +320,7 @@ describe("Paitent monitor view response", () => {
     const filterGoButton = await screen.findByTestId("goButton");
     fireEvent.click(filterGoButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=viewResponse&monitorId=list-item-1&startDate=2022-03-02&endDate=2023-05-30"
+      "therapy/?mainTab=therapy&tab=monitors&view=viewResponse&monitorId=list-item-1&startDate=2022-03-02&endDate=2023-05-30"
     );
     const backButton = await screen.findByTestId("backButton");
     fireEvent.click(backButton);

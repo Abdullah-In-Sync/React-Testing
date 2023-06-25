@@ -258,6 +258,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
 const defaultTabs = {
   therapy: "&tab=safety-plan",
+  "personal-info": "&tab=details",
 };
 
 export default MainWraperTherapyPatient;

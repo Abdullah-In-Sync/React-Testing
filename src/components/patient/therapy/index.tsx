@@ -66,13 +66,18 @@ const TherapyPatientComponent = () => {
           <Box className="secondSection" data-testid="patientViewMenu">
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
-              activeTabs="therapy"
+              tabLabel={`/patient/therapy/?mainTab=`}
+              defaultTabs={defaultTabs}
             />
           </Box>
         </Stack>
       </Layout>
     </>
   );
+};
+//mainTab=therapy&tab=safety-plan
+const defaultTabs = {
+  therapy: "&tab=safety-plan",
 };
 
 export default TherapyPatientComponent;
