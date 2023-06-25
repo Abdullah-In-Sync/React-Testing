@@ -1,6 +1,5 @@
 /* istanbul ignore file */
 import { Box } from "@material-ui/core";
-import { useRouter } from "next/router";
 import TherapyTabsGenerator from "../../../components/common/TabsGenerator/TherapyTabGenerator";
 import Feedback from "../../../components/patient/therapyPages/feedback";
 import Goals from "../../../components/patient/therapyPages/goals";
@@ -12,11 +11,6 @@ import Resources from "../../../components/patient/therapyPages/resource";
 import SafetyPlan from "../../../components/patient/therapyPages/safetyPlan";
 
 export default function TherapyMainComponent() {
-  const router = useRouter();
-  const {
-    query: { tab = "" },
-  } = router;
-
   const tabs = [
     {
       label: "Safety Plan",
@@ -62,7 +56,10 @@ export default function TherapyMainComponent() {
   ];
   return (
     <Box data-testid="patientViewTherapyTab" className="therapyTabsWrapper">
-      <TherapyTabsGenerator tabsList={tabs} activeTabs={tab} loadFromUrl />
+      <TherapyTabsGenerator
+        tabsList={tabs}
+        tabLabel={`/patient/therapy/?mainTab=therapy&tab=`}
+      />
     </Box>
   );
 }

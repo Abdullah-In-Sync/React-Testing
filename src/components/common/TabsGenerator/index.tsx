@@ -33,7 +33,7 @@ const TabsGenerator = (props: propTypes) => {
   const tabLabel = "&index=";
 
   const handleTabChange = (_, newValue) => {
-    router.push(`?tab=resources${tabLabel}${newValue}`);
+    router.push(`?mainTab=therapy&tab=resources${tabLabel}${newValue}`);
     if (!activeTab.includes(newValue)) setActiveTab(newValue);
   };
 

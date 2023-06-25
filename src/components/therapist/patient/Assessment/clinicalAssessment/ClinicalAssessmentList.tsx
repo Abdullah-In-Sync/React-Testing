@@ -9,6 +9,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   actionButtonClick,
   handleToggleContent = null,
   categoryListData,
+  therapistViewAssessmentLoading,
 }) => {
   const accordion = ({ title, item, i }) => {
     const { assessmentQuestionsViewData } = item;
@@ -28,7 +29,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   };
 
   const accordionList = () => {
-    if (categoryListData.length <= 0)
+    if (categoryListData.length <= 0 && !therapistViewAssessmentLoading)
       return <MesageTextDisplay message="No data Found." />;
 
     return categoryListData.map((item, i) => {

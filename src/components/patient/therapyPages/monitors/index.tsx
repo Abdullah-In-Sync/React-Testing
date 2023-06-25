@@ -93,7 +93,7 @@ const PatientMonitorsListPage: NextPage = () => {
             enqueueSnackbar("Response successfully submitted.", {
               variant: "success",
             });
-            router.push(`therapy/?tab=monitors`);
+            router.push(`therapy/?mainTab=therapy&tab=monitors`);
             doneCallback();
           }
           setLoader(false);
@@ -121,18 +121,20 @@ const PatientMonitorsListPage: NextPage = () => {
     if (currentMonitorIndex > -1) {
       const nextMonitor = patientMonitorList[currentMonitorIndex + 1];
       router.push(
-        `therapy/?tab=monitors&view=complete&monitorId=${nextMonitor._id}`
+        `therapy/?mainTab=therapy&tab=monitors&view=complete&monitorId=${nextMonitor._id}`
       );
     }
   };
 
   const backPress = () => {
-    router.push(`therapy/?tab=monitors`);
+    router.push(`therapy/?mainTab=therapy&tab=monitors`);
   };
 
   const completeButtonClick = (v) => {
     const { _id } = v;
-    router.push(`therapy/?tab=monitors&view=complete&monitorId=${_id}`);
+    router.push(
+      `therapy/?mainTab=therapy&tab=monitors&view=complete&monitorId=${_id}`
+    );
   };
 
   const viewResponseButtonClick = (v) => {
@@ -140,7 +142,7 @@ const PatientMonitorsListPage: NextPage = () => {
     const nEndDate = moment().format("YYYY-MM-DD");
     const nStartDate = initialDate;
     router.push(
-      `therapy/?tab=monitors&view=viewResponse&monitorId=${_id}&startDate=${nStartDate}&endDate=${nEndDate}`
+      `therapy/?mainTab=therapy&tab=monitors&view=viewResponse&monitorId=${_id}&startDate=${nStartDate}&endDate=${nEndDate}`
     );
   };
 
@@ -149,7 +151,7 @@ const PatientMonitorsListPage: NextPage = () => {
     const nEndDate = formatDate(toDate);
     const nStartDate = formatDate(fromDate);
     router.push(
-      `therapy/?tab=monitors&view=viewResponse&monitorId=${monitorId}&startDate=${nStartDate}&endDate=${nEndDate}`
+      `therapy/?mainTab=therapy&tab=monitors&view=viewResponse&monitorId=${monitorId}&startDate=${nStartDate}&endDate=${nEndDate}`
     );
   };
 

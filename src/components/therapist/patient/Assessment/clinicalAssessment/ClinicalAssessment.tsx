@@ -13,6 +13,8 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   categoryListData,
   onPressBack,
   onPressSummaryView,
+  actionButtonClick,
+  therapistViewAssessmentLoading,
 }) => {
   const styles = useStyles();
   return (
@@ -45,6 +47,8 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
           <ClinicalAssessmentList
             categoryListData={categoryListData}
             handleToggleContent={handleToggleContent}
+            actionButtonClick={actionButtonClick}
+            therapistViewAssessmentLoading={therapistViewAssessmentLoading}
           />
         </Stack>
       </Stack>
@@ -57,9 +61,10 @@ export default ClinicalAssessment;
 export interface ClinicalAssessmentProps {
   categoryListData?: CategoryEntity[];
   handleBackClick?: () => void;
-  actionButtonClick?: (v) => void;
+  actionButtonClick?: (v?: any) => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
   handleToggleContent?: any;
   onPressBack?: () => void;
   onPressSummaryView?: () => void;
+  therapistViewAssessmentLoading?: boolean;
 }

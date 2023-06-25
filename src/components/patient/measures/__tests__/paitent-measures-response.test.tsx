@@ -212,7 +212,7 @@ describe("Paitent response measures", () => {
     fireEvent.click(confirmButton);
     await (async () => {
       await expect(pushMock).toHaveBeenCalledWith(
-        `/patient/therapy/?tab=measures`
+        `/patient/therapy/?mainTab=therapy&tab=measures`
       );
     });
   });
@@ -256,7 +256,7 @@ describe("Paitent response measures", () => {
     fireEvent.click(confirmButton);
     await (async () => {
       await expect(pushMock).toHaveBeenCalledWith(
-        `/patient/therapy/?tab=measures`
+        `/patient/therapy/?mainTab=therapy&tab=measures`
       );
     });
   });

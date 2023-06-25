@@ -94,5 +94,3 @@ export default function TherapyMainComponent(props: propTypes) {
     </Box>
   );
 }
-
-// mainTab

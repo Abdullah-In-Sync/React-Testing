@@ -31,7 +31,7 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   onClickView,
   mode,
   onPressBack,
-  resourceDetailUrl = `/patient/therapy/?tab=resources`,
+  resourceDetailUrl = `/patient/therapy/?mainTab=therapy&tab=resources`,
   arrowTemplatedefaultIsPreview,
   defaultUserType,
 }) => {

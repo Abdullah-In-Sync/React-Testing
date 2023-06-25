@@ -279,7 +279,7 @@ describe("Therapist monitor response submit", () => {
     const completeButton = await screen.findByTestId("completeButton_0");
     fireEvent.click(completeButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "patient-id/?tab=monitor&&subTab1=patient-monitor&view=complete&monitorId=list-item-1"
+      "patient-id/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=complete&monitorId=list-item-1"
     );
   });
 
@@ -343,7 +343,7 @@ describe("Therapist monitor response submit", () => {
     fireEvent.click(nextButton);
 
     expect(pushMock).toHaveBeenCalledWith(
-      "patient-id/?tab=monitor&subTab1=patient-monitor&view=complete&monitorId=list-item-2"
+      "patient-id/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=complete&monitorId=list-item-2"
     );
   });
 
@@ -362,7 +362,7 @@ describe("Therapist monitor response submit", () => {
     const backButton = await screen.findByTestId("backMonitorBtn");
     fireEvent.click(backButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "patient-id/?tab=monitor&subTab1=patient-monitor"
+      "patient-id/?mainTab=therapy&tab=monitor&subTab1=patient-monitor"
     );
   });
 });

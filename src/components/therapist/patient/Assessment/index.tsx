@@ -6,6 +6,7 @@ import {
   GET_RISKS_LIST,
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
+  THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
   THERAPIST_VIEW_ASSESSMENT,
 } from "../../../../graphql/assessment/graphql";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
@@ -29,6 +30,9 @@ const TherapistPatientAssessmentList: React.FC = () => {
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
+  const [updateTherapitAssessmentCategory] = useMutation(
+    THERAPIST_UPDATE_ASSESSMENT_CATEGORY
+  );
   const { enqueueSnackbar } = useSnackbar();
 
   const [
@@ -38,6 +42,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
         therapistviewAssessment: { category: categoryListData = [] } = {},
       } = {},
       loading: therapistViewAssessmentLoading,
+      refetch: refetchGetTherapistViewAssessment,
     },
   ] = useLazyQuery<TherapistviewAssessmentData>(THERAPIST_VIEW_ASSESSMENT, {
     onCompleted: () => {
@@ -89,18 +94,21 @@ const TherapistPatientAssessmentList: React.FC = () => {
       : ({} as { pttherapy_session: string });
 
   useEffect(() => {
-    getRisksListData();
-    getAssessmentListData({
-      variables: { patientId },
-    });
+    if (!assessmentId) {
+      getRisksListData();
+      getAssessmentListData({
+        variables: { patientId },
+      });
+    }
   }, []);
 
   useEffect(() => {
-    setLoader(true);
-    if (assessmentId)
+    if (assessmentId) {
+      setLoader(true);
       getTherapistViewAssessment({
         variables: { assessmentId },
       });
+    }
   }, [assessmentId]);
 
   const submitAssessmentApi = async (formFields, doneCallback) => {
@@ -124,6 +132,29 @@ const TherapistPatientAssessmentList: React.FC = () => {
           const { therapistSubmitAssessment } = data;
           if (therapistSubmitAssessment) {
             enqueueSnackbar("Overall assessment submitted successfully.", {
+              variant: "success",
+            });
+            doneCallback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+      setLoader(false);
+    }
+  };
+
+  const updateAssessmentCategoryApi = async (formFields, doneCallback) => {
+    try {
+      await updateTherapitAssessmentCategory({
+        variables: formFields,
+        onCompleted: (data) => {
+          const { therapistUpdateAssessmentCat } = data;
+          if (therapistUpdateAssessmentCat) {
+            refetchGetTherapistViewAssessment();
+            enqueueSnackbar("Assessment shared successfully.", {
               variant: "success",
             });
             doneCallback();
@@ -167,13 +198,30 @@ const TherapistPatientAssessmentList: React.FC = () => {
     router.back();
   };
 
+  const actionButtonClick = (item) => {
+    const { _id: categoryId } = item;
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        updateAssessmentCategoryApi(
+          { categoryId, patientId, updateCat: { share_status: 1 } },
+          () => confirmRef.current.close()
+        ),
+      description: "Are you sure you want to share the assessment?",
+    });
+  };
+
   const currentView = () => {
     switch (assessmentView) {
       case "clinical-assessment":
         return (
-          !therapistViewAssessmentLoading && (
-            <ClinicalAssessment {...{ onPressBack, categoryListData }} />
-          )
+          <ClinicalAssessment
+            {...{
+              onPressBack,
+              categoryListData,
+              actionButtonClick,
+              therapistViewAssessmentLoading,
+            }}
+          />
         );
       default:
         return (

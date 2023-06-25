@@ -265,7 +265,7 @@ describe("Paitent monitor response submit", () => {
     const completeButton = await screen.findByTestId("completeButton_0");
     fireEvent.click(completeButton);
     expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=complete&monitorId=list-item-1"
+      "therapy/?mainTab=therapy&tab=monitors&view=complete&monitorId=list-item-1"
     );
   });
 
@@ -325,7 +325,7 @@ describe("Paitent monitor response submit", () => {
     fireEvent.click(nextButton);
 
     expect(pushMock).toHaveBeenCalledWith(
-      "therapy/?tab=monitors&view=complete&monitorId=list-item-2"
+      "therapy/?mainTab=therapy&tab=monitors&view=complete&monitorId=list-item-2"
     );
   });
 
@@ -341,6 +341,8 @@ describe("Paitent monitor response submit", () => {
     await sut();
     const backButton = await screen.findByTestId("backMonitorBtn");
     fireEvent.click(backButton);
-    expect(pushMock).toHaveBeenCalledWith("therapy/?tab=monitors");
+    expect(pushMock).toHaveBeenCalledWith(
+      "therapy/?mainTab=therapy&tab=monitors"
+    );
   });
 });
