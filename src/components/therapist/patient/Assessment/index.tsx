@@ -60,9 +60,6 @@ const TherapistPatientAssessmentList: React.FC = () => {
       loading: risksListLoading,
     },
   ] = useLazyQuery<GetRisksListData>(GET_RISKS_LIST, {
-    onCompleted: () => {
-      setLoader(false);
-    },
     fetchPolicy: "cache-and-network",
   });
 
@@ -84,6 +81,8 @@ const TherapistPatientAssessmentList: React.FC = () => {
     THERAPIST_GET_PATIENT_ASSESSMENT,
     {
       onCompleted: () => {
+        if (initialFetchAssessmentList) setInitialFetchAssessmentList(false);
+
         setLoader(false);
       },
       fetchPolicy: "cache-and-network",
@@ -101,9 +100,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
         onCompleted: () => {
           getAssessmentListData({
             variables: { patientId },
-            onCompleted: () => setInitialFetchAssessmentList(false),
           });
-          setLoader(false);
         },
       });
     }
