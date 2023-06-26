@@ -529,7 +529,10 @@ const Resource: NextPage = () => {
                   marginLeft: "8px",
                   minWidth: "144px",
                 }}
-                onClick={() => setIsFormulation(false)}
+                onClick={() => {
+                  setIsFormulation(false);
+                  setFilterValue({});
+                }}
               >
                 Resource
               </Button>
@@ -559,6 +562,7 @@ const Resource: NextPage = () => {
                 }}
                 data-testid="approveresourcelist"
                 onClick={() => {
+                  setIsFormulation(false);
                   handleFilterChange({ mode: "approve_resource" });
                 }}
               >

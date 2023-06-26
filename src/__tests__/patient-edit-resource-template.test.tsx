@@ -139,6 +139,7 @@ describe("Patient view template page", () => {
     (useRouter as jest.Mock).mockClear();
     const mockRouter = {
       push: jest.fn(),
+      back: jest.fn(),
     };
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
@@ -162,9 +163,7 @@ describe("Patient view template page", () => {
     fireEvent.click(tableTemplateSubmitButton);
     const successOkBtn = await screen.findByTestId("SuccessOkBtn");
     fireEvent.click(successOkBtn);
-    expect(mockRouter.push).toHaveBeenCalledWith(
-      "/patient/therapy/?mainTab=therapy&tab=resources"
-    );
+    expect(mockRouter.back).toHaveBeenCalledWith();
     expect(successOkBtn).not.toBeInTheDocument();
   });
 
