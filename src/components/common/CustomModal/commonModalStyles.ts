@@ -22,7 +22,9 @@ export const commonModalWrapperObj = (theme) => ({
     padding: 10,
   },
   "& .MuiOutlinedInput-root": {
-    height: 38,
+    fontSize: "unset",
+    lineHeight: "unset",
+    letterSpacing: "unset",
   },
   "& .MuiOutlinedInput-root.Mui-focused": {
     "& > fieldset": {

@@ -29,6 +29,8 @@ const TherapistPatientAssessmentList: React.FC = () => {
     router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
+  const [initialFetchAssessmentList, setInitialFetchAssessmentList] =
+    useState<boolean>(true);
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
   const [updateTherapitAssessmentCategory] = useMutation(
     THERAPIST_UPDATE_ASSESSMENT_CATEGORY
@@ -95,9 +97,14 @@ const TherapistPatientAssessmentList: React.FC = () => {
 
   useEffect(() => {
     if (!assessmentId) {
-      getRisksListData();
-      getAssessmentListData({
-        variables: { patientId },
+      getRisksListData({
+        onCompleted: () => {
+          getAssessmentListData({
+            variables: { patientId },
+            onCompleted: () => setInitialFetchAssessmentList(false),
+          });
+          setLoader(false);
+        },
       });
     }
   }, []);
@@ -225,7 +232,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
         );
       default:
         return (
-          !assessmentListLoading && (
+          !initialFetchAssessmentList && (
             <>
               <TherapistPatientOverallAssessment
                 risksListData={risksListData}

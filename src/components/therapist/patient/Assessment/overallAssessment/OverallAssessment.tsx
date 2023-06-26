@@ -16,7 +16,6 @@ const TherapistPatientOverallAssessment: React.FC<
   overallAssesmentText = "",
   pttherapySession,
   risk,
-  risksListLoading,
   assessmentListData,
   onClickAddAssessment,
   handleClickAssement,
@@ -64,7 +63,7 @@ const TherapistPatientOverallAssessment: React.FC<
         onClickAddAssessment={onClickAddAssessment}
         handleClickAssement={handleClickAssement}
       />
-      {!risksListLoading && commonform()}
+      {commonform()}
     </>
   );
 };
