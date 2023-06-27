@@ -57,15 +57,10 @@ const AddCategoryQuestion = ({ formikProps }: Props) => {
   };
 
   const questionBox = ({ i, item: { question } }: any) => {
-    const { questions = [] } = values;
-    const { question_id: questionId } = questions[i] || {};
-
     return (
       <Card key={`questionCard_${i}`} className={`questionCard`}>
         <CardContent>
-          <Box className="deleteButtonWrapper">
-            {deleteButton({ i, questionId })}
-          </Box>
+          <Box className="deleteButtonWrapper">{deleteButton({ i })}</Box>
           <Box key={i} className={`questionBoxWrapper`}>
             <Box className="quesBox">
               <Typography>{question}</Typography>
