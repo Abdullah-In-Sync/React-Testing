@@ -80,7 +80,7 @@ const CommonForm: React.FC<ViewProps> = ({
                   <Box className="fieldBox second">
                     <Box className="formatsOpenModalButtonWrapper">
                       <Button
-                        onClick={modalRefFormatsView.current?.open}
+                        onClick={() => modalRefFormatsView.current?.open()}
                         data-testid="formatModal"
                         variant="outlined"
                         fullWidth

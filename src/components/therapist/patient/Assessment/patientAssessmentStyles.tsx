@@ -121,5 +121,47 @@ export const useStyles = makeStyles(() => {
         },
       },
     },
+    questionsFieldsWrapper: {
+      "& .questionCard": {
+        boxShadow: "none",
+        border: "1px solid #ccc",
+        marginBottom: 10,
+        "& .deleteButtonWrapper": {
+          marginBottom: 10,
+          textAlign: "right",
+          "& button": {
+            background: theme.palette.primary.main,
+            "& svg": {
+              fontSize: 15,
+              color: theme.palette.primary.contrastText,
+            },
+          },
+        },
+      },
+    },
+    categoryQuestionsWrapper: {
+      "& .row1": {
+        textAlign: "right",
+        marginBottom: 10,
+      },
+      "& .row2": {
+        marginBottom: 10,
+        "& .quesBox": {
+          border: "1px solid #ccc",
+          padding: 10,
+          marginBottom: 10,
+          borderRadius: 5,
+        },
+      },
+      "& .row3": {
+        textAlign: "center",
+        "& button": {
+          minWidth: 150,
+        },
+        "& button:first-child": {
+          marginRight: 10,
+        },
+      },
+    },
   };
 });

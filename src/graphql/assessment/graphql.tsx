@@ -297,3 +297,37 @@ export const THERAPIST_UPDATE_ASSESSMENT_CATEGORY = gql`
     }
   }
 `;
+
+export const THERAPIST_VIEW_ASSESSMENT_QUESTION = gql`
+  query TherapistviewAssessmentQs($categoryId: ID!, $patientId: String!) {
+    therapistviewAssessmentQs(
+      category_id: $categoryId
+      patient_id: $patientId
+    ) {
+      _id
+      added_by
+      answer
+      category_id
+      created_date
+      patient_id
+      question
+      status
+    }
+  }
+`;
+
+export const THERAPIST_ASSESSMENT_SUBMIT_ANSWER = gql`
+  mutation TherapistAssessmentSubmitAns(
+    $categoryId: String!
+    $patientId: String!
+    $quesData: String!
+  ) {
+    therapistAssessmentSubmitAns(
+      category_id: $categoryId
+      patient_id: $patientId
+      quesData: $quesData
+    ) {
+      _id
+    }
+  }
+`;

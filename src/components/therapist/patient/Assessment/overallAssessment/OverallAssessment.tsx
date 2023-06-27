@@ -19,6 +19,7 @@ const TherapistPatientOverallAssessment: React.FC<
   assessmentListData,
   onClickAddAssessment,
   handleClickAssement,
+  initialFetchAssessmentList,
 }) => {
   const modifyRisk = risk
     ? risksListData
@@ -40,6 +41,7 @@ const TherapistPatientOverallAssessment: React.FC<
   const commonform = () => {
     return (
       <Formik
+        enableReinitialize
         validationSchema={therapistAssessmentValidationSchema({
           lastSessionNo: pttherapySession || 0,
         })}
@@ -63,7 +65,7 @@ const TherapistPatientOverallAssessment: React.FC<
         onClickAddAssessment={onClickAddAssessment}
         handleClickAssement={handleClickAssement}
       />
-      {commonform()}
+      {!initialFetchAssessmentList && commonform()}
     </>
   );
 };
@@ -94,4 +96,5 @@ export interface TherapistPatientAssessmentProps {
   onClickAddAssessment?: () => void;
   assessmentListLoading?: boolean;
   handleClickAssement?: (v) => void;
+  initialFetchAssessmentList?: boolean;
 }

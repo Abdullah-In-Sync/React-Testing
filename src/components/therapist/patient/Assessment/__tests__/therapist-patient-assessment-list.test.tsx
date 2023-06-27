@@ -7,10 +7,12 @@ import TherapyPatientMonitorList from "..";
 import { useAppContext } from "../../../../../contexts/AuthContext";
 import {
   GET_RISKS_LIST,
+  THERAPIST_ASSESSMENT_SUBMIT_ANSWER,
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
   THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
   THERAPIST_VIEW_ASSESSMENT,
+  THERAPIST_VIEW_ASSESSMENT_QUESTION,
 } from "../../../../../graphql/assessment/graphql";
 import theme from "../../../../../styles/theme/theme";
 
@@ -90,12 +92,83 @@ mocksData.push({
             _id: "cat1",
             assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
             name: "update category",
-            patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+            share_status: 1,
+            status: 1,
+          },
+          {
+            _id: "cat2",
+            assessment_id: "assement2",
+            name: "new cat name",
             share_status: 1,
             status: 1,
           },
         ],
       },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_VIEW_ASSESSMENT_QUESTION,
+    variables: {
+      patientId: "patient-id",
+      categoryId: "cat1",
+    },
+  },
+  result: {
+    data: {
+      therapistviewAssessmentQs: [
+        {
+          _id: "ques1",
+          added_by: "therapist",
+          answer: "tets some",
+          question: "1. How are you?",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_VIEW_ASSESSMENT_QUESTION,
+    variables: {
+      patientId: "patient-id",
+      categoryId: "cat2",
+    },
+  },
+  result: {
+    data: {
+      therapistviewAssessmentQs: [
+        {
+          _id: "que1cat2",
+          added_by: "therapist",
+          answer: "",
+          question: "1. new ques?",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_ASSESSMENT_SUBMIT_ANSWER,
+    variables: {
+      categoryId: "cat1",
+      patientId: "patient-id",
+      quesData: '[{"question_id":"ques1","answer":"tets some"}]',
+    },
+  },
+  result: {
+    data: {
+      therapistAssessmentSubmitAns: [
+        {
+          _id: "65169f1a-a68f-4c48-96d6-c2c5fe89e208",
+          __typename: "patientAssessmentQs",
+        },
+      ],
     },
   },
 });
@@ -222,5 +295,31 @@ describe("Therapist patient add assessment", () => {
     expect(
       await screen.findByText(/Assessment shared successfully./i)
     ).toBeInTheDocument();
+
+    const toggleContent0 = await screen.findByTestId("toggleContent0");
+    fireEvent.click(toggleContent0);
+
+    expect(await screen.findByText(/1. How are you?/i)).toBeInTheDocument();
+
+    const submitButton = await screen.findByTestId("submitAddQuestion");
+    fireEvent.click(submitButton);
+    const tconfirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(tconfirmButton);
+    expect(
+      await screen.findByText(/Response submitted successfully./i)
+    ).toBeInTheDocument();
+
+    const cancelButton = await screen.findByTestId("cancelAddQuestion");
+    fireEvent.click(cancelButton);
+    const qconfirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(qconfirmButton);
+    expect(cancelButton).not.toBeInTheDocument();
+
+    // const toggleContent1 = await screen.findByTestId("toggleContent1");
+    // fireEvent.click(toggleContent1);
+    // fireEvent.click(submitButton);
+    // expect(
+    //   await screen.findByText(/At least one response required./i)
+    // ).toBeInTheDocument();
   });
 });

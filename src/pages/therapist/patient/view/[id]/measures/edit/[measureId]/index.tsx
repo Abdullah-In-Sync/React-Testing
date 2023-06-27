@@ -145,7 +145,9 @@ const CreateMeasures: NextPage = () => {
 
   /* istanbul ignore next */
   const handleOk = () => {
-    router.push(`/therapist/patient/view/${patientId}/?tab=measures`);
+    router.push(
+      `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=measures`
+    );
   };
 
   const handleDeleteQuestion = ({ callback, item }) => {

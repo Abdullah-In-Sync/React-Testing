@@ -87,3 +87,18 @@ export interface CategoryEntity {
   share_status: number;
   status: number;
 }
+
+export interface TherapistViewAssessmentQuestionsData {
+  therapistviewAssessmentQs?: TherapistviewAssessmentQsEntity[] | null;
+}
+export interface TherapistviewAssessmentQsEntity {
+  _id: string;
+  added_by: string;
+  answer: string;
+  category_id: string;
+  created_date: string;
+  patient_id: string;
+  question: string;
+  status: number;
+  __typename: string;
+}

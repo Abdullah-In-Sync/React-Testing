@@ -1,20 +1,23 @@
 import { Box } from "@material-ui/core";
 import { Stack } from "@mui/material";
+import { FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
 import CommonButton from "../../../../common/Buttons/CommonButton";
 import { ConfirmElement } from "../../../../common/ConfirmWrapper";
 import ContentHeader from "../../../../common/ContentHeader";
 import { useStyles } from "../patientAssessmentStyles";
 import ClinicalAssessmentList from "./ClinicalAssessmentList";
-import { CategoryEntity } from "../../../../../graphql/assessment/types";
+import { InitialQuesionsFormValues } from "./updateQuestionResponse/UpdateQuestionResponse";
 
 const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
-  handleToggleContent,
   categoryListData,
   onPressBack,
   onPressSummaryView,
   actionButtonClick,
   therapistViewAssessmentLoading,
+  onToggleQuestionAccordion,
+  onSubmitAssessmentResponse,
+  confirmRef,
 }) => {
   const styles = useStyles();
   return (
@@ -45,10 +48,12 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
         </Stack>
         <Stack className="row2">
           <ClinicalAssessmentList
+            handleToggleContent={onToggleQuestionAccordion}
             categoryListData={categoryListData}
-            handleToggleContent={handleToggleContent}
             actionButtonClick={actionButtonClick}
             therapistViewAssessmentLoading={therapistViewAssessmentLoading}
+            onSubmitAssessmentResponse={onSubmitAssessmentResponse}
+            confirmRef={confirmRef}
           />
         </Stack>
       </Stack>
@@ -57,9 +62,8 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
 };
 
 export default ClinicalAssessment;
-
 export interface ClinicalAssessmentProps {
-  categoryListData?: CategoryEntity[];
+  categoryListData?: any;
   handleBackClick?: () => void;
   actionButtonClick?: (v?: any) => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
@@ -67,4 +71,11 @@ export interface ClinicalAssessmentProps {
   onPressBack?: () => void;
   onPressSummaryView?: () => void;
   therapistViewAssessmentLoading?: boolean;
+  onToggleQuestionAccordion?: any;
+  handleDeleteQuestion?: (v) => void;
+  onSubmitAssessmentResponse?: (
+    formData: InitialQuesionsFormValues,
+    formikHelper: FormikProps<InitialQuesionsFormValues>,
+    value
+  ) => void;
 }
