@@ -28,7 +28,9 @@ const UpdateQuestionResponse: React.FC<ViewProps> = (vprops) => {
     toggleContent,
     handleDeleteQuestion,
   } = vprops;
-  const { assessmentQuestionsViewData: questions = [] } = categoryData;
+  console.log("categoryData", categoryData);
+  const { assessmentQuestionsViewData: questions = [], _id: categoryId } =
+    categoryData;
 
   const modifyQuestions = (questions as Array<any>).map((item) => ({
     question_id: item._id,
@@ -65,6 +67,7 @@ const UpdateQuestionResponse: React.FC<ViewProps> = (vprops) => {
             {...props}
             onCancel={handleOnCancel}
             handleDeleteQuestion={handleDeleteQuestion}
+            categoryId={categoryId}
           />
         )}
       />

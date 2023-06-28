@@ -32,7 +32,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
     router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
-  const [initialFetchAssessmentList, setInitialFetchAssessmentList] =
+  const [initialFetchCategoriesList, setInitialFetchCategoriesList] =
     useState<boolean>(true);
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
   const [updateTherapitAssessmentCategory] = useMutation(
@@ -55,6 +55,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
     onCompleted: (data) => {
       const { therapistviewAssessment } = data;
       setLoader(false);
+      setInitialFetchCategoriesList(false);
       setAssessmentCategory(therapistviewAssessment);
     },
     fetchPolicy: "cache-and-network",
@@ -96,8 +97,6 @@ const TherapistPatientAssessmentList: React.FC = () => {
     THERAPIST_GET_PATIENT_ASSESSMENT,
     {
       onCompleted: () => {
-        if (initialFetchAssessmentList) setInitialFetchAssessmentList(false);
-
         setLoader(false);
       },
       fetchPolicy: "cache-and-network",
@@ -110,7 +109,8 @@ const TherapistPatientAssessmentList: React.FC = () => {
       : ({} as { pttherapy_session: string });
 
   useEffect(() => {
-    if (!assessmentId) {
+    if (!assessmentId && !assessmentView) {
+      setLoader(true);
       getRisksListData({
         onCompleted: () => {
           getAssessmentListData({
@@ -119,11 +119,12 @@ const TherapistPatientAssessmentList: React.FC = () => {
         },
       });
     }
-  }, []);
+  }, [assessmentView]);
 
   useEffect(() => {
     if (assessmentId) {
       setLoader(true);
+      setInitialFetchCategoriesList(true);
       getTherapistViewAssessment({
         variables: { assessmentId },
       });
@@ -315,37 +316,40 @@ const TherapistPatientAssessmentList: React.FC = () => {
     switch (assessmentView) {
       case "clinical-assessment":
         return (
-          <ClinicalAssessment
-            onToggleQuestionAccordion={onToggleQuestionAccordion}
-            {...{
-              onPressBack,
-              categoryListData: assessmentCategory,
-              actionButtonClick,
-              therapistViewAssessmentLoading,
-              onSubmitAssessmentResponse,
-              confirmRef,
-            }}
-          />
+          !initialFetchCategoriesList && (
+            <ClinicalAssessment
+              onToggleQuestionAccordion={onToggleQuestionAccordion}
+              {...{
+                onPressBack,
+                categoryListData: assessmentCategory,
+                actionButtonClick,
+                therapistViewAssessmentLoading,
+                onSubmitAssessmentResponse,
+                confirmRef,
+              }}
+            />
+          )
         );
       default:
         return (
           <>
-            <TherapistPatientOverallAssessment
-              risksListData={risksListData}
-              onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
-              onClickAddAssessment={handleAddAssessment}
-              {...{
-                overallAssesmentText,
-                pttherapySession,
-                risk,
-                assessmentListData,
-                risksListLoading,
-                assessmentListLoading,
-                confirmRef,
-                handleClickAssement,
-                initialFetchAssessmentList,
-              }}
-            />
+            {!assessmentListLoading && (
+              <TherapistPatientOverallAssessment
+                risksListData={risksListData}
+                onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
+                onClickAddAssessment={handleAddAssessment}
+                {...{
+                  overallAssesmentText,
+                  pttherapySession,
+                  risk,
+                  assessmentListData,
+                  risksListLoading,
+                  assessmentListLoading,
+                  confirmRef,
+                  handleClickAssement,
+                }}
+              />
+            )}
             <TherapistAssessmentMain
               modalRefAddAssessment={modalRefAddAssessment}
               reFetchAssessmentList={reFetchAssessmentList}

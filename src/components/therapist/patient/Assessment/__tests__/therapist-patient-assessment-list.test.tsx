@@ -178,7 +178,7 @@ mocksData.push({
     query: THERAPIST_SUBMIT_ASSESSMENT,
     variables: {
       overallAssesmentText: "some",
-      pttherapySession: "35",
+      pttherapySession: "38",
       risk: "6474a3be19ef06b681dfbf92",
       patientId: "patient-id",
     },
@@ -253,6 +253,9 @@ describe("Therapist patient add assessment", () => {
     });
     await sut();
     expect(await screen.findByText(/patient assessment/i)).toBeInTheDocument();
+    fireEvent.change(await screen.findByTestId("pttherapySession"), {
+      target: { value: "38" },
+    });
     const submitAssessmentForm = await screen.findByTestId("submitForm");
     fireEvent.click(submitAssessmentForm);
 
@@ -301,8 +304,8 @@ describe("Therapist patient add assessment", () => {
 
     expect(await screen.findByText(/1. How are you?/i)).toBeInTheDocument();
 
-    const submitButton = await screen.findByTestId("submitAddQuestion");
-    fireEvent.click(submitButton);
+    const submitButton1 = await screen.findByTestId("submitQuestion_cat1");
+    fireEvent.click(submitButton1);
     const tconfirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(tconfirmButton);
     expect(
@@ -315,11 +318,12 @@ describe("Therapist patient add assessment", () => {
     fireEvent.click(qconfirmButton);
     expect(cancelButton).not.toBeInTheDocument();
 
-    // const toggleContent1 = await screen.findByTestId("toggleContent1");
-    // fireEvent.click(toggleContent1);
-    // fireEvent.click(submitButton);
-    // expect(
-    //   await screen.findByText(/At least one response required./i)
-    // ).toBeInTheDocument();
+    const toggleContent1 = await screen.findByTestId("toggleContent1");
+    fireEvent.click(toggleContent1);
+    const submitButton2 = await screen.findByTestId("submitQuestion_cat2");
+    fireEvent.click(submitButton2);
+    expect(
+      await screen.findByText(/At least one response required./i)
+    ).toBeInTheDocument();
   });
 });
