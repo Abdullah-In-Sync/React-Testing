@@ -13,9 +13,8 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   confirmRef,
   therapistViewAssessmentLoading,
   handleDeleteQuestion,
-  onSubmitAssessmentResponse,
+  onSubmitAssessmentResponse
 }) => {
-  console.log("categoryListData", categoryListData);
   const { category: categories = [] } = categoryListData;
   const accordion = ({ title, item, i }) => {
     const { assessmentQuestionsViewData } = item;

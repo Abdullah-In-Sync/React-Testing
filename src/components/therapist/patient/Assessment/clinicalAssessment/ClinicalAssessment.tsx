@@ -18,6 +18,7 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   onToggleQuestionAccordion,
   onSubmitAssessmentResponse,
   confirmRef,
+  handleDeleteQuestion
 }) => {
   const styles = useStyles();
   return (
@@ -54,6 +55,7 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
             therapistViewAssessmentLoading={therapistViewAssessmentLoading}
             onSubmitAssessmentResponse={onSubmitAssessmentResponse}
             confirmRef={confirmRef}
+            handleDeleteQuestion={handleDeleteQuestion}
           />
         </Stack>
       </Stack>
