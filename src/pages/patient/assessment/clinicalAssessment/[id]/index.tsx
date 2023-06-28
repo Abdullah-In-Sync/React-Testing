@@ -25,13 +25,12 @@ const PatientClinicalAssessment: NextPage = () => {
   });
 
   const assessmentCatogeryData =
-    patientAssessmentCatagoryList?.patientAssessmentCategoryList;
+    patientAssessmentCatagoryList?.getAssessmentCategoryWithQues;
 
   /* istanbul ignore next */
   useEffect(() => {
     getPatientAssessmentCatagoryListData({
       variables: {
-        // assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
         assessment_id: assessmentId,
       },
     });
