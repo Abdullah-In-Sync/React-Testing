@@ -28,6 +28,7 @@ import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
 import { IS_ADMIN } from "../../../lib/constants";
 import TemplateArrow from "../../templateArrow";
+import MultiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
 
 type propTypes = {
   onSubmit?: any;
@@ -408,10 +409,10 @@ export default function CreateResource(props: propTypes) {
             </Grid>
             {userType == IS_ADMIN ? (
               <Grid item xs={4}>
-                <SingleSelectComponent
+                {/* <SingleSelectComponent
                   fullWidth={true}
                   required={true}
-                  id="resourceOrgSelect"
+                  id="r`esourceOrgSelect"
                   labelId="resourceOrg"
                   name="orgId"
                   value={formFields?.orgId}
@@ -422,6 +423,19 @@ export default function CreateResource(props: propTypes) {
                   mappingKeys={["_id", "name"]}
                   size="small"
                   className="form-control-bg"
+                /> */}
+                <MultiSelectComponent
+                  id="resourceOrgSelect"
+                  labelId="resourceOrg"
+                  mappingKeys={["_id", "name"]}
+                  name="orgId"
+                  options={(orgData && orgData?.getOrganizationData) || []}
+                  size="small"
+                  value={formFields?.orgId}
+                  className="form-control-bg"
+                  fullWidth={true}
+                  onChange={set2}
+                  inputProps={{ "data-testid": "org_id" }}
                 />
               </Grid>
             ) : (
