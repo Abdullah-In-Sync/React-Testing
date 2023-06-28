@@ -61,6 +61,7 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
                   }
                   multiple={true}
                   defaultValue={initRiskValues}
+                  classes={{ paper: "disableClickSelected" }}
                 />
               )}
             </Box>
@@ -69,7 +70,7 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
           <Box className="formRow3">
             <Box>
               <label>
-                No of requried Sessions <span className="impTxt">*</span>
+                No. of required sessions <span className="impTxt">*</span>
               </label>
               <FormikTextField
                 name="pttherapySession"

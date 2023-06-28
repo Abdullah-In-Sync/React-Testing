@@ -13,6 +13,7 @@ type Props = React.PropsWithChildren<{
   multiple?: boolean;
   freeSolo?: boolean;
   isOptionEqualToValue?: any;
+  classes?: object;
 }>;
 
 const CommonAutocomplete: React.FC<Props> = ({

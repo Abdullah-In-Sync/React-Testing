@@ -73,6 +73,7 @@ const AddCategoryQuestion = ({ formikProps }: Props) => {
                 inputProps={{
                   "data-testid": `questions.${i}.answer`,
                 }}
+                placeholder="Patient response"
                 variant="outlined"
                 multiline
                 rows="2"
