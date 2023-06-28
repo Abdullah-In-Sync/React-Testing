@@ -27,6 +27,25 @@ export const ADD_HOMEWORK = gql`
   }
 `;
 
+export const UPDATE_PATIENT_ASSESSMENT = gql`
+  mutation ($category_id: String!, $question: String!) {
+    updateAssesmentQuestByPatient(
+      category_id: $category_id
+      question: $question
+    ) {
+      _id
+      added_by
+      answer
+      category_id
+      created_date
+      patient_id
+      question
+      status
+      updated_date
+    }
+  }
+`;
+
 export const DELETE_HOMEWORK_TASK = gql`
   mutation ($patient_id: String!, $pthomework_id: String!) {
     deleteHomeworkTask(patient_id: $patient_id, pthomework_id: $pthomework_id) {

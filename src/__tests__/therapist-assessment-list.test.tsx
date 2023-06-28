@@ -122,7 +122,7 @@ describe("Therapist patient safety plan", () => {
 
     await waitFor(async () => {
       expect(
-        screen.queryByText("Assessment added successfully!")
+        screen.queryByText("Assessment already added")
       ).toBeInTheDocument();
 
       //   fireEvent.click(screen.queryByTestId("confirmButton"));
