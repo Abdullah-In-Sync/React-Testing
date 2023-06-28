@@ -1,7 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
 import { GetRisksListEntity } from "../../../../../graphql/assessment/types";
-import { csvDecode } from "../../../../../utility/helper";
+import { csvDecode, stringToInt } from "../../../../../utility/helper";
 import { ConfirmElement } from "../../../../common/ConfirmWrapper";
 import OverallAssessmentForm from "./OverallAssessmentForm";
 import TherapistPatientAssessmentList from "./TherapistPatientAssessmentList";
@@ -38,12 +38,14 @@ const TherapistPatientOverallAssessment: React.FC<
     risks: modifyRisk,
   };
 
+  const sessionNum = stringToInt(pttherapySession);
+
   const commonform = () => {
     return (
       <Formik
         enableReinitialize
         validationSchema={therapistAssessmentValidationSchema({
-          lastSessionNo: pttherapySession || 0,
+          lastSessionNo: sessionNum ? sessionNum + 1 : "",
         })}
         initialValues={initialValues}
         onSubmit={onSubmitTherapistAssessment}

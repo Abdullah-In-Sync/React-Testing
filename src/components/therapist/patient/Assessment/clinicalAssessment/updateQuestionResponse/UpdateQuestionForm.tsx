@@ -5,14 +5,10 @@ import CommonButton from "../../../../../common/Buttons/CommonButton";
 import { useStyles } from "../../patientAssessmentStyles";
 import AddCategoryQuestion from "./AssessmentQuestion";
 const UpdateQuestionResponseForm: React.FC<any> = (formikProps) => {
-  const {
-    isSubmitting,
-    onCancel,
-    values: { questions },
-    handleDeleteQuestion,
-  } = formikProps;
+  const { isSubmitting, onCancel, values, handleDeleteQuestion, categoryId } =
+    formikProps;
   const styles = useStyles();
-
+  const { questions } = values;
   return (
     <Stack className={styles.categoryQuestionsWrapper}>
       <Form>
@@ -28,7 +24,7 @@ const UpdateQuestionResponseForm: React.FC<any> = (formikProps) => {
             <CommonButton
               disabled={isSubmitting}
               type="submit"
-              data-testid="submitAddQuestion"
+              data-testid={`submitQuestion_${categoryId}`}
               variant="contained"
             >
               Save
