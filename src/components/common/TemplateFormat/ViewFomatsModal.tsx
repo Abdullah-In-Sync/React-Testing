@@ -15,7 +15,9 @@ const ViewFormatsModal: React.FC<ViewProps> = ({ modalRefFormatsView }) => {
       maxWidth="md"
       className={styles.modalC}
     >
-      <TemplateFormatsImages handleOk={modalRefFormatsView.current?.close} />
+      <TemplateFormatsImages
+        handleOk={() => modalRefFormatsView.current?.close()}
+      />
     </CommonModal>
   );
 };

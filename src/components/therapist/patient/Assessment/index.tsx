@@ -4,10 +4,12 @@ import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import {
   GET_RISKS_LIST,
+  THERAPIST_ASSESSMENT_SUBMIT_ANSWER,
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
   THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
   THERAPIST_VIEW_ASSESSMENT,
+  THERAPIST_VIEW_ASSESSMENT_QUESTION,
 } from "../../../../graphql/assessment/graphql";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import Loader from "../../../common/Loader";
@@ -17,6 +19,7 @@ import {
   GetRisksListData,
   TherapistGetPatientAssessmentData,
   TherapistviewAssessmentData,
+  TherapistViewAssessmentQuestionsData,
 } from "../../../../graphql/assessment/types";
 import TherapistAssessmentMain from "../../../../pages/therapist/patient/view/[id]/assessment";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
@@ -29,24 +32,30 @@ const TherapistPatientAssessmentList: React.FC = () => {
     router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
+  const [initialFetchAssessmentList, setInitialFetchAssessmentList] =
+    useState<boolean>(true);
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
   const [updateTherapitAssessmentCategory] = useMutation(
     THERAPIST_UPDATE_ASSESSMENT_CATEGORY
   );
+  const [submitAssessmentResponse] = useMutation(
+    THERAPIST_ASSESSMENT_SUBMIT_ANSWER
+  );
+  const [assessmentCategory, setAssessmentCategory] = useState<any>();
   const { enqueueSnackbar } = useSnackbar();
 
   const [
     getTherapistViewAssessment,
     {
-      data: {
-        therapistviewAssessment: { category: categoryListData = [] } = {},
-      } = {},
+      data: { therapistviewAssessment: assessmentViewData = undefined } = {},
       loading: therapistViewAssessmentLoading,
       refetch: refetchGetTherapistViewAssessment,
     },
   ] = useLazyQuery<TherapistviewAssessmentData>(THERAPIST_VIEW_ASSESSMENT, {
-    onCompleted: () => {
+    onCompleted: (data) => {
+      const { therapistviewAssessment } = data;
       setLoader(false);
+      setAssessmentCategory(therapistviewAssessment);
     },
     fetchPolicy: "cache-and-network",
   });
@@ -58,11 +67,16 @@ const TherapistPatientAssessmentList: React.FC = () => {
       loading: risksListLoading,
     },
   ] = useLazyQuery<GetRisksListData>(GET_RISKS_LIST, {
-    onCompleted: () => {
-      setLoader(false);
-    },
     fetchPolicy: "cache-and-network",
   });
+
+  const [getAssessmentQuestionData] =
+    useLazyQuery<TherapistViewAssessmentQuestionsData>(
+      THERAPIST_VIEW_ASSESSMENT_QUESTION,
+      {
+        fetchPolicy: "cache-and-network",
+      }
+    );
 
   const [
     getAssessmentListData,
@@ -82,6 +96,8 @@ const TherapistPatientAssessmentList: React.FC = () => {
     THERAPIST_GET_PATIENT_ASSESSMENT,
     {
       onCompleted: () => {
+        if (initialFetchAssessmentList) setInitialFetchAssessmentList(false);
+
         setLoader(false);
       },
       fetchPolicy: "cache-and-network",
@@ -95,9 +111,12 @@ const TherapistPatientAssessmentList: React.FC = () => {
 
   useEffect(() => {
     if (!assessmentId) {
-      getRisksListData();
-      getAssessmentListData({
-        variables: { patientId },
+      getRisksListData({
+        onCompleted: () => {
+          getAssessmentListData({
+            variables: { patientId },
+          });
+        },
       });
     }
   }, []);
@@ -134,6 +153,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
             enqueueSnackbar("Overall assessment submitted successfully.", {
               variant: "success",
             });
+            reFetchAssessmentList();
             doneCallback();
           }
           setLoader(false);
@@ -155,6 +175,34 @@ const TherapistPatientAssessmentList: React.FC = () => {
           if (therapistUpdateAssessmentCat) {
             refetchGetTherapistViewAssessment();
             enqueueSnackbar("Assessment shared successfully.", {
+              variant: "success",
+            });
+            doneCallback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+      setLoader(false);
+    }
+  };
+
+  const submitAssessmentResponseApi = async (formFields, doneCallback) => {
+    const { response, _id: categoryId } = formFields;
+
+    try {
+      await submitAssessmentResponse({
+        variables: {
+          categoryId,
+          patientId,
+          quesData: JSON.stringify(response),
+        },
+        onCompleted: (data) => {
+          const { therapistAssessmentSubmitAns } = data;
+          if (therapistAssessmentSubmitAns) {
+            enqueueSnackbar("Response submitted successfully.", {
               variant: "success",
             });
             doneCallback();
@@ -210,44 +258,99 @@ const TherapistPatientAssessmentList: React.FC = () => {
     });
   };
 
+  const onToggleQuestionAccordion = (_, categoryData, i) => {
+    setLoader(true);
+    const { _id: categoryId } = categoryData;
+    const t = JSON.parse(JSON.stringify(assessmentViewData));
+    if (assessmentCategory.category[i]["assessmentQuestionsViewData"]) {
+      setAssessmentCategory({ ...assessmentViewData });
+      setLoader(false);
+    } else
+      getAssessmentQuestionData({
+        variables: { patientId, categoryId },
+        onCompleted: (data) => {
+          const { therapistviewAssessmentQs } = data;
+          t.category[i]["assessmentQuestionsViewData"] =
+            therapistviewAssessmentQs;
+          setAssessmentCategory({ ...assessmentCategory, ...t });
+          setLoader(false);
+        },
+      });
+  };
+
+  const onSubmitAssessmentResponse = (v, formikHelperProps, categoryData) => {
+    const { setSubmitting } = formikHelperProps;
+    const { questions } = v;
+    const answerArr = [];
+
+    const response = questions.map(({ question_id, answer }) => {
+      if (answer && answer !== "") answerArr.push(answer);
+
+      return { question_id, answer };
+    });
+
+    if (answerArr.length <= 0) {
+      setSubmitting(false);
+      return enqueueSnackbar("At least one response required.", {
+        variant: "error",
+      });
+    }
+
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        submitAssessmentResponseApi({ response, ...categoryData }, () =>
+          closeCallback({ setSubmitting })
+        ),
+      description: "Are you sure you want to submit the response?",
+      setSubmitting,
+    });
+  };
+
+  const closeCallback = ({ setSubmitting }) => {
+    setSubmitting(false);
+    confirmRef.current.close();
+  };
+
   const currentView = () => {
     switch (assessmentView) {
       case "clinical-assessment":
         return (
           <ClinicalAssessment
+            onToggleQuestionAccordion={onToggleQuestionAccordion}
             {...{
               onPressBack,
-              categoryListData,
+              categoryListData: assessmentCategory,
               actionButtonClick,
               therapistViewAssessmentLoading,
+              onSubmitAssessmentResponse,
+              confirmRef,
             }}
           />
         );
       default:
         return (
-          !assessmentListLoading && (
-            <>
-              <TherapistPatientOverallAssessment
-                risksListData={risksListData}
-                onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
-                onClickAddAssessment={handleAddAssessment}
-                {...{
-                  overallAssesmentText,
-                  pttherapySession,
-                  risk,
-                  assessmentListData,
-                  risksListLoading,
-                  assessmentListLoading,
-                  confirmRef,
-                  handleClickAssement,
-                }}
-              />
-              <TherapistAssessmentMain
-                modalRefAddAssessment={modalRefAddAssessment}
-                reFetchAssessmentList={reFetchAssessmentList}
-              />
-            </>
-          )
+          <>
+            <TherapistPatientOverallAssessment
+              risksListData={risksListData}
+              onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
+              onClickAddAssessment={handleAddAssessment}
+              {...{
+                overallAssesmentText,
+                pttherapySession,
+                risk,
+                assessmentListData,
+                risksListLoading,
+                assessmentListLoading,
+                confirmRef,
+                handleClickAssement,
+                initialFetchAssessmentList,
+              }}
+            />
+            <TherapistAssessmentMain
+              modalRefAddAssessment={modalRefAddAssessment}
+              reFetchAssessmentList={reFetchAssessmentList}
+            />
+          </>
         );
     }
   };
