@@ -369,23 +369,21 @@ const TherapistPatientAssessmentList: React.FC = () => {
       default:
         return (
           <>
-            {risk && (
-              <TherapistPatientOverallAssessment
-                risksListData={risksListData}
-                onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
-                onClickAddAssessment={handleAddAssessment}
-                {...{
-                  overallAssesmentText,
-                  pttherapySession,
-                  risk,
-                  assessmentListData,
-                  risksListLoading,
-                  assessmentListLoading,
-                  confirmRef,
-                  handleClickAssement,
-                }}
-              />
-            )}
+            <TherapistPatientOverallAssessment
+              risksListData={risksListData}
+              onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
+              onClickAddAssessment={handleAddAssessment}
+              {...{
+                overallAssesmentText,
+                pttherapySession,
+                risk,
+                assessmentListData,
+                risksListLoading,
+                assessmentListLoading,
+                confirmRef,
+                handleClickAssement,
+              }}
+            />
             <TherapistAssessmentMain
               modalRefAddAssessment={modalRefAddAssessment}
               reFetchAssessmentList={reFetchAssessmentList}

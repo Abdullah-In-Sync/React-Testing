@@ -11,7 +11,7 @@ export const therapistAssessmentValidationSchema = ({ lastSessionNo }) =>
         const minText =
           min >= 50
             ? "Already reached maximum sessions 50."
-            : `Minimum required session is ${lastSessionNo}.`;
+            : `Minimum required session is ${min}.`;
         return minText;
       })
       .max(50, "Maximum required session is 50."),
