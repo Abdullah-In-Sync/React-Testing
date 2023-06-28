@@ -18,7 +18,11 @@ type Props = React.PropsWithChildren<{
   categoryId?: string;
 }>;
 
-const AddCategoryQuestion = ({ formikProps, handleDeleteQuestion, categoryId }: Props) => {
+const AddCategoryQuestion = ({
+  formikProps,
+  handleDeleteQuestion,
+  categoryId,
+}: Props) => {
   const styles = useStyles();
 
   const { values, setFieldValue } = formikProps;
@@ -58,13 +62,14 @@ const AddCategoryQuestion = ({ formikProps, handleDeleteQuestion, categoryId }: 
   };
 
   const questionBox = ({ i, item: { question } }: any) => {
-    console.log("vlaues", values)
     const { questions = [] } = values;
     const { question_id: questionId } = questions[i] || {};
     return (
       <Card key={`questionCard_${i}`} className={`questionCard`}>
         <CardContent>
-          <Box className="deleteButtonWrapper">{deleteButton({ i, questionId })}</Box>
+          <Box className="deleteButtonWrapper">
+            {deleteButton({ i, questionId })}
+          </Box>
           <Box key={i} className={`questionBoxWrapper`}>
             <Box className="quesBox">
               <Typography>{question}</Typography>

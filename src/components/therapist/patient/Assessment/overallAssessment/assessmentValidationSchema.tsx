@@ -6,6 +6,13 @@ export const therapistAssessmentValidationSchema = ({ lastSessionNo }) =>
       .required("Session is required")
       .positive()
       .integer()
-      .min(lastSessionNo, lastSessionNo >= 50 ? "Already reached maximum sessions 50." : `Minimum required session is ${lastSessionNo}.`)
+      .min(lastSessionNo, (v) => {
+        const { min } = v;
+        const minText =
+          min >= 50
+            ? "Already reached maximum sessions 50."
+            : `Minimum required session is ${lastSessionNo}.`;
+        return minText;
+      })
       .max(50, "Maximum required session is 50."),
   });

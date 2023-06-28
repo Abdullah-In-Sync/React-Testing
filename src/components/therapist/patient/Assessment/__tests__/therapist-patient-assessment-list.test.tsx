@@ -125,7 +125,7 @@ mocksData.push({
           added_by: "therapist",
           answer: "tets some",
           question: "1. How are you?",
-          category_id: "cat1"
+          category_id: "cat1",
         },
       ],
     },
@@ -148,7 +148,7 @@ mocksData.push({
           added_by: "therapist",
           answer: "",
           question: "1. new ques?",
-          category_id: "cat2"
+          category_id: "cat2",
         },
       ],
     },
@@ -222,18 +222,18 @@ mocksData.push({
       categoryId: "cat1",
       questionId: "ques1",
       patientId: "patient-id",
-      update: { status: 0 }
+      update: { status: 0 },
     },
   },
   result: {
-      "data": {
-        "therapistUpdateAssessmentQs": [
-          {
-            "_id": "d3766254-a609-44f1-ad72-c0af8af33d56",
-          }
-        ]
-      }
-    }
+    data: {
+      therapistUpdateAssessmentQs: [
+        {
+          _id: "d3766254-a609-44f1-ad72-c0af8af33d56",
+        },
+      ],
+    },
+  },
 });
 
 const sut = async () => {
@@ -349,7 +349,6 @@ describe("Therapist patient add assessment", () => {
     expect(
       await screen.findByText(/At least one response required./i)
     ).toBeInTheDocument();
-
   });
 
   it("should render delete assessment question", async () => {
@@ -370,5 +369,5 @@ describe("Therapist patient add assessment", () => {
     expect(
       await screen.findByText(/Question deleted successfully./i)
     ).toBeInTheDocument();
-  })
+  });
 });

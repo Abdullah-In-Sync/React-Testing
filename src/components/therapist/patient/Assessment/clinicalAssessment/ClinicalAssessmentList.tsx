@@ -13,7 +13,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   confirmRef,
   therapistViewAssessmentLoading,
   handleDeleteQuestion,
-  onSubmitAssessmentResponse
+  onSubmitAssessmentResponse,
 }) => {
   const { category: categories = [] } = categoryListData;
   const accordion = ({ title, item, i }) => {

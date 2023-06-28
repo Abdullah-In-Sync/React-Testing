@@ -18,7 +18,7 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   onToggleQuestionAccordion,
   onSubmitAssessmentResponse,
   confirmRef,
-  handleDeleteQuestion
+  handleDeleteQuestion,
 }) => {
   const styles = useStyles();
   return (

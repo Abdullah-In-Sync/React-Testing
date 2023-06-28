@@ -39,7 +39,9 @@ const TherapistPatientAssessmentList: React.FC = () => {
   const [updateTherapitAssessmentCategory] = useMutation(
     THERAPIST_UPDATE_ASSESSMENT_CATEGORY
   );
-  const [updateAssessmentQuestion] = useMutation(THERAPIST_UPDATE_ASSESSMENT_QUESTION)
+  const [updateAssessmentQuestion] = useMutation(
+    THERAPIST_UPDATE_ASSESSMENT_QUESTION
+  );
   const [submitAssessmentResponse] = useMutation(
     THERAPIST_ASSESSMENT_SUBMIT_ANSWER
   );
@@ -337,10 +339,13 @@ const TherapistPatientAssessmentList: React.FC = () => {
   };
 
   const handleDeleteQuestion = (v) => {
-    setLoader(true)
+    setLoader(true);
     const { questionId, categoryId, callback } = v;
-    deleteAssessmentQuestion({ patientId, categoryId, questionId, update: { status: 0 } }, callback)
-  }
+    deleteAssessmentQuestion(
+      { patientId, categoryId, questionId, update: { status: 0 } },
+      callback
+    );
+  };
 
   const currentView = () => {
     switch (assessmentView) {
@@ -356,7 +361,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
                 therapistViewAssessmentLoading,
                 onSubmitAssessmentResponse,
                 confirmRef,
-                handleDeleteQuestion
+                handleDeleteQuestion,
               }}
             />
           )
