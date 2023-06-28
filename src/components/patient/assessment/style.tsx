@@ -23,7 +23,7 @@ export const useStyles = makeStyles({
   accordianTop: {
     backgroundColor: "#7EBCA7",
     borderRadius: "10px",
-    marginBottom: "10px",
+    // marginBottom: "10px",
   },
   accordianIconButton: {
     color: "white",
@@ -35,6 +35,61 @@ export const useStyles = makeStyles({
   },
   accordianDetails: {
     backgroundColor: "white",
+  },
+
+  accordianDetailsBorder: {
+    border: "2px ",
+    borderStyle: "solid",
+    borderColor: "#7EBCA7",
+    borderRadius: "10px ",
+  },
+
+  accordianDetailsQuestionBorder: {
+    border: "2px ",
+    padding: "10px",
+    borderStyle: "solid",
+    borderColor: "#7EBCA7",
+    borderRadius: "10px ",
+    marginBottom: "10px",
+  },
+  accordianDetailsQuestionBox: {
+    backgroundColor: "#f0f0f0",
+    color: "#333",
+    // padding: "10px",
+    borderRadius: "4px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+  },
+
+  accordianDetailsQuestionBoxTypography: {
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    paddingLeft: "15px",
+    // fontWeight: "500",
+    fontSize: "14px",
+  },
+
+  accordianDetailsSaveCancelButtonBox: {
+    display: "flex",
+    justifyContent: "center",
+    p: 1,
+    m: 1,
+    bgcolor: "background.paper",
+    borderRadius: 1,
+  },
+
+  saveButton: {
+    backgroundColor: "#6EC9DB",
+    textTransform: "none",
+    paddingRight: "40px",
+    paddingLeft: "40px",
+  },
+
+  cancelButton: {
+    backgroundColor: "#6BA08E",
+    textTransform: "none",
+    paddingRight: "30px",
+    paddingLeft: "30px",
   },
 
   // style={{

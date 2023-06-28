@@ -63,15 +63,26 @@ const TherapistAssessmentMain: React.FC<any> = ({
           assessment_id: addAssessmentId,
           patient_id: patientId,
         },
-        onCompleted: () => {
-          reFetchAssessmentList();
-          setIsConfirmAdd(false);
-          handleCloseCreateAssessmentModal();
+        onCompleted: (data) => {
+          if (data?.therapistAddAssessment?.result === true) {
+            reFetchAssessmentList();
+            setIsConfirmAdd(false);
+            handleCloseCreateAssessmentModal();
 
-          enqueueSnackbar("Assessment added successfully!", {
-            variant: "success",
-            autoHideDuration: 2000,
-          });
+            enqueueSnackbar("Assessment added successfully!", {
+              variant: "success",
+              autoHideDuration: 2000,
+            });
+          } else {
+            reFetchAssessmentList();
+            setIsConfirmAdd(false);
+            handleCloseCreateAssessmentModal();
+
+            enqueueSnackbar("Assessment already added", {
+              variant: "error",
+              autoHideDuration: 2000,
+            });
+          }
         },
       });
     } catch (e) {
