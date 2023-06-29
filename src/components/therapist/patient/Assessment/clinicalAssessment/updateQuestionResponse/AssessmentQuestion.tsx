@@ -15,41 +15,46 @@ type Props = React.PropsWithChildren<{
     }[];
   }>;
   handleDeleteQuestion?: (v) => void;
+  categoryId?: string;
 }>;
 
-const AddCategoryQuestion = ({ formikProps }: Props) => {
+const AddCategoryQuestion = ({
+  formikProps,
+  handleDeleteQuestion,
+  categoryId,
+}: Props) => {
   const styles = useStyles();
 
-  const { values } = formikProps;
+  const { values, setFieldValue } = formikProps;
 
-  // const removeBox = (i) => {
-  //   const questions = [...values.questions];
-  //   questions.splice(i, 1);
-  //   setFieldValue("questions", questions);
-  // };
+  const removeBox = (i) => {
+    const questions = [...values.questions];
+    questions.splice(i, 1);
+    setFieldValue("questions", questions);
+  };
 
-  /* istanbul ignore next */
-  // const onClickDelete = ({ i, questionId }) => {
-  //   if (handleDeleteQuestion && questionId)
-  //     handleDeleteQuestion({
-  //       questionId,
-  //       callback: () => {
-  //         removeBox(i);
-  //       },
-  //       formFields: values,
-  //       i,
-  //     });
-  //   else removeBox(i);
-  // };
+  const onClickDelete = ({ i, questionId }) => {
+    if (handleDeleteQuestion && questionId)
+      handleDeleteQuestion({
+        questionId,
+        categoryId,
+        callback: () => {
+          removeBox(i);
+        },
+        formFields: values,
+        i,
+      });
+    else removeBox(i);
+  };
 
-  const deleteButton = ({ i }) => {
+  const deleteButton = ({ i, questionId }) => {
     return (
       <IconButton
         size="small"
         key={`deleteIconButton_${i}`}
         aria-label={`deleteIconButton_${i}`}
         data-testid={`iconButtonQuestion_${i}`}
-        onClick={() => null}
+        onClick={() => onClickDelete({ i, questionId })}
       >
         <DeleteSharp />
       </IconButton>
@@ -57,10 +62,14 @@ const AddCategoryQuestion = ({ formikProps }: Props) => {
   };
 
   const questionBox = ({ i, item: { question } }: any) => {
+    const { questions = [] } = values;
+    const { question_id: questionId } = questions[i] || {};
     return (
       <Card key={`questionCard_${i}`} className={`questionCard`}>
         <CardContent>
-          <Box className="deleteButtonWrapper">{deleteButton({ i })}</Box>
+          <Box className="deleteButtonWrapper">
+            {deleteButton({ i, questionId })}
+          </Box>
           <Box key={i} className={`questionBoxWrapper`}>
             <Box className="quesBox">
               <Typography>{question}</Typography>

@@ -331,3 +331,21 @@ export const THERAPIST_ASSESSMENT_SUBMIT_ANSWER = gql`
     }
   }
 `;
+
+export const THERAPIST_UPDATE_ASSESSMENT_QUESTION = gql`
+  mutation TherapistUpdateAssessmentQs(
+    $categoryId: String!
+    $patientId: String!
+    $questionId: String!
+    $update: UpdateAssessAnsInput
+  ) {
+    therapistUpdateAssessmentQs(
+      category_id: $categoryId
+      update: $update
+      patient_id: $patientId
+      question_id: $questionId
+    ) {
+      _id
+    }
+  }
+`;

@@ -16,6 +16,7 @@ const UpdateQuestionResponseForm: React.FC<any> = (formikProps) => {
           <AddCategoryQuestion
             formikProps={formikProps}
             handleDeleteQuestion={handleDeleteQuestion}
+            categoryId={categoryId}
           />
         </Box>
 
