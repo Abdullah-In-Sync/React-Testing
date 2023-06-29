@@ -292,8 +292,8 @@ export const GET_PATIENT_ASSESSMENT_LIST = gql`
 `;
 
 export const GET_PATIENT_ASSESSMENT_CATOGARY_LIST_BY_ASSESSMENT_ID = gql`
-  query patientAssessmentCategoryList($assessment_id: String!) {
-    patientAssessmentCategoryList(assessment_id: $assessment_id) {
+  query getAssessmentCategoryWithQues($assessment_id: String!) {
+    getAssessmentCategoryWithQues(assessment_id: $assessment_id) {
       _id
       category {
         _id
@@ -301,6 +301,17 @@ export const GET_PATIENT_ASSESSMENT_CATOGARY_LIST_BY_ASSESSMENT_ID = gql`
         created_date
         name
         patient_id
+        questions {
+          _id
+          added_by
+          answer
+          category_id
+          created_date
+          patient_id
+          question
+          status
+          updated_date
+        }
         share_status
         status
         updated_date

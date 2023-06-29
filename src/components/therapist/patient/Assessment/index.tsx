@@ -8,22 +8,23 @@ import {
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
   THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
+  THERAPIST_UPDATE_ASSESSMENT_QUESTION,
   THERAPIST_VIEW_ASSESSMENT,
   THERAPIST_VIEW_ASSESSMENT_QUESTION,
 } from "../../../../graphql/assessment/graphql";
-import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
-import Loader from "../../../common/Loader";
-import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
-import { csvEncode } from "../../../../utility/helper";
 import {
   GetRisksListData,
   TherapistGetPatientAssessmentData,
-  TherapistviewAssessmentData,
   TherapistViewAssessmentQuestionsData,
+  TherapistviewAssessmentData,
 } from "../../../../graphql/assessment/types";
 import TherapistAssessmentMain from "../../../../pages/therapist/patient/view/[id]/assessment";
+import { csvEncode } from "../../../../utility/helper";
+import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
+import Loader from "../../../common/Loader";
 import ClinicalAssessment from "./clinicalAssessment/ClinicalAssessment";
+import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
 
 const TherapistPatientAssessmentList: React.FC = () => {
   const router = useRouter();
@@ -32,11 +33,14 @@ const TherapistPatientAssessmentList: React.FC = () => {
     router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
-  const [initialFetchAssessmentList, setInitialFetchAssessmentList] =
+  const [initialFetchCategoriesList, setInitialFetchCategoriesList] =
     useState<boolean>(true);
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
   const [updateTherapitAssessmentCategory] = useMutation(
     THERAPIST_UPDATE_ASSESSMENT_CATEGORY
+  );
+  const [updateAssessmentQuestion] = useMutation(
+    THERAPIST_UPDATE_ASSESSMENT_QUESTION
   );
   const [submitAssessmentResponse] = useMutation(
     THERAPIST_ASSESSMENT_SUBMIT_ANSWER
@@ -55,6 +59,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
     onCompleted: (data) => {
       const { therapistviewAssessment } = data;
       setLoader(false);
+      setInitialFetchCategoriesList(false);
       setAssessmentCategory(therapistviewAssessment);
     },
     fetchPolicy: "cache-and-network",
@@ -96,8 +101,6 @@ const TherapistPatientAssessmentList: React.FC = () => {
     THERAPIST_GET_PATIENT_ASSESSMENT,
     {
       onCompleted: () => {
-        if (initialFetchAssessmentList) setInitialFetchAssessmentList(false);
-
         setLoader(false);
       },
       fetchPolicy: "cache-and-network",
@@ -110,7 +113,8 @@ const TherapistPatientAssessmentList: React.FC = () => {
       : ({} as { pttherapy_session: string });
 
   useEffect(() => {
-    if (!assessmentId) {
+    if (!assessmentId && !assessmentView) {
+      setLoader(true);
       getRisksListData({
         onCompleted: () => {
           getAssessmentListData({
@@ -119,11 +123,12 @@ const TherapistPatientAssessmentList: React.FC = () => {
         },
       });
     }
-  }, []);
+  }, [assessmentView]);
 
   useEffect(() => {
     if (assessmentId) {
       setLoader(true);
+      setInitialFetchCategoriesList(true);
       getTherapistViewAssessment({
         variables: { assessmentId },
       });
@@ -175,6 +180,28 @@ const TherapistPatientAssessmentList: React.FC = () => {
           if (therapistUpdateAssessmentCat) {
             refetchGetTherapistViewAssessment();
             enqueueSnackbar("Assessment shared successfully.", {
+              variant: "success",
+            });
+            doneCallback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+      setLoader(false);
+    }
+  };
+
+  const deleteAssessmentQuestion = async (formFields, doneCallback) => {
+    try {
+      await updateAssessmentQuestion({
+        variables: formFields,
+        onCompleted: (data) => {
+          const { therapistUpdateAssessmentQs } = data;
+          if (therapistUpdateAssessmentQs) {
+            enqueueSnackbar("Question deleted successfully.", {
               variant: "success",
             });
             doneCallback();
@@ -311,21 +338,33 @@ const TherapistPatientAssessmentList: React.FC = () => {
     confirmRef.current.close();
   };
 
+  const handleDeleteQuestion = (v) => {
+    setLoader(true);
+    const { questionId, categoryId, callback } = v;
+    deleteAssessmentQuestion(
+      { patientId, categoryId, questionId, update: { status: 0 } },
+      callback
+    );
+  };
+
   const currentView = () => {
     switch (assessmentView) {
       case "clinical-assessment":
         return (
-          <ClinicalAssessment
-            onToggleQuestionAccordion={onToggleQuestionAccordion}
-            {...{
-              onPressBack,
-              categoryListData: assessmentCategory,
-              actionButtonClick,
-              therapistViewAssessmentLoading,
-              onSubmitAssessmentResponse,
-              confirmRef,
-            }}
-          />
+          !initialFetchCategoriesList && (
+            <ClinicalAssessment
+              onToggleQuestionAccordion={onToggleQuestionAccordion}
+              {...{
+                onPressBack,
+                categoryListData: assessmentCategory,
+                actionButtonClick,
+                therapistViewAssessmentLoading,
+                onSubmitAssessmentResponse,
+                confirmRef,
+                handleDeleteQuestion,
+              }}
+            />
+          )
         );
       default:
         return (
@@ -343,7 +382,6 @@ const TherapistPatientAssessmentList: React.FC = () => {
                 assessmentListLoading,
                 confirmRef,
                 handleClickAssement,
-                initialFetchAssessmentList,
               }}
             />
             <TherapistAssessmentMain

@@ -153,3 +153,7 @@ p {
   top: 0;
   bottom: 0;
  }
+
+ .disableClickSelected .MuiAutocomplete-option[aria-selected="true"]{
+  pointer-events: none;
+ }

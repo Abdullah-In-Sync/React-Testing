@@ -1,11 +1,15 @@
+import { Box, Stack } from "@mui/material";
 import { Formik, FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
 import { GetRisksListEntity } from "../../../../../graphql/assessment/types";
-import { csvDecode } from "../../../../../utility/helper";
+import { csvDecode, stringToInt } from "../../../../../utility/helper";
 import { ConfirmElement } from "../../../../common/ConfirmWrapper";
 import OverallAssessmentForm from "./OverallAssessmentForm";
 import TherapistPatientAssessmentList from "./TherapistPatientAssessmentList";
 import { therapistAssessmentValidationSchema } from "./assessmentValidationSchema";
+import ContentHeader from "../../../../common/ContentHeader";
+import CommonButton from "../../../../common/Buttons/CommonButton";
+import { useStyles } from "../patientAssessmentStyles";
 
 const TherapistPatientOverallAssessment: React.FC<
   TherapistPatientAssessmentProps
@@ -19,8 +23,8 @@ const TherapistPatientOverallAssessment: React.FC<
   assessmentListData,
   onClickAddAssessment,
   handleClickAssement,
-  initialFetchAssessmentList,
 }) => {
+  const styles = useStyles();
   const modifyRisk = risk
     ? risksListData
         .filter((item) => csvDecode(risk).includes(item._id))
@@ -38,12 +42,14 @@ const TherapistPatientOverallAssessment: React.FC<
     risks: modifyRisk,
   };
 
+  const sessionNum = stringToInt(pttherapySession);
+
   const commonform = () => {
     return (
       <Formik
         enableReinitialize
         validationSchema={therapistAssessmentValidationSchema({
-          lastSessionNo: pttherapySession || 0,
+          lastSessionNo: sessionNum ? sessionNum + 1 : "",
         })}
         initialValues={initialValues}
         onSubmit={onSubmitTherapistAssessment}
@@ -60,12 +66,32 @@ const TherapistPatientOverallAssessment: React.FC<
 
   return (
     <>
-      <TherapistPatientAssessmentList
-        assessmentListData={assessmentListData}
-        onClickAddAssessment={onClickAddAssessment}
-        handleClickAssement={handleClickAssement}
-      />
-      {!initialFetchAssessmentList && commonform()}
+      <Stack className={styles.headerWrapper}>
+        <Box>
+          <ContentHeader title="Assessment" />
+        </Box>
+        <Box>
+          <CommonButton
+            className=""
+            data-testid="addAssessmentButton"
+            variant="contained"
+            onClick={onClickAddAssessment}
+            size="small"
+          >
+            Add Assessment
+          </CommonButton>
+        </Box>
+      </Stack>
+      {risk && (
+        <>
+          <TherapistPatientAssessmentList
+            assessmentListData={assessmentListData}
+            onClickAddAssessment={onClickAddAssessment}
+            handleClickAssement={handleClickAssement}
+          />
+          {commonform()}
+        </>
+      )}
     </>
   );
 };

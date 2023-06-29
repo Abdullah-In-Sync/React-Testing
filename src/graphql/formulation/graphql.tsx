@@ -27,7 +27,6 @@ export const GET_FORMULATION_LIST = gql`
       formulation_img
       formulation_instruction
       formulation_name
-      formulation_returnurl
       formulation_status
       formulation_type
       updated_date
