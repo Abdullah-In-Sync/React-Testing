@@ -49,7 +49,7 @@ const TherapistPatientOverallAssessment: React.FC<
       <Formik
         enableReinitialize
         validationSchema={therapistAssessmentValidationSchema({
-          lastSessionNo: sessionNum ? sessionNum + 1 : "",
+          lastSessionNo: sessionNum ? sessionNum : "",
         })}
         initialValues={initialValues}
         onSubmit={onSubmitTherapistAssessment}

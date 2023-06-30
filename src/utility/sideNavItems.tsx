@@ -207,7 +207,7 @@ export const therapistRoutes: RoutesType[] = [
   {
     key: 1,
     label: "Home",
-    path: Link + "/therapist/dashboard",
+    path: "/therapist/dashboard",
     icon: <HomeIcon />,
   },
   {

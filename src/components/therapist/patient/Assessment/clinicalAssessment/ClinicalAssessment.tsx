@@ -26,7 +26,7 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
       <Stack className={styles.clinicalAssessmentWrapper}>
         <Stack className="row1">
           <Box className="col1">
-            <ContentHeader title="Clinical Assessment" />
+            <ContentHeader title="Assessment Name" />
             <CommonButton
               data-testid="baackBtn"
               variant="contained"

@@ -35,7 +35,7 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
       <Stack className={styles.viewWrapper}>
         <Stack className="row1">
           <Box className="col1">
-            <ContentHeader title="Clinical Assessment" />
+            <ContentHeader title="Assessment Name" />
           </Box>
           <Box className="col2">
             <CommonButton
