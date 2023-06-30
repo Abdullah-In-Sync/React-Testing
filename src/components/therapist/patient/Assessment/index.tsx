@@ -10,6 +10,7 @@ import {
   THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
   THERAPIST_UPDATE_ASSESSMENT_QUESTION,
   THERAPIST_VIEW_ASSESSMENT,
+  THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW,
   THERAPIST_VIEW_ASSESSMENT_QUESTION,
 } from "../../../../graphql/assessment/graphql";
 import {
@@ -25,7 +26,7 @@ import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import Loader from "../../../common/Loader";
 import ClinicalAssessment from "./clinicalAssessment/ClinicalAssessment";
 import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
-
+import SummaryView from "./clinicalAssessment/SummaryView";
 const TherapistPatientAssessmentList: React.FC = () => {
   const router = useRouter();
   const modalRefAddAssessment = useRef<ModalElement>(null);
@@ -106,6 +107,31 @@ const TherapistPatientAssessmentList: React.FC = () => {
       fetchPolicy: "cache-and-network",
     }
   );
+
+  const [
+    getTherapistAssessmentSummaryView,
+    { data: therapistAssessmentSummaryViewData },
+  ] = useLazyQuery(THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW, {
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      console.log("Koca: get data ", data);
+      setLoader(false);
+    },
+  });
+
+  useEffect(() => {
+    if (assessmentId) {
+      getTherapistAssessmentSummaryView({
+        variables: {
+          patient_id: patientId,
+          assessment_id: assessmentId,
+
+          // assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
+          // patient_id: "5aa455d5de8248848b71c8113118e3f5",
+        },
+      });
+    }
+  }, [assessmentId, patientId]);
 
   const { pttherapy_session: pttherapySession } =
     therapies.length > 0
@@ -268,6 +294,11 @@ const TherapistPatientAssessmentList: React.FC = () => {
       `/therapist/patient/view/${patientId}/?mainTab=assessment&assessmentView=clinical-assessment&assessmentId=${assessmentId}`
     );
   };
+  const onPressSummaryView = () => {
+    router.push(
+      `/therapist/patient/view/${patientId}/?mainTab=assessment&assessmentView=summary-view`
+    );
+  };
 
   const onPressBack = () => {
     router.back();
@@ -362,9 +393,18 @@ const TherapistPatientAssessmentList: React.FC = () => {
                 onSubmitAssessmentResponse,
                 confirmRef,
                 handleDeleteQuestion,
+                onPressSummaryView,
               }}
             />
           )
+        );
+      case "summary-view":
+        return (
+          <SummaryView
+            therapistAssessmentSummaryViewData={
+              therapistAssessmentSummaryViewData
+            }
+          />
         );
       default:
         return (

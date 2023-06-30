@@ -1,6 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import TherapyPatientMonitorList from "..";
@@ -14,6 +14,7 @@ import {
   THERAPIST_UPDATE_ASSESSMENT_QUESTION,
   THERAPIST_VIEW_ASSESSMENT,
   THERAPIST_VIEW_ASSESSMENT_QUESTION,
+  THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW,
 } from "../../../../../graphql/assessment/graphql";
 import theme from "../../../../../styles/theme/theme";
 
@@ -72,6 +73,42 @@ mocksData.push({
           },
         ],
       },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW,
+    variables: { patient_id: "patient-id", assessment_id: "assessment-id-1" },
+  },
+  result: {
+    data: {
+      assessmentSummaryView: [
+        {
+          _id: "75b111fa-0305-4a46-8795-da17daa19730",
+          added_by: "patient",
+          answer: "First 123",
+          category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
+          created_date: "2023-06-03T06:19:31.729Z",
+          patient_id: "5aa455d5de8248848b71c8113118e3f5",
+          question: "updated question",
+          status: 1,
+          updated_date: "2023-06-28T08:23:07.469Z",
+        },
+        {
+          _id: "e0ba3356-0853-4dd0-909d-c196718f85eb",
+          added_by: "patient",
+          answer: "Second 123",
+          category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
+          created_date: "2023-06-19T06:51:31.682Z",
+          patient_id: "5aa455d5de8248848b71c8113118e3f5",
+          question:
+            "how are u brotherfgh  sdfgsgh ssssssssssssssssssssssssssss",
+          status: 1,
+          updated_date: "2023-06-28T08:23:07.476Z",
+        },
+      ],
     },
   },
 });
@@ -369,5 +406,27 @@ describe("Therapist patient add assessment", () => {
     expect(
       await screen.findByText(/Question deleted successfully./i)
     ).toBeInTheDocument();
+  });
+
+  it("should render clinical assessment list", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "patient-id",
+        mainTab: "assessment",
+        assessmentView: "clinical-assessment",
+        assessmentId: "assessment-id-1",
+      },
+      push: pushMock,
+    });
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.queryByTestId("summaryViewBtn")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("summaryViewBtn"));
+    });
+
+    expect(pushMock).toHaveBeenCalledWith(
+      "/therapist/patient/view/patient-id/?mainTab=assessment&assessmentView=summary-view"
+    );
   });
 });

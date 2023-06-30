@@ -220,6 +220,25 @@ export const THERAPIST_GET_PATIENT_ASSESSMENT = gql`
   }
 `;
 
+export const THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW = gql`
+  query assessmentSummaryView($patient_id: String!, $assessment_id: String!) {
+    assessmentSummaryView(
+      patient_id: $patient_id
+      assessment_id: $assessment_id
+    ) {
+      _id
+      added_by
+      answer
+      category_id
+      created_date
+      patient_id
+      question
+      status
+      updated_date
+    }
+  }
+`;
+
 export const GET_ORGANISATION_SHARED_LIST = gql`
   query getOrganisationSharedList($name: String!, $share_type: String!) {
     getOrganisationSharedList(name: $name, share_type: $share_type) {
