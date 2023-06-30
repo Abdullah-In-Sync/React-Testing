@@ -168,6 +168,7 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                           required={true}
                           name="resource_name"
                           id="resource_name"
+                          placeholder="Write your response here"
                           value={
                             assessmentAnswerInputs[index]
                               ? assessmentAnswerInputs[index].answer
@@ -204,9 +205,12 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                             setUpdateCatogoryId(data2._id);
                             setIsConfirm(true);
                           } else {
-                            enqueueSnackbar("Atleast attempt one question", {
-                              variant: "error",
-                            });
+                            enqueueSnackbar(
+                              "Please answer at least one question",
+                              {
+                                variant: "error",
+                              }
+                            );
                           }
                         }}
                         variant="contained"
