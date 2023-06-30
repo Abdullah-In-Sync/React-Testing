@@ -157,11 +157,17 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     flexDirection: "row",
     borderRadius: "8px",
     marginBottom: "40px",
-    border: mod == "edit" ? "1px solid #7EBCA7" : "1px solid #25282B",
+    border:
+      mod == "patientView" && userType !== "fullAccess"
+        ? "1px solid #7EBCA7"
+        : "1px solid #25282B",
     position: "relative",
   };
 
-  if ((mod == "edit" || mod == "patientView") && !isPreview) {
+  if (
+    (mod == "edit" || mod == "patientView" || userType == "patient") &&
+    userType !== "fullAccess"
+  ) {
     editStyle.borderRadius = "0px 0px 8px 8px";
     editStyle.borderTop = "unset";
   }
@@ -251,7 +257,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
           )}
         </ReactFlowProvider>
       </Box>
-      {(mod !== "patientView" || isPreview) && mod !== "mobile" && (
+      {mod !== "mobile" && (
         <Grid container justifyContent={"center"}>
           <Grid item padding={"63px 0px 94px 0px"}>
             <Button
