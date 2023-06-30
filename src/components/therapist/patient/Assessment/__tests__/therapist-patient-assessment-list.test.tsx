@@ -11,6 +11,7 @@ import {
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
   THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
+  THERAPIST_UPDATE_ASSESSMENT_QUESTION,
   THERAPIST_VIEW_ASSESSMENT,
   THERAPIST_VIEW_ASSESSMENT_QUESTION,
 } from "../../../../../graphql/assessment/graphql";
@@ -124,6 +125,7 @@ mocksData.push({
           added_by: "therapist",
           answer: "tets some",
           question: "1. How are you?",
+          category_id: "cat1",
         },
       ],
     },
@@ -146,6 +148,7 @@ mocksData.push({
           added_by: "therapist",
           answer: "",
           question: "1. new ques?",
+          category_id: "cat2",
         },
       ],
     },
@@ -208,6 +211,27 @@ mocksData.push({
       therapistUpdateAssessmentCat: {
         _id: "6429593c-6525-4b5c-88f2-004c419d8975",
       },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_UPDATE_ASSESSMENT_QUESTION,
+    variables: {
+      categoryId: "cat1",
+      questionId: "ques1",
+      patientId: "patient-id",
+      update: { status: 0 },
+    },
+  },
+  result: {
+    data: {
+      therapistUpdateAssessmentQs: [
+        {
+          _id: "d3766254-a609-44f1-ad72-c0af8af33d56",
+        },
+      ],
     },
   },
 });
@@ -324,6 +348,26 @@ describe("Therapist patient add assessment", () => {
     fireEvent.click(submitButton2);
     expect(
       await screen.findByText(/At least one response required./i)
+    ).toBeInTheDocument();
+  });
+
+  it("should render delete assessment question", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "patient-id",
+        mainTab: "assessment",
+        assessmentView: "clinical-assessment",
+        assessmentId: "assessment-id-1",
+      },
+      push: pushMock,
+    });
+    await sut();
+    const toggleContent0 = await screen.findByTestId("toggleContent0");
+    fireEvent.click(toggleContent0);
+    const deleteButton1 = await screen.findByTestId("iconButtonQuestion_0");
+    fireEvent.click(deleteButton1);
+    expect(
+      await screen.findByText(/Question deleted successfully./i)
     ).toBeInTheDocument();
   });
 });

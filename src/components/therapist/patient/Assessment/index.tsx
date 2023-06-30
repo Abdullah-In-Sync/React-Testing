@@ -8,22 +8,23 @@ import {
   THERAPIST_GET_PATIENT_ASSESSMENT,
   THERAPIST_SUBMIT_ASSESSMENT,
   THERAPIST_UPDATE_ASSESSMENT_CATEGORY,
+  THERAPIST_UPDATE_ASSESSMENT_QUESTION,
   THERAPIST_VIEW_ASSESSMENT,
   THERAPIST_VIEW_ASSESSMENT_QUESTION,
 } from "../../../../graphql/assessment/graphql";
-import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
-import Loader from "../../../common/Loader";
-import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
-import { csvEncode } from "../../../../utility/helper";
 import {
   GetRisksListData,
   TherapistGetPatientAssessmentData,
-  TherapistviewAssessmentData,
   TherapistViewAssessmentQuestionsData,
+  TherapistviewAssessmentData,
 } from "../../../../graphql/assessment/types";
 import TherapistAssessmentMain from "../../../../pages/therapist/patient/view/[id]/assessment";
+import { csvEncode } from "../../../../utility/helper";
+import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
+import Loader from "../../../common/Loader";
 import ClinicalAssessment from "./clinicalAssessment/ClinicalAssessment";
+import TherapistPatientOverallAssessment from "./overallAssessment/OverallAssessment";
 
 const TherapistPatientAssessmentList: React.FC = () => {
   const router = useRouter();
@@ -37,6 +38,9 @@ const TherapistPatientAssessmentList: React.FC = () => {
   const [submitTherapistAssessment] = useMutation(THERAPIST_SUBMIT_ASSESSMENT);
   const [updateTherapitAssessmentCategory] = useMutation(
     THERAPIST_UPDATE_ASSESSMENT_CATEGORY
+  );
+  const [updateAssessmentQuestion] = useMutation(
+    THERAPIST_UPDATE_ASSESSMENT_QUESTION
   );
   const [submitAssessmentResponse] = useMutation(
     THERAPIST_ASSESSMENT_SUBMIT_ANSWER
@@ -190,6 +194,28 @@ const TherapistPatientAssessmentList: React.FC = () => {
     }
   };
 
+  const deleteAssessmentQuestion = async (formFields, doneCallback) => {
+    try {
+      await updateAssessmentQuestion({
+        variables: formFields,
+        onCompleted: (data) => {
+          const { therapistUpdateAssessmentQs } = data;
+          if (therapistUpdateAssessmentQs) {
+            enqueueSnackbar("Question deleted successfully.", {
+              variant: "success",
+            });
+            doneCallback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+      setLoader(false);
+    }
+  };
+
   const submitAssessmentResponseApi = async (formFields, doneCallback) => {
     const { response, _id: categoryId } = formFields;
 
@@ -312,6 +338,15 @@ const TherapistPatientAssessmentList: React.FC = () => {
     confirmRef.current.close();
   };
 
+  const handleDeleteQuestion = (v) => {
+    setLoader(true);
+    const { questionId, categoryId, callback } = v;
+    deleteAssessmentQuestion(
+      { patientId, categoryId, questionId, update: { status: 0 } },
+      callback
+    );
+  };
+
   const currentView = () => {
     switch (assessmentView) {
       case "clinical-assessment":
@@ -326,6 +361,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
                 therapistViewAssessmentLoading,
                 onSubmitAssessmentResponse,
                 confirmRef,
+                handleDeleteQuestion,
               }}
             />
           )
@@ -333,23 +369,21 @@ const TherapistPatientAssessmentList: React.FC = () => {
       default:
         return (
           <>
-            {!assessmentListLoading && (
-              <TherapistPatientOverallAssessment
-                risksListData={risksListData}
-                onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
-                onClickAddAssessment={handleAddAssessment}
-                {...{
-                  overallAssesmentText,
-                  pttherapySession,
-                  risk,
-                  assessmentListData,
-                  risksListLoading,
-                  assessmentListLoading,
-                  confirmRef,
-                  handleClickAssement,
-                }}
-              />
-            )}
+            <TherapistPatientOverallAssessment
+              risksListData={risksListData}
+              onSubmitTherapistAssessment={handleSubmitTherapistAssessment}
+              onClickAddAssessment={handleAddAssessment}
+              {...{
+                overallAssesmentText,
+                pttherapySession,
+                risk,
+                assessmentListData,
+                risksListLoading,
+                assessmentListLoading,
+                confirmRef,
+                handleClickAssement,
+              }}
+            />
             <TherapistAssessmentMain
               modalRefAddAssessment={modalRefAddAssessment}
               reFetchAssessmentList={reFetchAssessmentList}
