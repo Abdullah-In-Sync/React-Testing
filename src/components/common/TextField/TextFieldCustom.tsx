@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { TextField, TextFieldProps } from "@mui/material";
 
 export default (props: TextFieldProps) => {

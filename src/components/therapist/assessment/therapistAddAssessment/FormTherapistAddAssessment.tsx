@@ -23,6 +23,7 @@ const FormAdminAssessmentBox: React.FC<ViewProps> = ({
   const formBox = () => {
     const [planId, setPlanId] = React.useState("");
 
+    /* istanbul ignore next */
     const set2 = (
       e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
     ) => {

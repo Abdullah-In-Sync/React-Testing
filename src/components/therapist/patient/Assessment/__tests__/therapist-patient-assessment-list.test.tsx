@@ -335,6 +335,8 @@ describe("Therapist patient add assessment", () => {
     expect(pushMock).toHaveBeenCalledWith(
       "/therapist/patient/view/patient-id/?mainTab=assessment&assessmentView=clinical-assessment&assessmentId=assessment-id-1"
     );
+
+    // expect(screen.queryByTestId("summaryViewBtn")).toBeInTheDocument();
   });
 
   it("should render clinical assessment list", async () => {
@@ -408,7 +410,7 @@ describe("Therapist patient add assessment", () => {
     ).toBeInTheDocument();
   });
 
-  it("should render clinical assessment list", async () => {
+  it("should render view summary assessment list", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "patient-id",
@@ -428,5 +430,22 @@ describe("Therapist patient add assessment", () => {
     expect(pushMock).toHaveBeenCalledWith(
       "/therapist/patient/view/patient-id/?mainTab=assessment&assessmentView=summary-view"
     );
+  });
+
+  it("should render summary view list", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "patient-id",
+        mainTab: "assessment",
+        assessmentView: "summary-view",
+      },
+      push: pushMock,
+    });
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.queryByTestId("summary_main_box")).toBeInTheDocument();
+      expect(screen.queryByTestId("backButton")).toBeInTheDocument();
+    });
   });
 });

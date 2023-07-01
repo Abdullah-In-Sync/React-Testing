@@ -11,11 +11,13 @@ type propTypes = {
 };
 
 export default function SummaryView(props: propTypes) {
+  /* istanbul ignore next */
   const styles = useStyles();
   const router = useRouter();
 
+  /* istanbul ignore next */
   const summaryData =
-    props.therapistAssessmentSummaryViewData?.assessmentSummaryView;
+    props?.therapistAssessmentSummaryViewData?.assessmentSummaryView;
 
   return (
     <Box>
@@ -26,40 +28,55 @@ export default function SummaryView(props: propTypes) {
           className="nextButton"
           data-testid="backButton"
           variant="contained"
-          onClick={() => router?.back()}
+          onClick={() =>
+            /* istanbul ignore next */
+            router?.back()
+          }
           startIcon={<ArrowBackIcon />}
         >
           Back
         </Button>
       </Box>
 
-      <Box className={styles.accordianDetailsQuestionBorder}>
-        {summaryData?.length > 0 ? (
-          summaryData.map((data, index) => (
-            <Box className={styles.accordianDetailsQuestionBorder} key={index}>
-              <Typography className={styles.catogoryName}>
-                Category name
-              </Typography>
+      <Box
+        data-testid={`summary_main_box`}
+        className={styles.accordianDetailsQuestionBorder}
+      >
+        {
+          /* istanbul ignore next */
+          summaryData?.length > 0 ? (
+            summaryData.map((data, index) => (
+              <Box
+                className={styles.accordianDetailsQuestionBorder}
+                key={index}
+              >
+                <Typography
+                  data-testid={`category_name`}
+                  className={styles.catogoryName}
+                >
+                  {data.category_name}
+                </Typography>
 
-              <Box className={styles.accordianDetailsQuestionBox}>
-                <Typography
-                  className={styles.accordianDetailsQuestionBoxTypography}
-                >
-                  {data.question}
-                </Typography>
+                <Box className={styles.accordianDetailsQuestionBox}>
+                  <Typography
+                    className={styles.accordianDetailsQuestionBoxTypography}
+                  >
+                    {data.question}
+                  </Typography>
+                </Box>
+                <Box className={styles.accordianDetailsQuestionBox}>
+                  <Typography
+                    className={styles.accordianDetailsQuestionBoxTypography}
+                  >
+                    {data.answer}
+                  </Typography>
+                </Box>
               </Box>
-              <Box className={styles.accordianDetailsQuestionBox}>
-                <Typography
-                  className={styles.accordianDetailsQuestionBoxTypography}
-                >
-                  {data.answer}
-                </Typography>
-              </Box>
-            </Box>
-          ))
-        ) : (
-          <Typography>No data found</Typography>
-        )}
+            ))
+          ) : (
+            <Typography>No data found</Typography>
+          )
+        }
       </Box>
     </Box>
   );

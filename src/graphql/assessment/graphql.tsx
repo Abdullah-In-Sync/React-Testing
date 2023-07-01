@@ -229,6 +229,7 @@ export const THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW = gql`
       _id
       added_by
       answer
+      category_name
       category_id
       created_date
       patient_id

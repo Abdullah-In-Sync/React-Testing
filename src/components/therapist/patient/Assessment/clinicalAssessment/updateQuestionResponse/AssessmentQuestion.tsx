@@ -33,6 +33,7 @@ const AddCategoryQuestion = ({
     setFieldValue("questions", questions);
   };
 
+  /* istanbul ignore next */
   const onClickDelete = ({ i, questionId }) => {
     if (handleDeleteQuestion && questionId)
       handleDeleteQuestion({

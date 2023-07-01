@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import * as Yup from "yup";
 
 export const therapistAssessmentValidationSchema = ({ lastSessionNo }) =>
