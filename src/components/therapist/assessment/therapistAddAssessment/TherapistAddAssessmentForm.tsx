@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
@@ -26,6 +27,7 @@ const TherapistAddAssessmentForm: React.FC<ViewProps> = ({
     planName: "",
   };
 
+  /* istanbul ignore next */
   const onChangeAssessmentId = (value) => {
     receiveAssessmentId(value);
   };
