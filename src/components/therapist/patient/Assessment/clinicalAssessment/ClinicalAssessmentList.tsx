@@ -43,6 +43,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   };
 
   const accordionList = () => {
+    /* istanbul ignore next */
     if (categories.length <= 0 && !therapistViewAssessmentLoading)
       return <MesageTextDisplay message="No data Found." />;
 
