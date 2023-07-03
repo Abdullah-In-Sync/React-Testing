@@ -82,7 +82,7 @@ const TherapistPatientOverallAssessment: React.FC<
           </CommonButton>
         </Box>
       </Stack>
-      {risksListData.length > 0 && (
+      {risk != undefined && (
         <>
           <TherapistPatientAssessmentList
             assessmentListData={assessmentListData}
