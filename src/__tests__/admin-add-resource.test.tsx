@@ -4,6 +4,8 @@ import {
   waitForElementToBeRemoved,
   fireEvent,
   waitFor,
+  within,
+  act,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
@@ -44,6 +46,10 @@ mocksData.push({
         {
           _id: "e7b5b7c0568b4eacad6f05f11d9c4884",
           name: "dev-myhelp",
+        },
+        {
+          _id: "e7b5b7c0568b4eacad6f05f11d9c4886",
+          name: "dev-myhelp2",
         },
       ],
     },
@@ -191,14 +197,34 @@ mocksData.push({
       orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
     },
   },
+
   result: {
     data: {
       createResource: {
+        duplicateNames: null,
         _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+        result: true,
+        __typename: "adminResult",
       },
     },
   },
 });
+
+export const checkSelected = async (element: HTMLElement, id: string) => {
+  const button = await within(element).findByRole("button");
+  expect(button).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.mouseDown(button);
+  });
+  const listBox = await screen.findByRole("listbox");
+  expect(listBox).toBeInTheDocument();
+  const selectOption = await screen.findByTestId(`shareOrg_${id}`);
+  expect(selectOption).toBeInTheDocument();
+  fireEvent.click(selectOption);
+  const hideEle = await screen.findAllByRole("presentation");
+  hideEle[0].style.display = "none";
+  // expect(listBox).toBeUndefined();
+};
 
 const sut = async () => {
   render(
@@ -263,19 +289,14 @@ describe("Admin add resource page", () => {
 
   it("should click org dropdown", async () => {
     await sut();
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
-    expect(screen.queryByTestId("org_id").getAttribute("value")).toBe(
-      "e7b5b7c0568b4eacad6f05f11d9c4884"
-    );
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
   });
 
   it("should click disorder dropdown and model dropdown", async () => {
     await sut();
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId("activity-indicator")
@@ -326,9 +347,8 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -366,9 +386,8 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });
@@ -423,9 +442,8 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");;
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId("activity-indicator")
@@ -492,9 +510,8 @@ describe("Admin add resource page", () => {
     fireEvent.change(screen.queryByTestId("resource_type"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.queryByTestId("org_id"), {
-      target: { value: "e7b5b7c0568b4eacad6f05f11d9c4884" },
-    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
     fireEvent.change(screen.queryByTestId("disorder_id"), {
       target: { value: "disorder_id_1" },
     });

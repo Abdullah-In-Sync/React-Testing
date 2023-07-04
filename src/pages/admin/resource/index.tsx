@@ -42,15 +42,6 @@ import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import Formulation from "../formulation";
 
-// COMPONENT STYLES
-const crudButtons = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "end",
-  marginBottom: 1,
-  flexDirection: "row",
-};
-
 const IconButtonWrapper = styled(IconButton)(
   () => `
   box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
@@ -501,8 +492,13 @@ const Resource: NextPage = () => {
     <>
       <Layout>
         <ContentHeader title="Library" />
-        <Grid container spacing={2}>
-          <Grid item xs={3} style={{ opacity: isFormulation ? 0 : 1 }}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="space-between"
+          alignItems={"center"}
+        >
+          <Grid xs={3} style={{ opacity: isFormulation ? 0 : 1 }}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -517,84 +513,84 @@ const Resource: NextPage = () => {
               />
             </Search>
           </Grid>
-          <Grid item xs={9}>
-            <Box sx={crudButtons}>
-              <Button
-                className={`text-white`}
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  bottom: "4px",
-                  height: "35px",
-                  marginLeft: "8px",
-                  minWidth: "144px",
-                }}
-                onClick={() => {
-                  setIsFormulation(false);
-                  setFilterValue({});
-                }}
-              >
-                Resource
-              </Button>
-              <Button
-                className={`text-white`}
-                {...(isFormulation ? { color: "secondary" } : {})}
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  height: "35px",
-                  minWidth: "144px",
-                  bottom: "4px",
-                  marginLeft: "8px",
-                }}
-                onClick={() => setIsFormulation(true)}
-              >
-                Formulation
-              </Button>
-              <Button
-                className={`text-white`}
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  bottom: "4px",
-                  height: "35px",
-                  marginLeft: "8px",
-                }}
-                data-testid="approveresourcelist"
-                onClick={() => {
-                  setIsFormulation(false);
-                  handleFilterChange({ mode: "approve_resource" });
-                }}
-              >
-                Approve Resource
-              </Button>
-
-              <div style={{ paddingLeft: "8px" }}>
-                <Button
-                  className={`text-white`}
-                  variant="contained"
-                  sx={{
-                    textTransform: "none",
-                    bottom: "4px",
-                    height: "35px",
-                  }}
-                  data-testid="templateList"
-                  href={"/v2/admin/resource/template/list"}
-                >
-                  Templates
-                </Button>
-              </div>
-              <AddButton
-                href="/v2/admin/resource/add"
-                className="mr-3"
-                label="Add Resource"
-              />
-              <AddButton
-                href="/v2/admin/resource/create"
-                className="mr-3"
-                label="Create Resource"
-              />
-            </Box>
+          <Grid display={"flex"} justifyContent={"end"} gap={"8px"}>
+            <Button
+              className={`text-white`}
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                height: "35px",
+                minWidth: "144px",
+              }}
+              onClick={() => {
+                setIsFormulation(false);
+                setFilterValue({});
+              }}
+            >
+              Resource
+            </Button>
+            <Button
+              className={`text-white`}
+              {...(isFormulation ? { color: "secondary" } : {})}
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                height: "35px",
+                minWidth: "144px",
+              }}
+              onClick={() => setIsFormulation(true)}
+            >
+              Formulation
+            </Button>
+            <Button
+              className={`text-white`}
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                height: "35px",
+              }}
+              data-testid="approveresourcelist"
+              onClick={() => {
+                setIsFormulation(false);
+                handleFilterChange({ mode: "approve_resource" });
+              }}
+            >
+              Approve Resource
+            </Button>
+            <Button
+              className={`text-white`}
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                height: "35px",
+              }}
+              data-testid="templateList"
+              href={"/v2/admin/resource/template/list"}
+            >
+              Templates
+            </Button>
+            <Button
+              color={"secondary"}
+              variant="contained"
+              href="/v2/admin/resource/add"
+              sx={{
+                textTransform: "none",
+                height: "35px",
+              }}
+            >
+              Add Resource
+            </Button>
+            <Button
+              color={"secondary"}
+              variant="contained"
+              href="/v2/admin/resource/create"
+              sx={{
+                textTransform: "none",
+                height: "35px",
+              }}
+            >
+              Create Resource
+            </Button>
           </Grid>
         </Grid>
         {isFormulation ? (

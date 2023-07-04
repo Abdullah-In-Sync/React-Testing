@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import React, { FormEvent, useEffect, useState } from "react";
 import { Box, FormControl, FormLabel, Grid, Typography } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
@@ -29,6 +30,7 @@ import { GET_ORG_DATA } from "../../../graphql/query";
 import { IS_ADMIN } from "../../../lib/constants";
 import TemplateArrow from "../../templateArrow";
 import MultiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
+import FormikSelectDropdown from "../FormikFields/FormikSelectDropdown";
 
 type propTypes = {
   onSubmit?: any;
@@ -71,7 +73,7 @@ export default function CreateResource(props: propTypes) {
     resourceType: null,
     agendaId: "",
     categoryId: "",
-    orgId: orgId,
+    orgId: "",
     resourceIssmartdraw: "1",
     templateData: "",
     templateId: "",
@@ -157,6 +159,8 @@ export default function CreateResource(props: propTypes) {
     }
   );
 
+  const csvDecode = (csvString) => (csvString ? csvString.split(",") : []);
+
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
@@ -184,7 +188,7 @@ export default function CreateResource(props: propTypes) {
         agenda_id: "",
       }));
       getDisorderByOrgId({
-        variables: { orgId: formFields.orgId },
+        variables: { orgId: formFields?.orgId?.split(",")?.[0] },
       });
     }
   }, [formFields.orgId]);
@@ -366,6 +370,36 @@ export default function CreateResource(props: propTypes) {
     /* istanbul ignore next */
   };
 
+  const handleChange = (event) => {
+    const value = event.target.value as string[];
+
+    if (value[value.length - 1] === "all") {
+      const updatedSelected = [
+        "all",
+        ...orgData?.getOrganizationData?.map((org) => org._id),
+      ];
+
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        orgId: updatedSelected.join(","),
+      }));
+      return;
+    } else if (
+      value.length === orgData?.getOrganizationData?.length &&
+      value?.indexOf("all") === -1
+    ) {
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        orgId: "",
+      }));
+    } else {
+      setFormFields({
+        ...formFields,
+        orgId: [...value].filter((v) => v != "all").join(","),
+      });
+    }
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-crate-form">
@@ -425,17 +459,23 @@ export default function CreateResource(props: propTypes) {
                   className="form-control-bg"
                 /> */}
                 <MultiSelectComponent
-                  id="resourceOrgSelect"
-                  labelId="resourceOrg"
-                  mappingKeys={["_id", "name"]}
-                  name="orgId"
-                  options={(orgData && orgData?.getOrganizationData) || []}
-                  size="small"
-                  value={formFields?.orgId}
-                  className="form-control-bg"
-                  fullWidth={true}
-                  onChange={set2}
+                  fullWidth
                   inputProps={{ "data-testid": "org_id" }}
+                  onChange={handleChange}
+                  id="organizationSelect"
+                  labelId="organizationSelect"
+                  name="orgId"
+                  label="Select Organization"
+                  options={[
+                    ...[{ _id: "all", name: "Select All" }],
+                    ...((orgData && orgData?.getOrganizationData) || []),
+                  ]}
+                  mappingKeys={["_id", "name"]}
+                  size="small"
+                  className="form-control-bg multiSelect"
+                  extraProps={{ "data-testid": "mainOrganizationSelect" }}
+                  multiSelect={csvDecode(formFields?.orgId)}
+                  value={csvDecode(formFields?.orgId)}
                 />
               </Grid>
             ) : (
