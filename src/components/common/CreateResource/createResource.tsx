@@ -73,7 +73,7 @@ export default function CreateResource(props: propTypes) {
     resourceType: null,
     agendaId: "",
     categoryId: "",
-    orgId: "",
+    orgId: userType == "therapist" ? orgId : "",
     resourceIssmartdraw: "1",
     templateData: "",
     templateId: "",
