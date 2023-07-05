@@ -89,7 +89,6 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
 
       setSelected(updatedSelected);
       onChangePlanId(updatedSelected);
-
       return;
     }
     setSelected(value);

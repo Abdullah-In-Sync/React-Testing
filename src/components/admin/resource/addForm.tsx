@@ -26,6 +26,7 @@ import SureModal from "./SureModal";
 import { addResourceFormField } from "../../../utility/types/resource_types";
 import { GET_ORG_DATA } from "../../../graphql/query";
 import { useAppContext } from "../../../contexts/AuthContext";
+import MultiSelectComponent from "../../common/SelectBox/MultiSelect/MutiSelectComponent";
 
 const defaultFormValue = {
   resource_name: "",
@@ -291,7 +292,37 @@ export default function AddForm(props: propTypes) {
       });
     }
   };
+  const csvDecode = (csvString) => (csvString ? csvString.split(",") : []);
+  const handleChange = (event) => {
+    const value = event.target.value as string[];
 
+    if (value[value.length - 1] === "all") {
+      const updatedSelected = [
+        "all",
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        ...orgData?.getOrganizationData?.map((org) => org._id),
+      ];
+
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        org_id: updatedSelected.join(","),
+      }));
+      return;
+    } else if (
+      value.length === orgData?.getOrganizationData?.length &&
+      value?.indexOf("all") === -1
+    ) {
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        org_id: "",
+      }));
+    } else {
+      setFormFields({
+        ...formFields,
+        org_id: [...value].filter((v) => v != "all").join(","),
+      });
+    }
+  };
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-add-form">
@@ -335,7 +366,7 @@ export default function AddForm(props: propTypes) {
             </Grid>
             {userType == "admin" ? (
               <Grid item xs={4}>
-                <SingleSelectComponent
+                {/* <SingleSelectComponent
                   fullWidth={true}
                   required={true}
                   id="resourceOrgSelect"
@@ -349,6 +380,25 @@ export default function AddForm(props: propTypes) {
                   mappingKeys={["_id", "name"]}
                   size="small"
                   className="form-control-bg"
+                /> */}
+                <MultiSelectComponent
+                  fullWidth
+                  required={true}
+                  onChange={handleChange}
+                  id="resourceOrgSelect"
+                  labelId="resourceOrg"
+                  name="org_id"
+                  label="Select Organization"
+                  options={[
+                    ...[{ _id: "all", name: "Select All" }],
+                    ...((orgData && orgData?.getOrganizationData) || []),
+                  ]}
+                  mappingKeys={["_id", "name"]}
+                  size="small"
+                  className="form-control-bg multiSelect"
+                  extraProps={{ "data-testid": "mainOrganizationSelect" }}
+                  multiSelect={csvDecode(formFields?.org_id)}
+                  value={csvDecode(formFields?.org_id)}
                 />
               </Grid>
             ) : (
