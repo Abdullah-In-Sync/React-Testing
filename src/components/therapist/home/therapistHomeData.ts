@@ -75,13 +75,6 @@ const therapistHomeData = {
       description:
         "Refer and keep up to date patient files. This can be accessed and used whilst in session with a particular patient, providing the ability to refer to specific communications and information. The patient's section supports the therapy process by providing a number of elements that are key for the therapy process .",
     },
-    {
-      id: "record11",
-      icon: require("@mui/icons-material/FormatAlignJustify").default,
-      title: "Others",
-      description:
-        "The current PHQ 9 and GAD 7 scores for a patient can be found here and can be either updated by either the therapist or patient electronically. The therapy outcomes are illustrated in a graphical chart to provide a visual representation of the patient’s progress.",
-    },
   ],
 };
 

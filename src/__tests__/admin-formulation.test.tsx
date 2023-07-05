@@ -1,11 +1,15 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import Formulation from "../pages/admin/formulation";
-import { GET_FORMULATION_LIST } from "../graphql/formulation/graphql";
+import {
+  ADD_FAV_FORMULATION,
+  GET_FORMULATION_LIST,
+  REMOVE_FAV_FORMULATION,
+} from "../graphql/formulation/graphql";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -139,6 +143,34 @@ const buildMocks = (): {
     },
   });
 
+  _mocks.push({
+    request: {
+      query: ADD_FAV_FORMULATION,
+      variables: { formulation_id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b" },
+    },
+    result: {
+      data: {
+        addFavouriteFormulation: {
+          fav_formulation_id: "new-fav-id",
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: REMOVE_FAV_FORMULATION,
+      variables: { fav_formulation_id: "new-fav-id" },
+    },
+    result: {
+      data: {
+        deleteFavouriteFormulation: {
+          deleted: true,
+        },
+      },
+    },
+  });
+
   return { mocks: _mocks };
 };
 
@@ -179,5 +211,20 @@ describe(" Formulation page", () => {
       expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument()
     );
     await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(4));
+  });
+
+  test("Add and remove fav formulation", async () => {
+    await sut();
+    const favButton = await screen.findByTestId(
+      "fav_btn_d1b60faa-c8aa-4258-ada0-cfdf18402b7b"
+    );
+    fireEvent.click(favButton);
+    expect(
+      await screen.findByText(/Favorite formulation added successfully./i)
+    ).toBeInTheDocument();
+    fireEvent.click(favButton);
+    expect(
+      await screen.findByText(/Favorite formulation deleted successfully./i)
+    ).toBeInTheDocument();
   });
 });

@@ -34,3 +34,19 @@ export const GET_FORMULATION_LIST = gql`
     }
   }
 `;
+
+export const ADD_FAV_FORMULATION = gql`
+  mutation AddFavouriteFormulation($formulation_id: String!) {
+    addFavouriteFormulation(formulation_id: $formulation_id) {
+      fav_formulation_id
+    }
+  }
+`;
+
+export const REMOVE_FAV_FORMULATION = gql`
+  mutation DeleteFavouriteFormulation($fav_formulation_id: String!) {
+    deleteFavouriteFormulation(fav_formulation_id: $fav_formulation_id) {
+      deleted
+    }
+  }
+`;
