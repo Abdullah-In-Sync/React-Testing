@@ -45,7 +45,7 @@ export default function FormulationCardGenerator({ data, fields }) {
                           field.render &&
                           typeof field.render === "function" &&
                           field.key === "actions" &&
-                          field.render(record[field.key], record)
+                          field.render(record[field.key], record, index)
                       )}
                     </>
                   }
@@ -58,7 +58,7 @@ export default function FormulationCardGenerator({ data, fields }) {
                         field.render &&
                         typeof field.render === "function" &&
                         field.key === "formulation_name" &&
-                        field.render(record[field.key], record)
+                        field.render(record[field.key], record, index)
                     )
                   }
                 </CardContentTitleWrapper>
