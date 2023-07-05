@@ -491,14 +491,21 @@ const Resource: NextPage = () => {
   return (
     <>
       <Layout>
-        <ContentHeader title="Library" />
+        <ContentHeader page={"resource"} title="Library" />
         <Grid
           container
           spacing={2}
           justifyContent="space-between"
           alignItems={"center"}
+          marginBottom={"16px"}
         >
-          <Grid xs={3} style={{ opacity: isFormulation ? 0 : 1 }}>
+          <Grid
+            xs={3}
+            style={{
+              opacity: isFormulation ? 0 : 1,
+              padding: " 0px 0px 0px 16px",
+            }}
+          >
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
