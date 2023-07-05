@@ -23,7 +23,7 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
   const assessmentCatogeryData = props.patientClinicalAssessmentList;
   const [expanded, setExpanded] = useState<number | boolean>(false);
   const [isConfirm, setIsConfirm] = useState(false);
-  const [isConfirmCancel, setIsConfirmCancle] = useState(false);
+  const [isConfirmCancel, setIsConfirmCancel] = useState(false);
 
   const [assessmentAnswerInputs, setAssessmentAnswerInputs] = useState([]);
   const [updateCatagoryId, setUpdateCatogoryId] = useState("");
@@ -43,9 +43,15 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
     }
   };
 
-  const handlePatientInputChange = (index, value, Id) => {
+  const handlePatientInputChange = (
+    accordionIndex: number,
+    questionIndex: number,
+    value: string,
+    Id: string
+  ) => {
     const updatedInputs = [...assessmentAnswerInputs];
-    updatedInputs[index] = {
+    const updatedIndex = accordionIndex * 1000 + questionIndex; // Unique index for each question
+    updatedInputs[updatedIndex] = {
       question_id: Id,
       answer: value,
     };
@@ -56,7 +62,6 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
     try {
       await updateAssessment({
         variables: {
-          // category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
           category_id: updateCatagoryId,
           question: JSON.stringify(assessmentAnswerInputs),
         },
@@ -69,29 +74,25 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
         },
       });
     } catch (e) {
-      /* istanbul ignore next */
-      enqueueSnackbar("Something is wrong", { variant: "error" });
+      enqueueSnackbar("Something went wrong", { variant: "error" });
     }
   };
 
-  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirm(false);
-    setIsConfirmCancle(false);
+    setIsConfirmCancel(false);
   };
 
-  /* istanbul ignore next */
-  const cancleFunction = () => {
+  const cancelFunction = () => {
     if (assessmentAnswerInputs.length) {
-      setIsConfirmCancle(true);
+      setIsConfirmCancel(true);
     }
   };
 
-  /* istanbul ignore next */
   const cancelConfirm = () => {
     setAssessmentAnswerInputs([]);
-    setIsConfirmCancle(false);
-    enqueueSnackbar("Assessment cancel successfully!", {
+    setIsConfirmCancel(false);
+    enqueueSnackbar("Assessment canceled successfully!", {
       variant: "success",
     });
   };
@@ -121,24 +122,24 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
           </Box>
         </Box>
 
-        {assessmentCatogeryData?.category?.map((data2, index) => (
-          <Box key={index} style={{ marginBottom: "20px" }}>
+        {assessmentCatogeryData?.category?.map((data2, accordionIndex) => (
+          <Box key={accordionIndex} style={{ marginBottom: "20px" }}>
             <Accordion
-              data-testid={`accordian_test_${index}`}
-              expanded={expanded === true || expanded === index}
+              data-testid={`accordian_test_${accordionIndex}`}
+              expanded={expanded === true || expanded === accordionIndex}
               className={styles.accordianTop}
             >
               <AccordionSummary
                 expandIcon={
-                  expanded === true || expanded === index ? (
+                  expanded === true || expanded === accordionIndex ? (
                     <RemoveIcon className={styles.accordianIconButton} />
                   ) : (
                     <AddIcon className={styles.accordianIconButton} />
                   )
                 }
-                aria-controls={`panel${index + 1}-content`}
-                id={`panel${index + 1}-header`}
-                onClick={() => handleToggle(index)}
+                aria-controls={`panel${accordionIndex + 1}-content`}
+                id={`panel${accordionIndex + 1}-header`}
+                onClick={() => handleToggle(accordionIndex)}
               >
                 <Typography className={styles.accordianName}>
                   {data2.name}
@@ -151,8 +152,11 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                   }}
                   className={styles.accordianDetails}
                 >
-                  {data2?.questions?.map((data, index) => (
-                    <Box className={styles.accordianDetailsQuestionBorder}>
+                  {data2?.questions?.map((data, questionIndex) => (
+                    <Box
+                      key={questionIndex}
+                      className={styles.accordianDetailsQuestionBorder}
+                    >
                       <Box className={styles.accordianDetailsQuestionBox}>
                         <Typography
                           className={
@@ -170,13 +174,18 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                           id="resource_name"
                           placeholder="Write your response here"
                           value={
-                            assessmentAnswerInputs[index]
-                              ? assessmentAnswerInputs[index].answer
+                            assessmentAnswerInputs[
+                              accordionIndex * 1000 + questionIndex
+                            ]
+                              ? assessmentAnswerInputs[
+                                  accordionIndex * 1000 + questionIndex
+                                ].answer
                               : data?.answer
                           }
                           onChange={(e) =>
                             handlePatientInputChange(
-                              index,
+                              accordionIndex,
+                              questionIndex,
                               e.target.value,
                               data._id
                             )
@@ -199,8 +208,6 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                         type="submit"
                         className={styles.saveButton}
                         onClick={() => {
-                          /* istanbul ignore next */
-
                           if (assessmentAnswerInputs.length) {
                             setUpdateCatogoryId(data2._id);
                             setIsConfirm(true);
@@ -221,13 +228,10 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                     </Grid>
                     <Grid item xs={6} textAlign="center">
                       <Button
-                        data-testid="cancleFeedbackButton"
+                        data-testid="cancelFeedbackButton"
                         variant="contained"
                         className={styles.cancelButton}
-                        onClick={
-                          /* istanbul ignore next */
-                          cancleFunction
-                        }
+                        onClick={cancelFunction}
                       >
                         Cancel
                       </Button>
