@@ -443,7 +443,7 @@ describe("Admin add resource page", () => {
       target: { value: "2" },
     });
     const select = await screen.findByTestId("mainOrganizationSelect");
-    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");;
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId("activity-indicator")

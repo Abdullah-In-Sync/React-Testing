@@ -35,7 +35,6 @@ import TemplateArrow from "../../templateArrow";
 import ContentHeader from "../ContentHeader";
 import ConfirmationModal from "../ConfirmationModal";
 import MultiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
-import FormikSelectDropdown from "../FormikFields/FormikSelectDropdown";
 
 type propTypes = {
   onSubmit?: any;
