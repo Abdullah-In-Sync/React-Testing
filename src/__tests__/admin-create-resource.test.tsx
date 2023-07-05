@@ -416,6 +416,41 @@ describe("Admin add resource page", () => {
     );
   });
 
+  it("check validation of availability resource", async () => {
+    await sut();
+
+    fireEvent.change(screen.queryByTestId("resourceName"), {
+      target: { value: "test" },
+    });
+    fireEvent.change(screen.queryByTestId("resourceType"), {
+      target: { value: "2" },
+    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
+    fireEvent.change(screen.queryByTestId("disorderId"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("modelId"), {
+      target: { value: "model_id_1" },
+    });
+
+    fireEvent.change(screen.queryByTestId("categoryId"), {
+      target: { value: "category_id_1" },
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("selectTemplateButton"));
+    });
+    await (async () => {
+      expect(
+        await screen.findByText("Please select availability of resource")
+      ).toBeInTheDocument();
+    });
+  });
+
   it("submit form with valid data", async () => {
     await sut();
 

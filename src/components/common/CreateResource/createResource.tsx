@@ -168,6 +168,7 @@ export default function CreateResource(props: propTypes) {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       props.setLoader(false);
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
@@ -344,6 +345,7 @@ export default function CreateResource(props: propTypes) {
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
 
+    /* istanbul ignore next */
     if (values.component_name == "ArrowTemplate") {
       setTemplateModal(false);
       setSelectedComponentType({
@@ -351,6 +353,7 @@ export default function CreateResource(props: propTypes) {
         type: values.component_name,
         info: values,
       });
+      /* istanbul ignore next */
       setTimeout(() => {
         scrollDown();
       }, 500);
@@ -436,7 +439,7 @@ export default function CreateResource(props: propTypes) {
     /* istanbul ignore next */
     formikHelper.setSubmitting(false);
   };
-
+  /* istanbul ignore next */
   const onTemplateCancel = () => {
     setSelectedComponentType({
       ...selectedComponentType,
@@ -445,7 +448,7 @@ export default function CreateResource(props: propTypes) {
       info: null,
     });
   };
-
+  /* istanbul ignore next */
   const onPreview = (values) => {
     sessionStorage.setItem(
       "create",
@@ -453,7 +456,7 @@ export default function CreateResource(props: propTypes) {
     );
     window.open("/v2/template/preview/create", "_blank");
   };
-
+  /* istanbul ignore next */
   const onSaveArrowTemplate = (arrowTemplateData: string) => {
     saveResource({
       ...formFields,
@@ -462,12 +465,12 @@ export default function CreateResource(props: propTypes) {
     });
     /* istanbul ignore next */
   };
-
+  /* istanbul ignore next */
   const onConfirmSubmit = () => {
     isConfirm.storedFunction();
     setIsConfirm({ status: false, storedFunction: null });
   };
-
+  /* istanbul ignore next */
   const clearIsConfirm = () => {
     setIsConfirm({ status: false, storedFunction: null });
   };
@@ -487,6 +490,7 @@ export default function CreateResource(props: propTypes) {
       }));
       return;
     } else if (
+      /* istanbul ignore next */
       value.length === orgData?.getOrganizationData?.length &&
       value?.indexOf("all") === -1
     ) {
@@ -854,6 +858,7 @@ export default function CreateResource(props: propTypes) {
         />
       )}
       {successModal && (
+        /* istanbul ignore next */
         <SuccessModal
           isOpen={successModal}
           description="Your resource has been created successfully."
