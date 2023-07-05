@@ -8,6 +8,25 @@ import ContentHeader from "../../../../common/ContentHeader";
 import { useStyles } from "../patientAssessmentStyles";
 import ClinicalAssessmentList from "./ClinicalAssessmentList";
 import { InitialQuesionsFormValues } from "./updateQuestionResponse/UpdateQuestionResponse";
+import { useRouter } from "next/router";
+
+export interface ClinicalAssessmentProps {
+  categoryListData?: any;
+  handleBackClick?: () => void;
+  actionButtonClick?: (v?: any) => void;
+  confirmRef?: ForwardedRef<ConfirmElement>;
+  handleToggleContent?: any;
+  onPressBack?: () => void;
+  onPressSummaryView?: any;
+  therapistViewAssessmentLoading?: boolean;
+  onToggleQuestionAccordion?: any;
+  handleDeleteQuestion?: (v) => void;
+  onSubmitAssessmentResponse?: (
+    formData: InitialQuesionsFormValues,
+    formikHelper: FormikProps<InitialQuesionsFormValues>,
+    value
+  ) => void;
+}
 
 const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   categoryListData,
@@ -21,12 +40,16 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   handleDeleteQuestion,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
+  const assessmentId = router?.query?.assessmentId as string;
+  console.log("Koca: url assessmentId ", assessmentId);
+
   return (
     <>
       <Stack className={styles.clinicalAssessmentWrapper}>
         <Stack className="row1">
           <Box className="col1">
-            <ContentHeader title="Clinical Assessment" />
+            <ContentHeader title="Assessment Name" />
             <CommonButton
               data-testid="baackBtn"
               variant="contained"
@@ -40,7 +63,9 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
             <CommonButton
               data-testid="summaryViewBtn"
               variant="contained"
+              // onClick={onPressSummaryView(assessmentId)}
               onClick={onPressSummaryView}
+              // href={`/v2/patient/assessment/clinicalAssessment`}
               size="small"
             >
               Summary View
@@ -64,20 +89,3 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
 };
 
 export default ClinicalAssessment;
-export interface ClinicalAssessmentProps {
-  categoryListData?: any;
-  handleBackClick?: () => void;
-  actionButtonClick?: (v?: any) => void;
-  confirmRef?: ForwardedRef<ConfirmElement>;
-  handleToggleContent?: any;
-  onPressBack?: () => void;
-  onPressSummaryView?: () => void;
-  therapistViewAssessmentLoading?: boolean;
-  onToggleQuestionAccordion?: any;
-  handleDeleteQuestion?: (v) => void;
-  onSubmitAssessmentResponse?: (
-    formData: InitialQuesionsFormValues,
-    formikHelper: FormikProps<InitialQuesionsFormValues>,
-    value
-  ) => void;
-}

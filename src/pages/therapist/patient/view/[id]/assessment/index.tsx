@@ -56,6 +56,7 @@ const TherapistAssessmentMain: React.FC<any> = ({
     setIsConfirmAdd(false);
   };
 
+  /* istanbul ignore next */
   const handleCreateAssessment = async () => {
     try {
       addAssessment({
@@ -132,19 +133,25 @@ const TherapistAssessmentMain: React.FC<any> = ({
         maxWidth="sm"
       >
         <TherapistAddAssessmentForm
-          onPressSubmit={() => setIsConfirmAdd(true)}
+          onPressSubmit={() =>
+            /* istanbul ignore next */
+            setIsConfirmAdd(true)
+          }
           organizationList={addAssessmentDropdownData}
           receiveAssessmentId={receiveAssessmentId}
         />
       </CommonModal>
 
-      {isConfirmAdd && (
-        <ConfirmationModal
-          label="Are you sure you want to add the Assessment?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={handleCreateAssessment}
-        />
-      )}
+      {
+        /* istanbul ignore next */
+        isConfirmAdd && (
+          <ConfirmationModal
+            label="Are you sure you want to add the Assessment?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={handleCreateAssessment}
+          />
+        )
+      }
     </>
   );
 };

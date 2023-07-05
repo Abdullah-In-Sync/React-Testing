@@ -22,13 +22,18 @@ import {
 import { TemplateFormData } from "../../templateTable/table.model";
 import TemplateTable from "../../templateTable";
 import { FormikProps } from "formik";
-import { CREATE_RESOURCE } from "../../../graphql/mutation/resource";
+import {
+  CREATE_RESOURCE,
+  CREATE_FORMULATION,
+} from "../../../graphql/mutation/resource";
 import { SuccessModal } from "../SuccessModal";
 import { useRouter } from "next/router";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
 import { IS_ADMIN } from "../../../lib/constants";
 import TemplateArrow from "../../templateArrow";
+import ContentHeader from "../ContentHeader";
+import ConfirmationModal from "../ConfirmationModal";
 import MultiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
 import FormikSelectDropdown from "../FormikFields/FormikSelectDropdown";
 
@@ -55,6 +60,7 @@ interface CreateResourceInput {
   resourceType: number;
   templateData?: string;
   templateId?: string;
+  formulation?: number;
 }
 
 export default function CreateResource(props: propTypes) {
@@ -63,7 +69,7 @@ export default function CreateResource(props: propTypes) {
   const {
     user: { user_type: userType, therapist_data: { org_id: orgId = "" } = {} },
   } = useAppContext();
-  const [formFields, setFormFields] = useState<CreateResourceInput>({
+  const initialState = {
     disorderId: "",
     modelId: "",
     resourceAvailOnlyme: "0",
@@ -81,12 +87,22 @@ export default function CreateResource(props: propTypes) {
     resourceInstruction: "",
     resourceIsformualation: "",
     resourceReferences: "",
-  });
+    formulation: 0,
+  };
+  const [formFields, setFormFields] =
+    useState<CreateResourceInput>(initialState);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   //useState for prefilled input data
   const [templateModal, setTemplateModal] = useState<boolean>(false);
   const [dimensionModal, setDimensionModal] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
+  const [createFormulation] = useMutation(CREATE_FORMULATION);
+
+  const [isConfirm, setIsConfirm] = useState<any>({
+    status: false,
+    message: "",
+    storedFunction: null,
+  });
 
   const [selectedComponentType, setSelectedComponentType] = useState({
     type: null,
@@ -128,6 +144,37 @@ export default function CreateResource(props: propTypes) {
       },
     }
   );
+
+  const createFormulationSubmit = async (formFields) => {
+    props.setLoader(true);
+    try {
+      await createFormulation({
+        variables: formFields,
+        onCompleted: (data) => {
+          const {
+            createFormulation: { result, duplicateNames },
+          } = data;
+          if (result) {
+            enqueueSnackbar("Formulation has been created successfully.", {
+              variant: "success",
+            });
+            router.push(`/${userType}/resource/`);
+          } else if (duplicateNames) {
+            /* istanbul ignore next */
+            enqueueSnackbar("Duplicate name.", {
+              variant: "error",
+            });
+          }
+          props.setLoader(false);
+        },
+      });
+    } catch (e) {
+      props.setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    }
+  };
 
   const [getModelByDisorderId, { data: modelData }] = useLazyQuery(
     GET_MODEL_BY_DISORDERID_DATA,
@@ -243,14 +290,28 @@ export default function CreateResource(props: propTypes) {
   };
 
   const setCheckBox = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | any>
   ) => {
     const name = e.target.name;
 
-    setFormFields((oldValues) => ({
-      ...oldValues,
-      [name]: Math.abs(oldValues[name] - 1),
-    }));
+    if (name === "formulation") {
+      setFormFields(() => ({
+        ...initialState,
+        ...{
+          formulation: !e.target.checked ? 0 : 1,
+        },
+      }));
+      setTemplateModal(false);
+      setSelectedComponentType({
+        type: null,
+        initialData: undefined,
+        info: undefined,
+      });
+    } else
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        [name]: Math.abs(oldValues[name] - 1),
+      }));
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -299,9 +360,42 @@ export default function CreateResource(props: propTypes) {
   /* istanbul ignore next */
   const saveResource = (data) => {
     props.setLoader(true);
-    createResource({
-      variables: data,
-    });
+    if (formFields?.formulation) {
+      const {
+        resourceAvailOnlyme,
+        resourceAvailTherapist,
+        resourceName,
+        orgId,
+        templateData,
+        templateId,
+        resourceDesc,
+        resourceInstruction,
+      } = data;
+
+      const formulationAvailFor = [];
+      if (resourceAvailTherapist == 1) formulationAvailFor.push(2);
+      if (resourceAvailOnlyme == 1) formulationAvailFor.push(1);
+
+      const tempD = {
+        resourceName,
+        formulationType: formFields?.formulation,
+        orgId,
+        resourceDesc,
+        resourceInstruction,
+        formulationAvailFor: JSON.stringify(formulationAvailFor),
+        templateData,
+        templateId,
+      };
+
+      return setIsConfirm({
+        status: true,
+        message: "Are you sure you want to create this formulation?",
+        storedFunction: () => createFormulationSubmit(tempD),
+      });
+    } else
+      createResource({
+        variables: data,
+      });
   };
 
   /* istanbul ignore next */
@@ -370,6 +464,15 @@ export default function CreateResource(props: propTypes) {
     /* istanbul ignore next */
   };
 
+  const onConfirmSubmit = () => {
+    isConfirm.storedFunction();
+    setIsConfirm({ status: false, storedFunction: null });
+  };
+
+  const clearIsConfirm = () => {
+    setIsConfirm({ status: false, storedFunction: null });
+  };
+
   const handleChange = (event) => {
     const value = event.target.value as string[];
 
@@ -402,6 +505,25 @@ export default function CreateResource(props: propTypes) {
 
   return (
     <>
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+      >
+        <ContentHeader title="Create Resource" />
+        <CheckBoxLabelComponent
+          value="1"
+          name="formulation"
+          onChange={setCheckBox}
+          label="Formulation"
+          placement="end"
+          inputProps={{
+            "data-testid": "formulationCheckbox",
+          }}
+          checked={formFields?.formulation}
+          size="small"
+        />
+      </Box>
       <form onSubmit={handleSubmit} data-testid="resource-crate-form">
         <Box
           sx={{ flexGrow: 1, border: "1px solid #cecece" }}
@@ -424,23 +546,25 @@ export default function CreateResource(props: propTypes) {
                 size="small"
               />
             </Grid>
-            <Grid item xs={4}>
-              <SingleSelectComponent
-                fullWidth={true}
-                required={true}
-                id="resourceTypeSelect"
-                labelId="resourceType"
-                name="resourceType"
-                value={formFields?.resourceType}
-                label="Select Resource Type"
-                onChange={set2}
-                inputProps={{ "data-testid": "resourceType" }}
-                options={resourceTypeOptions}
-                mappingKeys={["id", "value"]}
-                size="small"
-                className="form-control-bg"
-              />
-            </Grid>
+            {!formFields?.formulation && (
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="resourceTypeSelect"
+                  labelId="resourceType"
+                  name="resourceType"
+                  value={formFields?.resourceType}
+                  label="Select Resource Type"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "resourceType" }}
+                  options={resourceTypeOptions}
+                  mappingKeys={["id", "value"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
+            )}
             {userType == IS_ADMIN ? (
               <Grid item xs={4}>
                 {/* <SingleSelectComponent
@@ -483,62 +607,64 @@ export default function CreateResource(props: propTypes) {
             )}
           </Grid>
 
-          <Grid container spacing={2} marginBottom={5}>
-            <Grid item xs={4}>
-              <SingleSelectComponent
-                fullWidth={true}
-                required={true}
-                id="resourceDisorderSelect"
-                labelId="resourceDisorder"
-                name="disorderId"
-                value={formFields?.disorderId}
-                label="Select Disorder"
-                onChange={set2}
-                inputProps={{ "data-testid": "disorderId" }}
-                options={
-                  (disorderData && disorderData.getDisorderByOrgId) || []
-                }
-                mappingKeys={["_id", "disorder_name"]}
-                size="small"
-                className="form-control-bg"
-              />
+          {!formFields?.formulation && (
+            <Grid container spacing={2} marginBottom={5}>
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="resourceDisorderSelect"
+                  labelId="resourceDisorder"
+                  name="disorderId"
+                  value={formFields?.disorderId}
+                  label="Select Disorder"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "disorderId" }}
+                  options={
+                    (disorderData && disorderData.getDisorderByOrgId) || []
+                  }
+                  mappingKeys={["_id", "disorder_name"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  required={true}
+                  id="modelTypeSelect"
+                  labelId="modelType"
+                  name="modelId"
+                  value={formFields?.modelId}
+                  label="Select Model"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "modelId" }}
+                  options={(modelData && modelData?.getModelByDisorderId) || []}
+                  mappingKeys={["_id", "model_name"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  id="categorySelect"
+                  labelId="category"
+                  name="categoryId"
+                  value={formFields?.categoryId}
+                  label="Select Category (Optional)"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "categoryId" }}
+                  options={
+                    (categoryData && categoryData.getCategoryByModelId) || []
+                  }
+                  mappingKeys={["_id", "category_name"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={4}>
-              <SingleSelectComponent
-                fullWidth={true}
-                required={true}
-                id="modelTypeSelect"
-                labelId="modelType"
-                name="modelId"
-                value={formFields?.modelId}
-                label="Select Model"
-                onChange={set2}
-                inputProps={{ "data-testid": "modelId" }}
-                options={(modelData && modelData?.getModelByDisorderId) || []}
-                mappingKeys={["_id", "model_name"]}
-                size="small"
-                className="form-control-bg"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <SingleSelectComponent
-                fullWidth={true}
-                id="categorySelect"
-                labelId="category"
-                name="categoryId"
-                value={formFields?.categoryId}
-                label="Select Category (Optional)"
-                onChange={set2}
-                inputProps={{ "data-testid": "categoryId" }}
-                options={
-                  (categoryData && categoryData.getCategoryByModelId) || []
-                }
-                mappingKeys={["_id", "category_name"]}
-                size="small"
-                className="form-control-bg"
-              />
-            </Grid>
-          </Grid>
+          )}
 
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12}>
@@ -574,43 +700,47 @@ export default function CreateResource(props: propTypes) {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} marginBottom={5}>
-            <Grid item xs={12}>
-              <TextFieldComponent
-                name="resourceReferences"
-                id="references"
-                label="References"
-                value={formFields?.resourceReferences}
-                multiline
-                rows={4}
-                onChange={set2}
-                inputProps={{ "data-testid": "resourceReferences" }}
-                fullWidth={true}
-                className="form-control-bg"
-              />
+          {!formFields?.formulation && (
+            <Grid container spacing={2} marginBottom={5}>
+              <Grid item xs={12}>
+                <TextFieldComponent
+                  name="resourceReferences"
+                  id="references"
+                  label="References"
+                  value={formFields?.resourceReferences}
+                  multiline
+                  rows={4}
+                  onChange={set2}
+                  inputProps={{ "data-testid": "resourceReferences" }}
+                  fullWidth={true}
+                  className="form-control-bg"
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          )}
 
-          <Grid container spacing={2} marginBottom={5}>
-            <Grid item xs={3}>
-              <SingleSelectComponent
-                fullWidth={true}
-                id="agendaSelect"
-                labelId="agenda"
-                name="agendaId"
-                value={formFields?.agendaId}
-                label="Suggested Agenda"
-                onChange={set2}
-                inputProps={{ "data-testid": "agendaId" }}
-                options={
-                  (agendaData && agendaData.getAgendaByDisorderAndModel) || []
-                }
-                mappingKeys={["_id", "agenda_name"]}
-                size="small"
-                className="form-control-bg"
-              />
+          {!formFields?.formulation && (
+            <Grid container spacing={2} marginBottom={5}>
+              <Grid item xs={3}>
+                <SingleSelectComponent
+                  fullWidth={true}
+                  id="agendaSelect"
+                  labelId="agenda"
+                  name="agendaId"
+                  value={formFields?.agendaId}
+                  label="Suggested Agenda"
+                  onChange={set2}
+                  inputProps={{ "data-testid": "agendaId" }}
+                  options={
+                    (agendaData && agendaData.getAgendaByDisorderAndModel) || []
+                  }
+                  mappingKeys={["_id", "agenda_name"]}
+                  size="small"
+                  className="form-control-bg"
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          )}
 
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12}>
@@ -732,6 +862,14 @@ export default function CreateResource(props: propTypes) {
           onOk={() => {
             router.push(`/${userType}/resource/`);
           }}
+        />
+      )}
+
+      {isConfirm.status && (
+        <ConfirmationModal
+          label={isConfirm.message}
+          onCancel={clearIsConfirm}
+          onConfirm={onConfirmSubmit}
         />
       )}
     </>

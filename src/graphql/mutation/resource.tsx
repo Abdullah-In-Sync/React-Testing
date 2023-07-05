@@ -56,6 +56,37 @@ export const CREATE_RESOURCE = gql`
   }
 `;
 
+export const CREATE_FORMULATION = gql`
+  mutation CreateFormulation(
+    $resourceName: String!
+    $formulationType: Int!
+    $orgId: String!
+    $resourceDesc: String
+    $resourceInstruction: String
+    $formulationAvailFor: String
+    $templateData: String
+    $templateId: String
+  ) {
+    createFormulation(
+      formulation_name: $resourceName
+      formulation_type: $formulationType
+      org_id: $orgId
+      formulation_desc: $resourceDesc
+      formulation_instruction: $resourceInstruction
+      formulation_avail_for: $formulationAvailFor
+      template_data: $templateData
+      template_id: $templateId
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      message
+      result
+    }
+  }
+`;
+
 export const UPDATE_RESOURCE_TEMPLATE_RESPONSE = gql`
   mutation ($ptsharresId: ID!, $update: UpdatePatientResourceInput!) {
     updatePatientResourceById(ptsharresId: $ptsharresId, update: $update) {

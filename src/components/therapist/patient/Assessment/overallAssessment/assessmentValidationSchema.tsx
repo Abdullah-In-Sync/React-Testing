@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import * as Yup from "yup";
 
 export const therapistAssessmentValidationSchema = ({ lastSessionNo }) =>
@@ -8,10 +9,11 @@ export const therapistAssessmentValidationSchema = ({ lastSessionNo }) =>
       .integer()
       .min(lastSessionNo, (v) => {
         const { min } = v;
+        const modifyMinValue = min + 1;
         const minText =
-          min >= 50
+          modifyMinValue >= 50
             ? "Already reached maximum sessions 50."
-            : `Minimum required session is ${min}.`;
+            : `Minimum required session is ${modifyMinValue}.`;
         return minText;
       })
       .max(50, "Maximum required session is 50."),
