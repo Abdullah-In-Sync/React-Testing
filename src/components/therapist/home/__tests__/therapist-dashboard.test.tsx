@@ -18,6 +18,6 @@ const sut = async () => {
 describe("Therapist dashboard screen", () => {
   it("Should render thearpist dashboard cards", async () => {
     await sut();
-    expect(screen.getByTestId("cardBox_record11")).toBeInTheDocument();
+    expect(screen.getByTestId("cardBox_record10")).toBeInTheDocument();
   });
 });

@@ -8,7 +8,6 @@ import ContentHeader from "../../../../common/ContentHeader";
 import { useStyles } from "../patientAssessmentStyles";
 import ClinicalAssessmentList from "./ClinicalAssessmentList";
 import { InitialQuesionsFormValues } from "./updateQuestionResponse/UpdateQuestionResponse";
-import { useRouter } from "next/router";
 
 export interface ClinicalAssessmentProps {
   categoryListData?: any;
@@ -40,16 +39,14 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   handleDeleteQuestion,
 }) => {
   const styles = useStyles();
-  const router = useRouter();
-  const assessmentId = router?.query?.assessmentId as string;
-  console.log("Koca: url assessmentId ", assessmentId);
+  const { name } = categoryListData;
 
   return (
     <>
       <Stack className={styles.clinicalAssessmentWrapper}>
         <Stack className="row1">
           <Box className="col1">
-            <ContentHeader title="Assessment Name" />
+            {name && <ContentHeader title={name} />}
             <CommonButton
               data-testid="baackBtn"
               variant="contained"
