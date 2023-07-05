@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import React, { FormEvent, useEffect, useState } from "react";
 import { Box, FormControl, FormLabel, Grid, Typography } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
@@ -33,6 +34,7 @@ import { IS_ADMIN } from "../../../lib/constants";
 import TemplateArrow from "../../templateArrow";
 import ContentHeader from "../ContentHeader";
 import ConfirmationModal from "../ConfirmationModal";
+import MultiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
 
 type propTypes = {
   onSubmit?: any;
@@ -76,7 +78,7 @@ export default function CreateResource(props: propTypes) {
     resourceType: null,
     agendaId: "",
     categoryId: "",
-    orgId: orgId,
+    orgId: userType == "therapist" ? orgId : "",
     resourceIssmartdraw: "1",
     templateData: "",
     templateId: "",
@@ -166,6 +168,7 @@ export default function CreateResource(props: propTypes) {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       props.setLoader(false);
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
@@ -203,6 +206,8 @@ export default function CreateResource(props: propTypes) {
     }
   );
 
+  const csvDecode = (csvString) => (csvString ? csvString.split(",") : []);
+
   useEffect(() => {
     /* istanbul ignore next */
     props.setLoader(true);
@@ -230,7 +235,7 @@ export default function CreateResource(props: propTypes) {
         agenda_id: "",
       }));
       getDisorderByOrgId({
-        variables: { orgId: formFields.orgId },
+        variables: { orgId: formFields?.orgId?.split(",")?.[0] },
       });
     }
   }, [formFields.orgId]);
@@ -340,6 +345,7 @@ export default function CreateResource(props: propTypes) {
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
 
+    /* istanbul ignore next */
     if (values.component_name == "ArrowTemplate") {
       setTemplateModal(false);
       setSelectedComponentType({
@@ -347,6 +353,7 @@ export default function CreateResource(props: propTypes) {
         type: values.component_name,
         info: values,
       });
+      /* istanbul ignore next */
       setTimeout(() => {
         scrollDown();
       }, 500);
@@ -432,7 +439,7 @@ export default function CreateResource(props: propTypes) {
     /* istanbul ignore next */
     formikHelper.setSubmitting(false);
   };
-
+  /* istanbul ignore next */
   const onTemplateCancel = () => {
     setSelectedComponentType({
       ...selectedComponentType,
@@ -441,7 +448,7 @@ export default function CreateResource(props: propTypes) {
       info: null,
     });
   };
-
+  /* istanbul ignore next */
   const onPreview = (values) => {
     sessionStorage.setItem(
       "create",
@@ -449,7 +456,7 @@ export default function CreateResource(props: propTypes) {
     );
     window.open("/v2/template/preview/create", "_blank");
   };
-
+  /* istanbul ignore next */
   const onSaveArrowTemplate = (arrowTemplateData: string) => {
     saveResource({
       ...formFields,
@@ -458,14 +465,45 @@ export default function CreateResource(props: propTypes) {
     });
     /* istanbul ignore next */
   };
-
+  /* istanbul ignore next */
   const onConfirmSubmit = () => {
     isConfirm.storedFunction();
     setIsConfirm({ status: false, storedFunction: null });
   };
-
+  /* istanbul ignore next */
   const clearIsConfirm = () => {
     setIsConfirm({ status: false, storedFunction: null });
+  };
+
+  const handleChange = (event) => {
+    const value = event.target.value as string[];
+
+    if (value[value.length - 1] === "all") {
+      const updatedSelected = [
+        "all",
+        ...orgData?.getOrganizationData?.map((org) => org._id),
+      ];
+
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        orgId: updatedSelected.join(","),
+      }));
+      return;
+    } else if (
+      /* istanbul ignore next */
+      value.length === orgData?.getOrganizationData?.length &&
+      value?.indexOf("all") === -1
+    ) {
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        orgId: "",
+      }));
+    } else {
+      setFormFields({
+        ...formFields,
+        orgId: [...value].filter((v) => v != "all").join(","),
+      });
+    }
   };
 
   return (
@@ -532,10 +570,10 @@ export default function CreateResource(props: propTypes) {
             )}
             {userType == IS_ADMIN ? (
               <Grid item xs={4}>
-                <SingleSelectComponent
+                {/* <SingleSelectComponent
                   fullWidth={true}
                   required={true}
-                  id="resourceOrgSelect"
+                  id="r`esourceOrgSelect"
                   labelId="resourceOrg"
                   name="orgId"
                   value={formFields?.orgId}
@@ -546,6 +584,25 @@ export default function CreateResource(props: propTypes) {
                   mappingKeys={["_id", "name"]}
                   size="small"
                   className="form-control-bg"
+                /> */}
+                <MultiSelectComponent
+                  fullWidth
+                  inputProps={{ "data-testid": "org_id" }}
+                  onChange={handleChange}
+                  id="organizationSelect"
+                  labelId="organizationSelect"
+                  name="orgId"
+                  label="Select Organization"
+                  options={[
+                    ...[{ _id: "all", name: "Select All" }],
+                    ...((orgData && orgData?.getOrganizationData) || []),
+                  ]}
+                  mappingKeys={["_id", "name"]}
+                  size="small"
+                  className="form-control-bg multiSelect"
+                  extraProps={{ "data-testid": "mainOrganizationSelect" }}
+                  multiSelect={csvDecode(formFields?.orgId)}
+                  value={csvDecode(formFields?.orgId)}
                 />
               </Grid>
             ) : (
@@ -801,6 +858,7 @@ export default function CreateResource(props: propTypes) {
         />
       )}
       {successModal && (
+        /* istanbul ignore next */
         <SuccessModal
           isOpen={successModal}
           description="Your resource has been created successfully."

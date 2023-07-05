@@ -9,7 +9,10 @@ const ContentHeader = (props) => {
     <Box sx={header}>
       <Typography
         variant="h5"
-        sx={{ fontWeight: "bold !important" }}
+        sx={{
+          fontWeight: "bold !important",
+          ...(props.page == "resource" ? { paddingBottom: "16px" } : {}),
+        }}
         color={props.color ? props.color : `secondary.main`}
       >
         {props.title}

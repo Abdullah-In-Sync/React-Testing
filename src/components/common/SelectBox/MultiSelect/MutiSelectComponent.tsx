@@ -82,7 +82,11 @@ export default function MultiSelectComponent(props: propTypes) {
         )} */}
 
         {modifyOptions.map(({ id, value }) => (
-          <MenuItem key={`${id}-${value}`} value={id}>
+          <MenuItem
+            key={`${id}-${value}`}
+            value={id}
+            data-testid={`shareOrg_${id}`}
+          >
             <Checkbox
               checked={
                 props.multiSelect.indexOf(id) > -1 ||
