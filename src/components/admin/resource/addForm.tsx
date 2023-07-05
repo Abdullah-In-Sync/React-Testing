@@ -366,21 +366,6 @@ export default function AddForm(props: propTypes) {
             </Grid>
             {userType == "admin" ? (
               <Grid item xs={4}>
-                {/* <SingleSelectComponent
-                  fullWidth={true}
-                  required={true}
-                  id="resourceOrgSelect"
-                  labelId="resourceOrg"
-                  name="org_id"
-                  value={formFields?.org_id}
-                  label="Select Organization"
-                  onChange={set2}
-                  inputProps={{ "data-testid": "org_id" }}
-                  options={(orgData && orgData?.getOrganizationData) || []}
-                  mappingKeys={["_id", "name"]}
-                  size="small"
-                  className="form-control-bg"
-                /> */}
                 <MultiSelectComponent
                   fullWidth
                   required={true}

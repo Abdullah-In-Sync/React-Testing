@@ -1,5 +1,5 @@
 /* eslint-disable no-unsafe-optional-chaining */
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Box, FormControl, FormLabel, Grid, Typography } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useLazyQuery, useMutation } from "@apollo/client";
@@ -35,6 +35,8 @@ import TemplateArrow from "../../templateArrow";
 import ContentHeader from "../ContentHeader";
 import ConfirmationModal from "../ConfirmationModal";
 import MultiSelectComponent from "../SelectBox/MultiSelect/MutiSelectComponent";
+import InfoModal, { ConfirmInfoElement } from "../CustomModal/InfoModal";
+import InfoMessageView from "../InfoMessageView";
 
 type propTypes = {
   onSubmit?: any;
@@ -95,6 +97,7 @@ export default function CreateResource(props: propTypes) {
   const [templateModal, setTemplateModal] = useState<boolean>(false);
   const [dimensionModal, setDimensionModal] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
+  const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [createFormulation] = useMutation(CREATE_FORMULATION);
 
   const [isConfirm, setIsConfirm] = useState<any>({
@@ -133,16 +136,30 @@ export default function CreateResource(props: propTypes) {
     }
   );
 
-  const [createResource, { data: createResourceRes }] = useMutation(
-    CREATE_RESOURCE,
-    {
+  const [createResource] = useMutation(CREATE_RESOURCE, {
+    /* istanbul ignore next */
+    onCompleted: (data) => {
       /* istanbul ignore next */
-      onCompleted: () => {
-        /* istanbul ignore next */
-        props.setLoader(false);
-      },
-    }
-  );
+      props.setLoader(false);
+      if (data) {
+        const {
+          createResource: { duplicateNames },
+        } = data;
+
+        if (duplicateNames != null) {
+          infoModalRef.current.openConfirm({
+            data: {
+              duplicateNames,
+              message:
+                "This Resource already exists in the following organisations! ",
+            },
+          });
+        } else {
+          setSuccessModal(true);
+        }
+      }
+    },
+  });
 
   const createFormulationSubmit = async (formFields) => {
     props.setLoader(true);
@@ -216,13 +233,6 @@ export default function CreateResource(props: propTypes) {
       getOrgData();
     }
   }, []);
-
-  useEffect(() => {
-    /* istanbul ignore next */
-    if (createResourceRes?.createResource != null) {
-      setSuccessModal(true);
-    }
-  }, [createResourceRes]);
 
   useEffect(() => {
     if (formFields.orgId) {
@@ -570,21 +580,6 @@ export default function CreateResource(props: propTypes) {
             )}
             {userType == IS_ADMIN ? (
               <Grid item xs={4}>
-                {/* <SingleSelectComponent
-                  fullWidth={true}
-                  required={true}
-                  id="r`esourceOrgSelect"
-                  labelId="resourceOrg"
-                  name="orgId"
-                  value={formFields?.orgId}
-                  label="Select Organization"
-                  onChange={set2}
-                  inputProps={{ "data-testid": "org_id" }}
-                  options={(orgData && orgData?.getOrganizationData) || []}
-                  mappingKeys={["_id", "name"]}
-                  size="small"
-                  className="form-control-bg"
-                /> */}
                 <MultiSelectComponent
                   fullWidth
                   inputProps={{ "data-testid": "org_id" }}
@@ -876,6 +871,9 @@ export default function CreateResource(props: propTypes) {
           onConfirm={onConfirmSubmit}
         />
       )}
+      <InfoModal ref={infoModalRef}>
+        <InfoMessageView />
+      </InfoModal>
     </>
   );
 }
