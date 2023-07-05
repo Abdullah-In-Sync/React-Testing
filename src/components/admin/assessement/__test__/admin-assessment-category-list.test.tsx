@@ -55,7 +55,6 @@ mocksData.push({
       adminAssessmentAddQs: [
         {
           _id: "quesid-1",
-          __typename: "adminAssessmentQs",
         },
       ],
     },
@@ -87,7 +86,7 @@ mocksData.push({
             status: 1,
           },
         ],
-        name: "test-case-assessment",
+        name: "assessmentname-check",
       },
     },
   },
