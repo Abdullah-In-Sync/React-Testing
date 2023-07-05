@@ -56,7 +56,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       onCompleted: (data) => {
         /* istanbul ignore next */
         if (data!.getPatientTherapy) {
-          const pttherapyId = data!.getPatientTherapy[0]._id;
+          const pttherapyId = data!.getPatientTherapy[0]?._id;
           /* istanbul ignore next */
           if (pttherapyId) {
             setTherapy(pttherapyId);
