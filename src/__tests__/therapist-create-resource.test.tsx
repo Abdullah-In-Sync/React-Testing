@@ -48,6 +48,10 @@ mocksData.push({
           _id: "e7b5b7c0568b4eacad6f05f11d9c4884",
           name: "dev-myhelp",
         },
+        {
+          _id: "e7b5b7c0568b4eacad6f05f11d9c4885",
+          name: "dev-myhelp2",
+        },
       ],
     },
   },
@@ -152,10 +156,14 @@ mocksData.push({
       resourceReferences: "",
     },
   },
+
   result: {
     data: {
       createResource: {
+        duplicateNames: null,
         _id: "agenda_id_1",
+        result: true,
+        __typename: "adminResult",
       },
     },
   },
@@ -243,12 +251,17 @@ mocksData.push({
       resourceIsformualation: "0",
       resourceIssmartdraw: "0",
       resourceReferences: "",
+      orgId: "2301536c4d674b3598814174d8f19593",
     },
   },
+
   result: {
     data: {
       createResource: {
+        duplicateNames: null,
         _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+        result: true,
+        __typename: "adminResult",
       },
     },
   },

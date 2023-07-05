@@ -51,7 +51,6 @@ export const CREATE_RESOURCE = gql`
         _id
         name
       }
-      message
       result
     }
   }
