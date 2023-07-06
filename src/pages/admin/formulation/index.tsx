@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   IconButton,
   Box,
@@ -21,9 +21,14 @@ import CrudForm from "../../../components/common/CrudForm";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
-import { GET_FORMULATION_LIST } from "../../../graphql/formulation/graphql";
+import {
+  ADD_FAV_FORMULATION,
+  GET_FORMULATION_LIST,
+  REMOVE_FAV_FORMULATION,
+} from "../../../graphql/formulation/graphql";
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
 import { ShareOutlined } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -35,11 +40,14 @@ const IconButtonWrapper = styled(IconButton)(
 );
 
 const Formulation = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [filterValue, setFilterValue] = useState<any>({});
   const [dataList, setDataList] = useState<any>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [myFormulation, setMyFormulation] = useState<number>(0);
   const [myFavourite, setMyFavourite] = useState<number>(0);
+  const [addFavFormulation] = useMutation(ADD_FAV_FORMULATION);
+  const [removeFavFormulation] = useMutation(REMOVE_FAV_FORMULATION);
   const {
     user: { _id: adminId },
   } = useAppContext();
@@ -68,6 +76,77 @@ const Formulation = () => {
     }
   );
 
+  const addFavFormulationApi = async (formFields, index) => {
+    try {
+      await addFavFormulation({
+        variables: formFields,
+        onCompleted: (data) => {
+          const {
+            addFavouriteFormulation: { fav_formulation_id = undefined } = {},
+          } = data;
+          if (fav_formulation_id) {
+            enqueueSnackbar("Favorite formulation added successfully.", {
+              variant: "success",
+            });
+            const tempDataList = JSON.parse(JSON.stringify(dataList));
+            tempDataList[index]["fav_for_detail"] = [
+              {
+                _id: fav_formulation_id,
+              },
+            ];
+            setDataList(tempDataList);
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    }
+  };
+
+  const removeFavFormulationApi = async (formFields, index) => {
+    try {
+      await removeFavFormulation({
+        variables: formFields,
+        onCompleted: (data) => {
+          const { deleteFavouriteFormulation: { deleted = undefined } = {} } =
+            data;
+          if (deleted) {
+            enqueueSnackbar("Favorite formulation deleted successfully.", {
+              variant: "success",
+            });
+            const tempDataList = JSON.parse(JSON.stringify(dataList));
+            tempDataList[index]["fav_for_detail"] = [];
+            setDataList(tempDataList);
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    }
+  };
+
+  const handleRemoveFavFormulation = ({ fav_formulation_id, index }) => {
+    removeFavFormulationApi({ fav_formulation_id }, index);
+  };
+
+  const handleAddFavFormulation = ({ formulation_id, index }) => {
+    addFavFormulationApi({ formulation_id }, index);
+  };
+
+  const toggleFav = (v, index) => {
+    const { _id: formulation_id, fav_for_detail = [] } = v;
+    if (fav_for_detail.length > 0)
+      handleRemoveFavFormulation({
+        fav_formulation_id: fav_for_detail[0]["_id"],
+        index,
+      });
+    else handleAddFavFormulation({ formulation_id, index });
+  };
+
   const fields = [
     {
       key: "formulation_desc",
@@ -95,7 +174,7 @@ const Formulation = () => {
     {
       key: "actions",
       visible: true,
-      render: (_, value) => (
+      render: (_, value, index) => (
         <>
           {value?.user_id == adminId && (
             <>
@@ -113,13 +192,18 @@ const Formulation = () => {
               </IconButtonWrapper>
             </>
           )}
-          <IconButtonWrapper aria-label="favorite" size="small">
+          <IconButtonWrapper
+            onClick={() => toggleFav(value, index)}
+            data-testid={"fav_btn_" + value?._id}
+            aria-label="favorite"
+            size="small"
+          >
             <FavoriteBorderIcon
               data-testid={"fav_" + value?._id}
               id={"fav_" + value?._id}
               sx={{
                 color:
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
+                  value?.fav_for_detail && value?.fav_for_detail.length > 0
                     ? "red"
                     : "",
               }}

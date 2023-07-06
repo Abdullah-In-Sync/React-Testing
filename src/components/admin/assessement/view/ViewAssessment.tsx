@@ -29,14 +29,13 @@ const ViewAssessment: React.FC<ViewAssessmentProps> = ({
   assessmentQuestionsViewData,
   handleDeleteQuestion,
 }) => {
+  const { name } = data;
   const styles = useStyles();
   return (
     <ConfirmWrapper ref={confirmRef}>
       <Stack className={styles.viewWrapper}>
         <Stack className="row1">
-          <Box className="col1">
-            <ContentHeader title="Assessment Name" />
-          </Box>
+          <Box className="col1">{name && <ContentHeader title={name} />}</Box>
           <Box className="col2">
             <CommonButton
               data-testid="addCategory"

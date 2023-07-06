@@ -371,7 +371,6 @@ export default function CreateResource(props: propTypes) {
   };
   /* istanbul ignore next */
   const saveResource = (data) => {
-    props.setLoader(true);
     if (formFields?.formulation) {
       const {
         resourceAvailOnlyme,
