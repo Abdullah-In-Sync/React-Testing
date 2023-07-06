@@ -22,6 +22,7 @@ import {
 } from "../graphql/query/resource";
 
 import { useRouter } from "next/router";
+import { ThemeProvider } from "@mui/material";
 const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -37,6 +38,7 @@ import {
 import { useAppContext } from "../contexts/AuthContext";
 import Create from "../pages/admin/resource/create";
 import { GET_ORG_DATA } from "../graphql/query";
+import theme from "../styles/theme/theme";
 
 // mocks
 const mocksData = [];
@@ -314,9 +316,11 @@ export const checkSelected = async (element: HTMLElement, id: string) => {
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <Create />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <Create />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>
