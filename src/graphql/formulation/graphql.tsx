@@ -34,6 +34,29 @@ export const GET_FORMULATION_LIST = gql`
     }
   }
 `;
+export const UPDATE_ADMIN_FORMULATION_BY_ID = gql`
+  mutation ($formulation_id: ID!, $updateFormulation: UpdateFormulationInput) {
+    updateFormulationById(
+      formulation_id: $formulation_id
+      updateFormulation: $updateFormulation
+    ) {
+      _id
+      created_date
+      download_formulation_url
+      formulation_avail_for
+      formulation_desc
+      formulation_img
+      formulation_instruction
+      formulation_returnurl
+      formulation_name
+      formulation_status
+      formulation_type
+      formulation_url
+      updated_date
+      user_id
+    }
+  }
+`;
 
 export const ADD_FAV_FORMULATION = gql`
   mutation AddFavouriteFormulation($formulation_id: String!) {

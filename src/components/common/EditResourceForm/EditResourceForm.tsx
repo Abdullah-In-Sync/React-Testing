@@ -568,6 +568,7 @@ export default function EditForm(props: propTypes) {
                     mappingKeys={["_id", "name"]}
                     size="small"
                     className="form-control-bg"
+                    disabled={true}
                   />
                 </Grid>
               ) : (
