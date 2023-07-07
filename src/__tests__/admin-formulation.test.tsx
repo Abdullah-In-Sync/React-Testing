@@ -9,6 +9,7 @@ import {
   ADD_FAV_FORMULATION,
   GET_FORMULATION_LIST,
   REMOVE_FAV_FORMULATION,
+  UPDATE_ADMIN_FORMULATION_BY_ID,
 } from "../graphql/formulation/graphql";
 
 jest.mock("next/router", () => ({
@@ -40,6 +41,37 @@ const buildMocks = (): {
           user_status: "1",
           created_date: "2021-12-20 16:20:55",
           updated_date: "2021-12-20 16:20:55",
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: UPDATE_ADMIN_FORMULATION_BY_ID,
+      variables: {
+        formulation_id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+        updateFormulation: { formulation_status: 0 },
+      },
+    },
+    result: {
+      data: {
+        updateFormulationById: {
+          _id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+          created_date: "2023-07-04T12:16:57.353Z",
+          download_formulation_url: null,
+          formulation_avail_for: "[1]",
+          formulation_desc: "",
+          formulation_img: "",
+          formulation_instruction: "",
+          formulation_returnurl: null,
+          formulation_name: "testsome",
+          formulation_status: 0,
+          formulation_type: 1,
+          formulation_url: null,
+          updated_date: "2023-07-06T05:53:10.580Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          __typename: "FormulationData",
         },
       },
     },
@@ -226,5 +258,29 @@ describe(" Formulation page", () => {
     expect(
       await screen.findByText(/Favorite formulation deleted successfully./i)
     ).toBeInTheDocument();
+  });
+
+  test("Delete formulation", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(
+        screen.queryByTestId("deleteIcon_d1b60faa-c8aa-4258-ada0-cfdf18402b7b")
+      ).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.queryByTestId("deleteIcon_d1b60faa-c8aa-4258-ada0-cfdf18402b7b")
+      );
+
+      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      // expect(screen.queryByTestId("confirmButton")).not.toBeInTheDocument()
+      await waitFor(async () => {
+        expect(
+          screen.queryByText("Formulation deleted successfully!")
+        ).toBeInTheDocument();
+      });
+    });
   });
 });

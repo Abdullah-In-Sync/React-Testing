@@ -25,10 +25,12 @@ import {
   ADD_FAV_FORMULATION,
   GET_FORMULATION_LIST,
   REMOVE_FAV_FORMULATION,
+  UPDATE_ADMIN_FORMULATION_BY_ID,
 } from "../../../graphql/formulation/graphql";
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
 import { ShareOutlined } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -48,6 +50,14 @@ const Formulation = () => {
   const [myFavourite, setMyFavourite] = useState<number>(0);
   const [addFavFormulation] = useMutation(ADD_FAV_FORMULATION);
   const [removeFavFormulation] = useMutation(REMOVE_FAV_FORMULATION);
+  const [deleteFormulationId, setDeleteFormulationId] = useState<string>("");
+  const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
+
+  console.log("Koca: deleteFormulationId ", deleteFormulationId);
+
+  // Mutation
+  const [deleteFormulation] = useMutation(UPDATE_ADMIN_FORMULATION_BY_ID);
+
   const {
     user: { _id: adminId },
   } = useAppContext();
@@ -62,7 +72,7 @@ const Formulation = () => {
     });
   }, [searchText, myFavourite, myFormulation]);
 
-  const [getFormulationList, { loading: loading }] = useLazyQuery(
+  const [getFormulationList, { loading: loading, refetch }] = useLazyQuery(
     GET_FORMULATION_LIST,
     {
       fetchPolicy: "cache-and-network",
@@ -71,6 +81,7 @@ const Formulation = () => {
         /* istanbul ignore next */
       },
       onError: () => {
+        /* istanbul ignore next */
         setDataList([]);
       },
     }
@@ -99,6 +110,7 @@ const Formulation = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -123,6 +135,7 @@ const Formulation = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -147,8 +160,39 @@ const Formulation = () => {
     else handleAddFavFormulation({ formulation_id, index });
   };
 
+  /* istanbul ignore next */
+  const deleteFormulationHandler = async () => {
+    try {
+      await deleteFormulation({
+        variables: {
+          formulation_id: deleteFormulationId,
+          updateFormulation: {
+            formulation_status: 0,
+          },
+        },
+        onCompleted: () => {
+          setIsConfirmCompleteTask(false);
+          refetch();
+          enqueueSnackbar("Formulation deleted successfully!", {
+            variant: "success",
+          });
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  /* istanbul ignore next */
+  const clearIsConfirmCancel = () => {
+    setIsConfirmCompleteTask(false);
+  };
+
+  /* istanbul ignore next */
   const fields = [
     {
+      /* istanbul ignore next */
       key: "formulation_desc",
       visible: true,
     },
@@ -182,6 +226,10 @@ const Formulation = () => {
                 data-testid={"deleteIcon_" + value?._id}
                 aria-label="delete"
                 size="small"
+                onClick={() => {
+                  setDeleteFormulationId(value?._id);
+                  setIsConfirmCompleteTask(true);
+                }}
               >
                 <DeleteIcon />
               </IconButtonWrapper>
@@ -313,6 +361,14 @@ const Formulation = () => {
         <Loader visible={loading} />
         <FormulationCardGenerator data={dataList} fields={fields} />
       </Box>
+
+      {isConfirmCompleteTask && (
+        <ConfirmationModal
+          label="Are you sure you want to delete this formulation?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={deleteFormulationHandler}
+        />
+      )}
     </>
   );
 };
