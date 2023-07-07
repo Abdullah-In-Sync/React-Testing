@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import AddForm from "../../../../components/admin/resource/addForm";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
@@ -9,10 +9,15 @@ import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import withAuthentication from "../../../../hoc/auth";
+import InfoModal, {
+  ConfirmInfoElement,
+} from "../../../../components/common/CustomModal/InfoModal";
+import InfoMessageView from "../../../../components/common/InfoMessageView";
 
 const Index = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
+  const infoModalRef = useRef<ConfirmInfoElement>(null);
 
   const [createResource] = useMutation(CREATE_RESOURCE);
 
@@ -41,16 +46,28 @@ const Index = () => {
           orgId: formFields.org_id,
         },
         onCompleted: (data) => {
-          if (data && data.createResource && data.createResource._id) {
-            enqueueSnackbar("Resource added successfully", {
-              variant: "success",
-              autoHideDuration: 2000,
-            });
-            router.push("/admin/resource");
+          if (data) {
+            const {
+              createResource: { duplicateNames },
+            } = data;
+            if (duplicateNames != null) {
+              infoModalRef.current.openConfirm({
+                data: {
+                  duplicateNames,
+                  message:
+                    "This Resource already exists in the following organisations! ",
+                },
+              });
+            } else {
+              enqueueSnackbar("Resource added successfully", {
+                variant: "success",
+                autoHideDuration: 2000,
+              });
+              router.push("/admin/resource");
+            }
           }
         },
       });
-
       setLoader(false);
     } catch (e) {
       setLoader(false);
@@ -72,6 +89,9 @@ const Index = () => {
           setLoader={setLoader}
         />
       </Layout>
+      <InfoModal ref={infoModalRef}>
+        <InfoMessageView />
+      </InfoModal>
     </>
   );
 };

@@ -32,6 +32,8 @@ import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { useAppContext } from "../contexts/AuthContext";
 import Create from "../pages/therapist/resource/create";
 import { GET_ORG_DATA } from "../graphql/query";
+import { ThemeProvider } from "@mui/material";
+import theme from "../styles/theme/theme";
 
 // mocks
 const mocksData = [];
@@ -270,9 +272,11 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <Create />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <Create />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>

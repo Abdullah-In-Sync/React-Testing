@@ -32,6 +32,8 @@ jest.mock("../contexts/AuthContext");
 import { CREATE_RESOURCE } from "../graphql/mutation/resource";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_ORG_DATA } from "../graphql/query";
+import { ThemeProvider } from "@mui/material";
+import theme from "../styles/theme/theme";
 
 // mocks
 const mocksData = [];
@@ -210,6 +212,48 @@ mocksData.push({
   },
 });
 
+//check duplicates resource
+mocksData.push({
+  request: {
+    query: CREATE_RESOURCE,
+    variables: {
+      disorderId: "disorder_id_1",
+      modelId: "model_id_1",
+      resourceAvailOnlyme: 0,
+      resourceAvailTherapist: 1,
+      resourceFilename: "invalid.pdf",
+      resourceName: "test",
+      resourceType: 0,
+      agendaId: "agenda_id_1",
+      categoryId: "category_id_1",
+      resourceDesc: "",
+      resourceInstruction: "",
+      resourceIsformualation: "0",
+      resourceIssmartdraw: "0",
+      resourceReferences: "",
+      templateData: "",
+      templateId: "",
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
+    },
+  },
+
+  result: {
+    data: {
+      createResource: {
+        duplicateNames: [
+          {
+            _id: "517fa21a82c0464a92aaae90ae0d5c59",
+            name: "portal.dev-myhelp",
+            __typename: "OrgDetails",
+          },
+        ],
+        result: false,
+        __typename: "adminResult",
+      },
+    },
+  },
+});
+
 export const checkSelected = async (element: HTMLElement, id: string) => {
   const button = await within(element).findByRole("button");
   expect(button).toBeInTheDocument();
@@ -229,9 +273,11 @@ export const checkSelected = async (element: HTMLElement, id: string) => {
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <AddResource />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <AddResource />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>
@@ -572,5 +618,72 @@ describe("Admin add resource page", () => {
 
     const checkboxOnlyMe = screen.getByLabelText("Only Me") as HTMLInputElement;
     expect(checkboxOnlyMe).toBeChecked();
+  });
+
+  it("check duplicate popup", async () => {
+    const mockRouter = {
+      push: jest.fn(),
+    };
+
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    await sut();
+
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "test" },
+    });
+    fireEvent.change(screen.queryByTestId("resource_type"), {
+      target: { value: "2" },
+    });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "e7b5b7c0568b4eacad6f05f11d9c4884");
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("disorder_id"), {
+      target: { value: "disorder_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("model_id"), {
+      target: { value: "model_id_1" },
+    });
+    await waitForElementToBeRemoved(() =>
+      screen.queryByTestId("activity-indicator")
+    );
+    fireEvent.change(screen.queryByTestId("category_id"), {
+      target: { value: "category_id_1" },
+    });
+    fireEvent.change(screen.queryByTestId("agenda"), {
+      target: { value: "agenda_id_1" },
+    });
+
+    fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+    });
+
+    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
+    await (async () => {
+      expect(
+        await screen.findByText(
+          "This Resource already exists in the following organisations!"
+        )
+      ).toBeInTheDocument();
+    });
   });
 });
