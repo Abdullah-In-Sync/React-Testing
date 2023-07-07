@@ -526,7 +526,8 @@ const Resource: NextPage = () => {
               sx={{
                 textTransform: "none",
                 height: "35px",
-                minWidth: "144px",
+                minWidth: "100px",
+                padding: " 6px 0px",
               }}
               onClick={() => {
                 setIsFormulation(false);
@@ -542,7 +543,7 @@ const Resource: NextPage = () => {
               sx={{
                 textTransform: "none",
                 height: "35px",
-                minWidth: "144px",
+                minWidth: "120px",
               }}
               onClick={() => setIsFormulation(true)}
             >
