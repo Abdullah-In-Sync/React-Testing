@@ -496,7 +496,6 @@ const Resource: NextPage = () => {
           spacing={2}
           justifyContent="space-between"
           alignItems={"center"}
-          marginBottom={"16px"}
         >
           <Grid
             xs={3}
@@ -504,6 +503,7 @@ const Resource: NextPage = () => {
               opacity: isFormulation ? 0 : 1,
               padding: " 0px 0px 0px 16px",
             }}
+            marginBottom={"16px"}
           >
             <Search>
               <SearchIconWrapper>
@@ -519,7 +519,13 @@ const Resource: NextPage = () => {
               />
             </Search>
           </Grid>
-          <Grid display={"flex"} justifyContent={"end"} gap={"8px"}>
+          <Grid
+            display={"flex"}
+            justifyContent={"end"}
+            gap={"8px"}
+            marginBottom={"16px"}
+            paddingLeft={"16px"}
+          >
             <Button
               className={`text-white`}
               variant="contained"
