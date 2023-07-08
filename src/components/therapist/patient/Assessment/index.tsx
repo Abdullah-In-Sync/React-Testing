@@ -120,19 +120,19 @@ const TherapistPatientAssessmentList: React.FC = () => {
   });
 
   /* istanbul ignore next */
-  useEffect(() => {
-    if (assessmentId) {
-      getTherapistAssessmentSummaryView({
-        variables: {
-          patient_id: patientId,
-          assessment_id: assessmentId,
+  // useEffect(() => {
+  //   if (assessmentId) {
+  //     getTherapistAssessmentSummaryView({
+  //       variables: {
+  //         patient_id: patientId,
+  //         assessment_id: assessmentId,
 
-          // assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
-          // patient_id: "5aa455d5de8248848b71c8113118e3f5",
-        },
-      });
-    }
-  }, [assessmentId, patientId]);
+  //         // assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
+  //         // patient_id: "5aa455d5de8248848b71c8113118e3f5",
+  //       },
+  //     });
+  //   }
+  // }, [assessmentId, patientId]);
 
   const { pttherapy_session: pttherapySession } =
     therapies.length > 0
@@ -304,6 +304,13 @@ const TherapistPatientAssessmentList: React.FC = () => {
 
   /* istanbul ignore next */
   const onPressSummaryView = () => {
+    // refetch();
+    getTherapistAssessmentSummaryView({
+      variables: {
+        patient_id: patientId,
+        assessment_id: assessmentId,
+      },
+    });
     router.push(
       `/therapist/patient/view/${patientId}/?mainTab=assessment&assessmentView=summary-view`
     );
