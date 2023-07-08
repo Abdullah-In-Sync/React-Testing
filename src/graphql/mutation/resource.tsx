@@ -193,3 +193,31 @@ export const SHARE_RESOURCE = gql`
     }
   }
 `;
+export const CREATE_RESOURCE_FORMULATION = gql`
+  mutation MyMutation(
+    $formulation_name: String!
+    $formulation_filename: String!
+    $formulation_type: Int!
+    $org_id: String!
+    $formulation_avail_for: String
+    $formulation_desc: String
+    $formulation_instruction: String
+  ) {
+    createFormulation(
+      formulation_name: $formulation_name
+      formulation_filename: $formulation_filename
+      formulation_type: $formulation_type
+      org_id: $org_id
+      formulation_avail_for: $formulation_avail_for
+      formulation_desc: $formulation_desc
+      formulation_instruction: $formulation_instruction
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      message
+      result
+    }
+  }
+`;
