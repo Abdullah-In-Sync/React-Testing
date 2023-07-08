@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Loader from "../../../components/common/Loader";
 
 // GRAPHQL
@@ -23,6 +23,7 @@ import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import {
   ADD_FAV_FORMULATION,
+  ADMIN_SHARE_FORMULATION,
   GET_FORMULATION_LIST,
   REMOVE_FAV_FORMULATION,
   UPDATE_ADMIN_FORMULATION_BY_ID,
@@ -31,6 +32,8 @@ import FormulationCardGenerator from "../../../components/common/formulationCard
 import { ShareOutlined } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import ShareAssessmentForm from "../../../components/admin/assessement/shareAssessment/ShareAssessmentForm";
+import { ModalElement } from "../../../components/common/CustomModal/CommonModal";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -52,11 +55,18 @@ const Formulation = () => {
   const [removeFavFormulation] = useMutation(REMOVE_FAV_FORMULATION);
   const [deleteFormulationId, setDeleteFormulationId] = useState<string>("");
   const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
+  const shareInfoModalRef = useRef<ModalElement>(null);
+  const [isConfirmShare, setIsConfirmShare] = useState(false);
+  const [shareOrgIds, setShareOrgIds] = useState();
+  const [selectFormulation, setSelectFormulation] = useState("");
+  const [selectFormulationName, setSelectFormulationName] =
+    useState<string>(",");
 
   console.log("Koca: deleteFormulationId ", deleteFormulationId);
 
   // Mutation
   const [deleteFormulation] = useMutation(UPDATE_ADMIN_FORMULATION_BY_ID);
+  const [shareFormulation] = useMutation(ADMIN_SHARE_FORMULATION);
 
   const {
     user: { _id: adminId },
@@ -189,6 +199,13 @@ const Formulation = () => {
     setIsConfirmCompleteTask(false);
   };
 
+  const onPressShareFormulation = (formulationId: string, name: string) => {
+    console.log(formulationId, name, "onclick share");
+    setSelectFormulation(formulationId);
+    setSelectFormulationName(name);
+    shareInfoModalRef.current?.open();
+  };
+
   /* istanbul ignore next */
   const fields = [
     {
@@ -257,7 +274,14 @@ const Formulation = () => {
               }}
             />
           </IconButtonWrapper>
-          <IconButtonWrapper aria-label="favorite" size="small">
+          <IconButtonWrapper
+            onClick={() =>
+              onPressShareFormulation(value?._id, value?.formulation_name)
+            }
+            aria-label="favorite"
+            size="small"
+            data-testid={"shareBtn_" + value?._id}
+          >
             <ShareOutlined
               data-testid={"fav_" + value?._id}
               id={"fav_" + value?._id}
@@ -317,6 +341,52 @@ const Formulation = () => {
     }
   };
 
+  // share formulation
+  const handleShareAssessment = async () => {
+    try {
+      await shareFormulation({
+        variables: {
+          formulation_id: selectFormulation,
+          org_id: shareOrgIds,
+        },
+        onCompleted: (data) => {
+          if (data) {
+            const {
+              adminShareFormulation: { duplicateNames },
+            } = data;
+
+            if (duplicateNames) {
+              setIsConfirmShare(false);
+              shareInfoModalRef.current?.close();
+            } else {
+              shareInfoModalRef.current?.close();
+              setIsConfirmShare(false);
+              refetch();
+              setSelectFormulation(undefined);
+              setShareOrgIds(undefined);
+
+              enqueueSnackbar("Formulation shared successfully!", {
+                variant: "success",
+              });
+            }
+          }
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+  const receiveSharePlanIds = (value) => {
+    const formattedValue = value.join(",");
+    setShareOrgIds(formattedValue);
+  };
+
+  const clearIsConfirmShareCancel = () => {
+    setIsConfirmShare(false);
+  };
+
   return (
     <>
       <Box
@@ -367,6 +437,21 @@ const Formulation = () => {
           label="Are you sure you want to delete this formulation?"
           onCancel={clearIsConfirmCancel}
           onConfirm={deleteFormulationHandler}
+        />
+      )}
+      <ShareAssessmentForm
+        isOpen={shareInfoModalRef}
+        onPressSubmit={() => setIsConfirmShare(true)}
+        selectAssessmentName={selectFormulationName}
+        receivePlanId={receiveSharePlanIds}
+        shareType={"Formulation"}
+        headerTitleText={"Share formulation"}
+      />
+      {isConfirmShare && (
+        <ConfirmationModal
+          label="Are you sure you want to share the formulation?"
+          onCancel={clearIsConfirmShareCancel}
+          onConfirm={handleShareAssessment}
         />
       )}
     </>

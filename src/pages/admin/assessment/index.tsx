@@ -428,6 +428,7 @@ const AssessmentListPage: NextPage = () => {
           onPressSubmit={() => setIsConfirmShare(true)}
           selectAssessmentName={selectAssessmentName}
           receivePlanId={receiveSharePlanIds}
+          shareType={"Assessment"}
           headerTitleText={"Share assessment"}
         />
         {isConfirmShareTask && (

@@ -73,3 +73,15 @@ export const REMOVE_FAV_FORMULATION = gql`
     }
   }
 `;
+
+export const ADMIN_SHARE_FORMULATION = gql`
+  mutation adminShareFormulation($formulation_id: String!, $org_id: String!) {
+    adminShareFormulation(formulation_id: $formulation_id, org_id: $org_id) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;
