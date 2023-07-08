@@ -14,6 +14,7 @@ export type addResourceFormField = {
   resource_avail_onlyme: number;
   uploadFile: File;
   uploadFileURL: string;
+  formulation_avail_for?: any;
 };
 
 export type editResourceFormField = {
