@@ -21,7 +21,7 @@ export default function SummaryView(props: propTypes) {
 
   return (
     <Box>
-      <ContentHeader title="Clinical Assessment" />
+      <ContentHeader title="Assessment" />
 
       <Box className={styles.backButton}>
         <Button
