@@ -211,9 +211,12 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                   }}
                   className={styles.accordianDetails}
                 >
-                  {data2?.questions?.map((data, questionIndex) => {
-                    return (
-                      <Box className={styles.accordianDetailsQuestionBorder}>
+                  {data2?.questions?.length ? (
+                    data2.questions.map((data, questionIndex) => (
+                      <Box
+                        className={styles.accordianDetailsQuestionBorder}
+                        key={data._id}
+                      >
                         <Box className={styles.accordianDetailsQuestionBox}>
                           <Typography
                             className={
@@ -249,48 +252,52 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                           />
                         </Grid>
                       </Box>
-                    );
-                  })}
+                    ))
+                  ) : (
+                    <Typography>No data found</Typography>
+                  )}
 
-                  <Box className={styles.accordianDetailsSaveCancelButtonBox}>
-                    <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                      <Button
-                        type="submit"
-                        className={styles.saveButton}
-                        onClick={() => {
-                          /* istanbul ignore next */
-                          if (questionaries.length) {
-                            setUpdateCatogoryId(data2._id);
-                            setIsConfirm(true);
-                          } else {
-                            enqueueSnackbar(
-                              "Please answer at least one question",
-                              {
-                                variant: "error",
-                              }
-                            );
+                  {data2?.questions?.length ? (
+                    <Box className={styles.accordianDetailsSaveCancelButtonBox}>
+                      <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                        <Button
+                          type="submit"
+                          className={styles.saveButton}
+                          onClick={() => {
+                            /* istanbul ignore next */
+                            if (questionaries.length) {
+                              setUpdateCatogoryId(data2._id);
+                              setIsConfirm(true);
+                            } else {
+                              enqueueSnackbar(
+                                "Please answer at least one question",
+                                {
+                                  variant: "error",
+                                }
+                              );
+                            }
+                          }}
+                          variant="contained"
+                          data-testid="submitFeedback1"
+                        >
+                          Save
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} textAlign="center">
+                        <Button
+                          data-testid="cancleFeedbackButton"
+                          variant="contained"
+                          className={styles.cancelButton}
+                          onClick={
+                            /* istanbul ignore next */
+                            cancleFunction
                           }
-                        }}
-                        variant="contained"
-                        data-testid="submitFeedback1"
-                      >
-                        Save
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} textAlign="center">
-                      <Button
-                        data-testid="cancleFeedbackButton"
-                        variant="contained"
-                        className={styles.cancelButton}
-                        onClick={
-                          /* istanbul ignore next */
-                          cancleFunction
-                        }
-                      >
-                        Cancel
-                      </Button>
-                    </Grid>
-                  </Box>
+                        >
+                          Cancel
+                        </Button>
+                      </Grid>
+                    </Box>
+                  ) : null}
                 </AccordionDetails>
               </Box>
             </Accordion>
