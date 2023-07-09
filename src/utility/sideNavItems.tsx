@@ -308,6 +308,13 @@ export const patient_routes: RoutesType[] = [
     icon: <CalendarMonthIcon />,
     type: "APPOINTMENT",
   },
+  {
+    key: 6,
+    label: "Assessment",
+    path: "/patient/assessment",
+    icon: <CalendarMonthIcon />,
+    type: "APPOINTMENT",
+  },
 
   {
     key: 4,
@@ -322,13 +329,6 @@ export const patient_routes: RoutesType[] = [
     path: Link + "/patient/communication/1",
     icon: <ChatIcon />,
     type: "COMMUNICATION",
-  },
-  {
-    key: 6,
-    label: "Assessment",
-    path: "/patient/assessment",
-    icon: <CalendarMonthIcon />,
-    type: "APPOINTMENT",
   },
 ];
 
