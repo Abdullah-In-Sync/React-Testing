@@ -29,6 +29,7 @@ import {
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
 import { ShareOutlined } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -40,7 +41,9 @@ const IconButtonWrapper = styled(IconButton)(
 );
 
 const Formulation = () => {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [loader, setLoader] = useState<boolean>(false);
   const [filterValue, setFilterValue] = useState<any>({});
   const [dataList, setDataList] = useState<any>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -77,6 +80,7 @@ const Formulation = () => {
   );
 
   const addFavFormulationApi = async (formFields, index) => {
+    setLoader(true);
     try {
       await addFavFormulation({
         variables: formFields,
@@ -102,10 +106,13 @@ const Formulation = () => {
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+    } finally {
+      setLoader(false);
     }
   };
 
   const removeFavFormulationApi = async (formFields, index) => {
+    setLoader(true);
     try {
       await removeFavFormulation({
         variables: formFields,
@@ -126,6 +133,8 @@ const Formulation = () => {
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -145,6 +154,10 @@ const Formulation = () => {
         index,
       });
     else handleAddFavFormulation({ formulation_id, index });
+  };
+
+  const onClickEdit = ({ _id }) => {
+    router.push(`/admin/formulation/edit/${_id}`);
   };
 
   const fields = [
@@ -185,7 +198,11 @@ const Formulation = () => {
               >
                 <DeleteIcon />
               </IconButtonWrapper>
-              <IconButtonWrapper aria-label="create" size="small">
+              <IconButtonWrapper
+                aria-label="create"
+                size="small"
+                onClick={() => onClickEdit(value)}
+              >
                 <NextLink href={""} passHref>
                   <CreateIcon />
                 </NextLink>
@@ -313,6 +330,7 @@ const Formulation = () => {
         <Loader visible={loading} />
         <FormulationCardGenerator data={dataList} fields={fields} />
       </Box>
+      <Loader visible={loader} />
     </>
   );
 };

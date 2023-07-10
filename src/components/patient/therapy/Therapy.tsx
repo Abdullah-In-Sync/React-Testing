@@ -50,7 +50,7 @@ export default function TherapyMainComponent() {
 
     {
       label: "Feedback",
-      value: "feddback",
+      value: "feedback",
       component: <Feedback />,
     },
   ];
