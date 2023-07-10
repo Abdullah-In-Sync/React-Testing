@@ -1,4 +1,11 @@
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
+import {
+  screen,
+  render,
+  waitFor,
+  fireEvent,
+  within,
+  act,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
@@ -7,10 +14,14 @@ import { useAppContext } from "../contexts/AuthContext";
 import Formulation from "../pages/admin/formulation";
 import {
   ADD_FAV_FORMULATION,
+  ADMIN_SHARE_FORMULATION,
   GET_FORMULATION_LIST,
   REMOVE_FAV_FORMULATION,
   UPDATE_ADMIN_FORMULATION_BY_ID,
 } from "../graphql/formulation/graphql";
+import { GET_ORGANISATION_SHARED_LIST } from "../graphql/assessment/graphql";
+import { ThemeProvider } from "@mui/material";
+import theme from "../styles/theme/theme";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -203,16 +214,87 @@ const buildMocks = (): {
     },
   });
 
+  //for assessment share
+  _mocks.push({
+    request: {
+      query: GET_ORGANISATION_SHARED_LIST,
+      variables: {
+        name: "first description",
+        share_type: "formulation",
+      },
+    },
+    result: {
+      data: {
+        getOrganisationSharedList: [
+          {
+            _id: "4b82eac1-6e57-4666-bce3-3b358a7f5ed1",
+            is_shared: false,
+            name: "A",
+            __typename: "ShareOrganization",
+          },
+          {
+            _id: "df139464-0f74-4532-a489-c87e5b64144e",
+            is_shared: true,
+            name: "Add org editedkdjnsk",
+            __typename: "ShareOrganization",
+          },
+          {
+            _id: "22e18602-147d-499e-85fd-8b265e412411",
+            is_shared: true,
+            name: "Add refactor 1",
+            __typename: "ShareOrganization",
+          },
+        ],
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: ADMIN_SHARE_FORMULATION,
+      variables: {
+        formulation_id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+        org_id: "4b82eac1-6e57-4666-bce3-3b358a7f5ed1",
+      },
+    },
+    result: {
+      data: {
+        adminShareFormulation: {
+          duplicateNames: null,
+          result: true,
+          __typename: "adminResult",
+        },
+      },
+    },
+  });
+
   return { mocks: _mocks };
+};
+
+const clickSelect = async (element: HTMLElement) => {
+  const button = await within(element).findByRole("button");
+  expect(button).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.mouseDown(button);
+  });
+  const listBox = await screen.findByRole("listbox");
+  expect(listBox).toBeInTheDocument();
+  const selectOption = await screen.findByTestId(
+    "shareOrg_4b82eac1-6e57-4666-bce3-3b358a7f5ed1"
+  );
+  expect(selectOption).toBeInTheDocument();
+  fireEvent.click(selectOption);
 };
 
 const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <SnackbarProvider>
-        <Formulation />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <Formulation />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
 };
@@ -281,6 +363,41 @@ describe(" Formulation page", () => {
           screen.queryByText("Formulation deleted successfully!")
         ).toBeInTheDocument();
       });
+    });
+  });
+
+  it("Share formulation from list", async () => {
+    await sut();
+    const shareBtn = await screen.findByTestId(
+      "shareBtn_d1b60faa-c8aa-4258-ada0-cfdf18402b7b"
+    );
+    expect(shareBtn).toBeInTheDocument();
+    fireEvent.click(shareBtn);
+    const saveBtn = await screen.findByTestId("addSubmitForm");
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    expect(
+      screen.getByText("Organisation cannot be empty")
+    ).toBeInTheDocument();
+
+    const select = await screen.findByTestId("share_organisation_select_list");
+    expect(select).toBeInTheDocument();
+    await clickSelect(select);
+
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Are you sure you want to share the formulation?")
+      ).toBeInTheDocument();
+    });
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("confirmButton"));
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Formulation shared successfully!")
+      ).toBeInTheDocument();
     });
   });
 });

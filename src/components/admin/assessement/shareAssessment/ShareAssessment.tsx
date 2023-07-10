@@ -24,13 +24,14 @@ interface ViewProps {
   selectAssessmentName: string;
   setPlanId?: any;
   onChangePlanId?: any;
+  shareType: string;
 }
 
 const useStyles = makeStyles(() => ({
   customTooltip: {
     height: "48px",
     maxWidth: "353px",
-    padding: "14px 16px 19px 16px",
+    padding: "14px 14px 19px 16px",
     fontFamily: "Montserrat",
     fontSize: "12px",
     fontWeight: 600,
@@ -45,6 +46,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
   onPressSubmit,
   selectAssessmentName,
   onChangePlanId,
+  shareType,
 }) => {
   const classes = useStyles();
   const [selected, setSelected] = useState<string | string[]>([]);
@@ -69,7 +71,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
     getOrgSharedList({
       variables: {
         name: selectAssessmentName,
-        share_type: "assessment",
+        share_type: shareType.toLowerCase(),
       },
     });
   }, []);
@@ -183,7 +185,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 option.is_shared ? (
                   <Tooltip
                     key={i}
-                    title="Assessment is already shared with this organisation"
+                    title={`${shareType} is already shared with this organisation`}
                     disableHoverListener={!option.is_shared}
                     classes={{ tooltip: classes.customTooltip }}
                   >
