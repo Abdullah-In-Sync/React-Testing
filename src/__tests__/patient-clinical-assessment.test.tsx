@@ -70,7 +70,7 @@ mocksData.push({
     variables: {
       category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
       question:
-        '[{"question_id":"75b111fa-0305-4a46-8795-da17daa19730","answer":"Change answer"}]',
+        '[{"answer":"Change answer","question_id":"75b111fa-0305-4a46-8795-da17daa19730"}]',
     },
   },
   result: {

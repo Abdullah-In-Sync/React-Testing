@@ -12,6 +12,7 @@ interface ViewProps {
   receivePlanId: any;
   isOpen: any;
   headerTitleText: string;
+  shareType: string;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -27,6 +28,7 @@ const ShareAssessmentForm: React.FC<ViewProps> = ({
   receivePlanId,
   isOpen,
   headerTitleText,
+  shareType,
 }) => {
   const initialValues = {
     planDesc: "",
@@ -53,6 +55,7 @@ const ShareAssessmentForm: React.FC<ViewProps> = ({
               setPlanId={setPlanId}
               onChangePlanId={onChangePlanId}
               onPressSubmit={onPressSubmit}
+              shareType={shareType}
             />
           )}
         />

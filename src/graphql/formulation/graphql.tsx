@@ -91,3 +91,39 @@ export const UPDATE_FORMULATION = gql`
     }
   }
 `;
+
+export const UPDATE_ADMIN_FORMULATION_BY_ID = gql`
+  mutation ($formulation_id: ID!, $updateFormulation: UpdateFormulationInput) {
+    updateFormulationById(
+      formulation_id: $formulation_id
+      updateFormulation: $updateFormulation
+    ) {
+      _id
+      created_date
+      download_formulation_url
+      formulation_avail_for
+      formulation_desc
+      formulation_img
+      formulation_instruction
+      formulation_returnurl
+      formulation_name
+      formulation_status
+      formulation_type
+      formulation_url
+      updated_date
+      user_id
+    }
+  }
+`
+
+export const ADMIN_SHARE_FORMULATION = gql`
+  mutation adminShareFormulation($formulation_id: String!, $org_id: String!) {
+    adminShareFormulation(formulation_id: $formulation_id, org_id: $org_id) {
+      duplicateNames {
+        _id
+        name
+      }
+      result
+    }
+  }
+`;

@@ -21,6 +21,8 @@ import * as s3 from "../lib/helpers/s3";
 
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
+import { ThemeProvider } from "@mui/material";
+import theme from "../styles/theme/theme";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -189,9 +191,11 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <AddResource />
-      </SnackbarProvider>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <AddResource />
+        </SnackbarProvider>
+      </ThemeProvider>
     </MockedProvider>
   );
 };
