@@ -40,14 +40,7 @@ const AdminFormulationForm: React.FC<ViewProps> = ({
   const styles = useStyles();
   const { onlyMe, all } = values;
 
-  const handleOrgChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    if (value.indexOf("all") > -1) setFieldValue("orgId", "all");
-    else setFieldValue("orgId", value.join(","));
-  };
-
+  /* istanbul ignore next */
   const setCheckValue = (e) => {
     const {
       target: { name, checked },
@@ -83,7 +76,7 @@ const AdminFormulationForm: React.FC<ViewProps> = ({
                         inputProps={{
                           "data-testid": organizationList[0]?.name,
                         }}
-                        onChange={handleOrgChange}
+                        onChange={null}
                         id="organizationSelect"
                         labelId="organizationSelect"
                         name="orgId"
