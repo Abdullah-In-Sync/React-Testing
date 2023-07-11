@@ -18,7 +18,7 @@ import {
   UpdateFormulationData,
 } from "../../../../../graphql/formulation/types";
 
-const ViewAssessmentPage: NextPage = () => {
+const EditFormulationPage: NextPage = () => {
   const router = useRouter();
   const { query: { id: formulation_id } = {} } = router;
   const confirmRef = useRef<ConfirmElement>(null);
@@ -150,4 +150,4 @@ const ViewAssessmentPage: NextPage = () => {
   );
 };
 
-export default ViewAssessmentPage;
+export default EditFormulationPage;
