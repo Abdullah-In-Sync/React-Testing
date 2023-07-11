@@ -34,6 +34,64 @@ export const GET_FORMULATION_LIST = gql`
     }
   }
 `;
+
+export const ADD_FAV_FORMULATION = gql`
+  mutation AddFavouriteFormulation($formulation_id: String!) {
+    addFavouriteFormulation(formulation_id: $formulation_id) {
+      fav_formulation_id
+    }
+  }
+`;
+
+export const REMOVE_FAV_FORMULATION = gql`
+  mutation DeleteFavouriteFormulation($fav_formulation_id: String!) {
+    deleteFavouriteFormulation(fav_formulation_id: $fav_formulation_id) {
+      deleted
+    }
+  }
+`;
+
+export const GET_FORMULATION_BY_ID = gql`
+  query GetFormulationById($formulation_id: String!) {
+    getFormulationById(formulation_id: $formulation_id) {
+      fav_for_detail {
+        _id
+        forfav_status
+        formulation_id
+        user_id
+      }
+      formulation_avail_for
+      formulation_desc
+      formulation_img
+      formulation_instruction
+      formulation_name
+      formulation_status
+      formulation_type
+      formulation_url
+      org_id
+      template_data
+      template_id
+      user_id
+      _id
+      download_formulation_url
+    }
+  }
+`;
+
+export const UPDATE_FORMULATION = gql`
+  mutation UpdateFormulationById(
+    $formulation_id: ID!
+    $updateFormulation: UpdateFormulationInput
+  ) {
+    updateFormulationById(
+      formulation_id: $formulation_id
+      updateFormulation: $updateFormulation
+    ) {
+      _id
+    }
+  }
+`;
+
 export const UPDATE_ADMIN_FORMULATION_BY_ID = gql`
   mutation ($formulation_id: ID!, $updateFormulation: UpdateFormulationInput) {
     updateFormulationById(
@@ -54,22 +112,6 @@ export const UPDATE_ADMIN_FORMULATION_BY_ID = gql`
       formulation_url
       updated_date
       user_id
-    }
-  }
-`;
-
-export const ADD_FAV_FORMULATION = gql`
-  mutation AddFavouriteFormulation($formulation_id: String!) {
-    addFavouriteFormulation(formulation_id: $formulation_id) {
-      fav_formulation_id
-    }
-  }
-`;
-
-export const REMOVE_FAV_FORMULATION = gql`
-  mutation DeleteFavouriteFormulation($fav_formulation_id: String!) {
-    deleteFavouriteFormulation(fav_formulation_id: $fav_formulation_id) {
-      deleted
     }
   }
 `;

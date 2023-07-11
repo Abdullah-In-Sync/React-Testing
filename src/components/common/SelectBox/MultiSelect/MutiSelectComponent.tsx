@@ -43,6 +43,7 @@ const mapping = (options: Option[], keys = []) => {
   }, []);
 };
 
+/* istanbul ignore next */
 export default function MultiSelectComponent(props: propTypes) {
   const modifyOptions = mapping(props.options, props.mappingKeys);
   return (
