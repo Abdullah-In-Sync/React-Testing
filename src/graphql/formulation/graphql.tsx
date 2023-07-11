@@ -114,7 +114,7 @@ export const UPDATE_ADMIN_FORMULATION_BY_ID = gql`
       user_id
     }
   }
-`
+`;
 
 export const ADMIN_SHARE_FORMULATION = gql`
   mutation adminShareFormulation($formulation_id: String!, $org_id: String!) {

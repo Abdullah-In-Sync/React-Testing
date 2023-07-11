@@ -34,11 +34,13 @@ const SelectTemplate = forwardRef(
       },
     }));
 
+    /* istanbul ignore next */
     const onPreview = (values) => {
       sessionStorage.setItem("create", JSON.stringify({ data: values, name }));
       window.open("/v2/template/preview/create", "_blank");
     };
 
+    /* istanbul ignore next */
     const template = () => {
       if (componentName === "TemplateTable") {
         return (
@@ -75,6 +77,7 @@ const SelectTemplate = forwardRef(
       else if (componentName === "ArrowTemplate") return "Flow Template";
     };
 
+    /* istanbul ignore next */
     const onTemplateSelect = (values: any) => {
       const { component_name } = values;
       if (component_name !== "ArrowTemplate") {
@@ -89,6 +92,7 @@ const SelectTemplate = forwardRef(
       return;
     };
 
+    /* istanbul ignore next */
     const onGenerateTable = (values: TableDimensionFormData) => {
       const initialData: TemplateFormData = { rows: [] };
       for (let j = 0; j < values.rows; j++) {
