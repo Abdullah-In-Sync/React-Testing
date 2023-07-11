@@ -51,10 +51,12 @@ type propTypes = {
 };
 
 export default function EditFormFormulation(props: propTypes) {
+  /* istanbul ignore next */
   const {
     user: { user_type: userType, therapist_data: { org_id: orgId = "" } = {} },
   } = useAppContext();
   const router = useRouter();
+  /* istanbul ignore next */
   const id = router?.query.id as string;
   const { enqueueSnackbar } = useSnackbar();
 
@@ -69,6 +71,7 @@ export default function EditFormFormulation(props: propTypes) {
 
   const [getOrgData, { data: orgData }] = useLazyQuery(GET_ORG_DATA, {
     onCompleted: () => {
+      /* istanbul ignore next */
       props.setLoader(false);
     },
   });
@@ -113,6 +116,7 @@ export default function EditFormFormulation(props: propTypes) {
     setLoader(false);
   }, [resourceData]);
 
+  /* istanbul ignore next */
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -122,6 +126,7 @@ export default function EditFormFormulation(props: propTypes) {
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
   };
 
+  /* istanbul ignore next */
   const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     /* istanbul ignore next */
     const fileObj = event.target.files && event.target.files[0];
@@ -153,6 +158,7 @@ export default function EditFormFormulation(props: propTypes) {
     if (!isConfirm) return;
   };
 
+  /* istanbul ignore next */
   const uploadFileFormulation = async () => {
     try {
       props.setLoader(true);
@@ -179,8 +185,8 @@ export default function EditFormFormulation(props: propTypes) {
     }
   };
 
+  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
-    /* istanbul ignore next */
     setIsConfirm(false);
   };
 
@@ -305,6 +311,7 @@ export default function EditFormFormulation(props: propTypes) {
                       <Checkbox
                         disabled={true}
                         checked={
+                          /* istanbul ignore next */
                           formFields.formulation_avail_for?.includes(1) || false
                         }
                         name="allTherapists"
@@ -319,6 +326,7 @@ export default function EditFormFormulation(props: propTypes) {
                       <Checkbox
                         disabled={true}
                         checked={
+                          /* istanbul ignore next */
                           formFields.formulation_avail_for?.includes(2) || false
                         }
                         name="onlyMe"

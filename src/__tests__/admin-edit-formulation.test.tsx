@@ -12,7 +12,10 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
+import * as s3 from "../lib/helpers/s3";
+
 jest.mock("../contexts/AuthContext");
+const file = new File(["hello"], "hello.png", { type: "image/png" });
 
 // mocks
 const buildMocks = (): {
@@ -85,7 +88,7 @@ const buildMocks = (): {
           formulation_instruction: "Punjab 512",
           formulation_name: "test",
           org_id: "d1f2bbd3-3388-4ca2-9d68-55b95574a269",
-          formulation_img: undefined,
+          formulation_img: "invalid.pdf",
           formulation_avail_for: '"\\"\\\\\\"[1, 2]\\\\\\"\\""',
         },
       },
@@ -156,6 +159,12 @@ describe(" Formulation page", () => {
         id: "750a6993f61d4e58917e31e1244711f5",
       },
     }));
+
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
     await sut();
 
     await waitFor(async () => {
@@ -163,6 +172,11 @@ describe(" Formulation page", () => {
 
       fireEvent.change(screen.queryByTestId("formulation_name"), {
         target: { value: "test" },
+      });
+      await waitFor(async () => {
+        fireEvent.change(screen.getByTestId("resource_file_upload"), {
+          target: { files: [file] },
+        });
       });
 
       await waitFor(async () => {
