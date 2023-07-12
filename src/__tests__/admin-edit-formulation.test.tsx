@@ -6,7 +6,10 @@ import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { UPDATE_ADMIN_FORMULATION_BY_ID } from "../graphql/formulation/graphql";
 import EditFormulation from "../pages/admin/resource/editformulation/[id]";
-import { GET_FORMULATION_BY_ID } from "../graphql/query/resource";
+import {
+  GET_FORMULATION_BY_ID,
+  GET_UPLOAD_LOGO_URL,
+} from "../graphql/query/resource";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -113,6 +116,25 @@ const buildMocks = (): {
           updated_date: "2023-07-11T07:51:24.501Z",
           user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
           __typename: "FormulationData",
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: GET_UPLOAD_LOGO_URL,
+      variables: {
+        fileName: "invalid.pdf",
+        imageFolder: "images",
+      },
+    },
+    result: {
+      data: {
+        getFileUploadUrl: {
+          upload_file_url:
+            "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/images/invalid.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJAVM5ZG3HA%2F20230111%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230111T045239Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEEUaCWV1LXdlc3QtMSJHMEUCIE7dk8MXHXt0s1zS9mYyI5FcRfTXndZIQnhWiveBOj04AiEA2tuDh0m1WxJtgG1Lp%2BwEdWqv3DR9zH5FN%2BLcdIGiU4oq7QIInv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2NzM5MjgyNTgxMTMiDNFvVJ6v7acLMUp06CrBAqbjqQjc3Ti5Fd%2BkGz4wWVtyljkgqXnF1SdsDYT8AQ55P5kOJCjBmxzIYkliSUpwWJCQg37tS2YPyWHIlcTpApSzEdBTBHurASbVWItO3TvS7xWvc4Bvrz21Bte6TTHkHH3oJCmENxt%2B%2Fxa2NXstHRY74F32Rvm6H7nAViH7f9DpBSIuMzqQpAFeIMJKR2he%2BpFNmmYRV8ZUVHlrjo0Eq%2BymMRvlhC1PqZ358XiPKPGgkTokXRP%2Bnf%2B02niRNkKWhrSxth3oPlQ0TSEkPADJM3h7n80VeJ8O1wQInzwqwOI30H6Sv%2FjTmY2uEoCn9M4O51otmYsEiKrFGX9IlK4rmzuZgY%2FnqBAwCdAGfK8Ucml56W6vjZCrr%2FBeKdewATCyoyNrLLqkhOs0IHh%2BBWJEN2y%2FIGIsUOE2aO6FGGb6ql%2B7BjDsgPmdBjqeAQNgttAYGLvuTXfcginssgtpPrARYnBnNfLZzzBCIkjUdZGV9TqthZ8eEqz2krJvjcIe%2FVQLT26ICrfPtjJlQEmHA7Hj6bj4wDe9DgFf72aro8QRiATIn6LrCIDK8IIbluqiUiaAEE6r6wScMl1ibVtcAWt42FgA%2BgVtxzxZNN2IX4wKpgZBh3n8xx5zU%2Bi2BJdmBA9wGp3BQ3dCOkTG&X-Amz-Signature=d97a40cd5264c661ab74dd09b6f2f6f2c8c8f945fdd6a85f9035d9c869569d1a&X-Amz-SignedHeaders=host&x-id=PutObject",
+          __typename: "uploadFileUrl",
         },
       },
     },
