@@ -167,6 +167,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 order: "1",
                 flexGrow: "0",
                 borderRadius: "4px",
+                paddingBottom: "8px",
               }}
             >
               <MenuItem value="all">
