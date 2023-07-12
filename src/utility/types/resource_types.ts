@@ -41,6 +41,23 @@ export type editResourceFormField = {
   template_id?: string;
   template_data?: string;
   resource_issmartdraw?: string;
+  formulation_avail_for?: any;
+};
+
+export type editFormulationFormField = {
+  _id: string;
+  formulation_name: string;
+  formulation_type: number;
+  formulation_status: number;
+  org_id: string;
+  formulation_desc: string;
+  formulation_instruction: string;
+  formulation_url?: null;
+  formulation_avail_for?: any;
+  formulation_img?: string;
+  download_formulation_url?: string;
+  file_name: string;
+  uploadFile?: File;
 };
 
 export type addAndEditOrganizationFormFields = {
