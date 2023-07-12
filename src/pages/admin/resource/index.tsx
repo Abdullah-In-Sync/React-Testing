@@ -564,6 +564,7 @@ const Resource: NextPage = () => {
                 height: "35px",
                 minWidth: "120px",
               }}
+              data-testid="formulationTab"
               onClick={() => {
                 setIsFormulation(true);
                 router.push(`?tab=formulation`);
