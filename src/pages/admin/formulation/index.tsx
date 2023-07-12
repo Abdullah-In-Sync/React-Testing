@@ -181,7 +181,8 @@ const Formulation = () => {
   };
 
   /* istanbul ignore next */
-  const onClickEdit = (value) => {
+  const onClickEdit = (e, value) => {
+    e.stopPropagation();
     if (value.download_formulation_url === null) {
       router.push(`/admin/formulation/edit/${value._id}`);
     } else {
