@@ -353,6 +353,37 @@ export const GET_RESOURCE_DETAIL = gql`
   }
 `;
 
+export const GET_FORMULATION_BY_ID = gql`
+  query getFormulationById($formulation_id: String!) {
+    getFormulationById(formulation_id: $formulation_id) {
+      _id
+      created_date
+      download_formulation_url
+      fav_for_detail {
+        _id
+        created_date
+        forfav_status
+        formulation_id
+        updated_date
+        user_id
+      }
+      formulation_avail_for
+      formulation_desc
+      formulation_img
+      formulation_instruction
+      formulation_name
+      formulation_status
+      formulation_type
+      formulation_url
+      org_id
+      template_data
+      template_id
+      updated_date
+      user_id
+    }
+  }
+`;
+
 export const GET_TEMPLATE_DETAIL = gql`
   query getTemplateById($templateId: String!) {
     getTemplateById(templateId: $templateId) {

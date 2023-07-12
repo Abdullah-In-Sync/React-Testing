@@ -179,8 +179,13 @@ const Formulation = () => {
     else handleAddFavFormulation({ formulation_id, index });
   };
 
-  const onClickEdit = ({ _id }) => {
-    router.push(`/admin/formulation/edit/${_id}`);
+  /* istanbul ignore next */
+  const onClickEdit = (value) => {
+    if (value.download_formulation_url === null) {
+      router.push(`/admin/formulation/edit/${value._id}`);
+    } else {
+      router.push(`/admin/resource/editformulation/${value._id}`);
+    }
   };
 
   /* istanbul ignore next */
@@ -268,9 +273,7 @@ const Formulation = () => {
                 size="small"
                 onClick={() => onClickEdit(value)}
               >
-                <NextLink href={""} passHref>
-                  <CreateIcon />
-                </NextLink>
+                <CreateIcon />
               </IconButtonWrapper>
             </>
           )}
