@@ -199,12 +199,14 @@ const Resource: NextPage = () => {
     }
   }, [unApproveResourceList]);
   useEffect(() => {
-    if (router?.query.tab == "approveResource") {
-      setIsFormulation(false);
-      handleFilterChange({ mode: "approve_resource" });
-    }
-    if (router?.query.tab == "formulation") {
-      setIsFormulation(true);
+    if (router?.query?.tab) {
+      if (router?.query.tab == "approveResource") {
+        setIsFormulation(false);
+        handleFilterChange({ mode: "approve_resource" });
+      }
+      if (router?.query.tab == "formulation") {
+        setIsFormulation(true);
+      }
     }
   }, []);
 
