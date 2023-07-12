@@ -13,6 +13,7 @@ const CardWrapper = styled(Card)(
     box-shadow: none;
     height: 200px;
     padding-bottom: 10px;
+    cursor: pointer;
   `
 );
 
@@ -28,7 +29,11 @@ const CardContentDescriptionWrapper = styled(CardContent)(
     `
 );
 
-export default function FormulationCardGenerator({ data, fields }) {
+export default function FormulationCardGenerator({
+  data,
+  fields,
+  onPressCard,
+}) {
   return (
     <Grid container spacing={2} data-testid="cardWrapperContainer">
       {
@@ -36,7 +41,10 @@ export default function FormulationCardGenerator({ data, fields }) {
         data?.map((record, index) => {
           return (
             <Grid item xs={4} key={index} data-testid="card">
-              <CardWrapper>
+              <CardWrapper
+                data-testid={`card-${index}`}
+                onClick={() => onPressCard(record)}
+              >
                 <CardHeader
                   action={
                     <>

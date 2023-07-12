@@ -55,7 +55,7 @@ const EditFormulationComponent: React.FC<ViewProps> = ({
     formulation_avail_for,
     template_data = null,
   } = data || {};
-  const templateData = JSON.parse(template_data);
+  const templateData = template_data && JSON.parse(template_data);
   const formationAvail = JSON.parse(formulation_avail_for);
 
   const initialValues = {

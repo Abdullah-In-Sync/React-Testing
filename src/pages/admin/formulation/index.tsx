@@ -169,7 +169,8 @@ const Formulation = () => {
     addFavFormulationApi({ formulation_id }, index);
   };
 
-  const toggleFav = (v, index) => {
+  const toggleFav = (e, v, index) => {
+    e.stopPropagation();
     const { _id: formulation_id, fav_for_detail = [] } = v;
     if (fav_for_detail.length > 0)
       handleRemoveFavFormulation({
@@ -179,7 +180,8 @@ const Formulation = () => {
     else handleAddFavFormulation({ formulation_id, index });
   };
 
-  const onClickEdit = ({ _id }) => {
+  const onClickEdit = (e, { _id }) => {
+    e.stopPropagation();
     router.push(`/admin/formulation/edit/${_id}`);
   };
 
@@ -256,7 +258,8 @@ const Formulation = () => {
                 data-testid={"deleteIcon_" + value?._id}
                 aria-label="delete"
                 size="small"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setDeleteFormulationId(value?._id);
                   setIsConfirmCompleteTask(true);
                 }}
@@ -266,7 +269,7 @@ const Formulation = () => {
               <IconButtonWrapper
                 aria-label="create"
                 size="small"
-                onClick={() => onClickEdit(value)}
+                onClick={(e) => onClickEdit(e, value)}
               >
                 <NextLink href={""} passHref>
                   <CreateIcon />
@@ -275,7 +278,7 @@ const Formulation = () => {
             </>
           )}
           <IconButtonWrapper
-            onClick={() => toggleFav(value, index)}
+            onClick={(e) => toggleFav(e, value, index)}
             data-testid={"fav_btn_" + value?._id}
             aria-label="favorite"
             size="small"
@@ -292,9 +295,10 @@ const Formulation = () => {
             />
           </IconButtonWrapper>
           <IconButtonWrapper
-            onClick={() =>
-              onPressShareFormulation(value?._id, value?.formulation_name)
-            }
+            onClick={(e) => {
+              e.stopPropagation();
+              onPressShareFormulation(value?._id, value?.formulation_name);
+            }}
             aria-label="favorite"
             size="small"
             data-testid={"shareBtn_" + value?._id}
@@ -404,6 +408,11 @@ const Formulation = () => {
     setIsConfirmShare(false);
   };
 
+  const onPressCard = (value) => {
+    const { _id } = value;
+    router.push(`/admin/formulation/view/${_id}`);
+  };
+
   return (
     <>
       <Box
@@ -446,7 +455,11 @@ const Formulation = () => {
       </Box>
       <Box>
         <Loader visible={loading} />
-        <FormulationCardGenerator data={dataList} fields={fields} />
+        <FormulationCardGenerator
+          data={dataList}
+          fields={fields}
+          onPressCard={onPressCard}
+        />
       </Box>
       <Loader visible={loader} />
 
