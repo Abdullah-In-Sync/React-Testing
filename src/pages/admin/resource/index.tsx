@@ -40,6 +40,7 @@ import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import Formulation from "../formulation";
+import { useRouter } from "next/router";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -143,6 +144,7 @@ const Resource: NextPage = () => {
     user: { _id: adminId },
   } = useAppContext();
   const [approveModal, setApproveModal] = useState<boolean>(false);
+  const router = useRouter();
 
   // GRAPHQL
   const {
@@ -196,6 +198,15 @@ const Resource: NextPage = () => {
       setDataList(unApproveResourceList?.getAdminUnApproveResourceList);
     }
   }, [unApproveResourceList]);
+  useEffect(() => {
+    if (router?.query.tab == "approveResource") {
+      setIsFormulation(false);
+      handleFilterChange({ mode: "approve_resource" });
+    }
+    if (router?.query.tab == "formulation") {
+      setIsFormulation(true);
+    }
+  }, []);
 
   /* istanbul ignore next */
   const addFavour = async (id: string, isFav: string) => {
@@ -551,7 +562,10 @@ const Resource: NextPage = () => {
                 height: "35px",
                 minWidth: "120px",
               }}
-              onClick={() => setIsFormulation(true)}
+              onClick={() => {
+                setIsFormulation(true);
+                router.push(`?tab=formulation`);
+              }}
             >
               Formulation
             </Button>
@@ -566,6 +580,7 @@ const Resource: NextPage = () => {
               onClick={() => {
                 setIsFormulation(false);
                 handleFilterChange({ mode: "approve_resource" });
+                router.push(`?tab=approveResource`);
               }}
             >
               Approve Resource
