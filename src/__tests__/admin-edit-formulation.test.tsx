@@ -175,7 +175,7 @@ describe(" Formulation page", () => {
   });
   // check for Patient Session Resource list
 
-  it.only("should render complete edit formulation form and submit with valid data", async () => {
+  it("should render complete edit formulation form and submit with valid data", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "750a6993f61d4e58917e31e1244711f5",

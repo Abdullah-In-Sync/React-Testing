@@ -401,7 +401,7 @@ describe(" Formulation page", () => {
     });
   });
 
-  test.only("should render view formulation", async () => {
+  test("should render view formulation", async () => {
     await sut();
     const cardButton = await screen.findByTestId("card-0");
     fireEvent.click(cardButton);
