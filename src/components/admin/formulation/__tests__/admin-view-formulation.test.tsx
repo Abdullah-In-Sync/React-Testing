@@ -156,12 +156,14 @@ describe("Admin view formultion", () => {
         id: "formulation-image-1",
       },
       push: pushMock,
+      back: pushMock,
     });
     await sut();
-    // const selectTemplateButton = await screen.findByTestId("selectTemplate");
-    // fireEvent.click(selectTemplateButton);
     expect(
       await screen.findAllByText(/image to formulation folder/i)
     ).toHaveLength(1);
+    const backButton = await screen.findByTestId("backButton");
+    fireEvent.click(backButton);
+    expect(pushMock).toHaveBeenCalled();
   });
 });
