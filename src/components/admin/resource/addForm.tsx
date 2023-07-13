@@ -93,7 +93,7 @@ export default function AddForm(props: propTypes) {
 
   const { data: uploadFormulationURL } = useQuery(GET_UPLOAD_LOGO_URL, {
     variables: {
-      fileName: formFields.file_name,
+      fileName: formFields && formFields.file_name,
       imageFolder: "formulation",
     },
   });

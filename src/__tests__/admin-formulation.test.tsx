@@ -22,7 +22,7 @@ import {
 import { GET_ORGANISATION_SHARED_LIST } from "../graphql/assessment/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
-
+const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -301,7 +301,7 @@ const sut = async () => {
 describe(" Formulation page", () => {
   beforeEach(() => {
     const mockRouter = {
-      push: jest.fn(),
+      push: pushMock,
     };
 
     (useRouter as jest.Mock).mockReturnValue(mockRouter);
@@ -399,5 +399,14 @@ describe(" Formulation page", () => {
         screen.getByText("Formulation shared successfully!")
       ).toBeInTheDocument();
     });
+  });
+
+  test("should render view formulation", async () => {
+    await sut();
+    const cardButton = await screen.findByTestId("card-0");
+    fireEvent.click(cardButton);
+    expect(pushMock).toHaveBeenCalledWith(
+      "/admin/formulation/view/d1b60faa-c8aa-4258-ada0-cfdf18402b7b"
+    );
   });
 });

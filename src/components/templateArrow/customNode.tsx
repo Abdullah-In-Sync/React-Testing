@@ -20,6 +20,7 @@ interface TextUpdaterNodeProps {
   userType?: string;
   mode?: string;
   selected: boolean;
+  handleViewBoxClick: (v) => void;
 }
 
 const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
@@ -29,6 +30,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   userType,
   mode,
   selected,
+  handleViewBoxClick,
 }) => {
   const styles = useStyles();
   const handleId = id.split("_")[1];
@@ -80,7 +82,11 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
     <>
       <Box
         onClick={
-          userType == "patient" || mode == "mobile" ? onOpenPopup : undefined
+          handleViewBoxClick
+            ? () => handleViewBoxClick(data)
+            : userType == "patient" || mode == "mobile"
+            ? onOpenPopup
+            : undefined
         }
         data-testid="arrow-template-test-1"
         className={`${styles.nodeStyle} ${
