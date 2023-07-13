@@ -29,6 +29,7 @@ interface TemplateArrowProps {
   mode?: string;
   userType?: any;
   defaultIsPreview?: boolean;
+  handleViewBoxClick?: (value) => void;
 }
 
 const TemplateArrow: React.FC<TemplateArrowProps> = ({
@@ -39,13 +40,19 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   mode,
   userType,
   defaultIsPreview = false,
+  handleViewBoxClick,
 }) => {
   const [user, setUser] = useState(userType);
   const [mod, setmod] = useState(mode);
   const nodeType = useMemo(
     () => ({
       selectorNode: (props) => (
-        <TextUpdaterNode userType={user} mode={mod} {...props} />
+        <TextUpdaterNode
+          userType={user}
+          mode={mod}
+          {...props}
+          handleViewBoxClick={handleViewBoxClick}
+        />
       ),
     }),
     [user, mod]
@@ -288,7 +295,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
           </Grid>
         </Grid>
       )}
-      {mod == "mobile" && (
+      {mod == "mobile" && !handleViewBoxClick && (
         <Grid container justifyContent={"center"}>
           <Button
             data-testid="ArrowMobileTemplateSave"

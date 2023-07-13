@@ -177,7 +177,7 @@ export default function CreateResource(props: propTypes) {
             router.push(`/${userType}/resource/`);
           } else if (duplicateNames) {
             /* istanbul ignore next */
-            enqueueSnackbar("Duplicate name.", {
+            enqueueSnackbar("This formulation already exists!.", {
               variant: "error",
             });
           }
@@ -382,6 +382,16 @@ export default function CreateResource(props: propTypes) {
         resourceDesc,
         resourceInstruction,
       } = data;
+
+      if (
+        !resourceName ||
+        (resourceAvailTherapist != 1 && resourceAvailOnlyme != 1)
+      ) {
+        enqueueSnackbar("Availability of resource and name is mandatory.", {
+          variant: "error",
+        });
+        return;
+      }
 
       const formulationAvailFor = [];
       if (resourceAvailTherapist == 1) formulationAvailFor.push(2);

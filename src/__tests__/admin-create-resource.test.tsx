@@ -710,5 +710,16 @@ describe("Admin add resource page", () => {
     expect(
       await screen.findByText(/Formulation has been created successfully./i)
     ).toBeInTheDocument();
+
+    fireEvent.change(screen.queryByTestId("resourceName"), {
+      target: { value: "" },
+    });
+    fireEvent.click(await screen.findByTestId("resourceAvailOnlyme"));
+    fireEvent.click(await screen.findByTestId("tableTemplateSubmit"));
+    expect(
+      await screen.findByText(
+        /Availability of resource and name is mandatory./i
+      )
+    ).toBeInTheDocument();
   });
 });

@@ -18,6 +18,7 @@ export const CommonModal = React.forwardRef<ModalElement, CommonModalProps>(
     const handleClose = useHandleClose(setState, onClose);
 
     React.useImperativeHandle(ref, () => ({
+      /* istanbul ignore next */
       open() {
         setState({ open: true });
       },
