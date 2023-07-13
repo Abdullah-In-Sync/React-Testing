@@ -15,14 +15,22 @@ import {
   GET_MODEL_BY_DISORDERID_DATA,
   GET_THERAPIST_TOKEN_DATA,
 } from "../graphql/query/common";
-import { GET_UPLOAD_RESOURCE_URL } from "../graphql/query/resource";
-import { CREATE_RESOURCE } from "../graphql/mutation/resource";
-import * as s3 from "../lib/helpers/s3";
+import {
+  GET_UPLOAD_LOGO_URL,
+  GET_UPLOAD_RESOURCE_URL,
+} from "../graphql/query/resource";
+import {
+  CREATE_RESOURCE,
+  CREATE_RESOURCE_FORMULATION,
+} from "../graphql/mutation/resource";
 
-import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
+
+import * as s3 from "../lib/helpers/s3";
+
+import { useRouter } from "next/router";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -155,6 +163,25 @@ mocksData.push({
 const file = new File(["hello"], "hello.png", { type: "image/png" });
 // token data
 
+mocksData.push({
+  request: {
+    query: GET_UPLOAD_LOGO_URL,
+    variables: {
+      fileName: "invalid.pdf",
+      imageFolder: "formulation",
+    },
+  },
+  result: {
+    data: {
+      getFileUploadUrl: {
+        upload_file_url:
+          "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/images/invalid.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJAVM5ZG3HA%2F20230111%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230111T045239Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEEUaCWV1LXdlc3QtMSJHMEUCIE7dk8MXHXt0s1zS9mYyI5FcRfTXndZIQnhWiveBOj04AiEA2tuDh0m1WxJtgG1Lp%2BwEdWqv3DR9zH5FN%2BLcdIGiU4oq7QIInv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgw2NzM5MjgyNTgxMTMiDNFvVJ6v7acLMUp06CrBAqbjqQjc3Ti5Fd%2BkGz4wWVtyljkgqXnF1SdsDYT8AQ55P5kOJCjBmxzIYkliSUpwWJCQg37tS2YPyWHIlcTpApSzEdBTBHurASbVWItO3TvS7xWvc4Bvrz21Bte6TTHkHH3oJCmENxt%2B%2Fxa2NXstHRY74F32Rvm6H7nAViH7f9DpBSIuMzqQpAFeIMJKR2he%2BpFNmmYRV8ZUVHlrjo0Eq%2BymMRvlhC1PqZ358XiPKPGgkTokXRP%2Bnf%2B02niRNkKWhrSxth3oPlQ0TSEkPADJM3h7n80VeJ8O1wQInzwqwOI30H6Sv%2FjTmY2uEoCn9M4O51otmYsEiKrFGX9IlK4rmzuZgY%2FnqBAwCdAGfK8Ucml56W6vjZCrr%2FBeKdewATCyoyNrLLqkhOs0IHh%2BBWJEN2y%2FIGIsUOE2aO6FGGb6ql%2B7BjDsgPmdBjqeAQNgttAYGLvuTXfcginssgtpPrARYnBnNfLZzzBCIkjUdZGV9TqthZ8eEqz2krJvjcIe%2FVQLT26ICrfPtjJlQEmHA7Hj6bj4wDe9DgFf72aro8QRiATIn6LrCIDK8IIbluqiUiaAEE6r6wScMl1ibVtcAWt42FgA%2BgVtxzxZNN2IX4wKpgZBh3n8xx5zU%2Bi2BJdmBA9wGp3BQ3dCOkTG&X-Amz-Signature=d97a40cd5264c661ab74dd09b6f2f6f2c8c8f945fdd6a85f9035d9c869569d1a&X-Amz-SignedHeaders=host&x-id=PutObject",
+        __typename: "uploadFileUrl",
+      },
+    },
+  },
+});
+
 // add resource
 mocksData.push({
   request: {
@@ -183,6 +210,32 @@ mocksData.push({
     data: {
       createResource: {
         _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
+      },
+    },
+  },
+});
+
+// add formulation
+mocksData.push({
+  request: {
+    query: CREATE_RESOURCE_FORMULATION,
+    variables: {
+      formulation_name: "test",
+      formulation_filename: "invalid.pdf",
+      formulation_type: 1,
+      org_id: "myhelp",
+      formulation_desc: "",
+      formulation_instruction: "",
+      formulation_avail_for: "[2]",
+    },
+  },
+  result: {
+    data: {
+      createFormulation: {
+        duplicateNames: null,
+        message: null,
+        result: true,
+        __typename: "adminResult",
       },
     },
   },
@@ -218,6 +271,64 @@ describe("Therapist add resource page", () => {
         },
       },
     });
+  });
+
+  it("submit form with valid data for formulation", async () => {
+    const mockRouter = {
+      push: jest.fn(),
+    };
+
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "invalid.pdf",
+    });
+
+    await sut();
+
+    expect(screen.getByTestId("formulation_checkbox")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("formulation_checkbox"));
+
+    expect(screen.queryByTestId("resource_avail_onlyme")).toBeInTheDocument();
+
+    fireEvent.click(screen.queryByTestId("resource_avail_onlyme"));
+
+    fireEvent.change(screen.queryByTestId("resource_name"), {
+      target: { value: "test" },
+    });
+
+    const hiddenFileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    expect(hiddenFileInput.files.length).toBe(0);
+
+    await waitFor(async () => {
+      fireEvent.change(screen.getByTestId("resource_file_upload"), {
+        target: { files: [file] },
+      });
+    });
+
+    expect(hiddenFileInput.files.length).toBe(1);
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Formulation added successfully!")
+      ).toBeInTheDocument();
+    });
+    expect(mockRouter.push).toHaveBeenCalledWith("/therapist/resource");
   });
 
   it("should render complete add resource form", async () => {
