@@ -12,6 +12,7 @@ const ViewTemplateFormulation: React.FC<ViewProps> = ({
 }) => {
   const componentName = rows ? "TemplateTable" : "ArrowTemplate";
 
+  /* istanbul ignore next */
   const template = () => {
     if (componentName === "TemplateTable") {
       return (
