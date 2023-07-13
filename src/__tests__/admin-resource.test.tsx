@@ -401,6 +401,9 @@ describe("Admin Resource page", () => {
 
     await waitFor(async () => fireEvent.click(approveResourceBtn));
     await waitFor(async () => {
+      expect(
+        screen.queryByTestId("fav_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+      ).not.toBeInTheDocument();
       expect(mockRouter.push).toHaveBeenCalledWith("?tab=approveResource");
     });
   });
