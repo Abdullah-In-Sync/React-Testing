@@ -279,52 +279,6 @@ export default function AddForm(props: propTypes) {
     if (!confirmSubmission) return;
   };
 
-  /* istanbul ignore next */
-  // const uploadFile: any = async () => {
-  //   /* istanbul ignore next */
-  //   try {
-  //     /* istanbul ignore next */
-  //     props.setLoader(true);
-
-  //     if (
-  //       uploadResourceURL &&
-  //       uploadResourceURL?.getUploadResourceUrl &&
-  //       uploadResourceURL?.getUploadResourceUrl.resource_upload
-  //     ) {
-  //       const uploadStatus = await uploadToS3(
-  //         selectedFile,
-  //         uploadResourceURL.getUploadResourceUrl.resource_upload
-  //       );
-  //       /* istanbul ignore else */
-  //       if (uploadStatus) {
-  //         props.onSubmit(formFields);
-  //       } else {
-  //         enqueueSnackbar("There is an error with file upload!", {
-  //           variant: "error",
-  //           autoHideDuration: 2000,
-  //         });
-  //       }
-  //       /* istanbul ignore next */
-  //       props.setLoader(false);
-  //     } else {
-  //       /* istanbul ignore next */
-  //       props.setLoader(false);
-  //       /* istanbul ignore next */
-  //       enqueueSnackbar("Please select file!", {
-  //         variant: "error",
-  //         autoHideDuration: 2000,
-  //       });
-  //     }
-  //   } catch (e) {
-  //     /* istanbul ignore next */
-  //     props.setLoader(false);
-  //     enqueueSnackbar("Please fill the all fields", {
-  //       variant: "error",
-  //       autoHideDuration: 2000,
-  //     });
-  //   }
-  // };
-
   const uploadFileToS3 = async (
     selectedFile,
     uploadUrl,
@@ -332,33 +286,37 @@ export default function AddForm(props: propTypes) {
     formFields,
     successCallback
   ) => {
-    try {
-      props.setLoader(true);
+    await uploadToS3(selectedFile, uploadUrl);
+    successCallback(formFields);
+    props.setLoader(false);
 
-      if (uploadUrl) {
-        const uploadStatus = await uploadToS3(selectedFile, uploadUrl);
-        if (uploadStatus) {
-          successCallback(formFields);
-        } else {
-          enqueueSnackbar("There is an error with file upload!", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
-        }
-      } else {
-        enqueueSnackbar("Please select file!", {
-          variant: "error",
-          autoHideDuration: 2000,
-        });
-      }
-    } catch (e) {
-      enqueueSnackbar("Please fill all the fields", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-    } finally {
-      props.setLoader(false);
-    }
+    // try {
+    //   props.setLoader(true);
+
+    //   if (uploadUrl) {
+    //     const uploadStatus = await uploadToS3(selectedFile, uploadUrl);
+    //     if (uploadStatus) {
+    //       successCallback(formFields);
+    //     } else {
+    //       enqueueSnackbar("There is an error with file upload!", {
+    //         variant: "error",
+    //         autoHideDuration: 2000,
+    //       });
+    //     }
+    //   } else {
+    //     enqueueSnackbar("Please select file!", {
+    //       variant: "error",
+    //       autoHideDuration: 2000,
+    //     });
+    //   }
+    // } catch (e) {
+    //   enqueueSnackbar("Please fill all the fields", {
+    //     variant: "error",
+    //     autoHideDuration: 2000,
+    //   });
+    // } finally {
+    //   props.setLoader(false);
+    // }
   };
 
   const uploadFile = async () => {
@@ -370,7 +328,6 @@ export default function AddForm(props: propTypes) {
       props.onSubmit
     );
   };
-
   const uploadFileFormulation = async () => {
     await uploadFileToS3(
       selectedFile,

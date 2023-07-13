@@ -126,7 +126,7 @@ const buildMocks = (): {
       query: GET_UPLOAD_LOGO_URL,
       variables: {
         fileName: "invalid.pdf",
-        imageFolder: "images",
+        imageFolder: "formulation",
       },
     },
     result: {
