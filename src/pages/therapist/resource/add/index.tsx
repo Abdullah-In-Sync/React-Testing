@@ -2,10 +2,12 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import AddForm from "../../../../components/admin/resource/addForm";
-import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
-import { CREATE_RESOURCE } from "../../../../graphql/mutation/resource";
+import {
+  CREATE_RESOURCE,
+  CREATE_RESOURCE_FORMULATION,
+} from "../../../../graphql/mutation/resource";
 import { addResourceFormField } from "../../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
 import withAuthentication from "../../../../hoc/auth";
@@ -19,7 +21,9 @@ const Index = () => {
   const [loader, setLoader] = useState<boolean>(false);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
 
+  // Mutation
   const [createResource] = useMutation(CREATE_RESOURCE);
+  const [createFormulation] = useMutation(CREATE_RESOURCE_FORMULATION);
 
   const router = useRouter();
 
@@ -27,6 +31,7 @@ const Index = () => {
     setLoader(true);
   }, []);
 
+  /* istanbul ignore next */
   const submitFormHandler = async (formFields: addResourceFormField) => {
     try {
       createResource({
@@ -84,15 +89,64 @@ const Index = () => {
     }
   };
 
+  /* istanbul ignore next */
+  const submitFormHandlerFormulation = async (
+    formFields: addResourceFormField
+  ) => {
+    try {
+      createFormulation({
+        variables: {
+          formulation_name: formFields.resource_name,
+          formulation_filename: formFields.file_name,
+          formulation_type: 1,
+          org_id: formFields.org_id,
+          formulation_desc: formFields.resource_desc,
+          formulation_instruction: formFields.resource_instruction,
+          formulation_avail_for: JSON.stringify(
+            formFields.formulation_avail_for
+          ),
+        },
+        onCompleted: (data) => {
+          /* istanbul ignore next */
+          if (data?.createFormulation?.duplicateNames === null) {
+            enqueueSnackbar("Formulation added successfully!", {
+              variant: "success",
+              autoHideDuration: 2000,
+            });
+            router.push("/therapist/resource");
+          } else {
+            /* istanbul ignore next */
+            enqueueSnackbar("This formulation name already exist!", {
+              variant: "error",
+              autoHideDuration: 2000,
+            });
+            /* istanbul ignore next */
+            router.push("/therapist/resource");
+          }
+        },
+      });
+
+      setLoader(false);
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
+  };
   return (
     <>
       <Layout>
         <Loader visible={loader} />
-        <ContentHeader title="Add Resource" />
+
         <AddForm
           resourceType="add"
           onSubmit={submitFormHandler}
           setLoader={setLoader}
+          formulationSubmit={submitFormHandlerFormulation}
         />
       </Layout>
       <InfoModal ref={infoModalRef}>

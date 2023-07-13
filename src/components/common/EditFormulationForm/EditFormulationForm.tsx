@@ -79,7 +79,7 @@ export default function EditFormFormulation(props: propTypes) {
   const { data: uploadFormulationURL } = useQuery(GET_UPLOAD_LOGO_URL, {
     variables: {
       fileName: formFields.file_name,
-      imageFolder: "images",
+      imageFolder: "formulation",
     },
   });
 
