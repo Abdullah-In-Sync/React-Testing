@@ -13,6 +13,8 @@ const ViewTemplateFormulation: React.FC<ViewProps> = ({
   const componentName = rows ? "TemplateTable" : "ArrowTemplate";
 
   /* istanbul ignore next */
+  const handleViewBoxClick = () => null;
+  /* istanbul ignore next */
   const template = () => {
     if (componentName === "TemplateTable") {
       return (
@@ -32,7 +34,7 @@ const ViewTemplateFormulation: React.FC<ViewProps> = ({
           edgesData={edges}
           mode="mobile"
           userType="patient"
-          handleViewBoxClick={() => null}
+          handleViewBoxClick={handleViewBoxClick}
         />
       );
     }
