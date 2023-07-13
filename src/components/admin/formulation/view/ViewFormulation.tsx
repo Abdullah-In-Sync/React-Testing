@@ -1,7 +1,7 @@
 import InfoIcon from "@mui/icons-material/Info";
 import { Box, IconButton, Stack } from "@mui/material";
 import { GetFormulationById } from "../../../../graphql/formulation/types";
-import CardWithHeader from "../../../common/Cards/CardWithHeader";
+import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
 import InfoModal from "../../../common/CustomModal/InfoModal";
 import CustomImage from "../../../common/Image/Image";
 import NodeDetail from "./NodeDetail";
@@ -11,9 +11,14 @@ import { useStyles } from "./viewFormulationStyles";
 interface ViewProps {
   data?: GetFormulationById;
   infoModalRef?: any;
+  backButtonClick?: () => void;
 }
 
-const ViewFormulation: React.FC<ViewProps> = ({ data, infoModalRef }) => {
+const ViewFormulation: React.FC<ViewProps> = ({
+  data,
+  infoModalRef,
+  backButtonClick,
+}) => {
   const styles = useStyles();
   const {
     template_data,
@@ -49,7 +54,11 @@ const ViewFormulation: React.FC<ViewProps> = ({ data, infoModalRef }) => {
   return (
     <>
       <Stack className={styles.viewFormulationWrapper} mb={5}>
-        <CardWithHeader label={formulation_name} rightComponent={infoIcon}>
+        <BreadCrumbsWithBackButton
+          heading={formulation_name}
+          headerRightComponent={infoIcon}
+          backButtonClick={backButtonClick}
+        >
           {templateDataJson && (
             <ViewTemplateFormulation templateData={templateDataJson} />
           )}
@@ -58,7 +67,7 @@ const ViewFormulation: React.FC<ViewProps> = ({ data, infoModalRef }) => {
               <CustomImage url={formulation_url} />
             </Box>
           )}
-        </CardWithHeader>
+        </BreadCrumbsWithBackButton>
       </Stack>
       <InfoModal
         ref={infoModalRef}
