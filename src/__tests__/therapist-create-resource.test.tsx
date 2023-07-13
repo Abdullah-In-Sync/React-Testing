@@ -28,7 +28,10 @@ jest.mock("next/router", () => ({
 
 jest.mock("../contexts/AuthContext");
 
-import { CREATE_RESOURCE } from "../graphql/mutation/resource";
+import {
+  CREATE_FORMULATION,
+  CREATE_RESOURCE,
+} from "../graphql/mutation/resource";
 import { useAppContext } from "../contexts/AuthContext";
 import Create from "../pages/therapist/resource/create";
 import { GET_ORG_DATA } from "../graphql/query";
@@ -264,6 +267,32 @@ mocksData.push({
         _id: "9b04def7-c012-44ca-98f2-6060d90b9a25",
         result: true,
         __typename: "adminResult",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: CREATE_FORMULATION,
+    variables: {
+      resourceName: "test",
+      formulationType: 1,
+      orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
+      resourceDesc: "",
+      resourceInstruction: "",
+      formulationAvailFor: "[1]",
+      templateData:
+        '{"rows":[{"height":"200px","cells":[{"type":"","width":"600px"}]}]}',
+      templateId: "63774edbc553fac5d6a9bd74",
+    },
+  },
+  result: {
+    data: {
+      createFormulation: {
+        duplicateNames: null,
+        message: null,
+        result: true,
       },
     },
   },
@@ -581,5 +610,50 @@ describe("Therapist add resource page", () => {
     const allRows = await screen.queryAllByTestId("row-0");
 
     expect(allRows.length).toEqual(0);
+  });
+
+  it("On change formulation view", async () => {
+    await sut();
+    fireEvent.click(screen.queryByTestId("formulationCheckbox"));
+    fireEvent.change(screen.queryByTestId("resourceName"), {
+      target: { value: "test" },
+    });
+    fireEvent.click(await screen.findByTestId("resourceAvailOnlyme"));
+
+    fireEvent.click(await screen.findByTestId("selectTemplateButton"));
+
+    fireEvent.click(await screen.findByTestId("TemplateTable"));
+
+    fireEvent.click(await screen.findByTestId("TemplateProceed"));
+    fireEvent.click(await screen.findByTestId("selectDimensionButton"));
+
+    fireEvent.click(await screen.findByTestId("tableTemplateSubmit"));
+
+    const cancelButton = await screen.findByTestId("cancelButton");
+
+    fireEvent.click(cancelButton);
+
+    expect(cancelButton).not.toBeInTheDocument();
+
+    fireEvent.click(await screen.findByTestId("tableTemplateSubmit"));
+
+    const confirmButton = await screen.findByTestId("confirmButton");
+
+    fireEvent.click(confirmButton);
+
+    expect(
+      await screen.findByText(/Formulation has been created successfully./i)
+    ).toBeInTheDocument();
+
+    fireEvent.change(screen.queryByTestId("resourceName"), {
+      target: { value: "" },
+    });
+    fireEvent.click(await screen.findByTestId("resourceAvailOnlyme"));
+    fireEvent.click(await screen.findByTestId("tableTemplateSubmit"));
+    expect(
+      await screen.findByText(
+        /Availability of resource and name is mandatory./i
+      )
+    ).toBeInTheDocument();
   });
 });
