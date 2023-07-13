@@ -7,7 +7,7 @@ const CustomImage: React.FC<Props> = ({ url }) => {
   return (
     <>
       <img
-        alt="layout Responsive"
+        alt="no image"
         src={url}
         style={{
           width: "100%",
