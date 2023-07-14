@@ -76,7 +76,7 @@ const TherapistEditFormulationPage: NextPage = () => {
             enqueueSnackbar("Formulation updated successfully.", {
               variant: "success",
             });
-            router.push("/admin/resource/");
+            router.push("/therapist/formulation/");
           }
         },
       });
@@ -111,7 +111,7 @@ const TherapistEditFormulationPage: NextPage = () => {
   };
 
   const cancelConfirm = (callback) => {
-    router.push("/therapist/resource/");
+    router.push("/therapist/formulation/");
     callback();
   };
 
