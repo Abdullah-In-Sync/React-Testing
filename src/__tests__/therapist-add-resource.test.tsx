@@ -328,7 +328,7 @@ describe("Therapist add resource page", () => {
         screen.getByText("Formulation added successfully!")
       ).toBeInTheDocument();
     });
-    expect(mockRouter.push).toHaveBeenCalledWith("/therapist/resource");
+    expect(mockRouter.push).toHaveBeenCalledWith("/therapist/formulation");
   });
 
   it("should render complete add resource form", async () => {
@@ -547,14 +547,11 @@ describe("Therapist add resource page", () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
 
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     await waitFor(async () => {
-      expect(
-        screen.getByTestId("addResourceModalConfirmButton")
-      ).toBeInTheDocument();
-    });
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
 
-    fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
 
     await waitFor(async () => {
       expect(

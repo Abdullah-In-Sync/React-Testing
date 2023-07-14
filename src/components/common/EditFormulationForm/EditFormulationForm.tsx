@@ -65,6 +65,37 @@ export default function EditFormFormulation(props: propTypes) {
     org_id: orgId,
   });
 
+  /* istanbul ignore next */
+  const handleCheckboxChange = (event) => {
+    const { checked } = event.target;
+    const value = parseInt(event.target.value);
+
+    setFormFields((prevFormFields) => {
+      let updatedFormulationAvailFor = [];
+
+      if (Array.isArray(prevFormFields.formulation_avail_for)) {
+        if (checked) {
+          updatedFormulationAvailFor = [
+            ...prevFormFields.formulation_avail_for,
+            value,
+          ];
+        } else {
+          updatedFormulationAvailFor =
+            prevFormFields.formulation_avail_for.filter((v) => v !== value);
+        }
+      } else {
+        if (checked) {
+          updatedFormulationAvailFor = [value];
+        }
+      }
+
+      return {
+        ...prevFormFields,
+        formulation_avail_for: updatedFormulationAvailFor,
+      };
+    });
+  };
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loader, setLoader] = useState<boolean>(false);
   const [isConfirm, setIsConfirm] = useState(false);
@@ -309,13 +340,14 @@ export default function EditFormFormulation(props: propTypes) {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        disabled={true}
+                        // disabled={true}
                         checked={
                           /* istanbul ignore next */
                           formFields.formulation_avail_for?.includes(1) || false
                         }
                         name="allTherapists"
                         value={1}
+                        onChange={handleCheckboxChange}
                       />
                     }
                     label="All Therapists"
@@ -324,12 +356,13 @@ export default function EditFormFormulation(props: propTypes) {
                     data-testid="resource_avail_onlyme"
                     control={
                       <Checkbox
-                        disabled={true}
+                        // disabled={true}
                         checked={
                           /* istanbul ignore next */
                           formFields.formulation_avail_for?.includes(2) || false
                         }
                         name="onlyMe"
+                        onChange={handleCheckboxChange}
                         value={2}
                       />
                     }

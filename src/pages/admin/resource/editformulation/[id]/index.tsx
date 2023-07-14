@@ -49,7 +49,7 @@ const EditFormulation = () => {
             variant: "success",
           });
 
-          router.push("/admin/resource");
+          router.push("/admin/resource/?tab=formulation");
         },
       });
     } catch (e) {
