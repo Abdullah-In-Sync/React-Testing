@@ -14,6 +14,7 @@ type Props = React.PropsWithChildren<{
   onClickView?: () => void;
   activeBoxBorder?: boolean;
   mode?: string;
+  headerRightComponent?: any;
 }>;
 
 /* istanbul ignore next */
@@ -26,6 +27,7 @@ const BreadCrumbsWithBackButton = ({
   activeBoxBorder,
   nexButtonClick,
   mode,
+  headerRightComponent,
 }: Props) => {
   const styles = useStyles();
 
@@ -48,6 +50,7 @@ const BreadCrumbsWithBackButton = ({
               variant="contained"
               onClick={backButtonClick}
               startIcon={<ArrowBackAlt />}
+              size="small"
             >
               Back
             </Button>
@@ -59,6 +62,7 @@ const BreadCrumbsWithBackButton = ({
               variant="contained"
               onClick={nexButtonClick}
               endIcon={<ArrowForwardAlt />}
+              size="small"
             >
               Next
             </Button>
@@ -71,6 +75,7 @@ const BreadCrumbsWithBackButton = ({
         onClickView={onClickView}
         activeBoxBorder={activeBoxBorder}
         mode={mode}
+        rightComponent={headerRightComponent}
       >
         {children}
       </CardWithHeader>

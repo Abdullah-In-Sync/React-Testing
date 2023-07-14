@@ -32,13 +32,21 @@ const ViewFormulationPage: NextPage = () => {
     });
   }, []);
 
+  const backButtonClick = () => {
+    router.back();
+  };
+
   return (
     <>
       <Layout>
         <Loader visible={loader} />
         <ContentHeader title="Formulation Detail" />
         {formulationData && (
-          <ViewFormulation data={formulationData} infoModalRef={infoModalRef} />
+          <ViewFormulation
+            data={formulationData}
+            infoModalRef={infoModalRef}
+            backButtonClick={backButtonClick}
+          />
         )}
       </Layout>
     </>
