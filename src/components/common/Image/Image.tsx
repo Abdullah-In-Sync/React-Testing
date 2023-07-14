@@ -6,7 +6,14 @@ interface Props {
 const CustomImage: React.FC<Props> = ({ url }) => {
   return (
     <>
-      <img alt="no image" src={url} />
+      <img
+        alt="no image"
+        src={url}
+        style={{
+          maxWidth: "100%",
+          height: "auto",
+        }}
+      />
     </>
   );
 };
