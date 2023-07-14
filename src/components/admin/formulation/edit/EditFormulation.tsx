@@ -5,7 +5,7 @@ import { ForwardedRef, useRef } from "react";
 import * as Yup from "yup";
 import { GetFormulationById } from "../../../../graphql/formulation/types";
 import { ConfirmElement } from "../../../common/ConfirmWrapper";
-import AdminFormulationForm from "../form/AdminFormulationForm";
+import FormulationForm from "../form/FormulationForm";
 
 interface ViewProps {
   data?: GetFormulationById;
@@ -78,7 +78,7 @@ const EditFormulationComponent: React.FC<ViewProps> = ({
         validationSchema={validationSchema}
         onSubmit={submitForm}
         children={(props) => (
-          <AdminFormulationForm
+          <FormulationForm
             organizationList={organizationList}
             formikProps={props}
             selectTemplateRef={selectTemplateRef}

@@ -10,7 +10,7 @@ import { Form, FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
 import CommonButton from "../../../common/Buttons/CommonButton";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
-import { useStyles } from "./adminFormuationFormStyles";
+import { useStyles } from "./formuationFormStyles";
 import { csvDecode } from "../../../../utility/helper";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
@@ -28,11 +28,11 @@ interface ViewProps {
   selectTemplateRef?: any;
 }
 
-const AdminFormulationForm: React.FC<ViewProps> = ({
+const FormulationForm: React.FC<ViewProps> = ({
   onPressCancel,
   formikProps,
   confirmRef,
-  organizationList = [],
+  organizationList,
   selectTemplateRef,
 }) => {
   const { values, setFieldValue, submitForm, errors } = formikProps;
@@ -70,29 +70,31 @@ const AdminFormulationForm: React.FC<ViewProps> = ({
                         autoComplete="off"
                       />
                     </Box>
-                    <Box className="selectOrganisationWrapper">
-                      <FormikSelectDropdown
-                        fullWidth
-                        inputProps={{
-                          "data-testid": organizationList[0]?.name,
-                        }}
-                        onChange={null}
-                        id="organizationSelect"
-                        labelId="organizationSelect"
-                        name="orgId"
-                        label="Select Organization*"
-                        options={[
-                          ...[{ _id: "all", name: "Select All" }],
-                          ...organizationList,
-                        ]}
-                        mappingKeys={["_id", "name"]}
-                        size="small"
-                        className="form-control-bg multiSelect"
-                        extraProps={{ "data-testid": "organizationSelect" }}
-                        multiSelect={csvDecode(values.orgId)}
-                        disabled
-                      />
-                    </Box>
+                    {organizationList && (
+                      <Box className="selectOrganisationWrapper">
+                        <FormikSelectDropdown
+                          fullWidth
+                          inputProps={{
+                            "data-testid": organizationList[0]?.name,
+                          }}
+                          onChange={null}
+                          id="organizationSelect"
+                          labelId="organizationSelect"
+                          name="orgId"
+                          label="Select Organization*"
+                          options={[
+                            ...[{ _id: "all", name: "Select All" }],
+                            ...organizationList,
+                          ]}
+                          mappingKeys={["_id", "name"]}
+                          size="small"
+                          className="form-control-bg multiSelect"
+                          extraProps={{ "data-testid": "organizationSelect" }}
+                          multiSelect={csvDecode(values.orgId)}
+                          disabled
+                        />
+                      </Box>
+                    )}
                   </Box>
                 </Box>
                 <Box className="row2 rowc">
@@ -187,4 +189,4 @@ const AdminFormulationForm: React.FC<ViewProps> = ({
   );
 };
 
-export default AdminFormulationForm;
+export default FormulationForm;
