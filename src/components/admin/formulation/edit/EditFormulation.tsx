@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { GetFormulationById } from "../../../../graphql/formulation/types";
 import { ConfirmElement } from "../../../common/ConfirmWrapper";
 import FormulationForm from "../form/FormulationForm";
+import { shareResourceAvailability } from "../../../../lib/constants";
 
 interface ViewProps {
   data?: GetFormulationById;
@@ -62,8 +63,8 @@ const EditFormulationComponent: React.FC<ViewProps> = ({
     name: formulation_name,
     description: formulation_desc,
     instruction: formulation_instruction,
-    all: formationAvail.includes(2),
-    onlyMe: formationAvail.includes(1),
+    all: formationAvail.includes(shareResourceAvailability.allTherapist),
+    onlyMe: formationAvail.includes(shareResourceAvailability.onlyMe),
     templateData,
     orgId: org_id,
     componentName: templateData.rows ? "TemplateTable" : "ArrowTemplate",

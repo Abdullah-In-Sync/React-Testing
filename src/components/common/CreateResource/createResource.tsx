@@ -30,7 +30,7 @@ import { SuccessModal } from "../SuccessModal";
 import { useRouter } from "next/router";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
-import { IS_ADMIN } from "../../../lib/constants";
+import { IS_ADMIN, shareResourceAvailability } from "../../../lib/constants";
 import TemplateArrow from "../../templateArrow";
 import ContentHeader from "../ContentHeader";
 import ConfirmationModal from "../ConfirmationModal";
@@ -394,8 +394,10 @@ export default function CreateResource(props: propTypes) {
       }
 
       const formulationAvailFor = [];
-      if (resourceAvailTherapist == 1) formulationAvailFor.push(2);
-      if (resourceAvailOnlyme == 1) formulationAvailFor.push(1);
+      if (resourceAvailTherapist == 1)
+        formulationAvailFor.push(shareResourceAvailability.allTherapist);
+      if (resourceAvailOnlyme == 1)
+        formulationAvailFor.push(shareResourceAvailability.onlyMe);
 
       const tempD = {
         resourceName,

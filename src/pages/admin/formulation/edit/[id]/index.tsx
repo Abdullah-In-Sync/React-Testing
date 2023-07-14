@@ -17,6 +17,7 @@ import {
   FormulationData,
   UpdateFormulationData,
 } from "../../../../../graphql/formulation/types";
+import { shareResourceAvailability } from "../../../../../lib/constants";
 
 const EditFormulationPage: NextPage = () => {
   const router = useRouter();
@@ -63,8 +64,8 @@ const EditFormulationPage: NextPage = () => {
       formulation_type,
     } = formFields;
     const formulationAvailFor = [];
-    if (all) formulationAvailFor.push(2);
-    if (onlyMe) formulationAvailFor.push(1);
+    if (all) formulationAvailFor.push(shareResourceAvailability.allTherapist);
+    if (onlyMe) formulationAvailFor.push(shareResourceAvailability.onlyMe);
 
     const variables = {
       formulation_id,
