@@ -81,3 +81,8 @@ export const defalutEmojis = [
   { code: "1f60a", text: "Happy" },
   { code: "1f604", text: "Very Happy" },
 ];
+
+export const shareResourceAvailability = {
+  allTherapist: 1,
+  onlyMe: 2,
+};

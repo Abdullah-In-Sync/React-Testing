@@ -12,14 +12,13 @@ import {
   GET_FORMULATION_BY_ID,
   UPDATE_FORMULATION,
 } from "../../../../../graphql/formulation/graphql";
-import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
 import {
   FormulationData,
   UpdateFormulationData,
 } from "../../../../../graphql/formulation/types";
 import { shareResourceAvailability } from "../../../../../lib/constants";
 
-const EditFormulationPage: NextPage = () => {
+const TherapistEditFormulationPage: NextPage = () => {
   const router = useRouter();
   const { query: { id: formulation_id } = {} } = router;
   const confirmRef = useRef<ConfirmElement>(null);
@@ -27,11 +26,6 @@ const EditFormulationPage: NextPage = () => {
   const [updateFormulation] =
     useMutation<UpdateFormulationData>(UPDATE_FORMULATION);
   const { enqueueSnackbar } = useSnackbar();
-
-  const [
-    getOrgList,
-    { data: { getOrganizationData: organizationList = [] } = {} },
-  ] = useLazyQuery(GET_ORGANIZATION_LIST);
 
   const [
     getFormulation,
@@ -42,13 +36,6 @@ const EditFormulationPage: NextPage = () => {
       setLoader(false);
     },
   });
-
-  const selectedOrgIds = (orgId) => {
-    if (orgId === "all") {
-      /* istanbul ignore next */
-      return organizationList.map((item) => item._id).join(",");
-    } else return orgId;
-  };
 
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
@@ -75,9 +62,9 @@ const EditFormulationPage: NextPage = () => {
         formulation_desc: description,
         formulation_instruction: instruction,
         formulation_avail_for: JSON.stringify(formulationAvailFor),
-        org_id: selectedOrgIds(orgId),
         template_data: JSON.stringify(templateData),
         template_id,
+        org_id: orgId,
       },
     };
     try {
@@ -89,7 +76,7 @@ const EditFormulationPage: NextPage = () => {
             enqueueSnackbar("Formulation updated successfully.", {
               variant: "success",
             });
-            router.push("/admin/resource/");
+            router.push("/therapist/formulation/");
           }
         },
       });
@@ -102,12 +89,8 @@ const EditFormulationPage: NextPage = () => {
   };
 
   useEffect(() => {
-    getOrgList({
-      onCompleted: () => {
-        getFormulation({
-          variables: { formulation_id },
-        });
-      },
+    getFormulation({
+      variables: { formulation_id },
     });
   }, []);
 
@@ -123,12 +106,12 @@ const EditFormulationPage: NextPage = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
-        "Are you sure you want to cancel this formulation without saving?",
+        "Are you sure you want to cancel the formulation without updating?",
     });
   };
 
   const cancelConfirm = (callback) => {
-    router.push("/admin/resource/");
+    router.push("/therapist/formulation/");
     callback();
   };
 
@@ -141,7 +124,6 @@ const EditFormulationPage: NextPage = () => {
           <EditFormulationComponent
             confirmRef={confirmRef}
             data={formulationData}
-            organizationList={organizationList}
             submitForm={handleSavePress}
             onPressCancel={onPressCancel}
           />
@@ -151,4 +133,4 @@ const EditFormulationPage: NextPage = () => {
   );
 };
 
-export default EditFormulationPage;
+export default TherapistEditFormulationPage;

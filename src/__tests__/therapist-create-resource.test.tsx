@@ -281,7 +281,7 @@ mocksData.push({
       orgId: "e7b5b7c0568b4eacad6f05f11d9c4884",
       resourceDesc: "",
       resourceInstruction: "",
-      formulationAvailFor: "[1]",
+      formulationAvailFor: "[2]",
       templateData:
         '{"rows":[{"height":"200px","cells":[{"type":"","width":"600px"}]}]}',
       templateId: "63774edbc553fac5d6a9bd74",
