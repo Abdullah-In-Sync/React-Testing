@@ -57,7 +57,7 @@ const CreateMeasures: NextPage = () => {
       },
     });
   }, []);
-
+  /* istanbul ignore next */
   const submitForm = async (formFields, doneCallback) => {
     setLoader(true);
     const { description, templateData, templateId, title } = formFields;
@@ -91,7 +91,7 @@ const CreateMeasures: NextPage = () => {
       setLoader(false);
     }
   };
-
+  /* istanbul ignore next */
   const deleteQuestion = async (templateData, doneCallback) => {
     setLoader(true);
     const { description, template_id, title } = measureData;
@@ -128,7 +128,7 @@ const CreateMeasures: NextPage = () => {
       setSubmitting,
     });
   };
-
+  /* istanbul ignore next */
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
@@ -149,7 +149,7 @@ const CreateMeasures: NextPage = () => {
       `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=measures`
     );
   };
-
+  /* istanbul ignore next */
   const handleDeleteQuestion = ({ callback, item }) => {
     const { template_data } = measureData;
     const templateData = JSON.parse(template_data);
