@@ -27,7 +27,6 @@ import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSel
 import UploadButtonComponent from "../../common/UploadButton/UploadButtonComponent";
 import { getUpdatedFileName, uploadToS3 } from "../../../lib/helpers/s3";
 import CheckBoxLabelComponent from "../../common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
-import SureModal from "./SureModal";
 import { addResourceFormField } from "../../../utility/types/resource_types";
 import { GET_ORG_DATA } from "../../../graphql/query";
 import { useAppContext } from "../../../contexts/AuthContext";
@@ -71,10 +70,9 @@ export default function AddForm(props: propTypes) {
     org_id: orgId,
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   const [checkCompleteCheckBox, setCheckCompleteCheckbox] = useState<any>();
   const [isConfirm, setIsConfirm] = useState(false);
+  const [isConfirmResource, setIsConfirmResource] = useState(false);
 
   console.log("Koca: checkCompleteCheckBox ", checkCompleteCheckBox);
 
@@ -273,10 +271,10 @@ export default function AddForm(props: propTypes) {
     if (checkCompleteCheckBox === 1) {
       setIsConfirm(true);
     } else {
-      setModalOpen(true);
+      setIsConfirmResource(true);
     }
     /* istanbul ignore next */
-    if (!confirmSubmission) return;
+    if (!isConfirmResource) return;
   };
 
   const uploadFileToS3 = async (
@@ -341,6 +339,7 @@ export default function AddForm(props: propTypes) {
   const clearIsConfirmCancel = () => {
     /* istanbul ignore next */
     setIsConfirm(false);
+    setIsConfirmResource(false);
   };
 
   const handleCheckboxChange = (event) => {
@@ -718,49 +717,7 @@ export default function AddForm(props: propTypes) {
               </Grid>
             </Grid>
           )}
-          <SureModal
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-            setConfirmSubmission={setConfirmSubmission}
-          >
-            <Typography
-              sx={{
-                fontWeight: "600",
-                textAlign: "center",
-                fontSize: "27px",
-              }}
-            >
-              Are you sure want to add this resource?
-            </Typography>
-            <Box marginTop="20px" display="flex" justifyContent="end">
-              <Button
-                variant="contained"
-                color="inherit"
-                size="small"
-                data-testid="addResourceModalCancelButton"
-                onClick={() => {
-                  /* istanbul ignore next */
-                  setModalOpen(false);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                color="error"
-                variant="contained"
-                sx={{ marginLeft: "5px" }}
-                size="small"
-                data-testid="addResourceModalConfirmButton"
-                onClick={() => {
-                  /* istanbul ignore next */
-                  setModalOpen(false);
-                  uploadFile();
-                }}
-              >
-                Confirm
-              </Button>
-            </Box>
-          </SureModal>
+
           <Grid container spacing={2} marginBottom={5}>
             <Grid item xs={12} textAlign="center">
               <Button
@@ -778,6 +735,17 @@ export default function AddForm(props: propTypes) {
           </Grid>
         </Box>
       </form>
+
+      {isConfirmResource && (
+        <ConfirmationModal
+          label="Are you sure want to add this resource?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            uploadFile();
+          }}
+        />
+      )}
 
       {isConfirm && (
         <ConfirmationModal

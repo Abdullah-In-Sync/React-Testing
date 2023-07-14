@@ -108,7 +108,7 @@ const Index = () => {
               variant: "success",
               autoHideDuration: 2000,
             });
-            router.push("/admin/resource");
+            router.push("/admin/resource/?tab=formulation");
           } else {
             /* istanbul ignore next */
             enqueueSnackbar("This formulation name already exist!", {
@@ -116,7 +116,7 @@ const Index = () => {
               autoHideDuration: 2000,
             });
             /* istanbul ignore next */
-            router.push("/admin/resource");
+            router.push("/admin/resource/?tab=formulation");
           }
         },
       });
