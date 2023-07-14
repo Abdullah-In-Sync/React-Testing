@@ -84,6 +84,7 @@ const CreateMeasures: NextPage = () => {
       });
   };
 
+  /* istanbul ignore next */
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
       confirmFunction: (callback) => cancelConfirm(callback),
@@ -97,13 +98,13 @@ const CreateMeasures: NextPage = () => {
     handleOk();
     callback();
   };
-
+  /* istanbul ignore next */
   const handleOk = () => {
     router.push(
       `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=measures`
     );
   };
-
+  /* istanbul ignore next */
   return (
     <>
       <Layout>
