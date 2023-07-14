@@ -167,6 +167,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 order: "1",
                 flexGrow: "0",
                 borderRadius: "4px",
+                paddingBottom: "8px",
               }}
             >
               <MenuItem value="all">
@@ -179,7 +180,19 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                     }
                   />
                 </ListItemIcon>
-                <Typography data-testid={`checkbox123`}>Select All</Typography>
+                <Typography
+                  data-testid={`checkbox123`}
+                  style={{
+                    fontFamily: "Montserrat",
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    lineHeight: "24px",
+                    letterSpacing: "0px",
+                    textAlign: "left",
+                  }}
+                >
+                  Select All
+                </Typography>
               </MenuItem>
               {organizationList.map((option, i) =>
                 option.is_shared ? (

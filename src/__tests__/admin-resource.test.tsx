@@ -374,4 +374,37 @@ describe("Admin Resource page", () => {
       expect(screen.queryByText("Approve Resource")).toBeInTheDocument()
     );
   });
+
+  test("Click on FormulationTab and check url", async () => {
+    const mockRouter = {
+      push: jest.fn(),
+    };
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+    await sut();
+    const formulationBtn = await screen.findByTestId("formulationTab");
+    expect(formulationBtn).toBeInTheDocument();
+
+    await waitFor(async () => fireEvent.click(formulationBtn));
+    await waitFor(async () => {
+      expect(screen.queryByText("Select Disorder")).not.toBeInTheDocument();
+      expect(mockRouter.push).toHaveBeenCalledWith("?tab=formulation");
+    });
+  });
+  test("Click on ApproveResourceTab and check url", async () => {
+    const mockRouter = {
+      push: jest.fn(),
+    };
+    (useRouter as jest.Mock).mockReturnValue(mockRouter);
+    await sut();
+    const approveResourceBtn = await screen.findByTestId("approveresourcelist");
+    expect(approveResourceBtn).toBeInTheDocument();
+
+    await waitFor(async () => fireEvent.click(approveResourceBtn));
+    await waitFor(async () => {
+      expect(
+        screen.queryByTestId("fav_abfd4ef5-66f2-463c-be2e-86fe8fa449b2")
+      ).not.toBeInTheDocument();
+      expect(mockRouter.push).toHaveBeenCalledWith("?tab=approveResource");
+    });
+  });
 });
