@@ -1,13 +1,17 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { useAppContext } from "../contexts/AuthContext";
-import { GET_FORMULATION_LIST } from "../graphql/formulation/graphql";
+import {
+  GET_FORMULATION_LIST,
+  UPDATE_FORMULATION,
+} from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
 import TherapistFormulation from "../pages/therapist/formulation";
-
+import { useRouter } from "next/router";
+const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -143,6 +147,23 @@ const buildMocks = (): {
     },
   });
 
+  _mocks.push({
+    request: {
+      query: UPDATE_FORMULATION,
+      variables: {
+        formulation_id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+        updateFormulation: { formulation_status: 0 },
+      },
+    },
+    result: {
+      data: {
+        updateFormulationById: {
+          _id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+        },
+      },
+    },
+  });
+
   return { mocks: _mocks };
 };
 
@@ -176,6 +197,12 @@ describe("Therapist Formulation page", () => {
         },
       },
     });
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "formulation-id-1",
+      },
+      push: pushMock,
+    });
   });
 
   test("Renders Admin card wrapper container", async () => {
@@ -184,5 +211,31 @@ describe("Therapist Formulation page", () => {
       expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument()
     );
     await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(4));
+
+    const firstEditButton = await screen.findByTestId(
+      "editIcon_589e8b42-a640-4daa-a39c-ad53f7a6b891"
+    );
+    fireEvent.click(firstEditButton);
+    expect(pushMock).toHaveBeenCalledWith(
+      "/therapist/formulation/edit/589e8b42-a640-4daa-a39c-ad53f7a6b891"
+    );
+  });
+
+  test("should delete formulation", async () => {
+    await sut();
+
+    const firstDeleteButton = await screen.findByTestId(
+      "deleteIcon_d1b60faa-c8aa-4258-ada0-cfdf18402b7b"
+    );
+    fireEvent.click(firstDeleteButton);
+    const optionCancelButton = await screen.findByTestId("cancelButton");
+    fireEvent.click(optionCancelButton);
+    expect(optionCancelButton).not.toBeInTheDocument();
+    fireEvent.click(firstDeleteButton);
+    const optionConfirmButton = await screen.findByTestId("confirmButton");
+    fireEvent.click(optionConfirmButton);
+    expect(
+      await screen.findByText(/Formulation deleted successfully./i)
+    ).toBeInTheDocument();
   });
 });

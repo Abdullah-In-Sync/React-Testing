@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 import Loader from "../../../components/common/Loader";
 // GRAPHQL
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   IconButton,
   Box,
@@ -21,13 +22,21 @@ import CrudForm from "../../../components/common/CrudForm";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
-import { GET_FORMULATION_LIST } from "../../../graphql/formulation/graphql";
+import {
+  GET_FORMULATION_LIST,
+  UPDATE_FORMULATION,
+} from "../../../graphql/formulation/graphql";
 
 import { ShareOutlined } from "@mui/icons-material";
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
 import { AddButton } from "../../../components/common/Buttons";
 import FormulationCardGenerator from "../../../components/common/formulationCardGenerator";
+import ConfirmWrapper, {
+  ConfirmElement,
+} from "../../../components/common/ConfirmWrapper";
+import { UpdateFormulationData } from "../../../graphql/formulation/types";
+import { useSnackbar } from "notistack";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -46,11 +55,17 @@ const crudButtons = {
 };
 
 const TherapistFormulation = () => {
+  const router = useRouter();
+  const [loader, setLoader] = useState<boolean>(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const confirmRef = useRef<ConfirmElement>(null);
   const [filterValue, setFilterValue] = useState<any>({});
   const [dataList, setDataList] = useState<any>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [myFormulation, setMyFormulation] = useState<number>(0);
   const [myFavourite, setMyFavourite] = useState<number>(0);
+  const [updateFormulation] =
+    useMutation<UpdateFormulationData>(UPDATE_FORMULATION);
 
   const {
     user: { _id: Id },
@@ -68,20 +83,62 @@ const TherapistFormulation = () => {
   }, [searchText, myFavourite, myFormulation]);
 
   /* istanbul ignore next */
-  const [getFormulationList, { loading: loading }] = useLazyQuery(
-    GET_FORMULATION_LIST,
-    {
-      fetchPolicy: "cache-and-network",
-      onCompleted: (data) => {
-        setDataList(data.getFormulationList);
-        /* istanbul ignore next */
+  const [
+    getFormulationList,
+    { loading: loading, refetch: refetchFormulationList },
+  ] = useLazyQuery(GET_FORMULATION_LIST, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      setDataList(data.getFormulationList);
+      /* istanbul ignore next */
+    },
+    onError: () => {
+      /* istanbul ignore next */
+      setDataList([]);
+    },
+  });
+
+  const deleteApi = async (value, doneCallback) => {
+    setLoader(true);
+    const { _id: formulation_id } = value;
+    const variables = {
+      formulation_id,
+      updateFormulation: {
+        formulation_status: 0,
       },
-      onError: () => {
-        /* istanbul ignore next */
-        setDataList([]);
-      },
+    };
+    try {
+      await updateFormulation({
+        variables,
+        onCompleted: (data) => {
+          const { updateFormulationById } = data;
+          if (updateFormulationById) {
+            refetchFormulationList();
+            enqueueSnackbar("Formulation deleted successfully.", {
+              variant: "success",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    } finally {
+      doneCallback();
+      setLoader(false);
     }
-  );
+  };
+
+  const handlePressEdit = (v) => {
+    const { _id } = v;
+    router.push(`/therapist/formulation/edit/${_id}`);
+  };
+
+  const handlePressDelete = (value) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: (callback) => deleteApi(value, callback),
+      description: "Are you sure you want to delete the formulation?",
+    });
+  };
 
   /* istanbul ignore next */
   const fields = [
@@ -116,7 +173,12 @@ const TherapistFormulation = () => {
         <>
           {value?.user_id === Id && (
             <>
-              <IconButtonWrapper aria-label="create" size="small">
+              <IconButtonWrapper
+                data-testid={`editIcon_${value._id}`}
+                aria-label="create"
+                size="small"
+                onClick={() => handlePressEdit(value)}
+              >
                 <CreateIcon />
               </IconButtonWrapper>
             </>
@@ -127,6 +189,7 @@ const TherapistFormulation = () => {
               data-testid={"deleteIcon_" + value?._id}
               aria-label="delete"
               size="small"
+              onClick={() => handlePressDelete(value)}
             >
               <DeleteIcon />
             </IconButtonWrapper>
@@ -290,12 +353,14 @@ const TherapistFormulation = () => {
           />
         </Box>
         <Box>
-          <Loader visible={loading} />
-          <FormulationCardGenerator
-            onPressCard={onPressCard}
-            data={dataList}
-            fields={fields}
-          />
+          <Loader visible={loading || loader} />
+          <ConfirmWrapper ref={confirmRef}>
+            <FormulationCardGenerator
+              onPressCard={onPressCard}
+              data={dataList}
+              fields={fields}
+            />
+          </ConfirmWrapper>
         </Box>
       </Layout>
     </>
