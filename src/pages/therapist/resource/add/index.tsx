@@ -113,7 +113,7 @@ const Index = () => {
               variant: "success",
               autoHideDuration: 2000,
             });
-            router.push("/therapist/resource");
+            router.push("/therapist/formulation");
           } else {
             /* istanbul ignore next */
             enqueueSnackbar("This formulation name already exist!", {
@@ -121,7 +121,7 @@ const Index = () => {
               autoHideDuration: 2000,
             });
             /* istanbul ignore next */
-            router.push("/therapist/resource");
+            router.push("/therapist/formulation");
           }
         },
       });
