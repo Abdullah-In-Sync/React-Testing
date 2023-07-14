@@ -174,7 +174,11 @@ export default function CreateResource(props: propTypes) {
             enqueueSnackbar("Formulation has been created successfully.", {
               variant: "success",
             });
-            router.push(`/${userType}/resource/`);
+            /* istanbul ignore next */
+            if (userType == "therapist")
+              router.push(`/${userType}/formulation/`);
+            /* istanbul ignore next */ else
+              router.push(`/${userType}/resource/?tab=formulation`);
           } else if (duplicateNames) {
             /* istanbul ignore next */
             enqueueSnackbar("This formulation already exists.", {
