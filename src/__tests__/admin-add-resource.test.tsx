@@ -577,15 +577,11 @@ describe("Admin add resource page", () => {
     await waitFor(async () => {
       fireEvent.click(screen.queryByTestId("addResourceSubmitButton"));
     });
-
-    expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
     await waitFor(async () => {
-      expect(
-        screen.getByTestId("addResourceModalConfirmButton")
-      ).toBeInTheDocument();
-    });
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
 
-    fireEvent.click(screen.queryByTestId("addResourceModalConfirmButton"));
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
 
     await waitFor(async () => {
       expect(
@@ -790,6 +786,8 @@ describe("Admin add resource page", () => {
         screen.getByText("Formulation added successfully!")
       ).toBeInTheDocument();
     });
-    expect(mockRouter.push).toHaveBeenCalledWith("/admin/resource");
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      "/admin/resource/?tab=formulation"
+    );
   });
 });
