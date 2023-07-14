@@ -538,8 +538,14 @@ const Resource: NextPage = () => {
               />
             </Search>
           </Grid>
+
           <Grid item xs={9}>
             <Box sx={crudButtons}>
+              <AddButton
+                href="/v2/therapist/formulation"
+                className="mr-3"
+                label="Formulation"
+              />
               <AddButton
                 href="/v2/therapist/resource/add"
                 className="mr-3"
