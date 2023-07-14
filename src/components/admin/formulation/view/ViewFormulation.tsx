@@ -63,7 +63,7 @@ const ViewFormulation: React.FC<ViewProps> = ({
             <ViewTemplateFormulation templateData={templateDataJson} />
           )}
           {formulation_url && (
-            <Box p={3}>
+            <Box className="imageWrapper">
               <CustomImage url={formulation_url} />
             </Box>
           )}

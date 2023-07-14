@@ -17,6 +17,13 @@ export const useStyles = makeStyles(() => {
           fontSize: 30,
         },
       },
+      "& .imageWrapper": {
+        display: "flex",
+        minHeight: "65vh",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 10,
+      },
     },
     nodeCardDetailModalWrapper: {
       "& .row": {
