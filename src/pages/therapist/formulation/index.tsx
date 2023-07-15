@@ -24,6 +24,7 @@ import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import {
   GET_FORMULATION_LIST,
+  THERAPIST_SHARE_FORMULATION_BY_ID,
   UPDATE_FORMULATION,
 } from "../../../graphql/formulation/graphql";
 
@@ -37,6 +38,9 @@ import ConfirmWrapper, {
 } from "../../../components/common/ConfirmWrapper";
 import { UpdateFormulationData } from "../../../graphql/formulation/types";
 import { useSnackbar } from "notistack";
+import ShareAssessmentForm from "../../../components/admin/assessement/shareAssessment/ShareAssessmentForm";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { ModalElement } from "../../../components/common/CustomModal/CommonModal";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -64,8 +68,15 @@ const TherapistFormulation = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [myFormulation, setMyFormulation] = useState<number>(0);
   const [myFavourite, setMyFavourite] = useState<number>(0);
+  const shareInfoModalRef = useRef<ModalElement>(null);
+  const [isConfirmShare, setIsConfirmShare] = useState(false);
+  const [selectFormulationName, setSelectFormulationName] =
+    useState<string>(",");
+  const [shareOrgIds, setShareOrgIds] = useState();
+  const [selectFormulation, setSelectFormulation] = useState("");
   const [updateFormulation] =
     useMutation<UpdateFormulationData>(UPDATE_FORMULATION);
+  const [shareFormulation] = useMutation(THERAPIST_SHARE_FORMULATION_BY_ID);
 
   const {
     user: { _id: Id },
@@ -214,6 +225,10 @@ const TherapistFormulation = () => {
               aria-label="favorite"
               size="small"
               data-testid={"shareBtn_" + value?._id}
+              onClick={(e) => {
+                e.stopPropagation();
+                onPressShareFormulation(value?._id, value?.formulation_name);
+              }}
             >
               <ShareOutlined
                 data-testid={"fav_" + value?._id}
@@ -270,6 +285,59 @@ const TherapistFormulation = () => {
     if (value.mode == "my_favourites") {
       setMyFavourite(1);
       setMyFormulation(0);
+    }
+  };
+
+  const receiveSharePlanIds = (value) => {
+    const formattedValue = value.join(",");
+    setShareOrgIds(formattedValue);
+  };
+  const clearIsConfirmShareCancel = () => {
+    setIsConfirmShare(false);
+  };
+
+  const onPressShareFormulation = (formulationId: string, name: string) => {
+    console.log(formulationId, name, "onclick share");
+    setSelectFormulation(formulationId);
+    setSelectFormulationName(formulationId);
+    shareInfoModalRef.current?.open();
+  };
+
+  // share formulation
+  const handleShareAssessment = async () => {
+    try {
+      await shareFormulation({
+        variables: {
+          formulation_id: selectFormulation,
+          patient_id: shareOrgIds,
+        },
+        onCompleted: (data) => {
+          if (data) {
+            const {
+              therapistShareFormulationById: { duplicateNames },
+            } = data;
+
+            if (duplicateNames) {
+              setIsConfirmShare(false);
+              shareInfoModalRef.current?.close();
+            } else {
+              shareInfoModalRef.current?.close();
+              setIsConfirmShare(false);
+              refetchFormulationList();
+              setSelectFormulation(undefined);
+              setShareOrgIds(undefined);
+
+              enqueueSnackbar("Formulation shared successfully!", {
+                variant: "success",
+              });
+            }
+          }
+        },
+      });
+    } catch (e) {
+      console.log(e);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
     }
   };
 
@@ -363,6 +431,22 @@ const TherapistFormulation = () => {
           </ConfirmWrapper>
         </Box>
       </Layout>
+      <ShareAssessmentForm
+        isOpen={shareInfoModalRef}
+        onPressSubmit={() => setIsConfirmShare(true)}
+        selectAssessmentName={selectFormulationName}
+        receivePlanId={receiveSharePlanIds}
+        shareType={"Formulation"}
+        headerTitleText={"Share formulation"}
+        listType={"patient"}
+      />
+      {isConfirmShare && (
+        <ConfirmationModal
+          label="Are you sure you want to share the formulation?"
+          onCancel={clearIsConfirmShareCancel}
+          onConfirm={handleShareAssessment}
+        />
+      )}
     </>
   );
 };
