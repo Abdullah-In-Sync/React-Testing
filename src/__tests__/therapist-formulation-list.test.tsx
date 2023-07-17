@@ -1,10 +1,19 @@
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
+import {
+  screen,
+  render,
+  waitFor,
+  fireEvent,
+  within,
+  act,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { useAppContext } from "../contexts/AuthContext";
 import {
   GET_FORMULATION_LIST,
+  GET_PATIENT_SHARED_LIST,
+  THERAPIST_SHARE_FORMULATION_BY_ID,
   UPDATE_FORMULATION,
 } from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
@@ -164,6 +173,63 @@ const buildMocks = (): {
     },
   });
 
+  _mocks.push({
+    request: {
+      query: GET_PATIENT_SHARED_LIST,
+      variables: {
+        name: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+        share_type: "formulation",
+      },
+    },
+    result: {
+      data: {
+        getPatientSharedList: [
+          {
+            _id: "003de6cefb794d90ad1fecc00b9e8da9",
+            is_shared: false,
+            patient_firstname: "54534",
+            patient_lastname: "545",
+            __typename: "SharePatientList",
+          },
+          {
+            _id: "76e0f9ac97804e0eb5fc092f06a09d97",
+            is_shared: false,
+            patient_firstname: "API",
+            patient_lastname: "testing",
+            __typename: "SharePatientList",
+          },
+          {
+            _id: "1e15482374dc43169b1581279b651179",
+            is_shared: false,
+            patient_firstname: "Aarti",
+            patient_lastname: "chaudhary",
+            __typename: "SharePatientList",
+          },
+        ],
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: THERAPIST_SHARE_FORMULATION_BY_ID,
+      variables: {
+        formulation_id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+        patient_id: "003de6cefb794d90ad1fecc00b9e8da9",
+      },
+    },
+    result: {
+      data: {
+        therapistShareFormulationById: {
+          duplicateNames: null,
+          message: null,
+          result: true,
+          __typename: "adminResult",
+        },
+      },
+    },
+  });
+
   return { mocks: _mocks };
 };
 
@@ -205,6 +271,21 @@ describe("Therapist Formulation page", () => {
     });
   });
 
+  const clickSelect = async (element: HTMLElement) => {
+    const button = await within(element).findByRole("button");
+    expect(button).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.mouseDown(button);
+    });
+    const listBox = await screen.findByRole("listbox");
+    expect(listBox).toBeInTheDocument();
+    const selectOption = await screen.findByTestId(
+      "shareOrg_003de6cefb794d90ad1fecc00b9e8da9"
+    );
+    expect(selectOption).toBeInTheDocument();
+    fireEvent.click(selectOption);
+  };
+
   test("Renders Admin card wrapper container", async () => {
     await sut();
     await waitFor(() =>
@@ -237,5 +318,38 @@ describe("Therapist Formulation page", () => {
     expect(
       await screen.findByText(/Formulation deleted successfully./i)
     ).toBeInTheDocument();
+  });
+
+  it("Share formulation from list", async () => {
+    await sut();
+    const shareBtn = await screen.findByTestId(
+      "shareBtn_d1b60faa-c8aa-4258-ada0-cfdf18402b7b"
+    );
+    expect(shareBtn).toBeInTheDocument();
+    fireEvent.click(shareBtn);
+    const saveBtn = await screen.findByTestId("addSubmitForm");
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    expect(screen.getByText("Patient cannot be empty")).toBeInTheDocument();
+
+    const select = await screen.findByTestId("share_organisation_select_list");
+    expect(select).toBeInTheDocument();
+    await clickSelect(select);
+
+    expect(saveBtn).toBeInTheDocument();
+    fireEvent.click(saveBtn);
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Are you sure you want to share the formulation?")
+      ).toBeInTheDocument();
+    });
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("confirmButton"));
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Formulation shared successfully!")
+      ).toBeInTheDocument();
+    });
   });
 });
