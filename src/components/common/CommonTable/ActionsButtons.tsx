@@ -4,6 +4,7 @@ import * as React from "react";
 interface ViewProps {
   data: any;
   buttonClick: (value) => void;
+  view?: string;
 }
 
 const iconButtonsData = [
@@ -24,10 +25,20 @@ const iconButtonsData = [
     icon: require("@mui/icons-material/Share").default,
   },
 ];
+const iconButtonsFormulationData = [
+  {
+    id: "view",
+    icon: require("@mui/icons-material/Visibility").default,
+  },
+];
 
-const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
+const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick, view }) => {
   const iconButtons = () => {
-    return iconButtonsData.map((item) => {
+    const icons =
+      view == "patientFormulation"
+        ? iconButtonsFormulationData
+        : iconButtonsData;
+    return icons.map((item) => {
       const { id, icon: Icon } = item;
       return (
         <Fab
@@ -35,6 +46,9 @@ const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
           aria-label={`iconButton_${id}_${data._id}`}
           data-testid={`iconButton_${id}_${data._id}`}
           onClick={() => buttonClick({ ...data, ...{ pressedIconButton: id } })}
+          style={{
+            background: view == "patientFormulation" ? "#ffffff" : "#eaf3ff",
+          }}
         >
           <Icon />
         </Fab>
