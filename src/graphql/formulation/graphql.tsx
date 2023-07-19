@@ -157,3 +157,16 @@ export const GET_PATIENT_SHARED_LIST = gql`
     }
   }
 `;
+
+export const GET_PATIENT_FORMULATION_LIST = gql`
+  query getPatientFormulationList {
+    getPatientFormulationList {
+      _id
+      formulation_data {
+        _id
+        formulation_name
+        created_date
+      }
+    }
+  }
+`;

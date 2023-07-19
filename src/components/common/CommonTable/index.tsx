@@ -21,6 +21,7 @@ interface ViewProps {
   rowsLimit?: number;
   loading?: boolean;
   headerData?: any;
+  view?: string;
 }
 
 const CommonTable: React.FC<ViewProps> = ({
@@ -32,6 +33,7 @@ const CommonTable: React.FC<ViewProps> = ({
   rowsLimit,
   loading,
   headerData,
+  view,
 }) => {
   const styles = useStyles();
   const { list, total = 0 } = data || {};
@@ -67,11 +69,15 @@ const CommonTable: React.FC<ViewProps> = ({
 
   return (
     <Stack className={styles.tablePaper}>
-      <TableContainer>
+      <TableContainer
+        style={{
+          paddingBottom: view == "patientFormulation" ? "0px" : "20px",
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead className={styles.root}>
             <TableRow>
-              {columns(headerData).map((column) => (
+              {columns(headerData, view).map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -95,7 +101,7 @@ const CommonTable: React.FC<ViewProps> = ({
                     tabIndex={-1}
                     key={`tableRow_${i}`}
                   >
-                    {columns(headerData).map((column) => {
+                    {columns(headerData, view).map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
@@ -116,16 +122,19 @@ const CommonTable: React.FC<ViewProps> = ({
             </TableBody>
           )}
         </Table>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          component="div"
-          count={total}
-          rowsPerPage={rowsLimit}
-          page={tableCurentPage}
-          onPageChange={onPageChange}
-          onRowsPerPageChange={onSelectPageDropdown}
-        />
+        {!view && view != "patientFormulation" ? (
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            component="div"
+            count={total}
+            rowsPerPage={rowsLimit}
+            page={tableCurentPage}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onSelectPageDropdown}
+          />
+        ) : (
+          <></>
+        )}
       </TableContainer>
     </Stack>
   );
