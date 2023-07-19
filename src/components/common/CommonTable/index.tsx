@@ -21,7 +21,8 @@ interface ViewProps {
   rowsLimit?: number;
   loading?: boolean;
   headerData?: any;
-  view?: string;
+  hidePagination?: boolean;
+  actionButton?: any;
 }
 
 const CommonTable: React.FC<ViewProps> = ({
@@ -33,7 +34,8 @@ const CommonTable: React.FC<ViewProps> = ({
   rowsLimit,
   loading,
   headerData,
-  view,
+  hidePagination,
+  actionButton,
 }) => {
   const styles = useStyles();
   const { list, total = 0 } = data || {};
@@ -71,13 +73,13 @@ const CommonTable: React.FC<ViewProps> = ({
     <Stack className={styles.tablePaper}>
       <TableContainer
         style={{
-          paddingBottom: view == "patientFormulation" ? "0px" : "20px",
+          paddingBottom: hidePagination ? "0px" : "20px",
         }}
       >
         <Table stickyHeader aria-label="sticky table">
           <TableHead className={styles.root}>
             <TableRow>
-              {columns(headerData, view).map((column) => (
+              {columns(headerData, actionButton).map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -101,7 +103,7 @@ const CommonTable: React.FC<ViewProps> = ({
                     tabIndex={-1}
                     key={`tableRow_${i}`}
                   >
-                    {columns(headerData, view).map((column) => {
+                    {columns(headerData, actionButton).map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
@@ -122,7 +124,7 @@ const CommonTable: React.FC<ViewProps> = ({
             </TableBody>
           )}
         </Table>
-        {!view && view != "patientFormulation" ? (
+        {!hidePagination ? (
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50, 100]}
             component="div"

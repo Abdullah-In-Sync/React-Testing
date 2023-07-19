@@ -9,13 +9,17 @@ interface Column {
   format?: (value, callback: any, i?: number) => string | JSX.Element;
 }
 
-export const columns = (data, view): readonly Column[] => {
+export const columns = (data, buttons): readonly Column[] => {
   const tableBodyCell = (value, buttonClick, item, i) => {
     const { id } = item;
     switch (id) {
       case "actions":
         return (
-          <ActionsButtons data={value} buttonClick={buttonClick} view={view} />
+          <ActionsButtons
+            data={value}
+            buttonClick={buttonClick}
+            buttons={buttons}
+          />
         );
       case "sNo":
         return <Typography>{i + 1}</Typography>;
