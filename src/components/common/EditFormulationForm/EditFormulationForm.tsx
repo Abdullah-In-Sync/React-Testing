@@ -177,7 +177,7 @@ export default function EditFormFormulation(props: propTypes) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formFields.formulation_avail_for) {
+    if (!formFields.formulation_avail_for.length) {
       enqueueSnackbar("Please select availability of resource", {
         variant: "error",
         autoHideDuration: 2000,

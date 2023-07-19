@@ -81,7 +81,7 @@ const TherapyTabsGenerator = (props: propTypes) => {
                   color: "white",
                   backgroundColor: isActive ? "#689c8b" : "#6EC9DB",
                   borderRadius: "5px",
-                  height: 37,
+                  // height: 37,
                   fontSize: "14px",
                 }}
                 key={value}

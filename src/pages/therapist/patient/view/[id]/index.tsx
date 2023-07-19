@@ -23,6 +23,8 @@ import TabsGeneratorTherapistPatient from "../../../../../components/common/Tabs
 import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
+import TherapistNotesList from "./notes";
+import TherapisTherapyList from "../../../therapy";
 
 interface Props {
   children: React.ReactNode;
@@ -45,9 +47,12 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   const router = useRouter();
   const patId = router?.query.id as string;
-  const {
-    query: { id },
-  } = router;
+  const tab = router?.query?.mainTab as string;
+  const tab2 = router?.query?.tab as string;
+
+  // const {
+  //   query: { id },
+  // } = router;
 
   /* istanbul ignore next */
   const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
@@ -116,8 +121,8 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     {
       label: "Notes",
       value: "notes",
-      //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=notes`,
+      component: <TherapistNotesList setTherapy={therapy} />,
+      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=notes`,
     },
     {
       label: "Appointments",
@@ -246,9 +251,12 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
-              tabLabel={`/therapist/patient/view/${id}/?mainTab=`}
+              // tabLabel={`/therapist/patient/view/${id}/?mainTab=`}
               defaultTabs={defaultTabs}
             />
+            {tab === "therapy" && !tab2 && (
+              <TherapisTherapyList setTherapy={therapy} />
+            )}
           </Box>
         </Box>
       </Layout>
@@ -257,7 +265,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 };
 
 const defaultTabs = {
-  therapy: "&tab=safety-plan",
+  // therapy: "&tab=safety-plan",
   "personal-info": "&tab=details",
 };
 
