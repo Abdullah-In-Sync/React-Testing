@@ -25,7 +25,7 @@ export default function TherapyMainComponent(props: propTypes) {
   } = router;
   const tabs = [
     {
-      label: "Safecswcwty Plan",
+      label: "Safety Plan",
       value: "safety-plan",
       //  component: < />,
       // redirectUrl: Link + `therapist/patient/view/${patId}?tab=safety_plan`,
