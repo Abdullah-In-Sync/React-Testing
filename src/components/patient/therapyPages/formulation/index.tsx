@@ -26,7 +26,6 @@ const PatientFormulation: NextPage = () => {
           };
         });
         setFormulationList(list);
-        console.log(list, "list");
         setLoader(false);
       },
     });
@@ -49,6 +48,14 @@ const PatientFormulation: NextPage = () => {
     },
   ];
 
+  const iconButtonsFormulationData = [
+    {
+      id: "view",
+      icon: require("@mui/icons-material/Visibility").default,
+      styles: { background: "#ffffff" },
+    },
+  ];
+
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
   const handleActionButtonClick = (value) => {};
@@ -62,7 +69,8 @@ const PatientFormulation: NextPage = () => {
         pageActionButtonClick={handleActionButtonClick}
         loading={loadingFormulationList}
         headerData={formulationListHeader}
-        view={"patientFormulation"}
+        hidePagination={true}
+        actionButton={iconButtonsFormulationData}
       />
     </>
   );
