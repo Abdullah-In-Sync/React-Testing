@@ -326,3 +326,11 @@ export const GET_THERAPIST_TOKEN_DATA = gql`
     }
   }
 `;
+
+export const GET_FILE_UPLOAD_URl = gql`
+  query GetFileUploadUrl($fileName: String!, $imageFolder: String) {
+    getFileUploadUrl(fileName: $fileName, imageFolder: $imageFolder) {
+      upload_file_url
+    }
+  }
+`;

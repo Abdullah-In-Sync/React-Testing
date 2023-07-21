@@ -4,6 +4,7 @@ import * as React from "react";
 interface ViewProps {
   data: any;
   buttonClick: (value) => void;
+  actionButtonsData: any;
 }
 
 const iconButtonsData = [
@@ -25,9 +26,13 @@ const iconButtonsData = [
   },
 ];
 
-const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
+const ActionsButtons: React.FC<ViewProps> = ({
+  data,
+  buttonClick,
+  actionButtonsData = iconButtonsData,
+}) => {
   const iconButtons = () => {
-    return iconButtonsData.map((item) => {
+    return actionButtonsData.map((item) => {
       const { id, icon: Icon } = item;
       return (
         <Fab
