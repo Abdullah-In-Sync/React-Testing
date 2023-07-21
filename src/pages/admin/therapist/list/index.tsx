@@ -12,7 +12,6 @@ import { GET_ADMIN_THERAPIST_LIST } from "../../../../graphql/Therapist/graphql"
 
 const TherapistListPage: NextPage = () => {
   const router = useRouter();
-  const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const rowsLimit = 10;
   const [searchInputValue, setSearchInputValue] = useState();
@@ -34,6 +33,7 @@ const TherapistListPage: NextPage = () => {
       variables: { name: "", paginationtoken: "", limit: rowsLimit },
       onCompleted: (data) => {
         addPaginationToken(data);
+        setLoader(false);
       },
     });
   }, []);
@@ -67,7 +67,7 @@ const TherapistListPage: NextPage = () => {
         variables: {
           limit: rowsLimit,
           name: e.target.value,
-          pageNo: initialPageNo,
+          paginationtoken: "",
         },
         onCompleted: (data) => {
           addPaginationToken(data);

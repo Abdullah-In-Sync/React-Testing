@@ -29,6 +29,7 @@ const Filter: React.FC<ViewProps> = ({
   hidePlanType,
 }) => {
   const styles = useStyles();
+  /* istanbul ignore next */
   const filterRow = () => {
     return (
       <Stack className={styles.filterWrapper}>

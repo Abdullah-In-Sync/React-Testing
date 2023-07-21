@@ -1,6 +1,5 @@
 import * as Yup from "yup";
-const phoneRegExp =
-  /^\s*(?:\+?(\d{1,3}))?[\W\D\s]^|()*(\d[\W\D\s]*?\d[\D\W\s]*?\d)[\W\D\s]*(\d[\W\D\s]*?\d[\D\W\s]*?\d)[\W\D\s]*(\d[\W\D\s]*?\d[\D\W\s]*?\d[\W\D\s]*?\d)(?: *x(\d+))?\s*$/;
+const phoneRegExp = /^\+[1-9]{1}[0-9]{3,14}$/;
 export const addTherapistValidationSchema = Yup.object().shape({
   plan: Yup.string().required("Plan is required"),
   therapist_name: Yup.string().required("Name is required"),

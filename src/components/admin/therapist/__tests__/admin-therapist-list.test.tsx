@@ -48,6 +48,32 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_ADMIN_THERAPIST_LIST,
+    variables: {
+      limit: 10,
+      name: "stext",
+      paginationtoken: "",
+    },
+  },
+  result: {
+    data: {
+      getTherapistList: {
+        pagination: "pagination_token_text",
+        therapistlist: [
+          {
+            name: "testname",
+            phone_number: "+448989898989",
+            specialization: "Psychodynamic(Psychoanalytic) Psychotheraphy",
+            therapist_id: "sid",
+          },
+        ],
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -69,5 +95,16 @@ describe("Admin therapist list", () => {
     expect(await screen.findByText(/Dodctor/i)).toBeInTheDocument();
     fireEvent.click(await screen.findByTestId("createPlanButton"));
     expect(pushMock).toHaveBeenCalledWith("/admin/therapist/add");
+  });
+
+  it("should render search data", async () => {
+    await sut();
+    const searchInput = await screen.findByTestId("searchInput");
+    expect(searchInput).toBeInTheDocument();
+
+    fireEvent.change(searchInput, {
+      target: { value: "stext" },
+    });
+    expect(await screen.findByText("testname")).toBeInTheDocument();
   });
 });
