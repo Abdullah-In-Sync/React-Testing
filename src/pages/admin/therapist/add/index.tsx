@@ -15,7 +15,7 @@ import { ADD_ADMIN_THERAPIST } from "../../../../graphql/Therapist/graphql";
 import { GET_FILE_UPLOAD_URl } from "../../../../graphql/query/common";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { uploadToS3 } from "../../../../lib/helpers/s3";
-import { removeProp } from "../../../../utility/helper";
+import { cogMessageToJson, removeProp } from "../../../../utility/helper";
 
 const AddTherapistPage: NextPage = () => {
   const router = useRouter();
@@ -85,9 +85,10 @@ const AddTherapistPage: NextPage = () => {
             });
             router.push("/admin/therapist/list");
           } else if (message) {
+            const { message: messageText } = cogMessageToJson(message);
             infoModalRef.current.openConfirm({
               data: {
-                message: "An account with the given email already exits!",
+                message: messageText,
               },
             });
           }
@@ -139,7 +140,7 @@ const AddTherapistPage: NextPage = () => {
                 () => submitForm(variables, doneCallback)
               )
       );
-    } else if (therapist_poa_attachment_file) {
+    } else if (therapist_poa_attachment_file && therapist_proofaccredition) {
       const variables = removeProp(formFields, removePropList);
       getUrlAndUploadFile(
         {
@@ -148,7 +149,7 @@ const AddTherapistPage: NextPage = () => {
         },
         () => submitForm(variables, doneCallback)
       );
-    } else if (therapist_inscover_file && therapist_proofaccredition) {
+    } else if (therapist_inscover_file) {
       const variables = removeProp(formFields, removePropList);
       getUrlAndUploadFile(
         { fileName: therapist_inscover, file: therapist_inscover_file },

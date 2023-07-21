@@ -1,13 +1,14 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import theme from "../../../../styles/theme/theme";
 
+import { useRouter } from "next/router";
 import { GET_ADMIN_THERAPIST_LIST } from "../../../../graphql/Therapist/graphql";
 import TherapistListPage from "../../../../pages/admin/therapist/list";
-
+const pushMock = jest.fn();
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -61,7 +62,12 @@ const sut = async () => {
 
 describe("Admin therapist list", () => {
   it("should render list", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: pushMock,
+    });
     await sut();
     expect(await screen.findByText(/Dodctor/i)).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("createPlanButton"));
+    expect(pushMock).toHaveBeenCalledWith("/admin/therapist/add");
   });
 });

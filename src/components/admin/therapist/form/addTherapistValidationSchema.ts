@@ -58,7 +58,7 @@ export const addTherapistValidationSchema = Yup.object().shape({
     }
   ),
   phone_number: Yup.string()
-    .required()
+    .required("Phone number is required")
     .matches(phoneRegExp, "Phone number is not valid"),
   trial_period: Yup.string().when("plan", {
     is: "free",

@@ -191,13 +191,13 @@ const CommonForm: React.FC<ViewProps> = ({
                     <FormikTextField
                       name="phone_number"
                       id="phone_number"
-                      label="Phone"
+                      label="Phone*"
                       fullWidth={true}
                       inputProps={{ "data-testid": "phone_number" }}
                       variant="outlined"
                       className="form-control-bg"
                       size="small"
-                      placeholder="Phone"
+                      placeholder="Phone*"
                     />
                   </Box>
                   <Box>
@@ -269,6 +269,7 @@ const CommonForm: React.FC<ViewProps> = ({
                           Number(e.target?.checked)
                         )
                       }
+                      data-testid="toggleAcc"
                     />
                   </Box>
                 </Box>

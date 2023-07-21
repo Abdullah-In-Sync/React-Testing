@@ -109,3 +109,16 @@ export const removeProp = (object, keys) =>
     const { [k]: _ , ...p } = o;
     return p;
   }, object);
+
+export const cogMessageToJson = (message) => {
+  const tempJson: any = {};
+  message
+    .replace(/[{}]/g, "")
+    .split(", ")
+    .forEach((v) => {
+      tempJson[v.substring(0, v.indexOf("="))] = v.substring(
+        v.indexOf("=") + 1
+      );
+    });
+  return tempJson;
+};

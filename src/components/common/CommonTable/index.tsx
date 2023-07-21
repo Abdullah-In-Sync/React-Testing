@@ -126,15 +126,17 @@ const CommonTable: React.FC<ViewProps> = ({
           )}
         </Table>
         {!hidePagination ? (
-        <TablePagination
-          rowsPerPageOptions={onSelectPageDropdown ? [5, 10, 25, 50, 100] : []}
-          component="div"
-          count={total}
-          rowsPerPage={rowsLimit}
-          page={tableCurentPage}
-          onPageChange={onPageChange}
-          onRowsPerPageChange={onSelectPageDropdown}
-        />
+          <TablePagination
+            rowsPerPageOptions={
+              onSelectPageDropdown ? [5, 10, 25, 50, 100] : []
+            }
+            component="div"
+            count={total}
+            rowsPerPage={rowsLimit}
+            page={tableCurentPage}
+            onPageChange={onPageChange}
+            onRowsPerPageChange={onSelectPageDropdown}
+          />
         ) : (
           <></>
         )}
