@@ -12,6 +12,7 @@ type propsType = {
   extraProps?: any;
   fileName?: string;
   buttonText?: string;
+  hideIcon?: boolean;
 };
 
 export default function UploadButtonComponent(props: propsType) {
@@ -20,7 +21,7 @@ export default function UploadButtonComponent(props: propsType) {
       <Button
         variant={props.variant}
         component="label"
-        startIcon={<SendIcon />}
+        startIcon={!props.hideIcon && <SendIcon />}
       >
         {props.buttonText || "Upload"}
         <input

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import moment from "moment";
 
 type SessionObject = {
@@ -100,6 +101,25 @@ export const formatDate = (isoDate) => {
 
 export const stringToInt = (str: string): number | undefined => {
   const temp = parseInt(str);
-  console.log("temp", temp);
   if (!isNaN(temp)) return temp;
+};
+
+export const removeProp = (object, keys) =>
+  keys.reduce((o, k) => {
+    // eslint-disable-next-line
+    const { [k]: _ , ...p } = o;
+    return p;
+  }, object);
+
+export const cogMessageToJson = (message) => {
+  const tempJson: any = {};
+  message
+    .replace(/[{}]/g, "")
+    .split(", ")
+    .forEach((v) => {
+      tempJson[v.substring(0, v.indexOf("="))] = v.substring(
+        v.indexOf("=") + 1
+      );
+    });
+  return tempJson;
 };

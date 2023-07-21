@@ -36,6 +36,7 @@ export const useStyles = makeStyles(() => {
       "& .actionsWrapper": {
         position: "relative",
         zIndex: 1,
+        minWidth: 180,
       },
       "& .actionsWrapper button": {
         marginRight: 10,
