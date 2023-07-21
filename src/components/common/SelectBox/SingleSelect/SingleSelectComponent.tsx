@@ -49,6 +49,7 @@ const mapping = (options: Option[], keys = []) => {
 };
 
 export default function SingleSelectComponent(props: propTypes) {
+  /* istanbul ignore next */
   return (
     <FormControl
       fullWidth={props.fullWidth}

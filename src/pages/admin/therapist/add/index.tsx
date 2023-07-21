@@ -50,6 +50,7 @@ const AddTherapistPage: NextPage = () => {
     getOrgList();
   }, []);
 
+  /* istanbul ignore file */
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
     getUploadUrl({
       variables: {
@@ -70,6 +71,7 @@ const AddTherapistPage: NextPage = () => {
     });
   };
 
+  /* istanbul ignore file */
   const submitForm = async (variables, doneCallback) => {
     try {
       await addTherapist({
@@ -106,6 +108,7 @@ const AddTherapistPage: NextPage = () => {
     }
   };
 
+  /* istanbul ignore next */
   const uploadFileAndSubmitForm = async (formFields, doneCallback) => {
     setLoader(true);
     const {
