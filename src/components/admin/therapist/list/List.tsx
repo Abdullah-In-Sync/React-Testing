@@ -43,7 +43,7 @@ const TherapistListComponent: React.FC<ViewProps> = ({
         data={{ list: listData, total: totalData }}
         pageActionButtonClick={pageActionButtonClick}
         onPageChange={onPageChange}
-        actionButtons={[
+        actionButton={[
           {
             id: "view",
             icon: require("@mui/icons-material/Visibility").default,

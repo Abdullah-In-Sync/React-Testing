@@ -4,7 +4,7 @@ import * as React from "react";
 interface ViewProps {
   data: any;
   buttonClick: (value) => void;
-  actionButtonsData: any;
+  buttons?: any;
 }
 
 const iconButtonsData = [
@@ -29,10 +29,10 @@ const iconButtonsData = [
 const ActionsButtons: React.FC<ViewProps> = ({
   data,
   buttonClick,
-  actionButtonsData = iconButtonsData,
+  buttons = iconButtonsData,
 }) => {
   const iconButtons = () => {
-    return actionButtonsData.map((item) => {
+    return buttons.map((item) => {
       const { id, icon: Icon } = item;
       return (
         <Fab
@@ -40,6 +40,7 @@ const ActionsButtons: React.FC<ViewProps> = ({
           aria-label={`iconButton_${id}_${data._id}`}
           data-testid={`iconButton_${id}_${data._id}`}
           onClick={() => buttonClick({ ...data, ...{ pressedIconButton: id } })}
+          style={item?.styles ? item.styles : {}}
         >
           <Icon />
         </Fab>

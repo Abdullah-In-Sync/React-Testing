@@ -21,7 +21,8 @@ interface ViewProps {
   rowsLimit?: number;
   loading?: boolean;
   headerData?: any;
-  actionButtons?: any;
+  hidePagination?: boolean;
+  actionButton?: any;
 }
 
 const CommonTable: React.FC<ViewProps> = ({
@@ -33,11 +34,12 @@ const CommonTable: React.FC<ViewProps> = ({
   rowsLimit,
   loading,
   headerData,
-  actionButtons,
+  hidePagination,
+  actionButton,
 }) => {
   const styles = useStyles();
   const { list, total = 0 } = data || {};
-  const columnsData = columns(headerData, actionButtons);
+  const columnsData = columns(headerData, actionButton);
 
   const messageCheck = () => {
     if (loading) return <Typography>Loading...</Typography>;
@@ -70,7 +72,11 @@ const CommonTable: React.FC<ViewProps> = ({
 
   return (
     <Stack className={styles.tablePaper}>
-      <TableContainer>
+      <TableContainer
+        style={{
+          paddingBottom: hidePagination ? "0px" : "20px",
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead className={styles.root}>
             <TableRow>
@@ -119,7 +125,7 @@ const CommonTable: React.FC<ViewProps> = ({
             </TableBody>
           )}
         </Table>
-
+        {!hidePagination ? (
         <TablePagination
           rowsPerPageOptions={onSelectPageDropdown ? [5, 10, 25, 50, 100] : []}
           component="div"
@@ -129,6 +135,9 @@ const CommonTable: React.FC<ViewProps> = ({
           onPageChange={onPageChange}
           onRowsPerPageChange={onSelectPageDropdown}
         />
+        ) : (
+          <></>
+        )}
       </TableContainer>
     </Stack>
   );

@@ -9,7 +9,7 @@ interface Column {
   format?: (value, callback: any, i?: number) => string | JSX.Element;
 }
 
-export const columns = (data, actionButtonsData): readonly Column[] => {
+export const columns = (data, buttons): readonly Column[] => {
   const tableBodyCell = (value, buttonClick, item, i) => {
     const { id } = item;
     switch (id) {
@@ -18,7 +18,7 @@ export const columns = (data, actionButtonsData): readonly Column[] => {
           <ActionsButtons
             data={value}
             buttonClick={buttonClick}
-            actionButtonsData={actionButtonsData}
+            buttons={buttons}
           />
         );
       case "sNo":

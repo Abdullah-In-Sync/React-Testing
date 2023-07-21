@@ -17,6 +17,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ORGANISATION_SHARED_LIST } from "../../../../graphql/assessment/graphql";
+import { GET_PATIENT_SHARED_LIST } from "../../../../graphql/formulation/graphql";
 
 interface ViewProps {
   buttonClick?: (value: any) => void;
@@ -25,6 +26,7 @@ interface ViewProps {
   setPlanId?: any;
   onChangePlanId?: any;
   shareType: string;
+  listType?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -40,6 +42,9 @@ const useStyles = makeStyles(() => ({
     textAlign: "left",
     borderRadius: "4px",
   },
+  textSize: {
+    fontSize: "12px",
+  },
 }));
 
 const ShareAssessmentModel: React.FC<ViewProps> = ({
@@ -47,33 +52,51 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
   selectAssessmentName,
   onChangePlanId,
   shareType,
+  listType,
 }) => {
   const classes = useStyles();
   const [selected, setSelected] = useState<string | string[]>([]);
   const [hasError, setHasError] = useState(false);
   const [selectableOrg, setSelectableOrg] = useState([]);
+  const [organizationList, setOrganizationList] = useState([]);
 
-  const [
-    getOrgSharedList,
-    { data: { getOrganisationSharedList: organizationList = [] } = {} },
-  ] = useLazyQuery(GET_ORGANISATION_SHARED_LIST, {
+  const [getOrgSharedList] = useLazyQuery(GET_ORGANISATION_SHARED_LIST, {
     fetchPolicy: "cache-and-network",
     onCompleted: (data) => {
+      setOrganizationList(data.getOrganisationSharedList);
       const selectable = data.getOrganisationSharedList.filter(
         (org) => !org.is_shared
       );
       setSelectableOrg(selectable);
-      console.log(data.getOrganisationSharedList, "on complete");
+      /* istanbul ignore next */
+    },
+  });
+
+  const [getPatientSharedList] = useLazyQuery(GET_PATIENT_SHARED_LIST, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      setOrganizationList(data.getPatientSharedList);
+      const selectable = data.getPatientSharedList.filter((p) => !p.is_shared);
+      setSelectableOrg(selectable);
       /* istanbul ignore next */
     },
   });
   useEffect(() => {
-    getOrgSharedList({
-      variables: {
-        name: selectAssessmentName,
-        share_type: shareType.toLowerCase(),
-      },
-    });
+    if (listType == "patient") {
+      getPatientSharedList({
+        variables: {
+          name: selectAssessmentName,
+          share_type: shareType.toLowerCase(),
+        },
+      });
+    } else {
+      getOrgSharedList({
+        variables: {
+          name: selectAssessmentName,
+          share_type: shareType.toLowerCase(),
+        },
+      });
+    }
   }, []);
 
   const isAllSelected =
@@ -133,7 +156,7 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
               onClick={handleInputLabelClick}
               id="mutiple-select-label"
             >
-              Select organisation
+              {listType == "patient" ? "Select patient" : "Select organisation"}
             </InputLabel>
             <Select
               data-testid="share_organisation_select_list"
@@ -157,8 +180,10 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 const selectedOptions = organizationList.filter((option) =>
                   selected.includes(option._id)
                 );
-                const selectedNames = selectedOptions.map(
-                  (option) => option.name
+                const selectedNames = selectedOptions.map((option) =>
+                  listType == "patient"
+                    ? option.patient_firstname + " " + option.patient_lastname
+                    : option.name
                 );
                 return selectedNames.join(", ");
               }}
@@ -198,7 +223,11 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                 option.is_shared ? (
                   <Tooltip
                     key={i}
-                    title={`${shareType} is already shared with this organisation`}
+                    title={
+                      listType == "patient"
+                        ? `${shareType} is already shared with this patient`
+                        : `${shareType} is already shared with this organisation`
+                    }
                     disableHoverListener={!option.is_shared}
                     classes={{ tooltip: classes.customTooltip }}
                   >
@@ -207,7 +236,11 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                       key={option._id}
                       value={option._id}
                       disabled={option.is_shared}
-                      aria-label={option.name}
+                      aria-label={
+                        listType == "patient"
+                          ? option.patient_firstname
+                          : option.name
+                      }
                       sx={{
                         "&.Mui-disabled": {
                           pointerEvents: "all",
@@ -220,7 +253,15 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                           checked={selected.indexOf(option._id) > -1}
                         />
                       </ListItemIcon>
-                      <ListItemText primary={option.name} />
+                      <ListItemText
+                        secondary={
+                          listType == "patient"
+                            ? option.patient_firstname +
+                              " " +
+                              option.patient_lastname
+                            : option.name
+                        }
+                      />
                     </MenuItem>
                   </Tooltip>
                 ) : (
@@ -241,7 +282,15 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                         checked={selected.indexOf(option._id) > -1}
                       />
                     </ListItemIcon>
-                    <ListItemText primary={option.name} />
+                    <ListItemText
+                      secondary={
+                        listType == "patient"
+                          ? option.patient_firstname +
+                            " " +
+                            option.patient_lastname
+                          : option.name
+                      }
+                    />
                   </MenuItem>
                 )
               )}
@@ -255,7 +304,9 @@ const ShareAssessmentModel: React.FC<ViewProps> = ({
                   font: "Montserrat",
                 }}
               >
-                Organisation cannot be empty
+                {listType == "patient"
+                  ? "Patient cannot be empty"
+                  : "Organisation cannot be empty"}
               </FormHelperText>
             )}
           </FormControl>

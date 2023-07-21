@@ -51,7 +51,7 @@ const TabsGenerator = (props: propTypes) => {
   }, [activeTab]);
 
   return (
-    <div style={{ overflowX: "hidden", minHeight: 500 }}>
+    <div style={{ overflowX: "hidden" }}>
       {!editable && (
         <Tabs
           data-testid="tabId"

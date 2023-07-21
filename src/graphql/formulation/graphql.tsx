@@ -127,3 +127,46 @@ export const ADMIN_SHARE_FORMULATION = gql`
     }
   }
 `;
+
+export const THERAPIST_SHARE_FORMULATION_BY_ID = gql`
+  mutation therapistShareFormulationById(
+    $formulation_id: String!
+    $patient_id: String!
+  ) {
+    therapistShareFormulationById(
+      formulation_id: $formulation_id
+      patient_id: $patient_id
+    ) {
+      duplicateNames {
+        _id
+        name
+      }
+      message
+      result
+    }
+  }
+`;
+
+export const GET_PATIENT_SHARED_LIST = gql`
+  query getPatientSharedList($name: String!, $share_type: String!) {
+    getPatientSharedList(name: $name, share_type: $share_type) {
+      _id
+      is_shared
+      patient_firstname
+      patient_lastname
+    }
+  }
+`;
+
+export const GET_PATIENT_FORMULATION_LIST = gql`
+  query getPatientFormulationList {
+    getPatientFormulationList {
+      _id
+      formulation_data {
+        _id
+        formulation_name
+        created_date
+      }
+    }
+  }
+`;

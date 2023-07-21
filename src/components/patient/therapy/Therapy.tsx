@@ -9,6 +9,7 @@ import Monitors from "../../../components/patient/therapyPages/monitors";
 import Relapse from "../../../components/patient/therapyPages/relapse";
 import Resources from "../../../components/patient/therapyPages/resource";
 import SafetyPlan from "../../../components/patient/therapyPages/safetyPlan";
+import PatientFormulation from "../therapyPages/formulation";
 
 export default function TherapyMainComponent() {
   const tabs = [
@@ -41,6 +42,11 @@ export default function TherapyMainComponent() {
       label: "Resources",
       value: "resources",
       component: <Resources />,
+    },
+    {
+      label: "Formulation",
+      value: "formulation",
+      component: <PatientFormulation />,
     },
     {
       label: "Relapse Plan",

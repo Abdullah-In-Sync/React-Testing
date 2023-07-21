@@ -260,23 +260,31 @@ const Formulation = () => {
           {value?.user_id == adminId && (
             <>
               <IconButtonWrapper
-                data-testid={"deleteIcon_" + value?._id}
-                aria-label="delete"
-                size="small"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteFormulationId(value?._id);
-                  setIsConfirmCompleteTask(true);
-                }}
-              >
-                <DeleteIcon />
-              </IconButtonWrapper>
-              <IconButtonWrapper
                 aria-label="create"
                 size="small"
                 onClick={(e) => onClickEdit(e, value)}
               >
                 <CreateIcon />
+              </IconButtonWrapper>
+              <IconButtonWrapper
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPressShareFormulation(value?._id, value?.formulation_name);
+                }}
+                aria-label="favorite"
+                size="small"
+                data-testid={"shareBtn_" + value?._id}
+              >
+                <ShareOutlined
+                  data-testid={"fav_" + value?._id}
+                  id={"fav_" + value?._id}
+                  sx={{
+                    color:
+                      value?.fav_res_detail && value?.fav_res_detail.length > 0
+                        ? "red"
+                        : "",
+                  }}
+                />
               </IconButtonWrapper>
             </>
           )}
@@ -298,24 +306,16 @@ const Formulation = () => {
             />
           </IconButtonWrapper>
           <IconButtonWrapper
+            data-testid={"deleteIcon_" + value?._id}
+            aria-label="delete"
+            size="small"
             onClick={(e) => {
               e.stopPropagation();
-              onPressShareFormulation(value?._id, value?.formulation_name);
+              setDeleteFormulationId(value?._id);
+              setIsConfirmCompleteTask(true);
             }}
-            aria-label="favorite"
-            size="small"
-            data-testid={"shareBtn_" + value?._id}
           >
-            <ShareOutlined
-              data-testid={"fav_" + value?._id}
-              id={"fav_" + value?._id}
-              sx={{
-                color:
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
-                    ? "red"
-                    : "",
-              }}
-            />
+            <DeleteIcon />
           </IconButtonWrapper>
         </>
       ),
