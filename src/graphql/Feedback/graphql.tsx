@@ -175,6 +175,28 @@ export const GET_THERAPIST_FEEDBACKLIST_DATA_NEW = gql`
   }
 `;
 
+export const THERAPIST_PATIENT_LIST = gql`
+  query getPatientList(
+    $limit: Int!
+    $name: String
+    $next_pagination_token: String
+  ) {
+    getPatientList(
+      name: $name
+      limit: $limit
+      next_pagination_token: $next_pagination_token
+    ) {
+      pagination
+      patientlist {
+        email
+        name
+        patient_id
+        phone_number
+      }
+    }
+  }
+`;
+
 export const VIEW_RESPONSE_DOWNLOAD_CSV = gql`
   query viewResponseDownloadCSV($feedbackId: String!) {
     viewResponseDownloadCSV(feedbackId: $feedbackId) {
