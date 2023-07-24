@@ -105,7 +105,7 @@ const CommonForm: React.FC<ViewProps> = ({
                       variant="outlined"
                       className="form-control-bg"
                       size="small"
-                      placeholder="Please enter monitor name*"
+                      placeholder="Name*"
                     />
                   </Box>
                   <Box>
@@ -153,7 +153,7 @@ const CommonForm: React.FC<ViewProps> = ({
                       variant="outlined"
                       className="form-control-bg"
                       size="small"
-                      placeholder="Please enter monitor name*"
+                      placeholder="Email*"
                     />
                   </Box>
                   <Box>
@@ -167,7 +167,7 @@ const CommonForm: React.FC<ViewProps> = ({
                       variant="outlined"
                       className="form-control-bg"
                       size="small"
-                      placeholder="Please enter monitor name*"
+                      placeholder="Password*"
                     />
                   </Box>
                   <Box>
@@ -181,7 +181,7 @@ const CommonForm: React.FC<ViewProps> = ({
                       variant="outlined"
                       className="form-control-bg"
                       size="small"
-                      placeholder="Please enter monitor name*"
+                      placeholder="Confirm Password*"
                     />
                   </Box>
                 </Box>
