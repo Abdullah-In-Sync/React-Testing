@@ -19,11 +19,13 @@ import {
 import { useSnackbar } from "notistack";
 import SureModal from "../../../components/admin/resource/SureModal";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { useRouter } from "next/router";
 
 const TherapistPatientListPage: NextPage = () => {
   const modalRefAddPlan = useRef<ModalElement>(null);
   const rowsLimit = 10;
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const [searchInputValue, setSearchInputValue] = useState("");
   const [loader, setLoader] = useState<boolean>(true);
@@ -185,6 +187,11 @@ const TherapistPatientListPage: NextPage = () => {
       setDeletePatientId(value.patient_id);
       setModalOpen(true);
     }
+    if (pressedIconButton == "view")
+      router.push(
+        `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details`
+      );
+
     if (!confirmSubmission) return;
   };
 
