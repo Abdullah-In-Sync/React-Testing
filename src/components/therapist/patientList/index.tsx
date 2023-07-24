@@ -38,7 +38,7 @@ const TherapistPatientListComponent: React.FC<ViewProps> = ({
       <SearchFilter
         searchInputValue={searchInputValue}
         onChangeSearchInput={onChangeSearchInput}
-        sideButtonLabel={"Create Assessment"}
+        sideButtonLabel={"Add Patient"}
         onPressSideButton={onPressSideButton}
       />
 
