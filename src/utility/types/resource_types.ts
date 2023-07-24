@@ -17,6 +17,13 @@ export type addResourceFormField = {
   formulation_avail_for?: any;
 };
 
+export type addPatientFormFields = {
+  email: string;
+  patient_firstname: string;
+  patient_lastname: string;
+  phone_number: string;
+};
+
 export type editResourceFormField = {
   _id: string;
   resource_name: string;
