@@ -1,6 +1,7 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { AppBar, Box, Fab, Toolbar, Typography } from "@mui/material";
 import * as React from "react";
+import Image from "next/image";
 
 import { useStyles } from "./CardWithHeaderStyles";
 
@@ -12,6 +13,7 @@ type propTypes = {
   activeBoxBorder?: boolean;
   rightComponent?: any;
   mode?: string;
+  view?: string;
 };
 
 const CardWithHeader = (props: propTypes) => {
@@ -24,6 +26,7 @@ const CardWithHeader = (props: propTypes) => {
     activeBoxBorder,
     rightComponent,
     mode,
+    view,
   } = props || {};
   return (
     <div
@@ -48,7 +51,15 @@ const CardWithHeader = (props: propTypes) => {
               data-testid="eyeIconButton"
               onClick={onClickView}
             >
-              <VisibilityIcon />
+              {view == "patientFormulation" ? (
+                <Image
+                  src={`/images/infoIcon.png`}
+                  width="36px"
+                  height="36px"
+                />
+              ) : (
+                <VisibilityIcon />
+              )}
             </Fab>
           )}
           {rightComponent && rightComponent()}

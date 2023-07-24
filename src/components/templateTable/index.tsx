@@ -11,7 +11,7 @@ import { TemplateTableRow } from "./TableRow";
 import { useStyles } from "./tableTemplateStyles";
 
 interface TemplateTableProps {
-  mode: "view" | "edit" | "patientView";
+  mode: "view" | "edit" | "patientView" | "patientFormulation";
   initialData?: TemplateFormData;
   onSubmit?: (
     formData: TemplateFormData,
@@ -27,6 +27,7 @@ interface TemplateTableProps {
   ) => void;
   userType?: "admin" | "patient";
   showActionsBottom?: boolean;
+  view?: string;
 }
 const TemplateTable: React.FC<TemplateTableProps> = ({
   initialData,
@@ -36,6 +37,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
   userType = "admin",
   mode,
   showActionsBottom = true,
+  view,
 }) => {
   const styles = useStyles();
   // const { user: { user_type: userType } = {} } = useAppContext();
@@ -59,7 +61,12 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
       setInitialValues(initialData);
     }
   }, [initialData]);
-
+  const customStyle = {
+    border: "1px solid green",
+    borderWidth: "0px 1px 1px 1px",
+    padding: "35px 16px 25px 16px",
+    borderRadius: "0px 0px 8px 8px",
+  };
   return (
     <Formik<TemplateFormData>
       initialValues={initialValues}
@@ -69,7 +76,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
     >
       {(formikHelper) => {
         return (
-          <Form>
+          <Form style={view == "patientFormulation" ? customStyle : {}}>
             <Grid
               className={`${styles[mode]} ${styles.tableCellView}`}
               container

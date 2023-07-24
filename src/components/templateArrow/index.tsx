@@ -23,7 +23,7 @@ const getId = () => `dndnode_${id++}`;
 
 interface TemplateArrowProps {
   onSubmit?: (updatedData: string) => void;
-  onCancel?: any;
+  onCancel?: () => void;
   nodesData?: Node[] | [];
   edgesData?: Edge[] | [];
   mode?: string;
