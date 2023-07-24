@@ -188,6 +188,8 @@ const TherapistPatientListPage: NextPage = () => {
     if (!confirmSubmission) return;
   };
 
+  //
+
   return (
     <>
       <Layout>
@@ -201,7 +203,7 @@ const TherapistPatientListPage: NextPage = () => {
           onPageChange={onPageChange}
           totalData={
             /* istanbul ignore next */
-            listData?.getPatientList?.patientlist?.length === 9
+            listData?.getPatientList?.patientlist?.length === rowsLimit
               ? (tableCurentPage + 2) * rowsLimit
               : tableCurentPage * rowsLimit
           }
