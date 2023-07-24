@@ -1,9 +1,9 @@
 export default {
   therapistListHeader: [
-    {
-      id: "sNo",
-      label: "S. No.",
-    },
+    // {
+    //   id: "sNo",
+    //   label: "S. No.",
+    // },
     {
       id: "name",
       label: "Name",
