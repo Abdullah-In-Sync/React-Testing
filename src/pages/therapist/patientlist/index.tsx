@@ -192,6 +192,11 @@ const TherapistPatientListPage: NextPage = () => {
         `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details`
       );
 
+    if (pressedIconButton == "edit")
+      router.push(
+        `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details&editValue=true`
+      );
+
     if (!confirmSubmission) return;
   };
 

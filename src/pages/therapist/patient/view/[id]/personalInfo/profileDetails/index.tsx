@@ -9,6 +9,7 @@ import { patientEditProfileFormFeild } from "../../../../../../../utility/types/
 import { UPDATE_PROFILE_DATA_FROM_THERAPIST } from "../../../../../../../graphql/mutation/patient";
 import { useSnackbar } from "notistack";
 import Loader from "../../../../../../../components/common/Loader";
+import { useRouter } from "next/router";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -19,10 +20,21 @@ const IconButtonWrapper = styled(IconButton)(
 );
 
 export default function TherapistProfileDetails() {
-  const patientId = sessionStorage.getItem("patient_id");
+  const router = useRouter();
+  const patientId = router?.query?.id as string;
+
+  // const patientId = sessionStorage.getItem("patient_id");
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
   const [editable, setEditable] = useState<boolean>(false);
+
+  const editValue = router?.query?.editValue as string;
+
+  useEffect(() => {
+    if (editValue === "true") {
+      setEditable(true);
+    }
+  }, []);
 
   const [updatePatient] = useMutation(UPDATE_PROFILE_DATA_FROM_THERAPIST);
 
