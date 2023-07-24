@@ -101,7 +101,7 @@ const TherapistListPage: NextPage = () => {
           listData={listData}
           onPageChange={onPageChange}
           totalData={
-            listData.length === 9
+            listData.length === rowsLimit
               ? (tableCurentPage + 2) * rowsLimit
               : tableCurentPage * rowsLimit
           }

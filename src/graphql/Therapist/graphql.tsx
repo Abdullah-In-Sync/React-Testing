@@ -14,6 +14,7 @@ export const GET_ADMIN_THERAPIST_LIST = gql`
       pagination
       therapistlist {
         name
+        email
         phone_number
         specialization
         therapist_id
