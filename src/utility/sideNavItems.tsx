@@ -219,7 +219,9 @@ export const therapistRoutes: RoutesType[] = [
   {
     key: 3,
     label: "Patients",
-    path: Link + "/therapist/patient/list",
+    // path: Link + "/therapist/patient/list",
+    path: "/therapist/patientlist",
+
     icon: <PersonIcon />,
   },
   {

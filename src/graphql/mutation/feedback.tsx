@@ -179,3 +179,31 @@ export const POST_THERAPIST_FEEDBACK_NEW = gql`
     }
   }
 `;
+
+export const THERAPIST_ADD_PATIENT = gql`
+  mutation (
+    $email: String!
+    $patient_firstname: String!
+    $patient_lastname: String!
+    $phone_number: String!
+  ) {
+    addPatient(
+      email: $email
+      patient_firstname: $patient_firstname
+      patient_lastname: $patient_lastname
+      phone_number: $phone_number
+    ) {
+      message
+      result
+    }
+  }
+`;
+
+export const THERAPIST_DELETE_PATIENT = gql`
+  mutation ($patient_id: String!) {
+    deletePatient(patient_id: $patient_id) {
+      message
+      result
+    }
+  }
+`;
