@@ -34,7 +34,7 @@ export const Columns: readonly Column[] = [
 
 const InfoMessageView: React.FC<ViewProps> = ({ data = {}, modalRef }) => {
   const styles = useStyles();
-  const { duplicateNames = [], message } = data;
+  const { duplicateNames, message } = data;
 
   const duplicteTable = () => {
     return (
@@ -93,7 +93,7 @@ const InfoMessageView: React.FC<ViewProps> = ({ data = {}, modalRef }) => {
           </Box>
         )}
       </Box>
-      <Box className="boxSecond">{duplicteTable()}</Box>
+      <Box className="boxSecond">{duplicateNames && duplicteTable()}</Box>
       <Box className="okButtonWrapper">
         <Button
           variant="contained"

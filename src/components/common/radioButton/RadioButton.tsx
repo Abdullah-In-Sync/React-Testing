@@ -17,7 +17,7 @@ const RadioButton = (props) => {
       <ErrorMessage
         name={`response`}
         component="div"
-        className="invalid-feedback"
+        className="invalid-input-message"
       />
     </>
   );

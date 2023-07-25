@@ -46,6 +46,7 @@ const mapping = (options: Option[], keys = []) => {
 /* istanbul ignore next */
 export default function MultiSelectComponent(props: propTypes) {
   const modifyOptions = mapping(props.options, props.mappingKeys);
+  /* istanbul ignore next */
   return (
     <FormControl
       fullWidth={props.fullWidth}

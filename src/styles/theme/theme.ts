@@ -67,6 +67,7 @@ const theme = (props?: any) => {
         dark: "#ef6c00",
         contrastText: "rgba(0, 0, 0, 0.87)",
       },
+      mode: "light",
     },
   });
 };

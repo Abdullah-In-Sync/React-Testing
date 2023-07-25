@@ -64,7 +64,7 @@ export const superadmin_routes: RoutesType[] = [
     {
       key: 3,
       label: "Therapist",
-      path: Link + "/superadmin/therapist/list",
+      path: "/admin/therapist/list",
       icon: <PersonIcon />,
     },
   ],
@@ -219,7 +219,9 @@ export const therapistRoutes: RoutesType[] = [
   {
     key: 3,
     label: "Patients",
-    path: Link + "/therapist/patient/list",
+    // path: Link + "/therapist/patient/list",
+    path: "/therapist/patientlist",
+
     icon: <PersonIcon />,
   },
   {

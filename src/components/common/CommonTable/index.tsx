@@ -39,6 +39,7 @@ const CommonTable: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
   const { list, total = 0 } = data || {};
+  const columnsData = columns(headerData, actionButton);
 
   const messageCheck = () => {
     if (loading) return <Typography>Loading...</Typography>;
@@ -59,7 +60,7 @@ const CommonTable: React.FC<ViewProps> = ({
     return (
       tempCheck != null && (
         <TableRow className="rowMessageWrapper">
-          <TableCell colSpan={5}>
+          <TableCell colSpan={columnsData.length}>
             <Stack className="stackMesage" spacing={2}>
               <span className="alertMessage"> {tempCheck} </span>
             </Stack>
@@ -79,7 +80,7 @@ const CommonTable: React.FC<ViewProps> = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead className={styles.root}>
             <TableRow>
-              {columns(headerData, actionButton).map((column) => (
+              {columnsData.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -103,7 +104,7 @@ const CommonTable: React.FC<ViewProps> = ({
                     tabIndex={-1}
                     key={`tableRow_${i}`}
                   >
-                    {columns(headerData, actionButton).map((column) => {
+                    {columnsData.map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
@@ -126,7 +127,9 @@ const CommonTable: React.FC<ViewProps> = ({
         </Table>
         {!hidePagination ? (
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            rowsPerPageOptions={
+              onSelectPageDropdown ? [5, 10, 25, 50, 100] : []
+            }
             component="div"
             count={total}
             rowsPerPage={rowsLimit}
