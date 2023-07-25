@@ -60,6 +60,47 @@ mocksData.push({
   },
 });
 
+// doc formulation
+mocksData.push({
+  request: {
+    query: GET_FORMULATION_BY_SHARE_ID,
+    variables: {
+      ptsharresId: "46cb932a4c6346268ec4c13009cdd1b6",
+    },
+  },
+  result: {
+    data: {
+      getFormulationByShareId: [
+        {
+          _id: "46cb932a4c6346268ec4c13009cdd1b6",
+          created_date: "2022-04-20T09:27:30.000Z",
+          formulation_data: [
+            {
+              user_id: "d873f1f8436e4117b760db3a54c05026",
+              formulation_url: null,
+              formulation_type: null,
+              formulation_status: 1,
+              formulation_returnurl: null,
+              formulation_name: "19th april amar",
+              formulation_instruction: null,
+              formulation_img: "",
+              formulation_desc: "test ",
+              formulation_avail_for: "[1]",
+              download_formulation_url: "https://google.com",
+              __typename: "FormulationData",
+            },
+          ],
+          formulation_id: "306cd6f0b2d5454c9385c09d749bed18",
+          patient_id: "47aedf8a20344f68b8f064c94160046d",
+          share_from: "686802e5123a482681a680a673ef7f53",
+          updated_date: "2022-04-20T09:27:30.000Z",
+          __typename: "Patshareformulation",
+        },
+      ],
+    },
+  },
+});
+
 // update template
 mocksData.push({
   request: {
@@ -119,7 +160,19 @@ describe("Formulation list page", () => {
       },
     });
   });
-  it("click on view", async () => {
+  it("formulation detail", async () => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        id: "46cb932a4c6346268ec4c13009cdd1b6",
+      },
+    }));
+    await sut();
+    await waitFor(() => {
+      expect(screen.getByTestId("downloadIconButton")).toBeInTheDocument();
+    });
+  });
+
+  it("check doc formulation", async () => {
     useRouter.mockImplementation(() => ({
       query: {
         id: "46cb932a4c6346268ec4c13009cdd1b5",

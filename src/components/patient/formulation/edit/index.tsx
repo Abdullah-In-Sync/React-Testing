@@ -5,6 +5,7 @@ import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton
 import { templateComponents } from "../../resource/edit/patientTemplateData";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import TemplateArrow from "../../../templateArrow";
+import { CustomImageComponent } from "../../../common/CustomImage";
 
 interface ViewProps {
   formulationData: any;
@@ -32,7 +33,6 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
 
   const TemplateDynamic = templateComponents[formulationData?.component_name];
-  // const TemplateDynamic = templateComponents["TemplateTable"];
   const templateData =
     formulationData.template_response &&
     formulationData.template_response !== ""
@@ -53,13 +53,20 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
     <>
       <BreadCrumbsWithBackButton
         heading={formulationData?.formulation_name || ""}
-        activeBoxBorder={true}
         backButtonClick={onPressBack ? onPressBack : handleBackButton}
         {...onClickViewProps}
         mode={
-          formulationData?.component_name == "ArrowTemplate" ? "arrowView" : ""
+          formulationData?.component_name == "ArrowTemplate" ||
+          formulationData?.download_formulation_url
+            ? "arrowView"
+            : ""
         }
         view={"patientFormulation"}
+        downloadUrl={
+          formulationData?.download_formulation_url
+            ? formulationData?.download_formulation_url
+            : undefined
+        }
       >
         {staticTemplate &&
           TemplateDynamic &&
@@ -82,6 +89,11 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
             onCancel={onCancel}
             userType={defaultUserType ? defaultUserType : userType}
             defaultIsPreview={arrowTemplatedefaultIsPreview}
+          />
+        )}
+        {formulationData?.download_formulation_url && (
+          <CustomImageComponent
+            url={formulationData?.download_formulation_url}
           />
         )}
       </BreadCrumbsWithBackButton>

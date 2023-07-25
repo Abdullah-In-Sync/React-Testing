@@ -16,6 +16,7 @@ type Props = React.PropsWithChildren<{
   mode?: string;
   headerRightComponent?: any;
   view?: string;
+  downloadUrl?: string;
 }>;
 
 /* istanbul ignore next */
@@ -30,6 +31,7 @@ const BreadCrumbsWithBackButton = ({
   mode,
   headerRightComponent,
   view,
+  downloadUrl,
 }: Props) => {
   const styles = useStyles();
 
@@ -79,6 +81,7 @@ const BreadCrumbsWithBackButton = ({
         mode={mode}
         rightComponent={headerRightComponent}
         view={view}
+        downloadUrl={downloadUrl}
       >
         {children}
       </CardWithHeader>

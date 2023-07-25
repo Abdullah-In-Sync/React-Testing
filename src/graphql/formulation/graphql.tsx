@@ -165,6 +165,11 @@ export const GET_PATIENT_FORMULATION_LIST = gql`
       created_date
       formulation_data {
         formulation_name
+        download_formulation_url
+        formulation_avail_for
+        formulation_img
+        formulation_returnurl
+        formulation_url
       }
     }
   }
