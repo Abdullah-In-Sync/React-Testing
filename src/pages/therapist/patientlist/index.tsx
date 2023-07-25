@@ -182,6 +182,9 @@ const TherapistPatientListPage: NextPage = () => {
   /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
     const { pressedIconButton } = value;
+    sessionStorage.setItem("patient_name", `${value.name}`);
+    sessionStorage.setItem("patient_id", `${value.patient_id}`);
+    sessionStorage.setItem("user_type", "therapist");
 
     if (pressedIconButton === "delete") {
       setDeletePatientId(value.patient_id);
@@ -191,6 +194,12 @@ const TherapistPatientListPage: NextPage = () => {
       router.push(
         `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details`
       );
+
+    if (pressedIconButton == "edit") {
+      router.push(
+        `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details&editValue=true`
+      );
+    }
 
     if (!confirmSubmission) return;
   };
