@@ -75,6 +75,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
       enableReinitialize={true}
     >
       {(formikHelper) => {
+        console.log(formikHelper?.values,"formikHelper?.values")
         return (
           <Form style={view == "patientFormulation" ? customStyle : {}}>
             <Grid

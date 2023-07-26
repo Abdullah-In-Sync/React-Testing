@@ -215,10 +215,16 @@ export const GET_FORMULATION_BY_SHARE_ID = gql`
         formulation_avail_for
         download_formulation_url
       }
+      template_detail {
+        component_name
+        category
+        name
+      }
       formulation_id
       patient_id
       share_from
       updated_date
+      template_response
     }
   }
 `;

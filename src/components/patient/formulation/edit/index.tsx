@@ -28,18 +28,19 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
   defaultUserType,
   onCancel,
 }) => {
+  console.log(formulationData, "formulationData");
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
 
-  const TemplateDynamic = templateComponents[formulationData?.component_name];
+  const TemplateDynamic = templateComponents[formulationData.component_name];
   const templateData =
-    formulationData.template_response &&
-    formulationData.template_response !== ""
-      ? formulationData.template_response
-      : formulationData.templateData;
-  const staticTemplate: TemplateFormData =
-    templateData && JSON.parse(templateData);
+    formulationData?.template_response &&
+    formulationData?.template_response !== ""
+      ? formulationData?.template_response
+      : formulationData?.template_response;
+  console.log(templateData, "templateData");
+  const staticTemplate: TemplateFormData = templateData !== "" && templateData;
   const handleBackButton = (): any => {
     const fromUrl = router?.query?.from as string;
     return mode !== "edit" && onClickView
@@ -57,13 +58,13 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
         {...onClickViewProps}
         mode={
           formulationData?.component_name == "ArrowTemplate" ||
-          formulationData?.download_formulation_url
+          formulationData?.component_name == ""
             ? "arrowView"
             : ""
         }
         view={"patientFormulation"}
         downloadUrl={
-          formulationData?.download_formulation_url
+          formulationData?.component_name == ""
             ? formulationData?.download_formulation_url
             : undefined
         }
@@ -91,10 +92,8 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
             defaultIsPreview={arrowTemplatedefaultIsPreview}
           />
         )}
-        {formulationData?.download_formulation_url && (
-          <CustomImageComponent
-            url={formulationData?.download_formulation_url}
-          />
+        {formulationData?.component_name == "" && (
+          <CustomImageComponent url={formulationData?.formulation_url} />
         )}
       </BreadCrumbsWithBackButton>
     </>
