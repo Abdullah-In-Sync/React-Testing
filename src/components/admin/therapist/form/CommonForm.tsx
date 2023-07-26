@@ -8,10 +8,10 @@ import { useStyles } from "./addTherapistStyles";
 import ConfirmWrapper from "../../../common/ConfirmWrapper";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
+import { Typography } from "@material-ui/core";
 import { getUpdatedFileName } from "../../../../lib/helpers/s3";
 import InfoMessageView from "../../../common/InfoMessageView";
 import TherapistInputs from "./TherapistInputs";
-import { Typography } from "@material-ui/core";
 
 type ViewProps = CommonFormProps & ModalRefs;
 
@@ -224,28 +224,40 @@ const CommonForm: React.FC<ViewProps> = ({
   const formInput = () => {
     switch (viewType) {
       case "view":
-        return viewInputs();
+        return (
+          <Card className={styles.formWrapper}>
+            <CardContent>
+              <Stack>{viewInputs()}</Stack>
+            </CardContent>
+          </Card>
+        );
       case "edit":
-        return editInputs();
+        return (
+          <ConfirmWrapper ref={confirmRef}>
+            <Card className={styles.formWrapper}>
+              <CardContent>
+                <Stack>{editInputs()}</Stack>
+              </CardContent>
+            </Card>
+          </ConfirmWrapper>
+        );
       default:
-        return registrationInputs();
+        return (
+          <ConfirmWrapper ref={confirmRef}>
+            <Card className={styles.formWrapper}>
+              <CardContent>
+                <Stack>{registrationInputs()}</Stack>
+              </CardContent>
+            </Card>
+            <InfoModal ref={infoModalRef} maxWidth={"xs"}>
+              <InfoMessageView />
+            </InfoModal>
+          </ConfirmWrapper>
+        );
     }
   };
 
-  return (
-    <>
-      <ConfirmWrapper ref={confirmRef}>
-        <Card className={styles.formWrapper}>
-          <CardContent>
-            <Stack>{formInput()}</Stack>
-          </CardContent>
-        </Card>
-        <InfoModal ref={infoModalRef} maxWidth={"xs"}>
-          <InfoMessageView />
-        </InfoModal>
-      </ConfirmWrapper>
-    </>
-  );
+  return formInput();
 };
 
 export default CommonForm;

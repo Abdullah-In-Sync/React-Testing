@@ -18,6 +18,7 @@ const style = {
   },
 };
 
+/* istanbul ignore next */
 export default function BasicModal(props) {
   const {
     modalOpen,

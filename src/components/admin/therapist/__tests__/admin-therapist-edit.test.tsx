@@ -256,6 +256,11 @@ describe("Admin edit therapist", () => {
       await screen.findByText(/071248444__rightmark.png/i)
     ).toBeInTheDocument();
     fireEvent.click(await screen.findByTestId("submitForm"));
+    const cancelButton = await screen.findByRole("button", { name: "Cancel" });
+    expect(cancelButton).toBeInTheDocument();
+    fireEvent.click(cancelButton);
+    expect(cancelButton).not.toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("submitForm"));
     const confirmButton = await screen.findByTestId("confirmButton");
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);

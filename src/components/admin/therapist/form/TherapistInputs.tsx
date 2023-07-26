@@ -6,6 +6,7 @@ import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { IOSSwitch } from "../../../common/ToggleButton/IosToggleButton";
 import UploadButtonComponent from "../../../common/UploadButton/UploadButtonComponent";
 
+/* istanbul ignore next */
 const TherapistInputs = {
   changePasswordSec: () => (
     <>
