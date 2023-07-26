@@ -67,7 +67,7 @@ mocksData.push({
 mocksData.push({
   request: {
     query: GET_PROFILE_DATA_FOR_THERAPIST,
-    variables: { patient_id: null },
+    variables: { patient_id: undefined },
   },
   result: {
     data: {
@@ -132,7 +132,7 @@ mocksData.push({
   request: {
     query: UPDATE_PROFILE_DATA_FROM_THERAPIST,
     variables: {
-      patient_id: null,
+      patient_id: undefined,
       first_name: "first_name",
       birthdate: "",
       address_line1: "",
