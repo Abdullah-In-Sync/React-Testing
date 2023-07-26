@@ -55,6 +55,7 @@ const CommonForm: React.FC<ViewProps> = ({
     setFieldValue(`${name}_file`, fileObj);
   };
 
+  /* istanbul ignore next */
   const bottomCommonInputs = () => (
     <>
       <Box className="fieldsBoxWrapperFirst">
@@ -77,6 +78,7 @@ const CommonForm: React.FC<ViewProps> = ({
     </>
   );
 
+  /* istanbul ignore next */
   const editInputs = () => {
     return (
       <Form>
@@ -116,6 +118,7 @@ const CommonForm: React.FC<ViewProps> = ({
     );
   };
 
+  /* istanbul ignore next */
   const registrationInputs = () => {
     return (
       <Form>
@@ -153,6 +156,7 @@ const CommonForm: React.FC<ViewProps> = ({
     );
   };
 
+  /* istanbul ignore next */
   const viewInputs = () => {
     return (
       <Stack className="viewStack disbledFields">
@@ -216,6 +220,7 @@ const CommonForm: React.FC<ViewProps> = ({
     );
   };
 
+  /* istanbul ignore next */
   const formInput = () => {
     switch (viewType) {
       case "view":

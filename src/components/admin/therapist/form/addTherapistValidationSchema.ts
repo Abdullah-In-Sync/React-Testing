@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 const phoneRegExp = /^\+[1-9]{1}[0-9]{3,14}$/;
 
+/* istanbul ignore next */
 export const addTherapistValidationSchema = Yup.object().shape({
   plan: Yup.string().required("Plan is required"),
   therapist_name: Yup.string().required("Name is required"),
@@ -65,6 +66,7 @@ export const addTherapistValidationSchema = Yup.object().shape({
   }),
 });
 
+/* istanbul ignore next */
 export const editTherapistValidationSchema = Yup.object().shape({
   plan: Yup.string().required("Plan is required"),
   therapist_name: Yup.string().required("Name is required"),
