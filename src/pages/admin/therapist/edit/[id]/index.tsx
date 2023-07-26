@@ -137,6 +137,7 @@ const EditTherapistPage: NextPage = () => {
         onCompleted: (data) => {
           const { updateTherapistById: { _id = undefined } = {} } = data;
           if (_id) {
+            router.push("/admin/therapist/list");
             enqueueSnackbar("Therapist updated successfully!", {
               variant: "success",
             });

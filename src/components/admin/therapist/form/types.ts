@@ -31,8 +31,8 @@ export interface ModalRefs {
 
 export interface CommonFormProps {
   submitForm?: (
-    formData: InitialFormValues,
-    formikHelper: FormikProps<InitialFormValues>
+    formData?: InitialFormValues,
+    formikHelper?: FormikProps<InitialFormValues>
   ) => void;
   organizationList?: Array<{
     [key: string]: any;
@@ -40,6 +40,6 @@ export interface CommonFormProps {
   onPressCancel?: () => void;
   formikProps?: FormikProps<InitialFormValues>;
   handleDeleteQuestion?: (v) => void;
-  edit?: boolean;
+  viewType?: "edit" | "view";
   masterData?: any;
 }

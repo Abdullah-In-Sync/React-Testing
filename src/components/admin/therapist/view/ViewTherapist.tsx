@@ -1,19 +1,14 @@
-import { Formik, FormikProps } from "formik";
+import { Formik } from "formik";
 import React from "react";
 import CommonForm from "../form/CommonForm";
-import { editTherapistValidationSchema } from "../form/addTherapistValidationSchema";
 
 import {
   GetMasterDataEntity,
   GetTherapistById,
 } from "../../../../graphql/Therapist/types";
-import { InitialFormValues, ModalRefs } from "../form/types";
+import { ModalRefs } from "../form/types";
 
 interface ViewProps {
-  submitForm?: (
-    formData: InitialFormValues,
-    formikHelper: FormikProps<InitialFormValues>
-  ) => void;
   organizationList?: object[];
   masterData?: {
     specialization: GetMasterDataEntity[];
@@ -23,8 +18,7 @@ interface ViewProps {
   therapistData?: GetTherapistById;
 }
 
-const EditTherapistForm: React.FC<ViewProps & ModalRefs> = ({
-  submitForm,
+const ViewTherapistForm: React.FC<ViewProps & ModalRefs> = ({
   organizationList,
   confirmRef,
   infoModalRef,
@@ -72,9 +66,8 @@ const EditTherapistForm: React.FC<ViewProps & ModalRefs> = ({
   const commonform = () => {
     return (
       <Formik
-        validationSchema={editTherapistValidationSchema}
         initialValues={initialValues}
-        onSubmit={submitForm}
+        onSubmit={null}
         children={(props: any) => (
           <CommonForm
             formikProps={props}
@@ -82,7 +75,7 @@ const EditTherapistForm: React.FC<ViewProps & ModalRefs> = ({
             confirmRef={confirmRef}
             infoModalRef={infoModalRef}
             masterData={masterData}
-            viewType="edit"
+            viewType="view"
           />
         )}
       />
@@ -92,4 +85,4 @@ const EditTherapistForm: React.FC<ViewProps & ModalRefs> = ({
   return <>{commonform()}</>;
 };
 
-export default EditTherapistForm;
+export default ViewTherapistForm;

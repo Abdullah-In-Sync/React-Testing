@@ -103,6 +103,8 @@ const TherapistListPage: NextPage = () => {
     const { user_id, pressedIconButton } = value;
     if (pressedIconButton === "edit")
       return router.push(`/admin/therapist/edit/${user_id}`);
+    else if (pressedIconButton === "view")
+      return router.push(`/admin/therapist/view/${user_id}`);
     //action button
   };
 

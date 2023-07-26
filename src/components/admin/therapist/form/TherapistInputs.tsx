@@ -62,7 +62,7 @@ const TherapistInputs = {
       <FormikTextField
         name="phone_number"
         id="phone_number"
-        label="Phone*"
+        label="Phone no*"
         fullWidth={true}
         inputProps={{ "data-testid": "phone_number" }}
         variant="outlined"
@@ -73,7 +73,7 @@ const TherapistInputs = {
       />
     </Box>
   ),
-  therapistIdInput: () => (
+  therapistIdInput: (props) => (
     <Box>
       <FormikTextField
         name="therapist_id"
@@ -85,7 +85,7 @@ const TherapistInputs = {
         className="form-control-bg"
         size="small"
         placeholder="Therapist ID*"
-        disabled
+        {...props}
       />
     </Box>
   ),
