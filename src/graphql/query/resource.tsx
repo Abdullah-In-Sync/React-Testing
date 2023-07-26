@@ -160,7 +160,7 @@ export const GET_PATIENT_APPOINTMENTS_LIST = gql`
         therapist_specialization
         therapist_status
         therapist_totexp
-        therapit_proofacredition
+        therapist_proofaccredition
         user_id
       }
       therapist_id

@@ -174,9 +174,9 @@ mocksData.push({
       accredited_body: "acc body text",
       therapist_totexp: "5",
       therapist_add: "addr text",
-      phone_number: "+911234567890",
-      professionalAccreditation: "student",
       therapist_inscover: "dummy.pdf",
+      phone_number: "+911234567890",
+      therapist_profaccredition: "student",
     },
   },
   result: {
@@ -205,7 +205,7 @@ mocksData.push({
       therapist_totexp: "5",
       therapist_add: "addr text",
       phone_number: "+911234567890",
-      professionalAccreditation: "student",
+      therapist_profaccredition: "student",
     },
   },
   result: {
@@ -291,11 +291,13 @@ const selectDropDown = async (dropdownTestId) => {
   const selectDropdown = await screen.findByTestId(dropdownTestId);
   expect(selectDropdown).toBeInTheDocument();
 
-  const button = within(selectDropdown).getByRole("button");
+  const button = await within(selectDropdown).findByRole("button");
   fireEvent.mouseDown(button);
 
-  const listbox = within(screen.getByRole("presentation")).getByRole("listbox");
-  const options = within(listbox).getAllByRole("option");
+  const listbox = await within(
+    await screen.findByRole("presentation")
+  ).findByRole("listbox");
+  const options = await within(listbox).findAllByRole("option");
 
   fireEvent.click(options[0]);
 };
