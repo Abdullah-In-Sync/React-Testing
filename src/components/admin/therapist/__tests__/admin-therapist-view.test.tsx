@@ -11,7 +11,7 @@ import {
   GET_MASTER_DATA,
   GET_THERAPIST_BY_ID,
 } from "../../../../graphql/Therapist/graphql";
-import EditTherapistPage from "../../../../pages/admin/therapist/edit/[id]";
+import ViewTherapistPage from "../../../../pages/admin/therapist/view/[id]";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -197,7 +197,7 @@ const sut = async () => {
     <MockedProvider mocks={mocksData} addTypename={false}>
       <ThemeProvider theme={theme()}>
         <SnackbarProvider>
-          <EditTherapistPage />
+          <ViewTherapistPage />
         </SnackbarProvider>
       </ThemeProvider>
     </MockedProvider>

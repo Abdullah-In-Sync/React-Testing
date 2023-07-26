@@ -43,7 +43,7 @@ const EditTherapistForm: React.FC<ViewProps & ModalRefs> = ({
     therapist_totexp,
     _id,
     therapist_name,
-    therapist_proofaccredition = 1,
+    therapist_proofaccredition,
     therapist_profaccredition,
     therapist_add,
     trial_period = "",

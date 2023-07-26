@@ -110,7 +110,10 @@ const CommonForm: React.FC<ViewProps> = ({
         {/* fourth row */}
         <Box className="fieldsBoxWrapperFirst">
           <TherapistInputs.accreditedBodyInput />
-          <TherapistInputs.accToggle setFieldValue={setFieldValue} />
+          <TherapistInputs.accToggle
+            setFieldValue={setFieldValue}
+            therapist_proofaccredition={therapist_proofaccredition}
+          />
           <Box />
         </Box>
         {bottomCommonInputs()}
@@ -149,7 +152,10 @@ const CommonForm: React.FC<ViewProps> = ({
             professional={professional}
           />
           <TherapistInputs.accreditedBodyInput />
-          <TherapistInputs.accToggle setFieldValue={setFieldValue} />
+          <TherapistInputs.accToggle
+            setFieldValue={setFieldValue}
+            therapist_proofaccredition={therapist_proofaccredition}
+          />
         </Box>
         {bottomCommonInputs()}
       </Form>

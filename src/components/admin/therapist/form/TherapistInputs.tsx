@@ -253,11 +253,16 @@ const TherapistInputs = {
       />
     </Box>
   ),
-  accToggle: ({ setFieldValue }) => (
+  accToggle: ({ setFieldValue, therapist_proofaccredition }) => (
     <Box className="accToggleWrapper">
       <label className="accLabel">Proof of Accreditation:</label>
       <FormControlLabel
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+        control={
+          <IOSSwitch
+            sx={{ m: 1 }}
+            defaultChecked={Boolean(therapist_proofaccredition)}
+          />
+        }
         label=""
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setFieldValue("therapist_proofaccredition", Number(e.target?.checked))
