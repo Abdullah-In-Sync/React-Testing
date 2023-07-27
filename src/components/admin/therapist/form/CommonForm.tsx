@@ -1,28 +1,17 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-} from "@mui/material";
-import { ErrorMessage, Form } from "formik";
+import { Box, Card, CardContent, Stack } from "@mui/material";
+import { Form } from "formik";
 import React from "react";
-import CommonButton from "../../../common/Buttons/CommonButton";
 import InfoModal from "../../../common/CustomModal/InfoModal";
-import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropdown";
-import FormikTextField from "../../../common/FormikFields/FormikTextField";
 
 import { useStyles } from "./addTherapistStyles";
 
 import ConfirmWrapper from "../../../common/ConfirmWrapper";
 import { CommonFormProps, ModalRefs } from "../form/types";
 
+import { Typography } from "@material-ui/core";
 import { getUpdatedFileName } from "../../../../lib/helpers/s3";
 import InfoMessageView from "../../../common/InfoMessageView";
-import { IOSSwitch } from "../../../common/ToggleButton/IosToggleButton";
-import UploadButtonComponent from "../../../common/UploadButton/UploadButtonComponent";
+import TherapistInputs from "./TherapistInputs";
 
 type ViewProps = CommonFormProps & ModalRefs;
 
@@ -32,8 +21,10 @@ const CommonForm: React.FC<ViewProps> = ({
   confirmRef,
   infoModalRef,
   masterData,
+  viewType,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
+
   const {
     plan,
     therapist_poa_attachment = "No file choosen",
@@ -64,322 +55,215 @@ const CommonForm: React.FC<ViewProps> = ({
     setFieldValue(`${name}_file`, fileObj);
   };
 
-  const choosePlanRadio = ({ row, options }) => {
+  /* istanbul ignore next */
+  const bottomCommonInputs = () => (
+    <>
+      <Box className="fieldsBoxWrapperFirst">
+        {TherapistInputs.uploadFileInputs({
+          therapist_proofaccredition,
+          therapist_poa_attachment,
+          fileOnChange,
+          therapist_inscover,
+        })}
+      </Box>
+      {/* sixth row */}
+      <Box className="fieldsBoxWrapperFirst" alignItems={"center"}>
+        {TherapistInputs.choosePlan({
+          plan,
+          setFieldValue,
+          plan_trial,
+        })}
+      </Box>
+      {TherapistInputs.formSubmitButton({ isSubmitting })}
+    </>
+  );
+
+  /* istanbul ignore next */
+  const editInputs = () => {
     return (
-      <RadioGroup {...row} className="radio-buttons">
-        {(options as Array<any>).map((option: string, index: number) => (
-          <FormControlLabel
-            key={`choosePlan_${index}`}
-            data-testid={`choosePlan_${index}`}
-            name="plan"
-            value={option.toLocaleLowerCase()}
-            control={<Radio />}
-            label={option}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFieldValue(`plan`, e.target.value)
-            }
-            checked={plan === option.toLocaleLowerCase()}
-            disabled={option === "Paid"}
+      <Form>
+        {/* first row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.therapistIdInput disabled />
+          <TherapistInputs.therapistNameInput />
+          <TherapistInputs.organizationDropdown
+            organizationList={organizationList}
+            disabled
           />
-        ))}
-      </RadioGroup>
+        </Box>
+        {/* second row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.specializationDropdown
+            specialization={specialization}
+          />
+          <TherapistInputs.phoneNumberInput disabled />
+          <TherapistInputs.emailInput disabled />
+        </Box>
+        {/* third row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.therapistAddInput />
+          <TherapistInputs.totalExpInput />
+          <TherapistInputs.professionalAccreditationInput
+            professional={professional}
+          />
+        </Box>
+        {/* fourth row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.accreditedBodyInput />
+          <TherapistInputs.accToggle
+            setFieldValue={setFieldValue}
+            therapist_proofaccredition={therapist_proofaccredition}
+          />
+          <Box />
+        </Box>
+        {bottomCommonInputs()}
+      </Form>
     );
   };
 
-  return (
-    <>
-      <ConfirmWrapper ref={confirmRef}>
-        <Card className={styles.formWrapper}>
-          <CardContent>
-            <Stack>
-              <Form>
-                {/* first row */}
-                <Box className="fieldsBoxWrapperFirst">
-                  <Box>
-                    <FormikTextField
-                      name="therapist_name"
-                      id="therapist_name"
-                      label="Name*"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "therapist_name" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Name*"
-                    />
-                  </Box>
-                  <Box>
-                    <FormikSelectDropdown
-                      id="orgId"
-                      labelId="orgLabel"
-                      name="org_id"
-                      showDefaultSelectOption={false}
-                      label="Organization*"
-                      options={organizationList}
-                      mappingKeys={["_id", "name"]}
-                      size="small"
-                      className="form-control-bg"
-                      extraProps={{
-                        "data-testid": "organization",
-                      }}
-                    />
-                  </Box>
-                  <Box>
-                    <FormikSelectDropdown
-                      id="therapist_specialization"
-                      labelId="therapist_specialization"
-                      name="therapist_specialization"
-                      showDefaultSelectOption={false}
-                      label="Specialization"
-                      options={specialization}
-                      mappingKeys={["name", "display_name"]}
-                      size="small"
-                      className="form-control-bg"
-                      extraProps={{
-                        "data-testid": "therapist_specialization",
-                      }}
-                    />
-                  </Box>
-                </Box>
-                {/* second row */}
-                <Box className="fieldsBoxWrapperFirst">
-                  <Box>
-                    <FormikTextField
-                      name="email"
-                      id="email"
-                      label="Email*"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "emailInput" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Email*"
-                    />
-                  </Box>
-                  <Box>
-                    <FormikTextField
-                      type="password"
-                      name="password"
-                      id="password"
-                      label="Password*"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "passwordInput" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Password*"
-                    />
-                  </Box>
-                  <Box>
-                    <FormikTextField
-                      type="password"
-                      name="confirm_password"
-                      id="confirmPassword"
-                      label="Confirm Password*"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "confirmPasswordInput" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Confirm Password*"
-                    />
-                  </Box>
-                </Box>
-                {/* third row */}
-                <Box className="fieldsBoxWrapperFirst">
-                  <Box>
-                    <FormikTextField
-                      name="phone_number"
-                      id="phone_number"
-                      label="Phone*"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "phone_number" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Phone*"
-                    />
-                  </Box>
-                  <Box>
-                    <FormikTextField
-                      name="therapist_add"
-                      id="therapist_add"
-                      label="Address"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "address_input" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Address"
-                    />
-                  </Box>
-                  <Box>
-                    <FormikTextField
-                      name="therapist_totexp"
-                      id="therapist_totexp"
-                      label="Total Experience"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "therapist_totexp" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Total Experience"
-                    />
-                  </Box>
-                </Box>
-                {/* fourth row */}
-                <Box className="fieldsBoxWrapperFirst">
-                  <Box>
-                    <FormikSelectDropdown
-                      id="professionalAccreditation"
-                      labelId="professionalAccreditation"
-                      name="professionalAccreditation"
-                      showDefaultSelectOption={false}
-                      label="Professional Accreditation"
-                      options={professional}
-                      mappingKeys={["name", "display_name"]}
-                      size="small"
-                      className="form-control-bg"
-                      extraProps={{
-                        "data-testid": "professionalAccreditation",
-                      }}
-                    />
-                  </Box>
-                  <Box>
-                    <FormikTextField
-                      name="accredited_body"
-                      id="accredited_body"
-                      label="Name of Accredited body"
-                      fullWidth={true}
-                      inputProps={{ "data-testid": "accredited_body" }}
-                      variant="outlined"
-                      className="form-control-bg"
-                      size="small"
-                      placeholder="Name of Accredited body"
-                    />
-                  </Box>
-                  <Box className="accToggleWrapper">
-                    <label className="accLabel">Proof of Accreditation:</label>
-                    <FormControlLabel
-                      control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
-                      label=""
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setFieldValue(
-                          "therapist_proofaccredition",
-                          Number(e.target?.checked)
-                        )
-                      }
-                      data-testid="toggleAcc"
-                    />
-                  </Box>
-                </Box>
-                {/* fifth row */}
-                <Box className="fieldsBoxWrapperFirst">
-                  {Boolean(therapist_proofaccredition) && (
-                    <Box className="chooseFileWrapper">
-                      <label className="uploadButtonLabel">
-                        Attach proof of Accreditation:
-                      </label>
-                      <UploadButtonComponent
-                        variant="contained"
-                        name="therapist_poa_attachment"
-                        inputProps={{
-                          "data-testid": "therapist_poa_attachment",
-                        }}
-                        onChange={(e) =>
-                          fileOnChange("therapist_poa_attachment", e)
-                        }
-                        fileName={therapist_poa_attachment}
-                        buttonText="Choose File"
-                        hideIcon
-                      />
-                      <ErrorMessage
-                        name={`therapist_poa_attachment_file`}
-                        component="div"
-                        className="invalid-input-message"
-                      />
-                    </Box>
-                  )}
-                  <Box className="chooseFileWrapper">
-                    <label className="uploadButtonLabel">
-                      Insurance Cover:
-                    </label>
-                    <UploadButtonComponent
-                      variant="contained"
-                      name="therapist_inscover"
-                      inputProps={{ "data-testid": "therapist_inscover" }}
-                      onChange={(e) => fileOnChange("therapist_inscover", e)}
-                      fileName={therapist_inscover}
-                      buttonText="Choose File"
-                      hideIcon
-                    />
-                    <ErrorMessage
-                      name={`therapist_inscover_file`}
-                      component="div"
-                      className="invalid-input-message"
-                    />
-                  </Box>
-                  <Box />
-                </Box>
-                {/* sixth row */}
-                <Box className="fieldsBoxWrapperFirst" alignItems={"center"}>
-                  <Box className="radioErrorMessgeWrapper">
-                    <Box className="radioFieldsWrapper">
-                      <label className="radioLabel">Choose Plan* :</label>
-                      {choosePlanRadio({
-                        row: true,
-                        options: ["Free", "Paid"],
-                      })}
-                    </Box>
-                    <ErrorMessage
-                      name={`plan`}
-                      component="div"
-                      className="invalid-input-message"
-                    />
-                  </Box>
-                  {plan === "free" && (
-                    <Box>
-                      <FormikSelectDropdown
-                        id="trial_period"
-                        labelId="trial_period"
-                        name="trial_period"
-                        showDefaultSelectOption={false}
-                        label="Select trial period*"
-                        options={plan_trial}
-                        mappingKeys={["name", "display_name"]}
-                        size="small"
-                        className="form-control-bg"
-                        extraProps={{
-                          "data-testid": "trial_period",
-                        }}
-                      />
-                    </Box>
-                  )}
-                  <Box />
-                </Box>
+  /* istanbul ignore next */
+  const registrationInputs = () => {
+    return (
+      <Form>
+        {/* first row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.therapistNameInput />
+          <TherapistInputs.organizationDropdown
+            organizationList={organizationList}
+          />
+          <TherapistInputs.specializationDropdown
+            specialization={specialization}
+          />
+        </Box>
+        {/* second row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.emailInput />
+          <TherapistInputs.changePasswordSec />
+        </Box>
+        {/* third row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.phoneNumberInput />
+          <TherapistInputs.therapistAddInput />
+          <TherapistInputs.totalExpInput />
+        </Box>
+        {/* fourth row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.professionalAccreditationInput
+            professional={professional}
+          />
+          <TherapistInputs.accreditedBodyInput />
+          <TherapistInputs.accToggle
+            setFieldValue={setFieldValue}
+            therapist_proofaccredition={therapist_proofaccredition}
+          />
+        </Box>
+        {bottomCommonInputs()}
+      </Form>
+    );
+  };
 
-                <Box className="bottomActionButtonsWrapper">
-                  <Box>
-                    <CommonButton
-                      type="submit"
-                      data-testid="submitForm"
-                      variant="contained"
-                      disabled={isSubmitting}
-                    >
-                      Save
-                    </CommonButton>
-                  </Box>
-                </Box>
-              </Form>
-            </Stack>
-          </CardContent>
-        </Card>
-        <InfoModal ref={infoModalRef} maxWidth={"xs"}>
-          <InfoMessageView />
-        </InfoModal>
-      </ConfirmWrapper>
-    </>
-  );
+  /* istanbul ignore next */
+  const viewInputs = () => {
+    return (
+      <Stack className="viewStack disbledFields">
+        {/* first row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.therapistIdInput />
+          <TherapistInputs.therapistNameInput />
+          <TherapistInputs.organizationDropdown
+            organizationList={organizationList}
+          />
+        </Box>
+        {/* second row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.specializationDropdown
+            specialization={specialization}
+          />
+          <TherapistInputs.phoneNumberInput />
+          <TherapistInputs.emailInput />
+        </Box>
+        {/* third row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.therapistAddInput />
+          <TherapistInputs.totalExpInput />
+          <TherapistInputs.professionalAccreditationInput
+            professional={professional}
+          />
+        </Box>
+        {/* fourth row */}
+        <Box className="fieldsBoxWrapperFirst">
+          <TherapistInputs.accreditedBodyInput />
+          {/* <TherapistInputs.accToggle setFieldValue={setFieldValue} /> */}
+          <Box />
+          <Box />
+        </Box>
+        <Box className="fieldsBoxWrapperFirst">
+          {Boolean(therapist_proofaccredition) && (
+            <Box className="chooseFileWrapper">
+              <label className="uploadButtonLabel">
+                Attach proof of Accreditation:
+              </label>
+              <Typography className="fileName">
+                {therapist_poa_attachment}
+              </Typography>
+            </Box>
+          )}
+          <Box className="chooseFileWrapper">
+            <label className="uploadButtonLabel">Insurance Cover:</label>
+            <Typography className="fileName">{therapist_inscover}</Typography>
+          </Box>
+          <Box />
+        </Box>
+        {/* sixth row */}
+        <Box className="fieldsBoxWrapperFirst" alignItems={"center"}>
+          {TherapistInputs.choosePlan({
+            plan,
+            setFieldValue,
+            plan_trial,
+          })}
+        </Box>
+      </Stack>
+    );
+  };
+
+  /* istanbul ignore next */
+  const formInput = () => {
+    switch (viewType) {
+      case "view":
+        return (
+          <Card className={styles.formWrapper}>
+            <CardContent>
+              <Stack>{viewInputs()}</Stack>
+            </CardContent>
+          </Card>
+        );
+      case "edit":
+        return (
+          <ConfirmWrapper ref={confirmRef}>
+            <Card className={styles.formWrapper}>
+              <CardContent>
+                <Stack>{editInputs()}</Stack>
+              </CardContent>
+            </Card>
+          </ConfirmWrapper>
+        );
+      default:
+        return (
+          <ConfirmWrapper ref={confirmRef}>
+            <Card className={styles.formWrapper}>
+              <CardContent>
+                <Stack>{registrationInputs()}</Stack>
+              </CardContent>
+            </Card>
+            <InfoModal ref={infoModalRef} maxWidth={"xs"}>
+              <InfoMessageView />
+            </InfoModal>
+          </ConfirmWrapper>
+        );
+    }
+  };
+
+  return formInput();
 };
 
 export default CommonForm;

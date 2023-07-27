@@ -6,6 +6,11 @@ export const useStyles = makeStyles(() => {
   const theme = useTheme() as Theme;
   return {
     formWrapper: {
+      "& .viewStack": {
+        "& .fileName": {
+          color: theme.palette.primary.main,
+        },
+      },
       padding: 15,
       border: `1px solid ${theme.palette.secondary.main}`,
       borderRadius: 7,

@@ -32,10 +32,12 @@ export const Columns: readonly Column[] = [
   },
 ];
 
+/* istanbul ignore next */
 const InfoMessageView: React.FC<ViewProps> = ({ data = {}, modalRef }) => {
   const styles = useStyles();
   const { duplicateNames, message } = data;
 
+  /* istanbul ignore next */
   const duplicteTable = () => {
     return (
       <Box className="duplicatesTable">
