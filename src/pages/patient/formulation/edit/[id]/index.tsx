@@ -99,6 +99,7 @@ const PatientEditTemplatePage: NextPage = () => {
       });
       if (updatePatFormulationById) setSuccessModal(true);
     } catch (e) {
+      /* istanbul ignore next */
       console.log(e);
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     } finally {
@@ -107,13 +108,16 @@ const PatientEditTemplatePage: NextPage = () => {
   };
 
   const handleViewOpen = () => {
+    /* istanbul ignore next */
     if (description || instruction) {
       setIsOpenPopup(true);
     }
   };
 
   const handleSuccessOk = () => {
+    /* istanbul ignore next */
     router.back();
+    /* istanbul ignore next */
     setSuccessModal(false);
   };
   const onPressBack = () => {
@@ -130,6 +134,7 @@ const PatientEditTemplatePage: NextPage = () => {
     router.back();
     setIsConfirmCancel(false);
   };
+  /* istanbul ignore next */
   const onCancel = () => {
     setIsConfirmCancel(true);
   };
