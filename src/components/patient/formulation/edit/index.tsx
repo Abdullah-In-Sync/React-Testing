@@ -28,7 +28,6 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
   defaultUserType,
   onCancel,
 }) => {
-  console.log(formulationData, "formulationData");
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
   const onClickViewProps = { ...(mode === "edit" && { onClickView }) };
@@ -38,9 +37,9 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
     formulationData?.template_response &&
     formulationData?.template_response !== ""
       ? formulationData?.template_response
-      : formulationData?.template_response;
-  console.log(templateData, "templateData");
-  const staticTemplate: TemplateFormData = templateData !== "" && templateData;
+      : formulationData?.template_data;
+  const staticTemplate: TemplateFormData =
+    templateData !== "" && JSON.parse(templateData);
   const handleBackButton = (): any => {
     const fromUrl = router?.query?.from as string;
     return mode !== "edit" && onClickView
@@ -56,15 +55,10 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
         heading={formulationData?.formulation_name || ""}
         backButtonClick={onPressBack ? onPressBack : handleBackButton}
         {...onClickViewProps}
-        mode={
-          formulationData?.component_name == "ArrowTemplate" ||
-          formulationData?.component_name == ""
-            ? "arrowView"
-            : ""
-        }
+        mode={"arrowView"}
         view={"patientFormulation"}
         downloadUrl={
-          formulationData?.component_name == ""
+          !formulationData?.component_name
             ? formulationData?.download_formulation_url
             : undefined
         }
@@ -92,7 +86,7 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
             defaultIsPreview={arrowTemplatedefaultIsPreview}
           />
         )}
-        {formulationData?.component_name == "" && (
+        {!formulationData?.component_name && (
           <CustomImageComponent url={formulationData?.formulation_url} />
         )}
       </BreadCrumbsWithBackButton>

@@ -10,7 +10,6 @@ import {
 } from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),

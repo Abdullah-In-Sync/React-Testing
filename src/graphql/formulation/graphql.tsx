@@ -214,6 +214,7 @@ export const GET_FORMULATION_BY_SHARE_ID = gql`
         formulation_desc
         formulation_avail_for
         download_formulation_url
+        template_data
       }
       template_detail {
         component_name

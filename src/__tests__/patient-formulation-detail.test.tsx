@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
@@ -13,6 +13,12 @@ const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
+}));
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
 }));
 
 jest.mock("../contexts/AuthContext");
@@ -32,27 +38,39 @@ mocksData.push({
       getFormulationByShareId: [
         {
           _id: "46cb932a4c6346268ec4c13009cdd1b5",
-          created_date: "2022-04-20T09:27:30.000Z",
+          created_date: "2023-07-27T03:46:30.009Z",
           formulation_data: [
             {
-              user_id: "d873f1f8436e4117b760db3a54c05026",
-              formulation_url: null,
-              formulation_type: null,
+              user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+              formulation_url:
+                "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/formulation/?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJAS2SR42YS%2F20230727%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230727T090223Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMSJHMEUCIAcvVekGThLcCP8PG0F%2FPmzEenmiPLjGdbl6cNHqbtyRAiEAqwPIvAfGFXKF2L5uCd2gWL6zWYW49eacxhGb0qSvJZMq9gIIWhABGgw2NzM5MjgyNTgxMTMiDMLEsVh6a7Xd0NCfFyrTAsnaGrMErwI4ZD2L6WxtPDXHTmfvrlF7Iln9zLfqy2tZs%2FaZX0hbHbGXkfYSi7yByqKKCe3CdIOy7PdZXSaFe7zdHQHAq89kOhROwJC58O8m40Vfpo40G7TDQWTsXz12uLzT%2FFInRwcygC1a%2BDIoQ%2BowFgP3UNxPsx0hqvFNbG5bYSZQTRcjrpTFFz4MI19S1KRpejOlXXm1cTfD8DLdjawht%2BuCm4Jvy2eMMjxUBAeF1Q71W9vF6iTLmUO2s7VGrYGiKLQwRnqFxVCYQAG0oFRtvPD%2FwrbkOChrmSOKkVbBphVp49wqJjj1B4T78Ufn4%2FuS4bGrZk8YMNVhDv5Qnhi9WlC8pUDkBWkjNapWgfKcYcA3YQ5IOdLwIoB7qQZwq5YBuA2mdEvtYpONSYSs1zq2sTlYEW05sLf7v4ylUiu3aBhVJaqXUzAIKdzXDkDlixsN0zCF1YimBjqeAanVMkJCoWJ3CnNmWqZO5SsOPr23V%2BgDqeTtAkRBHLs6rLc%2BSbRhTMo4JWSvkRrDrbfBuTNjJzJrzL9nPKIKKSn2FgnaABO3jdEzYzkMWahaNKAJVQtDtMYI3yGit3omHxkYUIfGI5wCrv%2Bu6Sm7kKqZ0iXdLwFGV9XLC1c2im0SE0ZT%2FnUkLIYX7nRHUmzEuj65CMasOjM6o68wrSUd&X-Amz-Signature=1e5cd6e2980df6d917afab1c3de4bd014af314ffa936c3b3fa9760a2268b4f56&X-Amz-SignedHeaders=host&response-content-disposition=inline%3B%20filename%3D&x-id=GetObject",
+              formulation_type: 1,
               formulation_status: 1,
               formulation_returnurl: null,
-              formulation_name: "19th april amar",
-              formulation_instruction: null,
+              formulation_name: "Test-Arrow-temp",
+              formulation_instruction: "",
               formulation_img: "",
-              formulation_desc: "test ",
-              formulation_avail_for: "[1]",
-              download_formulation_url: null,
+              formulation_desc: "Test description",
+              formulation_avail_for: "[1, 2]",
+              download_formulation_url:
+                "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/formulation/?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJAS2SR42YS%2F20230727%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230727T090223Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMSJHMEUCIAcvVekGThLcCP8PG0F%2FPmzEenmiPLjGdbl6cNHqbtyRAiEAqwPIvAfGFXKF2L5uCd2gWL6zWYW49eacxhGb0qSvJZMq9gIIWhABGgw2NzM5MjgyNTgxMTMiDMLEsVh6a7Xd0NCfFyrTAsnaGrMErwI4ZD2L6WxtPDXHTmfvrlF7Iln9zLfqy2tZs%2FaZX0hbHbGXkfYSi7yByqKKCe3CdIOy7PdZXSaFe7zdHQHAq89kOhROwJC58O8m40Vfpo40G7TDQWTsXz12uLzT%2FFInRwcygC1a%2BDIoQ%2BowFgP3UNxPsx0hqvFNbG5bYSZQTRcjrpTFFz4MI19S1KRpejOlXXm1cTfD8DLdjawht%2BuCm4Jvy2eMMjxUBAeF1Q71W9vF6iTLmUO2s7VGrYGiKLQwRnqFxVCYQAG0oFRtvPD%2FwrbkOChrmSOKkVbBphVp49wqJjj1B4T78Ufn4%2FuS4bGrZk8YMNVhDv5Qnhi9WlC8pUDkBWkjNapWgfKcYcA3YQ5IOdLwIoB7qQZwq5YBuA2mdEvtYpONSYSs1zq2sTlYEW05sLf7v4ylUiu3aBhVJaqXUzAIKdzXDkDlixsN0zCF1YimBjqeAanVMkJCoWJ3CnNmWqZO5SsOPr23V%2BgDqeTtAkRBHLs6rLc%2BSbRhTMo4JWSvkRrDrbfBuTNjJzJrzL9nPKIKKSn2FgnaABO3jdEzYzkMWahaNKAJVQtDtMYI3yGit3omHxkYUIfGI5wCrv%2Bu6Sm7kKqZ0iXdLwFGV9XLC1c2im0SE0ZT%2FnUkLIYX7nRHUmzEuj65CMasOjM6o68wrSUd&X-Amz-Signature=f7b45ee12f210ce605dc4ecf1b98db2b2c3f48dc7d7689d3002781d34da5ab11&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D&x-id=GetObject",
+              template_data:
+                '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":721,"y":127.4375},"data":{"label":"Test 2","description":"Desc2"},"style":{"width":298,"height":248},"positionAbsolute":{"x":721,"y":127.4375},"selected":true,"dragging":false},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":109.84226659805233,"y":163.7575846343691},"data":{"label":"Test","description":"Desc"},"style":{"width":298,"height":248},"selected":false,"positionAbsolute":{"x":109.84226659805233,"y":163.7575846343691},"dragging":false}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
               __typename: "FormulationData",
             },
           ],
-          formulation_id: "306cd6f0b2d5454c9385c09d749bed17",
+          template_detail: {
+            component_name: "ArrowTemplate",
+            category: "Arrow Template",
+            name: "Flow Template",
+            __typename: "Templates",
+          },
+          formulation_id: "e9756dde-78f8-4053-a5ca-5ab6fd5df71b",
           patient_id: "47aedf8a20344f68b8f064c94160046d",
           share_from: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2022-04-20T09:27:30.000Z",
+          updated_date: "2023-07-27T09:00:03.313Z",
+          template_response:
+            '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":721,"y":127.4375},"data":{"label":"Test 2","description":"Desc2","patientResponse":"Test Res"},"style":{"width":298,"height":248},"positionAbsolute":{"x":721,"y":127.4375},"selected":true,"dragging":false},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":109.84226659805233,"y":163.7575846343691},"data":{"label":"Test","description":"Desc","patientResponse":"test res"},"style":{"width":298,"height":248},"selected":false,"positionAbsolute":{"x":109.84226659805233,"y":163.7575846343691},"dragging":false}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
           __typename: "Patshareformulation",
         },
       ],
@@ -73,27 +91,32 @@ mocksData.push({
       getFormulationByShareId: [
         {
           _id: "46cb932a4c6346268ec4c13009cdd1b6",
-          created_date: "2022-04-20T09:27:30.000Z",
+          created_date: "2023-07-27T08:35:29.926Z",
           formulation_data: [
             {
-              user_id: "d873f1f8436e4117b760db3a54c05026",
-              formulation_url: null,
-              formulation_type: null,
+              user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+              formulation_url:
+                "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/formulation/070836117__testing_with_magnifier_185604.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJAS2SR42YS%2F20230727%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230727T085330Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMSJHMEUCIAcvVekGThLcCP8PG0F%2FPmzEenmiPLjGdbl6cNHqbtyRAiEAqwPIvAfGFXKF2L5uCd2gWL6zWYW49eacxhGb0qSvJZMq9gIIWhABGgw2NzM5MjgyNTgxMTMiDMLEsVh6a7Xd0NCfFyrTAsnaGrMErwI4ZD2L6WxtPDXHTmfvrlF7Iln9zLfqy2tZs%2FaZX0hbHbGXkfYSi7yByqKKCe3CdIOy7PdZXSaFe7zdHQHAq89kOhROwJC58O8m40Vfpo40G7TDQWTsXz12uLzT%2FFInRwcygC1a%2BDIoQ%2BowFgP3UNxPsx0hqvFNbG5bYSZQTRcjrpTFFz4MI19S1KRpejOlXXm1cTfD8DLdjawht%2BuCm4Jvy2eMMjxUBAeF1Q71W9vF6iTLmUO2s7VGrYGiKLQwRnqFxVCYQAG0oFRtvPD%2FwrbkOChrmSOKkVbBphVp49wqJjj1B4T78Ufn4%2FuS4bGrZk8YMNVhDv5Qnhi9WlC8pUDkBWkjNapWgfKcYcA3YQ5IOdLwIoB7qQZwq5YBuA2mdEvtYpONSYSs1zq2sTlYEW05sLf7v4ylUiu3aBhVJaqXUzAIKdzXDkDlixsN0zCF1YimBjqeAanVMkJCoWJ3CnNmWqZO5SsOPr23V%2BgDqeTtAkRBHLs6rLc%2BSbRhTMo4JWSvkRrDrbfBuTNjJzJrzL9nPKIKKSn2FgnaABO3jdEzYzkMWahaNKAJVQtDtMYI3yGit3omHxkYUIfGI5wCrv%2Bu6Sm7kKqZ0iXdLwFGV9XLC1c2im0SE0ZT%2FnUkLIYX7nRHUmzEuj65CMasOjM6o68wrSUd&X-Amz-Signature=09fa41d383fd09e5858b8862fa3a9b7468a8718641cfa43b60e108aa00a0699f&X-Amz-SignedHeaders=host&response-content-disposition=inline%3B%20filename%3D070836117__testing_with_magnifier_185604.jpeg&x-id=GetObject",
+              formulation_type: 1,
               formulation_status: 1,
               formulation_returnurl: null,
-              formulation_name: "19th april amar",
-              formulation_instruction: null,
-              formulation_img: "",
-              formulation_desc: "test ",
-              formulation_avail_for: "[1]",
-              download_formulation_url: "https://google.com",
+              formulation_name: "Test-file-formulation",
+              formulation_instruction: "",
+              formulation_img: "070836117__testing_with_magnifier_185604.jpeg",
+              formulation_desc: "test file desc",
+              formulation_avail_for: "[1, 2]",
+              download_formulation_url:
+                "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/formulation/070836117__testing_with_magnifier_185604.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJAS2SR42YS%2F20230727%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230727T085330Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEMH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMSJHMEUCIAcvVekGThLcCP8PG0F%2FPmzEenmiPLjGdbl6cNHqbtyRAiEAqwPIvAfGFXKF2L5uCd2gWL6zWYW49eacxhGb0qSvJZMq9gIIWhABGgw2NzM5MjgyNTgxMTMiDMLEsVh6a7Xd0NCfFyrTAsnaGrMErwI4ZD2L6WxtPDXHTmfvrlF7Iln9zLfqy2tZs%2FaZX0hbHbGXkfYSi7yByqKKCe3CdIOy7PdZXSaFe7zdHQHAq89kOhROwJC58O8m40Vfpo40G7TDQWTsXz12uLzT%2FFInRwcygC1a%2BDIoQ%2BowFgP3UNxPsx0hqvFNbG5bYSZQTRcjrpTFFz4MI19S1KRpejOlXXm1cTfD8DLdjawht%2BuCm4Jvy2eMMjxUBAeF1Q71W9vF6iTLmUO2s7VGrYGiKLQwRnqFxVCYQAG0oFRtvPD%2FwrbkOChrmSOKkVbBphVp49wqJjj1B4T78Ufn4%2FuS4bGrZk8YMNVhDv5Qnhi9WlC8pUDkBWkjNapWgfKcYcA3YQ5IOdLwIoB7qQZwq5YBuA2mdEvtYpONSYSs1zq2sTlYEW05sLf7v4ylUiu3aBhVJaqXUzAIKdzXDkDlixsN0zCF1YimBjqeAanVMkJCoWJ3CnNmWqZO5SsOPr23V%2BgDqeTtAkRBHLs6rLc%2BSbRhTMo4JWSvkRrDrbfBuTNjJzJrzL9nPKIKKSn2FgnaABO3jdEzYzkMWahaNKAJVQtDtMYI3yGit3omHxkYUIfGI5wCrv%2Bu6Sm7kKqZ0iXdLwFGV9XLC1c2im0SE0ZT%2FnUkLIYX7nRHUmzEuj65CMasOjM6o68wrSUd&X-Amz-Signature=fa3868bb7b48269eb864317df412e204d4bbe5771fdabcb7f7a92d8e11e7ed58&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D070836117__testing_with_magnifier_185604.jpeg&x-id=GetObject",
+              template_data: "",
               __typename: "FormulationData",
             },
           ],
-          formulation_id: "306cd6f0b2d5454c9385c09d749bed18",
+          template_detail: null,
+          formulation_id: "860726f2-f3ca-4db6-9930-bd318b8b53e0",
           patient_id: "47aedf8a20344f68b8f064c94160046d",
           share_from: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2022-04-20T09:27:30.000Z",
+          updated_date: "2023-07-27T08:35:29.926Z",
+          template_response: null,
           __typename: "Patshareformulation",
         },
       ],
@@ -108,20 +131,19 @@ mocksData.push({
     variables: {
       ptsharresId: "46cb932a4c6346268ec4c13009cdd1b5",
       updateShareForm: {
-        // eslint-disable-next-line prettier/prettier
         template_response:
-          '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":473.2414156225255,"y":117.2588609700811},"data":{"label":"test","description":"test","patientResponse":"test"},"style":{"width":298,"height":248},"selected":false,"dragging":false,"positionAbsolute":{"x":473.2414156225255,"y":117.2588609700811}},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":89.67422782202881,"y":153.20227159497477},"data":{"label":"","patientResponse":"test"},"style":{"width":298,"height":248},"positionAbsolute":{"x":89.67422782202881,"y":153.20227159497477}}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
+          '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":721,"y":127.4375},"data":{"label":"Test 2","description":"Desc2","patientResponse":"Test Res"},"style":{"width":298,"height":248},"positionAbsolute":{"x":721,"y":127.4375},"selected":true,"dragging":false},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":109.84226659805233,"y":163.7575846343691},"data":{"label":"Test","description":"Desc","patientResponse":"test res"},"style":{"width":298,"height":248},"selected":false,"positionAbsolute":{"x":109.84226659805233,"y":163.7575846343691},"dragging":false}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
       },
     },
   },
   result: {
     data: {
-      updatePatFormulationById: {
+      getFormulationByShareId: {
         _id: "46cb932a4c6346268ec4c13009cdd1b5",
-        formulation_id: "306cd6f0b2d5454c9385c09d749bed17",
+        formulation_id: "e9756dde-78f8-4053-a5ca-5ab6fd5df71b",
         template_id: null,
         template_response:
-          '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":473.2414156225255,"y":117.2588609700811},"data":{"label":"test","description":"test","patientResponse":"test"},"style":{"width":298,"height":248},"selected":false,"dragging":false,"positionAbsolute":{"x":473.2414156225255,"y":117.2588609700811}},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":89.67422782202881,"y":153.20227159497477},"data":{"label":"","patientResponse":"test"},"style":{"width":298,"height":248},"positionAbsolute":{"x":89.67422782202881,"y":153.20227159497477}}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
+          '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":721,"y":127.4375},"data":{"label":"Test 2","description":"Desc2","patientResponse":"Test Res"},"style":{"width":298,"height":248},"positionAbsolute":{"x":721,"y":127.4375},"selected":true,"dragging":false},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":109.84226659805233,"y":163.7575846343691},"data":{"label":"Test","description":"Desc","patientResponse":"test res"},"style":{"width":298,"height":248},"selected":false,"positionAbsolute":{"x":109.84226659805233,"y":163.7575846343691},"dragging":false}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
         __typename: "UpdatePatientFormulation",
       },
     },
@@ -142,7 +164,7 @@ const sut = async () => {
   screen.queryByTestId("activity-indicator");
 };
 
-describe("Formulation list page", () => {
+describe("Formulation detail page", () => {
   beforeEach(() => {
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
@@ -160,7 +182,7 @@ describe("Formulation list page", () => {
       },
     });
   });
-  it("formulation detail", async () => {
+  it("formulation doc", async () => {
     useRouter.mockImplementation(() => ({
       query: {
         id: "46cb932a4c6346268ec4c13009cdd1b6",
@@ -172,15 +194,29 @@ describe("Formulation list page", () => {
     });
   });
 
-  it("check doc formulation", async () => {
+  it("template formulation", async () => {
     useRouter.mockImplementation(() => ({
       query: {
         id: "46cb932a4c6346268ec4c13009cdd1b5",
       },
     }));
     await sut();
-    await waitFor(() => {
+    await waitFor(async () => {
       expect(screen.queryByText("Formulation Detail")).toBeInTheDocument();
+      const subBtn = screen.getByTestId("tableTemplateSubmit");
+      expect(subBtn).toBeInTheDocument();
+      fireEvent.click(subBtn);
+      expect(
+        screen.getByText("Are you sure you want to submit the response?")
+      ).toBeInTheDocument();
+      const confirmBtn = screen.getByTestId("confirmButton");
+      expect(confirmBtn).toBeInTheDocument();
+      fireEvent.click(confirmBtn);
+    });
+    await (async () => {
+      expect(
+        screen.getByText("Your worksheet has been submitted successfully.")
+      ).toBeInTheDocument();
     });
   });
 });
