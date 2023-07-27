@@ -18,11 +18,11 @@ const PatientFormulation: NextPage = () => {
       fetchPolicy: "cache-and-network",
       onCompleted: (data) => {
         /* istanbul ignore next */
-        let list = data.getPatientFormulationList.map((f) => ({
+        let list = data.getPatientFormulationList?.map((f) => ({
           ...f,
           ...f.formulation_data[0],
         }));
-        list = list.map((f) => {
+        list = list?.map((f) => {
           return {
             ...f,
             created_date: moment(f.created_date).format("DD-MM-YYYY"),
