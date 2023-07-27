@@ -3,9 +3,10 @@ import React from "react";
 import Filter from "../../../common/Filter";
 import CommonTable from "../../../common/CommonTable";
 import therapistData from "./data";
+import { TherapistlistEntity } from "../../../../graphql/Therapist/types";
 
 interface ViewProps {
-  listData?: any;
+  listData?: TherapistlistEntity[];
   pageActionButtonClick: (value) => void;
   onPageChange?: (event, newPage) => void;
   tableCurentPage?: number;
@@ -15,11 +16,11 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   loadingTherapistList?: boolean;
   onPressSideButton?: () => void;
-  totalData?: any;
+  totalData?: number;
 }
 
 const TherapistListComponent: React.FC<ViewProps> = ({
-  listData = [],
+  listData,
   pageActionButtonClick,
   onPageChange,
   tableCurentPage,

@@ -224,7 +224,7 @@ export const GET_TOKEN_DATA = gql`
         therapist_specialization
         therapist_status
         therapist_totexp
-        therapit_proofacredition
+        therapist_proofaccredition
         user_id
       }
     }
@@ -320,7 +320,7 @@ export const GET_THERAPIST_TOKEN_DATA = gql`
         therapist_specialization
         therapist_status
         therapist_totexp
-        therapit_proofacredition
+        therapist_proofaccredition
         user_id
       }
     }

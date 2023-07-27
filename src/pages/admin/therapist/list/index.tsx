@@ -9,6 +9,7 @@ import Layout from "../../../../components/layout";
 import { useRouter } from "next/router";
 import TherapistListComponent from "../../../../components/admin/therapist/list/List";
 import { GET_ADMIN_THERAPIST_LIST } from "../../../../graphql/Therapist/graphql";
+import { TherapistListData } from "../../../../graphql/Therapist/types";
 
 const TherapistListPage: NextPage = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const TherapistListPage: NextPage = () => {
   const [searchInputValue, setSearchInputValue] = useState();
   const [paginationTokenList, setPaginationToken] = useState([]);
   const [loader, setLoader] = useState<boolean>(true);
+  const [reachEnd, setReachEnd] = useState<boolean>(false);
 
   const [
     getAdminTherapistList,
@@ -24,7 +26,7 @@ const TherapistListPage: NextPage = () => {
       loading: loadingTherapistList,
       data: { getTherapistList: { therapistlist: listData = [] } = {} } = {},
     },
-  ] = useLazyQuery(GET_ADMIN_THERAPIST_LIST, {
+  ] = useLazyQuery<TherapistListData>(GET_ADMIN_THERAPIST_LIST, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -39,24 +41,26 @@ const TherapistListPage: NextPage = () => {
   }, []);
 
   /* istanbul ignore next */
-  const onPageChange = (event?: any, newPage?: number) => {
+  const onPageChange = (_?: any, newPage?: number) => {
     const searchText =
       searchInputValue && searchInputValue !== ""
         ? { name: searchInputValue }
         : { name: "" };
     const tempNewPage = paginationTokenList[newPage - 1];
-    getAdminTherapistList({
-      variables: {
-        limit: rowsLimit,
-        paginationtoken: tempNewPage,
-        ...searchText,
-      },
-      onCompleted: (data) => {
-        addPaginationToken(data);
-        setLoader(false);
-        setTableCurrentPage(newPage);
-      },
-    });
+    if (tempNewPage)
+      getAdminTherapistList({
+        variables: {
+          limit: rowsLimit,
+          paginationtoken: tempNewPage,
+          ...searchText,
+        },
+        onCompleted: (data) => {
+          if (!reachEnd) addPaginationToken(data);
+
+          setLoader(false);
+          setTableCurrentPage(newPage);
+        },
+      });
   };
 
   const onChangeSearchInput = (e) => {
@@ -79,8 +83,15 @@ const TherapistListPage: NextPage = () => {
 
   const addPaginationToken = (data) => {
     const { getTherapistList: { pagination = undefined } = {} } = data;
-    if (pagination && !paginationTokenList.includes(pagination))
+    if (
+      pagination != null &&
+      pagination &&
+      !paginationTokenList.includes(pagination)
+    ) {
       setPaginationToken([...paginationTokenList, ...[pagination]]);
+    } else {
+      setReachEnd(true);
+    }
   };
 
   const onPressSideButton = () => {
@@ -88,7 +99,12 @@ const TherapistListPage: NextPage = () => {
   };
 
   /* istanbul ignore next */
-  const handleActionButtonClick = () => {
+  const handleActionButtonClick = (value) => {
+    const { user_id, pressedIconButton } = value;
+    if (pressedIconButton === "edit")
+      return router.push(`/admin/therapist/edit/${user_id}`);
+    else if (pressedIconButton === "view")
+      return router.push(`/admin/therapist/view/${user_id}`);
     //action button
   };
 
@@ -101,9 +117,9 @@ const TherapistListPage: NextPage = () => {
           listData={listData}
           onPageChange={onPageChange}
           totalData={
-            listData.length === rowsLimit
+            paginationTokenList.length > tableCurentPage
               ? (tableCurentPage + 2) * rowsLimit
-              : tableCurentPage * rowsLimit
+              : (tableCurentPage + 1) * rowsLimit
           }
           tableCurentPage={tableCurentPage}
           rowsLimit={rowsLimit}

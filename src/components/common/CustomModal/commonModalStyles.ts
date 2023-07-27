@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@mui/system";
 import { useTheme } from "@mui/styles";
 
+/* istanbul ignore next */
 export const commonModalWrapperObj = (theme) => ({
   "& .MuiTypography-root": {
     background: theme.palette.primary.main,
@@ -38,6 +39,7 @@ export const commonModalWrapperObj = (theme) => ({
   },
 });
 
+/* istanbul ignore next */
 export const useStyles = makeStyles(() => {
   const theme = useTheme() as Theme;
   return {
