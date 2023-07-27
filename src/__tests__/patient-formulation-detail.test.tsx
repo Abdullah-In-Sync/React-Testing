@@ -15,6 +15,7 @@ jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
+const pushMock = jest.fn();
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
@@ -194,7 +195,7 @@ describe("Formulation detail page", () => {
     });
   });
 
-  it("template formulation", async () => {
+  it(" submit template formulation", async () => {
     useRouter.mockImplementation(() => ({
       query: {
         id: "46cb932a4c6346268ec4c13009cdd1b5",
@@ -217,6 +218,35 @@ describe("Formulation detail page", () => {
       expect(
         screen.getByText("Your worksheet has been submitted successfully.")
       ).toBeInTheDocument();
+    });
+  });
+
+  it(" cancel template formulation", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "46cb932a4c6346268ec4c13009cdd1b5",
+      },
+      back: pushMock,
+    });
+    await sut();
+    await waitFor(async () => {
+      expect(screen.queryByText("Formulation Detail")).toBeInTheDocument();
+      const cancelBtn = screen.getByTestId("tableTemplateCancel");
+      expect(cancelBtn).toBeInTheDocument();
+      fireEvent.click(cancelBtn);
+      expect(
+        screen.getByText(
+          "Are you sure you want to cancel the response without submitting?"
+        )
+      ).toBeInTheDocument();
+      const confirmBtn = screen.getByTestId("confirmButton");
+      expect(confirmBtn).toBeInTheDocument();
+      fireEvent.click(confirmBtn);
+    });
+    await (async () => {
+      expect(pushMock).toHaveBeenCalledWith(
+        "/patient/therapy/?mainTab=therapy&tab=formulation"
+      );
     });
   });
 });
