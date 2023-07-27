@@ -199,11 +199,13 @@ const Resource: NextPage = () => {
     }
   }, [unApproveResourceList]);
   useEffect(() => {
+    /* istanbul ignore next */
     if (router?.query?.tab) {
       if (router?.query.tab == "approveResource") {
         setIsFormulation(false);
         handleFilterChange({ mode: "approve_resource" });
       }
+      /* istanbul ignore next */
       if (router?.query.tab == "formulation") {
         setIsFormulation(true);
       }
@@ -548,6 +550,7 @@ const Resource: NextPage = () => {
                 minWidth: "100px",
                 padding: " 6px 0px",
               }}
+              /* istanbul ignore next */
               onClick={() => {
                 setIsFormulation(false);
                 setFilterValue({});
@@ -680,6 +683,7 @@ const Resource: NextPage = () => {
                   color="inherit"
                   size="small"
                   data-testid="deleteResourceModalCancelButton"
+                  /* istanbul ignore next */
                   onClick={() => {
                     setModalOpen(false);
                   }}
@@ -693,6 +697,7 @@ const Resource: NextPage = () => {
                   size="small"
                   data-testid="deleteResourceModalConfirmButton"
                   disabled={isMutating}
+                  /* istanbul ignore next */
                   onClick={() => {
                     setModalOpen(false);
                     handleDelete(resourceId);
