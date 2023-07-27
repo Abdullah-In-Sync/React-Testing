@@ -1,13 +1,9 @@
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
 import PatientFormulation from "../components/patient/therapyPages/formulation";
-import {
-  GET_FORMULATION_BY_SHARE_ID,
-  GET_PATIENT_FORMULATION_LIST,
-  UPDATE_PAT_FORMULATION_BY_ID,
-} from "../graphql/formulation/graphql";
+import { GET_PATIENT_FORMULATION_LIST } from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
 
