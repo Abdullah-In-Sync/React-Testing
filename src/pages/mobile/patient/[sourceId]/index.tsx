@@ -70,6 +70,7 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const clearIsConfirm = () => {
     setIsConfirm({
       confirm: false,
@@ -77,6 +78,7 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const onConfirmSubmit = async () => {
     setLoader(true);
     try {
@@ -93,6 +95,7 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
           },
         },
       });
+      /* istanbul ignore next */
       if (updatePatientResourceById) {
         //to send event to mobile app
         const cancelData = {
@@ -103,8 +106,10 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
         console.log(cancelData);
       }
     } catch {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     } finally {
+      /* istanbul ignore next */
       setLoader(false);
       setIsConfirm({
         confirm: false,

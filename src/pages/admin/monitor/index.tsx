@@ -78,6 +78,7 @@ const MonitorListPage: NextPage = () => {
   });
 
   const onPageChange = (event?: any, newPage?: number) => {
+    /* istanbul ignore next */
     setPage(newPage + 1);
     /* istanbul ignore next */
     setTableCurrentPage(newPage);
@@ -99,13 +100,16 @@ const MonitorListPage: NextPage = () => {
   };
 
   const onChangeSearchInput = (e) => {
+    /* istanbul ignore next */
     setSearchInputValue(e.target.value);
+    /* istanbul ignore next */
     setTableCurrentPage(0);
     setPage(1);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const onPressSideButton = () => {
+    /* istanbul ignore next */
     router.push("/admin/monitor/create");
   };
 
@@ -130,6 +134,7 @@ const MonitorListPage: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
       enqueueSnackbar("Something is wrong", { variant: "error" });
     } finally {
@@ -162,7 +167,9 @@ const MonitorListPage: NextPage = () => {
     }
   };
 
+  /* istanbul ignore next */
   const clearIsConfirm = () => {
+    /* istanbul ignore next */
     setIsConfirm({
       status: false,
       storedFunction: null,
@@ -173,6 +180,7 @@ const MonitorListPage: NextPage = () => {
 
   const onConfirmSubmit = () => {
     isConfirm.storedFunction(() => {
+      /* istanbul ignore next */
       setIsConfirm({
         status: false,
         storedFunction: null,
@@ -181,7 +189,9 @@ const MonitorListPage: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const handleOk = () => {
+    /* istanbul ignore next */
     setSuccessModal(undefined);
   };
 

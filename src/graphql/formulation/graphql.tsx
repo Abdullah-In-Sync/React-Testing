@@ -162,11 +162,70 @@ export const GET_PATIENT_FORMULATION_LIST = gql`
   query getPatientFormulationList {
     getPatientFormulationList {
       _id
+      created_date
       formulation_data {
-        _id
         formulation_name
-        created_date
+        download_formulation_url
+        formulation_avail_for
+        formulation_img
+        formulation_returnurl
+        formulation_url
       }
+    }
+  }
+`;
+
+export const UPDATE_PAT_FORMULATION_BY_ID = gql`
+  mutation updatePatFormulationById(
+    $patient_id: String
+    $ptsharresId: ID!
+    $updateShareForm: UpdatePatientFormulationInput
+  ) {
+    updatePatFormulationById(
+      patient_id: $patient_id
+      ptsharresId: $ptsharresId
+      updateShareForm: $updateShareForm
+    ) {
+      _id
+      formulation_id
+      template_id
+      template_response
+    }
+  }
+`;
+
+export const GET_FORMULATION_BY_SHARE_ID = gql`
+  query getFormulationByShareId($ptsharresId: String!, $patient_id: String) {
+    getFormulationByShareId(
+      ptsharresId: $ptsharresId
+      patient_id: $patient_id
+    ) {
+      _id
+      created_date
+      formulation_data {
+        user_id
+        formulation_url
+        formulation_type
+        formulation_status
+        formulation_returnurl
+        formulation_name
+        formulation_instruction
+        formulation_img
+        formulation_desc
+        formulation_avail_for
+        download_formulation_url
+        template_data
+      }
+      template_detail {
+        component_name
+        category
+        name
+      }
+      formulation_id
+      patient_id
+      share_from
+      updated_date
+      template_response
     }
   }
 `;

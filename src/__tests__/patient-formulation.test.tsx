@@ -15,6 +15,7 @@ jest.mock("../contexts/AuthContext");
 
 const mocksData = [];
 
+// formulation list
 mocksData.push({
   request: {
     query: GET_PATIENT_FORMULATION_LIST,
@@ -95,7 +96,6 @@ describe("Formulation list page", () => {
       },
     });
   });
-
   it("Render formulation list", async () => {
     await sut();
 
