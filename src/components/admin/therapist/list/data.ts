@@ -23,6 +23,7 @@ export default {
     {
       id: "actions",
       label: "Actions",
+      addIndex: true,
     },
   ],
 };
