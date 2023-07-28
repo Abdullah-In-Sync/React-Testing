@@ -16,7 +16,7 @@ export const columns = (data, buttons): readonly Column[] => {
       case "actions":
         return (
           <ActionsButtons
-            data={value}
+            data={{ ...value, i }}
             buttonClick={buttonClick}
             buttons={buttons}
           />
