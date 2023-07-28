@@ -142,6 +142,104 @@ export const GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA = gql`
   }
 `;
 
+// export const GET_THERAPIST_NOTES_DATA = gql`
+//   query getPatientNotesData(
+//     $patient_id: String!
+//     $ptsession_id: String!
+//     $pttherapy_id: String!
+//   ) {
+//     getPatientNotesData(
+//       patient_id: $patient_id
+//       ptsession_id: $ptsession_id
+//       pttherapy_id: $pttherapy_id
+//     ) {
+//       _id
+//       created_date
+//       patient_id
+//       patnotes_comments
+//       patnotes_risk_comment
+//       patnotes_status
+//       patnotes_summary
+//       ptsession_id
+//       pttherapy_id
+//       risk_id
+//       therapist_id
+//       topic_id
+//       updated_date
+//     }
+//   }
+// `;
+
+export const GET_THERAPIST_NOTES_DATA = gql`
+  query getPatientNotesData(
+    $patient_id: String!
+    $ptsession_id: String!
+    $pttherapy_id: String!
+  ) {
+    getPatientNotesData(
+      patient_id: $patient_id
+      ptsession_id: $ptsession_id
+      pttherapy_id: $pttherapy_id
+    ) {
+      patientmeasure {
+        _id
+        added_by
+        created_date
+        description
+        patient_id
+        score
+        score_date
+        score_id
+        scores_list {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          session_no
+          status
+          template_data
+          template_id
+        }
+        session_no
+        share_status
+        status
+        template_data
+        template_id
+        therapist_id
+        title
+        updated_date
+      }
+      patientmonitor {
+        _id
+        added_by
+        created_date
+        name
+        org_id
+        patient_id
+        status
+        therapist_id
+        updated_date
+      }
+      patientnotes {
+        _id
+        created_date
+        patient_id
+        patnotes_comments
+        patnotes_risk_comment
+        patnotes_status
+        patnotes_summary
+        ptsession_id
+        pttherapy_id
+        risk_id
+        therapist_id
+        topic_id
+        updated_date
+      }
+    }
+  }
+`;
+
 export const GET_POPUP_RESOURCE_LIST_DATA = gql`
   query getPopupResourceList(
     $disorderId: String

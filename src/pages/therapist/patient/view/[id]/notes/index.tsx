@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLazyQuery } from "@apollo/client";
 import Loader from "../../../../../../components/common/Loader";
 import ContentHeader from "../../../../../../components/common/ContentHeader";
 import { GET_PATIENTSESSION_DATA } from "../../../../../../graphql/query/patient";
 import { Box, Typography } from "@mui/material";
 import { Accordion } from "../../../../../../components/common/Accordion";
+import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
+import { useSnackbar } from "notistack";
+import NotesDetail from "../../../../../../components/therapist/TherapistNotes/NotesDetail";
 
 type propTypes = {
   setTherapy: any;
 };
 
 export default function TherapistNotesList(props: propTypes) {
+  const { enqueueSnackbar } = useSnackbar();
+  const therapyId = props.setTherapy;
+  const onToggle = useRef<any>();
+
   const [loader, setLoader] = useState<boolean>(true);
+  const [isConfirm, setIsConfirm] = useState(false);
 
   const [getPatientSessionData, { data: patientSessionData }] = useLazyQuery(
     GET_PATIENTSESSION_DATA,
@@ -36,9 +44,30 @@ export default function TherapistNotesList(props: propTypes) {
     });
   }, [props.setTherapy]);
 
-  // Take refrence from
-  // Patient safetyPlan src/components/patient/therapyPages/safetyPlan/index.tsx
-  // Therapist homework src/components/therapist/patient/TherapsitHomework/index.tsx
+  const cancelConfirm = () => {
+    /* istanbul ignore next */
+    // onToggle?.current && onToggle.current?.(true);
+    if (onToggle?.current) {
+      onToggle.current(true);
+    }
+
+    setIsConfirm(false);
+    /* istanbul ignore next */
+    enqueueSnackbar("Cancel successfully", {
+      variant: "success",
+    });
+  };
+
+  const cancelFunction = (callBack) => {
+    setIsConfirm(true);
+    onToggle.current = callBack;
+  };
+
+  const clearIsConfirmCancel = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
+
   return (
     <>
       {/* <Layout> */}
@@ -56,8 +85,16 @@ export default function TherapistNotesList(props: propTypes) {
                     key={`according-${v.ptsession_no}`}
                     title={`Session ${v.ptsession_no}`}
                     marginBottom={"20px !important"}
-                    detail={() => {
-                      return <Typography>Work in progress</Typography>;
+                    detail={(toggleAccordion) => {
+                      return (
+                        <NotesDetail
+                          sessionNo={v.ptsession_no}
+                          sessionId={v._id}
+                          therapyId={therapyId}
+                          onCancel={cancelFunction}
+                          toggleAccordion={toggleAccordion}
+                        />
+                      );
                     }}
                   />
                 );
@@ -69,6 +106,14 @@ export default function TherapistNotesList(props: propTypes) {
               )
         }
       </Box>
+
+      {isConfirm && (
+        <ConfirmationModal
+          label="Are you sure you want to cancel without saving?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={cancelConfirm}
+        />
+      )}
     </>
   );
 }

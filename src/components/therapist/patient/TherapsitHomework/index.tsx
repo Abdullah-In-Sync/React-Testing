@@ -26,7 +26,6 @@ const TherapyPatientHomework: any = (props) => {
       },
     }
   );
-  console.log("Koca: patientSessionData ", patientSessionData);
 
   useEffect(() => {
     getPatientSessionData({
