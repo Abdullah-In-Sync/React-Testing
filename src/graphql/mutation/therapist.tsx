@@ -10,6 +10,11 @@ export const ADD_HOMEWORK = gql`
     $pthomework_id: String
     $pthomewrk_resp: String
     $therapist_resp: String
+    $notes_id: String
+    $notes_risk_comment: String
+    $notes_summary: String
+    $risk_id: String
+    $pttherapy_id: String
   ) {
     saveHomeworkTask(
       patient_id: $patient_id
@@ -21,6 +26,12 @@ export const ADD_HOMEWORK = gql`
       pthomework_id: $pthomework_id
       pthomewrk_resp: $pthomewrk_resp
       therapist_resp: $therapist_resp
+
+      notes_id: $notes_id
+      notes_risk_comment: $notes_risk_comment
+      notes_summary: $notes_summary
+      risk_id: $risk_id
+      pttherapy_id: $pttherapy_id
     ) {
       result
     }
