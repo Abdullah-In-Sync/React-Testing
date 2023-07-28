@@ -13,6 +13,10 @@ import Loader from "../../../../components/common/Loader";
 import TemplateArrow from "../../../../components/templateArrow";
 import Cookies from "js-cookie";
 import ConfirmationModal from "../../../../components/common/ConfirmationModal";
+import {
+  GET_FORMULATION_BY_SHARE_ID,
+  UPDATE_PAT_FORMULATION_BY_ID,
+} from "../../../../graphql/formulation/graphql";
 
 const PatientMobileArrowTemplatePage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -28,23 +32,39 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   });
 
   const id = router?.query?.sourceId as string;
+  const isFormulation = router?.query?.isFormulation;
+  const updateKey = isFormulation ? "updateShareForm" : "update";
+  const resKey = isFormulation
+    ? "updatePatFormulationById"
+    : "updatePatientResourceById";
   const [updateResourceTemplateResponse] = useMutation(
-    UPDATE_RESOURCE_TEMPLATE_RESPONSE
+    isFormulation
+      ? UPDATE_PAT_FORMULATION_BY_ID
+      : UPDATE_RESOURCE_TEMPLATE_RESPONSE
   );
 
   const [getPatientResourceTemplate] = useLazyQuery(
-    GET_PATIENT_RESOURCE_TEMPLATE,
+    isFormulation ? GET_FORMULATION_BY_SHARE_ID : GET_PATIENT_RESOURCE_TEMPLATE,
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore else */
-        if (data!.getResourceDetailById) {
-          const resourceDetail = data!.getResourceDetailById[0];
+        if (data?.getResourceDetailById) {
+          const resourceDetail = data?.getResourceDetailById[0];
           if (resourceDetail) {
             /* istanbul ignore else */
             setTemplateDetail(resourceDetail?.template_detail);
             setRecourceData(resourceDetail?.resource_data[0]);
             setTemplateResponse(resourceDetail?.template_response);
+          }
+        }
+        if (data?.getFormulationByShareId) {
+          const formulationDetail = data?.getFormulationByShareId[0];
+          if (formulationDetail) {
+            /* istanbul ignore else */
+            setTemplateDetail(formulationDetail?.template_detail);
+            setRecourceData(formulationDetail?.formulation_data[0]);
+            setTemplateResponse(formulationDetail?.template_response);
           }
         }
         /* istanbul ignore else */
@@ -83,11 +103,11 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     setLoader(true);
     try {
       const {
-        data: { updatePatientResourceById },
+        data: { [resKey]: updatedData },
       } = await updateResourceTemplateResponse({
         variables: {
           ptsharresId: id,
-          update: {
+          [updateKey]: {
             template_response:
               templateDetail.component_name == "ArrowTemplate"
                 ? isConfirm.data
@@ -96,14 +116,14 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
         },
       });
       /* istanbul ignore next */
-      if (updatePatientResourceById) {
+      if (updatedData) {
         //to send event to mobile app
         const cancelData = {
           msg: "",
           type: "success",
-          data: updatePatientResourceById,
+          data: updatedData,
         };
-        console.log(cancelData);
+        console.log(cancelData, "event data");
       }
     } catch {
       /* istanbul ignore next */
