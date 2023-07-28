@@ -15,6 +15,8 @@ type Props = React.PropsWithChildren<{
   activeBoxBorder?: boolean;
   mode?: string;
   headerRightComponent?: any;
+  view?: string;
+  downloadUrl?: string;
 }>;
 
 /* istanbul ignore next */
@@ -28,6 +30,8 @@ const BreadCrumbsWithBackButton = ({
   nexButtonClick,
   mode,
   headerRightComponent,
+  view,
+  downloadUrl,
 }: Props) => {
   const styles = useStyles();
 
@@ -76,6 +80,8 @@ const BreadCrumbsWithBackButton = ({
         activeBoxBorder={activeBoxBorder}
         mode={mode}
         rightComponent={headerRightComponent}
+        view={view}
+        downloadUrl={downloadUrl}
       >
         {children}
       </CardWithHeader>
