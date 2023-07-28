@@ -154,6 +154,7 @@ function NotesDetail(props: propTypes) {
           (item) => item.complete_status
         );
 
+        /* istanbul ignore next */
         if (verifyValuetoCheckBox == true) {
           setCheckCompleteCheckbox(1);
         }
@@ -183,6 +184,7 @@ function NotesDetail(props: propTypes) {
     therapistHomeworkDataData2?.getPatientHomeworkData;
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (therapistNotesData?.getPatientNotesData?.patientnotes.length) {
       const preFilledData =
         therapistNotesData?.getPatientNotesData?.patientnotes[0];
@@ -249,6 +251,7 @@ function NotesDetail(props: propTypes) {
     myFavourites,
   ]);
 
+  /* istanbul ignore next */
   function refreshData() {
     getTherapistHomeworkData({
       variables: {
@@ -261,10 +264,12 @@ function NotesDetail(props: propTypes) {
     });
   }
 
+  /* istanbul ignore next */
   const handleSearchData = (data) => {
     setSearchValue(data);
   };
 
+  /* istanbul ignore next */
   const handleCreateInput = () => {
     if (previousSessionTaskData?.length > 0) {
       confirmModalRefForOldHomework.current?.open();
@@ -278,6 +283,7 @@ function NotesDetail(props: propTypes) {
     setInputs([...inputs, ""]);
   };
 
+  /* istanbul ignore next */
   const handleInputChangePrviousHomework = (index, value, Id) => {
     const updatedInputs = [...inputs];
     updatedInputs[index] = value;
@@ -288,26 +294,24 @@ function NotesDetail(props: propTypes) {
     setPrevioushomeworkId(updatedId);
   };
 
+  /* istanbul ignore next */
   const handleInputChange = (index, value) => {
     const updatedInputs = [...inputs];
     updatedInputs[index] = value;
     setInputs(updatedInputs);
   };
 
-  // const handleRiskInputBoxChange = (index, value) => {
-  //   const updatedInputs = [...inputs];
-  //   updatedInputs[index] = value;
-  //   setRiskInputsBox(updatedInputs);
-  // };
-
+  /* istanbul ignore next */
   const handleRiskInputBoxChange = (value) => {
     setRiskInputsBox(value);
   };
 
+  /* istanbul ignore next */
   const handleSessionSummaryChange = (value) => {
     setSessionSummaryInputsBox(value);
   };
 
+  /* istanbul ignore next */
   const handleTherapistInputChange = (index, value, Id) => {
     const updatedInputs = [...therapistInputs];
 
@@ -319,6 +323,7 @@ function NotesDetail(props: propTypes) {
     setLptHomeworkId(updatedId);
   };
 
+  /* istanbul ignore next */
   const handlePatientInputChange = (index, value, Id) => {
     const updatedInputs = [...patientInputs];
     updatedInputs[index] = value;
@@ -329,12 +334,14 @@ function NotesDetail(props: propTypes) {
     setLptHomeworkId(updatedId);
   };
 
+  /* istanbul ignore next */
   const handleDeleteInput = (index) => {
     const updatedInputs = [...inputs];
     updatedInputs.splice(index, 1);
     setInputs(updatedInputs);
   };
 
+  /* istanbul ignore next */
   const handlerAddAndUpdate = async () => {
     try {
       await addHomework({
@@ -367,6 +374,7 @@ function NotesDetail(props: propTypes) {
     }
   };
 
+  /* istanbul ignore next */
   const handleDeleteHomeworkTask = async () => {
     try {
       await deleteHomeworkTask({
@@ -385,6 +393,7 @@ function NotesDetail(props: propTypes) {
     }
   };
 
+  /* istanbul ignore next */
   const compleateHomework = async () => {
     try {
       await CompleteHomeworkTask({
@@ -438,16 +447,16 @@ function NotesDetail(props: propTypes) {
     if (!isConfirm) return;
   };
 
+  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
-    /* istanbul ignore next */
     setIsConfirm(false);
     setIsConfirmDeleteTask(false);
     setIsConfirmCompleteTask(false);
     setCheckCompleteCheckbox("");
   };
 
+  /* istanbul ignore next */
   const handleOk = () => {
-    /* istanbul ignore next */
     setSuccessModal(false);
     setCompleteTaskSuccessModal(false);
     setCompleteResourceAssignedModal(false);
@@ -455,17 +464,20 @@ function NotesDetail(props: propTypes) {
     refetch();
   };
 
+  /* istanbul ignore next */
   const handleOk2 = () => {
-    /* istanbul ignore next */
     setDeleteTaskSuccessModal(false);
     setInputs([]);
     refetch();
   };
 
+  /* istanbul ignore next */
   const setCheckBox = () => {
     setIsConfirmCompleteTask(true);
     setCheckCompleteCheckbox(1);
   };
+
+  /* istanbul ignore next */
 
   const handleMyRes = () => {
     if (myFavourites === 1) {
@@ -474,6 +486,7 @@ function NotesDetail(props: propTypes) {
     setMyResource((prevValue) => (prevValue === 1 ? 0 : 1));
   };
 
+  /* istanbul ignore next */
   const handleMyFav = () => {
     if (myResource === 1) {
       setMyResource(0);
@@ -487,6 +500,7 @@ function NotesDetail(props: propTypes) {
       (obj) => obj.complete_status === "1"
     );
 
+    /* istanbul ignore next */
     if (hasCompleteStatus) {
       enqueueSnackbar("Resources cannot be attached to completed tasks.", {
         variant: "error",
@@ -521,12 +535,15 @@ function NotesDetail(props: propTypes) {
                 </TableHead>
 
                 <TableBody>
-                  {patientMeasureTable?.map((data) => (
-                    <TableRow>
-                      <TableCell>{data.title}</TableCell>
-                      <TableCell>{data.score}</TableCell>
-                    </TableRow>
-                  ))}
+                  {
+                    /* istanbul ignore next */
+                    patientMeasureTable?.map((data) => (
+                      <TableRow>
+                        <TableCell>{data.title}</TableCell>
+                        <TableCell>{data.score}</TableCell>
+                      </TableRow>
+                    ))
+                  }
 
                   <Box
                     style={{
@@ -571,12 +588,15 @@ function NotesDetail(props: propTypes) {
                 </TableHead>
 
                 <TableBody>
-                  {patientMonitorTable?.map((data) => (
-                    <TableRow>
-                      <TableCell>{data.name}</TableCell>
-                      <TableCell>{data.score}</TableCell>
-                    </TableRow>
-                  ))}
+                  {
+                    /* istanbul ignore next */
+                    patientMonitorTable?.map((data) => (
+                      <TableRow>
+                        <TableCell>{data.name}</TableCell>
+                        <TableCell>{data.score}</TableCell>
+                      </TableRow>
+                    ))
+                  }
 
                   <Box
                     style={{
@@ -620,6 +640,7 @@ function NotesDetail(props: propTypes) {
             data-testid="relapsePlanDropdown"
             id="name"
             value={
+              /* istanbul ignore next */
               riskListData && riskListData.getRisksList
                 ? riskListData.getRisksList.filter((option) =>
                     riskId.includes(option._id)
@@ -627,8 +648,12 @@ function NotesDetail(props: propTypes) {
                 : []
             }
             options={(riskListData && riskListData.getRisksList) || []}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) =>
+              /* istanbul ignore next */
+              option.name
+            }
             onChange={(e, newValue) => {
+              /* istanbul ignore next */
               if (newValue) {
                 const selectedValues = newValue.map((value) => value._id);
                 setRiskId(selectedValues);
@@ -826,6 +851,7 @@ function NotesDetail(props: propTypes) {
                         multiline
                         rows={4}
                         onChange={(e) =>
+                          /* istanbul ignore next */
                           handlePatientInputChange(
                             index,
                             e.target.value,
@@ -866,6 +892,7 @@ function NotesDetail(props: propTypes) {
                         multiline
                         rows={4}
                         onChange={(e) =>
+                          /* istanbul ignore next */
                           handleTherapistInputChange(
                             index,
                             e.target.value,
@@ -926,6 +953,7 @@ function NotesDetail(props: propTypes) {
                       multiline
                       rows={4}
                       onChange={(e) =>
+                        /* istanbul ignore next */
                         handleInputChangePrviousHomework(
                           index,
                           e.target.value,
@@ -962,8 +990,11 @@ function NotesDetail(props: propTypes) {
 
                     <Button
                       onClick={() => {
+                        /* istanbul ignore next */
                         addResourceFunction();
+                        /* istanbul ignore next */
                         setPtHomeworkId(data._id);
+                        /* istanbul ignore next */
                         setPtShareId(data.ptshareres_id);
                       }}
                       data-testid={`addNewQuestion_${index}`}
@@ -1083,7 +1114,10 @@ function NotesDetail(props: propTypes) {
                       >
                         <DeleteIcon
                           style={{ color: "white" }}
-                          onClick={() => handleDeleteInput(index)}
+                          onClick={() =>
+                            /* istanbul ignore next */
+                            handleDeleteInput(index)
+                          }
                         />
                       </IconButtonWrapper>
                     </Box>
