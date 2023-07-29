@@ -21,6 +21,7 @@ export interface TherapistlistEntity {
   specialization: string;
   therapist_id: string;
   user_id: string;
+  therapist_status?: number;
 }
 
 export interface TherapistData {

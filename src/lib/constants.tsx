@@ -86,3 +86,8 @@ export const shareResourceAvailability = {
   allTherapist: 1,
   onlyMe: 2,
 };
+
+export const blockUnblockText = {
+  1: "Unblocked",
+  0: "Blocked",
+};

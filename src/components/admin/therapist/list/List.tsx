@@ -4,6 +4,9 @@ import Filter from "../../../common/Filter";
 import CommonTable from "../../../common/CommonTable";
 import therapistData from "./data";
 import { TherapistlistEntity } from "../../../../graphql/Therapist/types";
+import ConfirmWrapper from "../../../common/ConfirmWrapper";
+import { Stack } from "@mui/material";
+import { useStyles } from "./listStyles";
 
 interface ViewProps {
   listData?: TherapistlistEntity[];
@@ -17,6 +20,7 @@ interface ViewProps {
   loadingTherapistList?: boolean;
   onPressSideButton?: () => void;
   totalData?: number;
+  confirmRef?: any;
 }
 
 const TherapistListComponent: React.FC<ViewProps> = ({
@@ -30,9 +34,11 @@ const TherapistListComponent: React.FC<ViewProps> = ({
   loadingTherapistList,
   onPressSideButton,
   totalData,
+  confirmRef,
 }) => {
+  const styles = useStyles();
   return (
-    <>
+    <ConfirmWrapper ref={confirmRef}>
       <Filter
         searchInputValue={searchInputValue}
         onChangeSearchInput={onChangeSearchInput}
@@ -40,34 +46,37 @@ const TherapistListComponent: React.FC<ViewProps> = ({
         onPressSideButton={onPressSideButton}
         hidePlanType
       />
-      <CommonTable
-        data={{ list: listData, total: totalData }}
-        pageActionButtonClick={pageActionButtonClick}
-        onPageChange={onPageChange}
-        actionButton={[
-          {
-            id: "view",
-            icon: require("@mui/icons-material/Visibility").default,
-          },
-          {
-            id: "edit",
-            icon: require("@mui/icons-material/Edit").default,
-          },
-          {
-            id: "delete",
-            icon: require("@mui/icons-material/DeleteSharp").default,
-          },
-          {
-            id: "block",
-            icon: require("@mui/icons-material/Block").default,
-          },
-        ]}
-        tableCurentPage={tableCurentPage}
-        rowsLimit={rowsLimit}
-        loading={loadingTherapistList}
-        headerData={therapistData.therapistListHeader}
-      />
-    </>
+      <Stack className={styles.tableWrapper}>
+        <CommonTable
+          data={{ list: listData, total: totalData }}
+          pageActionButtonClick={pageActionButtonClick}
+          onPageChange={onPageChange}
+          actionButton={[
+            {
+              id: "view",
+              icon: require("@mui/icons-material/Visibility").default,
+            },
+            {
+              id: "edit",
+              icon: require("@mui/icons-material/Edit").default,
+            },
+            {
+              id: "delete",
+              icon: require("@mui/icons-material/DeleteSharp").default,
+            },
+            {
+              id: "block",
+              icon: require("@mui/icons-material/Block").default,
+              isActive: "therapist_status",
+            },
+          ]}
+          tableCurentPage={tableCurentPage}
+          rowsLimit={rowsLimit}
+          loading={loadingTherapistList}
+          headerData={therapistData.therapistListHeader}
+        />
+      </Stack>
+    </ConfirmWrapper>
   );
 };
 

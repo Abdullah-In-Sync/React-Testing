@@ -3,6 +3,7 @@ import ActionsButtons from "./ActionsButtons";
 
 interface Column {
   id: string;
+  addIndex?: boolean;
   label: string;
   minWidth?: number;
   align?: "center";
@@ -11,12 +12,12 @@ interface Column {
 
 export const columns = (data, buttons): readonly Column[] => {
   const tableBodyCell = (value, buttonClick, item, i) => {
-    const { id } = item;
+    const { id, addIndex } = item;
     switch (id) {
       case "actions":
         return (
           <ActionsButtons
-            data={value}
+            data={{ ...value, ...(addIndex ? { i } : {}) }}
             buttonClick={buttonClick}
             buttons={buttons}
           />

@@ -19,6 +19,7 @@ export const GET_ADMIN_THERAPIST_LIST = gql`
         specialization
         therapist_id
         user_id
+        therapist_status
       }
     }
   }
@@ -120,6 +121,15 @@ export const UPDATE_THERAPIST_BY_ID = gql`
     ) {
       _id
       user_id
+    }
+  }
+`;
+
+export const DELETE_THERAPIST_BY_ID = gql`
+  mutation DeleteTherapist($therapist_id: String!) {
+    deleteTherapist(therapist_id: $therapist_id) {
+      message
+      result
     }
   }
 `;
