@@ -150,7 +150,7 @@ export default function AddPatientForm(props: propTypes) {
 
       {isConfirmSubmit && (
         <ConfirmationModal
-          label="Are you sure you want to create the assessment?"
+          label="Are you sure you want to add this patient?"
           onCancel={clearIsConfirmCancel}
           onConfirm={() => handleCreatePatient(formFields)}
         />

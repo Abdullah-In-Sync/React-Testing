@@ -35,7 +35,7 @@ const TherapistPatientListPage: NextPage = () => {
   const [isConfirm, setIsConfirm] = useState(false);
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [paginationTokenList, setPaginationToken] = useState([]);
-  const [createAssessment] = useMutation(THERAPIST_ADD_PATIENT);
+  const [createPatient] = useMutation(THERAPIST_ADD_PATIENT);
   const [deletePatient] = useMutation(THERAPIST_DELETE_PATIENT);
 
   useEffect(() => {
@@ -94,18 +94,28 @@ const TherapistPatientListPage: NextPage = () => {
   /* istanbul ignore next */
   const handleCreatePatient = async (formFields) => {
     try {
-      await createAssessment({
+      await createPatient({
         variables: {
           email: formFields.email,
           patient_firstname: formFields.patient_firstname,
           patient_lastname: formFields.patient_lastname,
           phone_number: formFields.phone_number,
         },
-        onCompleted: () => {
+        onCompleted: (data) => {
           handleCloseAddPatientModal();
-          enqueueSnackbar("Patient added successfully!", {
-            variant: "success",
-          });
+          if (data.addPatient.result === "error") {
+            enqueueSnackbar(
+              "An account with this email address alreeay exists",
+              {
+                variant: "error",
+              }
+            );
+          } else {
+            enqueueSnackbar("Patient added successfully!", {
+              variant: "success",
+            });
+          }
+
           refetch();
         },
       });

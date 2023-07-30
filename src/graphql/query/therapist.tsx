@@ -142,34 +142,6 @@ export const GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA = gql`
   }
 `;
 
-// export const GET_THERAPIST_NOTES_DATA = gql`
-//   query getPatientNotesData(
-//     $patient_id: String!
-//     $ptsession_id: String!
-//     $pttherapy_id: String!
-//   ) {
-//     getPatientNotesData(
-//       patient_id: $patient_id
-//       ptsession_id: $ptsession_id
-//       pttherapy_id: $pttherapy_id
-//     ) {
-//       _id
-//       created_date
-//       patient_id
-//       patnotes_comments
-//       patnotes_risk_comment
-//       patnotes_status
-//       patnotes_summary
-//       ptsession_id
-//       pttherapy_id
-//       risk_id
-//       therapist_id
-//       topic_id
-//       updated_date
-//     }
-//   }
-// `;
-
 export const GET_THERAPIST_NOTES_DATA = gql`
   query getPatientNotesData(
     $patient_id: String!
@@ -220,6 +192,24 @@ export const GET_THERAPIST_NOTES_DATA = gql`
         status
         therapist_id
         updated_date
+        patientmonitor_ans {
+          _id
+          answer
+          created_date
+          monitor_id
+          question_id
+        }
+        patientmonitor_ques {
+          _id
+          answer
+          created_date
+          monitor_id
+          question
+          question_option
+          question_type
+          status
+          updated_date
+        }
       }
       patientnotes {
         _id
