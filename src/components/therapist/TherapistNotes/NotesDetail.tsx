@@ -43,12 +43,11 @@ import {
 import ConfirmBoxModal from "../../common/ConfirmBoxModal";
 import { ModalElement } from "../../common/CustomModal/CommonModal";
 import { useAppContext } from "../../../contexts/AuthContext";
-
 import { useStyles } from "../../common/AddQuestionsBox/addQuestionsBoxStyles";
 import ResourcePopup from "../patient/TherapsitHomework/resourcePopup";
-
 import { GET_RISKS_LIST } from "../../../graphql/assessment/graphql";
 import { Box } from "@material-ui/core";
+import Emoji from "../../common/Emoji";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -525,44 +524,68 @@ function NotesDetail(props: propTypes) {
                   }}
                 >
                   <TableRow>
-                    <TableCell style={{ color: "white" }}>
+                    <TableCell style={{ color: "white", padding: "16px" }}>
                       Measure Name
                     </TableCell>
-                    <TableCell style={{ color: "white" }}>
+                    <TableCell style={{ color: "white", padding: "16px" }}>
                       Current Score
                     </TableCell>
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
-                  {
-                    /* istanbul ignore next */
-                    patientMeasureTable?.map((data) => (
-                      <TableRow>
-                        <TableCell>{data.title}</TableCell>
-                        <TableCell>{data.score}</TableCell>
-                      </TableRow>
-                    ))
-                  }
+                {
+                  /* istanbul ignore next */
 
-                  <Box
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      textDecoration: "underline",
-                      paddingLeft: "200px",
-                    }}
-                  >
-                    <Typography
-                      style={{
-                        color: "#6EC9DB",
-                      }}
-                    >
-                      View More
-                    </Typography>
-                  </Box>
-                </TableBody>
+                  patientMeasureTable && patientMeasureTable.length > 0 ? (
+                    <TableBody>
+                      {
+                        /* istanbul ignore next */
+
+                        patientMeasureTable.map((data) => (
+                          <TableRow key={data.title}>
+                            <TableCell style={{ padding: "18px" }}>
+                              {data.title}
+                            </TableCell>
+                            <TableCell style={{ padding: "18px" }}>
+                              {data.score}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      }
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          textAlign: "center",
+                          paddingLeft: "200px",
+                          paddingBottom: "10px",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        <Typography
+                          style={{
+                            color: "#6EC9DB",
+                            borderBottom: "1px solid #6EC9DB",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          View more
+                        </Typography>
+                      </Box>
+                    </TableBody>
+                  ) : (
+                    <TableBody>
+                      <TableRow>
+                        <TableCell
+                          colSpan={2}
+                          style={{ padding: "18px", textAlign: "center" }}
+                        >
+                          No data found
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  )
+                }
               </Table>
             </TableContainer>
           </Grid>
@@ -587,37 +610,107 @@ function NotesDetail(props: propTypes) {
                   </TableRow>
                 </TableHead>
 
-                <TableBody>
-                  {
-                    /* istanbul ignore next */
-                    patientMonitorTable?.map((data) => (
-                      <TableRow>
-                        <TableCell>{data.name}</TableCell>
-                        <TableCell>{data.score}</TableCell>
-                      </TableRow>
-                    ))
-                  }
+                {
+                  /* istanbul ignore next */
+                  patientMonitorTable && patientMonitorTable.length > 0 ? (
+                    <TableBody>
+                      {
+                        /* istanbul ignore next */
+                        patientMonitorTable.map((data) => {
+                          console.log("Monitor table data ", data);
+                          const questionOptions =
+                            data?.patientmonitor_ques?.question_option;
 
-                  <Box
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      textDecoration: "underline",
-                      paddingLeft: "200px",
-                    }}
-                  >
-                    <Typography
-                      style={{
-                        color: "#6EC9DB",
-                      }}
-                    >
-                      View More
-                    </Typography>
-                  </Box>
-                </TableBody>
+                          if (!questionOptions) {
+                            console.log("Question options not available.");
+                            return null;
+                          }
+
+                          let code = null;
+                          let text = null;
+
+                          try {
+                            const parsedQuestionOptions =
+                              JSON.parse(questionOptions);
+                            const matchingOption = parsedQuestionOptions.find(
+                              (option) =>
+                                option.text === data?.patientmonitor_ans?.answer
+                            );
+
+                            if (matchingOption) {
+                              code = matchingOption.code;
+                              text = matchingOption.text;
+                            }
+                          } catch (error) {
+                            console.error(
+                              "Error parsing question options JSON:",
+                              error
+                            );
+                            return null;
+                          }
+
+                          return (
+                            <TableRow key={data.name}>
+                              <TableCell>{data.name}</TableCell>
+                              <TableCell>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Emoji unified={code} size={20} />
+                                  <span
+                                    style={{
+                                      marginLeft: "5px",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    {text}
+                                  </span>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                      }
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          textAlign: "center",
+                          paddingLeft: "200px",
+                          paddingBottom: "10px",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        <Typography
+                          style={{
+                            color: "#6EC9DB",
+                            borderBottom: "1px solid #6EC9DB",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          View more
+                        </Typography>
+                      </Box>
+                    </TableBody>
+                  ) : (
+                    <TableBody>
+                      <TableRow>
+                        <TableCell
+                          style={{ padding: "18px", textAlign: "center" }}
+                          colSpan={2}
+                        >
+                          No data found
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  )
+                }
               </Table>
             </TableContainer>
+            ;
           </Grid>
         </Grid>
 
