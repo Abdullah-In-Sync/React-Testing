@@ -14,7 +14,7 @@ import {
 } from "../../../../../graphql/formulation/graphql";
 import PatientFormulationTemplateEdit from "../../../../../components/patient/formulation/edit";
 import ConfirmationModal from "../../../../../components/common/ConfirmationModal";
-import TemplatePopupView from "../../../../../components/common/popupViewTemplate /templatePopupView";
+import TemplatePopupView from "../../../../../components/common/popupViewTemplate/templatePopupView";
 
 const PatientEditTemplatePage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
