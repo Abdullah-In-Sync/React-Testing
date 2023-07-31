@@ -1,32 +1,16 @@
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import BadgeIcon from "@mui/icons-material/Badge";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import ChatIcon from "@mui/icons-material/Chat";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
-import CorporateFareIcon from "@mui/icons-material/CorporateFare";
-import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
-import DescriptionIcon from "@mui/icons-material/Description";
-import DifferenceIcon from "@mui/icons-material/Difference";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
-import FilePresentIcon from "@mui/icons-material/FilePresent";
+import FeedbackIcon from "@mui/icons-material/Feedback";
+import GroupsIcon from "@mui/icons-material/Groups";
+import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 import HomeIcon from "@mui/icons-material/Home";
-import InventoryIcon from "@mui/icons-material/Inventory";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
+import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
+import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined";
 import PersonIcon from "@mui/icons-material/Person";
-import SettingsIcon from "@mui/icons-material/Settings";
-import StraightenIcon from "@mui/icons-material/Straighten";
-import StyleIcon from "@mui/icons-material/Style";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 import TungstenIcon from "@mui/icons-material/Tungsten";
 
-import { Link } from "../lib/helpers/common";
+import { SpaOutlined } from "@mui/icons-material";
 
 type RoutesType =
   | {
@@ -51,155 +35,63 @@ export const superadmin_routes: RoutesType[] = [
   {
     key: 1,
     label: "Home",
-    path: Link + "/superadmin/dashboard",
+    path: "/admin/dashboard",
     icon: <HomeIcon />,
   },
-  [
-    {
-      key: 2,
-      label: "Hospital",
-      path: Link + "/superadmin/hospital/list",
-      icon: <ApartmentIcon />,
-    },
-    {
-      key: 3,
-      label: "Therapist",
-      path: "/admin/therapist/list",
-      icon: <PersonIcon />,
-    },
-  ],
+  {
+    key: 2,
+    label: "Organization",
+    path: "/admin/organization/list",
+    icon: <GroupsIcon />, //<Diversity3Icon />,
+  },
+  {
+    key: 3,
+    label: "Therapist",
+    path: "/admin/therapist/list",
+    icon: <PsychologyIcon />,
+  },
   {
     key: 4,
-    label: "Package",
-    path: Link + "/superadmin/package/list",
-    icon: <PersonIcon />,
+    label: "Library",
+    path: "/admin/resource",
+    icon: <LibraryBooksIcon />,
   },
   {
     key: 5,
-    label: "Organization",
-    path: "/admin/organization/list",
-    icon: <CorporateFareIcon />,
+    label: "Assesment",
+    path: "/admin/assessment",
+    icon: <MedicalInformationOutlinedIcon />,
   },
   {
     key: 6,
-    label: "Therapies",
-    path: Link + "/superadmin/therapies",
-    icon: <PersonIcon />,
+    label: "Relapse",
+    path: "/admin/relapsePlan",
+    icon: <TungstenIcon />,
   },
-  [
-    {
-      key: 7,
-      label: "Users",
-      path: Link + "/superadmin/users/list",
-      icon: <PersonIcon />,
-    },
-    {
-      key: 8,
-      label: "Library",
-      path: Link + "/v2/admin/resource",
-      icon: <LibraryBooksIcon />,
-    },
-    {
-      key: 15,
-      label: "Assesment",
-      path: "/admin/assessment",
-      icon: <EqualizerIcon />,
-    },
-    {
-      key: 9,
-      label: "Formulation",
-      path: Link + "/superadmin/formulationmodel",
-      icon: <FactCheckIcon />,
-    },
-  ],
+  {
+    key: 7,
+    label: "Safety Plan",
+    path: "/admin/safetyPlan/",
+    icon: <HealthAndSafetyOutlinedIcon />,
+  },
+  {
+    key: 8,
+    label: "Measures",
+    path: "/admin/measures",
+    icon: <EqualizerIcon />,
+  },
+  {
+    key: 9,
+    label: "Monitors",
+    path: "/admin/monitor",
+    icon: <MonitorOutlinedIcon />,
+  },
   {
     key: 10,
-    label: "Risks",
-    path: Link + "/superadmin/risks/list",
-    icon: <CrisisAlertIcon />,
+    label: "Feedback",
+    path: "/admin/feedback",
+    icon: <FeedbackIcon />,
   },
-  {
-    key: 11,
-    label: "Keywords",
-    path: Link + "/superadmin/keywords/list",
-    icon: <StyleIcon />,
-  },
-  [
-    {
-      key: 12,
-      label: "Clinical Analysis",
-      path: Link + "/superadmin/clinical-analysis",
-      icon: <MedicalInformationIcon />,
-    },
-    {
-      key: 13,
-      label: "Safety Plan",
-      path: "/admin/safetyPlan/",
-      icon: <BadgeIcon />,
-    },
-    {
-      key: 14,
-      label: "Measures",
-      path: "/admin/measures",
-      icon: <StraightenIcon />,
-    },
-    {
-      key: 15,
-      label: "Monitor",
-      path: "/admin/monitor",
-      icon: <EqualizerIcon />,
-    },
-    {
-      key: 16,
-      label: "Feedback",
-      path: Link + "/v2/admin/feedback",
-      icon: <ThumbUpAltIcon />,
-    },
-    {
-      key: 17,
-      label: "Agenda",
-      path: Link + "/superadmin/agenda/list",
-      icon: <AppRegistrationIcon />,
-    },
-    {
-      key: 18,
-      label: "Contacts",
-      path: Link + "/superadmin/contact/list",
-      icon: <ContactPhoneIcon />,
-    },
-    {
-      key: 19,
-      label: "Diary",
-      path: Link + "/superadmin/diary/list",
-      icon: <AutoStoriesIcon />,
-    },
-    {
-      key: 20,
-      label: "CPD",
-      path: Link + "/superadmin/cpd/list",
-      icon: <DifferenceIcon />,
-    },
-  ],
-  {
-    key: 21,
-    label: "File",
-    path: Link + "/superadmin/patientfiles",
-    icon: <FilePresentIcon />,
-  },
-  [
-    {
-      key: 22,
-      label: "TODOs",
-      path: Link + "/superadmin/patienttodo",
-      icon: <ListAltIcon />,
-    },
-    {
-      key: 23,
-      label: "Relapse",
-      path: "/admin/relapsePlan",
-      icon: <TungstenIcon />,
-    },
-  ],
 ];
 
 //** THERAPIST ROUTES **//
@@ -212,59 +104,16 @@ export const therapistRoutes: RoutesType[] = [
   },
   {
     key: 2,
-    label: "Calendar",
-    path: Link + "/therapist/calendar",
-    icon: <CalendarMonthIcon />,
-  },
-  {
-    key: 3,
     label: "Patients",
     // path: Link + "/therapist/patient/list",
     path: "/therapist/patientlist",
-
-    icon: <PersonIcon />,
+    icon: <GroupsIcon />,
   },
   {
     key: 4,
     label: "Library",
-    path: Link + "/v2/therapist/resource",
+    path: "/therapist/resource",
     icon: <LibraryBooksIcon />,
-  },
-  {
-    key: 5,
-    label: "Connect",
-    path: Link + "/therapist/communication",
-    icon: <ConnectWithoutContactIcon />,
-  },
-  {
-    key: 6,
-    label: "Contacts",
-    path: Link + "/therapist/contact/list",
-    icon: <ContactPhoneIcon />,
-  },
-  {
-    key: 7,
-    label: "Diary",
-    path: Link + "/therapist/diary/list",
-    icon: <DescriptionIcon />,
-  },
-  {
-    key: 8,
-    label: "CPD",
-    path: Link + "/therapist/cpd/list",
-    icon: <DifferenceIcon />,
-  },
-  {
-    key: 9,
-    label: "Packages",
-    path: Link + "/therapist/packages",
-    icon: <InventoryIcon />,
-  },
-  {
-    key: 10,
-    label: "Settings",
-    path: Link + "/therapist/settings",
-    icon: <SettingsIcon />,
   },
 ];
 
@@ -305,32 +154,17 @@ export const patient_routes: RoutesType[] = [
   },
   {
     key: 3,
-    label: "Appointments",
-    path: Link + "/patient/appointments",
-    icon: <CalendarMonthIcon />,
-    type: "APPOINTMENT",
-  },
-  {
-    key: 6,
     label: "Assessment",
     path: "/patient/assessment",
-    icon: <CalendarMonthIcon />,
+    icon: <MedicalInformationOutlinedIcon />,
     type: "APPOINTMENT",
   },
-
   {
     key: 4,
     label: "Therapy",
     path: "/patient/therapy/?mainTab=therapy&tab=safety-plan",
-    icon: <NewspaperIcon />,
+    icon: <SpaOutlined />,
     type: "THERAPY",
-  },
-  {
-    key: 5,
-    label: "Communication",
-    path: Link + "/patient/communication/1",
-    icon: <ChatIcon />,
-    type: "COMMUNICATION",
   },
 ];
 

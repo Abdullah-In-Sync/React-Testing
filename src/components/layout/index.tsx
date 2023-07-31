@@ -16,12 +16,14 @@ interface SidebarLayoutProps {
   boxStyle?: object;
   cardStyle?: object;
   cardClass?: string;
+  cardWrapper?: object;
 }
 
 const Layout: FC<SidebarLayoutProps> = ({
   children,
   boxStyle,
   cardClass = "",
+  cardWrapper = {},
 }) => {
   const theme = useTheme();
 
@@ -60,7 +62,11 @@ const Layout: FC<SidebarLayoutProps> = ({
             ...boxStyle,
           }}
         >
-          <Box display="block" style={wrapper} className={cardClass}>
+          <Box
+            display="block"
+            style={{ ...wrapper, ...cardWrapper }}
+            className={cardClass}
+          >
             {children}
           </Box>
           <Footer />
