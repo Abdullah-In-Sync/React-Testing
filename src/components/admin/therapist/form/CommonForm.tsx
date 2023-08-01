@@ -198,7 +198,7 @@ const CommonForm: React.FC<ViewProps> = ({
           <Box />
         </Box>
         <Box className="fieldsBoxWrapperFirst">
-          {Boolean(therapist_proofaccredition) && (
+          {therapist_poa_attachment && Boolean(therapist_proofaccredition) && (
             <Box className="chooseFileWrapper">
               <label className="uploadButtonLabel">
                 Attach proof of Accreditation:
@@ -208,10 +208,12 @@ const CommonForm: React.FC<ViewProps> = ({
               </Typography>
             </Box>
           )}
-          <Box className="chooseFileWrapper">
-            <label className="uploadButtonLabel">Insurance Cover:</label>
-            <Typography className="fileName">{therapist_inscover}</Typography>
-          </Box>
+          {therapist_inscover && (
+            <Box className="chooseFileWrapper">
+              <label className="uploadButtonLabel">Insurance Cover:</label>
+              <Typography className="fileName">{therapist_inscover}</Typography>
+            </Box>
+          )}
           <Box />
         </Box>
         {/* sixth row */}

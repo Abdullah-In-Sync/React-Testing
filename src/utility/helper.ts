@@ -123,3 +123,8 @@ export const cogMessageToJson = (message) => {
     });
   return tempJson;
 };
+
+export const firstLetterCapital = (value) => {
+  if (value) return value.charAt(0).toUpperCase() + value.slice(1);
+  else return "";
+};

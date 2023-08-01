@@ -24,31 +24,41 @@ mocksData.push({
   request: {
     query: GET_ADMIN_THERAPIST_LIST,
     variables: {
-      name: "",
-      paginationtoken: "",
+      searchText: "",
+      pageNo: 1,
       limit: 10,
     },
   },
   result: {
     data: {
       getTherapistList: {
-        pagination: "pagination_token_text",
+        total: "65",
         therapistlist: [
           {
-            name: "Dodctor",
-            phone_number: "+448989898989",
-            specialization: "Psychodynamic(Psychoanalytic) Psychotheraphy",
-            therapist_id: "tharapist_id_1",
-            user_id: "user_id_1",
-            therapist_status: 0,
-          },
-          {
-            name: "Rahul Therapist 80",
-            phone_number: "+44896745343235",
-            specialization: "Person Centred",
-            therapist_id: "tharapist_id_2",
-            user_id: "user_id_2",
+            _id: "tharapist_id_1",
+            therapist_name: "Dodctor",
             therapist_status: 1,
+            plan: "free",
+            user_id: "user_id_1",
+            org_data: [
+              {
+                name: "portal.dev-myhelp",
+                _id: "org_id_1",
+              },
+            ],
+          },
+          {
+            _id: "tharapist_id_2",
+            therapist_name: "tom hanks",
+            therapist_status: 0,
+            plan: "free",
+            user_id: "user_id_2",
+            org_data: [
+              {
+                name: "portal.dev-myhelp",
+                _id: "org_id_2",
+              },
+            ],
           },
         ],
       },
@@ -61,46 +71,27 @@ mocksData.push({
     query: GET_ADMIN_THERAPIST_LIST,
     variables: {
       limit: 10,
-      name: "stext",
-      paginationtoken: "",
+      searchText: "stext",
+      pageNo: 1,
     },
   },
   result: {
     data: {
       getTherapistList: {
-        pagination: "pagination_token_text",
+        total: "65",
         therapistlist: [
           {
-            name: "testname",
-            phone_number: "+448989898989",
-            specialization: "Psychodynamic(Psychoanalytic) Psychotheraphy",
-            therapist_id: "sid",
-          },
-        ],
-      },
-    },
-  },
-});
-
-mocksData.push({
-  request: {
-    query: GET_ADMIN_THERAPIST_LIST,
-    variables: {
-      limit: 10,
-      name: "stext",
-      paginationtoken: "",
-    },
-  },
-  result: {
-    data: {
-      getTherapistList: {
-        pagination: "pagination_token_text",
-        therapistlist: [
-          {
-            name: "testname",
-            phone_number: "+448989898989",
-            specialization: "Psychodynamic(Psychoanalytic) Psychotheraphy",
-            therapist_id: "sid",
+            _id: "tharapist_id_1",
+            therapist_name: "testname",
+            therapist_status: 1,
+            plan: "free",
+            user_id: "user_id_1",
+            org_data: [
+              {
+                name: "portal.dev-myhelp",
+                _id: "org_id_1",
+              },
+            ],
           },
         ],
       },
@@ -131,7 +122,7 @@ mocksData.push({
     variables: {
       user_id: "user_id_1",
       update: {
-        therapist_status: 1,
+        therapist_status: 0,
       },
     },
   },
@@ -151,7 +142,7 @@ mocksData.push({
     variables: {
       user_id: "user_id_2",
       update: {
-        therapist_status: 0,
+        therapist_status: 1,
       },
     },
   },
@@ -201,7 +192,9 @@ describe("Admin therapist list", () => {
 
   it("delete therapist from list", async () => {
     await sut();
-    const deleteButton = await screen.findByTestId("iconButton_delete_0");
+    const deleteButton = await screen.findByTestId(
+      "iconButton_delete_tharapist_id_1"
+    );
     expect(deleteButton).toBeInTheDocument();
     fireEvent.click(deleteButton);
 
@@ -216,16 +209,20 @@ describe("Admin therapist list", () => {
 
   it("block therapist from list", async () => {
     await sut();
-    const blockButton0 = await screen.findByTestId("iconButton_block_0");
+    const blockButton0 = await screen.findByTestId(
+      "iconButton_block_tharapist_id_1"
+    );
     fireEvent.click(blockButton0);
     expect(
-      await screen.findByText(/Therapist Unblocked successfully!/i)
+      await screen.findByText(/Therapist Blocked successfully!/i)
     ).toBeInTheDocument();
 
-    const blockButton1 = await screen.findByTestId("iconButton_block_1");
+    const blockButton1 = await screen.findByTestId(
+      "iconButton_block_tharapist_id_2"
+    );
     fireEvent.click(blockButton1);
     expect(
-      await screen.findByText(/Therapist Blocked successfully!/i)
+      await screen.findByText(/Therapist Unblocked successfully!/i)
     ).toBeInTheDocument();
   });
 });
