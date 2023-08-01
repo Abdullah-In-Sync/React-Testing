@@ -27,50 +27,43 @@ export default function TherapyMainComponent(props: propTypes) {
     {
       label: "Safety Plan",
       value: "safety-plan",
-      //  component: < />,
-      // redirectUrl: Link + `therapist/patient/view/${patId}?tab=safety_plan`,
       component: <TherapistSafetyPlanIndex />,
     },
     {
       label: "Measures",
       value: "measures",
       component: <Measures />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=measures`,
-    },
-    {
-      label: "Formulation",
-      value: "formulation",
-      //    component: <TherapyMainComponent />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=formulation`,
     },
     {
       label: "Goals",
       value: "goals",
       component: <TherapyPatientGoalsIndex setTherapy={setTherapy} />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=goals`,
     },
     {
       label: "Monitor",
       value: "monitor",
       component: <TherapistMonotorTabs />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=tools`,
     },
     {
       label: "Homework",
       value: "homework",
       component: <TherapyPatientHomeworkIndex setTherapy={setTherapy} />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=homework`,
-    },
-    {
-      label: "Relapse",
-      value: "relapse",
-      component: <TherapistRelapseIndex />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=relapse`,
     },
     {
       label: "Resources",
       value: "resources",
       component: <PatientEditTemplatePage2 />,
+    },
+    {
+      label: "Formulation",
+      value: "formulation",
+      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=formulation`,
+    },
+
+    {
+      label: "Relapse",
+      value: "relapse",
+      component: <TherapistRelapseIndex />,
     },
     {
       label: "Feedback",
