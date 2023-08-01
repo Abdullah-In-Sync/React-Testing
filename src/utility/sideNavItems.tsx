@@ -104,7 +104,7 @@ export const therapistRoutes: RoutesType[] = [
   },
   {
     key: 2,
-    label: "Patients",
+    label: "Patient",
     // path: Link + "/therapist/patient/list",
     path: "/therapist/patientlist",
     icon: <GroupsIcon />,
