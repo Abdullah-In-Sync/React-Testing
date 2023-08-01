@@ -21,6 +21,7 @@ interface ViewProps {
   onPressSideButton?: () => void;
   totalData?: number;
   confirmRef?: any;
+  onSelectPageDropdown?: any;
 }
 
 const TherapistListComponent: React.FC<ViewProps> = ({
@@ -35,6 +36,7 @@ const TherapistListComponent: React.FC<ViewProps> = ({
   onPressSideButton,
   totalData,
   confirmRef,
+  onSelectPageDropdown,
 }) => {
   const styles = useStyles();
   return (
@@ -74,6 +76,7 @@ const TherapistListComponent: React.FC<ViewProps> = ({
           rowsLimit={rowsLimit}
           loading={loadingTherapistList}
           headerData={therapistData.therapistListHeader}
+          onSelectPageDropdown={onSelectPageDropdown}
         />
       </Stack>
     </ConfirmWrapper>
