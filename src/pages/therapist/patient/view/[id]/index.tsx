@@ -15,16 +15,15 @@ import React, { useEffect, useState } from "react";
 import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
-import { Link } from "../../../../../lib/helpers/common";
 
 import { useTheme } from "@mui/styles";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
+import TherapisTherapyList from "../../../therapy";
+import TherapistNotesList from "./notes";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
-import TherapistNotesList from "./notes";
-import TherapisTherapyList from "../../../therapy";
 
 interface Props {
   children: React.ReactNode;
@@ -105,13 +104,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Personal Info",
       value: "personal-info",
       component: <TherapyPersonalInfoTabs />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=peronalinfo`,
     },
     {
       label: "Assessment",
       value: "assessment",
       component: <TherapistPatientAssessment />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=assessment`,
     },
     {
       label: "Therapy",
@@ -122,31 +119,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Notes",
       value: "notes",
       component: <TherapistNotesList setTherapy={therapy} />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=notes`,
-    },
-    {
-      label: "Appointments",
-      value: "appointments",
-      //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=appointments`,
-    },
-    {
-      label: "To-Do",
-      value: "to-do",
-      //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=to_do`,
-    },
-    {
-      label: "Files",
-      value: "files",
-      //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=files`,
-    },
-    {
-      label: "Communications",
-      value: "communications",
-      //  component: <Agreement />,
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=communications`,
     },
   ];
 
