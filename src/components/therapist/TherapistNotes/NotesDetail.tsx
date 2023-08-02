@@ -48,6 +48,7 @@ import ResourcePopup from "../patient/TherapsitHomework/resourcePopup";
 import { GET_RISKS_LIST } from "../../../graphql/assessment/graphql";
 import { Box } from "@material-ui/core";
 import Emoji from "../../common/Emoji";
+import { useRouter } from "next/router";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -67,6 +68,7 @@ type propTypes = {
 function NotesDetail(props: propTypes) {
   const { user } = useAppContext();
   const styles = useStyles();
+  const router = useRouter();
   const orgId = user?.therapist_data?.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const confirmModalRef = useRef<ModalElement>(null);
@@ -509,6 +511,20 @@ function NotesDetail(props: propTypes) {
     }
   };
 
+  /* istanbul ignore next */
+  const handleViewMoreMeasures = () => {
+    router.push(
+      `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=measures`
+    );
+  };
+
+  /* istanbul ignore next */
+  const handleViewMoreMonitor = () => {
+    router.push(
+      `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=monitor&subTab1=my-monitor`
+    );
+  };
+
   return (
     <>
       <div>
@@ -567,7 +583,9 @@ function NotesDetail(props: propTypes) {
                             color: "#6EC9DB",
                             borderBottom: "1px solid #6EC9DB",
                             fontWeight: "bold",
+                            cursor: "pointer",
                           }}
+                          onClick={handleViewMoreMeasures}
                         >
                           View more
                         </Typography>
@@ -689,7 +707,9 @@ function NotesDetail(props: propTypes) {
                             color: "#6EC9DB",
                             borderBottom: "1px solid #6EC9DB",
                             fontWeight: "bold",
+                            cursor: "pointer",
                           }}
+                          onClick={handleViewMoreMonitor}
                         >
                           View more
                         </Typography>
