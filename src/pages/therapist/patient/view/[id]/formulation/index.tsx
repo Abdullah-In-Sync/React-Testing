@@ -5,14 +5,12 @@ import Loader from "../../../../../../components/common/Loader";
 import { useLazyQuery } from "@apollo/client";
 import CommonTable from "../../../../../../components/common/CommonTable";
 import moment from "moment";
-import { useRouter } from "next/router";
 import { GET_PAT_FORMULATION_LIST } from "../../../../../../graphql/formulation/graphql";
 
 const TherapistPatientFormulation: NextPage = () => {
-  const router = useRouter();
   const [loader, setLoader] = useState<boolean>(false);
   const [formulationList, setFormulationList] = useState([]);
-  const id = router?.query?.id;
+  const id = sessionStorage.getItem("patient_id");
 
   const [getPatFormulationList, { loading: loadingFormulationList }] =
     useLazyQuery(GET_PAT_FORMULATION_LIST, {
