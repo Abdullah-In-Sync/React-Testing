@@ -4,7 +4,6 @@ import TherapyTabsGenerator from "../../../../../../components/common/TabsGenera
 import { Box } from "@material-ui/core";
 import PatientEditTemplatePage2 from "../resources";
 import { useRouter } from "next/router";
-import { Link } from "../../../../../../lib/helpers/common";
 import TherapistSafetyPlanIndex from "../safetyPlan";
 import TherapistFeedbackTabs from "../../../../feedback/FeedbackTabs";
 import TherapistRelapseIndex from "../relapse";
@@ -12,6 +11,7 @@ import TherapyPatientHomeworkIndex from "../homework";
 import Measures from "../../../../../../components/therapist/measures";
 import TherapyPatientGoalsIndex from "../goals";
 import TherapistMonotorTabs from "../monitors/therapistMonitorTabs";
+import TherapistPatientFormulation from "../formulation";
 
 type propTypes = {
   setTherapy: any;
@@ -19,7 +19,6 @@ type propTypes = {
 export default function TherapyMainComponent(props: propTypes) {
   const setTherapy = props.setTherapy;
   const router = useRouter();
-  const patId = router?.query.id as string;
   const {
     query: { id, mainTab },
   } = router;
@@ -57,7 +56,8 @@ export default function TherapyMainComponent(props: propTypes) {
     {
       label: "Formulation",
       value: "formulation",
-      redirectUrl: Link + `/therapist/patient/view/${patId}?tab=formulation`,
+      component: <TherapistPatientFormulation />,
+      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=formulation`,
     },
 
     {
