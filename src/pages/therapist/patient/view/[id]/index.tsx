@@ -223,7 +223,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
           <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
-              tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
+              // tabLabel={`/therapist/patient/view/${id}/?mainTab=`}
               defaultTabs={defaultTabs}
             />
             {tab === "therapy" && !tab2 && (
