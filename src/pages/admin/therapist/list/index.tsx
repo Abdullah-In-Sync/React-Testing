@@ -7,27 +7,25 @@ import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
 
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import TherapistListComponent from "../../../../components/admin/therapist/list/List";
+import { ConfirmElement } from "../../../../components/common/ConfirmWrapper";
 import {
-  GET_ADMIN_THERAPIST_LIST,
   DELETE_THERAPIST_BY_ID,
+  GET_ADMIN_THERAPIST_LIST,
   UPDATE_THERAPIST_BY_ID,
 } from "../../../../graphql/Therapist/graphql";
-import { TherapistListData } from "../../../../graphql/Therapist/types";
-import { useSnackbar } from "notistack";
-import { ConfirmElement } from "../../../../components/common/ConfirmWrapper";
 import { blockUnblockText } from "../../../../lib/constants";
-// DELETE_THERAPIST_BY_ID
+import { TherapistListData } from "../../../../graphql/Therapist/types";
+
 const TherapistListPage: NextPage = () => {
   const router = useRouter();
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
-  const rowsLimit = 10;
-  const [searchInputValue, setSearchInputValue] = useState();
-  const [paginationTokenList, setPaginationToken] = useState([]);
+  const [rowsLimit, setRowsLimit] = useState(10);
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [loader, setLoader] = useState<boolean>(true);
-  const [reachEnd, setReachEnd] = useState<boolean>(false);
   const [deleteTherapist] = useMutation(DELETE_THERAPIST_BY_ID);
   const [updateTherapist] = useMutation(UPDATE_THERAPIST_BY_ID);
 
@@ -35,7 +33,9 @@ const TherapistListPage: NextPage = () => {
     getAdminTherapistList,
     {
       loading: loadingTherapistList,
-      data: { getTherapistList: { therapistlist: listData = [] } = {} } = {},
+      data: {
+        getTherapistList: { therapistlist: listData = [], total = "" } = {},
+      } = {},
       refetch: refetchTherapistList,
     },
   ] = useLazyQuery<TherapistListData>(GET_ADMIN_THERAPIST_LIST, {
@@ -44,13 +44,58 @@ const TherapistListPage: NextPage = () => {
 
   useEffect(() => {
     getAdminTherapistList({
-      variables: { name: "", paginationtoken: "", limit: rowsLimit },
-      onCompleted: (data) => {
-        addPaginationToken(data);
+      variables: {
+        searchText: "",
+        pageNo: tableCurentPage + 1,
+        limit: rowsLimit,
+      },
+      onCompleted: () => {
         setLoader(false);
       },
     });
   }, []);
+
+  /* istanbul ignore next */
+  const onPageChange = (event?: any, newPage?: number) => {
+    setTableCurrentPage(newPage);
+    getAdminTherapistList({
+      variables: {
+        searchText: searchInputValue,
+        pageNo: newPage + 1,
+        limit: rowsLimit,
+      },
+      onCompleted: () => {
+        setLoader(false);
+      },
+    });
+  };
+
+  const onChangeSearchInput = (e) => {
+    setSearchInputValue(e.target.value);
+    getAdminTherapistList({
+      variables: { searchText: e.target.value, pageNo: 1, limit: rowsLimit },
+      onCompleted: () => {
+        setLoader(false);
+      },
+    });
+    setTableCurrentPage(0);
+  };
+
+  /* istanbul ignore next */
+  const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsLimit(+event.target.value);
+    getAdminTherapistList({
+      variables: {
+        searchText: searchInputValue,
+        pageNo: 1,
+        limit: event.target.value,
+      },
+      onCompleted: () => {
+        setLoader(false);
+      },
+    });
+    setTableCurrentPage(0);
+  };
 
   const deleteApi = async (formFields, doneCallback) => {
     setLoader(true);
@@ -111,73 +156,6 @@ const TherapistListPage: NextPage = () => {
     }
   };
 
-  /* istanbul ignore next */
-  const onPageChange = (_?: any, newPage?: number) => {
-    const searchText =
-      searchInputValue && searchInputValue !== ""
-        ? { name: searchInputValue }
-        : { name: "" };
-    const tempNewPage = paginationTokenList[newPage - 1];
-    if (tempNewPage)
-      getAdminTherapistList({
-        variables: {
-          limit: rowsLimit,
-          paginationtoken: tempNewPage,
-          ...searchText,
-        },
-        onCompleted: (data) => {
-          if (!reachEnd) addPaginationToken(data);
-
-          setLoader(false);
-          setTableCurrentPage(newPage);
-        },
-      });
-    else if (newPage === 0) {
-      getAdminTherapistList({
-        variables: {
-          limit: rowsLimit,
-          paginationtoken: "",
-          ...searchText,
-        },
-        onCompleted: () => {
-          setLoader(false);
-          setTableCurrentPage(0);
-        },
-      });
-    }
-  };
-
-  const onChangeSearchInput = (e) => {
-    setPaginationToken([]);
-    setTableCurrentPage(0);
-    setSearchInputValue(() => {
-      getAdminTherapistList({
-        variables: {
-          limit: rowsLimit,
-          name: e.target.value,
-          paginationtoken: "",
-        },
-        onCompleted: (data) => {
-          addPaginationToken(data);
-        },
-      });
-      return e.target.value;
-    });
-  };
-
-  const addPaginationToken = (data) => {
-    const { getTherapistList: { pagination = undefined } = {} } = data;
-    if (
-      pagination != null &&
-      pagination &&
-      !paginationTokenList.includes(pagination)
-    ) {
-      setPaginationToken([...paginationTokenList, ...[pagination]]);
-    } else {
-      setReachEnd(true);
-    }
-  };
-
   const onPressSideButton = () => {
     router.push(`/admin/therapist/add`);
   };
@@ -191,8 +169,12 @@ const TherapistListPage: NextPage = () => {
 
   /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
-    const { user_id, pressedIconButton, therapist_id, therapist_status } =
-      value;
+    const {
+      user_id,
+      pressedIconButton,
+      _id: therapist_id,
+      therapist_status,
+    } = value;
     switch (pressedIconButton) {
       case "edit":
         return router.push(`/admin/therapist/edit/${user_id}`);
@@ -217,12 +199,9 @@ const TherapistListPage: NextPage = () => {
         <ContentHeader title="Therapist" />
         <TherapistListComponent
           listData={listData}
+          onSelectPageDropdown={onSelectPageDropdown}
           onPageChange={onPageChange}
-          totalData={
-            paginationTokenList.length > tableCurentPage
-              ? (tableCurentPage + 2) * rowsLimit
-              : (tableCurentPage + 1) * rowsLimit
-          }
+          totalData={total}
           tableCurentPage={tableCurentPage}
           rowsLimit={rowsLimit}
           searchInputValue={searchInputValue}
@@ -236,4 +215,5 @@ const TherapistListPage: NextPage = () => {
     </>
   );
 };
+
 export default TherapistListPage;

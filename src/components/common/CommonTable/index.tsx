@@ -108,13 +108,17 @@ const CommonTable: React.FC<ViewProps> = ({
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format
-                            ? column.format(
-                                row,
-                                pageActionButtonClick,
-                                tableCurentPage * rowsLimit + i
-                              )
-                            : value}
+                          {column.render ? (
+                            <Typography>{column.render(value)}</Typography>
+                          ) : column.format ? (
+                            column.format(
+                              row,
+                              pageActionButtonClick,
+                              tableCurentPage * rowsLimit + i
+                            )
+                          ) : (
+                            value
+                          )}
                         </TableCell>
                       );
                     })}

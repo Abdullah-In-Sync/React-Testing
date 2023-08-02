@@ -11,17 +11,16 @@ export interface TherapistListData {
   getTherapistList: GetTherapistList;
 }
 export interface GetTherapistList {
-  pagination: string;
+  total: any;
   therapistlist?: TherapistlistEntity[] | null;
 }
 export interface TherapistlistEntity {
-  name: string;
-  email: string;
-  phone_number: string;
-  specialization: string;
-  therapist_id: string;
+  _id: string;
+  therapist_name: string;
+  therapist_status: number;
+  plan: string;
   user_id: string;
-  therapist_status?: number;
+  org_data?: OrgDataEntity[] | null;
 }
 
 export interface TherapistData {
@@ -50,4 +49,9 @@ export interface GetTherapistById {
   phone_number: string;
   plan: string;
   trial_period?: string;
+}
+
+export interface OrgDataEntity {
+  name: string;
+  _id: string;
 }

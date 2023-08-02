@@ -1,25 +1,19 @@
 import { gql } from "@apollo/client";
 
 export const GET_ADMIN_THERAPIST_LIST = gql`
-  query GetTherapistList(
-    $limit: Int!
-    $name: String
-    $paginationtoken: String
-  ) {
-    getTherapistList(
-      limit: $limit
-      name: $name
-      paginationtoken: $paginationtoken
-    ) {
-      pagination
+  query GetTherapistList($limit: Int!, $pageNo: Int!, $searchText: String) {
+    getTherapistList(limit: $limit, pageNo: $pageNo, searchText: $searchText) {
+      total
       therapistlist {
-        name
-        email
-        phone_number
-        specialization
-        therapist_id
-        user_id
+        _id
+        therapist_name
         therapist_status
+        plan
+        user_id
+        org_data {
+          name
+          _id
+        }
       }
     }
   }

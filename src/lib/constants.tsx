@@ -91,3 +91,8 @@ export const blockUnblockText = {
   1: "Unblocked",
   0: "Blocked",
 };
+
+export const activeInactiveText = {
+  0: "Inactive",
+  1: "Active",
+};

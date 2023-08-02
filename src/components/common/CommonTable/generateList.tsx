@@ -8,6 +8,7 @@ interface Column {
   minWidth?: number;
   align?: "center";
   format?: (value, callback: any, i?: number) => string | JSX.Element;
+  render?: (value) => string;
 }
 
 export const columns = (data, buttons): readonly Column[] => {
