@@ -42,7 +42,9 @@ const ActionsButtons: React.FC<ViewProps> = ({
           data-testid={`iconButton_${id}_${_id}`}
           onClick={() => buttonClick({ ...data, ...{ pressedIconButton: id } })}
           style={item?.styles ? item.styles : {}}
-          className={`isActive_${data[isActive]}`}
+          className={`isActive_${data[isActive]} ${
+            data?.isAttachment && id == "attachment" ? "active" : ""
+          }`}
         >
           <Icon />
         </Fab>
