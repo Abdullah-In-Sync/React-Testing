@@ -6,7 +6,6 @@ import { GET_PAT_FORMULATION_LIST } from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
 import TherapistPatientFormulation from "../pages/therapist/patient/view/[id]/formulation";
-const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -112,6 +111,7 @@ mocksData.push({
 });
 
 const sut = async () => {
+  sessionStorage.setItem("patient_id", "27f49dbe245843eda77fe5170ee074a8");
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <ThemeProvider theme={theme()}>
@@ -145,13 +145,7 @@ describe("Formulation list page", () => {
     });
   });
   it("Render Therapist patient formulation list", async () => {
-    useRouter.mockImplementation(() => ({
-      query: {
-        id: "27f49dbe245843eda77fe5170ee074a8",
-      },
-    }));
     await sut();
-
     await waitFor(() => {
       expect(
         screen.getByTestId(
