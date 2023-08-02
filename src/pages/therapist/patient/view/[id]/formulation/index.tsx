@@ -76,6 +76,7 @@ const TherapistPatientFormulation: NextPage = () => {
   ];
 
   /* istanbul ignore next */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleActionButtonClick = (value) => {
     // const { _id } = value;
     // router.push(`formulation/edit/${_id}`);
