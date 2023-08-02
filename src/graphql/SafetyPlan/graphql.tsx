@@ -391,6 +391,32 @@ export const ADD_THERAPIST_SAFETY_PLAN = gql`
   }
 `;
 
+export const ADD_THERAPIST_ADD_AGENDA = gql`
+  mutation addPatientAgenda(
+    $disorder_id: String!
+    $model_id: String!
+    $patient_id: String!
+  ) {
+    addPatientAgenda(
+      disorder_id: $disorder_id
+      model_id: $model_id
+      patient_id: $patient_id
+    ) {
+      message
+      result
+    }
+  }
+`;
+
+export const GET_PATIENT_AGENDA_DETAILS = gql`
+  query getPatientAgendaDetail($patient_id: String!) {
+    getPatientAgendaDetail(patient_id: $patient_id) {
+      message
+      result
+    }
+  }
+`;
+
 export const ADD_THERAPIST_MEASURE_PLAN_ADD = gql`
   mutation therapistAddMeasure($patient_id: String!, $measure_id: String!) {
     therapistAddMeasure(patient_id: $patient_id, measure_id: $measure_id) {

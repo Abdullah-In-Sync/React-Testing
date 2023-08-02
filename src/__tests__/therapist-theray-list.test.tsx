@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { useAppContext } from "../contexts/AuthContext";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/react-testing";
@@ -6,6 +6,14 @@ import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
 import theme from "../styles/theme/theme";
 import { ThemeProvider } from "@mui/styles";
 import TherapisTherapyList from "../pages/therapist/therapy";
+import {
+  GET_DISORDER_DATA_BY_ORG_ID,
+  GET_MODEL_BY_DISORDERID_DATA,
+} from "../graphql/query/common";
+import {
+  ADD_THERAPIST_ADD_AGENDA,
+  GET_PATIENT_AGENDA_DETAILS,
+} from "../graphql/SafetyPlan/graphql";
 
 jest.mock("../contexts/AuthContext");
 
@@ -81,6 +89,80 @@ mocks.push({
   },
 });
 
+mocks.push({
+  request: {
+    query: GET_DISORDER_DATA_BY_ORG_ID,
+    variables: {
+      orgId: "myhelp",
+    },
+  },
+  result: {
+    data: {
+      getDisorderByOrgId: [
+        {
+          _id: "disorder_id_1",
+          user_type: "therapist",
+          disorder_name: "disorder 1",
+        },
+      ],
+    },
+  },
+});
+
+mocks.push({
+  request: {
+    query: GET_MODEL_BY_DISORDERID_DATA,
+    variables: {
+      disorderId: "disorder_id_1",
+    },
+  },
+  result: {
+    data: {
+      getModelByDisorderId: [
+        {
+          _id: "model_id_1",
+          model_name: "model_id_1",
+        },
+        {
+          _id: "model_id_2",
+          model_name: "model_id_2",
+        },
+      ],
+    },
+  },
+});
+
+mocks.push({
+  request: {
+    query: ADD_THERAPIST_ADD_AGENDA,
+    variables: {
+      disorder_id: "disorder_id_1",
+      model_id: "model_id_1",
+      patient_id: undefined,
+    },
+  },
+  result: {
+    data: { data: { addPatientAgenda: null } },
+  },
+});
+
+mocks.push({
+  request: {
+    query: GET_PATIENT_AGENDA_DETAILS,
+    variables: { patient_id: "4937a27dc00d48bf983fdcd4b0762ebd" },
+  },
+  result: {
+    data: {
+      data: {
+        getPatientAgendaDetail: {
+          message: null,
+          result: true,
+          __typename: "result",
+        },
+      },
+    },
+  },
+});
 const sut = async () => {
   // system under test
   sessionStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
@@ -127,6 +209,51 @@ describe("Therapist client feedback list", () => {
     await waitFor(async () => {
       const tiles = await screen.findAllByTestId("list-tile");
       expect(tiles.length).toEqual(5);
+    });
+  });
+
+  test("Renders homework data", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("addAgendaButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("addAgendaButton"));
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+
+        fireEvent.change(screen.queryByTestId("disorder_id"), {
+          target: { value: "disorder_id_1" },
+        });
+        await expect(
+          (await screen.findByTestId("disorder_id")).getAttribute("value")
+        ).toBe("disorder_id_1");
+      });
+
+      await waitFor(async () => {
+        fireEvent.change(screen.queryByTestId("model_id"), {
+          target: { value: "model_id_1" },
+        });
+        expect(screen.queryByTestId("model_id").getAttribute("value")).toBe(
+          "model_id_1"
+        );
+      });
+
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText(
+            "Agenda added Successfully, You can not add agenda again"
+          )
+        ).toBeInTheDocument();
+      });
     });
   });
 });
