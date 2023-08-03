@@ -48,10 +48,6 @@ export default function AgendaDetailAccordian(props: propTypes) {
   }, [props.sessionNo]);
 
   const handleDeleteAgenda = async () => {
-    console.debug("Delete agenda variable", {
-      patient_id: patientId,
-      ptagenda_id: deleteAgendaId,
-    });
     try {
       await deleteAgenda({
         variables: {

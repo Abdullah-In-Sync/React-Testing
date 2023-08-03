@@ -265,7 +265,7 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test.only("Renders agenda table data", async () => {
+  test("Renders agenda table data", async () => {
     await sut();
     await waitFor(async () => {
       await sut();
