@@ -417,6 +417,22 @@ export const GET_PATIENT_AGENDA_DETAILS = gql`
   }
 `;
 
+export const GET_PATIENT_AGENDA_DETAILS_LIST = gql`
+  query getPatientAgendaList($patient_id: String!, $session: Int!) {
+    getPatientAgendaList(patient_id: $patient_id, session: $session) {
+      type
+      agenda_id
+      agenda_name
+      display_order
+      resource_id
+      ptsharres_id
+      share_status
+      created_date
+      updated_date
+    }
+  }
+`;
+
 export const ADD_THERAPIST_MEASURE_PLAN_ADD = gql`
   mutation therapistAddMeasure($patient_id: String!, $measure_id: String!) {
     therapistAddMeasure(patient_id: $patient_id, measure_id: $measure_id) {

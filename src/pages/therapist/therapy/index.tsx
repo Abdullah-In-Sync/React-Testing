@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { SuccessModal } from "../../../components/common/SuccessModal";
 
+import AgendaDetailAccordian from "./AgendaDetail";
+
 type propTypes = {
   setTherapy: any;
 };
@@ -196,7 +198,9 @@ export default function TherapisTherapyList(props: propTypes) {
                       title={`Session ${v.ptsession_no}`}
                       marginBottom={"20px !important"}
                       detail={() => {
-                        return <Typography>Work in progress</Typography>;
+                        return (
+                          <AgendaDetailAccordian sessionNo={v.ptsession_no} />
+                        );
                       }}
                     />
                   );

@@ -1,4 +1,10 @@
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
+import {
+  screen,
+  render,
+  waitFor,
+  fireEvent,
+  within,
+} from "@testing-library/react";
 import { useAppContext } from "../contexts/AuthContext";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/react-testing";
@@ -13,6 +19,7 @@ import {
 import {
   ADD_THERAPIST_ADD_AGENDA,
   GET_PATIENT_AGENDA_DETAILS,
+  GET_PATIENT_AGENDA_DETAILS_LIST,
 } from "../graphql/SafetyPlan/graphql";
 
 jest.mock("../contexts/AuthContext");
@@ -35,50 +42,6 @@ mocks.push({
           therapist_id: "686802e5123a482681a680a673ef7f53",
           pttherapy_id: "199ca7dc71fe47649fc93e5255843f81",
           ptsession_no: 1,
-          ptsession_status: 1,
-          created_date: "2023-04-09T14:37:08.000Z",
-          updated_date: null,
-          __typename: "PatientSessionData",
-        },
-        {
-          _id: "da790381eeb14b5db6d75886ffbb807c",
-          patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          pttherapy_id: "199ca7dc71fe47649fc93e5255843f81",
-          ptsession_no: 2,
-          ptsession_status: 1,
-          created_date: "2023-04-09T14:37:08.000Z",
-          updated_date: null,
-          __typename: "PatientSessionData",
-        },
-        {
-          _id: "72d5de2b014e49e98e229539146787ff",
-          patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          pttherapy_id: "199ca7dc71fe47649fc93e5255843f81",
-          ptsession_no: 3,
-          ptsession_status: 1,
-          created_date: "2023-04-09T14:37:08.000Z",
-          updated_date: null,
-          __typename: "PatientSessionData",
-        },
-        {
-          _id: "18834c1137284450958ff52783c352ee",
-          patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          pttherapy_id: "199ca7dc71fe47649fc93e5255843f81",
-          ptsession_no: 4,
-          ptsession_status: 1,
-          created_date: "2023-04-09T14:37:08.000Z",
-          updated_date: null,
-          __typename: "PatientSessionData",
-        },
-        {
-          _id: "d83e1f973522401eb9b556eca85b8ba8",
-          patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          pttherapy_id: "199ca7dc71fe47649fc93e5255843f81",
-          ptsession_no: 5,
           ptsession_status: 1,
           created_date: "2023-04-09T14:37:08.000Z",
           updated_date: null,
@@ -163,6 +126,31 @@ mocks.push({
     },
   },
 });
+
+mocks.push({
+  request: {
+    query: GET_PATIENT_AGENDA_DETAILS_LIST,
+    variables: { session: 1, patient_id: "4937a27dc00d48bf983fdcd4b0762ebd" },
+  },
+  result: {
+    data: {
+      getPatientAgendaList: [
+        {
+          type: "agenda",
+          agenda_id: "c68d0dca482f452f96c8cf6f24428d5a",
+          agenda_name: "Agenda to beat blues ",
+          display_order: 0,
+          resource_id: "",
+          ptsharres_id: "",
+          share_status: 0,
+          created_date: "2023-07-31T08:23:05.181Z",
+          updated_date: "2023-07-31T08:23:05.181Z",
+          __typename: "PatientAgenda",
+        },
+      ],
+    },
+  },
+});
 const sut = async () => {
   // system under test
   sessionStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
@@ -179,7 +167,7 @@ const sut = async () => {
     </MockedProvider>
   );
   // await waitForElementToBeRemoved(() =>
-  screen.queryByTestId("activity-indicator");
+  // screen.queryByTestId("activity-indicator");
   // );
 };
 
@@ -204,15 +192,15 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test("Renders homework data", async () => {
+  test("Renders agenda data", async () => {
     await sut();
     await waitFor(async () => {
       const tiles = await screen.findAllByTestId("list-tile");
-      expect(tiles.length).toEqual(5);
+      expect(tiles.length).toEqual(1);
     });
   });
 
-  test("Renders homework data", async () => {
+  test("Add agenda", async () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getByTestId("addAgendaButton")).toBeInTheDocument();
@@ -253,6 +241,25 @@ describe("Therapist client feedback list", () => {
             "Agenda added Successfully, You can not add agenda again"
           )
         ).toBeInTheDocument();
+      });
+    });
+  });
+
+  test("Renders agenda table data", async () => {
+    await sut();
+    await waitFor(async () => {
+      await sut();
+      const list = await screen.findAllByTestId("list-tile");
+
+      const firstAccordion = list[0];
+
+      await fireEvent.click(
+        within(firstAccordion).queryByTestId("toggleContent")
+      );
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
+        expect(screen.queryAllByTestId("table-row").length).toBe(1);
       });
     });
   });
