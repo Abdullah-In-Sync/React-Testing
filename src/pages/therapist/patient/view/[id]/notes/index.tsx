@@ -8,12 +8,18 @@ import { Accordion } from "../../../../../../components/common/Accordion";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
 import { useSnackbar } from "notistack";
 import NotesDetail from "../../../../../../components/therapist/TherapistNotes/NotesDetail";
+import { useRouter } from "next/router";
 
 type propTypes = {
   setTherapy: any;
 };
 
 export default function TherapistNotesList(props: propTypes) {
+  const router = useRouter();
+  /* istanbul ignore next */
+  const SessionNo = router?.query.SessionNo as string;
+  const sessionNumber = parseInt(SessionNo, 10);
+
   const { enqueueSnackbar } = useSnackbar();
   const therapyId = props.setTherapy;
   const onToggle = useRef<any>();
@@ -29,7 +35,6 @@ export default function TherapistNotesList(props: propTypes) {
       },
     }
   );
-  console.log("Koca: patientSessionData ", patientSessionData);
 
   useEffect(() => {
     console.debug("Get session data variable", {
@@ -85,6 +90,7 @@ export default function TherapistNotesList(props: propTypes) {
                     key={`according-${v.ptsession_no}`}
                     title={`Session ${v.ptsession_no}`}
                     marginBottom={"20px !important"}
+                    defaultIsOpen={v.ptsession_no === sessionNumber}
                     detail={(toggleAccordion) => {
                       return (
                         <NotesDetail

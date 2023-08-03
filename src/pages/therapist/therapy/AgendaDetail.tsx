@@ -10,11 +10,15 @@ import ShareIcon from "@mui/icons-material/Share";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useLazyQuery } from "@apollo/client";
 import { GET_PATIENT_AGENDA_DETAILS_LIST } from "../../../graphql/SafetyPlan/graphql";
+import { useRouter } from "next/router";
 
 type propTypes = {
   sessionNo?: any;
 };
 export default function AgendaDetailAccordian(props: propTypes) {
+  const router = useRouter();
+  /* istanbul ignore next */
+  const patientId = sessionStorage.getItem("patient_id");
   const [loader, setLoader] = useState<boolean>(false);
 
   const [getPatientAgendaDetailsList, { data: agendaDetailList }] =
@@ -92,6 +96,12 @@ export default function AgendaDetailAccordian(props: propTypes) {
     },
   ];
 
+  const noteForSession = () => {
+    router.push(
+      `/therapist/patient/view/${patientId}/?mainTab=notes&SessionNo=${props.sessionNo}`
+    );
+  };
+
   return (
     <div>
       <Box
@@ -122,7 +132,11 @@ export default function AgendaDetailAccordian(props: propTypes) {
         </Box>
 
         <Box style={{ marginLeft: "10px" }}>
-          <Button data-testid="notesForSession" variant="contained">
+          <Button
+            data-testid="notesForSession"
+            variant="contained"
+            onClick={noteForSession}
+          >
             Notes for Session {props.sessionNo}
           </Button>
         </Box>
