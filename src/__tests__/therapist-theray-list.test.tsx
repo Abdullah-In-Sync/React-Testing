@@ -167,7 +167,7 @@ const sut = async () => {
     </MockedProvider>
   );
   // await waitForElementToBeRemoved(() =>
-  screen.queryByTestId("activity-indicator");
+  // screen.queryByTestId("activity-indicator");
   // );
 };
 
