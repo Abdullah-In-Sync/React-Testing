@@ -192,7 +192,7 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test("Renders homework data", async () => {
+  test("Renders agenda data", async () => {
     await sut();
     await waitFor(async () => {
       const tiles = await screen.findAllByTestId("list-tile");
@@ -200,7 +200,7 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test("Renders homework data", async () => {
+  test("Add agenda", async () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getByTestId("addAgendaButton")).toBeInTheDocument();
@@ -245,7 +245,7 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test("Renders homework data", async () => {
+  test("Renders agenda table data", async () => {
     await sut();
     await waitFor(async () => {
       await sut();
@@ -253,7 +253,9 @@ describe("Therapist client feedback list", () => {
 
       const firstAccordion = list[0];
 
-      fireEvent.click(within(firstAccordion).queryByTestId("toggleContent"));
+      await fireEvent.click(
+        within(firstAccordion).queryByTestId("toggleContent")
+      );
 
       await waitFor(async () => {
         expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();

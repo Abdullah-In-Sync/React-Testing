@@ -65,16 +65,6 @@ const AssessmentListPage: NextPage = () => {
   const [shareAssessment] = useMutation(ADMIN_SHARE_ASSESSMENT);
 
   useEffect(() => {
-    getOrgList();
-
-    if (editDeleteAssessmentId.length) {
-      getAssessmentDataById({
-        variables: {
-          assessment_id: editDeleteAssessmentId,
-        },
-      });
-    }
-
     getAdminAssessmentList({
       variables: {
         limit: rowsLimit,
@@ -83,14 +73,21 @@ const AssessmentListPage: NextPage = () => {
         ...selectFilterOptions,
       },
     });
-  }, [
-    rowsLimit,
-    selectFilterOptions,
-    tableCurentPage,
-    searchInputValue,
-    page,
-    editDeleteAssessmentId,
-  ]);
+  }, [rowsLimit, selectFilterOptions, searchInputValue, page]);
+
+  useEffect(() => {
+    if (editDeleteAssessmentId.length) {
+      getAssessmentDataById({
+        variables: {
+          assessment_id: editDeleteAssessmentId,
+        },
+      });
+    }
+  }, [editDeleteAssessmentId]);
+
+  useEffect(() => {
+    getOrgList();
+  }, []);
 
   const [
     getOrgList,
