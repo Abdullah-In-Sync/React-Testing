@@ -20,6 +20,7 @@ import {
   ADD_THERAPIST_ADD_AGENDA,
   GET_PATIENT_AGENDA_DETAILS,
   GET_PATIENT_AGENDA_DETAILS_LIST,
+  PATIENT_DELETE_AGENDA_BY_ID,
 } from "../graphql/SafetyPlan/graphql";
 
 jest.mock("../contexts/AuthContext");
@@ -136,6 +137,7 @@ mocks.push({
     data: {
       getPatientAgendaList: [
         {
+          _id: "68c1c055-d2a8-4d02-8977-7af0e9446335",
           type: "agenda",
           agenda_id: "c68d0dca482f452f96c8cf6f24428d5a",
           agenda_name: "Agenda to beat blues ",
@@ -148,6 +150,24 @@ mocks.push({
           __typename: "PatientAgenda",
         },
       ],
+    },
+  },
+});
+mocks.push({
+  request: {
+    query: PATIENT_DELETE_AGENDA_BY_ID,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      ptagenda_id: "68c1c055-d2a8-4d02-8977-7af0e9446335",
+    },
+  },
+  result: {
+    data: {
+      patientDeleteAgenda: {
+        message: null,
+        result: true,
+        __typename: "result",
+      },
     },
   },
 });
@@ -245,7 +265,7 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test("Renders agenda table data", async () => {
+  test.only("Renders agenda table data", async () => {
     await sut();
     await waitFor(async () => {
       await sut();
@@ -260,6 +280,20 @@ describe("Therapist client feedback list", () => {
       await waitFor(async () => {
         expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
         expect(screen.queryAllByTestId("table-row").length).toBe(1);
+        expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
+        expect(screen.getByTestId("delete-icon-button")).toBeInTheDocument();
+        fireEvent.click(screen.queryByTestId("delete-icon-button"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Agenda deleted successfully!")
+        ).toBeInTheDocument();
       });
     });
   });

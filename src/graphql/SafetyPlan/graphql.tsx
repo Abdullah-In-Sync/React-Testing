@@ -420,6 +420,7 @@ export const GET_PATIENT_AGENDA_DETAILS = gql`
 export const GET_PATIENT_AGENDA_DETAILS_LIST = gql`
   query getPatientAgendaList($patient_id: String!, $session: Int!) {
     getPatientAgendaList(patient_id: $patient_id, session: $session) {
+      _id
       type
       agenda_id
       agenda_name
@@ -429,6 +430,15 @@ export const GET_PATIENT_AGENDA_DETAILS_LIST = gql`
       share_status
       created_date
       updated_date
+    }
+  }
+`;
+
+export const PATIENT_DELETE_AGENDA_BY_ID = gql`
+  mutation ($patient_id: String!, $ptagenda_id: String!) {
+    patientDeleteAgenda(patient_id: $patient_id, ptagenda_id: $ptagenda_id) {
+      message
+      result
     }
   }
 `;
