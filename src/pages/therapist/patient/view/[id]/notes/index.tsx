@@ -37,10 +37,6 @@ export default function TherapistNotesList(props: propTypes) {
   );
 
   useEffect(() => {
-    console.debug("Get session data variable", {
-      pttherapyId: props.setTherapy,
-      patientId: sessionStorage.getItem("patient_id"),
-    });
     getPatientSessionData({
       variables: {
         pttherapyId: props.setTherapy,
