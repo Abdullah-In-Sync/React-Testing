@@ -88,8 +88,8 @@ export const shareResourceAvailability = {
 };
 
 export const blockUnblockText = {
-  1: "Unblocked",
-  0: "Blocked",
+  1: "unblocked",
+  0: "blocked",
 };
 
 export const activeInactiveText = {
