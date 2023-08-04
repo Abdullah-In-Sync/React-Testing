@@ -2,40 +2,89 @@ import React, { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import ContentHeader from "../../../../../../components/common/ContentHeader";
 import Loader from "../../../../../../components/common/Loader";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import CommonTable from "../../../../../../components/common/CommonTable";
 import moment from "moment";
-import { GET_PAT_FORMULATION_LIST } from "../../../../../../graphql/formulation/graphql";
+import {
+  GET_PAT_FORMULATION_LIST,
+  THERAPIST_DELETE_FORMULATION,
+} from "../../../../../../graphql/formulation/graphql";
+import { useSnackbar } from "notistack";
+import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
 
 const TherapistPatientFormulation: NextPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
   const [formulationList, setFormulationList] = useState([]);
+  const [isConfirmDelete, setIsConfirmDelete] = useState(false);
+  const [selectedId, setSelectedId] = useState();
   const id = sessionStorage.getItem("patient_id");
+  const [deleteFormulation] = useMutation(THERAPIST_DELETE_FORMULATION);
 
-  const [getPatFormulationList, { loading: loadingFormulationList }] =
-    useLazyQuery(GET_PAT_FORMULATION_LIST, {
-      fetchPolicy: "cache-and-network",
-      onCompleted: (data) => {
-        /* istanbul ignore next */
-        let list = data.getPatFormulationList?.map((f) => ({
+  const [
+    getPatFormulationList,
+    { loading: loadingFormulationList, refetch: refetchFormulationList },
+  ] = useLazyQuery(GET_PAT_FORMULATION_LIST, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      /* istanbul ignore next */
+      let list = data.getPatFormulationList?.map((f) => ({
+        ...f,
+        formulationId: f.formulation_data[0]._id,
+        formulation_name: f.formulation_data[0].formulation_name,
+        download_formulation_url:
+          f.formulation_data[0].download_formulation_url,
+        formulation_avail_for: f.formulation_data[0].formulation_avail_for,
+        formulation_img: f.formulation_data[0].formulation_img,
+        formulation_returnurl: f.formulation_data[0].formulation_returnurl,
+        formulation_url: f.formulation_data[0].formulation_url,
+        isAttachment:
+          f.formulation_data[0].formulation_img == "" &&
+          f.template_detail == null
+            ? false
+            : true,
+      }));
+      list = list?.map((f) => {
+        return {
           ...f,
-          ...f.formulation_data[0],
-          isAttachment:
-            f.formulation_data[0].formulation_img == "" &&
-            f.template_detail == null
-              ? false
-              : true,
-        }));
-        list = list?.map((f) => {
-          return {
-            ...f,
-            created_date: moment(f.created_date).format("DD-MM-YYYY"),
-          };
+          created_date: moment(f.created_date).format("DD-MM-YYYY"),
+        };
+      });
+      setFormulationList(list);
+      setLoader(false);
+    },
+  });
+
+  const handleDeleteFormulation = async () => {
+    setLoader(true);
+    try {
+      const {
+        data: { therapistDeleteFormulation },
+      } = await deleteFormulation({
+        variables: {
+          patient_formulation_id: selectedId,
+        },
+      });
+      if (therapistDeleteFormulation?.result) {
+        refetchFormulationList();
+        enqueueSnackbar("Formulation deleted successfully.", {
+          variant: "success",
         });
-        setFormulationList(list);
-        setLoader(false);
-      },
-    });
+      }
+    } catch (e) {
+      /* istanbul ignore next */
+      console.log(e);
+      enqueueSnackbar("Server error please try later.", { variant: "error" });
+    } finally {
+      setIsConfirmDelete(false);
+      setLoader(false);
+    }
+  };
+
+  const clearIsConfirmDeleteCancel = () => {
+    setIsConfirmDelete(false);
+  };
+
   useEffect(() => {
     getPatFormulationList({
       variables: { patientId: id },
@@ -76,6 +125,12 @@ const TherapistPatientFormulation: NextPage = () => {
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleActionButtonClick = (value) => {
+    const { formulationId,_id,  pressedIconButton } = value;
+    console.log(value);
+    if (pressedIconButton == "delete") {
+      setSelectedId(_id);
+      setIsConfirmDelete(true);
+    }
     // const { _id } = value;
     // router.push(`formulation/edit/${_id}`);
   };
@@ -92,6 +147,13 @@ const TherapistPatientFormulation: NextPage = () => {
         hidePagination={true}
         actionButton={iconButtonsFormulationData}
       />
+      {isConfirmDelete && (
+        <ConfirmationModal
+          label="Are you sure you want to delete the formulation?"
+          onCancel={clearIsConfirmDeleteCancel}
+          onConfirm={handleDeleteFormulation}
+        />
+      )}
     </>
   );
 };
