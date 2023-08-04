@@ -214,7 +214,7 @@ describe("Admin therapist list", () => {
     );
     fireEvent.click(blockButton0);
     expect(
-      await screen.findByText(/Therapist Blocked successfully!/i)
+      await screen.findByText(/Therapist blocked successfully!/i)
     ).toBeInTheDocument();
 
     const blockButton1 = await screen.findByTestId(
@@ -222,7 +222,7 @@ describe("Admin therapist list", () => {
     );
     fireEvent.click(blockButton1);
     expect(
-      await screen.findByText(/Therapist Unblocked successfully!/i)
+      await screen.findByText(/Therapist unblocked successfully!/i)
     ).toBeInTheDocument();
   });
 });
