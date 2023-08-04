@@ -185,7 +185,7 @@ mocks.push({
   },
   result: {
     data: {
-      patientDeleteAgenda: {
+      addPatientAgendaItem: {
         message: null,
         result: true,
         __typename: "result",
