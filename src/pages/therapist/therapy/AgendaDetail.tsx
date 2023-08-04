@@ -8,20 +8,30 @@ import CheckIcon from "@mui/icons-material/Check";
 import ShareIcon from "@mui/icons-material/Share";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useLazyQuery } from "@apollo/client";
-import { GET_PATIENT_AGENDA_DETAILS_LIST } from "../../../graphql/SafetyPlan/graphql";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import {
+  GET_PATIENT_AGENDA_DETAILS_LIST,
+  PATIENT_DELETE_AGENDA_BY_ID,
+} from "../../../graphql/SafetyPlan/graphql";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
 
 type propTypes = {
   sessionNo?: any;
 };
 export default function AgendaDetailAccordian(props: propTypes) {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   /* istanbul ignore next */
   const patientId = sessionStorage.getItem("patient_id");
   const [loader, setLoader] = useState<boolean>(false);
+  const [deletModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [deleteAgendaId, setDeleteAgendaId] = useState(null);
 
-  const [getPatientAgendaDetailsList, { data: agendaDetailList }] =
+  const [deleteAgenda] = useMutation(PATIENT_DELETE_AGENDA_BY_ID);
+
+  const [getPatientAgendaDetailsList, { data: agendaDetailList, refetch }] =
     useLazyQuery(GET_PATIENT_AGENDA_DETAILS_LIST, {
       onCompleted: () => {
         setLoader(false);
@@ -36,6 +46,35 @@ export default function AgendaDetailAccordian(props: propTypes) {
       },
     });
   }, [props.sessionNo]);
+
+  const handleDeleteAgenda = async () => {
+    try {
+      await deleteAgenda({
+        variables: {
+          patient_id: patientId,
+          ptagenda_id: deleteAgendaId,
+        },
+        onCompleted: () => {
+          setDeleteModalOpen(false);
+
+          enqueueSnackbar("Agenda deleted successfully!", {
+            variant: "success",
+          });
+          refetch();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  /* istanbul ignore next */
+  const clearIsConfirmCancel = () => {
+    setDeleteModalOpen(false);
+  };
 
   const fields = [
     {
@@ -61,10 +100,17 @@ export default function AgendaDetailAccordian(props: propTypes) {
       key: "actions",
       columnName: "Delete",
       visible: true,
-      render: () => (
+      render: (_, value) => (
         <>
-          <IconButton size="small">
-            <DeleteIcon data-testid="deleteIcon" />
+          <IconButton
+            size="small"
+            onClick={() => {
+              setDeleteModalOpen(true);
+              setDeleteAgendaId(value._id);
+            }}
+            data-testid="delete-icon-button"
+          >
+            <DeleteIcon />
           </IconButton>
         </>
       ),
@@ -141,6 +187,17 @@ export default function AgendaDetailAccordian(props: propTypes) {
           </Button>
         </Box>
       </Box>
+
+      {deletModalOpen && (
+        <ConfirmationModal
+          label="Are you sure want to delete this agenda?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            handleDeleteAgenda();
+          }}
+        />
+      )}
     </div>
   );
 }
