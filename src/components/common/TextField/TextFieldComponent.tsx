@@ -3,6 +3,7 @@ import React from "react";
 import { TextField } from "@mui/material";
 
 type propTypes = {
+  type?: string;
   required?: boolean;
   className?: string;
   fullWidth?: boolean;
@@ -30,6 +31,7 @@ export default function TextFieldComponent(props: propTypes) {
   return (
     <TextField
       style={props.style}
+      type={props.type}
       fullWidth={props.fullWidth}
       className={props.className}
       required={props.required}

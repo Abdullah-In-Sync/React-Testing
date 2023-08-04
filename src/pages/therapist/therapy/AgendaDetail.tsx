@@ -1,21 +1,26 @@
 import { Box } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import TableGenerator from "../../../components/common/TableGenerator";
 import { Button, IconButton } from "@mui/material";
 import NextLink from "next/link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import ShareIcon from "@mui/icons-material/Share";
-
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   GET_PATIENT_AGENDA_DETAILS_LIST,
   PATIENT_DELETE_AGENDA_BY_ID,
+  THERAPIST_ADD_ITEM_AGENDA,
 } from "../../../graphql/SafetyPlan/graphql";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import {
+  CommonModal,
+  ModalElement,
+} from "../../../components/common/CustomModal/CommonModal";
+import AddAgendaItemForm from "./AddAgendaItem";
 
 type propTypes = {
   sessionNo?: any;
@@ -25,14 +30,22 @@ export default function AgendaDetailAccordian(props: propTypes) {
   const { enqueueSnackbar } = useSnackbar();
   /* istanbul ignore next */
   const patientId = sessionStorage.getItem("patient_id");
+  const modalRefAddAgendaItem = useRef<ModalElement>(null);
+
   const [loader, setLoader] = useState<boolean>(false);
   const [deletModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [deleteAgendaId, setDeleteAgendaId] = useState(null);
 
+  const [displayOrderInput, setDisplayOrderInput] = useState();
+  const [agendaItemInput, setAgendaItemInput] = useState("");
+  const [isConfirmAddAgendaTask, setIsConfirmAddAgendaTask] = useState(false);
+
   const [deleteAgenda] = useMutation(PATIENT_DELETE_AGENDA_BY_ID);
+  const [addAgendaItem] = useMutation(THERAPIST_ADD_ITEM_AGENDA);
 
   const [getPatientAgendaDetailsList, { data: agendaDetailList, refetch }] =
     useLazyQuery(GET_PATIENT_AGENDA_DETAILS_LIST, {
+      fetchPolicy: "network-only",
       onCompleted: () => {
         setLoader(false);
       },
@@ -74,6 +87,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
   /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setDeleteModalOpen(false);
+    setIsConfirmAddAgendaTask(false);
   };
 
   const fields = [
@@ -148,6 +162,58 @@ export default function AgendaDetailAccordian(props: propTypes) {
     );
   };
 
+  const handleOpenAddAgendaItemModal = useCallback(
+    () => modalRefAddAgendaItem.current?.open(),
+    []
+  );
+  const handleCloseAddAgendaItemModal = useCallback(() => {
+    /* istanbul ignore next */
+    modalRefAddAgendaItem.current?.close();
+  }, []);
+
+  const handleAgendaItem = async () => {
+    try {
+      await addAgendaItem({
+        variables: {
+          patient_id: patientId,
+          display_order: parseInt(displayOrderInput),
+          agenda_name: agendaItemInput,
+          session: props.sessionNo,
+        },
+        onCompleted: (data) => {
+          setIsConfirmAddAgendaTask(false);
+          handleCloseAddAgendaItemModal();
+
+          /* istanbul ignore next */
+          if (data.addPatientAgendaItem.message === null) {
+            enqueueSnackbar("Agenda item added successfully!", {
+              variant: "success",
+            });
+          } else {
+            enqueueSnackbar(`${data.addPatientAgendaItem.message}`, {
+              variant: "error",
+            });
+          }
+
+          refetch();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
+  const receiveDisplayValue = (value) => {
+    setDisplayOrderInput(value);
+  };
+
+  const receivedAgendaValue = (value) => {
+    setAgendaItemInput(value);
+  };
+
   return (
     <div>
       <Box
@@ -163,7 +229,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
           loader={loader}
           backendPagination={false}
           selectedRecords={[]}
-          rowOnePage={10}
+          rowOnePage={100}
           showPagination={false}
         />
       </Box>
@@ -171,7 +237,11 @@ export default function AgendaDetailAccordian(props: propTypes) {
       <Box style={{ display: "flex", justifyContent: "space-between" }}>
         <Box style={{ flex: 1 }}>
           <Box style={{ marginLeft: "10px" }}>
-            <Button data-testid="addAgendaItemButton" variant="contained">
+            <Button
+              data-testid="addAgendaItemButton"
+              variant="contained"
+              onClick={handleOpenAddAgendaItemModal}
+            >
               Add Agenda Item
             </Button>
           </Box>
@@ -188,6 +258,18 @@ export default function AgendaDetailAccordian(props: propTypes) {
         </Box>
       </Box>
 
+      <CommonModal
+        ref={modalRefAddAgendaItem}
+        headerTitleText="Add Item"
+        maxWidth="sm"
+      >
+        <AddAgendaItemForm
+          onPressSubmit={() => setIsConfirmAddAgendaTask(true)}
+          receiveDisplayValue={receiveDisplayValue}
+          receivedAgendaValue={receivedAgendaValue}
+        />
+      </CommonModal>
+
       {deletModalOpen && (
         <ConfirmationModal
           label="Are you sure want to delete this agenda?"
@@ -196,6 +278,14 @@ export default function AgendaDetailAccordian(props: propTypes) {
             /* istanbul ignore next */
             handleDeleteAgenda();
           }}
+        />
+      )}
+
+      {isConfirmAddAgendaTask && (
+        <ConfirmationModal
+          label="Are you sure you want to add this item?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={handleAgendaItem}
         />
       )}
     </div>
