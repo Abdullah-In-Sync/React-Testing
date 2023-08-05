@@ -443,6 +443,25 @@ export const PATIENT_DELETE_AGENDA_BY_ID = gql`
   }
 `;
 
+export const THERAPIST_ADD_ITEM_AGENDA = gql`
+  mutation (
+    $agenda_name: String!
+    $display_order: Int!
+    $patient_id: String!
+    $session: Int!
+  ) {
+    addPatientAgendaItem(
+      agenda_name: $agenda_name
+      display_order: $display_order
+      patient_id: $patient_id
+      session: $session
+    ) {
+      message
+      result
+    }
+  }
+`;
+
 export const ADD_THERAPIST_MEASURE_PLAN_ADD = gql`
   mutation therapistAddMeasure($patient_id: String!, $measure_id: String!) {
     therapistAddMeasure(patient_id: $patient_id, measure_id: $measure_id) {

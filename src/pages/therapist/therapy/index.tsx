@@ -172,17 +172,18 @@ export default function TherapisTherapyList(props: propTypes) {
             <ContentHeader title="Therapy" />
           </Box>
 
-          {agendaDetails?.getPatientAgendaDetail?.result !== true && (
-            <Box style={{ marginLeft: "10px" }}>
-              <Button
-                data-testid="addAgendaButton"
-                variant="contained"
-                onClick={handleOpenAddAgendaModal}
-              >
-                Add Agenda
-              </Button>
-            </Box>
-          )}
+          {/* {agendaDetails?.getPatientAgendaDetail?.result !== true && ( */}
+          <Box style={{ marginLeft: "10px" }}>
+            <Button
+              data-testid="addAgendaButton"
+              variant="contained"
+              onClick={handleOpenAddAgendaModal}
+              disabled={agendaDetails?.getPatientAgendaDetail?.result == true}
+            >
+              Add Agenda
+            </Button>
+          </Box>
+          {/* )} */}
         </Box>
 
         <Box marginBottom={"20px"}>
