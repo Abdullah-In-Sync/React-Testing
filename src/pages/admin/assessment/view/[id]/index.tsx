@@ -174,7 +174,6 @@ const ViewAssessmentPage: NextPage = () => {
 
   const onDeleteCategoryQuestion = async (formFields) => {
     const { questionId, callback } = formFields;
-    console.debug("formfields", questionId);
     setLoader(true);
     try {
       await deleteCategoryQuestion({

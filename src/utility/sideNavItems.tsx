@@ -42,7 +42,7 @@ export const superadmin_routes: RoutesType[] = [
     key: 2,
     label: "Organization",
     path: "/admin/organization/list",
-    icon: <GroupsIcon />, //<Diversity3Icon />,
+    icon: <GroupsIcon />,
   },
   {
     key: 3,
