@@ -6,10 +6,8 @@ import { useAuth } from "../../hooks/useAuth";
 const LoginPage: NextPage = () => {
   const { login } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  console.debug("login", login);
   const handleLoginCallback = ({ data, status }) => {
     const { message } = data;
-    console.debug(data, status, message);
     enqueueSnackbar(message, {
       variant: status,
     });

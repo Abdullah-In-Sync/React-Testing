@@ -194,7 +194,7 @@ const SidebarMenu = () => {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {getRouteByUser(user?.user_type).map((val, index) => {
+              {getRouteByUser().map((val, index) => {
                 if (Array.isArray(val)) {
                   /* istanbul ignore next */
                   return (

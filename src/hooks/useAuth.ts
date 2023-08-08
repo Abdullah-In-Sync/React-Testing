@@ -6,7 +6,6 @@ import { setSessionToken } from "../utility/storage";
 export const useAuth = () => {
   const router = useRouter();
   const login = async (values, { setSubmitting, callback }) => {
-    console.debug("login ....", values);
     fetch("/v2/api/login", {
       method: "POST",
       headers: {
@@ -15,13 +14,11 @@ export const useAuth = () => {
       body: JSON.stringify(values),
     })
       .then((res) => {
-        console.debug({ res });
         if (!res.ok) throw res;
         return res.json();
       })
       .then((data) =>
         setSessionToken(data, ({ userType }) => {
-          console.debug("data", data);
           callback({
             status: "success",
             data: { data, message: "Login successful!" },
