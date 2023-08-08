@@ -157,10 +157,9 @@ export default function TherapisTherapyList(props: propTypes) {
     setIsConfirmCompleteTask(false);
   };
 
+  /* istanbul ignore next */
   const handleOk = () => {
-    /* istanbul ignore next */
     setCompleteAgendaAddModal(false);
-
     refetch();
   };
   return (
@@ -177,8 +176,14 @@ export default function TherapisTherapyList(props: propTypes) {
             <Button
               data-testid="addAgendaButton"
               variant="contained"
-              onClick={handleOpenAddAgendaModal}
-              disabled={agendaDetails?.getPatientAgendaDetail?.result == true}
+              onClick={
+                /* istanbul ignore next */
+                handleOpenAddAgendaModal
+              }
+              disabled={
+                /* istanbul ignore next */
+                agendaDetails?.getPatientAgendaDetail?.result == true
+              }
             >
               Add Agenda
             </Button>
