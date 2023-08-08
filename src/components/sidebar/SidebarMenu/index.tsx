@@ -14,6 +14,7 @@ import {
   default_patient_routes,
   btb_actions_patient_routes,
 } from "../../../utility/sideNavItems";
+import { getSessionToken } from "../../../utility/storage";
 
 const listItem = {
   paddingTop: "0px",
@@ -167,14 +168,15 @@ const SidebarMenu = () => {
   };
 
   const userRoute = {
-    patient: patientLinks(),
+    patient: user ? patientLinks() : [],
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };
 
   /* istanbul ignore next */
-  const getRouteByUser = (user) => {
-    return userRoute[user] || superadmin_routes;
+  const getRouteByUser = () => {
+    const { userType } = getSessionToken();
+    return userType ? userRoute[userType] : [];
   };
 
   /* istanbul ignore next */

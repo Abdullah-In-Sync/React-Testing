@@ -14,6 +14,7 @@ import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import { SidebarContext } from "../../contexts/SidebarContext";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 import { useAppContext } from "../../contexts/AuthContext";
 
@@ -22,8 +23,10 @@ import {
   patient_routes,
   therapistRoutes,
 } from "../../utility/navItems";
+import { clearSession, getSessionToken } from "../../utility/storage";
 
 const NavBar = () => {
+  const router = useRouter();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [userType, setUserType] = useState<string>("admin");
   const { user: { organization_settings: { logo = null } = {} } = {} } =
@@ -36,8 +39,9 @@ const NavBar = () => {
     therapist: therapistRoutes,
     admin: superadmin_routes,
   };
-  const getRouteByUser = (user) => {
-    return userRoute[user] || superadmin_routes;
+  const getRouteByUser = () => {
+    const { userType } = getSessionToken();
+    return userRoute[userType] || [];
   };
 
   /* istanbul ignore next */
@@ -51,6 +55,10 @@ const NavBar = () => {
   };
 
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
+
+  const handleDropdownLick = (label) => {
+    if (label === "Log Out") clearSession(() => router.replace("/login"));
+  };
   return (
     <AppBar
       data-testid="navBar"
@@ -122,7 +130,7 @@ const NavBar = () => {
                 <MenuItem
                   key={setting.label}
                   component={"a"}
-                  href={setting.path}
+                  onClick={() => handleDropdownLick(setting.label)}
                 >
                   <Typography textAlign="center">{setting.label}</Typography>
                 </MenuItem>

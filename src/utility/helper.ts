@@ -128,3 +128,12 @@ export const firstLetterCapital = (value) => {
   if (value) return value.charAt(0).toUpperCase() + value.slice(1);
   else return "";
 };
+
+export const getCurrentURL = () => {
+  if (typeof window !== "undefined") {
+    const {
+      location: { protocol, hostname, port = "" },
+    } = window;
+    return protocol + "//" + hostname + ":" + port;
+  }
+};
