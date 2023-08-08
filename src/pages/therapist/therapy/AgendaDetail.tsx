@@ -279,7 +279,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
               variant: "success",
             });
           } else {
-            enqueueSnackbar(`${data.addPatientAgendaItem.message}`, {
+            enqueueSnackbar(`This agenda item already exists`, {
               variant: "error",
             });
           }
