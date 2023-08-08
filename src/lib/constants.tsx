@@ -88,11 +88,17 @@ export const shareResourceAvailability = {
 };
 
 export const blockUnblockText = {
-  1: "Unblocked",
-  0: "Blocked",
+  1: "unblocked",
+  0: "blocked",
 };
 
 export const activeInactiveText = {
   0: "Inactive",
   1: "Active",
+};
+
+export const homeRoute = {
+  admin: "/admin/dashboard/",
+  therapist: "/therapist/dashboard/",
+  patient: "/patient/home/",
 };
