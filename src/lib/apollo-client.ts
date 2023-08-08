@@ -8,7 +8,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import Cookies from "js-cookie";
 import { env } from "./env";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { clearSession } from "../utility/storage";
 
 const httpLink = createHttpLink({
@@ -29,9 +29,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const errorLink = onError(({ networkError }) => {
-  const router = useRouter();
   if (networkError["statusCode"] === 401) {
-    clearSession(() => router.replace("/login"));
+    clearSession(() => Router.replace("/login"));
   }
 });
 
