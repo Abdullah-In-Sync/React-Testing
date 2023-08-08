@@ -21,6 +21,7 @@ import {
   GET_PATIENT_AGENDA_DETAILS,
   GET_PATIENT_AGENDA_DETAILS_LIST,
   PATIENT_DELETE_AGENDA_BY_ID,
+  THERAPIST_ADD_ITEM_AGENDA,
 } from "../graphql/SafetyPlan/graphql";
 
 jest.mock("../contexts/AuthContext");
@@ -171,6 +172,27 @@ mocks.push({
     },
   },
 });
+
+mocks.push({
+  request: {
+    query: THERAPIST_ADD_ITEM_AGENDA,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      display_order: 1,
+      agenda_name: "My name is agenda",
+      session: 1,
+    },
+  },
+  result: {
+    data: {
+      addPatientAgendaItem: {
+        message: null,
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
 const sut = async () => {
   // system under test
   sessionStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
@@ -265,7 +287,7 @@ describe("Therapist client feedback list", () => {
     });
   });
 
-  test("Renders agenda table data", async () => {
+  test("Delete agenda item list", async () => {
     await sut();
     await waitFor(async () => {
       await sut();
@@ -293,6 +315,50 @@ describe("Therapist client feedback list", () => {
       await waitFor(async () => {
         expect(
           screen.getByText("Agenda deleted successfully!")
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  test("Add agenda item", async () => {
+    await sut();
+    await waitFor(async () => {
+      await sut();
+      const list = await screen.findAllByTestId("list-tile");
+
+      const firstAccordion = list[0];
+
+      await fireEvent.click(
+        within(firstAccordion).queryByTestId("toggleContent")
+      );
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
+        fireEvent.click(screen.queryByTestId("addAgendaItemButton"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("display_order")).toBeInTheDocument();
+        expect(screen.getByTestId("agenda_name")).toBeInTheDocument();
+
+        fireEvent.change(screen.queryByTestId("display_order"), {
+          target: { value: 1 },
+        });
+        fireEvent.change(screen.queryByTestId("agenda_name"), {
+          target: { value: "My name is agenda" },
+        });
+
+        fireEvent.click(screen.queryByTestId("addSubmitForm"));
+      });
+
+      await waitFor(async () => {
+        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Agenda item added successfully!")
         ).toBeInTheDocument();
       });
     });
