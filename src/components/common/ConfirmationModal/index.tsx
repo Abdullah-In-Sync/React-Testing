@@ -6,7 +6,9 @@ interface ViewProps {
   label: string;
   description?: string;
   onCancel?: () => void;
-  onConfirm?: () => void;
+  onConfirm?: any;
+  // onConfirm?: () => void;
+
   onOk?: () => void;
   mode?: string;
 }

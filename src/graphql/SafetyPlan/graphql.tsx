@@ -462,6 +462,27 @@ export const THERAPIST_ADD_ITEM_AGENDA = gql`
   }
 `;
 
+export const ASSIGN_RESOURCE_AGENDA = gql`
+  mutation (
+    $patient_id: String!
+    $ptagenda_id: String!
+    $resource_id: String!
+    $session: Int!
+    $ptsharres_id: String
+  ) {
+    patientAgendaAssignResource(
+      patient_id: $patient_id
+      ptagenda_id: $ptagenda_id
+      resource_id: $resource_id
+      session: $session
+      ptsharres_id: $ptsharres_id
+    ) {
+      message
+      result
+    }
+  }
+`;
+
 export const ADD_THERAPIST_MEASURE_PLAN_ADD = gql`
   mutation therapistAddMeasure($patient_id: String!, $measure_id: String!) {
     therapistAddMeasure(patient_id: $patient_id, measure_id: $measure_id) {
