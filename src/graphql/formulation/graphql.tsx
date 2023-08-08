@@ -236,6 +236,7 @@ export const GET_PAT_FORMULATION_LIST = gql`
       _id
       created_date
       formulation_data {
+        _id
         formulation_name
         download_formulation_url
         formulation_avail_for
@@ -254,6 +255,17 @@ export const GET_PAT_FORMULATION_LIST = gql`
       template_id
       template_response
       updated_date
+    }
+  }
+`;
+
+export const THERAPIST_DELETE_FORMULATION_BY_ID = gql`
+  mutation therapistDeleteFormulationById($patient_formulation_id: String!) {
+    therapistDeleteFormulationById(
+      patient_formulation_id: $patient_formulation_id
+    ) {
+      message
+      result
     }
   }
 `;
