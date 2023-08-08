@@ -105,7 +105,7 @@ const TherapistPatientListPage: NextPage = () => {
           handleCloseAddPatientModal();
           if (data.addPatient.result === "error") {
             enqueueSnackbar(
-              "An account with this email address alreeay exists",
+              "An account with this email address already exists.",
               {
                 variant: "error",
               }

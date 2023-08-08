@@ -24,6 +24,8 @@ import { useRouter } from "next/router";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { SuccessModal } from "../../../components/common/SuccessModal";
 
+import AgendaDetailAccordian from "./AgendaDetail";
+
 type propTypes = {
   setTherapy: any;
 };
@@ -170,17 +172,18 @@ export default function TherapisTherapyList(props: propTypes) {
             <ContentHeader title="Therapy" />
           </Box>
 
-          {agendaDetails?.getPatientAgendaDetail?.result !== true && (
-            <Box style={{ marginLeft: "10px" }}>
-              <Button
-                data-testid="addAgendaButton"
-                variant="contained"
-                onClick={handleOpenAddAgendaModal}
-              >
-                Add Agenda
-              </Button>
-            </Box>
-          )}
+          {/* {agendaDetails?.getPatientAgendaDetail?.result !== true && ( */}
+          <Box style={{ marginLeft: "10px" }}>
+            <Button
+              data-testid="addAgendaButton"
+              variant="contained"
+              onClick={handleOpenAddAgendaModal}
+              disabled={agendaDetails?.getPatientAgendaDetail?.result == true}
+            >
+              Add Agenda
+            </Button>
+          </Box>
+          {/* )} */}
         </Box>
 
         <Box marginBottom={"20px"}>
@@ -196,7 +199,9 @@ export default function TherapisTherapyList(props: propTypes) {
                       title={`Session ${v.ptsession_no}`}
                       marginBottom={"20px !important"}
                       detail={() => {
-                        return <Typography>Work in progress</Typography>;
+                        return (
+                          <AgendaDetailAccordian sessionNo={v.ptsession_no} />
+                        );
                       }}
                     />
                   );
