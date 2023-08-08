@@ -1,26 +1,25 @@
-import { useState, MouseEvent, useContext, useEffect } from "react";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
-import { SidebarContext } from "../../contexts/SidebarContext";
-import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
-import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { MouseEvent, useContext, useState } from "react";
+import { SidebarContext } from "../../contexts/SidebarContext";
 
 import { useAppContext } from "../../contexts/AuthContext";
 
 import {
-  superadmin_routes,
   patient_routes,
+  superadmin_routes,
   therapistRoutes,
 } from "../../utility/navItems";
 import { clearSession, getSessionToken } from "../../utility/storage";
@@ -28,11 +27,8 @@ import { clearSession, getSessionToken } from "../../utility/storage";
 const NavBar = () => {
   const router = useRouter();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [userType, setUserType] = useState<string>("admin");
   const { user: { organization_settings: { logo = null } = {} } = {} } =
     useAppContext();
-
-  useEffect(() => setUserType(Cookies.get("user_type")), []);
 
   const userRoute = {
     patient: patient_routes,
@@ -126,7 +122,7 @@ const NavBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {getRouteByUser(userType).map((setting) => (
+              {getRouteByUser().map((setting) => (
                 <MenuItem
                   key={setting.label}
                   component={"a"}
