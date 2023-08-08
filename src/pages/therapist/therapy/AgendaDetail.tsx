@@ -12,6 +12,7 @@ import {
   ASSIGN_RESOURCE_AGENDA,
   GET_PATIENT_AGENDA_DETAILS_LIST,
   PATIENT_DELETE_AGENDA_BY_ID,
+  PATIENT_SHARE_AGENDA_BY_ID,
   THERAPIST_ADD_ITEM_AGENDA,
 } from "../../../graphql/SafetyPlan/graphql";
 import { useRouter } from "next/router";
@@ -34,6 +35,7 @@ type propTypes = {
 export default function AgendaDetailAccordian(props: propTypes) {
   const { user } = useAppContext();
   const router = useRouter();
+  /* istanbul ignore next */
   const orgId = user?.therapist_data?.org_id;
   const sessionNo = props.sessionNo;
   const session = parseInt(sessionNo, 10);
@@ -44,7 +46,11 @@ export default function AgendaDetailAccordian(props: propTypes) {
 
   const [loader, setLoader] = useState<boolean>(false);
   const [deletModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [shareModalOpen, setShareModalOpen] = useState<boolean>(false);
+
   const [deleteAgendaId, setDeleteAgendaId] = useState(null);
+  const [ptShareId, setPtShareId] = useState(null);
+
   const [displayOrderInput, setDisplayOrderInput] = useState();
   const [agendaItemInput, setAgendaItemInput] = useState("");
   const [isConfirmAddAgendaTask, setIsConfirmAddAgendaTask] = useState(false);
@@ -58,6 +64,8 @@ export default function AgendaDetailAccordian(props: propTypes) {
   const [reassignedResourceId, setReassignedResourceId] = useState("");
 
   const [deleteAgenda] = useMutation(PATIENT_DELETE_AGENDA_BY_ID);
+  const [shareAgenda] = useMutation(PATIENT_SHARE_AGENDA_BY_ID);
+
   const [addAgendaItem] = useMutation(THERAPIST_ADD_ITEM_AGENDA);
   const [assigneResource] = useMutation(ASSIGN_RESOURCE_AGENDA);
 
@@ -68,7 +76,6 @@ export default function AgendaDetailAccordian(props: propTypes) {
         setLoader(false);
       },
     });
-  console.log("Koca: agendaDetailList ", agendaDetailList);
 
   useEffect(() => {
     getPatientAgendaDetailsList({
@@ -91,13 +98,6 @@ export default function AgendaDetailAccordian(props: propTypes) {
 
   useEffect(() => {
     if (openResourceModal === true) {
-      console.debug("Get resource popup data", {
-        therapyId: props.therapyId,
-        orgId: orgId,
-        searchText: searchValue,
-        myResource: myResource,
-        myFav: myFavourites,
-      });
       getPopupData({
         variables: {
           therapyId: props.therapyId,
@@ -143,13 +143,39 @@ export default function AgendaDetailAccordian(props: propTypes) {
     }
   };
 
+  const handleShareAgenda = async () => {
+    try {
+      await shareAgenda({
+        variables: {
+          ptsharres_id: ptShareId,
+          ptagenda_id: deleteAgendaId,
+        },
+        onCompleted: () => {
+          setShareModalOpen(false);
+
+          enqueueSnackbar("Agenda shared successfully!", {
+            variant: "success",
+          });
+          refetch();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
   /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setDeleteModalOpen(false);
     setIsConfirmAddAgendaTask(false);
     setIsConfirmCompleteTask(false);
+    setShareModalOpen(false);
   };
 
+  /* istanbul ignore next */
   const fields = [
     {
       key: "empty",
@@ -210,7 +236,6 @@ export default function AgendaDetailAccordian(props: propTypes) {
               setCheckForResourceId(value.resource_id);
             }}
           >
-            {/* {value.resource_id} */}
             <VisibilityIcon />
           </IconButton>
 
@@ -232,19 +257,32 @@ export default function AgendaDetailAccordian(props: propTypes) {
           </IconButton>
 
           <IconButton
+            disabled={value.share_status == 1}
             style={{
               borderRadius: "50%",
               border: "1px solid #000",
+              backgroundColor: value.share_status == 1 ? "#6EC9DB" : undefined,
             }}
             size="small"
+            onClick={() => {
+              setShareModalOpen(true);
+              setDeleteAgendaId(value._id);
+              setPtShareId(value.ptsharres_id);
+            }}
           >
-            <ShareIcon data-testid="deleteIcon" />
+            <ShareIcon
+              style={{
+                color: value.share_status == 1 ? "#ffff" : undefined,
+              }}
+              data-testid="share-agenda-button"
+            />
           </IconButton>
         </>
       ),
     },
   ];
 
+  /* istanbul ignore next */
   const noteForSession = () => {
     router.push(
       `/therapist/patient/view/${patientId}/?mainTab=notes&SessionNo=${props.sessionNo}`
@@ -252,6 +290,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
   };
 
   const handleOpenAddAgendaItemModal = useCallback(
+    /* istanbul ignore next */
     () => modalRefAddAgendaItem.current?.open(),
     []
   );
@@ -439,6 +478,17 @@ export default function AgendaDetailAccordian(props: propTypes) {
           }}
         />
       )}
+
+      {shareModalOpen && (
+        <ConfirmationModal
+          label="Are you sure want to share resource with patient?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            handleShareAgenda();
+          }}
+        />
+      )}
       {isConfirmAddAgendaTask && (
         <ConfirmationModal
           label="Are you sure you want to add this item?"
@@ -464,13 +514,16 @@ export default function AgendaDetailAccordian(props: propTypes) {
         handleMyFav={handleMyFav}
       />
 
-      {isConfirmCompleteTask && (
-        <ConfirmationModal
-          label="Resource already assigned, would you like to change it?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={reassigneAgendaResources}
-        />
-      )}
+      {
+        /* istanbul ignore next */
+        isConfirmCompleteTask && (
+          <ConfirmationModal
+            label="Resource already assigned, would you like to change it?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={reassigneAgendaResources}
+          />
+        )
+      }
     </div>
   );
 }

@@ -443,6 +443,18 @@ export const PATIENT_DELETE_AGENDA_BY_ID = gql`
   }
 `;
 
+export const PATIENT_SHARE_AGENDA_BY_ID = gql`
+  mutation ($ptsharres_id: String!, $ptagenda_id: String!) {
+    patientAgendaShareResource(
+      ptsharres_id: $ptsharres_id
+      ptagenda_id: $ptagenda_id
+    ) {
+      message
+      result
+    }
+  }
+`;
+
 export const THERAPIST_ADD_ITEM_AGENDA = gql`
   mutation (
     $agenda_name: String!
