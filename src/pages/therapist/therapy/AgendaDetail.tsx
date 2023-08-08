@@ -200,7 +200,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
             style={{
               borderRadius: "50%",
               border: "1px solid #000",
-              marginRight: "10px", // Adding margin to the right
+              marginRight: "10px",
             }}
             size="small"
             data-testid="edit-icon-button"
@@ -218,7 +218,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
             style={{
               borderRadius: "50%",
               border: "1px solid #000",
-              marginRight: "10px", // Adding margin to the right
+              marginRight: "10px",
               backgroundColor: value.resource_id !== "" ? "#6EC9DB" : undefined,
             }}
             size="small"
@@ -466,7 +466,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
 
       {isConfirmCompleteTask && (
         <ConfirmationModal
-          label="Resource already assigned do you want to change it?"
+          label="Resource already assigned, would you like to change it?"
           onCancel={clearIsConfirmCancel}
           onConfirm={reassigneAgendaResources}
         />
