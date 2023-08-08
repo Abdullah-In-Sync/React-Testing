@@ -1,8 +1,11 @@
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
-import { GET_PAT_FORMULATION_LIST } from "../graphql/formulation/graphql";
+import {
+  GET_PAT_FORMULATION_LIST,
+  THERAPIST_DELETE_FORMULATION_BY_ID,
+} from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
 import TherapistPatientFormulation from "../pages/therapist/patient/view/[id]/formulation";
@@ -110,6 +113,25 @@ mocksData.push({
   },
 });
 
+//delete formulation
+mocksData.push({
+  request: {
+    query: THERAPIST_DELETE_FORMULATION_BY_ID,
+    variables: {
+      patient_formulation_id: "c7349895-c90c-4188-a35c-1b2b22673ed6",
+    },
+  },
+  result: {
+    data: {
+      therapistDeleteFormulationById: {
+        message: null,
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   sessionStorage.setItem("patient_id", "27f49dbe245843eda77fe5170ee074a8");
   render(
@@ -163,6 +185,29 @@ describe("Formulation list page", () => {
         screen.getByTestId(
           "iconButton_attachment_c7349895-c90c-4188-a35c-1b2b22673ed6"
         )
+      ).toBeInTheDocument();
+    });
+  });
+  it("Delete Formulation From list", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_delete_c7349895-c90c-4188-a35c-1b2b22673ed6"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.getByTestId(
+          "iconButton_delete_c7349895-c90c-4188-a35c-1b2b22673ed6"
+        )
+      );
+      expect(
+        screen.getByText("Are you sure you want to delete the formulation?")
+      ).toBeInTheDocument();
+
+      fireEvent.click(screen.getByTestId("confirmButton"));
+      expect(
+        await screen.findByText(/Formulation deleted successfully./i)
       ).toBeInTheDocument();
     });
   });

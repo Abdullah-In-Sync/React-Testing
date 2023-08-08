@@ -7,7 +7,7 @@ import CommonTable from "../../../../../../components/common/CommonTable";
 import moment from "moment";
 import {
   GET_PAT_FORMULATION_LIST,
-  THERAPIST_DELETE_FORMULATION,
+  THERAPIST_DELETE_FORMULATION_BY_ID,
 } from "../../../../../../graphql/formulation/graphql";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
@@ -19,7 +19,7 @@ const TherapistPatientFormulation: NextPage = () => {
   const [isConfirmDelete, setIsConfirmDelete] = useState(false);
   const [selectedId, setSelectedId] = useState();
   const id = sessionStorage.getItem("patient_id");
-  const [deleteFormulation] = useMutation(THERAPIST_DELETE_FORMULATION);
+  const [deleteFormulation] = useMutation(THERAPIST_DELETE_FORMULATION_BY_ID);
 
   const [
     getPatFormulationList,
@@ -59,17 +59,17 @@ const TherapistPatientFormulation: NextPage = () => {
     setLoader(true);
     try {
       const {
-        data: { therapistDeleteFormulation },
+        data: { therapistDeleteFormulationById },
       } = await deleteFormulation({
         variables: {
           patient_formulation_id: selectedId,
         },
       });
-      if (therapistDeleteFormulation?.result) {
-        refetchFormulationList();
+      if (therapistDeleteFormulationById?.result) {
         enqueueSnackbar("Formulation deleted successfully.", {
           variant: "success",
         });
+        refetchFormulationList();
       }
     } catch (e) {
       /* istanbul ignore next */
@@ -125,14 +125,11 @@ const TherapistPatientFormulation: NextPage = () => {
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleActionButtonClick = (value) => {
-    const { formulationId,_id,  pressedIconButton } = value;
-    console.log(value);
+    const { _id, pressedIconButton } = value;
     if (pressedIconButton == "delete") {
       setSelectedId(_id);
       setIsConfirmDelete(true);
     }
-    // const { _id } = value;
-    // router.push(`formulation/edit/${_id}`);
   };
 
   return (
