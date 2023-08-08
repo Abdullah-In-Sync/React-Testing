@@ -200,7 +200,11 @@ export default function TherapisTherapyList(props: propTypes) {
                       marginBottom={"20px !important"}
                       detail={() => {
                         return (
-                          <AgendaDetailAccordian sessionNo={v.ptsession_no} />
+                          <AgendaDetailAccordian
+                            sessionId={v._id}
+                            therapyId={props.setTherapy}
+                            sessionNo={v.ptsession_no}
+                          />
                         );
                       }}
                     />
