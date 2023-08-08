@@ -259,9 +259,9 @@ export const GET_PAT_FORMULATION_LIST = gql`
   }
 `;
 
-export const THERAPIST_DELETE_FORMULATION = gql`
-  mutation therapistDeleteFormulation($patient_formulation_id: String!) {
-    therapistDeleteFormulation(
+export const THERAPIST_DELETE_FORMULATION_BY_ID = gql`
+  mutation therapistDeleteFormulationById($patient_formulation_id: String!) {
+    therapistDeleteFormulationById(
       patient_formulation_id: $patient_formulation_id
     ) {
       message
