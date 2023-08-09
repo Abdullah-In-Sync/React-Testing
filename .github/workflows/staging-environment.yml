@@ -92,6 +92,9 @@ jobs:
         envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.STAGING_APPSYNC_URL }}
         envkey_NEXT_PUBLIC_V1_ROOT_URL: https://portal.staging-myhelp.co.uk
         envkey_NEXT_PUBLIC_BTB_COURSE_1_URL: ${{ vars.STAGING_BTB_COURSE_1_URL }}
+        envkey_NEXT_PUBLIC_COGNITO_REGION: ${{ secrets.STAGING_AWS_REGION }}
+        envkey_NEXT_PUBLIC_COGNITO_APP_CLIENT_ID: ${{ secrets.STAGING_AWS_CLIENT_ID }}
+        envkey_NEXT_PUBLIC_COGNITO_USER_POOL_ID: ${{ secrets.STAGING_USER_POOL_ID }}
         directory: src
         file_name: .env.local
         fail_on_empty: true
