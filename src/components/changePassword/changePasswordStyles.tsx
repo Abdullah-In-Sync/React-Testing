@@ -1,10 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Theme } from "@mui/system";
-import { useTheme } from "@mui/styles";
 import { commonModalWrapperObj } from "../common/CustomModal/commonModalStyles";
 
 export const useStyles = makeStyles(() => {
-  const theme = useTheme() as Theme;
   return {
     changePasswordModalWrapper: {
       "& label": {
@@ -25,7 +22,7 @@ export const useStyles = makeStyles(() => {
         textAlign: "center",
         marginTop: 10,
       },
-      ...commonModalWrapperObj(theme),
+      ...commonModalWrapperObj(),
     },
   };
 });

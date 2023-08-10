@@ -1,9 +1,29 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Theme } from "@mui/system";
-import { useTheme } from "@mui/styles";
+
+const theme = {
+  palette: {
+    primary: {
+      main: "#6EC9DB",
+      contrastText: "#ffffff",
+      light: "#eaf3ff",
+    },
+    secondary: {
+      main: "#6BA08E",
+      contrastText: "#ffffff",
+    },
+
+    custom: {
+      light: "#ffffff",
+      main: "#f57c00",
+      dark: "#ef6c00",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
+    mode: "light",
+  },
+};
 
 /* istanbul ignore next */
-export const commonModalWrapperObj = (theme) => ({
+export const commonModalWrapperObj = () => ({
   "& .MuiTypography-root": {
     background: theme.palette.primary.main,
     color: theme.palette.custom.light,
@@ -41,9 +61,8 @@ export const commonModalWrapperObj = (theme) => ({
 
 /* istanbul ignore next */
 export const useStyles = makeStyles(() => {
-  const theme = useTheme() as Theme;
   return {
-    commonModalWrapper: commonModalWrapperObj(theme),
+    commonModalWrapper: commonModalWrapperObj(),
     modalC: {
       "& .MuiTypography-root": {
         background: theme.palette.primary.contrastText,
