@@ -17,6 +17,7 @@ module.exports = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   moduleNameMapper: {
     "\\.(scss|sass|css)$": "identity-obj-proxy",
+    "^uuid$": require.resolve("uuid"),
   },
   clearMocks: true,
   collectCoverage: false,
