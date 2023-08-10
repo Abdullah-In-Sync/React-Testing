@@ -11,6 +11,7 @@ import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_THERAPIST_TOKEN_DATA } from "../graphql/query/common";
 import { GET_RESOURCE_DETAIL } from "../graphql/query/resource";
 import { useAppContext } from "../contexts/AuthContext";
+import { SnackbarProvider } from "notistack";
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
@@ -175,7 +176,9 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <ResourceById />
+      <SnackbarProvider>
+        <ResourceById />
+      </SnackbarProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>

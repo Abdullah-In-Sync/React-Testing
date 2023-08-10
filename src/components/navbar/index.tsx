@@ -11,21 +11,27 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { MouseEvent, useContext, useState } from "react";
+import { MouseEvent, useContext, useRef, useState } from "react";
 import { SidebarContext } from "../../contexts/SidebarContext";
 
 import { useAppContext } from "../../contexts/AuthContext";
 
+import { useSnackbar } from "notistack";
+import { useAuth } from "../../hooks/useAuth";
 import {
   patient_routes,
   superadmin_routes,
   therapistRoutes,
 } from "../../utility/navItems";
-import { clearSession, getSessionToken } from "../../utility/storage";
+import { getSessionToken } from "../../utility/storage";
+import ChangePassword from "../changePassword/ChangePassword";
+import { ConfirmInfoElement } from "../common/CustomModal/InfoModal";
 
 const NavBar = () => {
-  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+  const { logout } = useAuth();
+
+  const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const { user: { organization_settings: { logo = null } = {} } = {} } =
     useAppContext();
@@ -52,108 +58,124 @@ const NavBar = () => {
 
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
 
-  const handleDropdownLick = (label) => {
-    if (label === "Log Out") clearSession(() => router.replace("/login"));
+  const onPressChangePassword = () => {
+    infoModalRef.current.openConfirm({});
+  };
+
+  const handleDropdownCLick = (label) => {
+    if (label === "logout")
+      return logout(({ status, message }) =>
+        enqueueSnackbar(message, {
+          variant: status,
+        })
+      );
+    else if (label === "changePassword") return onPressChangePassword();
   };
   return (
-    <AppBar
-      data-testid="navBar"
-      position="fixed"
-      color="inherit"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-    >
-      <Container sx={{ maxWidth: "100%" }} maxWidth={false}>
-        <Toolbar disableGutters>
-          <Box
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            {logo && logo != "" ? (
-              <img
-                src={`/account/openFile?type=logo&file=${logo}`}
-                height="40"
-                width="150"
-                alt="logo"
-                loading="lazy"
-              />
-            ) : (
-              <Image
-                alt="My Help"
-                src="/images/logo.png"
-                height="40"
-                width="150"
-              />
-            )}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenUserMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+    <>
+      <AppBar
+        data-testid="navBar"
+        position="fixed"
+        color="inherit"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Container sx={{ maxWidth: "100%" }} maxWidth={false}>
+          <Toolbar disableGutters>
+            <Box
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                flexGrow: 1,
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
               }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
             >
-              {getRouteByUser().map((setting) => (
-                <MenuItem
-                  key={setting.label}
-                  component={"a"}
-                  onClick={() => handleDropdownLick(setting.label)}
+              {logo && logo != "" ? (
+                <img
+                  src={`/account/openFile?type=logo&file=${logo}`}
+                  height="40"
+                  width="150"
+                  alt="logo"
+                  loading="lazy"
+                />
+              ) : (
+                <Image
+                  alt="My Help"
+                  src="/images/logo.png"
+                  height="40"
+                  width="150"
+                />
+              )}
+            </Box>
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenUserMenu}
+                  color="inherit"
+                  data-testid="accountCircleBtn"
                 >
-                  <Typography textAlign="center">{setting.label}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+                  <AccountCircle />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                data-testid="menu_dropdown"
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {getRouteByUser().map((setting) => (
+                  <MenuItem
+                    key={setting.label}
+                    component={"a"}
+                    data-testid={`btn_${setting.id}`}
+                    onClick={() => handleDropdownCLick(setting.id)}
+                  >
+                    <Typography textAlign="center">{setting.label}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
 
-          <Box
-            component="span"
-            sx={{
-              ml: 2,
-              display: { lg: "none", xs: "inline-block" },
-            }}
-          >
-            <Tooltip arrow title="Toggle Menu">
-              <IconButton color="primary" onClick={toggleSidebar}>
-                {!sidebarToggle ? (
-                  <MenuTwoToneIcon fontSize="small" />
-                ) : (
-                  <CloseTwoToneIcon fontSize="small" />
-                )}
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+            <Box
+              component="span"
+              sx={{
+                ml: 2,
+                display: { lg: "none", xs: "inline-block" },
+              }}
+            >
+              <Tooltip arrow title="Toggle Menu">
+                <IconButton color="primary" onClick={toggleSidebar}>
+                  {!sidebarToggle ? (
+                    <MenuTwoToneIcon fontSize="small" />
+                  ) : (
+                    <CloseTwoToneIcon fontSize="small" />
+                  )}
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <ChangePassword infoModalRef={infoModalRef} />
+    </>
   );
 };
 export default NavBar;

@@ -12,6 +12,7 @@ import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { GET_PATIENT_RESOURCE_DETAIL } from "../graphql/query/resource";
 import * as s3 from "../lib/helpers/s3";
 import { useAppContext } from "../contexts/AuthContext";
+import { SnackbarProvider } from "notistack";
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 const file = new File(["hello"], "hello.png", { type: "image/png" });
@@ -150,7 +151,9 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <ResourceDetailById />
+      <SnackbarProvider>
+        <ResourceDetailById />
+      </SnackbarProvider>
     </MockedProvider>
   );
   await waitForElementToBeRemoved(() =>

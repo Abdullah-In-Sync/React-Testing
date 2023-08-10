@@ -2,6 +2,7 @@ import { MockedProvider, MockedResponse } from "@apollo/react-testing";
 import { render, screen } from "@testing-library/react";
 import { GET_UPLOAD_RESOURCE_URL } from "../../graphql/query/resource";
 import UploadButtonComponent from "../common/UploadButton/UploadButtonComponent";
+import { SnackbarProvider } from "notistack";
 
 const buildMocks = (): {
   mocks: MockedResponse[];
@@ -33,12 +34,14 @@ const { mocks } = buildMocks();
 const sut = async () => {
   render(
     <MockedProvider mocks={mocks}>
-      <UploadButtonComponent
-        name="upload_file"
-        variant="contained"
-        onChange="javascript:void(0)"
-        inputProps={{ "data-testid": "resource_file_upload" }}
-      />
+      <SnackbarProvider>
+        <UploadButtonComponent
+          name="upload_file"
+          variant="contained"
+          onChange="javascript:void(0)"
+          inputProps={{ "data-testid": "resource_file_upload" }}
+        />
+      </SnackbarProvider>
     </MockedProvider>
   );
 };

@@ -4,12 +4,15 @@ import { render, screen } from "@testing-library/react";
 
 import TherpaistDashboard from "../../../../pages/therapist/dashboard";
 import theme from "../../../../styles/theme/theme";
+import { SnackbarProvider } from "notistack";
 
 const sut = async () => {
   render(
     <MockedProvider addTypename={false}>
       <ThemeProvider theme={theme()}>
-        <TherpaistDashboard />
+        <SnackbarProvider>
+          <TherpaistDashboard />
+        </SnackbarProvider>
       </ThemeProvider>
     </MockedProvider>
   );
