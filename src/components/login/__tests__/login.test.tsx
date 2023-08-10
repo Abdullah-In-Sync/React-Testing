@@ -4,14 +4,17 @@ import {
   act,
   fireEvent,
   render,
-  screen,
   renderHook,
+  screen,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
+import { Auth } from "aws-amplify";
 import * as useAuth from "../../../hooks/useAuth";
 import LoginPage from "../../../pages/login";
 import theme from "../../../styles/theme/theme";
+
+jest.mock("aws-amplify");
 
 jest.mock("next/router", () => {
   const router = {
@@ -36,17 +39,18 @@ const sut = async () => {
 };
 
 describe("Login page", () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   it("should render login form", async () => {
-    global.fetch = () =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve({ tet: "t" }),
-      } as Response);
+    (Auth.signIn as jest.Mock).mockReturnValue({
+      signInUserSession: {
+        accessToken: {
+          jwtToken: "dummyToken",
+          payload: {
+            "cognito:groups": ["patient"],
+            exp: new Date().getTime() + 1 * 3600 * 1000,
+          },
+        },
+      },
+    });
     await sut();
     const loginButton = screen.getByTestId("loginButton");
     expect(loginButton).toBeInTheDocument();
@@ -68,12 +72,9 @@ describe("Login page", () => {
   });
 
   it("should render login fail", async () => {
-    global.fetch = () =>
-      Promise.resolve({
-        status: 403,
-        json: () =>
-          Promise.resolve({ message: "Username or password incorrect!" }),
-      } as Response);
+    (Auth.signIn as jest.Mock).mockImplementation(() => {
+      throw new Error("Username or password incorrect!");
+    });
     await sut();
     const loginButton = screen.getByTestId("loginButton");
     expect(loginButton).toBeInTheDocument();

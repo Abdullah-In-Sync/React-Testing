@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { homeRoute } from "./lib/constants";
+
 export async function middleware(request: NextRequest) {
   const userToken = request.cookies.get("myhelptoken");
   const userType = request.cookies.get("user_type");
@@ -29,4 +30,5 @@ export const config = {
     "/admin/:path*",
     "/therapist/:path*",
   ],
+  runtime: "experimental-edge",
 };

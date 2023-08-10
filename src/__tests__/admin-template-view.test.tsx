@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { GET_TEMPLATE_DETAIL } from "../graphql/query/resource";
 import ViewTemplate from "../pages/admin/resource/template/view/[id]/index";
+import { SnackbarProvider } from "notistack";
 
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
@@ -30,7 +31,9 @@ mocksData.push({
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
-      <ViewTemplate />
+      <SnackbarProvider>
+        <ViewTemplate />
+      </SnackbarProvider>
     </MockedProvider>
   );
 };
