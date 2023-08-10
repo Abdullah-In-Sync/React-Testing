@@ -77,8 +77,9 @@ const TherapistPatientOverallAssessment: React.FC<
             variant="contained"
             onClick={onClickAddAssessment}
             size="small"
+            style={{ textTransform: "none" }}
           >
-            Add Assessment
+            Add assessment
           </CommonButton>
         </Box>
       </Stack>
