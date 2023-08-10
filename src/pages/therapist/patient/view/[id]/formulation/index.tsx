@@ -11,6 +11,7 @@ import {
 } from "../../../../../../graphql/formulation/graphql";
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
+import { useRouter } from "next/router";
 
 const TherapistPatientFormulation: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -20,6 +21,7 @@ const TherapistPatientFormulation: NextPage = () => {
   const [selectedId, setSelectedId] = useState();
   const id = sessionStorage.getItem("patient_id");
   const [deleteFormulation] = useMutation(THERAPIST_DELETE_FORMULATION_BY_ID);
+  const router = useRouter();
 
   const [
     getPatFormulationList,
@@ -129,6 +131,9 @@ const TherapistPatientFormulation: NextPage = () => {
     if (pressedIconButton == "delete") {
       setSelectedId(_id);
       setIsConfirmDelete(true);
+    }
+    if (pressedIconButton == "view") {
+      router.push(`/therapist/patient/view/${id}/formulation/edit/${_id}`);
     }
   };
 
