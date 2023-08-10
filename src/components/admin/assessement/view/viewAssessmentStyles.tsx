@@ -1,10 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Theme } from "@mui/system";
-import { useTheme } from "@mui/styles";
 import { commonModalWrapperObj } from "../../../common/CustomModal/commonModalStyles";
 
 export const useStyles = makeStyles(() => {
-  const theme = useTheme() as Theme;
   return {
     viewWrapper: {
       "& .row1": {
@@ -49,7 +46,7 @@ export const useStyles = makeStyles(() => {
       "& .row2": {
         textAlign: "center",
       },
-      ...commonModalWrapperObj(theme),
+      ...commonModalWrapperObj(),
     },
   };
 });

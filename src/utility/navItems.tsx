@@ -1,43 +1,47 @@
-import { Link } from "../lib/helpers/common";
-
 //** SUPER ADMIN ROUTES **//
 export const superadmin_routes = [
   {
+    id: "changePassword",
     key: 1,
     label: "Change Password",
-    path: Link + "/superadmin/dashboard?page=changepwd",
+    path: "",
   },
   {
+    id: "logout",
     key: 2,
     label: "Log Out",
-    path: Link + "/account/logout",
+    path: "",
   },
 ];
 
 //** THERAPIST ROUTES **//
 export const therapistRoutes = [
   {
+    id: "changePassword",
     key: 1,
     label: "Change Password",
-    path: Link + "/therapist/dashboard?page=changepwd",
+    path: "",
   },
   {
+    id: "logout",
     key: 2,
     label: "Log Out",
-    path: Link + "/account/logout",
+    path: "",
   },
 ];
 
 //** PATINET ROUTES **//
 export const patient_routes = [
   {
+    id: "changePassword",
     key: 1,
     label: "Change Password",
-    path: Link + "/patient/dashboard?page=changepwd",
+    path: "",
   },
   {
+    id: "logout",
     key: 2,
     label: "Log Out",
-    path: Link + "/account/logout",
+    path: "",
   },
 ];
