@@ -10,7 +10,7 @@ import { SuccessModal } from "../../../../../../../../components/common/SuccessM
 import Layout from "../../../../../../../../components/layout";
 import {
   GET_FORMULATION_BY_SHARE_ID,
-  UPDATE_FORMULATION_BY_ID,
+  UPDATE_PAT_FORMULATION_BY_ID,
 } from "../../../../../../../../graphql/formulation/graphql";
 import PatientFormulationTemplateEdit from "../../../../../../../../components/patient/formulation/edit";
 import ConfirmationModal from "../../../../../../../../components/common/ConfirmationModal";
@@ -44,7 +44,7 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
   const id = router?.query?.ptShareId as string;
   const patientId = sessionStorage.getItem("patient_id");
 
-  const [updateTemplateResponse] = useMutation(UPDATE_FORMULATION_BY_ID);
+  const [updateTemplateResponse] = useMutation(UPDATE_PAT_FORMULATION_BY_ID);
 
   const [getFormulation] = useLazyQuery(GET_FORMULATION_BY_SHARE_ID, {
     fetchPolicy: "network-only",
@@ -56,7 +56,6 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
           template_response: data?.getFormulationByShareId[0].template_response,
           component_name:
             data?.getFormulationByShareId[0]?.template_detail?.component_name,
-          formulation_id: data?.getFormulationByShareId[0].formulation_id,
         };
         setFormulationData(Obj);
         setDescription(
@@ -74,7 +73,7 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
 
   useEffect(() => {
     getFormulation({
-      variables: { ptsharresId: id, patient_id: patientId },
+      variables: { ptsharresId: id,patient_id: patientId},
     });
   }, []);
 
@@ -90,16 +89,17 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
     setLoader(true);
     try {
       const {
-        data: { updateFormulationById },
+        data: { updatePatFormulationById },
       } = await updateTemplateResponse({
         variables: {
-          formulation_id: formulationData.formulation_id,
-          updateFormulation: {
-            template_data: updatedData,
+          ptsharresId: id,
+          patient_id: patientId,
+          updateShareForm: {
+            template_response: updatedData,
           },
         },
       });
-      if (updateFormulationById) setSuccessModal(true);
+      if (updatePatFormulationById) setSuccessModal(true);
     } catch (e) {
       /* istanbul ignore next */
       console.log(e);

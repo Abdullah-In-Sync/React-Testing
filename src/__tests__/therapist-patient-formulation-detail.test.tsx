@@ -4,7 +4,7 @@ import { MockedProvider } from "@apollo/client/testing";
 import { useAppContext } from "../contexts/AuthContext";
 import {
   GET_FORMULATION_BY_SHARE_ID,
-  UPDATE_FORMULATION_BY_ID,
+  UPDATE_PAT_FORMULATION_BY_ID,
 } from "../graphql/formulation/graphql";
 import { ThemeProvider } from "@mui/material";
 import theme from "../styles/theme/theme";
@@ -130,11 +130,12 @@ mocksData.push({
 // update template
 mocksData.push({
   request: {
-    query: UPDATE_FORMULATION_BY_ID,
+    query: UPDATE_PAT_FORMULATION_BY_ID,
     variables: {
-      formulation_id: "46cb932a4c6346268ec4c13009cdd1b5",
-      updateFormulation: {
-        template_data:
+      ptsharresId: "46cb932a4c6346268ec4c13009cdd1b5",
+      patient_id: "27f49dbe245843eda77fe5170ee074a8",
+      updateShareForm: {
+        template_response:
           '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":721,"y":127.4375},"data":{"label":"Test 2","description":"Desc2","patientResponse":"Test Res"},"style":{"width":298,"height":248},"positionAbsolute":{"x":721,"y":127.4375},"selected":true,"dragging":false},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":109.84226659805233,"y":163.7575846343691},"data":{"label":"Test","description":"Desc","patientResponse":"test res"},"style":{"width":298,"height":248},"selected":false,"positionAbsolute":{"x":109.84226659805233,"y":163.7575846343691},"dragging":false}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
       },
     },
@@ -143,23 +144,11 @@ mocksData.push({
     data: {
       updateFormulationById: {
         _id: "46cb932a4c6346268ec4c13009cdd1b5",
-        created_date: "2023-08-10T10:11:15.895Z",
-        download_formulation_url: null,
-        formulation_avail_for: "[1, 2]",
-        formulation_desc: "description",
-        formulation_img: "",
-        formulation_instruction: "intro",
-        formulation_name: "test-therapist-table-temp",
-        formulation_returnurl: null,
-        formulation_status: 1,
-        formulation_type: 1,
-        formulation_url: null,
-        template_data:
+        formulation_id: "f103d548-bb4a-45ee-b557-8079eb3dcaaa",
+        template_id: null,
+        template_response:
           '{"nodes":[{"width":298,"height":248,"id":"dndnode_0","type":"selectorNode","position":{"x":721,"y":127.4375},"data":{"label":"Test 2","description":"Desc2","patientResponse":"Test Res"},"style":{"width":298,"height":248},"positionAbsolute":{"x":721,"y":127.4375},"selected":true,"dragging":false},{"width":298,"height":248,"id":"dndnode_1","type":"selectorNode","position":{"x":109.84226659805233,"y":163.7575846343691},"data":{"label":"Test","description":"Desc","patientResponse":"test res"},"style":{"width":298,"height":248},"selected":false,"positionAbsolute":{"x":109.84226659805233,"y":163.7575846343691},"dragging":false}],"edges":[{"source":"dndnode_0","sourceHandle":"source_left0","target":"dndnode_1","targetHandle":"target_right1","type":"smoothstep","markerStart":{"type":"arrow"},"id":"reactflow__edge-dndnode_0source_left0-dndnode_1target_right1"}]}',
-        template_id: "63774edbc553fac5d6a9bd74",
-        updated_date: "2023-08-10T10:25:05.453Z",
-        user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-        __typename: "FormulationData",
+        __typename: "UpdatePatientFormulation",
       },
     },
   },
