@@ -4,7 +4,9 @@ import { Amplify, Auth } from "aws-amplify";
 import { homeRoute } from "../lib/constants";
 import { clearSession, setSessionToken } from "../utility/storage";
 import { env } from "./../lib/env";
-const { region, userPoolId, clientId } = env;
+const {
+  cognito: { region, userPoolId, clientId },
+} = env;
 
 /* istanbul ignore next */
 Amplify.configure({

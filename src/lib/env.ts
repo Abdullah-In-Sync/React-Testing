@@ -25,7 +25,4 @@ export const env = {
     cookies: "https://myhelp.co.uk/cookies-policy.html",
     privacy: "https://myhelp.co.uk/privacy-policy.html",
   },
-  region: process.env.NEXT_PUBLIC_COGNITO_REGION,
-  userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID,
-  clientId: process.env.NEXT_PUBLIC_COGNITO_APP_CLIENT_ID,
 };
