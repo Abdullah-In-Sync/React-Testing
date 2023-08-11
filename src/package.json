@@ -49,6 +49,7 @@
     "notistack": "^2.0.5",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
+    "react-auth-code-input": "^3.2.1",
     "react-chartjs-2": "^5.1.0",
     "react-client-session": "^0.0.8",
     "react-custom-scrollbars-2": "^4.5.0",

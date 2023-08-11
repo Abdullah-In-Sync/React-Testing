@@ -30,6 +30,10 @@
   background-color: #6ec9db !important;
 }
 
+.link a{
+  color: #6ec9db !important;
+}
+
 .form-control-bg {
   background: #dadada52;
 }
