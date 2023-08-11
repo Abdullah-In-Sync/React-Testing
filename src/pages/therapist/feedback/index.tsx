@@ -62,7 +62,11 @@ const TherapyPatientFeedback: any = (props) => {
   const [
     getTherapistFeedbackListNewData,
     { loading, data: therapistFeedbackNewData },
-  ] = useLazyQuery(GET_THERAPIST_FEEDBACKLIST_DATA_NEW);
+  ] = useLazyQuery(GET_THERAPIST_FEEDBACKLIST_DATA_NEW, {
+    onCompleted: () => {
+      setFormValues([]);
+    },
+  });
 
   const setDefaultStateExcludingLoader = () => {
     setFeedbackType("therapist");
@@ -141,17 +145,35 @@ const TherapyPatientFeedback: any = (props) => {
   /* istanbul ignore next */
   const handleOptionChange = (e) => {
     const val = e.target.name;
-    /* istanbul ignore next */
     const p = val.split("_");
-    /* istanbul ignore next */
+
     if (p[0]) {
-      setFormValues([
-        ...formValues,
-        {
-          questionId: p[1],
-          answer: e.target.value,
-        },
-      ]);
+      const questionId = p[1];
+      const existingIndex = formValues.findIndex(
+        (item) => item.questionId === questionId
+      );
+
+      if (existingIndex !== -1) {
+        const updatedFormValues = formValues.map((item, index) => {
+          if (index === existingIndex) {
+            return {
+              ...item,
+              answer: e.target.value,
+            };
+          }
+          return item;
+        });
+
+        setFormValues(updatedFormValues);
+      } else {
+        setFormValues([
+          ...formValues,
+          {
+            questionId,
+            answer: e.target.value,
+          },
+        ]);
+      }
     }
   };
 
@@ -203,6 +225,7 @@ const TherapyPatientFeedback: any = (props) => {
       onCompleted: () => {
         /* istanbul ignore next */
         setSuccessModal(true);
+        setFormValues([]);
       },
     });
   };
@@ -228,6 +251,7 @@ const TherapyPatientFeedback: any = (props) => {
   return (
     <>
       <Loader visible={loader} />
+      <h1>jbsdcscbs</h1>
       <Box style={{ paddingBottom: "30px" }}>
         <Box>
           <Accordion
@@ -502,7 +526,9 @@ const TherapyPatientFeedback: any = (props) => {
                     }}
                     expanded={sessionPanelExpanded === panelName}
                     onChange={handleSessionPanelChange(panelName)}
-                    onClick={() => setSessionNo(p)}
+                    onClick={() => {
+                      setSessionNo(p);
+                    }}
                     key={v._id}
                     data-testid="SessionPanelItem"
                   >
