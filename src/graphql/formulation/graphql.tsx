@@ -269,3 +269,32 @@ export const THERAPIST_DELETE_FORMULATION_BY_ID = gql`
     }
   }
 `;
+
+export const UPDATE_FORMULATION_BY_ID = gql`
+  mutation updateFormulationById(
+    $formulation_id: ID!
+    $updateFormulation: UpdateFormulationInput
+  ) {
+    updateFormulationById(
+      formulation_id: $formulation_id
+      updateFormulation: $updateFormulation
+    ) {
+      _id
+      created_date
+      download_formulation_url
+      formulation_avail_for
+      formulation_desc
+      formulation_img
+      formulation_instruction
+      formulation_name
+      formulation_returnurl
+      formulation_status
+      formulation_type
+      formulation_url
+      template_data
+      template_id
+      updated_date
+      user_id
+    }
+  }
+`;
