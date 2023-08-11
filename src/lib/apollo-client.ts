@@ -29,7 +29,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const errorLink = onError(({ networkError }) => {
-  if (networkError["statusCode"] === 401) {
+  if (networkError && networkError["statusCode"] === 401) {
     clearSession(() => Router.replace("/login"));
   }
 });

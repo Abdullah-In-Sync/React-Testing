@@ -86,9 +86,49 @@ export const useAuth = () => {
     }
   };
 
+  // Send confirmation code to user's email
+  const forgotPassword = async (values, callback) => {
+    const { username } = values;
+    try {
+      await Auth.forgotPassword(username);
+      return callback({
+        status: "success",
+        message: "Security code has been sent to your email!",
+      });
+    } catch (error) {
+      return callback({
+        status: "error",
+        message: error.message,
+      });
+    }
+  };
+
+  // Collect confirmation code and new password
+  const forgotPasswordSubmit = async (
+    username: string,
+    code: string,
+    newPassword: string,
+    callback
+  ) => {
+    try {
+      await Auth.forgotPasswordSubmit(username, code, newPassword);
+      return callback({
+        status: "success",
+        message: "Password changed successfully!",
+      });
+    } catch (error) {
+      return callback({
+        status: "error",
+        message: error.message,
+      });
+    }
+  };
+
   return {
     login,
     logout,
     changePassword,
+    forgotPassword,
+    forgotPasswordSubmit,
   };
 };

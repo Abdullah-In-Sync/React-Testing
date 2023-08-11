@@ -37,7 +37,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ infoModalRef }) => {
       variant: status,
     });
     setSubmitting(false);
-    infoModalRef.current.close();
+    if (status !== "error") infoModalRef.current.close();
   };
 
   const onSubmit = (values, { setSubmitting }) => {
