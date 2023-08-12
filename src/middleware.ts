@@ -30,5 +30,4 @@ export const config = {
     "/admin/:path*",
     "/therapist/:path*",
   ],
-  runtime: "experimental-edge",
 };

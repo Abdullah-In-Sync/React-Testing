@@ -4,10 +4,10 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import InputAdornment from "@mui/material/InputAdornment";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { Form, FormikProps } from "formik";
+import Link from "next/link";
 import * as React from "react";
 import FormikTextField from "../../components/common/FormikFields/FormikTextField";
 import CommonLoadingButton from "../common/Buttons/CommonLoadingButton";
@@ -48,6 +48,7 @@ const LoginForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
                 variant="outlined"
                 className=""
                 placeholder="Your email address"
+                autoComplete="off"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -67,6 +68,7 @@ const LoginForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
                 variant="outlined"
                 className=""
                 placeholder="Enter your password"
+                autoComplete="off"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -75,10 +77,8 @@ const LoginForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
                   ),
                 }}
               />
-              <Box textAlign={"right"}>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+              <Box textAlign={"right"} className="link">
+                <Link href="/forgotPassword">Forgot password?</Link>
               </Box>
             </Box>
             <Box>
@@ -92,9 +92,13 @@ const LoginForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
               >
                 Login
               </CommonLoadingButton>
-              <Box textAlign={"center"}>
-                <Link href="#" variant="body2">
-                  {"Privacy Policy & Terms of Use"}
+              <Box textAlign={"center"} className="link">
+                <Link href="https://portal.myhelp.co.uk/account/privacy_policy">
+                  <a target="_blank">{"Privacy Policy"}</a>
+                </Link>
+                &nbsp;-&nbsp;
+                <Link href="https://portal.myhelp.co.uk/account/terms_of_use">
+                  <a target="_blank">{"Terms of Use"}</a>
                 </Link>
               </Box>
             </Box>

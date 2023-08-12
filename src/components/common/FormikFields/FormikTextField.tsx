@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { ErrorMessage, useField } from "formik";
 import TextFieldCustom from "../TextField/TextFieldCustom";
 
-const ResponseTextArea = (props) => {
+const FormikTextField = (props) => {
   const { hideError, ...rest } = props;
   const [field, touched] = useField(rest);
 
@@ -25,4 +25,4 @@ const ResponseTextArea = (props) => {
   );
 };
 
-export default ResponseTextArea;
+export default FormikTextField;
