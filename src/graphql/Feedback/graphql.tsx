@@ -176,23 +176,20 @@ export const GET_THERAPIST_FEEDBACKLIST_DATA_NEW = gql`
 `;
 
 export const THERAPIST_PATIENT_LIST = gql`
-  query getPatientList(
-    $limit: Int!
-    $name: String
-    $next_pagination_token: String
-  ) {
+  query getPatientList($limit: Int!, $page_no: Int!, $search_text: String) {
     getPatientList(
-      name: $name
       limit: $limit
-      next_pagination_token: $next_pagination_token
+      page_no: $page_no
+      search_text: $search_text
     ) {
-      pagination
       patientlist {
-        email
-        name
-        patient_id
-        phone_number
+        patient_firstname
+        patient_lastname
+        created_date
+        update_date
+        _id
       }
+      total
     }
   }
 `;
