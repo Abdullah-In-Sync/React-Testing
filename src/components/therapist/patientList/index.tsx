@@ -51,10 +51,10 @@ const TherapistPatientListComponent: React.FC<ViewProps> = ({
             id: "view",
             icon: require("@mui/icons-material/Visibility").default,
           },
-          {
-            id: "edit",
-            icon: require("@mui/icons-material/Edit").default,
-          },
+          // {
+          //   id: "edit",
+          //   icon: require("@mui/icons-material/Edit").default,
+          // },
           {
             id: "delete",
             icon: require("@mui/icons-material/DeleteSharp").default,

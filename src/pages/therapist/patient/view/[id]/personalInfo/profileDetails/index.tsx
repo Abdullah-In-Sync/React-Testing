@@ -28,13 +28,13 @@ export default function TherapistProfileDetails() {
   const [loader, setLoader] = useState<boolean>(false);
   const [editable, setEditable] = useState<boolean>(false);
 
-  const editValue = router?.query?.editValue as string;
+  // const editValue = router?.query?.editValue as string;
 
-  useEffect(() => {
-    if (editValue === "true") {
-      setEditable(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (editValue === "true") {
+  //     setEditable(true);
+  //   }
+  // }, []);
 
   const [updatePatient] = useMutation(UPDATE_PROFILE_DATA_FROM_THERAPIST);
 

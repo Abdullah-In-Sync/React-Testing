@@ -4,17 +4,18 @@ export default {
     //   id: "sNo",
     //   label: "S. No.",
     // },
+
     {
-      id: "name",
-      label: "Name",
+      id: "full_name",
+      label: "Patient Name",
     },
     {
-      id: "email",
-      label: "Email",
+      id: "created_date",
+      label: "Created on",
     },
     {
-      id: "phone_number",
-      label: "Phone",
+      id: "update_date",
+      label: "Last Update",
     },
 
     {
