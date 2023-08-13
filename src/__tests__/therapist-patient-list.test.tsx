@@ -21,32 +21,25 @@ mocksData.push({
   request: {
     query: THERAPIST_PATIENT_LIST,
     variables: {
+      search_text: "",
+      page_no: 1,
       limit: 10,
-      next_pagination_token: "",
-      name: "",
     },
   },
   result: {
     data: {
       getPatientList: {
-        pagination:
-          "CAIS4QIIARK6AggDErUCAHC+Q0Bz3YhIqZ+/fkE3qbRRphNpnOGQZ3MJTLqaUVqZeyJAbiI6IlBhZ2luYXRpb25Db250aW51YXRpb25EVE8iLCJuZXh0S2V5IjoiQUFBQUFBQUFEUDJPQVFFQlZmblF3OER5U0E2OTRmdWVoQ21sZWdLU3lOOUViRXczbjY0RHNRU1VZWTFsYm1ZN200Nkc0OEhBNU9XYXpLYWptNFRvdUptTng0T0xoT3k0bUppbTQ3bk55dWFiMmNiVG1BQ0F3S3JmenNPSHdQbVNnZXZ2aC9lZXdvcTAxOURBM2FtNXo5cTBoYkxUaFkyc3JLaTUxZkFBQVRzPSIsInBhZ2luYXRpb25EZXB0aCI6MTAsInByZXZpb3VzUmVxdWVzdFRpbWUiOjE2ODk4NjEzMTkwNzZ9GiCHjyFeZQHPXWoD0FVPqefm/q8gIC8y02gG81kBSvIlbw==",
         patientlist: [
           {
-            email: "syeda.naziahassan06@gmail.com",
-            name: "Nazia Hassan",
-            patient_id: "c0320bceab244bbb9deef97ba7f41c9acsc",
-            phone_number: "+4403457251227",
-            __typename: "PatientList",
+            patient_firstname: "feedback patient",
+            patient_lastname: "patient",
+            created_date: "2023-08-09T11:32:42.584Z",
+            update_date: null,
+            _id: "c5e4fc9a-9a1d-4668-b434-b28a682a24e8",
+            __typename: "Patient",
           },
-          // {
-          //   email: "sh@gmail.com",
-          //   name: "Shubham Srivaatav",
-          //   patient_id: "c0320bceab244bbb9deef97ba7f41c9a",
-          //   phone_number: "+448989898989",
-          //   __typename: "PatientList",
-          // },
         ],
+        total: 188,
         __typename: "PatientListData",
       },
     },
@@ -77,7 +70,7 @@ mocksData.push({
 mocksData.push({
   request: {
     query: THERAPIST_DELETE_PATIENT,
-    variables: { patient_id: "c0320bceab244bbb9deef97ba7f41c9acsc" },
+    variables: { patient_id: "c5e4fc9a-9a1d-4668-b434-b28a682a24e8" },
   },
   result: {
     data: {
@@ -104,7 +97,7 @@ const sut = async () => {
 describe("Therapist patient list page", () => {
   it("should render list", async () => {
     await sut();
-    expect(await screen.findByText(/Nazia Hassan/i)).toBeInTheDocument();
+    expect(await screen.findByText(/feedback patient/i)).toBeInTheDocument();
     fireEvent.click(await screen.findByTestId("createPlanButton"));
   });
 
@@ -153,9 +146,15 @@ describe("Therapist patient list page", () => {
     await sut();
     await waitFor(async () => {
       expect(
-        screen.queryByTestId("iconButton_delete_undefined")
+        screen.queryByTestId(
+          "iconButton_delete_c5e4fc9a-9a1d-4668-b434-b28a682a24e8"
+        )
       ).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("iconButton_delete_undefined"));
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_delete_c5e4fc9a-9a1d-4668-b434-b28a682a24e8"
+        )
+      );
 
       await waitFor(async () => {
         expect(screen.queryByTestId("sureModal")).toBeInTheDocument();

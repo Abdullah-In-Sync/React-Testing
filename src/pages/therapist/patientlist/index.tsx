@@ -34,50 +34,69 @@ const TherapistPatientListPage: NextPage = () => {
   const [deletePatientId, setDeletePatientId] = useState("");
   const [isConfirm, setIsConfirm] = useState(false);
   const [tableCurentPage, setTableCurrentPage] = useState(0);
-  const [paginationTokenList, setPaginationToken] = useState([]);
   const [createPatient] = useMutation(THERAPIST_ADD_PATIENT);
   const [deletePatient] = useMutation(THERAPIST_DELETE_PATIENT);
-
-  useEffect(() => {
-    getTherapistPatientList({
-      variables: { name: "", next_pagination_token: "", limit: rowsLimit },
-      onCompleted: (data) => {
-        addPaginationToken(data);
-        setLoader(false);
-      },
-    });
-  }, []);
 
   const [
     getTherapistPatientList,
     { loading: loadingTherapistList, data: listData, refetch },
   ] = useLazyQuery(THERAPIST_PATIENT_LIST, {
     fetchPolicy: "cache-and-network",
-    onCompleted: (data) => {
-      /* istanbul ignore next */
-      addPaginationToken(data);
+    onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
     },
   });
 
   /* istanbul ignore next */
-  const onChangeSearchInput = (e) => {
-    setPaginationToken([]);
-    setTableCurrentPage(0);
-    setSearchInputValue(() => {
-      getTherapistPatientList({
-        variables: {
-          limit: rowsLimit,
-          name: e.target.value,
-          next_pagination_token: "",
-        },
-        onCompleted: (data) => {
-          addPaginationToken(data);
-        },
-      });
-      return e.target.value;
+  const transformedListData = listData?.getPatientList?.patientlist?.map(
+    (patient) => ({
+      ...patient,
+      full_name: `${patient.patient_firstname} ${patient.patient_lastname}`,
+      created_date: patient.created_date
+        ? patient.created_date.split("T")[0]
+        : "",
+    })
+  );
+
+  useEffect(() => {
+    getTherapistPatientList({
+      variables: {
+        search_text: "",
+        page_no: tableCurentPage + 1,
+        limit: rowsLimit,
+      },
+      onCompleted: () => {
+        setLoader(false);
+      },
     });
+  }, []);
+
+  /* istanbul ignore next */
+  const onPageChange = (event?: any, newPage?: number) => {
+    setTableCurrentPage(newPage);
+    getTherapistPatientList({
+      variables: {
+        search_text: searchInputValue,
+        page_no: newPage + 1,
+        limit: rowsLimit,
+      },
+      onCompleted: () => {
+        setLoader(false);
+      },
+    });
+  };
+
+  /* istanbul ignore next */
+  const onChangeSearchInput = (e) => {
+    setSearchInputValue(e.target.value);
+    getTherapistPatientList({
+      variables: { search_text: e.target.value, page_no: 1, limit: rowsLimit },
+      onCompleted: () => {
+        setLoader(false);
+      },
+    });
+    setTableCurrentPage(0);
   };
 
   /* istanbul ignore next */
@@ -161,60 +180,29 @@ const TherapistPatientListPage: NextPage = () => {
   };
 
   /* istanbul ignore next */
-  const addPaginationToken = (data) => {
-    const { getPatientList: { pagination = undefined } = {} } = data;
-    if (pagination && !paginationTokenList.includes(pagination))
-      setPaginationToken([...paginationTokenList, ...[pagination]]);
-  };
-
-  /* istanbul ignore next */
-  const onPageChange = (event?: any, newPage?: number) => {
-    const searchText =
-      searchInputValue && searchInputValue !== ""
-        ? { name: searchInputValue }
-        : { name: "" };
-    const tempNewPage = paginationTokenList[newPage - 1];
-
-    getTherapistPatientList({
-      variables: {
-        limit: rowsLimit,
-        next_pagination_token: tempNewPage,
-        ...searchText,
-      },
-      onCompleted: (data) => {
-        addPaginationToken(data);
-        setLoader(false);
-        setTableCurrentPage(newPage);
-      },
-    });
-  };
-
-  /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
     const { pressedIconButton } = value;
-    sessionStorage.setItem("patient_name", `${value.name}`);
-    sessionStorage.setItem("patient_id", `${value.patient_id}`);
+    sessionStorage.setItem("patient_name", `${value.full_name}`);
+    sessionStorage.setItem("patient_id", `${value._id}`);
     sessionStorage.setItem("user_type", "therapist");
 
     if (pressedIconButton === "delete") {
-      setDeletePatientId(value.patient_id);
+      setDeletePatientId(value._id);
       setModalOpen(true);
     }
     if (pressedIconButton == "view")
       router.push(
-        `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details`
+        `/therapist/patient/view/${value._id}/?mainTab=personal-info&tab=details`
       );
 
-    if (pressedIconButton == "edit") {
-      router.push(
-        `/therapist/patient/view/${value.patient_id}/?mainTab=personal-info&tab=details&editValue=true`
-      );
-    }
+    // if (pressedIconButton == "edit") {
+    //   router.push(
+    //     `/therapist/patient/view/${value._id}/?mainTab=personal-info&tab=details&editValue=true`
+    //   );
+    // }
 
     if (!confirmSubmission) return;
   };
-
-  //
 
   return (
     <>
@@ -225,14 +213,9 @@ const TherapistPatientListPage: NextPage = () => {
           searchInputValue={searchInputValue}
           onChangeSearchInput={onChangeSearchInput}
           onPressSideButton={handleOpenAddPatientModal}
-          listData={listData?.getPatientList?.patientlist}
+          listData={transformedListData}
           onPageChange={onPageChange}
-          totalData={
-            /* istanbul ignore next */
-            listData?.getPatientList?.patientlist?.length === rowsLimit
-              ? (tableCurentPage + 2) * rowsLimit
-              : tableCurentPage * rowsLimit
-          }
+          totalData={listData?.getPatientList?.total}
           tableCurentPage={tableCurentPage}
           rowsLimit={rowsLimit}
           loadingTherapistList={loadingTherapistList}
