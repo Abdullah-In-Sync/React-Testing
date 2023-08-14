@@ -27,6 +27,8 @@ export const localTokenValidation = (
   const [
     getTokenData,
     { loading: tokenLoading, data: tokenData, error: tokenError },
-  ] = useLazyQuery(userType ? tokenValidationQuery[userType] : GET_TOKEN_DATA);
+  ] = useLazyQuery(userType ? tokenValidationQuery[userType] : GET_TOKEN_DATA, {
+    fetchPolicy: "cache-and-network",
+  });
   return [getTokenData, tokenLoading, tokenData, tokenError];
 };
