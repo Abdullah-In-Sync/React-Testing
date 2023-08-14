@@ -73,17 +73,17 @@ const AdminFeedbackResponses = () => {
     downloadCsvApi((csvResData) => {
       if (csvResData.length > 0) {
         const modifyCsvData = [];
-        csvResData.forEach((uitem) => {
-          uitem.responses.map((ditem) => {
-            const question = uitem.question.trim();
-            if (!csvHeader.includes(question)) csvHeader.push(question);
+        const sorted = formatData(csvResData);
+        sorted.forEach((uitem) => {
+          uitem.question = uitem.question.trim();
+          if (!csvHeader.includes(uitem.question))
+            csvHeader.push(uitem.question);
 
-            modifyCsvData.push(csvDataFormat({ question, ...ditem }));
-          });
+          modifyCsvData.push(csvDataFormat({ ...uitem }));
         });
-
+        const groupedData = groupByRow(modifyCsvData);
         window.location.href = `data:text/csv;charset=utf-8,${encodeURI(
-          csvString({ header: csvHeader, data: modifyCsvData })
+          csvString({ header: csvHeader, data: groupedData })
         )}`;
       } else {
         enqueueSnackbar("No data found.", {
@@ -91,6 +91,43 @@ const AdminFeedbackResponses = () => {
         });
       }
     });
+  };
+  const formatData = (data) => {
+    const mergedResponses = [];
+    data.forEach((item) => {
+      const question = item.question;
+      const responses = item.responses.map((response) => {
+        return {
+          ...response,
+          question: question,
+        };
+      });
+      mergedResponses.push(...responses);
+    });
+    return mergedResponses.sort((a, b) => {
+      const dateComparison =
+        new Date(a.created_date).getTime() - new Date(b.created_date).getTime();
+
+      if (dateComparison !== 0) {
+        return dateComparison;
+      }
+
+      return b.patient_name.localeCompare(a.patient_name);
+    });
+  };
+
+  const groupByRow = (data) => {
+    const mergedMap = new Map();
+    data.forEach((obj) => {
+      const key = `${obj["Therapist Name"]}-${obj["Assigned Paitent Name"]}-${obj["Therapy Name"]}`;
+      if (!mergedMap.has(key)) {
+        mergedMap.set(key, obj);
+      } else {
+        const existingObj = mergedMap.get(key);
+        mergedMap.set(key, { ...existingObj, ...obj });
+      }
+    });
+    return Array.from(mergedMap.values());
   };
 
   useEffect(() => {
