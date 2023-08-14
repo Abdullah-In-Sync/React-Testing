@@ -131,11 +131,13 @@ jobs:
       run: yarn lint
       working-directory: src
 
-  unit-test-job:
-    name: Run Unit Tests
+  unit-test-setup-job:
+    name: Setup Unit Test Runner
     needs: install-dependencies
     runs-on: ubuntu-latest    
-
+    outputs:
+      test-chunks: ${{ steps.set-test-chunks.outputs.test-chunks }}
+      test-chunk-ids: ${{ steps.set-test-chunk-ids.outputs.test-chunk-ids }}
     steps:
     - run: env
 
@@ -156,26 +158,73 @@ jobs:
           **/.eslintcache
           ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
         key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
-      
-    - name: Run test suite
-      run: yarn test:cov
-      working-directory: src
-    
-    - name: Archive coverage report results
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        name: coverage-report
-        path: src/coverage/lcov.info
 
-    - name: Archive tests report results
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        name: tests-report
-        path: src/test-report.xml
+    - id: set-test-chunks
+      name: Set Chunks
+      run: echo "test-chunks=$(npx jest --listTests --json | jq -cM '[_nwise(length / 10 | ceil)]')" >> $GITHUB_OUTPUT
+      working-directory: src
+
+    - id: set-test-chunk-ids
+      name: Set Chunk IDs
+      run: echo "test-chunk-ids=$(echo $CHUNKS | jq -cM 'to_entries | map(.key)')" >> $GITHUB_OUTPUT
+      working-directory: src
+      env:
+        CHUNKS: ${{ steps.set-test-chunks.outputs.test-chunks }}
+
+  unit-test-runner-job:
+    name: Testing (chunk ${{ matrix.chunk }})
+    needs: 
+      - install-dependencies
+      - unit-test-setup-job
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        chunk: ${{ fromJson(needs.unit-test-setup-job.outputs.test-chunk-ids) }}
+      fail-fast: false
+
+    steps:
+      - run: env
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Restore Cached Packages
+        id: yarn-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+            ${{ needs.install-dependencies.outputs.yarn-cache-dir }}
+          key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
+        
+      - name: Run test suite
+        run: echo $CHUNKS | jq '.[${{ matrix.chunk }}] | .[] | @text' | xargs yarn test:cov --coverageThreshold="{}"
+        working-directory: src
+        env:
+          CHUNKS: ${{ needs.unit-test-setup-job.outputs.test-chunks }}
+
+      - name: Rename coverage report results
+        run: mv coverage/lcov.info coverage/lcov-chunk-${{ matrix.chunk }}.info
+        working-directory: src
+
+      - name: Archive coverage report results
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: coverage-report-chunk-${{ matrix.chunk }}
+          path: src/coverage/lcov-chunk-${{ matrix.chunk }}.info
 
   static-analysis-job:
     name: Perform Static Analysis
-    needs: unit-test-job
+    needs: 
+      - unit-test-setup-job
+      - unit-test-runner-job
     runs-on: ubuntu-latest
     steps:
       - run: env
@@ -184,28 +233,52 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-    
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: "14.x"
 
-      - name: Download coverage report result
+      # - name: Setup LCOV
+      #   run: |
+      #     sudo apt-get update -y
+      #     sudo apt install -y libperlio-gzip-perl libjson-perl libdatetime-timezone-perl libcapture-tiny-perl
+      #     VERSION="2.0"
+      #     mkdir Iconv
+      #     cd Iconv
+      #     wget "https://github.com/linux-test-project/lcov/releases/download/v$VERSION/lcov-$VERSION.tar.gz"
+      #     tar -xzf "lcov-$VERSION.tar.gz"
+      #     cd "lcov-$VERSION"
+      #     sudo make install
+      #   working-directory: src
+
+      - name: Download coverage report results
         uses: actions/download-artifact@v3
         with:
-          name: coverage-report
           path: src/coverage/
 
-      - name: Download tests report result
-        uses: actions/download-artifact@v3
-        with:
-          name: tests-report
-          path: src/
+      - name: Merge coverage report results
+        run: npx lcov-result-merger 'coverage/**/lcov-*.info' 'coverage/lcov.info'
+        working-directory: src
 
-      - name: Fix test report paths
-        working-directory: src/
-        run: |
-          sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' test-report.xml
+      # - name: Report code coverage
+      #   run: genhtml src/coverage/lcov.info --output-directory coverage-report
+
+      # - name: Archive code coverage report
+      #   uses: actions/upload-artifact@v3.1.2
+      #   with:
+      #     name: code-coverage-report
+      #     path: coverage-report
+
+      # - name: Report code coverage
+      #   uses: MyHelp-Ltd/github-actions-report-lcov@2996a96adc81c362e0eb9d7b14a1719f35687cd6
+      #   with:
+      #     coverage-files: src/coverage/**/lcov-*.info
+      #     minimum-coverage: 80
+      #     artifact-name: code-coverage-report
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     working-directory: src
+      #     update-comment: true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1.8
@@ -213,23 +286,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  cleanup-job:
-    name: Cleanup
-    if: always()
-    needs: 
-      - install-dependencies
-      - build-job
-      - linting-job
-      - unit-test-job
-      - static-analysis-job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Delete coverage report result
-        uses: geekyeggo/delete-artifact@v1
+      - name: Cleanup
+        uses: geekyeggo/delete-artifact@v2
         with:
-          name: coverage-report
-
-      - name: Delete tests report result
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: tests-report
+          name: |
+            coverage-report-chunk-*
