@@ -115,7 +115,7 @@ jobs:
         aws-region: ${{ env.deploy-aws-region }}
 
     - name: Prepare Upload
-      run: mkdir -p ./dist/v2; mv ./out/* ./dist/v2 
+      run: mkdir -p ./dist; mv ./out/* ./dist
       working-directory: src
 
     - name: Upload
@@ -125,7 +125,7 @@ jobs:
         bucket: ${{ env.deploy-s3-bucket }}
         bucket-region: ${{ env.deploy-s3-bucket-region }}
         dist-id: ${{ env.deploy-cloudfront-dist-id }}
-        invalidation: /v2
+        invalidation: /
         delete-removed: true
         no-cache: true
         private: true
