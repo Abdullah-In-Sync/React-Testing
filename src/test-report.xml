@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testExecutions version="1">
-  <file path="/Users/myles.harding/Projects/Personal/MyHelp/web-application-v2/src/__tests__/example.test.ts">
-    <testCase name="therapistDataFn lambda example test" duration="0"/>
-  </file>
-</testExecutions>
