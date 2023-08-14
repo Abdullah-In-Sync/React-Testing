@@ -10,14 +10,14 @@ export async function middleware(request: NextRequest) {
     (!userToken || !userType) &&
     !request.nextUrl.pathname.includes("/login")
   ) {
-    return NextResponse.redirect(new URL("/v2/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   } else if (
     userToken &&
     userType &&
-    !request.nextUrl.href.includes(`/v2/${userType}/`)
+    !request.nextUrl.href.includes(`/${userType}/`)
   ) {
     return NextResponse.redirect(
-      new URL("/v2" + homeRoute[userType], request.url)
+      new URL("" + homeRoute[userType], request.url)
     );
   }
 }

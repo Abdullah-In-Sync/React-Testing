@@ -62,7 +62,7 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
               variant="contained"
               // onClick={onPressSummaryView(assessmentId)}
               onClick={onPressSummaryView}
-              // href={`/v2/patient/assessment/clinicalAssessment`}
+              // href={`/patient/assessment/clinicalAssessment`}
               size="small"
             >
               Summary View

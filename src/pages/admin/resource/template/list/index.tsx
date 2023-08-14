@@ -111,7 +111,7 @@ const TemplateList = () => {
               variant="contained"
               sx={{ textTransform: "none", bottom: "4px", height: "35px" }}
               data-testid="addResource"
-              href="/v2/admin/resource/add"
+              href="/admin/resource/add"
             >
               Add Resource
             </Button>

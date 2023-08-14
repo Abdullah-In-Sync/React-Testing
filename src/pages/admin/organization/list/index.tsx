@@ -169,7 +169,7 @@ const OrganizationList = () => {
                 paddingRight: " 40px",
               }}
               data-testid="addResource"
-              href="/v2/admin/organization/add"
+              href="/admin/organization/add"
             >
               <PersonAddIcon />
               Add Organization

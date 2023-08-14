@@ -274,7 +274,7 @@ export default function EditForm(props: propTypes) {
       JSON.stringify({ data: values, name: formFields.resource_name })
     );
     window.open(
-      `/v2/template/preview/${resourceData?.getResourceById[0]?._id}`,
+      `/template/preview/${resourceData?.getResourceById[0]?._id}`,
       "_blank"
     );
   };

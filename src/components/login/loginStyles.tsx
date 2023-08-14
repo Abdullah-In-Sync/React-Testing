@@ -9,7 +9,7 @@ export const useStyles = makeStyles(() => {
     gridContainer: {
       height: "100vh",
       "& .leftColumnGrid": {
-        backgroundImage: `url(${url}/v2/images/loginSideImg.png)`,
+        backgroundImage: `url(${url}/images/loginSideImg.png)`,
         backgroundRepeat: "no-repeat",
         backgroundColor: theme.palette.grey[50],
         backgroundSize: "cover",

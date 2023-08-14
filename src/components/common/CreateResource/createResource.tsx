@@ -479,7 +479,7 @@ export default function CreateResource(props: propTypes) {
       "create",
       JSON.stringify({ data: values, name: formFields.resourceName })
     );
-    window.open("/v2/template/preview/create", "_blank");
+    window.open("/template/preview/create", "_blank");
   };
   /* istanbul ignore next */
   const onSaveArrowTemplate = (arrowTemplateData: string) => {

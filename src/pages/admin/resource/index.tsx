@@ -599,14 +599,14 @@ const Resource: NextPage = () => {
                 height: "35px",
               }}
               data-testid="templateList"
-              href={"/v2/admin/resource/template/list"}
+              href={"/admin/resource/template/list"}
             >
               Templates
             </Button>
             <Button
               color={"secondary"}
               variant="contained"
-              href="/v2/admin/resource/add"
+              href="/admin/resource/add"
               sx={{
                 textTransform: "none",
                 height: "35px",
@@ -617,7 +617,7 @@ const Resource: NextPage = () => {
             <Button
               color={"secondary"}
               variant="contained"
-              href="/v2/admin/resource/create"
+              href="/admin/resource/create"
               sx={{
                 textTransform: "none",
                 height: "35px",
