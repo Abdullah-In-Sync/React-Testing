@@ -56,6 +56,9 @@ const TherapistPatientListPage: NextPage = () => {
       created_date: patient.created_date
         ? patient.created_date.split("T")[0]
         : "",
+      updated_date: patient.updated_date
+        ? patient.updated_date.split("T")[0]
+        : "",
     })
   );
 
