@@ -4,6 +4,7 @@ import {
   PatientViewMonitorQuestionsEntity,
 } from "../../../../graphql/Monitor/types";
 import { chartData, emojisData } from "./types";
+import { parseNativeEmoji } from "../../../../utility/helper";
 
 /**
  * Sorting api data based on questions type.
@@ -110,12 +111,9 @@ export const emojisLineChartPlugins = (
           const { code } = questionOption[value - 1] || {};
           if (code) {
             const y = yAxis.getPixelForTick(index);
-            ctx.font = "30px serif";
-            ctx.fillText(
-              String.fromCodePoint(parseInt(code, 16)),
-              xAxis.left - 47,
-              y + 10
-            );
+            ctx.font =
+              "30px 'Segoe UI Emoji', 'Segoe UI Symbol', 'Segoe UI', 'Apple Color Emoji', 'Twemoji Mozilla', 'Noto Color Emoji', 'Android Emoji', Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort";
+            ctx.fillText(parseNativeEmoji(code), xAxis.left - 47, y + 10);
           }
         });
       },

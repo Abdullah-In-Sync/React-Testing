@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useAppContext } from "../contexts/AuthContext";
-import { Link } from "../lib/helpers/common";
 type UserRole = "admin" | "therapist" | "patient";
 
 export default function withAuthentication<T>(
@@ -10,15 +9,15 @@ export default function withAuthentication<T>(
   return (props: T) => {
     const { isAuthenticated, user } = useAppContext();
 
-    useEffect(() => {
-      if (!isAuthenticated) {
-        window.location.href = Link;
-      } else if (allowOnly && !allowOnly.includes(user?.user_type)) {
-        window.location.href = `${Link}/${
-          user?.user_type == "admin" ? "superadmin" : user?.user_type
-        }/dashboard`;
-      }
-    }, []);
+    // useEffect(() => {
+    //   if (!isAuthenticated) {
+    //     window.location.href = Link;
+    //   } else if (allowOnly && !allowOnly.includes(user?.user_type)) {
+    //     window.location.href = `${Link}/${
+    //       user?.user_type == "admin" ? "superadmin" : user?.user_type
+    //     }/dashboard`;
+    //   }
+    // }, []);
 
     const checkUserAuthorized = useMemo(() => {
       return !(allowOnly && !allowOnly.includes(user?.user_type));
