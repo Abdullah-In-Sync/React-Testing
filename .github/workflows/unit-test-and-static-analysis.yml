@@ -89,7 +89,7 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ needs.install-dependencies.outputs.yarn-version }}-${{ needs.install-dependencies.outputs.cache-hash }}
 
     - name: Make Env File
-      uses: SpicyPizza/create-envfile@v1.3
+      uses: SpicyPizza/create-envfile@v2.0
       with:
         envkey_NEXT_PUBLIC_ENVIRONMENT: dev
         envkey_NEXT_PUBLIC_GRAPHQL_SERVER: ${{ secrets.DEV_APPSYNC_URL }}
