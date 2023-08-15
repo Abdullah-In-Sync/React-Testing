@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import moment from "moment";
+import { getSessionToken } from "./storage";
 
 type SessionObject = {
   label: string;
@@ -143,4 +144,13 @@ export const parseNativeEmoji = (unified: string): string => {
     .split("-")
     .map((hex) => String.fromCodePoint(parseInt(hex, 16)))
     .join("");
+};
+
+export const isAuth = (router) => {
+  const { userToken, userType } = getSessionToken();
+  return (
+    userToken &&
+    userType &&
+    router.asPath.split("?")[0].split("/")[1] === userType
+  );
 };
