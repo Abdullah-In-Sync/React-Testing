@@ -16,11 +16,7 @@ const ConfirmBox: React.FC<ViewProps> = ({ handleOk }) => {
             <Typography>Format 1</Typography>
           </Box>
           <Box className="imageWrapper">
-            <img
-              alt="My Help"
-              src="/v2/images/format_1.png"
-              className={"image"}
-            />
+            <img alt="My Help" src="/images/format_1.png" className={"image"} />
           </Box>
         </Box>
         <Box>
@@ -28,11 +24,7 @@ const ConfirmBox: React.FC<ViewProps> = ({ handleOk }) => {
             <Typography className="headingText">Format 2</Typography>
           </Box>
           <Box className="imageWrapper">
-            <img
-              alt="My Help"
-              src="/v2/images/format_2.png"
-              className={"image"}
-            />
+            <img alt="My Help" src="/images/format_2.png" className={"image"} />
           </Box>
         </Box>
       </Box>

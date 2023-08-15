@@ -37,7 +37,7 @@ const SelectTemplate = forwardRef(
     /* istanbul ignore next */
     const onPreview = (values) => {
       sessionStorage.setItem("create", JSON.stringify({ data: values, name }));
-      window.open("/v2/template/preview/create", "_blank");
+      window.open("/template/preview/create", "_blank");
     };
 
     /* istanbul ignore next */

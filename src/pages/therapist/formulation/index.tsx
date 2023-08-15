@@ -353,13 +353,13 @@ const TherapistFormulation = () => {
         <Grid item xs={9}>
           <Box sx={crudButtons}>
             <AddButton
-              href="/v2/therapist/resource"
+              href="/therapist/resource"
               className="mr-3"
               label="Resource"
               data-testid={`resource`}
             />
             <AddButton
-              href="/v2/therapist/formulation"
+              href="/therapist/formulation"
               style={{
                 backgroundColor: "#6EC9DB",
               }}
@@ -367,12 +367,12 @@ const TherapistFormulation = () => {
               label="Formulation"
             />
             <AddButton
-              href="/v2/therapist/resource/add"
+              href="/therapist/resource/add"
               className="mr-3"
               label="Add Resource"
             />
             <AddButton
-              href="/v2/therapist/resource/create"
+              href="/therapist/resource/create"
               className="mr-3"
               label="Create Resource"
             />

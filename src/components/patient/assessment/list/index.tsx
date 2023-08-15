@@ -17,7 +17,7 @@ const PatientAssessmentList = (props: propTypes) => {
           className={styles.listBlueBar}
           variant="contained"
           data-testid="assessment_name"
-          href={`/v2/patient/assessment/clinicalAssessment/${data._id}`}
+          href={`/patient/assessment/clinicalAssessment/${data._id}`}
         >
           <Typography
             style={{
