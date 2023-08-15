@@ -1,8 +1,17 @@
 name: Unit Test and Static Analysis
 
 on:
+  push:
+    paths-ignore:
+      - README.md
+      - SECURITY.md
+      - docs/**
+      - .github/**
+      - sonar-project.properties
+    branches:
+      - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]    
   workflow_dispatch:
 
 jobs:
@@ -239,19 +248,6 @@ jobs:
         with:
           node-version: "14.x"
 
-      # - name: Setup LCOV
-      #   run: |
-      #     sudo apt-get update -y
-      #     sudo apt install -y libperlio-gzip-perl libjson-perl libdatetime-timezone-perl libcapture-tiny-perl
-      #     VERSION="2.0"
-      #     mkdir Iconv
-      #     cd Iconv
-      #     wget "https://github.com/linux-test-project/lcov/releases/download/v$VERSION/lcov-$VERSION.tar.gz"
-      #     tar -xzf "lcov-$VERSION.tar.gz"
-      #     cd "lcov-$VERSION"
-      #     sudo make install
-      #   working-directory: src
-
       - name: Download coverage report results
         uses: actions/download-artifact@v3
         with:
@@ -261,27 +257,16 @@ jobs:
         run: npx lcov-result-merger 'coverage/**/lcov-*.info' 'coverage/lcov.info'
         working-directory: src
 
-      # - name: Report code coverage
-      #   run: genhtml src/coverage/lcov.info --output-directory coverage-report
-
-      # - name: Archive code coverage report
-      #   uses: actions/upload-artifact@v3.1.2
-      #   with:
-      #     name: code-coverage-report
-      #     path: coverage-report
-
-      # - name: Report code coverage
-      #   uses: MyHelp-Ltd/github-actions-report-lcov@2996a96adc81c362e0eb9d7b14a1719f35687cd6
-      #   with:
-      #     coverage-files: src/coverage/**/lcov-*.info
-      #     minimum-coverage: 80
-      #     artifact-name: code-coverage-report
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     working-directory: src
-      #     update-comment: true
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./src/coverage/lcov.info
+          flags: unit-tests
+          fail_ci_if_error: false
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.8
+        uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
