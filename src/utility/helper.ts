@@ -1,7 +1,5 @@
 /* istanbul ignore file */
 import moment from "moment";
-import { homeRoute } from "../lib/constants";
-import { getSessionToken } from "./storage";
 
 type SessionObject = {
   label: string;
@@ -109,7 +107,7 @@ export const stringToInt = (str: string): number | undefined => {
 export const removeProp = (object, keys) =>
   keys.reduce((o, k) => {
     // eslint-disable-next-line
-    const { [k]: _ , ...p } = o;
+    const { [k]: _, ...p } = o;
     return p;
   }, object);
 
@@ -138,23 +136,6 @@ export const getCurrentURL = () => {
     } = window;
     return protocol + "//" + hostname + ":" + port;
   }
-};
-
-export const checkAuthAndRedirect = (callback) => {
-  const { userToken, userType } = getSessionToken();
-  if (
-    (!userToken || !userType) &&
-    !window.location.pathname.includes("/login")
-  ) {
-    window.location.replace("/login");
-  } else if (
-    userToken &&
-    userType &&
-    !window.location.href.includes(`${getCurrentURL()}/${userType}`)
-  ) {
-    window.location.replace(homeRoute[userType]);
-  }
-  callback(true);
 };
 
 export const parseNativeEmoji = (unified: string): string => {
