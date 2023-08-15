@@ -128,7 +128,7 @@ jobs:
       working-directory: src
 
     - name: Upload
-      uses: reggionick/s3-deploy@v3
+      uses: reggionick/s3-deploy@v4
       with:
         folder: src/dist
         bucket: ${{ env.deploy-s3-bucket }}
