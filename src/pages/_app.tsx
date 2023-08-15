@@ -22,6 +22,7 @@ import "@fontsource/roboto/700.css";
 import { SnackbarProvider } from "notistack";
 import { AuthProvider } from "../contexts/AuthContext";
 import { SidebarProvider } from "../contexts/SidebarContext";
+import { RouteGuard } from "../hoc/routeGaurd";
 import "../styles/main.css";
 import createEmotionCache from "../utility/createEmotionCache";
 
@@ -49,7 +50,9 @@ const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
               <SidebarProvider>
                 <CacheProvider value={emotionCache}>
                   <CssBaseline />
-                  <Component {...pageProps} />
+                  <RouteGuard>
+                    <Component {...pageProps} />
+                  </RouteGuard>
                 </CacheProvider>
               </SidebarProvider>
             </SnackbarProvider>
