@@ -1,5 +1,7 @@
 /* istanbul ignore file */
 import moment from "moment";
+import { homeRoute } from "../lib/constants";
+import { getSessionToken } from "./storage";
 
 type SessionObject = {
   label: string;
@@ -136,4 +138,28 @@ export const getCurrentURL = () => {
     } = window;
     return protocol + "//" + hostname + ":" + port;
   }
+};
+
+export const checkAuthAndRedirect = (callback) => {
+  const { userToken, userType } = getSessionToken();
+  if (
+    (!userToken || !userType) &&
+    !window.location.pathname.includes("/login")
+  ) {
+    window.location.replace("/login");
+  } else if (
+    userToken &&
+    userType &&
+    !window.location.href.includes(`${getCurrentURL()}/${userType}`)
+  ) {
+    window.location.replace(homeRoute[userType]);
+  }
+  callback(true);
+};
+
+export const parseNativeEmoji = (unified: string): string => {
+  return unified
+    .split("-")
+    .map((hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .join("");
 };

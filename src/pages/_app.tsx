@@ -8,7 +8,7 @@ import { env } from "./../lib/env";
 import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apollo-client";
 
-import { Provider, ErrorBoundary } from "@rollbar/react";
+import { ErrorBoundary, Provider } from "@rollbar/react";
 const rollbarConfig = {
   accessToken: env.rollbar.accessToken,
   environment: env.which,
@@ -20,10 +20,12 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 import { SnackbarProvider } from "notistack";
+import { useState } from "react";
 import { AuthProvider } from "../contexts/AuthContext";
 import { SidebarProvider } from "../contexts/SidebarContext";
 import "../styles/main.css";
 import createEmotionCache from "../utility/createEmotionCache";
+import { checkAuthAndRedirect } from "../utility/helper";
 
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
@@ -32,31 +34,37 @@ interface MyAppProps extends AppProps {
 
 const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const [isLoaded, setIsLoaded] = useState(false);
 
+  React.useEffect(() => {
+    checkAuthAndRedirect((status) => setIsLoaded(status));
+  }, []);
   return (
-    <Provider config={rollbarConfig}>
-      <ErrorBoundary>
-        <ApolloProvider client={client}>
-          <AuthProvider>
-            <SnackbarProvider
-              maxSnack={3}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
-              autoHideDuration={6000}
-            >
-              <SidebarProvider>
-                <CacheProvider value={emotionCache}>
-                  <CssBaseline />
-                  <Component {...pageProps} />
-                </CacheProvider>
-              </SidebarProvider>
-            </SnackbarProvider>
-          </AuthProvider>
-        </ApolloProvider>
-      </ErrorBoundary>
-    </Provider>
+    isLoaded && (
+      <Provider config={rollbarConfig}>
+        <ErrorBoundary>
+          <ApolloProvider client={client}>
+            <AuthProvider>
+              <SnackbarProvider
+                maxSnack={3}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+                autoHideDuration={6000}
+              >
+                <SidebarProvider>
+                  <CacheProvider value={emotionCache}>
+                    <CssBaseline />
+                    <Component {...pageProps} />
+                  </CacheProvider>
+                </SidebarProvider>
+              </SnackbarProvider>
+            </AuthProvider>
+          </ApolloProvider>
+        </ErrorBoundary>
+      </Provider>
+    )
   );
 };
 
