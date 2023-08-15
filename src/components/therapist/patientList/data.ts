@@ -14,7 +14,7 @@ export default {
       label: "Created on",
     },
     {
-      id: "update_date",
+      id: "updated_date",
       label: "Last Update",
     },
 
