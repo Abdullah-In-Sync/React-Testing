@@ -186,7 +186,7 @@ export const THERAPIST_PATIENT_LIST = gql`
         patient_firstname
         patient_lastname
         created_date
-        update_date
+        updated_date
         _id
       }
       total
