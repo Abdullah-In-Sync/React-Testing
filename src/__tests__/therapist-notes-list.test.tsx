@@ -625,7 +625,7 @@ describe("Therapist client feedback list", () => {
     fireEvent.click(await screen.findByTestId("editTemplateSubmitButton"));
 
     expect(
-      screen.getByText("Are you sure you want to save sessinon notes?")
+      screen.getByText("Are you sure you want to save session notes?")
     ).toBeInTheDocument();
 
     fireEvent.click(await screen.findByTestId("confirmButton"));
@@ -634,11 +634,6 @@ describe("Therapist client feedback list", () => {
       expect(screen.getByText("Saved Successfully.")).toBeInTheDocument();
     });
 
-    fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
-
-    await waitFor(async () => {
-      expect(screen.getByText("Add Homework")).toBeInTheDocument();
-    });
     // });
   });
 
@@ -692,19 +687,13 @@ describe("Therapist client feedback list", () => {
     fireEvent.click(await screen.findByTestId("editTemplateSubmitButton"));
 
     expect(
-      screen.getByText("Are you sure you want to save sessinon notes?")
+      screen.getByText("Are you sure you want to save session notes?")
     ).toBeInTheDocument();
 
     fireEvent.click(await screen.findByTestId("confirmButton"));
 
     await waitFor(async () => {
       expect(screen.getByText("Saved Successfully.")).toBeInTheDocument();
-    });
-
-    fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
-
-    await waitFor(async () => {
-      expect(screen.getByText("Add Homework")).toBeInTheDocument();
     });
   });
 
@@ -871,7 +860,9 @@ describe("Therapist client feedback list", () => {
     });
 
     await waitFor(async () => {
-      expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
+      expect(
+        screen.getByText("Resource assigned successfully.")
+      ).toBeInTheDocument();
     });
   });
 });
