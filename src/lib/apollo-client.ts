@@ -1,18 +1,20 @@
 import {
   ApolloClient,
-  createHttpLink,
   InMemoryCache,
+  createHttpLink,
   from,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import Cookies from "js-cookie";
-import { env } from "./env";
 import Router from "next/router";
+import fetch from "node-fetch";
 import { clearSession } from "../utility/storage";
+import { env } from "./env";
 
 const httpLink = createHttpLink({
   uri: env.graphql.url,
+  fetch: fetch as any,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -28,9 +30,12 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(({ networkError }) => {
+export const errorLink = onError(({ networkError }) => {
+  // const router = useRouter();
   if (networkError && networkError["statusCode"] === 401) {
-    clearSession(() => Router.replace("/account"));
+    clearSession(() => {
+      Router.replace("/account");
+    });
   }
 });
 
