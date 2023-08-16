@@ -146,7 +146,7 @@ const TherapistAssessmentMain: React.FC<any> = ({
         /* istanbul ignore next */
         isConfirmAdd && (
           <ConfirmationModal
-            label="Are you sure you want to add the Assessment?"
+            label="Are you sure you want to add the assessment?"
             onCancel={clearIsConfirmCancel}
             onConfirm={handleCreateAssessment}
           />

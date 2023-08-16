@@ -15,7 +15,7 @@ export default {
     },
     {
       id: "updated_date",
-      label: "Last Update",
+      label: "Last Updated",
     },
 
     {

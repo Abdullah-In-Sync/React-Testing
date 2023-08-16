@@ -92,6 +92,20 @@ export const UPDATE_FORMULATION = gql`
   }
 `;
 
+// export const ADD_FAV_FORMULATION = gql`
+//   mutation UpdateFormulationById(
+//     $formulation_id: ID!
+//     $updateFormulation: UpdateFormulationInput
+//   ) {
+//     updateFormulationById(
+//       formulation_id: $formulation_id
+//       updateFormulation: $updateFormulation
+//     ) {
+//       _id
+//     }
+//   }
+// `;
+
 export const UPDATE_ADMIN_FORMULATION_BY_ID = gql`
   mutation ($formulation_id: ID!, $updateFormulation: UpdateFormulationInput) {
     updateFormulationById(

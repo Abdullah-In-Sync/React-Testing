@@ -11,8 +11,10 @@ import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_TOKEN_DATA } from "../graphql/query/common";
 import { useAppContext } from "../contexts/AuthContext";
 import {
+  ADD_FAV_FORMULATION,
   GET_FORMULATION_LIST,
   GET_PATIENT_SHARED_LIST,
+  REMOVE_FAV_FORMULATION,
   THERAPIST_SHARE_FORMULATION_BY_ID,
   UPDATE_FORMULATION,
 } from "../graphql/formulation/graphql";
@@ -75,7 +77,17 @@ const buildMocks = (): {
             _id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
             created_date: "2023-06-20T08:43:32.409Z",
             download_formulation_url: null,
-            fav_for_detail: [],
+            fav_for_detail: [
+              // {
+              //   _id: "b115383a-82c6-4a6f-98e8-8628eb6c4295",
+              //   created_date: "2023-08-14T06:43:09.369Z",
+              //   forfav_status: 1,
+              //   formulation_id: "3695d9ee-ebd0-4ecf-9e10-a427cc4ad464",
+              //   updated_date: null,
+              //   user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+              //   __typename: "FavFormulationData",
+              // },
+            ],
             formulation_avail_for: "",
             formulation_desc: "description",
             formulation_img: "",
@@ -109,7 +121,17 @@ const buildMocks = (): {
             _id: "3bbc2640-2998-4c83-a11c-0d0456315b7c",
             created_date: "2023-06-20T08:50:12.427Z",
             download_formulation_url: null,
-            fav_for_detail: [],
+            fav_for_detail: [
+              {
+                _id: "b115383a-82c6-4a6f-98e8-8628eb6c4295",
+                created_date: "2023-08-14T06:43:09.369Z",
+                forfav_status: 1,
+                formulation_id: "3695d9ee-ebd0-4ecf-9e10-a427cc4ad464",
+                updated_date: null,
+                user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+                __typename: "FavFormulationData",
+              },
+            ],
             formulation_avail_for: "",
             formulation_desc:
               "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
@@ -225,6 +247,34 @@ const buildMocks = (): {
           message: null,
           result: true,
           __typename: "adminResult",
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: ADD_FAV_FORMULATION,
+      variables: { formulation_id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b" },
+    },
+    result: {
+      data: {
+        addFavouriteFormulation: {
+          fav_formulation_id: "new-fav-id",
+        },
+      },
+    },
+  });
+
+  _mocks.push({
+    request: {
+      query: REMOVE_FAV_FORMULATION,
+      variables: { fav_formulation_id: "b115383a-82c6-4a6f-98e8-8628eb6c4295" },
+    },
+    result: {
+      data: {
+        deleteFavouriteFormulation: {
+          deleted: true,
         },
       },
     },
@@ -351,5 +401,30 @@ describe("Therapist Formulation page", () => {
         screen.getByText("Formulation shared successfully!")
       ).toBeInTheDocument();
     });
+  });
+
+  test("Add and remove fav formulation", async () => {
+    await sut();
+    const favButton = await screen.findByTestId(
+      "fav_btn_d1b60faa-c8aa-4258-ada0-cfdf18402b7b"
+    );
+
+    expect(favButton).toBeInTheDocument();
+
+    fireEvent.click(favButton);
+    expect(
+      await screen.findByText(/Favorite formulation added successfully./i)
+    ).toBeInTheDocument();
+
+    const favButton2 = await screen.findByTestId(
+      "fav_btn_3bbc2640-2998-4c83-a11c-0d0456315b7c"
+    );
+
+    expect(favButton2).toBeInTheDocument();
+
+    fireEvent.click(favButton2);
+    expect(
+      await screen.findByText(/Favorite formulation deleted successfully./i)
+    ).toBeInTheDocument();
   });
 });
