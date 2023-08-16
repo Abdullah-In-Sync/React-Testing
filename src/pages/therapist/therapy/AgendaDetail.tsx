@@ -153,7 +153,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
         onCompleted: () => {
           setShareModalOpen(false);
 
-          enqueueSnackbar("Agenda shared successfully!", {
+          enqueueSnackbar("Resource shared successfully!", {
             variant: "success",
           });
           refetch();

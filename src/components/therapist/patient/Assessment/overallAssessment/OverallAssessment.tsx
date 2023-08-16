@@ -79,7 +79,7 @@ const TherapistPatientOverallAssessment: React.FC<
             size="small"
             style={{ textTransform: "none" }}
           >
-            Add assessment
+            Add Assessment
           </CommonButton>
         </Box>
       </Stack>
