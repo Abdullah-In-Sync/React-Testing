@@ -24,7 +24,6 @@ import React, { useEffect, useRef, useState } from "react";
 import TextFieldComponent from "../../common/TextField/TextFieldComponent";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationModal from "../../common/ConfirmationModal";
-import { SuccessModal } from "../../common/SuccessModal";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import {
@@ -88,7 +87,6 @@ function NotesDetail(props: propTypes) {
   const [isConfirmDeleteTask, setIsConfirmDeleteTask] = useState(false);
   const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState("");
-  const [successModal, setSuccessModal] = useState<boolean>(false);
   const [previoushomeworkId, setPrevioushomeworkId] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [ptHomeworkId, setPtHomeworkId] = useState("");
@@ -98,14 +96,6 @@ function NotesDetail(props: propTypes) {
   const [riskId, setRiskId] = React.useState<string[]>([]);
   const [noteUpdateId, setNoteUpdateId] = useState("");
   const [openResourceModal, setOpenResourceModal] = useState(false);
-  const [deleteTasksuccessModal, setDeleteTaskSuccessModal] =
-    useState<boolean>(false);
-
-  const [completeTasksuccessModal, setCompleteTaskSuccessModal] =
-    useState<boolean>(false);
-
-  const [completeResourceAssignedModal, setCompleteResourceAssignedModal] =
-    useState<boolean>(false);
 
   // Mutation
   const [addHomework] = useMutation(ADD_HOMEWORK);
@@ -364,7 +354,9 @@ function NotesDetail(props: propTypes) {
         },
         onCompleted: () => {
           setIsConfirm(false);
-          setSuccessModal(true);
+          enqueueSnackbar("Saved Successfully.", {
+            variant: "success",
+          });
           setInputs([]);
           refetch();
         },
@@ -385,7 +377,11 @@ function NotesDetail(props: propTypes) {
         },
         onCompleted: () => {
           setIsConfirmDeleteTask(false);
-          setDeleteTaskSuccessModal(true);
+          enqueueSnackbar("Your task has been deleted successfully.", {
+            variant: "success",
+          });
+          setInputs([]);
+          refetch();
         },
       });
     } catch (e) {
@@ -405,8 +401,9 @@ function NotesDetail(props: propTypes) {
         },
         onCompleted: () => {
           setIsConfirmCompleteTask(false);
-          setCompleteTaskSuccessModal(true);
-
+          enqueueSnackbar("Your task has been completed successfully.", {
+            variant: "success",
+          });
           refreshData();
         },
       });
@@ -431,7 +428,11 @@ function NotesDetail(props: propTypes) {
           resource_id: resourceId,
         },
         onCompleted: () => {
-          setCompleteResourceAssignedModal(true);
+          setOpenResourceModal(false);
+          enqueueSnackbar("Resource assigned successfully.", {
+            variant: "success",
+          });
+          refetch();
         },
       });
     } catch (e) {
@@ -457,20 +458,20 @@ function NotesDetail(props: propTypes) {
   };
 
   /* istanbul ignore next */
-  const handleOk = () => {
-    setSuccessModal(false);
-    setCompleteTaskSuccessModal(false);
-    setCompleteResourceAssignedModal(false);
-    setOpenResourceModal(false);
-    refetch();
-  };
+  // const handleOk = () => {
+  //   setSuccessModal(false);
+  //   setCompleteTaskSuccessModal(false);
+  //   setCompleteResourceAssignedModal(false);
+  //   setOpenResourceModal(false);
+  //   refetch();
+  // };
 
   /* istanbul ignore next */
-  const handleOk2 = () => {
-    setDeleteTaskSuccessModal(false);
-    setInputs([]);
-    refetch();
-  };
+  // const handleOk2 = () => {
+  //   setDeleteTaskSuccessModal(false);
+  //   setInputs([]);
+  //   refetch();
+  // };
 
   /* istanbul ignore next */
   const setCheckBox = () => {
@@ -1324,7 +1325,7 @@ function NotesDetail(props: propTypes) {
 
         {isConfirm && (
           <ConfirmationModal
-            label="Are you sure you want to save sessinon notes?"
+            label="Are you sure you want to save session notes?"
             onCancel={clearIsConfirmCancel}
             onConfirm={handlerAddAndUpdate}
           />
@@ -1338,47 +1339,11 @@ function NotesDetail(props: propTypes) {
           />
         )}
 
-        {deleteTasksuccessModal && (
-          <SuccessModal
-            isOpen={deleteTasksuccessModal}
-            title="Successful"
-            description={"Your task has been deleted successfully."}
-            onOk={handleOk2}
-          />
-        )}
-
-        {successModal && (
-          <SuccessModal
-            isOpen={successModal}
-            title="Successful"
-            description={"Saved Successfully."}
-            onOk={handleOk}
-          />
-        )}
-
         {isConfirmCompleteTask && (
           <ConfirmationModal
             label="Are you sure, you want to mark last session's homework as completed?"
             onCancel={clearIsConfirmCancel}
             onConfirm={compleateHomework}
-          />
-        )}
-
-        {completeTasksuccessModal && (
-          <SuccessModal
-            isOpen={completeTasksuccessModal}
-            title="Successful"
-            description={"Your task has been completed successfully."}
-            onOk={handleOk}
-          />
-        )}
-
-        {completeResourceAssignedModal && (
-          <SuccessModal
-            isOpen={completeResourceAssignedModal}
-            title="Successful"
-            description={"Resource assigned successfully."}
-            onOk={handleOk}
           />
         )}
       </div>
