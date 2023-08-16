@@ -576,7 +576,7 @@ describe("Therapist client feedback list", () => {
 
       await waitFor(async () => {
         expect(
-          screen.getByText("Agenda shared successfully!")
+          screen.getByText("Resource shared successfully!")
         ).toBeInTheDocument();
       });
     });

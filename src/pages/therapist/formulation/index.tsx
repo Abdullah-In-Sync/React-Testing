@@ -23,7 +23,9 @@ import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import {
+  ADD_FAV_FORMULATION,
   GET_FORMULATION_LIST,
+  REMOVE_FAV_FORMULATION,
   THERAPIST_SHARE_FORMULATION_BY_ID,
   UPDATE_FORMULATION,
 } from "../../../graphql/formulation/graphql";
@@ -77,6 +79,8 @@ const TherapistFormulation = () => {
   const [updateFormulation] =
     useMutation<UpdateFormulationData>(UPDATE_FORMULATION);
   const [shareFormulation] = useMutation(THERAPIST_SHARE_FORMULATION_BY_ID);
+  const [addFavFormlation] = useMutation(ADD_FAV_FORMULATION);
+  const [deleteFavFormlation] = useMutation(REMOVE_FAV_FORMULATION);
 
   const {
     user: { _id: Id },
@@ -208,6 +212,14 @@ const TherapistFormulation = () => {
               data-testid={"fav_btn_" + value?._id}
               aria-label="favorite"
               size="small"
+              onClick={() => {
+                /* istanbul ignore next */
+                if (value?.fav_for_detail.length) {
+                  handlerRemoveFav(value.fav_for_detail[0]._id);
+                } else {
+                  handlerAddFav(value._id);
+                }
+              }}
             >
               <FavoriteBorderIcon
                 data-testid={"fav_" + value?._id}
@@ -336,6 +348,44 @@ const TherapistFormulation = () => {
       });
     } catch (e) {
       console.log(e);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const handlerAddFav = async (formulationId) => {
+    try {
+      await addFavFormlation({
+        variables: {
+          formulation_id: formulationId,
+        },
+        onCompleted: () => {
+          enqueueSnackbar("Favorite formulation added successfully.", {
+            variant: "success",
+          });
+          refetchFormulationList();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+    }
+  };
+
+  const handlerRemoveFav = async (removeFormulationId) => {
+    try {
+      await deleteFavFormlation({
+        variables: {
+          fav_formulation_id: removeFormulationId,
+        },
+        onCompleted: () => {
+          enqueueSnackbar("Favorite formulation deleted successfully.", {
+            variant: "success",
+          });
+          refetchFormulationList();
+        },
+      });
+    } catch (e) {
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
     }
