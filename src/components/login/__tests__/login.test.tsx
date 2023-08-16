@@ -11,7 +11,7 @@ import { SnackbarProvider } from "notistack";
 
 import { Auth } from "aws-amplify";
 import * as useAuth from "../../../hooks/useAuth";
-import LoginPage from "../../../pages/login";
+import LoginPage from "../../../pages/account";
 import theme from "../../../styles/theme/theme";
 
 jest.mock("aws-amplify");

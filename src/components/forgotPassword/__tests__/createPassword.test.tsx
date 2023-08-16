@@ -74,7 +74,7 @@ describe("Create new password", () => {
     expect(
       await screen.findByText(/Password changed successfully!/i)
     ).toBeInTheDocument();
-    expect(pushMock).toHaveBeenCalledWith("/login");
+    expect(pushMock).toHaveBeenCalledWith("/account");
   });
 
   it("should render change password fail", async () => {

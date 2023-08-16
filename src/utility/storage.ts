@@ -13,7 +13,7 @@ export const getSessionToken = () => {
   return { userToken, userType };
 };
 
-export const clearSession = async (proceedNextCallback) => {
+export const clearSession = (proceedNextCallback) => {
   Object.keys(Cookies.get()).forEach(function (cookieName) {
     Cookies.remove(cookieName);
   });

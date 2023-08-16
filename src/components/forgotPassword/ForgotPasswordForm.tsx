@@ -61,7 +61,7 @@ const ForgotPasswordForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
               </CommonLoadingButton>
               <Box textAlign={"center"} className="link backLinkWrapper">
                 <KeyboardBackspaceOutlinedIcon className="backIcon" />{" "}
-                <Link href="/login">{"Back to login"}</Link>
+                <Link href="/account">{"Back to login"}</Link>
               </Box>
             </Box>
           </Form>
