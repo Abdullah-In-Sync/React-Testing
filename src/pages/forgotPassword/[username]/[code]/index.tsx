@@ -17,7 +17,7 @@ const CreatePasswordPage: NextPage = () => {
       variant: status,
     });
     setSubmitting(false);
-    if (status === "success") router.push("/login");
+    if (status === "success") router.push("/account");
   };
 
   const handleSubmit = ({ newPassword }, { setSubmitting }) => {
