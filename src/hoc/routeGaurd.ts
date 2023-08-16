@@ -26,13 +26,13 @@ function RouteGuard({ children }) {
 
   function authCheck(url) {
     const { userToken, userType } = getSessionToken();
-    const publicPaths = ["login", "forgotPassword"];
+    const publicPaths = ["account", "forgotPassword"];
     const path = url.split("?")[0];
     const initialPath = path.split("/")[1];
     if (!userToken && !publicPaths.includes(initialPath)) {
       setAuthorized(false);
       router.push({
-        pathname: "/login",
+        pathname: "/account",
         query: { returnUrl: router.asPath },
       });
     } else if (userToken && userType && initialPath !== userType) {

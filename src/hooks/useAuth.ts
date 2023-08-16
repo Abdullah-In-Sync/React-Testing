@@ -71,7 +71,7 @@ export const useAuth = () => {
   const logout = async (callback) => {
     try {
       await Auth.signOut();
-      router.replace("/login");
+      router.replace("/account");
       clearSession(() => {
         return callback({
           status: "success",
