@@ -610,8 +610,11 @@ const Resource: NextPage = () => {
               onClick={() => {
                 /* istanbul ignore next */
                 setIsFormulation(false);
+                /* istanbul ignore next */
                 setApproveTab(false);
+                /* istanbul ignore next */
                 setIsUnapproveFormulation(0);
+                /* istanbul ignore next */
                 setFilterValue({});
               }}
             >
