@@ -165,6 +165,7 @@ export const GET_TOKEN_DATA = gql`
         _id
         contract
         logo
+        logo_url
         name
         panel_color
         patient

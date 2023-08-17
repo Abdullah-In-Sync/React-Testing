@@ -33,7 +33,7 @@ const NavBar = () => {
 
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { user: { organization_settings: { logo = null } = {} } = {} } =
+  const { user: { organization_settings: { logo_url = "" } = {} } = {} } =
     useAppContext();
 
   const userRoute = {
@@ -93,9 +93,9 @@ const NavBar = () => {
                 textDecoration: "none",
               }}
             >
-              {logo && logo != "" ? (
+              {logo_url ? (
                 <img
-                  src={`/account/openFile?type=logo&file=${logo}`}
+                  src={logo_url}
                   height="40"
                   width="150"
                   alt="logo"
