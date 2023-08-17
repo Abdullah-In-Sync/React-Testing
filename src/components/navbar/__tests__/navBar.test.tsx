@@ -8,13 +8,13 @@ import {
   screen,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-
 import { Auth } from "aws-amplify";
 import NavBar from "..";
 import * as useAuth from "../../../hooks/useAuth";
 import theme from "../../../styles/theme/theme";
 import * as store from "../../../utility/storage";
-
+import { useAppContext } from "../../../contexts/AuthContext";
+jest.mock("../../../contexts/AuthContext");
 jest.mock("aws-amplify");
 
 jest.mock("next/router", () => {
@@ -47,12 +47,29 @@ describe("Nav bar", () => {
     (Auth.currentAuthenticatedUser as jest.Mock).mockReturnValue({
       user: {},
     });
+    (useAppContext as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: {
+        _id: "testid",
+        user_type: "patient",
+        parent_id: "patientid",
+        user_status: "1",
+        patient_data: {
+          therapist_id: "therapistid",
+        },
+        organization_settings: {
+          _id: "orgid",
+          logo_url: "",
+          panel_color: "",
+          side_menu_color: "",
+        },
+      },
+    });
   });
 
   it("should render logout", async () => {
     (Auth.signOut as jest.Mock).mockReturnValue("success");
     await sut();
-
     const menuOpenButton = await screen.findByTestId("accountCircleBtn");
     fireEvent.click(menuOpenButton);
     const logoutButton = await screen.findByTestId("btn_logout");
@@ -70,7 +87,6 @@ describe("Nav bar", () => {
       throw new Error("Logout failed!");
     });
     await sut();
-
     const menuOpenButton = await screen.findByTestId("accountCircleBtn");
     fireEvent.click(menuOpenButton);
     const logoutButton = await screen.findByTestId("btn_logout");
@@ -85,9 +101,7 @@ describe("Nav bar", () => {
 
   it("should render change password sccuess", async () => {
     (Auth.changePassword as jest.Mock).mockReturnValue("success");
-
     await sut();
-
     const menuOpenButton = await screen.findByTestId("accountCircleBtn");
     fireEvent.click(menuOpenButton);
     const changePasswordButton = await screen.findByTestId(
@@ -123,9 +137,7 @@ describe("Nav bar", () => {
     (Auth.changePassword as jest.Mock).mockImplementation(() => {
       throw new Error("Incorrect password!");
     });
-
     await sut();
-
     const menuOpenButton = await screen.findByTestId("accountCircleBtn");
     fireEvent.click(menuOpenButton);
     const changePasswordButton = await screen.findByTestId(
@@ -153,5 +165,33 @@ describe("Nav bar", () => {
       await result.current.changePassword("Happ1ness", "Myhelp@123", jest.fn);
     });
     expect(await screen.findByText(/Incorrect password!/i)).toBeInTheDocument();
+  });
+
+  it("should render logo", async () => {
+    (useAppContext as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: {
+        _id: "testid",
+        user_type: "patient",
+        parent_id: "patientid",
+        user_status: "1",
+        patient_data: {
+          therapist_id: "therapistid",
+        },
+        organization_settings: {
+          _id: "orgid",
+          contract: "<p>test</p>",
+          logo: "logo.png",
+          logo_url: "https://test.com/logo.png",
+          name: "portal.dev-myhelp",
+          panel_color: "#6ec9db",
+          patient_plural: "patients",
+          side_menu_color: "#6ec9db",
+        },
+      },
+    });
+    await sut();
+    const logo = screen.getByRole("img");
+    expect(logo).toHaveAttribute("src", "https://test.com/logo.png");
   });
 });
