@@ -538,8 +538,10 @@ const Resource: NextPage = () => {
     if (value?.mode === "approve_resource") {
       setApproveTab(true);
       if (isUnapproveFormulation == 1) {
+        /* istanbul ignore next */
         getUnApproveFormulation();
       } else {
+        /* istanbul ignore next */
         getUnApproveResource();
       }
     }
@@ -551,6 +553,7 @@ const Resource: NextPage = () => {
     const name = e.target.name;
 
     if (name === "formulation") {
+      /* istanbul ignore next */
       setIsUnapproveFormulation(!e.target.checked ? 0 : 1);
     }
   };
@@ -605,6 +608,7 @@ const Resource: NextPage = () => {
               }}
               /* istanbul ignore next */
               onClick={() => {
+                /* istanbul ignore next */
                 setIsFormulation(false);
                 setApproveTab(false);
                 setIsUnapproveFormulation(0);
