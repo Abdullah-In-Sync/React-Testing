@@ -41,6 +41,11 @@ import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import Formulation from "../formulation";
 import { useRouter } from "next/router";
+import CheckBoxLabelComponent from "../../../components/common/CheckBoxs/CheckBoxLabel/CheckBoxLabelComponent";
+import {
+  GET_UNAPPROVE_FORMULATION_LIST,
+  UPDATE_ADMIN_FORMULATION_BY_ID,
+} from "../../../graphql/formulation/graphql";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -139,7 +144,10 @@ const Resource: NextPage = () => {
   const [removeFavourite] = useMutation(REMOVE_FAVOURITE);
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [approveResource] = useMutation(APPROVE_RESOURCE);
+  const [approveFormulation] = useMutation(UPDATE_ADMIN_FORMULATION_BY_ID);
   const [isFormulation, setIsFormulation] = useState<boolean>(false);
+  const [isUnapproveFormulation, setIsUnapproveFormulation] = useState(0);
+  const [approveTab, setApproveTab] = useState(false);
   const {
     user: { _id: adminId },
   } = useAppContext();
@@ -173,6 +181,24 @@ const Resource: NextPage = () => {
     fetchPolicy: "no-cache",
   });
 
+  const [getUnApproveFormulation, { loading: unapproveFormulationLoading }] =
+    useLazyQuery(GET_UNAPPROVE_FORMULATION_LIST, {
+      fetchPolicy: "no-cache",
+      onCompleted: (data) => {
+        if (data?.getUnApproveFormulationList) {
+          const formateData = data.getUnApproveFormulationList.map((f) => {
+            return {
+              _id: f._id,
+              resource_name: f.formulation_name,
+              resource_desc: f.formulation_desc,
+              user_id: f.user_id,
+            };
+          });
+          setDataList(formateData);
+        }
+      },
+    });
+
   const { data: categoryList } = useQuery(GET_CATEGORY, {
     variables: {
       modelId: filterValue?.modelId ?? "",
@@ -197,12 +223,16 @@ const Resource: NextPage = () => {
       /* istanbul ignore next */
       setDataList(unApproveResourceList?.getAdminUnApproveResourceList);
     }
-  }, [unApproveResourceList]);
+    if (isUnapproveFormulation == 1) {
+      getUnApproveFormulation();
+    }
+  }, [unApproveResourceList, isUnapproveFormulation]);
   useEffect(() => {
     /* istanbul ignore next */
     if (router?.query?.tab) {
       if (router?.query.tab == "approveResource") {
         setIsFormulation(false);
+        setApproveTab(true);
         handleFilterChange({ mode: "approve_resource" });
       }
       /* istanbul ignore next */
@@ -294,19 +324,6 @@ const Resource: NextPage = () => {
             </IconButtonWrapper>
           )}
 
-          {value?.user_id == adminId && (
-            <IconButtonWrapper
-              onClick={() => {
-                setModalOpen(true);
-                setResourceId(value?._id);
-              }}
-              data-testid={"deleteIcon_" + value?._id}
-              aria-label="delete"
-              size="small"
-            >
-              <DeleteIcon />
-            </IconButtonWrapper>
-          )}
           {filterValue?.mode === "approve_resource" && (
             <IconButtonWrapper
               onClick={() => {
@@ -323,7 +340,8 @@ const Resource: NextPage = () => {
             </IconButtonWrapper>
           )}
 
-          {filterValue?.mode === "approve_resource" && (
+          {(value?.user_id == adminId ||
+            filterValue?.mode === "approve_resource") && (
             <IconButtonWrapper
               onClick={() => {
                 setModalOpen(true);
@@ -469,18 +487,38 @@ const Resource: NextPage = () => {
   const handleApprove = async (id) => {
     /* istanbul ignore else */
     setIsMutation(true);
-    approveResource({
-      variables: {
-        resourceId: id,
-      },
-      onCompleted: () => {
-        setIsMutation(false);
-        enqueueSnackbar("Resource Approved successfully!", {
-          variant: "success",
-        });
-        handleFilterChange({ mode: "approve_resource" });
-      },
-    });
+    if (isUnapproveFormulation == 1) {
+      await approveFormulation({
+        variables: {
+          formulation_id: id,
+          updateFormulation: {
+            formulation_status: 1,
+          },
+        },
+        onCompleted: () => {
+          setIsMutation(false);
+          setApproveTab(true);
+          handleFilterChange({ mode: "approve_resource" });
+          enqueueSnackbar("Formulation Approved successfully!", {
+            variant: "success",
+          });
+        },
+      });
+    } else {
+      approveResource({
+        variables: {
+          resourceId: id,
+        },
+        onCompleted: () => {
+          setIsMutation(false);
+          enqueueSnackbar("Resource Approved successfully!", {
+            variant: "success",
+          });
+          handleFilterChange({ mode: "approve_resource" });
+          setApproveTab(true);
+        },
+      });
+    }
   };
 
   const handleFilterChange = (value) => {
@@ -498,7 +536,22 @@ const Resource: NextPage = () => {
     setModelData(modelList?.disordermodel_data);
     /* istanbul ignore next */
     if (value?.mode === "approve_resource") {
-      getUnApproveResource();
+      setApproveTab(true);
+      if (isUnapproveFormulation == 1) {
+        getUnApproveFormulation();
+      } else {
+        getUnApproveResource();
+      }
+    }
+  };
+
+  const setCheckBox = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | any>
+  ) => {
+    const name = e.target.name;
+
+    if (name === "formulation") {
+      setIsUnapproveFormulation(!e.target.checked ? 0 : 1);
     }
   };
 
@@ -553,6 +606,8 @@ const Resource: NextPage = () => {
               /* istanbul ignore next */
               onClick={() => {
                 setIsFormulation(false);
+                setApproveTab(false);
+                setIsUnapproveFormulation(0);
                 setFilterValue({});
               }}
             >
@@ -570,6 +625,7 @@ const Resource: NextPage = () => {
               data-testid="formulationTab"
               onClick={() => {
                 setIsFormulation(true);
+                setApproveTab(false);
                 router.push(`?tab=formulation`);
               }}
             >
@@ -585,6 +641,7 @@ const Resource: NextPage = () => {
               data-testid="approveresourcelist"
               onClick={() => {
                 setIsFormulation(false);
+                setApproveTab(true);
                 handleFilterChange({ mode: "approve_resource" });
                 router.push(`?tab=approveResource`);
               }}
@@ -631,22 +688,48 @@ const Resource: NextPage = () => {
           <Formulation />
         ) : (
           <>
-            <CrudForm
-              fields={filterList}
-              onFieldChange={(value) => {
-                /* istanbul ignore next */
-                handleFilterChange(value);
-              }}
-              values={filterValue}
-            />
-
+            {isUnapproveFormulation == 0 && (
+              <CrudForm
+                fields={filterList}
+                onFieldChange={(value) => {
+                  /* istanbul ignore next */
+                  handleFilterChange(value);
+                }}
+                values={filterValue}
+              />
+            )}
+            {approveTab && (
+              <Box display={"flex"} justifyContent={"flex-end"}>
+                <CheckBoxLabelComponent
+                  value="1"
+                  name="formulation"
+                  onChange={setCheckBox}
+                  label="Formulation"
+                  placement="end"
+                  inputProps={{
+                    "data-testid": "formulationCheckbox",
+                  }}
+                  checked={isUnapproveFormulation}
+                  size="small"
+                />
+              </Box>
+            )}
             <Box>
-              <Loader visible={loading || unapproveLoading} />
+              <Loader
+                visible={
+                  loading || unapproveLoading || unapproveFormulationLoading
+                }
+              />
               <CardGenerator data={dataList} fields={fields} />
             </Box>
             <ApproveSureModal
               modalOpen={approveModal}
               setModalOpen={setApproveModal}
+              msg={
+                isUnapproveFormulation == 1
+                  ? "Are you sure you want to approve this formulation?"
+                  : "Are you sure want to approve this resource?"
+              }
             >
               <Box marginTop="20px" display="flex" justifyContent="end">
                 <Button
