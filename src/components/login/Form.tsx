@@ -93,11 +93,11 @@ const LoginForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
                 Login
               </CommonLoadingButton>
               <Box textAlign={"center"} className="link">
-                <Link href="https://portal.myhelp.co.uk/account/privacy_policy">
+                <Link href="https://myhelp.co.uk/privacy-policy.html">
                   <a target="_blank">{"Privacy Policy"}</a>
                 </Link>
                 &nbsp;-&nbsp;
-                <Link href="https://portal.myhelp.co.uk/account/terms_of_use">
+                <Link href="https://myhelp.co.uk/terms-of-use.html">
                   <a target="_blank">{"Terms of Use"}</a>
                 </Link>
               </Box>
