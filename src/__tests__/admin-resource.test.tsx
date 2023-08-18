@@ -17,6 +17,10 @@ import {
 
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
+import {
+  GET_UNAPPROVE_FORMULATION_LIST,
+  UPDATE_ADMIN_FORMULATION_BY_ID,
+} from "../graphql/formulation/graphql";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -202,6 +206,73 @@ const buildMocks = (): {
         adminApproveResourceById: {
           _id: "9be5d270b71041caac142fb4b2bbc0ec",
           resource_status: 1,
+        },
+      },
+    },
+  });
+
+  // get unapproved formulation list
+  _mocks.push({
+    request: {
+      query: GET_UNAPPROVE_FORMULATION_LIST,
+      variables: {},
+    },
+    result: {
+      data: {
+        getUnApproveFormulationList: [
+          {
+            _id: "169a05f5-9302-448f-ba95-373011ab3079",
+            created_date: "2023-07-03T12:25:07.672Z",
+            download_formulation_url: null,
+            formulation_avail_for: "1",
+            formulation_desc: "Testcase name 1",
+            formulation_img: "",
+            formulation_instruction: "Testcase name 2",
+            formulation_name: "Testcase name",
+            formulation_status: 2,
+            formulation_type: 1,
+            formulation_url: null,
+            org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
+            template_data: "",
+            template_id: "",
+            updated_date: "2023-07-03T12:25:07.672Z",
+            user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          },
+        ],
+      },
+    },
+  });
+
+  // approve formulation from list
+  _mocks.push({
+    request: {
+      query: UPDATE_ADMIN_FORMULATION_BY_ID,
+      variables: {
+        formulation_id: "169a05f5-9302-448f-ba95-373011ab3079",
+        updateFormulation: {
+          formulation_status: 1,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateFormulationById: {
+          _id: "169a05f5-9302-448f-ba95-373011ab3079",
+          created_date: "2023-07-03T12:25:07.672Z",
+          download_formulation_url: null,
+          formulation_avail_for: "1",
+          formulation_desc: "Testcase name 1",
+          formulation_img: "",
+          formulation_instruction: "Testcase name 2",
+          formulation_name: "Testcase name",
+          formulation_status: 2,
+          formulation_type: 1,
+          formulation_url: null,
+          org_id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
+          template_data: "",
+          template_id: "",
+          updated_date: "2023-07-03T12:25:07.672Z",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
         },
       },
     },
@@ -406,5 +477,47 @@ describe("Admin Resource page", () => {
       ).not.toBeInTheDocument();
       expect(mockRouter.push).toHaveBeenCalledWith("?tab=approveResource");
     });
+  });
+
+  test("should display the unapprove formulation list", async () => {
+    await sut();
+    await waitFor(() =>
+      expect(screen.queryByTestId("approveresourcelist")).toBeInTheDocument()
+    );
+    fireEvent.click(screen.queryByTestId("approveresourcelist"));
+
+    await waitFor(() =>
+      expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument()
+    );
+    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(2));
+    fireEvent.click(screen.queryByTestId("formulationCheckbox"));
+    await waitFor(() =>
+      expect(screen.queryByTestId("cardWrapperContainer")).toBeInTheDocument()
+    );
+    await waitFor(() => expect(screen.queryAllByTestId("card").length).toBe(1));
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("doneIcon_169a05f5-9302-448f-ba95-373011ab3079")
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(
+      screen.queryByTestId("doneIcon_169a05f5-9302-448f-ba95-373011ab3079")
+    );
+    expect(
+      screen.queryByText("Are you sure you want to approve this formulation?")
+    ).toBeInTheDocument();
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId("approveResourceModalConfirmButton")
+      ).toBeInTheDocument()
+    );
+    await waitFor(() =>
+      fireEvent.click(screen.queryByTestId("approveResourceModalCancelButton"))
+    );
+    await waitFor(() =>
+      expect(screen.queryByText("Approve Resource")).toBeInTheDocument()
+    );
   });
 });

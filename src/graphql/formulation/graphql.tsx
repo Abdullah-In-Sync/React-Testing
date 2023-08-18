@@ -312,3 +312,14 @@ export const UPDATE_FORMULATION_BY_ID = gql`
     }
   }
 `;
+
+export const GET_UNAPPROVE_FORMULATION_LIST = gql`
+  query getUnApproveFormulationList {
+    getUnApproveFormulationList {
+      _id
+      formulation_name
+      formulation_desc
+      user_id
+    }
+  }
+`;
