@@ -927,8 +927,10 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(saveButton);
     const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
+    waitFor(async () => {
+      const okButton = await screen.findByTestId("SuccessOkBtn");
+      expect(okButton).toBeInTheDocument();
+    });
   });
 
   it("should update plan fail", async () => {

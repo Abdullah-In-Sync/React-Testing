@@ -12,7 +12,6 @@ import {
 } from "../../../../../../components/common/CustomModal/CommonModal";
 import Loader from "../../../../../../components/common/Loader";
 import { SuccessModal } from "../../../../../../components/common/SuccessModal";
-import TherapistSafetyPlanComponent from "../../../../../../components/therapist/patient/therapistSafetyPlan";
 import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
 import {
   ADD_THERAPIST_SAFETY_PLAN,
@@ -29,6 +28,7 @@ import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 
 import AddPlanForm from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/AddSafetyPlan";
 import { useAppContext } from "../../../../../../contexts/AuthContext";
+import TherapistRelapsePlanComponent from "../../../../../../components/therapist/patient/therapistRelapse";
 
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
@@ -502,7 +502,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Safety Plan" />
         <Box style={{ paddingTop: "10px" }}>
-          <TherapistSafetyPlanComponent
+          <TherapistRelapsePlanComponent
             safetyPlanList={listData}
             searchInputValue={searchInputValue}
             onChangeSearchInput={onChangeSearchInput}
@@ -519,6 +519,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             onPressDeletePlan={onPressDeletePlan}
             handleAddIconButton={handleAddIconButton}
             accordionOpen={!getSafetyPlanByIdError && accordionOpen}
+            isSafetyPlan={true}
           />
         </Box>
       </Box>
