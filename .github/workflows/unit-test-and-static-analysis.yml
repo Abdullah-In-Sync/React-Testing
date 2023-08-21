@@ -98,6 +98,7 @@ jobs:
         envkey_NEXT_PUBLIC_COGNITO_REGION: ${{ secrets.DEV_AWS_REGION }}
         envkey_NEXT_PUBLIC_COGNITO_APP_CLIENT_ID: ${{ secrets.DEV_AWS_CLIENT_ID }}
         envkey_NEXT_PUBLIC_COGNITO_USER_POOL_ID: ${{ secrets.DEV_USER_POOL_ID }}
+        envkey_NEXT_PUBLIC_GRAPHQL_API_KEY: ${{ secrets.DEV_APPSYNC_API_KEY }}
         directory: src
         file_name: .env.local
         fail_on_empty: true

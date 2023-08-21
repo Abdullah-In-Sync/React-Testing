@@ -95,6 +95,7 @@ jobs:
         envkey_NEXT_PUBLIC_COGNITO_REGION: ${{ secrets.STAGING_AWS_REGION }}
         envkey_NEXT_PUBLIC_COGNITO_APP_CLIENT_ID: ${{ secrets.STAGING_AWS_CLIENT_ID }}
         envkey_NEXT_PUBLIC_COGNITO_USER_POOL_ID: ${{ secrets.STAGING_USER_POOL_ID }}
+        envkey_NEXT_PUBLIC_GRAPHQL_API_KEY: ${{ secrets.STAGING_APPSYNC_API_KEY }}
         directory: src
         file_name: .env.local
         fail_on_empty: true
