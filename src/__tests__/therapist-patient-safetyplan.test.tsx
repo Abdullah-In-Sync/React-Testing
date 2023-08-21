@@ -927,8 +927,8 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(saveButton);
     const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
-    waitFor(async () => {
-      const okButton = await screen.findByTestId("SuccessOkBtn");
+    waitFor(() => {
+      const okButton = screen.queryByTestId("SuccessOkBtn");
       expect(okButton).toBeInTheDocument();
     });
   });
@@ -948,9 +948,7 @@ describe("Therapist patient safety plan", () => {
     );
 
     fireEvent.click(saveButton);
-    const confirmButton = await screen.findByRole("button", {
-      name: "Confirm",
-    });
+    const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
     const serverError = await screen.findByText(
       /Server error please try later./i
@@ -990,9 +988,7 @@ describe("Therapist patient safety plan", () => {
     const deleteButton = await screen.findByTestId("iconButtonQuestion_0");
 
     fireEvent.click(deleteButton);
-    const confirmButton = await screen.findByRole("button", {
-      name: "Confirm",
-    });
+    const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
     const okButton = await screen.findByTestId("SuccessOkBtn");
     expect(okButton).toBeInTheDocument();
@@ -1034,6 +1030,7 @@ describe("Therapist patient safety plan", () => {
   });
 
   it("should delete safety plan question fail", async () => {
+    (useRouter as jest.Mock).mockClear();
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "7a27dc00d48bf983fdcd4b0762ebd-fail",
