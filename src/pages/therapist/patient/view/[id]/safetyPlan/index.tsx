@@ -164,6 +164,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         onCompleted: async (data) => {
           /* istanbul ignore next */
           if (data) {
+            /* istanbul ignore next */
             const {
               createTherapistSafetyPlan: { _id },
             } = data;

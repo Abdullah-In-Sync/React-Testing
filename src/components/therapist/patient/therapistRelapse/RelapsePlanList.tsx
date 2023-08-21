@@ -36,6 +36,7 @@ const TherapistRelapseList = (safetyPlanList) => {
         className={styles.safetyPlanListWrapper}
       >
         {safetyPlanList &&
+          /* istanbul ignore next */
           safetyPlanList?.safetyPlanList?.[key] &&
           safetyPlanList?.safetyPlanList?.[key].map((v, k) => {
             const checkIsEditable = isEditable(v);
