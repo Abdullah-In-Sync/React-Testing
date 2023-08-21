@@ -69,7 +69,10 @@ const TherapistRelapseList = (safetyPlanList) => {
                           <Minimize
                             data-testid={`button-minus-icon_${k}`}
                             /* istanbul ignore next */
-                            onClick={() => handleAddIconButton(k, v._id)}
+                            onClick={() =>
+                              /* istanbul ignore next */
+                              handleAddIconButton(k, v._id)
+                            }
                             className="text-white"
                           />
                         </Box>

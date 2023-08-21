@@ -202,6 +202,20 @@ mocksData.push({
           updated_date: "2023-02-03T05:22:57.823Z",
           __typename: "patientSafetyPlanQuestions",
         },
+        {
+          _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e-patient-answer3",
+          created_date: "2023-02-03T05:22:57.823Z",
+          patient_answer: "optionset3",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          safety_additional_details: "Description text detail",
+          safety_ques: "Question text2",
+          safety_ques_status: "1",
+          safety_ques_type: "2",
+          safety_ques_typeoption: "option1,optionset3",
+          updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
       ],
     },
   },
@@ -1062,6 +1076,8 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(addButton);
 
     const patientResponse = await screen.findByText(/optionset2/i);
+    const patientResponse2 = await screen.findByText(/optionset3/i);
     expect(patientResponse).toBeInTheDocument();
+    expect(patientResponse2).toBeInTheDocument();
   });
 });
