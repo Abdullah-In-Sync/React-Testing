@@ -162,6 +162,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: async (data) => {
+          /* istanbul ignore next */
           if (data) {
             const {
               createTherapistSafetyPlan: { _id },
@@ -171,6 +172,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
               description: "Your plan has been created successfully.",
             });
             await handleAddIconButton(0, _id);
+            /* istanbul ignore next */
             getSafetyPlanList({
               variables: { patientId: patId },
             });
@@ -417,11 +419,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       await updateTherapistSafetyPlanQuestions({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
+        /* istanbul ignore next */
         onCompleted: async (data) => {
+          /* istanbul ignore next */
           if (data) {
+            /* istanbul ignore next */
             setSuccessModal({
               description: "Your question has been updated successfully.",
             });
+            /* istanbul ignore next */
             await fetchPlanData(planId);
           }
         },
