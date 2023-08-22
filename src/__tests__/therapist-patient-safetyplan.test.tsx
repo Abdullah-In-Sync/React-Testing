@@ -189,7 +189,7 @@ mocksData.push({
           patient_answer: "I didnt excersize",
           patient_id: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
           plan_id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-update",
-          safety_additional_details: "desc",
+          safety_additional_details: "desc2",
           safety_ques: "What did you done?",
           safety_ques_status: "1",
           safety_ques_type: "1",
@@ -1170,5 +1170,25 @@ describe("Therapist patient safety plan", () => {
       target: { value: "response3" },
     });
     expect(await screen.findByText(/response3/i)).toBeInTheDocument();
+  });
+
+  it("should update question description response", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+    expect(
+      await screen.findByTestId("iconEditButtonQuestion_1")
+    ).toBeInTheDocument();
+
+    const patientResponse = await screen.findByText(/desc2/i);
+    fireEvent.change(patientResponse, {
+      target: { value: "desc3" },
+    });
+    expect(await screen.findByText(/desc3/i)).toBeInTheDocument();
   });
 });

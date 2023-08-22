@@ -33,29 +33,27 @@ import TherapistRelapsePlanComponent from "../../../../../../components/therapis
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
   const { user } = useAppContext();
-  // codecov-ignore-start
   const orgId = user?.therapist_data.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
   const modalRefAddPlan = useRef<ModalElement>(null);
   const handleOpenCreatePlanModal = useCallback((_, v) => {
     setCurrentSafetyPlan(v);
-    return modalRef.current?.open();
+    return modalRef.current.open();
   }, []);
   const handleCloseCreatePlanModal = useCallback(() => {
     // setCurrentSafetyPlan(undefined)
-    return modalRef.current?.close();
+    return modalRef.current.close();
   }, []);
 
   const handleOpenAddPlanModal = useCallback(
-    () => modalRefAddPlan.current?.open(),
+    () => modalRefAddPlan.current.open(),
     []
   );
   const handleCloseAddPlanModal = useCallback(() => {
     /* istanbul ignore next */
-    modalRefAddPlan.current?.close();
+    modalRefAddPlan.current.close();
   }, []);
-  // codecov-ignore-end
 
   const [successModal, setSuccessModal] = useState<any>();
   /* istanbul ignore next */
@@ -420,7 +418,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
         /* istanbul ignore next */
-        // codecov-ignore-start
         onCompleted: async () => {
           /* istanbul ignore next */
           setSuccessModal({
@@ -429,7 +426,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           /* istanbul ignore next */
           await fetchPlanData(planId);
         },
-        // codecov-ignore-end
       });
     } catch (e) {
       setLoader(false);
