@@ -95,6 +95,31 @@ mocksData.push({
   request: {
     query: GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
     variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
+    },
+  },
+  result: {
+    data: {
+      getSafetyPlanListByPatientId: [
+        {
+          _id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-update",
+          created_date: "2023-01-23T05:24:08.166Z",
+          description: "test-response -patient side",
+          plan_owner: "admin",
+          name: "Test Plan Data",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          plan_type: "custom",
+          __typename: "patientSafetyPlans",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_SAFETY_PLAN_LIST_FOR_THERAPIST,
+    variables: {
       patientId: "7a27dc00d48bf983fdcd4b0762ebd-patient-answer",
     },
   },
@@ -132,14 +157,44 @@ mocksData.push({
           _id: "3d13474a-24fd-4ae6-adb9-d2a3ecdeed6e",
           created_date: "2023-02-03T05:22:57.823Z",
           patient_answer: null,
-          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          plan_id: "f5e126b3-6c64-47ec-bbaa-b186a06f5879",
+          patient_id: "7a27dc00d48bf983fdcd4b0762ebd",
+          plan_id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027",
           safety_additional_details: "",
           safety_ques: "Question text",
           safety_ques_status: "1",
           safety_ques_type: "2",
           safety_ques_typeoption: "option1,option2",
           updated_date: "2023-02-03T05:22:57.823Z",
+          __typename: "patientSafetyPlanQuestions",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: VIEW_PATIENT_SAFETY_PLAN_BY_ID,
+    variables: {
+      patientId: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
+      planId: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-update",
+    },
+  },
+  result: {
+    data: {
+      viewPatientSafetyPlanById: [
+        {
+          _id: "60f60b02-663f-4abd-8e90-0b324adcdadb-update",
+          created_date: "2023-08-19T10:28:02.253Z",
+          patient_answer: "I didnt excersize",
+          patient_id: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
+          plan_id: "b605e3f4-9f2a-48fe-9a76-9c7cebed6027-update",
+          safety_additional_details: "desc",
+          safety_ques: "What did you done?",
+          safety_ques_status: "1",
+          safety_ques_type: "1",
+          safety_ques_typeoption: "",
+          updated_date: "2023-08-19T10:36:49.976Z",
           __typename: "patientSafetyPlanQuestions",
         },
       ],
@@ -1095,5 +1150,25 @@ describe("Therapist patient safety plan", () => {
     expect(patientResponse).toBeInTheDocument();
     expect(patientResponse2).toBeInTheDocument();
     expect(patientResponse3).toBeInTheDocument();
+  });
+
+  it("should update patient response", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+    expect(
+      await screen.findByTestId("iconEditButtonQuestion_1")
+    ).toBeInTheDocument();
+
+    const patientResponse = await screen.findByText(/I didnt excersize/i);
+    fireEvent.change(patientResponse, {
+      target: { value: "response3" },
+    });
+    expect(await screen.findByText(/response3/i)).toBeInTheDocument();
   });
 });
