@@ -99,12 +99,10 @@ const CreateRelapsePlan: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           setLoader(false);
-          if (data) {
-            if (data?.adminCreateRelapsePlan.result == true) {
-              setSuccessModal(true);
-            } else {
-              setShowCheckModal(true);
-            }
+          if (data?.adminCreateRelapsePlan.result == true) {
+            setSuccessModal(true);
+          } else {
+            setShowCheckModal(true);
           }
         },
       });

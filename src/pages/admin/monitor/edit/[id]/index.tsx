@@ -79,11 +79,9 @@ const EditMonitor: NextPage = () => {
       await updateMonitor({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            router.push(`/admin/monitor`);
-            doneCallback();
-          }
+        onCompleted: () => {
+          router.push(`/admin/monitor`);
+          doneCallback();
         },
       });
     } catch (e) {
@@ -130,14 +128,12 @@ const EditMonitor: NextPage = () => {
           questionId,
         },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            callback();
-            questionCallback();
-            enqueueSnackbar("Question successfully deleted.", {
-              variant: "success",
-            });
-          }
+        onCompleted: () => {
+          callback();
+          questionCallback();
+          enqueueSnackbar("Question successfully deleted.", {
+            variant: "success",
+          });
         },
       });
     } catch (e) {

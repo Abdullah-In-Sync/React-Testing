@@ -97,11 +97,9 @@ const EditRelapsePlanPage: NextPage = () => {
       await updateRelapsePlan({
         variables: { ...variables },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: () => {
           /* istanbul ignore next */
-          if (data) {
-            setSuccessModal(true);
-          }
+          setSuccessModal(true);
           doneCallback();
         },
       });
@@ -176,14 +174,12 @@ const EditRelapsePlanPage: NextPage = () => {
       await deleteRelapsePlanQuestion({
         variables: { questionId },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            successDeleteCallback();
-            doneCallback();
-            enqueueSnackbar("Question has been deleted successfully.", {
-              variant: "success",
-            });
-          }
+        onCompleted: () => {
+          successDeleteCallback();
+          doneCallback();
+          enqueueSnackbar("Question has been deleted successfully.", {
+            variant: "success",
+          });
           setLoader(false);
         },
       });

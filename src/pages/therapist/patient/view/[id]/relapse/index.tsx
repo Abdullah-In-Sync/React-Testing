@@ -224,16 +224,14 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       await updateTherapistRelapsePlan({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            /* istanbul ignore next */
-            setSuccessModal({
-              description: share_status
-                ? "Your plan has been shared successfully."
-                : "Your plan has been updated successfully.",
-            });
-            refetch();
-          }
+        onCompleted: () => {
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: share_status
+              ? "Your plan has been shared successfully."
+              : "Your plan has been updated successfully.",
+          });
+          refetch();
         },
       });
     } catch (e) {
@@ -266,17 +264,15 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          if (data) {
-            const {
-              therapistCreateRelapsePlan: { _id },
-            } = data;
-            refetch();
-            handleAddIconButton(0, _id);
-            /* istanbul ignore next */
-            setSuccessModal({
-              description: "Your plan has been created successfully.",
-            });
-          }
+          const {
+            therapistCreateRelapsePlan: { _id },
+          } = data;
+          refetch();
+          handleAddIconButton(0, _id);
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan has been created successfully.",
+          });
         },
       });
     } catch (e) {
@@ -410,13 +406,11 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       await updateRelapseRelapsePlanQuestions({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            setSuccessModal({
-              description: "Your question has been updated successfully.",
-            });
-            refetchRelapsePlan();
-          }
+        onCompleted: () => {
+          setSuccessModal({
+            description: "Your question has been updated successfully.",
+          });
+          refetchRelapsePlan();
         },
       });
     } catch (e) {
@@ -452,14 +446,12 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       await deleteRelapsePlan({
         variables: { questionId },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            successDeleteCallback();
-            doneCallback();
-            setSuccessModal({
-              description: "Your question has been deleted successfully.",
-            });
-          }
+        onCompleted: () => {
+          successDeleteCallback();
+          doneCallback();
+          setSuccessModal({
+            description: "Your question has been deleted successfully.",
+          });
         },
       });
     } catch (e) {

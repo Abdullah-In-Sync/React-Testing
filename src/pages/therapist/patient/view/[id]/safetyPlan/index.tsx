@@ -261,18 +261,16 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       await updateTherapistSafetyPlan({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            /* istanbul ignore next */
-            setSuccessModal({
-              description: share_status
-                ? "Your plan has been shared successfully."
-                : "Your plan has been updated successfully.",
-            });
-            getSafetyPlanList({
-              variables: { patientId: patId },
-            });
-          }
+        onCompleted: () => {
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: share_status
+              ? "Your plan has been shared successfully."
+              : "Your plan has been updated successfully.",
+          });
+          getSafetyPlanList({
+            variables: { patientId: patId },
+          });
         },
       });
     } catch (e) {

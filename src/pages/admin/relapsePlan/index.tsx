@@ -176,16 +176,14 @@ const RelapsePlanPage: NextPage = () => {
       await updateRelapsePlanFn({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            getRelapsePlanList({
-              variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
-            });
-            doneCallback();
-            setSuccessModal({
-              description: "Your plan has been deleted successfully.",
-            });
-          }
+        onCompleted: () => {
+          getRelapsePlanList({
+            variables: { limit: rowsLimit, pageNo: tableCurentPage + 1 },
+          });
+          doneCallback();
+          setSuccessModal({
+            description: "Your plan has been deleted successfully.",
+          });
         },
       });
     } catch (e) {

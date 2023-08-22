@@ -84,14 +84,12 @@ const ViewAssessmentPage: NextPage = () => {
           assessmentId,
           ...formFields,
         },
-        onCompleted: (data) => {
-          if (data) {
-            refetchAssessmentData();
-            enqueueSnackbar("Assessment category added successfully.", {
-              variant: "success",
-            });
-            callback();
-          }
+        onCompleted: () => {
+          refetchAssessmentData();
+          enqueueSnackbar("Assessment category added successfully.", {
+            variant: "success",
+          });
+          callback();
           setLoader(false);
         },
       });
@@ -116,14 +114,12 @@ const ViewAssessmentPage: NextPage = () => {
             status: 1,
           },
         },
-        onCompleted: (data) => {
-          if (data) {
-            refetchAssessmentData();
-            enqueueSnackbar("Assessment category updated successfully.", {
-              variant: "success",
-            });
-            callback();
-          }
+        onCompleted: () => {
+          refetchAssessmentData();
+          enqueueSnackbar("Assessment category updated successfully.", {
+            variant: "success",
+          });
+          callback();
           setLoader(false);
         },
       });
@@ -257,14 +253,12 @@ const ViewAssessmentPage: NextPage = () => {
             status: 0,
           },
         },
-        onCompleted: (data) => {
-          if (data) {
-            refetchAssessmentData();
-            enqueueSnackbar("Assessment category deleted successfully.", {
-              variant: "success",
-            });
-            callback();
-          }
+        onCompleted: () => {
+          refetchAssessmentData();
+          enqueueSnackbar("Assessment category deleted successfully.", {
+            variant: "success",
+          });
+          callback();
           setLoader(false);
         },
       });
