@@ -50,7 +50,7 @@ const TabsGeneratorTherapistPatient = (props: propTypes) => {
     const { [newValue]: tabName = "" } = activeTabs || {};
     router.push(
       `${tabLabel}${newValue}${tabName}${
-        defaultTabs[newValue] ? defaultTabs[newValue] : ""
+        defaultTabs && defaultTabs[newValue] ? defaultTabs[newValue] : ""
       }`
     );
     if (!activeTab.includes(newValue)) setActiveTab([newValue]);

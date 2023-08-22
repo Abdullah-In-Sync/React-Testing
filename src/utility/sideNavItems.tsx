@@ -45,6 +45,12 @@ export const superadmin_routes: RoutesType[] = [
     icon: <GroupsIcon />,
   },
   {
+    key: 2,
+    label: "Therapies",
+    path: "/admin/therapies?mainTab=disorder",
+    icon: <PersonIcon />,
+  },
+  {
     key: 3,
     label: "Therapist",
     path: "/admin/therapist/list",

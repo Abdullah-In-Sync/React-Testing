@@ -102,3 +102,5 @@ export const homeRoute = {
   therapist: "/therapist/dashboard/",
   patient: "/patient/home/",
 };
+
+export const publicPaths = ["account", "forgotPassword"];
