@@ -35,8 +35,8 @@ const Filter: React.FC<ViewProps> = ({
             onChangeInput={onChangeSearchInput}
           />
           <SingleSelectComponent
-            id="organizationSelect"
-            labelId="organizationSelect"
+            id="therapySelect"
+            labelId="therapySelect"
             name="therapyId"
             value={selectFilterOptions["therapyId"]}
             label="Select Therapy"

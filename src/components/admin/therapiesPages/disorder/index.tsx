@@ -1,7 +1,8 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  ADD_ADMIN_DISORDER,
   GET_ADMIN_DISORDER_LIST,
   GET_ADMIN_THERAPY_LIST,
 } from "../../../../graphql/disorder/graphql";
@@ -12,6 +13,9 @@ import {
   AdminDisorderData,
   AdminTherapyData,
 } from "../../../../graphql/disorder/types";
+import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
+import { ConfirmElement } from "../../../common/ConfirmWrapper";
+import { useSnackbar } from "notistack";
 
 const DisorderPage: NextPage = () => {
   const [tableCurentPage, setTableCurrentPage] = useState(0);
@@ -20,6 +24,10 @@ const DisorderPage: NextPage = () => {
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
   const [page, setPage] = useState(1);
+  const [addAdminDisorder] = useMutation(ADD_ADMIN_DISORDER);
+  const infoModalRef = useRef<ConfirmInfoElement>(null);
+  const confirmRef = useRef<ConfirmElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     getOrgList();
@@ -52,6 +60,7 @@ const DisorderPage: NextPage = () => {
     {
       loading: loadingDisorderList,
       data: { getAdminDisorderList: listData = undefined } = {},
+      refetch: refetchDisorderData,
     },
   ] = useLazyQuery<AdminDisorderData>(GET_ADMIN_DISORDER_LIST, {
     fetchPolicy: "cache-and-network",
@@ -96,9 +105,53 @@ const DisorderPage: NextPage = () => {
     setPage(1);
   };
 
+  const onAddDisorderSubmit = async (formFields, callback) => {
+    setLoader(true);
+    try {
+      await addAdminDisorder({
+        variables: formFields,
+        onCompleted: (data) => {
+          if (data) {
+            refetchDisorderData();
+            enqueueSnackbar("Disorder added successfully!", {
+              variant: "success",
+            });
+            callback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
   /* istanbul ignore next */
   const onPressSideButton = () => {
-    //
+    infoModalRef.current.openConfirm({
+      data: {
+        therapyListData,
+        onSubmit: submitAddDisorderForm,
+        headerTitleText: "Edit Category",
+      },
+    });
+  };
+
+  const submitCallback = () => {
+    confirmRef.current.close();
+    infoModalRef.current.close();
+  };
+
+  const submitAddDisorderForm = (v, { setSubmitting }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () => onAddDisorderSubmit(v, submitCallback),
+      description: "Are you sure you want to add this Disorder?",
+      setSubmitting,
+    });
   };
 
   return (
@@ -119,6 +172,8 @@ const DisorderPage: NextPage = () => {
         pageActionButtonClick={null}
         onPressSideButton={onPressSideButton}
         therapyListData={therapyListData}
+        infoModalRef={infoModalRef}
+        confirmRef={confirmRef}
       />
     </>
   );
