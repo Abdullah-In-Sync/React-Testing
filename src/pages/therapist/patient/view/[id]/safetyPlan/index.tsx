@@ -163,21 +163,18 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: async (data) => {
           /* istanbul ignore next */
-          if (data) {
-            /* istanbul ignore next */
-            const {
-              createTherapistSafetyPlan: { _id },
-            } = data;
-            /* istanbul ignore next */
-            setSuccessModal({
-              description: "Your plan has been created successfully.",
-            });
-            await handleAddIconButton(0, _id);
-            /* istanbul ignore next */
-            getSafetyPlanList({
-              variables: { patientId: patId },
-            });
-          }
+          const {
+            createTherapistSafetyPlan: { _id },
+          } = data;
+          /* istanbul ignore next */
+          setSuccessModal({
+            description: "Your plan has been created successfully.",
+          });
+          await handleAddIconButton(0, _id);
+          /* istanbul ignore next */
+          getSafetyPlanList({
+            variables: { patientId: patId },
+          });
         },
       });
     } catch (e) {
@@ -421,16 +418,13 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
         /* istanbul ignore next */
-        onCompleted: async (data) => {
+        onCompleted: async () => {
           /* istanbul ignore next */
-          if (data) {
-            /* istanbul ignore next */
-            setSuccessModal({
-              description: "Your question has been updated successfully.",
-            });
-            /* istanbul ignore next */
-            await fetchPlanData(planId);
-          }
+          setSuccessModal({
+            description: "Your question has been updated successfully.",
+          });
+          /* istanbul ignore next */
+          await fetchPlanData(planId);
         },
       });
     } catch (e) {
