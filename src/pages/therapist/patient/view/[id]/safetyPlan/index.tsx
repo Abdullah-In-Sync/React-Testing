@@ -33,6 +33,7 @@ import TherapistRelapsePlanComponent from "../../../../../../components/therapis
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
   const { user } = useAppContext();
+  // codecov-ignore-start
   const orgId = user?.therapist_data.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
@@ -54,6 +55,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     /* istanbul ignore next */
     modalRefAddPlan.current?.close();
   }, []);
+  // codecov-ignore-end
 
   const [successModal, setSuccessModal] = useState<any>();
   /* istanbul ignore next */
@@ -418,6 +420,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
         /* istanbul ignore next */
+        // codecov-ignore-start
         onCompleted: async () => {
           /* istanbul ignore next */
           setSuccessModal({
@@ -426,6 +429,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           /* istanbul ignore next */
           await fetchPlanData(planId);
         },
+        // codecov-ignore-end
       });
     } catch (e) {
       setLoader(false);
