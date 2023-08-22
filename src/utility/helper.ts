@@ -154,3 +154,8 @@ export const isAuth = (router) => {
     router.asPath.split("?")[0].split("/")[1] === userType
   );
 };
+
+export const getIntialPath = (url) => {
+  const path = url.split("?")[0];
+  return path.split("/")[1];
+};
