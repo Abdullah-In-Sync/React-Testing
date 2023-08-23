@@ -2,16 +2,15 @@ import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-
 import { useRouter } from "next/router";
 import {
+  ADD_ADMIN_DISORDER,
   GET_ADMIN_DISORDER_LIST,
   GET_ADMIN_THERAPY_LIST,
 } from "../../../../../graphql/disorder/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
-import theme from "../../../../../styles/theme/theme";
 import AdminTherapiesPage from "../../../../../pages/admin/therapies";
-
+import theme from "../../../../../styles/theme/theme";
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
@@ -33,14 +32,14 @@ mocksData.push({
             therapy_name: "appsync",
             therapy_status: 1,
             organization_name: "arti real",
-            org_id: "72b6b276ee55481682cb9bf246294faa",
+            org_id: "orgid1",
             _id: "therapy1",
           },
           {
             therapy_name: "Therapy Model disorder Category Edit",
             therapy_status: 1,
             organization_name: "portal.dev-myhelp",
-            org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+            org_id: "orgid2",
             _id: "therapy2",
           },
         ],
@@ -180,6 +179,24 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADD_ADMIN_DISORDER,
+    variables: {
+      disorder_name: "diordername",
+      therapy_id: "therapy2",
+    },
+  },
+  result: {
+    data: {
+      adminAddDisorder: {
+        message: "Disorder Added Successfully",
+        result: true,
+      },
+    },
+  },
+});
+
 beforeEach(() => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
@@ -204,20 +221,17 @@ const sut = async () => {
 const selectDropDown = async (dropdownTestId) => {
   const selectDropdown = await screen.findByTestId(dropdownTestId);
   expect(selectDropdown).toBeInTheDocument();
-
   const button = await within(selectDropdown).findByRole("button");
   fireEvent.mouseDown(button);
-
   const listbox = await within(
     await screen.findByRole("presentation")
   ).findByRole("listbox");
   const options = await within(listbox).findAllByRole("option");
-
   fireEvent.click(options[1]);
 };
 
 describe("Admin disorder therapy list", () => {
-  it("should render tharapy filter list", async () => {
+  it("should render tharapy filter list and new disorder", async () => {
     await sut();
     expect(await screen.findByText(/therapy detail/i)).toBeInTheDocument();
     fireEvent.change(await screen.findByTestId("searchInput"), {
@@ -226,5 +240,15 @@ describe("Admin disorder therapy list", () => {
     await selectDropDown("therapySelect");
     await selectDropDown("organizationSelect");
     expect(await screen.findByText(/search text/i)).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("addDisorderButton"));
+    fireEvent.change(await screen.findByTestId("disorderName"), {
+      target: { value: "diordername" },
+    });
+    await selectDropDown("therapySelectModal");
+    fireEvent.click(await screen.findByTestId("addDisorderSubmit"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Disorder added successfully!/i)
+    ).toBeInTheDocument();
   });
 });
