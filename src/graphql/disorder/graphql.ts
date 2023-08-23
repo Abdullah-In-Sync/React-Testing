@@ -57,3 +57,12 @@ export const GET_ADMIN_THERAPY_LIST = gql`
     }
   }
 `;
+
+export const ADD_ADMIN_DISORDER = gql`
+  mutation AdminAddDisorder($disorder_name: String!, $therapy_id: String!) {
+    adminAddDisorder(disorder_name: $disorder_name, therapy_id: $therapy_id) {
+      message
+      result
+    }
+  }
+`;
