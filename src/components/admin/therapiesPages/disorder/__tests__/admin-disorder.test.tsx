@@ -7,6 +7,7 @@ import {
   ADD_ADMIN_DISORDER,
   GET_ADMIN_DISORDER_LIST,
   GET_ADMIN_THERAPY_LIST,
+  UPDATE_ADMIN_DISORDER,
 } from "../../../../../graphql/disorder/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
 import AdminTherapiesPage from "../../../../../pages/admin/therapies";
@@ -83,7 +84,7 @@ mocksData.push({
       getAdminDisorderList: {
         data: [
           {
-            _id: "2a11b2b1-32ef-47b4-bd44-63a1b0226a97",
+            _id: "disorder1",
             disorder_name: "Test Update Name",
             disorder_status: 1,
             organization_settings: [
@@ -100,7 +101,7 @@ mocksData.push({
             ],
           },
           {
-            _id: "a01fc64388764eb3ba1967c541088e8e",
+            _id: "disorder2",
             disorder_name: "Test Data",
             disorder_status: 1,
             organization_settings: [
@@ -139,7 +140,7 @@ mocksData.push({
       getAdminDisorderList: {
         data: [
           {
-            _id: "2a11b2b1-32ef-47b4-bd44-63a1b0226a97",
+            _id: "disorder1",
             disorder_name: "Test Update Name",
             disorder_status: 1,
             organization_settings: [
@@ -156,7 +157,7 @@ mocksData.push({
             ],
           },
           {
-            _id: "a01fc64388764eb3ba1967c541088e8e",
+            _id: "disorder2",
             disorder_name: "Test Data",
             disorder_status: 1,
             organization_settings: [
@@ -192,6 +193,25 @@ mocksData.push({
       adminAddDisorder: {
         message: "Disorder Added Successfully",
         result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_ADMIN_DISORDER,
+    variables: {
+      disorder_id: "disorder1",
+      update_disorder: {
+        disorder_status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateDisorder: {
+        _id: "disorder1",
       },
     },
   },
@@ -249,6 +269,15 @@ describe("Admin disorder therapy list", () => {
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
       await screen.findByText(/Disorder added successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should delete disorder", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_delete_disorder1"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Disorder deleted successfully!/i)
     ).toBeInTheDocument();
   });
 });
