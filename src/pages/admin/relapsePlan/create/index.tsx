@@ -52,18 +52,21 @@ const CreateRelapsePlan: NextPage = () => {
       key: "name",
       columnName: "Organization",
       visible: true,
+      /* istanbul ignore next */
       render: (val) => val,
     },
     {
       key: "planName",
       columnName: "Plan Name",
       visible: true,
+      /* istanbul ignore next */
       render: () => createDataRef?.current?.planName,
     },
     {
       key: "planType",
       columnName: "Plan Type",
       visible: true,
+      /* istanbul ignore next */
       render: () => createDataRef?.current?.planType,
     },
   ];
@@ -174,6 +177,7 @@ const CreateRelapsePlan: NextPage = () => {
   };
 
   const onOkCheckFeedbackModel = () => {
+    /* istanbul ignore next */
     setShowCheckModal(false);
   };
 

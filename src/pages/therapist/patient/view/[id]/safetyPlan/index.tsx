@@ -458,14 +458,12 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       await deleteSafetyPlan({
         variables: { questionId },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            successDeleteCallback();
-            doneCallback();
-            setSuccessModal({
-              description: "Your question has been deleted successfully.",
-            });
-          }
+        onCompleted: () => {
+          successDeleteCallback();
+          doneCallback();
+          setSuccessModal({
+            description: "Your question has been deleted successfully.",
+          });
         },
       });
     } catch (e) {

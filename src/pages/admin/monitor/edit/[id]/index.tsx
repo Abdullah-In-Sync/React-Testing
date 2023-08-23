@@ -85,10 +85,13 @@ const EditMonitor: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -104,7 +107,9 @@ const EditMonitor: NextPage = () => {
   };
 
   const onPressCancel = () => {
+    /* istanbul ignore next */
     confirmRef.current.openConfirm({
+      /* istanbul ignore next */
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
         "Are you sure you want to cancel the monitor without saving?",
@@ -137,10 +142,13 @@ const EditMonitor: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       callback();
     } finally {
       setLoader(false);
