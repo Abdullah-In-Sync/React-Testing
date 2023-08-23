@@ -272,12 +272,37 @@ describe("Admin disorder therapy list", () => {
     ).toBeInTheDocument();
   });
 
+  it("should render adding new disorder fail", async () => {
+    await sut();
+    expect(await screen.findByText(/therapy detail/i)).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("addDisorderButton"));
+    fireEvent.change(await screen.findByTestId("disorderName"), {
+      target: { value: "diordernamefail" },
+    });
+    await selectDropDown("therapySelectModal");
+    fireEvent.click(await screen.findByTestId("addDisorderSubmit"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Server error please try later./i)
+    ).toBeInTheDocument();
+  });
+
   it("should delete disorder", async () => {
     await sut();
     fireEvent.click(await screen.findByTestId("iconButton_delete_disorder1"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
       await screen.findByText(/Disorder deleted successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should delete disorder fail", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_delete_disorder2"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+
+    expect(
+      await screen.findByText(/Server error please try later./i)
     ).toBeInTheDocument();
   });
 });
