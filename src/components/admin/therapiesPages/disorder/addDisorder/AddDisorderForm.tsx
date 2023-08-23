@@ -49,7 +49,7 @@ const AddDisorderForm: React.FC<any> = ({
               data-testid="addDisorderSubmit"
               variant="contained"
             >
-              Save
+              Add
             </CommonButton>
           </Box>
         </Box>

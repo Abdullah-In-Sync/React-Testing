@@ -136,7 +136,7 @@ const DisorderPage: NextPage = () => {
       data: {
         therapyListData,
         onSubmit: submitAddDisorderForm,
-        headerTitleText: "Edit Category",
+        headerTitleText: "Add Disorder",
       },
     });
   };
