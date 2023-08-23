@@ -374,25 +374,23 @@ const Formulation = () => {
           org_id: shareOrgIds,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminShareFormulation: { duplicateNames },
-            } = data;
+          const {
+            adminShareFormulation: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              setIsConfirmShare(false);
-              shareInfoModalRef.current?.close();
-            } else {
-              shareInfoModalRef.current?.close();
-              setIsConfirmShare(false);
-              refetch();
-              setSelectFormulation(undefined);
-              setShareOrgIds(undefined);
+          if (duplicateNames) {
+            setIsConfirmShare(false);
+            shareInfoModalRef.current?.close();
+          } else {
+            shareInfoModalRef.current?.close();
+            setIsConfirmShare(false);
+            refetch();
+            setSelectFormulation(undefined);
+            setShareOrgIds(undefined);
 
-              enqueueSnackbar("Formulation shared successfully!", {
-                variant: "success",
-              });
-            }
+            enqueueSnackbar("Formulation shared successfully!", {
+              variant: "success",
+            });
           }
         },
       });

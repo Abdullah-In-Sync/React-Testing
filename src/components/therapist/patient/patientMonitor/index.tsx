@@ -45,13 +45,11 @@ const TherapyPatientMonitorList: any = () => {
       onCompleted: (data) => {
         /* istanbul ignore next */
         setLoader(false);
-        if (data) {
-          const { getAdminMonitorList = [] } = data;
+        const { getAdminMonitorList = [] } = data;
 
-          modalRefAddMonitor?.current?.openConfirm({
-            data: getAdminMonitorList,
-          });
-        }
+        modalRefAddMonitor?.current?.openConfirm({
+          data: getAdminMonitorList,
+        });
         setLoader(false);
       },
       onError: () => {

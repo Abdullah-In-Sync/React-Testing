@@ -58,23 +58,21 @@ const CreateMeasures: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminCreateMeasures: { duplicateNames },
-            } = data;
+          const {
+            adminCreateMeasures: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              infoModalRef.current.openConfirm({
-                data: { duplicateNames, measureText: title },
-              });
-            } else {
-              confirmRef.current.showSuccess({
-                description: "Your measure has been created successfully.",
-                handleOk,
-              });
-            }
-            doneCallback();
+          if (duplicateNames) {
+            infoModalRef.current.openConfirm({
+              data: { duplicateNames, measureText: title },
+            });
+          } else {
+            confirmRef.current.showSuccess({
+              description: "Your measure has been created successfully.",
+              handleOk,
+            });
           }
+          doneCallback();
         },
       });
     } catch (e) {

@@ -324,25 +324,23 @@ const TherapistFormulation = () => {
           patient_id: shareOrgIds,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              therapistShareFormulationById: { duplicateNames },
-            } = data;
+          const {
+            therapistShareFormulationById: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              setIsConfirmShare(false);
-              shareInfoModalRef.current?.close();
-            } else {
-              shareInfoModalRef.current?.close();
-              setIsConfirmShare(false);
-              refetchFormulationList();
-              setSelectFormulation(undefined);
-              setShareOrgIds(undefined);
+          if (duplicateNames) {
+            setIsConfirmShare(false);
+            shareInfoModalRef.current?.close();
+          } else {
+            shareInfoModalRef.current?.close();
+            setIsConfirmShare(false);
+            refetchFormulationList();
+            setSelectFormulation(undefined);
+            setShareOrgIds(undefined);
 
-              enqueueSnackbar("Formulation shared successfully!", {
-                variant: "success",
-              });
-            }
+            enqueueSnackbar("Formulation shared successfully!", {
+              variant: "success",
+            });
           }
         },
       });

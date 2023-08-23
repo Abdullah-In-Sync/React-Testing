@@ -40,22 +40,20 @@ const CreateMeasures: NextPage = () => {
       await createMeasures({
         variables,
         onCompleted: (data) => {
-          if (data) {
-            const {
-              therapistCreateMeasures: { duplicateNames },
-            } = data;
-            if (duplicateNames) {
-              enqueueSnackbar("This measure’s name already exists.", {
-                variant: "error",
-              });
-            } else {
-              confirmRef.current.showSuccess({
-                description: "Your measure has been created successfully.",
-                handleOk,
-              });
-            }
-            doneCallback();
+          const {
+            therapistCreateMeasures: { duplicateNames },
+          } = data;
+          if (duplicateNames) {
+            enqueueSnackbar("This measure’s name already exists.", {
+              variant: "error",
+            });
+          } else {
+            confirmRef.current.showSuccess({
+              description: "Your measure has been created successfully.",
+              handleOk,
+            });
           }
+          doneCallback();
         },
       });
     } catch (e) {

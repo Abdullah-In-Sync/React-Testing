@@ -58,24 +58,22 @@ const CreateMonitor: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminCreateMonitor: { duplicateNames },
-            } = data;
+          const {
+            adminCreateMonitor: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              infoModalRef.current.openConfirm({
-                data: {
-                  duplicateNames,
-                  message:
-                    "This monitor already exists in the given organisation!",
-                },
-              });
-            } else {
-              router.push("/admin/monitor");
-            }
-            doneCallback();
+          if (duplicateNames) {
+            infoModalRef.current.openConfirm({
+              data: {
+                duplicateNames,
+                message:
+                  "This monitor already exists in the given organisation!",
+              },
+            });
+          } else {
+            router.push("/admin/monitor");
           }
+          doneCallback();
         },
       });
     } catch (e) {
