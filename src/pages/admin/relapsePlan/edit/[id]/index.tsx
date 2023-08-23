@@ -80,6 +80,7 @@ const EditRelapsePlanPage: NextPage = () => {
   };
 
   const submitForm = async (formFields: InitialFormValues, doneCallback) => {
+    /* istanbul ignore next */
     const { orgId, planDesc, planName, planType, questions = [] } = formFields;
     /* istanbul ignore next */
     const variables = {

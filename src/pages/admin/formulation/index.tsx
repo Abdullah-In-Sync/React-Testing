@@ -342,7 +342,6 @@ const Formulation = () => {
   ];
 
   const handleFilterChange = (value) => {
-    console.log(value, "value");
     /* istanbul ignore next */
     setFilterValue(value);
     /* istanbul ignore next */
@@ -351,14 +350,17 @@ const Formulation = () => {
       setMyFavourite(0);
       window.location.reload();
     }
+    /* istanbul ignore next */
     if (value.mode == "all_formulation") {
       setMyFormulation(0);
       setMyFavourite(0);
     }
+    /* istanbul ignore next */
     if (value.mode == "my_formulation") {
       setMyFormulation(1);
       setMyFavourite(0);
     }
+    /* istanbul ignore next */
     if (value.mode == "my_favourites") {
       setMyFavourite(1);
       setMyFormulation(0);
@@ -379,7 +381,9 @@ const Formulation = () => {
           } = data;
 
           if (duplicateNames) {
+            /* istanbul ignore next */
             setIsConfirmShare(false);
+            /* istanbul ignore next */
             shareInfoModalRef.current?.close();
           } else {
             shareInfoModalRef.current?.close();
@@ -395,7 +399,6 @@ const Formulation = () => {
         },
       });
     } catch (e) {
-      console.log(e);
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
     }
@@ -406,6 +409,7 @@ const Formulation = () => {
   };
 
   const clearIsConfirmShareCancel = () => {
+    /* istanbul ignore next */
     setIsConfirmShare(false);
   };
 

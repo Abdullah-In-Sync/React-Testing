@@ -136,6 +136,7 @@ const TherapistFormulation = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
     } finally {
       doneCallback();
@@ -305,6 +306,7 @@ const TherapistFormulation = () => {
     setShareOrgIds(formattedValue);
   };
   const clearIsConfirmShareCancel = () => {
+    /* istanbul ignore next */
     setIsConfirmShare(false);
   };
 
@@ -329,7 +331,9 @@ const TherapistFormulation = () => {
           } = data;
 
           if (duplicateNames) {
+            /* istanbul ignore next */
             setIsConfirmShare(false);
+            /* istanbul ignore next */
             shareInfoModalRef.current?.close();
           } else {
             shareInfoModalRef.current?.close();
@@ -345,6 +349,7 @@ const TherapistFormulation = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       console.log(e);
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });

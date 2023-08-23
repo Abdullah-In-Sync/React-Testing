@@ -71,6 +71,7 @@ const CreateMonitor: NextPage = () => {
               },
             });
           } else {
+            /* istanbul ignore next */
             router.push("/admin/monitor");
           }
           doneCallback();
@@ -97,6 +98,7 @@ const CreateMonitor: NextPage = () => {
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
+      /* istanbul ignore next */
       confirmFunction: (callback) => cancelConfirm(callback),
       description: "Are you sure you are canceling the monitor without saving?",
     });

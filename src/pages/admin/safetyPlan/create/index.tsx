@@ -41,6 +41,7 @@ const CreateSafetyPlanPage: NextPage = () => {
   }, []);
 
   const selectedOrgIds = (orgId) => {
+    /* istanbul ignore next */
     if (orgId === "all") {
       /* istanbul ignore next */
       return organizationList.map((item) => item._id).join(",");

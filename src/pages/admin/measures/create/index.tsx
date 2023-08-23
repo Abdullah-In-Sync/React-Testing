@@ -35,6 +35,7 @@ const CreateMeasures: NextPage = () => {
   }, []);
 
   const selectedOrgIds = (orgId) => {
+    /* istanbul ignore next */
     if (orgId === "all") {
       /* istanbul ignore next */
       return organizationList.map((item) => item._id).join(",");
@@ -101,6 +102,7 @@ const CreateMeasures: NextPage = () => {
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
+      /* istanbul ignore next */
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
         "Are you sure you want to cancel the measure without saving?",

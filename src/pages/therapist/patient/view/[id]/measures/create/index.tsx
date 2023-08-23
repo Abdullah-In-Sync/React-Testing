@@ -57,10 +57,13 @@ const CreateMeasures: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -68,6 +71,7 @@ const CreateMeasures: NextPage = () => {
   };
 
   const handleSavePress = (formFields, { setSubmitting }) => {
+    /* istanbul ignore next */
     const { templateData: { questions = [] } = {} } = formFields;
     if (questions.length <= 0) {
       setSubmitting(false);

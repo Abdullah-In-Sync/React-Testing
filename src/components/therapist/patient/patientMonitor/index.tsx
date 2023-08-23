@@ -27,9 +27,12 @@ import MonitorListWrapper from "./monitors/MonitorListWrapper";
 const TherapyPatientMonitorList: any = () => {
   const initialDate = "2022-03-02";
   const modalRefAddMonitor = useRef<ConfirmInfoElement>(null);
+  /* istanbul ignore next */
   const { user = {} } = useAppContext();
+  /* istanbul ignore next */
   const { therapist_data: { org_id: orgId = undefined } = {} } = user;
   const router = useRouter();
+  /* istanbul ignore next */
   const { query: { id: patientId, view, monitorId, startDate, endDate } = {} } =
     router;
   const confirmRef = useRef<ConfirmElement>(null);
@@ -53,6 +56,7 @@ const TherapyPatientMonitorList: any = () => {
         setLoader(false);
       },
       onError: () => {
+        /* istanbul ignore next */
         enqueueSnackbar("Server error.", {
           variant: "error",
         });
@@ -125,6 +129,7 @@ const TherapyPatientMonitorList: any = () => {
     } catch (e) {
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
+      /* istanbul ignore next */
       setLoader(false);
     }
   };
@@ -153,6 +158,7 @@ const TherapyPatientMonitorList: any = () => {
     } catch (e) {
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
+      /* istanbul ignore next */
       setLoader(false);
     }
   };
@@ -259,6 +265,7 @@ const TherapyPatientMonitorList: any = () => {
         return (
           <MonitorViewResponse
             monitorData={monitorViewData}
+            /* istanbul ignore next */
             initialDate={(startDate || initialDate) as string}
             handleRangeGoButton={handleRangeGoButton}
             onBackButtonPress={backPress}

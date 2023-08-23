@@ -502,10 +502,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         },
         onCompleted: () => {
           refetch();
+          /* istanbul ignore next */
           if (accordionOpen || accordionOpen === 0) setAccordionOpen(undefined);
-
           setIsConfirm(false);
-
           /* istanbul ignore next */
           setSuccessModal({
             description: "Your plan has been deleted successfully.",

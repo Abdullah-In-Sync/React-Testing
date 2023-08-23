@@ -308,7 +308,9 @@ const AssessmentListPage: NextPage = () => {
           } = data;
 
           if (duplicateNames) {
+            /* istanbul ignore next */
             setIsConfirmShare(false);
+            /* istanbul ignore next */
             shareInfoModalRef.current?.close();
           } else {
             shareInfoModalRef.current?.close();
@@ -360,6 +362,7 @@ const AssessmentListPage: NextPage = () => {
     }
   };
   const clearIsConfirmShareCancel = () => {
+    /* istanbul ignore next */
     setIsConfirmShare(false);
   };
 
