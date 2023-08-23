@@ -27,6 +27,60 @@ export const GET_ADMIN_ASSESSMENT_LIST = gql`
   }
 `;
 
+export const GET_ADMIN_THERAPIES_LIST = gql`
+  query adminTherapyList(
+    $limit: Int
+    $pageNo: Int
+    $orgId: String
+    $therapy_name: String
+  ) {
+    adminTherapyList(
+      limit: $limit
+      pageNo: $pageNo
+      org_id: $orgId
+      therapy_name: $therapy_name
+    ) {
+      data {
+        _id
+        created_date
+        org_id
+        organization_name
+        therapy_status
+        therapy_name
+        updated_date
+        user_id
+        user_type
+      }
+      total
+    }
+  }
+`;
+
+export const ADMIN_ADD_THERAPY = gql`
+  mutation adminAddTherapy($org_id: String!, $therapy_name: String!) {
+    adminAddTherapy(org_id: $org_id, therapy_name: $therapy_name) {
+      message
+      result
+    }
+  }
+`;
+
+export const ADMIN_DELETE_THERAPY = gql`
+  mutation adminUpdateTherapy($therapy_id: ID!, $update: UpdateTherapyInput) {
+    adminUpdateTherapy(therapy_id: $therapy_id, update: $update) {
+      _id
+      created_date
+      org_id
+      organization_name
+      therapy_name
+      therapy_status
+      updated_date
+      user_id
+      user_type
+    }
+  }
+`;
+
 export const ADMIN_CREATE_ASSESSMENT = gql`
   mutation adminCreateAssessment($org_id: String!, $name: String!) {
     adminCreateAssessment(org_id: $org_id, name: $name) {

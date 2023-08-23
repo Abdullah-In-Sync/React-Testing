@@ -7,6 +7,7 @@ import TabsGeneratorTherapist from "../../common/TabsGenerator/TabsGeneratorTher
 
 import { useStyles } from "./therapiesStyles";
 import DisorderPage from "../therapiesPages/disorder";
+import TherapiesListPage from "../therapiesPages/therapy";
 
 const TherapyAdminComponent = () => {
   const styles = useStyles();
@@ -16,7 +17,7 @@ const TherapyAdminComponent = () => {
     {
       label: "Therapy",
       value: "therapy",
-      component: null,
+      component: <TherapiesListPage />,
     },
     {
       label: "Disorder",
