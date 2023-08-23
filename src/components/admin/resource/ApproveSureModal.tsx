@@ -5,7 +5,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Box } from "@mui/system";
 
 const ApproveSureModal = (props) => {
-  const { modalOpen, setModalOpen } = props;
+  const { modalOpen, setModalOpen, msg } = props;
   return (
     <div>
       <Modal
@@ -39,7 +39,7 @@ const ApproveSureModal = (props) => {
                   fontSize: "27px",
                 }}
               >
-                Are you sure want to approve this resource?
+                {msg ? msg : "Are you sure want to approve this resource?"}
               </Typography>
             </Box>
             {props.children}
