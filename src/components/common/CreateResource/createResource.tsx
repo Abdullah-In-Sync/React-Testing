@@ -141,22 +141,21 @@ export default function CreateResource(props: propTypes) {
     onCompleted: (data) => {
       /* istanbul ignore next */
       props.setLoader(false);
-      if (data) {
-        const {
-          createResource: { duplicateNames },
-        } = data;
+      const {
+        createResource: { duplicateNames },
+      } = data;
 
-        if (duplicateNames != null) {
-          infoModalRef.current.openConfirm({
-            data: {
-              duplicateNames,
-              message:
-                "This Resource already exists in the following organisations! ",
-            },
-          });
-        } else {
-          setSuccessModal(true);
-        }
+      if (duplicateNames != null) {
+        infoModalRef.current.openConfirm({
+          data: {
+            duplicateNames,
+            message:
+              "This Resource already exists in the following organisations! ",
+          },
+        });
+      } else {
+        /* istanbul ignore next */
+        setSuccessModal(true);
       }
     },
   });

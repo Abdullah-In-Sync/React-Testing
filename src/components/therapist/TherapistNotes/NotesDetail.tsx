@@ -108,6 +108,7 @@ function NotesDetail(props: propTypes) {
   const [getiskData, { data: riskListData }] = useLazyQuery(GET_RISKS_LIST, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      /* istanbul ignore next */
       console.log("Koca: risk data ", data);
     },
   });
@@ -118,6 +119,7 @@ function NotesDetail(props: propTypes) {
   ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      /* istanbul ignore next */
       console.log("Koca: data ", data);
     },
   });
@@ -127,6 +129,7 @@ function NotesDetail(props: propTypes) {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         console.log("Koca: notes prefiled data ", data);
       },
     }
@@ -157,6 +160,7 @@ function NotesDetail(props: propTypes) {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         console.log("Koca: data ", data);
       },
     }

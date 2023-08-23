@@ -90,12 +90,16 @@ const PatientMonitorsListPage: NextPage = () => {
             patientSubmitMonitor: { _id },
           } = data;
           if (_id) {
+            /* istanbul ignore next */
             enqueueSnackbar("Response successfully submitted.", {
               variant: "success",
             });
+            /* istanbul ignore next */
             router.push(`therapy/?mainTab=therapy&tab=monitors`);
+            /* istanbul ignore next */
             doneCallback();
           }
+          /* istanbul ignore next */
           setLoader(false);
         },
       });

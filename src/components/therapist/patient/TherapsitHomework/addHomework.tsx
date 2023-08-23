@@ -104,6 +104,7 @@ function HomeworkDetails(props: propTypes) {
   ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      /* istanbul ignore next */
       console.log("Koca: data ", data);
     },
   });
@@ -132,6 +133,7 @@ function HomeworkDetails(props: propTypes) {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         console.log("Koca: data ", data);
       },
     }

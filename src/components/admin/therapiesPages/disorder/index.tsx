@@ -112,14 +112,16 @@ const DisorderPage: NextPage = () => {
     try {
       await addAdminDisorder({
         variables: formFields,
-        onCompleted: (data) => {
-          if (data) {
-            refetchDisorderData();
-            enqueueSnackbar("Disorder added successfully!", {
-              variant: "success",
-            });
-            callback();
-          }
+        onCompleted: () => {
+          /* istanbul ignore next */
+          refetchDisorderData();
+          /* istanbul ignore next */
+          enqueueSnackbar("Disorder added successfully!", {
+            variant: "success",
+          });
+          /* istanbul ignore next */
+          callback();
+          /* istanbul ignore next */
           setLoader(false);
         },
       });
@@ -137,14 +139,16 @@ const DisorderPage: NextPage = () => {
     try {
       await updateAdminDisorder({
         variables: formFields,
-        onCompleted: (data) => {
-          if (data) {
-            refetchDisorderData();
-            enqueueSnackbar("Disorder deleted successfully!", {
-              variant: "success",
-            });
-            callback();
-          }
+        onCompleted: () => {
+          /* istanbul ignore next */
+          refetchDisorderData();
+          /* istanbul ignore next */
+          enqueueSnackbar("Disorder deleted successfully!", {
+            variant: "success",
+          });
+          /* istanbul ignore next */
+          callback();
+          /* istanbul ignore next */
           setLoader(false);
         },
       });

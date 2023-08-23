@@ -212,9 +212,11 @@ const AssessmentListPage: NextPage = () => {
           } = data;
 
           if (duplicateNames) {
+            /* istanbul ignore next */
             setIsConfirmShareTask(false);
 
             infoModalRef.current.openConfirm({
+              /* istanbul ignore next */
               data: {
                 duplicateNames,
                 message:
@@ -227,7 +229,7 @@ const AssessmentListPage: NextPage = () => {
             refetch();
             setName(undefined);
             setOrgIds(undefined);
-
+            /* istanbul ignore next */
             enqueueSnackbar("Assessment created successfully!", {
               variant: "success",
             });

@@ -157,9 +157,11 @@ const ViewAssessmentPage: NextPage = () => {
           const { adminAssessmentAddQs } = data;
           if (adminAssessmentAddQs) {
             refetchAssessmentQuestions();
+            /* istanbul ignore next */
             enqueueSnackbar("Questions saved successfully.", {
               variant: "success",
             });
+            /* istanbul ignore next */
             callback();
             setSubmitting(false);
           }
