@@ -66,3 +66,17 @@ export const ADD_ADMIN_DISORDER = gql`
     }
   }
 `;
+
+export const UPDATE_ADMIN_DISORDER = gql`
+  mutation AdminUpdateDisorder(
+    $disorder_id: ID!
+    $update_disorder: UpdateDisorderInput
+  ) {
+    adminUpdateDisorder(
+      disorder_id: $disorder_id
+      update_disorder: $update_disorder
+    ) {
+      _id
+    }
+  }
+`;

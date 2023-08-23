@@ -1,21 +1,22 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
+import { useSnackbar } from "notistack";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ADD_ADMIN_DISORDER,
   GET_ADMIN_DISORDER_LIST,
   GET_ADMIN_THERAPY_LIST,
+  UPDATE_ADMIN_DISORDER,
 } from "../../../../graphql/disorder/graphql";
-import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import Loader from "../../../common/Loader";
-import DisorderComponent from "./Disorder";
 import {
   AdminDisorderData,
   AdminTherapyData,
 } from "../../../../graphql/disorder/types";
-import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
+import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { ConfirmElement } from "../../../common/ConfirmWrapper";
-import { useSnackbar } from "notistack";
+import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
+import Loader from "../../../common/Loader";
+import DisorderComponent from "./Disorder";
 
 const DisorderPage: NextPage = () => {
   const [tableCurentPage, setTableCurrentPage] = useState(0);
@@ -25,6 +26,7 @@ const DisorderPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const [addAdminDisorder] = useMutation(ADD_ADMIN_DISORDER);
+  const [updateAdminDisorder] = useMutation(UPDATE_ADMIN_DISORDER);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -130,6 +132,31 @@ const DisorderPage: NextPage = () => {
     }
   };
 
+  const onUpdateDisorderSubmit = async (formFields, callback) => {
+    setLoader(true);
+    try {
+      await updateAdminDisorder({
+        variables: formFields,
+        onCompleted: (data) => {
+          if (data) {
+            refetchDisorderData();
+            enqueueSnackbar("Disorder deleted successfully!", {
+              variant: "success",
+            });
+            callback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
   /* istanbul ignore next */
   const onPressSideButton = () => {
     infoModalRef.current.openConfirm({
@@ -154,6 +181,20 @@ const DisorderPage: NextPage = () => {
     });
   };
 
+  const handleTableActions = (v) => {
+    const { pressedIconButton, _id: disorder_id } = v;
+    if (pressedIconButton === "delete")
+      return confirmRef.current.openConfirm({
+        confirmFunction: () =>
+          onUpdateDisorderSubmit(
+            { disorder_id, update_disorder: { disorder_status: 0 } },
+            () => confirmRef.current.close()
+          ),
+        description:
+          "Associated Model and Categories will also get deleted. Would you like to proceed?",
+      });
+  };
+
   return (
     <>
       <Loader visible={loader} />
@@ -169,7 +210,7 @@ const DisorderPage: NextPage = () => {
         selectFilterOptions={selectFilterOptions}
         onChangeFilterDropdown={onChangeFilterDropdown}
         loadingDisorderList={loadingDisorderList}
-        pageActionButtonClick={null}
+        pageActionButtonClick={handleTableActions}
         onPressSideButton={onPressSideButton}
         therapyListData={therapyListData}
         infoModalRef={infoModalRef}
