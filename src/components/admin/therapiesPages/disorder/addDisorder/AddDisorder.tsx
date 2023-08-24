@@ -19,6 +19,7 @@ const AddDisorder: React.FC<ViewProps> = ({
     onSubmit,
     value: { disorder_name = "", therapy_id = "" } = {},
     therapyListData,
+    saveButtonText,
   } = {},
 }) => {
   const initialValues = {
@@ -33,7 +34,11 @@ const AddDisorder: React.FC<ViewProps> = ({
         initialValues={initialValues}
         onSubmit={onSubmit}
         children={(props) => (
-          <AddDisorderForm {...props} therapyListData={therapyListData} />
+          <AddDisorderForm
+            {...props}
+            therapyListData={therapyListData}
+            saveButtonText={saveButtonText}
+          />
         )}
       />
     );
