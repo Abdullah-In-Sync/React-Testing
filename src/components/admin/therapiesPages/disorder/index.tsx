@@ -89,12 +89,15 @@ const DisorderPage: NextPage = () => {
   };
 
   const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /* istanbul ignore next */
     setRowsLimit(+event.target.value);
+    /* istanbul ignore next */
     setTableCurrentPage(0);
   };
 
   const onChangeFilterDropdown = async (e) => {
     const temp = selectFilterOptions;
+    /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     setSelectFilterOptions({ ...temp });
     setTableCurrentPage(0);

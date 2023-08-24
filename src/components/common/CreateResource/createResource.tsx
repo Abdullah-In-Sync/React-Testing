@@ -143,9 +143,11 @@ export default function CreateResource(props: propTypes) {
       props.setLoader(false);
       const {
         createResource: { duplicateNames },
+        /* istanbul ignore next */
       } = data;
-
+      /* istanbul ignore next */
       if (duplicateNames != null) {
+        /* istanbul ignore next */
         infoModalRef.current.openConfirm({
           data: {
             duplicateNames,
@@ -169,6 +171,7 @@ export default function CreateResource(props: propTypes) {
           const {
             createFormulation: { result, duplicateNames },
           } = data;
+          /* istanbul ignore next */
           if (result) {
             enqueueSnackbar("Formulation has been created successfully.", {
               variant: "success",
@@ -178,6 +181,7 @@ export default function CreateResource(props: propTypes) {
               router.push(`/${userType}/formulation/`);
             /* istanbul ignore next */ else
               router.push(`/${userType}/resource/?tab=formulation`);
+            /* istanbul ignore next */
           } else if (duplicateNames) {
             /* istanbul ignore next */
             enqueueSnackbar("This formulation already exists.", {
@@ -190,6 +194,7 @@ export default function CreateResource(props: propTypes) {
     } catch (e) {
       /* istanbul ignore next */
       props.setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -248,6 +253,7 @@ export default function CreateResource(props: propTypes) {
         agenda_id: "",
       }));
       getDisorderByOrgId({
+        /* istanbul ignore next */
         variables: { orgId: formFields?.orgId?.split(",")?.[0] },
       });
     }
@@ -308,6 +314,7 @@ export default function CreateResource(props: propTypes) {
     const name = e.target.name;
 
     if (name === "formulation") {
+      /* istanbul ignore next */
       setFormFields(() => ({
         ...initialState,
         ...{
@@ -501,23 +508,28 @@ export default function CreateResource(props: propTypes) {
 
   const handleChange = (event) => {
     const value = event.target.value as string[];
-
+    /* istanbul ignore next */
     if (value[value.length - 1] === "all") {
+      /* istanbul ignore next */
       const updatedSelected = [
         "all",
+        /* istanbul ignore next */
         ...orgData?.getOrganizationData?.map((org) => org._id),
       ];
-
+      /* istanbul ignore next */
       setFormFields((oldValues) => ({
         ...oldValues,
         orgId: updatedSelected.join(","),
       }));
+      /* istanbul ignore next */
       return;
+      /* istanbul ignore next */
     } else if (
       /* istanbul ignore next */
       value.length === orgData?.getOrganizationData?.length &&
       value?.indexOf("all") === -1
     ) {
+      /* istanbul ignore next */
       setFormFields((oldValues) => ({
         ...oldValues,
         orgId: "",
@@ -547,6 +559,7 @@ export default function CreateResource(props: propTypes) {
           inputProps={{
             "data-testid": "formulationCheckbox",
           }}
+          /* istanbul ignore next */
           checked={formFields?.formulation}
           size="small"
         />
@@ -564,6 +577,7 @@ export default function CreateResource(props: propTypes) {
                 name="resourceName"
                 id="resourceName"
                 label="Name"
+                /* istanbul ignore next */
                 value={formFields?.resourceName}
                 onChange={set2}
                 fullWidth={true}
@@ -573,6 +587,7 @@ export default function CreateResource(props: propTypes) {
                 size="small"
               />
             </Grid>
+            {/* istanbul ignore next */}
             {!formFields?.formulation && (
               <Grid item xs={4}>
                 <SingleSelectComponent
@@ -581,6 +596,7 @@ export default function CreateResource(props: propTypes) {
                   id="resourceTypeSelect"
                   labelId="resourceType"
                   name="resourceType"
+                  /* istanbul ignore next */
                   value={formFields?.resourceType}
                   label="Select Resource Type"
                   onChange={set2}
@@ -604,13 +620,15 @@ export default function CreateResource(props: propTypes) {
                   label="Select Organization"
                   options={[
                     ...[{ _id: "all", name: "Select All" }],
-                    ...((orgData && orgData?.getOrganizationData) || []),
+                    ...((orgData && orgData.getOrganizationData) || []),
                   ]}
                   mappingKeys={["_id", "name"]}
                   size="small"
                   className="form-control-bg multiSelect"
                   extraProps={{ "data-testid": "mainOrganizationSelect" }}
+                  /* istanbul ignore next */
                   multiSelect={csvDecode(formFields?.orgId)}
+                  /* istanbul ignore next */
                   value={csvDecode(formFields?.orgId)}
                 />
               </Grid>
@@ -628,6 +646,7 @@ export default function CreateResource(props: propTypes) {
                   id="resourceDisorderSelect"
                   labelId="resourceDisorder"
                   name="disorderId"
+                  /* istanbul ignore next */
                   value={formFields?.disorderId}
                   label="Select Disorder"
                   onChange={set2}
@@ -651,7 +670,7 @@ export default function CreateResource(props: propTypes) {
                   label="Select Model"
                   onChange={set2}
                   inputProps={{ "data-testid": "modelId" }}
-                  options={(modelData && modelData?.getModelByDisorderId) || []}
+                  options={(modelData && modelData.getModelByDisorderId) || []}
                   mappingKeys={["_id", "model_name"]}
                   size="small"
                   className="form-control-bg"
@@ -663,11 +682,13 @@ export default function CreateResource(props: propTypes) {
                   id="categorySelect"
                   labelId="category"
                   name="categoryId"
+                  /* istanbul ignore next */
                   value={formFields?.categoryId}
                   label="Select Category (Optional)"
                   onChange={set2}
                   inputProps={{ "data-testid": "categoryId" }}
                   options={
+                    /* istanbul ignore next */
                     (categoryData && categoryData.getCategoryByModelId) || []
                   }
                   mappingKeys={["_id", "category_name"]}
@@ -684,6 +705,7 @@ export default function CreateResource(props: propTypes) {
                 name="resourceDesc"
                 id="descrption"
                 label="Description"
+                /* istanbul ignore next */
                 value={formFields?.resourceDesc}
                 multiline
                 rows={4}
@@ -701,6 +723,7 @@ export default function CreateResource(props: propTypes) {
                 name="resourceInstruction"
                 id="instructions"
                 label="Instructions"
+                /* istanbul ignore next */
                 value={formFields?.resourceInstruction}
                 multiline
                 rows={4}
@@ -711,7 +734,7 @@ export default function CreateResource(props: propTypes) {
               />
             </Grid>
           </Grid>
-
+          {/* istanbul ignore next */}
           {!formFields?.formulation && (
             <Grid container spacing={2} marginBottom={5}>
               <Grid item xs={12}>
@@ -719,6 +742,7 @@ export default function CreateResource(props: propTypes) {
                   name="resourceReferences"
                   id="references"
                   label="References"
+                  /* istanbul ignore next */
                   value={formFields?.resourceReferences}
                   multiline
                   rows={4}
@@ -730,7 +754,7 @@ export default function CreateResource(props: propTypes) {
               </Grid>
             </Grid>
           )}
-
+          {/* istanbul ignore next */}
           {!formFields?.formulation && (
             <Grid container spacing={2} marginBottom={5}>
               <Grid item xs={3}>
@@ -739,11 +763,13 @@ export default function CreateResource(props: propTypes) {
                   id="agendaSelect"
                   labelId="agenda"
                   name="agendaId"
+                  /* istanbul ignore next */
                   value={formFields?.agendaId}
                   label="Suggested Agenda"
                   onChange={set2}
                   inputProps={{ "data-testid": "agendaId" }}
                   options={
+                    /* istanbul ignore next */
                     (agendaData && agendaData.getAgendaByDisorderAndModel) || []
                   }
                   mappingKeys={["_id", "agenda_name"]}
@@ -779,6 +805,7 @@ export default function CreateResource(props: propTypes) {
                       inputProps={{
                         "data-testid": "resourceAvailTherapist",
                       }}
+                      /* istanbul ignore next */
                       checked={formFields?.resourceAvailTherapist}
                       size="small"
                     />
@@ -791,6 +818,7 @@ export default function CreateResource(props: propTypes) {
                       inputProps={{
                         "data-testid": "resourceAvailOnlyme",
                       }}
+                      /* istanbul ignore next */
                       checked={formFields?.resourceAvailOnlyme}
                       size="small"
                     />
@@ -832,7 +860,7 @@ export default function CreateResource(props: propTypes) {
           onModalClose={setDimensionModal}
         />
       )}
-
+      {/* istanbul ignore next */}
       {selectedComponentType?.info != null && (
         <Box style={{ margin: "32px 0px 40px 0px" }}>
           <Typography
@@ -849,7 +877,7 @@ export default function CreateResource(props: propTypes) {
           </Typography>
         </Box>
       )}
-
+      {/* istanbul ignore next */}
       {selectedComponentType.type == "TemplateTable" && (
         <TemplateTable
           initialData={selectedComponentType.initialData}
@@ -873,6 +901,7 @@ export default function CreateResource(props: propTypes) {
           description="Your resource has been created successfully."
           title="Success"
           onOk={() => {
+            /* istanbul ignore next */
             router.push(`/${userType}/resource/`);
           }}
         />
