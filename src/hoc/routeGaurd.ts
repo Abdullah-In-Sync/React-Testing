@@ -26,6 +26,7 @@ function RouteGuard({ children }) {
 
   function authCheck(url) {
     const { userToken, userType } = getSessionToken();
+    const allowed = [userType, "template"];
     const publicPaths = ["account", "forgotPassword"];
     const path = url.split("?")[0];
     const initialPath = path.split("/")[1];
@@ -35,7 +36,7 @@ function RouteGuard({ children }) {
         pathname: "/account",
         query: { returnUrl: router.asPath },
       });
-    } else if (userToken && userType && initialPath !== userType) {
+    } else if (userToken && userType && !allowed.includes(initialPath)) {
       router.push(homeRoute[userType]);
     } else {
       setAuthorized(true);
