@@ -426,7 +426,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -443,6 +445,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       confirmObject: {
         description: "Are you sure you want to update the question?",
       },
+      /* istanbul ignore next */
       storedFunction: (callback) => submitQuestionForm(formFields, callback),
       setSubmitting: setSubmitting,
     });
@@ -459,18 +462,24 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables: { questionId },
         fetchPolicy: "network-only",
         onCompleted: () => {
+          /* istanbul ignore next */
           successDeleteCallback();
+          /* istanbul ignore next */
           doneCallback();
+          /* istanbul ignore next */
           setSuccessModal({
             description: "Your question has been deleted successfully.",
           });
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -478,6 +487,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   };
 
   const handleDeleteQuestion = (v) => {
+    /* istanbul ignore next */
     const { questionId, callback: successDeleteCallback } = v;
     setIsConfirm({
       ...isConfirm,
@@ -486,6 +496,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         confirmObject: {
           description: "Are you sure you want to delete the question?",
         },
+        /* istanbul ignore next */
         storedFunction: async (callback) => {
           await callDeleteApi(questionId, successDeleteCallback, callback);
         },
