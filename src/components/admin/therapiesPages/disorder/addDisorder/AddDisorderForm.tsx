@@ -8,6 +8,7 @@ import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 const AddDisorderForm: React.FC<any> = ({
   isSubmitting,
   therapyListData = [],
+  saveButtonText,
 }) => {
   return (
     <Stack className={"addCategoryFormWrapper"}>
@@ -49,7 +50,7 @@ const AddDisorderForm: React.FC<any> = ({
               data-testid="addDisorderSubmit"
               variant="contained"
             >
-              Add
+              {saveButtonText || "Add"}
             </CommonButton>
           </Box>
         </Box>
