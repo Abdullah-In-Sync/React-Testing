@@ -184,7 +184,7 @@ mocksData.push({
     data: {
       viewPatientSafetyPlanById: [
         {
-          _id: "60f60b02-663f-4abd-8e90-0b324adcdadb-update",
+          _id: "60f60b02-663f-4abd-8e90-0b324adcdadb-update-que",
           created_date: "2023-08-19T10:28:02.253Z",
           patient_answer: "I didnt excersize",
           patient_id: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
@@ -758,6 +758,23 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: DELETE_THERAPIST_SAFETY_PLAN_QUESTION,
+    variables: {
+      questionId: "60f60b02-663f-4abd-8e90-0b324adcdadb-update-que",
+    },
+  },
+  result: {
+    data: {
+      deleteTherapistSafetyPlanQs: {
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -1190,5 +1207,23 @@ describe("Therapist patient safety plan", () => {
       target: { value: "desc3" },
     });
     expect(await screen.findByText(/desc3/i)).toBeInTheDocument();
+  });
+
+  it("should delete question", async () => {
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "7a27dc00d48bf983fdcd4b0762ebd-update-pat-res",
+      },
+    }));
+    await sut();
+    const addButton = await screen.findByTestId("button-add-icon_0");
+    fireEvent.click(addButton);
+    const deleteBtn = await screen.findByTestId("iconButtonQuestion_0");
+    expect(deleteBtn).toBeInTheDocument();
+    fireEvent.click(deleteBtn);
+    const confirmBtn = await screen.findByTestId("confirmButton");
+    expect(confirmBtn).toBeInTheDocument();
+    fireEvent.click(confirmBtn);
+    expect(await screen.findByTestId("SuccessOkBtn"));
   });
 });
