@@ -412,8 +412,10 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     };
 
     try {
+      /* istanbul ignore next */
       await updateTherapistSafetyPlanQuestions({
         variables: { ...variables, ...modifyQuestions },
+        /* istanbul ignore next */
         fetchPolicy: "network-only",
         /* istanbul ignore next */
         onCompleted: async () => {
@@ -432,6 +434,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);

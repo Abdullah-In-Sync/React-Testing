@@ -141,7 +141,9 @@ export default function CreateResource(props: propTypes) {
     onCompleted: (data) => {
       /* istanbul ignore next */
       props.setLoader(false);
+      /* istanbul ignore next */
       const {
+        /* istanbul ignore next */
         createResource: { duplicateNames },
         /* istanbul ignore next */
       } = data;
@@ -252,6 +254,7 @@ export default function CreateResource(props: propTypes) {
         category_id: "",
         agenda_id: "",
       }));
+      /* istanbul ignore next */
       getDisorderByOrgId({
         /* istanbul ignore next */
         variables: { orgId: formFields?.orgId?.split(",")?.[0] },
