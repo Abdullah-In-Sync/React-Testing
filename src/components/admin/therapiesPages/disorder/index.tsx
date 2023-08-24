@@ -231,6 +231,7 @@ const DisorderPage: NextPage = () => {
           value: { disorder_name, therapy_id },
           disorder_id,
           therapyListData,
+          saveButtonText: "Update",
           onSubmit: (v, formikProps) =>
             submitUpdateDisorderForm(v, { ...formikProps, disorder_id }),
           headerTitleText: "Edit Disorder",
