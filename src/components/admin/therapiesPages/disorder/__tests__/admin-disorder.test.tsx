@@ -95,7 +95,7 @@ mocksData.push({
             ],
             therapy_detail: [
               {
-                _id: "a8bf94e308d04c598d0a06413cf30ef1",
+                _id: "therapy1",
                 therapy_name: "therapy detail",
               },
             ],
@@ -112,7 +112,7 @@ mocksData.push({
             ],
             therapy_detail: [
               {
-                _id: "6572f356775b447e83838f5b54323765",
+                _id: "therapy2",
                 therapy_name: "delete therapy",
               },
             ],
@@ -217,6 +217,26 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_ADMIN_DISORDER,
+    variables: {
+      disorder_id: "disorder1",
+      update_disorder: {
+        disorder_name: "Test Update Name",
+        therapy_id: "therapy1",
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateDisorder: {
+        _id: "disorder1",
+      },
+    },
+  },
+});
+
 beforeEach(() => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
@@ -303,6 +323,16 @@ describe("Admin disorder therapy list", () => {
 
     expect(
       await screen.findByText(/Server error please try later./i)
+    ).toBeInTheDocument();
+  });
+
+  it("should update disorder", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_edit_disorder1"));
+    fireEvent.click(await screen.findByTestId("addDisorderSubmit"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Disorder updated successfully!/i)
     ).toBeInTheDocument();
   });
 });

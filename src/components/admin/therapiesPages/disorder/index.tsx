@@ -137,21 +137,26 @@ const DisorderPage: NextPage = () => {
     }
   };
 
-  const onUpdateDisorderSubmit = async (formFields, callback) => {
+  const onUpdateDisorderSubmit = async (
+    formFields,
+    callback,
+    successMessage
+  ) => {
     setLoader(true);
     try {
       await updateAdminDisorder({
         variables: formFields,
-        onCompleted: () => {
-          /* istanbul ignore next */
-          refetchDisorderData();
-          /* istanbul ignore next */
-          enqueueSnackbar("Disorder deleted successfully!", {
-            variant: "success",
-          });
-          /* istanbul ignore next */
-          callback();
-          /* istanbul ignore next */
+        onCompleted: (data) => {
+          if (data) {
+            refetchDisorderData();
+            enqueueSnackbar(
+              successMessage || "Disorder deleted successfully!",
+              {
+                variant: "success",
+              }
+            );
+            callback();
+          }
           setLoader(false);
         },
       });
@@ -183,22 +188,53 @@ const DisorderPage: NextPage = () => {
   const submitAddDisorderForm = (v, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: () => onAddDisorderSubmit(v, submitCallback),
-      description: "Are you sure you want to add this Disorder?",
+      description: "Are you sure you want to add this disorder?",
+      setSubmitting,
+    });
+  };
+
+  const submitUpdateDisorderForm = (v, { setSubmitting, disorder_id }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        onUpdateDisorderSubmit(
+          { disorder_id, update_disorder: v },
+          submitCallback,
+          "Disorder updated successfully!"
+        ),
+      description: "Are you sure you want to update this disorder?",
       setSubmitting,
     });
   };
 
   const handleTableActions = (v) => {
-    const { pressedIconButton, _id: disorder_id } = v;
+    const {
+      pressedIconButton,
+      disorder_name,
+      therapy_detail,
+      _id: disorder_id,
+    } = v;
+    const therapy_id = therapy_detail[0]?._id;
     if (pressedIconButton === "delete")
       return confirmRef.current.openConfirm({
         confirmFunction: () =>
           onUpdateDisorderSubmit(
             { disorder_id, update_disorder: { disorder_status: 0 } },
-            () => confirmRef.current.close()
+            () => confirmRef.current.close(),
+            undefined
           ),
         description:
-          "Associated Model and Categories will also get deleted. Would you like to proceed?",
+          "Associated model and categories will also get deleted. Would you like to proceed?",
+      });
+    else if (pressedIconButton === "edit")
+      infoModalRef.current.openConfirm({
+        data: {
+          value: { disorder_name, therapy_id },
+          disorder_id,
+          therapyListData,
+          onSubmit: (v, formikProps) =>
+            submitUpdateDisorderForm(v, { ...formikProps, disorder_id }),
+          headerTitleText: "Edit Disorder",
+        },
       });
   };
 
