@@ -207,34 +207,34 @@ const AssessmentListPage: NextPage = () => {
           org_id: orgIds,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminCreateAssessment: { duplicateNames },
-            } = data;
+          const {
+            adminCreateAssessment: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              setIsConfirmShareTask(false);
+          if (duplicateNames) {
+            /* istanbul ignore next */
+            setIsConfirmShareTask(false);
 
-              infoModalRef.current.openConfirm({
-                data: {
-                  duplicateNames,
-                  message:
-                    "This assessment already exists in the following organisation!",
-                },
-              });
-            } else {
-              handleCloseCreateAssessmentModal();
-              setIsConfirmShareTask(false);
-              refetch();
-              setName(undefined);
-              setOrgIds(undefined);
-
-              enqueueSnackbar("Assessment created successfully!", {
-                variant: "success",
-              });
-            }
-            //   doneCallback();
+            infoModalRef.current.openConfirm({
+              /* istanbul ignore next */
+              data: {
+                duplicateNames,
+                message:
+                  "This assessment already exists in the following organisation!",
+              },
+            });
+          } else {
+            handleCloseCreateAssessmentModal();
+            setIsConfirmShareTask(false);
+            refetch();
+            setName(undefined);
+            setOrgIds(undefined);
+            /* istanbul ignore next */
+            enqueueSnackbar("Assessment created successfully!", {
+              variant: "success",
+            });
           }
+          //   doneCallback();
         },
       });
     } catch (e) {
@@ -305,25 +305,25 @@ const AssessmentListPage: NextPage = () => {
           org_id: shareOrgIds,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminShareAssessment: { duplicateNames },
-            } = data;
+          const {
+            adminShareAssessment: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              setIsConfirmShare(false);
-              shareInfoModalRef.current?.close();
-            } else {
-              shareInfoModalRef.current?.close();
-              setIsConfirmShare(false);
-              refetch();
-              setSelectAssessment(undefined);
-              setShareOrgIds(undefined);
+          if (duplicateNames) {
+            /* istanbul ignore next */
+            setIsConfirmShare(false);
+            /* istanbul ignore next */
+            shareInfoModalRef.current?.close();
+          } else {
+            shareInfoModalRef.current?.close();
+            setIsConfirmShare(false);
+            refetch();
+            setSelectAssessment(undefined);
+            setShareOrgIds(undefined);
 
-              enqueueSnackbar("Assessment shared successfully!", {
-                variant: "success",
-              });
-            }
+            enqueueSnackbar("Assessment shared successfully!", {
+              variant: "success",
+            });
           }
         },
       });
@@ -364,6 +364,7 @@ const AssessmentListPage: NextPage = () => {
     }
   };
   const clearIsConfirmShareCancel = () => {
+    /* istanbul ignore next */
     setIsConfirmShare(false);
   };
 

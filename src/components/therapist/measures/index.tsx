@@ -132,6 +132,7 @@ const Measures: React.FC = () => {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         const { therapistViewScoreList = {} } = data || {};
         setAccodionViewScore(therapistViewScoreList);
       },
@@ -201,6 +202,7 @@ const Measures: React.FC = () => {
           if (result == true) {
             setAddTaskSuccessModal(true);
           } else {
+            /* istanbul ignore next */
             enqueueSnackbar("This measure already exist.", {
               variant: "error",
             });

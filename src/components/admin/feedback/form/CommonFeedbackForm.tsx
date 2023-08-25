@@ -87,17 +87,18 @@ const CommonFeedbackForm: React.FC<ViewProps> = ({
 
   useEffect(() => {
     if (
-      values?.orgId != "" &&
-      values?.sessionNo != "" &&
-      values?.userType != "" &&
-      !values?._id
+      values &&
+      values.orgId != "" &&
+      values.sessionNo != "" &&
+      values.userType != "" &&
+      !values._id
     ) {
       setLoader?.(true);
       checkFeedbackName?.({
         variables: {
-          orgId: values?.orgId,
-          sessionNo: values?.sessionNo,
-          userType: values?.userType,
+          orgId: values.orgId,
+          sessionNo: values.sessionNo,
+          userType: values.userType,
         },
       });
     }

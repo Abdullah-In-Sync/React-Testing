@@ -55,25 +55,23 @@ const Index = () => {
           orgId: formFields.org_id,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              createResource: { duplicateNames },
-            } = data;
-            if (duplicateNames != null) {
-              infoModalRef.current.openConfirm({
-                data: {
-                  duplicateNames,
-                  message:
-                    "This Resource already exists in the following organisations! ",
-                },
-              });
-            } else {
-              enqueueSnackbar("Resource added successfully", {
-                variant: "success",
-                autoHideDuration: 2000,
-              });
-              router.push("/therapist/resource");
-            }
+          const {
+            createResource: { duplicateNames },
+          } = data;
+          if (duplicateNames != null) {
+            infoModalRef.current.openConfirm({
+              data: {
+                duplicateNames,
+                message:
+                  "This Resource already exists in the following organisations! ",
+              },
+            });
+          } else {
+            enqueueSnackbar("Resource added successfully", {
+              variant: "success",
+              autoHideDuration: 2000,
+            });
+            router.push("/therapist/resource");
           }
         },
       });

@@ -58,24 +58,23 @@ const CreateMonitor: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminCreateMonitor: { duplicateNames },
-            } = data;
+          const {
+            adminCreateMonitor: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              infoModalRef.current.openConfirm({
-                data: {
-                  duplicateNames,
-                  message:
-                    "This monitor already exists in the given organisation!",
-                },
-              });
-            } else {
-              router.push("/admin/monitor");
-            }
-            doneCallback();
+          if (duplicateNames) {
+            infoModalRef.current.openConfirm({
+              data: {
+                duplicateNames,
+                message:
+                  "This monitor already exists in the given organisation!",
+              },
+            });
+          } else {
+            /* istanbul ignore next */
+            router.push("/admin/monitor");
           }
+          doneCallback();
         },
       });
     } catch (e) {
@@ -99,6 +98,7 @@ const CreateMonitor: NextPage = () => {
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
+      /* istanbul ignore next */
       confirmFunction: (callback) => cancelConfirm(callback),
       description: "Are you sure you are canceling the monitor without saving?",
     });

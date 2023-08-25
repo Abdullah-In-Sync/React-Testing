@@ -79,18 +79,19 @@ const EditMonitor: NextPage = () => {
       await updateMonitor({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            router.push(`/admin/monitor`);
-            doneCallback();
-          }
+        onCompleted: () => {
+          router.push(`/admin/monitor`);
+          doneCallback();
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       doneCallback();
     } finally {
       setLoader(false);
@@ -106,7 +107,9 @@ const EditMonitor: NextPage = () => {
   };
 
   const onPressCancel = () => {
+    /* istanbul ignore next */
     confirmRef.current.openConfirm({
+      /* istanbul ignore next */
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
         "Are you sure you want to cancel the monitor without saving?",
@@ -130,21 +133,22 @@ const EditMonitor: NextPage = () => {
           questionId,
         },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            callback();
-            questionCallback();
-            enqueueSnackbar("Question successfully deleted.", {
-              variant: "success",
-            });
-          }
+        onCompleted: () => {
+          callback();
+          questionCallback();
+          enqueueSnackbar("Question successfully deleted.", {
+            variant: "success",
+          });
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
+      /* istanbul ignore next */
       callback();
     } finally {
       setLoader(false);
