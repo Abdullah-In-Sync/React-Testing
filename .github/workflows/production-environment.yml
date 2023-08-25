@@ -109,7 +109,7 @@ jobs:
       working-directory: src
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-access-key-id: ${{ env.deploy-aws-access-key-id }}
         aws-secret-access-key: ${{ env.deploy-aws-secret-access-key }}
