@@ -23,6 +23,7 @@ const LoginPage: NextPage = () => {
   }) => {
     const { _id: orgId } = orgQuery || {};
     getTokenQuery[userType]({
+      fetchPolicy: "cache-and-network",
       onCompleted: (orgTokenData) => {
         const { getTokenData: tData = {} } = orgTokenData;
         const { organization_settings: { _id: tokenOrgId = undefined } = {} } =
