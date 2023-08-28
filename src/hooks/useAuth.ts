@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 
 import { Amplify, Auth } from "aws-amplify";
-import { homeRoute } from "../lib/constants";
 import { clearSession, setSessionToken } from "../utility/storage";
 import { env } from "./../lib/env";
 const {
@@ -41,8 +40,8 @@ export const useAuth = () => {
           status: "success",
           data: userData,
           message: "Login successful!",
+          userType,
         });
-        return router.replace(homeRoute[userType]);
       });
     } catch (error) {
       callback({ status: "error", message: error.message });

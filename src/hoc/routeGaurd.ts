@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { homeRoute } from "../lib/constants";
+import { allowedPaths, homeRoute, publicPaths } from "../lib/constants";
 import { getSessionToken } from "../utility/storage";
 import { isAuth } from "../utility/helper";
 
@@ -26,8 +26,7 @@ function RouteGuard({ children }) {
 
   function authCheck(url) {
     const { userToken, userType } = getSessionToken();
-    const allowed = [userType, "template"];
-    const publicPaths = ["account", "forgotPassword"];
+    const allowed = [userType, ...allowedPaths];
     const path = url.split("?")[0];
     const initialPath = path.split("/")[1];
     if (!userToken && !publicPaths.includes(initialPath)) {

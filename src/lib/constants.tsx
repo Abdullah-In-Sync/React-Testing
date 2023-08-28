@@ -1,3 +1,9 @@
+import {
+  GET_ADMIN_TOKEN_DATA,
+  GET_THERAPIST_TOKEN_DATA,
+  GET_TOKEN_DATA,
+} from "../graphql/query/common";
+
 export const IS_PATIENT = "patient";
 export const IS_ADMIN = "admin";
 export const IS_THERAPIST = "therapist";
@@ -104,3 +110,14 @@ export const homeRoute = {
 };
 
 export const publicPaths = ["account", "forgotPassword"];
+export const allowedPaths = ["template"];
+
+export const publicApiNameAccessWithKey = ["GetOrgByDomain"];
+
+export const tokenValidationQuery = {
+  admin: GET_ADMIN_TOKEN_DATA,
+  patient: GET_TOKEN_DATA,
+  therapist: GET_THERAPIST_TOKEN_DATA,
+};
+
+export const defaultOrgName = "portal";

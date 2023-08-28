@@ -1,21 +1,20 @@
 /* istanbul ignore file */
 import {
-  useState,
-  ReactNode,
-  createContext,
   Dispatch,
-  SetStateAction,
   FC,
-  useEffect,
+  ReactNode,
+  SetStateAction,
+  createContext,
   useContext,
+  useEffect,
+  useState,
 } from "react";
 
-import { localTokenValidation } from "../lib/helpers/auth";
-import Cookies from "js-cookie";
-import theme from "../styles/theme/theme";
 import { ThemeProvider } from "@mui/material";
 import router from "next/router";
-import { getSessionToken } from "../utility/storage";
+import { queryOrgTokenData } from "../hooks/fetchOrgTokenData";
+import theme from "../styles/theme/theme";
+import { clearSession, getSessionToken } from "../utility/storage";
 
 type AuthContext = {
   user: any;
@@ -23,6 +22,7 @@ type AuthContext = {
   isLoading: boolean;
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
+  orgData: any;
 };
 
 export const AuthContext = createContext<AuthContext>({
@@ -39,54 +39,50 @@ export const useAppContext = () => useContext(AuthContext);
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<any>(undefined);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(undefined);
+  const { userToken, userType } = getSessionToken();
 
-  const [getTokenData, tokenLoading, tokenData, tokenError] =
-    localTokenValidation(Cookies.get("user_type"));
+  const { orgQuery, getOrgDomainLoading, getTokenQuery } = queryOrgTokenData();
+  const { _id: orgId } = orgQuery || {};
 
   useEffect(() => {
-    handleGetToken();
-    router.events.on("routeChangeComplete", handleGetToken);
-    return () => {
-      router.events.off("routeChangeComplete", handleGetToken);
-    };
-  }, [router.events]);
+    if (userToken && userType && orgId) handleGetToken();
+  }, [orgId]);
 
   const handleGetToken = () => {
-    const { userToken, userType } = getSessionToken();
-    if (userToken && userType) {
-      getTokenData();
-    } else {
-      setUser(undefined);
-      setIsAuthenticated(false);
-    }
+    getTokenQuery[userType]({
+      onCompleted: (orgTokenData) => {
+        const { getTokenData: tData = {} } = orgTokenData;
+        const { organization_settings: { _id: tokenOrgId = undefined } = {} } =
+          tData;
+        if (orgId === tokenOrgId) {
+          setUser({
+            ...tData,
+          });
+        } else {
+          setUser(undefined);
+          setIsAuthenticated(false);
+          clearSession(() => {
+            router.replace("/account");
+          });
+        }
+      },
+    });
   };
-
-  useEffect(() => {
-    const { userType } = getSessionToken();
-    if (tokenData && tokenData?.getTokenData?.user_type == userType) {
-      setUser({
-        ...tokenData?.getTokenData,
-      });
-      setIsAuthenticated(true);
-    } else if (tokenError) {
-      setUser(undefined);
-      setIsAuthenticated(false);
-    }
-  }, [tokenLoading]);
 
   return (
     <AuthContext.Provider
       data-testid="authContext"
       value={{
-        user: tokenData?.getTokenData,
+        user,
         setUser,
         isAuthenticated,
         setIsAuthenticated,
-        isLoading: tokenLoading,
+        isLoading: getOrgDomainLoading,
+        orgData: orgQuery,
       }}
     >
-      <ThemeProvider theme={theme(user?.organization_settings)}>
-        {isAuthenticated != undefined && children}
+      <ThemeProvider theme={theme(orgQuery)}>
+        {!getOrgDomainLoading && children}
       </ThemeProvider>
     </AuthContext.Provider>
   );

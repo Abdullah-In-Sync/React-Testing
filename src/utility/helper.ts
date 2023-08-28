@@ -159,3 +159,12 @@ export const getIntialPath = (url) => {
   const path = url.split("?")[0];
   return path.split("/")[1];
 };
+
+export const getOrgNameFromCurrentUrl = () => {
+  if (typeof window !== "undefined") {
+    const {
+      location: { hostname },
+    } = window;
+    return hostname.split(".")[0];
+  }
+};

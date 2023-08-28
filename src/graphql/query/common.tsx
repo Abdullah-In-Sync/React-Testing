@@ -324,6 +324,9 @@ export const GET_THERAPIST_TOKEN_DATA = gql`
         therapist_proofaccredition
         user_id
       }
+      organization_settings {
+        _id
+      }
     }
   }
 `;
@@ -332,6 +335,29 @@ export const GET_FILE_UPLOAD_URl = gql`
   query GetFileUploadUrl($fileName: String!, $imageFolder: String) {
     getFileUploadUrl(fileName: $fileName, imageFolder: $imageFolder) {
       upload_file_url
+    }
+  }
+`;
+
+export const GET_ORG_PUBLIC_DATA = gql`
+  query GetOrgByDomain($name: String!) {
+    getOrgByDomain(name: $name) {
+      _id
+      contract
+      created_date
+      disorder_id
+      logo
+      logo_url
+      model_id
+      name
+      panel_color
+      patient
+      patient_plural
+      patient_welcome_email
+      side_menu_color
+      therapist
+      therapy
+      therapy_id
     }
   }
 `;
