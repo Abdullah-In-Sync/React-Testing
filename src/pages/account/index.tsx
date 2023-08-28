@@ -15,22 +15,28 @@ const LoginPage: NextPage = () => {
   const { setUser, setIsAuthenticated } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleAuthLoginRedirection = ({ userType }) => {
+  const handleAuthLoginRedirection = ({
+    userType,
+    status,
+    message,
+    setSubmitting,
+  }) => {
     const { _id: orgId } = orgQuery || {};
     getTokenQuery[userType]({
       onCompleted: (orgTokenData) => {
         const { getTokenData: tData = {} } = orgTokenData;
         const { organization_settings: { _id: tokenOrgId = undefined } = {} } =
           tData;
-        if (orgId === tokenOrgId) {
+        if (orgId === tokenOrgId || userType === "admin") {
           setUser({
             ...tData,
           });
           setIsAuthenticated(true);
           nofify({
-            status: "success",
-            message: "Login successful!",
+            status: status,
+            message: message,
           });
+          setSubmitting(false);
           return router.replace(homeRoute[userType]);
         } else {
           clearSession(() => {
@@ -39,6 +45,7 @@ const LoginPage: NextPage = () => {
               message: "Not allowed!",
             });
           });
+          setSubmitting(false);
         }
       },
     });
@@ -50,21 +57,21 @@ const LoginPage: NextPage = () => {
     });
   };
 
-  const handleLoginCallback = ({ status, message, userType }) => {
-    if (status === "error")
+  const handleLoginCallback = ({
+    status,
+    message,
+    userType,
+    setSubmitting,
+  }) => {
+    if (status === "error") {
+      setSubmitting(false);
       return nofify({
         status,
         message,
       });
-    else if (userType === "admin") {
-      nofify({
-        status,
-        message,
-      });
-      return router.replace(homeRoute[userType]);
     }
 
-    handleAuthLoginRedirection({ userType });
+    handleAuthLoginRedirection({ userType, status, message, setSubmitting });
   };
 
   const handleSubmit = (formFields, { setSubmitting }) => {

@@ -9,10 +9,10 @@ import { onError } from "@apollo/client/link/error";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import fetch from "node-fetch";
-import { clearSession } from "../utility/storage";
-import { env } from "./env";
-import { publicApiNameAccessWithKey, publicPaths } from "./constants";
 import { getIntialPath } from "../utility/helper";
+import { clearSession } from "../utility/storage";
+import { publicApiNameAccessWithKey, publicPaths } from "./constants";
+import { env } from "./env";
 
 const httpLink = createHttpLink({
   uri: env.graphql.url,
@@ -25,16 +25,16 @@ const authLink = setContext((apiDetail, { headers }) => {
   const token = Cookies.get("myhelptoken");
   // return the headers to the context so httpLink can read them
 
-  const authHeader =
-    !token && publicApiNameAccessWithKey.includes(operationName)
-      ? { "x-api-key": env.graphql.apiKey }
-      : token
-      ? { authorization: token }
-      : {};
+  const getAuthHeader = () => {
+    if (!token && publicApiNameAccessWithKey.includes(operationName))
+      return { "x-api-key": env.graphql.apiKey };
+    else if (token) return { authorization: token };
+    else return {};
+  };
   return {
     headers: {
       ...headers,
-      ...authHeader,
+      ...getAuthHeader(),
       ContentType: "application/json",
     },
   };
