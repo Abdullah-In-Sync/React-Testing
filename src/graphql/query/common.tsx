@@ -324,6 +324,9 @@ export const GET_THERAPIST_TOKEN_DATA = gql`
         therapist_proofaccredition
         user_id
       }
+      organization_settings {
+        _id
+      }
     }
   }
 `;

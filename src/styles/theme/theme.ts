@@ -50,7 +50,7 @@ const theme = (props?: any) => {
     },
     palette: {
       primary: {
-        main: panel_color ? panel_color : "#6EC9DB",
+        main: /^#[0-9A-F]{6}$/i.test(panel_color) ? panel_color : "#6EC9DB",
         contrastText: "#ffffff",
         light: "#eaf3ff",
       },

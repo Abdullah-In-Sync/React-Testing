@@ -170,24 +170,16 @@ describe("Nav bar", () => {
   it("should render logo", async () => {
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
-      user: {
-        _id: "testid",
-        user_type: "patient",
-        parent_id: "patientid",
-        user_status: "1",
-        patient_data: {
-          therapist_id: "therapistid",
-        },
-        organization_settings: {
-          _id: "orgid",
-          contract: "<p>test</p>",
-          logo: "logo.png",
-          logo_url: "https://test.com/logo.png",
-          name: "portal.dev-myhelp",
-          panel_color: "#6ec9db",
-          patient_plural: "patients",
-          side_menu_color: "#6ec9db",
-        },
+      orgData: {
+        _id: "orgid2",
+        logo: "080432161__logo.png",
+        logo_url: "https://test.com/logo.png",
+        name: "portal.dev-myhelp",
+        panel_color: "#6ec9db",
+        patient: "Patient",
+        patient_plural: "patients",
+        patient_welcome_email: "",
+        side_menu_color: "#6ec9db",
       },
     });
     await sut();

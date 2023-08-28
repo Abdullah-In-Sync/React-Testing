@@ -9,6 +9,7 @@ import {
 } from "@apollo/client";
 import Router from "next/router";
 import { errorLink } from "../apollo-client";
+import * as helper from "../../utility/helper";
 
 jest.mock("next/router", () => ({ replace: jest.fn() }));
 
@@ -50,6 +51,9 @@ describe("errorLink", () => {
       callback();
     },
   }));
+
+  const orgNameSpy = jest.spyOn(helper, "getIntialPath");
+  orgNameSpy.mockReturnValue("portal");
 
   it("should handle error and redirect to login screen", async () => {
     const mockLink = new ApolloLink(() => {
