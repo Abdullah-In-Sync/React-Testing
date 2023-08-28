@@ -12,7 +12,7 @@ const LoginPage: NextPage = () => {
   const { login } = useAuth();
   const router = useRouter();
   const { orgQuery, getTokenQuery } = queryOrgTokenData();
-  const { setUser } = useAppContext();
+  const { setUser, setIsAuthenticated } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleAuthLoginRedirection = ({ userType }) => {
@@ -26,6 +26,7 @@ const LoginPage: NextPage = () => {
           setUser({
             ...tData,
           });
+          setIsAuthenticated(true);
           nofify({
             status: "success",
             message: "Login successful!",

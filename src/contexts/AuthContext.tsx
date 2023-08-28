@@ -15,6 +15,7 @@ import router from "next/router";
 import { queryOrgTokenData } from "../hooks/fetchOrgTokenData";
 import theme from "../styles/theme/theme";
 import { clearSession, getSessionToken } from "../utility/storage";
+import { GetOrgByDomain } from "../graphql/org/types";
 
 type AuthContext = {
   user: any;
@@ -22,7 +23,7 @@ type AuthContext = {
   isLoading: boolean;
   isAuthenticated: boolean;
   setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-  orgData: any;
+  orgData: GetOrgByDomain;
 };
 
 export const AuthContext = createContext<AuthContext>({
@@ -58,6 +59,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           setUser({
             ...tData,
           });
+          setIsAuthenticated(true);
         } else {
           setUser(undefined);
           setIsAuthenticated(false);

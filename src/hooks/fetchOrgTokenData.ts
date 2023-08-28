@@ -1,7 +1,8 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_ORG_PUBLIC_DATA } from "../graphql/query/common";
+
 import { defaultOrgName, tokenValidationQuery } from "../lib/constants";
 import { getOrgNameFromCurrentUrl } from "../utility/helper";
+import { GET_ORG_PUBLIC_DATA } from "../graphql/org/graphql";
 export const queryOrgTokenData = () => {
   const hostnameFirst = getOrgNameFromCurrentUrl();
   const orgName =

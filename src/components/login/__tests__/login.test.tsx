@@ -14,12 +14,10 @@ import { Auth } from "aws-amplify";
 import * as useAuth from "../../../hooks/useAuth";
 import LoginPage from "../../../pages/account";
 import theme from "../../../styles/theme/theme";
-import {
-  GET_ORG_PUBLIC_DATA,
-  GET_TOKEN_DATA,
-} from "../../../graphql/query/common";
+import { GET_TOKEN_DATA } from "../../../graphql/query/common";
 import { useAppContext } from "../../../contexts/AuthContext";
 import * as getOrgNameFromCurrentUrl from "../../../utility/helper";
+import { GET_ORG_PUBLIC_DATA } from "../../../graphql/org/graphql";
 
 jest.mock("../../../contexts/AuthContext");
 
@@ -119,6 +117,7 @@ describe("Login page", () => {
   beforeEach(() => {
     (useAppContext as jest.Mock).mockReturnValue({
       setUser: jest.fn,
+      setIsAuthenticated: jest.fn,
     });
   });
 
