@@ -56,6 +56,13 @@ const LoginPage: NextPage = () => {
         status,
         message,
       });
+    else if (userType === "admin") {
+      nofify({
+        status,
+        message,
+      });
+      return router.replace(homeRoute[userType]);
+    }
 
     handleAuthLoginRedirection({ userType });
   };
