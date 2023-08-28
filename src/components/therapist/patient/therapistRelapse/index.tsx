@@ -41,6 +41,7 @@ interface ViewProps {
   relapsePlanList?: TherapistGetAdminRelapseListEntity[];
   accordionOpen?: number;
   handleAddIconButton?: (index: number, id: string) => void;
+  isSafetyPlan?: boolean;
 }
 
 const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
@@ -62,6 +63,7 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
   relapsePlanList,
   accordionOpen,
   handleAddIconButton,
+  isSafetyPlan,
 }) => {
   return (
     <>
@@ -84,6 +86,7 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
         onPressDeletePlan={onPressDeletePlan}
         accordionOpen={accordionOpen}
         handleAddIconButton={handleAddIconButton}
+        isSafetyPlan={isSafetyPlan}
       />
       <TherapistRelapseAddPlan
         relapsePlanList={relapsePlanList}

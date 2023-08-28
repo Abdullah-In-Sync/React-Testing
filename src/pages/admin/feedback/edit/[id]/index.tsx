@@ -109,10 +109,8 @@ const EditFeedbackPage: NextPage = () => {
       editFeedback({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            setSuccessModal(true);
-          }
+        onCompleted: () => {
+          setSuccessModal(true);
           doneCallback();
         },
       });

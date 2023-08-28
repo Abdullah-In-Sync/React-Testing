@@ -177,8 +177,8 @@ export default function ProfileForm(props: propTypes) {
       onCompleted: (data) => {
         if (data!.getProfileById) {
           setFormFields(data.getProfileById);
-          setHealthValue(data?.getProfileById?.patient_physical_health);
-          setIlnessValue(data?.getProfileById?.patient_illness_ability);
+          setHealthValue(data.getProfileById?.patient_physical_health);
+          setIlnessValue(data.getProfileById?.patient_illness_ability);
         }
       },
     });

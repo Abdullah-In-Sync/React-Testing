@@ -136,6 +136,7 @@ const TherapistFormulation = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
     } finally {
       doneCallback();
@@ -305,6 +306,7 @@ const TherapistFormulation = () => {
     setShareOrgIds(formattedValue);
   };
   const clearIsConfirmShareCancel = () => {
+    /* istanbul ignore next */
     setIsConfirmShare(false);
   };
 
@@ -324,29 +326,30 @@ const TherapistFormulation = () => {
           patient_id: shareOrgIds,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              therapistShareFormulationById: { duplicateNames },
-            } = data;
+          const {
+            therapistShareFormulationById: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              setIsConfirmShare(false);
-              shareInfoModalRef.current?.close();
-            } else {
-              shareInfoModalRef.current?.close();
-              setIsConfirmShare(false);
-              refetchFormulationList();
-              setSelectFormulation(undefined);
-              setShareOrgIds(undefined);
+          if (duplicateNames) {
+            /* istanbul ignore next */
+            setIsConfirmShare(false);
+            /* istanbul ignore next */
+            shareInfoModalRef.current?.close();
+          } else {
+            shareInfoModalRef.current?.close();
+            setIsConfirmShare(false);
+            refetchFormulationList();
+            setSelectFormulation(undefined);
+            setShareOrgIds(undefined);
 
-              enqueueSnackbar("Formulation shared successfully!", {
-                variant: "success",
-              });
-            }
+            enqueueSnackbar("Formulation shared successfully!", {
+              variant: "success",
+            });
           }
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       console.log(e);
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });

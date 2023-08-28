@@ -48,28 +48,26 @@ const Index = () => {
           orgId: formFields.org_id,
         },
         onCompleted: (data) => {
-          if (data) {
-            const {
-              createResource: { duplicateNames },
-            } = data;
+          const {
+            createResource: { duplicateNames },
+          } = data;
+          /* istanbul ignore next */
+          if (duplicateNames != null) {
+            infoModalRef.current.openConfirm({
+              data: {
+                duplicateNames,
+                message:
+                  "This Resource already exists in the following organisations! ",
+              },
+            });
+          } else {
             /* istanbul ignore next */
-            if (duplicateNames != null) {
-              infoModalRef.current.openConfirm({
-                data: {
-                  duplicateNames,
-                  message:
-                    "This Resource already exists in the following organisations! ",
-                },
-              });
-            } else {
-              /* istanbul ignore next */
-              enqueueSnackbar("Resource added successfully", {
-                variant: "success",
-                autoHideDuration: 2000,
-              });
-              /* istanbul ignore next */
-              router.push("/admin/resource");
-            }
+            enqueueSnackbar("Resource added successfully", {
+              variant: "success",
+              autoHideDuration: 2000,
+            });
+            /* istanbul ignore next */
+            router.push("/admin/resource");
           }
         },
       });

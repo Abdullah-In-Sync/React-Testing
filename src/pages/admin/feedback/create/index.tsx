@@ -66,10 +66,8 @@ const CreateFeedbackPage: NextPage = () => {
       createFeedback({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            setSuccessModal(true);
-          }
+        onCompleted: () => {
+          setSuccessModal(true);
         },
       });
     } catch (e) {

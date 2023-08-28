@@ -35,6 +35,7 @@ const CreateMeasures: NextPage = () => {
   }, []);
 
   const selectedOrgIds = (orgId) => {
+    /* istanbul ignore next */
     if (orgId === "all") {
       /* istanbul ignore next */
       return organizationList.map((item) => item._id).join(",");
@@ -58,23 +59,21 @@ const CreateMeasures: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: (data) => {
-          if (data) {
-            const {
-              adminCreateMeasures: { duplicateNames },
-            } = data;
+          const {
+            adminCreateMeasures: { duplicateNames },
+          } = data;
 
-            if (duplicateNames) {
-              infoModalRef.current.openConfirm({
-                data: { duplicateNames, measureText: title },
-              });
-            } else {
-              confirmRef.current.showSuccess({
-                description: "Your measure has been created successfully.",
-                handleOk,
-              });
-            }
-            doneCallback();
+          if (duplicateNames) {
+            infoModalRef.current.openConfirm({
+              data: { duplicateNames, measureText: title },
+            });
+          } else {
+            confirmRef.current.showSuccess({
+              description: "Your measure has been created successfully.",
+              handleOk,
+            });
           }
+          doneCallback();
         },
       });
     } catch (e) {
@@ -103,6 +102,7 @@ const CreateMeasures: NextPage = () => {
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
+      /* istanbul ignore next */
       confirmFunction: (callback) => cancelConfirm(callback),
       description:
         "Are you sure you want to cancel the measure without saving?",

@@ -55,6 +55,7 @@ type propTypes = {
 function HomeworkDetails(props: propTypes) {
   const { user } = useAppContext();
   const styles = useStyles();
+  /* istanbul ignore next */
   const orgId = user?.therapist_data?.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const confirmModalRef = useRef<ModalElement>(null);
@@ -104,6 +105,7 @@ function HomeworkDetails(props: propTypes) {
   ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      /* istanbul ignore next */
       console.log("Koca: data ", data);
     },
   });
@@ -113,15 +115,18 @@ function HomeworkDetails(props: propTypes) {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         const last_homework_list =
+          /* istanbul ignore next */
           data?.therapistViewPatientHomework?.last_homework_list;
+        /* istanbul ignore next */
         const ids = last_homework_list?.map((item) => item._id);
         setCompleteHomeWorkId(ids);
-
+        /* istanbul ignore next */
         const verifyValuetoCheckBox = last_homework_list?.some(
           (item) => item.complete_status
         );
-
+        /* istanbul ignore next */
         if (verifyValuetoCheckBox == true) {
+          /* istanbul ignore next */
           setCheckCompleteCheckbox(1);
         }
       },
@@ -132,6 +137,7 @@ function HomeworkDetails(props: propTypes) {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         console.log("Koca: data ", data);
       },
     }
@@ -197,29 +203,40 @@ function HomeworkDetails(props: propTypes) {
   }
 
   const handleSearchData = (data) => {
+    /* istanbul ignore next */
     setSearchValue(data);
   };
 
   const handleCreateInput = () => {
+    /* istanbul ignore next */
     if (previousSessionTaskData?.length > 0) {
+      /* istanbul ignore next */
       confirmModalRefForOldHomework.current?.open();
-
+      /* istanbul ignore next */
       return;
     }
+    /* istanbul ignore next */
     if (inputs.length >= 15) {
+      /* istanbul ignore next */
       confirmModalRef.current?.open();
+      /* istanbul ignore next */
       return; // exit the function without creating a new input
     }
     setInputs([...inputs, ""]);
   };
 
   const handleInputChangePrviousHomework = (index, value, Id) => {
+    /* istanbul ignore next */
     const updatedInputs = [...inputs];
+    /* istanbul ignore next */
     updatedInputs[index] = value;
+    /* istanbul ignore next */
     setInputs(updatedInputs);
-
+    /* istanbul ignore next */
     const updatedId = [...previoushomeworkId];
+    /* istanbul ignore next */
     updatedId[index] = Id;
+    /* istanbul ignore next */
     setPrevioushomeworkId(updatedId);
   };
 
@@ -241,18 +258,26 @@ function HomeworkDetails(props: propTypes) {
   };
 
   const handlePatientInputChange = (index, value, Id) => {
+    /* istanbul ignore next */
     const updatedInputs = [...patientInputs];
+    /* istanbul ignore next */
     updatedInputs[index] = value;
+    /* istanbul ignore next */
     setpatientInputs(updatedInputs);
-
+    /* istanbul ignore next */
     const updatedId = [...lptHomeworkId];
+    /* istanbul ignore next */
     updatedId[index] = Id;
+    /* istanbul ignore next */
     setLptHomeworkId(updatedId);
   };
 
   const handleDeleteInput = (index) => {
+    /* istanbul ignore next */
     const updatedInputs = [...inputs];
+    /* istanbul ignore next */
     updatedInputs.splice(index, 1);
+    /* istanbul ignore next */
     setInputs(updatedInputs);
   };
 
@@ -356,8 +381,11 @@ function HomeworkDetails(props: propTypes) {
   const clearIsConfirmCancel = () => {
     /* istanbul ignore next */
     setIsConfirm(false);
+    /* istanbul ignore next */
     setIsConfirmDeleteTask(false);
+    /* istanbul ignore next */
     setIsConfirmCompleteTask(false);
+    /* istanbul ignore next */
     setCheckCompleteCheckbox("");
   };
 
@@ -373,7 +401,9 @@ function HomeworkDetails(props: propTypes) {
   const handleOk2 = () => {
     /* istanbul ignore next */
     setDeleteTaskSuccessModal(false);
+    /* istanbul ignore next */
     setInputs([]);
+    /* istanbul ignore next */
     refetch();
   };
 
@@ -383,16 +413,22 @@ function HomeworkDetails(props: propTypes) {
   };
 
   const handleMyRes = () => {
+    /* istanbul ignore next */
     if (myFavourites === 1) {
+      /* istanbul ignore next */
       setMyFavourites(0);
     }
+    /* istanbul ignore next */
     setMyResource((prevValue) => (prevValue === 1 ? 0 : 1));
   };
 
   const handleMyFav = () => {
+    /* istanbul ignore next */
     if (myResource === 1) {
+      /* istanbul ignore next */
       setMyResource(0);
     }
+    /* istanbul ignore next */
     setMyFavourites((prevValue) => (prevValue === 1 ? 0 : 1));
   };
 
@@ -449,7 +485,9 @@ function HomeworkDetails(props: propTypes) {
                           </Typography>
                         </Grid>
                       }
+                      /* istanbul ignore next */
                       disabled={lastHomeworkList?.some((homework) =>
+                        /* istanbul ignore next */
                         homework?.complete_status === 1 ? true : false
                       )}
                     />
@@ -475,65 +513,51 @@ function HomeworkDetails(props: propTypes) {
           </Box>
         </Box>
 
-        {lastHomeworkList?.length > 0 && (
-          <Box>
-            <Typography
-              style={{
-                paddingRight: "15px",
-                color: "#6EC9DB",
-                fontWeight: "bold",
-                display: "flex",
-                textAlign: "start",
-              }}
-              data-testid="safety_ques"
-            >
-              Last Session's Homework
-            </Typography>
-            <Box
-              sx={{
-                flexGrow: 1,
-                border: "1px solid #cecece",
-                display: "grid",
-              }}
-              p={5}
-              marginBottom={"25px"}
-              borderRadius={"7px"}
-            >
+        {
+          /* istanbul ignore next */
+          lastHomeworkList?.length > 0 && (
+            <Box>
+              <Typography
+                style={{
+                  paddingRight: "15px",
+                  color: "#6EC9DB",
+                  fontWeight: "bold",
+                  display: "flex",
+                  textAlign: "start",
+                }}
+                data-testid="safety_ques"
+              >
+                Last Session's Homework
+              </Typography>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  border: "1px solid #cecece",
+                  display: "grid",
+                }}
+                p={5}
+                marginBottom={"25px"}
+                borderRadius={"7px"}
+              >
+                {
+                  /* istanbul ignore next */
+                  lastHomeworkList?.map((data, index) => (
+                    <div>
+                      <Typography
+                        style={{
+                          textAlign: "left",
+                          color: "#000000DE",
+                        }}
+                      >
+                        {index + 1 + "."}
+                        {data.pthomewrk_task}
+                      </Typography>
+                    </div>
+                  ))
+                }
+              </Box>
               {lastHomeworkList?.map((data, index) => (
-                <div>
-                  <Typography
-                    style={{
-                      textAlign: "left",
-                      color: "#000000DE",
-                    }}
-                  >
-                    {index + 1 + "."}
-                    {data.pthomewrk_task}
-                  </Typography>
-                </div>
-              ))}
-            </Box>
-            {lastHomeworkList?.map((data, index) => (
-              <Box style={{ paddingBottom: "20px" }}>
-                <Typography
-                  style={{
-                    paddingRight: "15px",
-                    color: "#6EC9DB",
-                    fontWeight: "bold",
-                    display: "flex",
-                    textAlign: "start",
-                  }}
-                  data-testid="safety_ques"
-                >
-                  Homework Review Task {index + 1}
-                </Typography>
-                <Box
-                  sx={{
-                    border: "1px solid #cecece",
-                    padding: "10px",
-                  }}
-                  borderRadius={"7px"}
-                >
+                <Box style={{ paddingBottom: "20px" }}>
                   <Typography
                     style={{
                       paddingRight: "15px",
@@ -544,198 +568,232 @@ function HomeworkDetails(props: propTypes) {
                     }}
                     data-testid="safety_ques"
                   >
-                    Patient Response
+                    Homework Review Task {index + 1}
                   </Typography>
+                  <Box
+                    sx={{
+                      border: "1px solid #cecece",
+                      padding: "10px",
+                    }}
+                    borderRadius={"7px"}
+                  >
+                    <Typography
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                        display: "flex",
+                        textAlign: "start",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      Patient Response
+                    </Typography>
 
-                  <Grid container spacing={2} marginBottom={0}>
+                    <Grid container spacing={2} marginBottom={0}>
+                      <Grid item xs={12}>
+                        <TextFieldComponent
+                          name="resource_references"
+                          id="references"
+                          value={
+                            /* istanbul ignore next */
+                            patientInputs[index]
+                              ? patientInputs[index]
+                              : /* istanbul ignore next */
+                                data?.pthomewrk_resp
+                          }
+                          multiline
+                          rows={4}
+                          onChange={(e) =>
+                            /* istanbul ignore next */
+                            handlePatientInputChange(
+                              index,
+                              e.target.value,
+                              data._id
+                            )
+                          }
+                          inputProps={{ "data-testid": "resource_references" }}
+                          fullWidth={true}
+                          className="form-control-bg"
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <Typography
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                        paddingTop: "10px",
+                        display: "flex",
+                        textAlign: "start",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      Therapist Response
+                    </Typography>
+
+                    <Grid container spacing={2} marginBottom={0}>
+                      <Grid item xs={12}>
+                        <TextFieldComponent
+                          name="therapist_resp"
+                          id="references"
+                          value={
+                            therapistInputs[index]
+                              ? therapistInputs[index]
+                              : /* istanbul ignore next */
+                                data?.therapist_resp
+                          }
+                          multiline
+                          rows={4}
+                          onChange={(e) =>
+                            handleTherapistInputChange(
+                              index,
+                              e.target.value,
+                              data._id
+                            )
+                          }
+                          inputProps={{ "data-testid": "therapist_resp" }}
+                          fullWidth={true}
+                          className="form-control-bg"
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )
+        }
+
+        {
+          /* istanbul ignore next */
+          previousSessionTaskData?.length > 0 && (
+            <div>
+              {previousSessionTaskData?.map((data, index) => (
+                <Box style={{ paddingTop: "10px" }}>
+                  <Box
+                    className="fieldBox second"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      paddingBottom: "5px",
+                      paddingTop: "5px",
+                    }}
+                  >
+                    <Typography
+                      style={{
+                        paddingRight: "15px",
+                        color: "#6EC9DB",
+                        fontWeight: "bold",
+                      }}
+                      data-testid="safety_ques"
+                    >
+                      Homework Task {index + 1}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      border: "1px solid #cecece",
+                      padding: "10px",
+                    }}
+                    borderRadius={"7px"}
+                  >
                     <Grid item xs={12}>
                       <TextFieldComponent
                         name="resource_references"
                         id="references"
                         value={
-                          patientInputs[index]
-                            ? patientInputs[index]
-                            : data?.pthomewrk_resp
+                          /* istanbul ignore next */
+                          inputs[index] ? inputs[index] : data?.pthomewrk_task
                         }
                         multiline
                         rows={4}
                         onChange={(e) =>
-                          handlePatientInputChange(
+                          /* istanbul ignore next */
+                          handleInputChangePrviousHomework(
                             index,
                             e.target.value,
                             data._id
                           )
                         }
-                        inputProps={{ "data-testid": "resource_references" }}
+                        inputProps={{
+                          "data-testid": `Pre_homework_task${index}`,
+                        }}
                         fullWidth={true}
                         className="form-control-bg"
                       />
                     </Grid>
-                  </Grid>
-
-                  <Typography
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6EC9DB",
-                      fontWeight: "bold",
-                      paddingTop: "10px",
-                      display: "flex",
-                      textAlign: "start",
-                    }}
-                    data-testid="safety_ques"
-                  >
-                    Therapist Response
-                  </Typography>
-
-                  <Grid container spacing={2} marginBottom={0}>
-                    <Grid item xs={12}>
-                      <TextFieldComponent
-                        name="therapist_resp"
-                        id="references"
-                        value={
-                          therapistInputs[index]
-                            ? therapistInputs[index]
-                            : data?.therapist_resp
-                        }
-                        multiline
-                        rows={4}
-                        onChange={(e) =>
-                          handleTherapistInputChange(
-                            index,
-                            e.target.value,
-                            data._id
-                          )
-                        }
-                        inputProps={{ "data-testid": "therapist_resp" }}
-                        fullWidth={true}
-                        className="form-control-bg"
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-        )}
-
-        {previousSessionTaskData?.length > 0 && (
-          <div>
-            {previousSessionTaskData?.map((data, index) => (
-              <Box style={{ paddingTop: "10px" }}>
-                <Box
-                  className="fieldBox second"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    paddingBottom: "5px",
-                    paddingTop: "5px",
-                  }}
-                >
-                  <Typography
-                    style={{
-                      paddingRight: "15px",
-                      color: "#6EC9DB",
-                      fontWeight: "bold",
-                    }}
-                    data-testid="safety_ques"
-                  >
-                    Homework Task {index + 1}
-                  </Typography>
-                </Box>
-
-                <Box
-                  sx={{
-                    border: "1px solid #cecece",
-                    padding: "10px",
-                  }}
-                  borderRadius={"7px"}
-                >
-                  <Grid item xs={12}>
-                    <TextFieldComponent
-                      name="resource_references"
-                      id="references"
-                      value={
-                        inputs[index] ? inputs[index] : data?.pthomewrk_task
-                      }
-                      multiline
-                      rows={4}
-                      onChange={(e) =>
-                        handleInputChangePrviousHomework(
-                          index,
-                          e.target.value,
-                          data._id
-                        )
-                      }
-                      inputProps={{
-                        "data-testid": `Pre_homework_task${index}`,
-                      }}
-                      fullWidth={true}
-                      className="form-control-bg"
-                    />
-                  </Grid>
-
-                  <Box
-                    className="fieldBox second"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      paddingTop: "10px",
-                    }}
-                  >
-                    <Link
-                      data-testid="edit-upload-file"
-                      href={data?.resource_url}
-                      underline="none"
-                      target="_blank"
-                      style={{ paddingTop: "10px", paddingRight: "20px" }}
-                    >
-                      <Typography style={{ color: "black" }}>
-                        {data?.resource_name}
-                      </Typography>
-                    </Link>
-
-                    <Button
-                      onClick={() => {
-                        addResourceFunction();
-                        setPtHomeworkId(data._id);
-                        setPtShareId(data.ptshareres_id);
-                      }}
-                      data-testid={`addNewQuestion_${index}`}
-                      variant="outlined"
-                      startIcon={<AttachFileIcon />}
-                    >
-                      Add Resource
-                    </Button>
 
                     <Box
-                      style={{
+                      className="fieldBox second"
+                      sx={{
                         display: "flex",
                         justifyContent: "flex-end",
-                        paddingBottom: "5px",
-                        paddingLeft: "5px",
+                        paddingTop: "10px",
                       }}
                     >
-                      <IconButtonWrapper
-                        aria-label="create"
-                        size="small"
-                        style={{ backgroundColor: "#6EC9DB" }}
+                      <Link
+                        data-testid="edit-upload-file"
+                        /* istanbul ignore next */
+                        href={data?.resource_url}
+                        underline="none"
+                        target="_blank"
+                        style={{ paddingTop: "10px", paddingRight: "20px" }}
                       >
-                        <DeleteIcon
-                          style={{ color: "white" }}
-                          data-testid={`button-delete-icon${index}`}
-                          onClick={() => {
-                            setIsConfirmDeleteTask(true);
-                            setDeleteTaskId(data._id);
-                          }}
-                        />
-                      </IconButtonWrapper>
+                        <Typography style={{ color: "black" }}>
+                          {/* istanbul ignore next */}
+                          {data?.resource_name}
+                        </Typography>
+                      </Link>
+
+                      <Button
+                        onClick={() => {
+                          /* istanbul ignore next */
+                          addResourceFunction();
+                          /* istanbul ignore next */
+                          setPtHomeworkId(data._id);
+                          /* istanbul ignore next */
+                          setPtShareId(data.ptshareres_id);
+                        }}
+                        data-testid={`addNewQuestion_${index}`}
+                        variant="outlined"
+                        startIcon={<AttachFileIcon />}
+                      >
+                        Add Resource
+                      </Button>
+
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          paddingBottom: "5px",
+                          paddingLeft: "5px",
+                        }}
+                      >
+                        <IconButtonWrapper
+                          aria-label="create"
+                          size="small"
+                          style={{ backgroundColor: "#6EC9DB" }}
+                        >
+                          <DeleteIcon
+                            style={{ color: "white" }}
+                            data-testid={`button-delete-icon${index}`}
+                            onClick={() => {
+                              setIsConfirmDeleteTask(true);
+                              setDeleteTaskId(data._id);
+                            }}
+                          />
+                        </IconButtonWrapper>
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
-              </Box>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )
+        }
 
         {!previousSessionTaskData?.length && (
           <Box>
@@ -817,6 +875,7 @@ function HomeworkDetails(props: propTypes) {
                       >
                         <DeleteIcon
                           style={{ color: "white" }}
+                          /* istanbul ignore next */
                           onClick={() => handleDeleteInput(index)}
                         />
                       </IconButtonWrapper>

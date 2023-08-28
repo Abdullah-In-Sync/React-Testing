@@ -89,11 +89,9 @@ const EditSafetyPlanPage: NextPage = () => {
       await updateSafetyPlan({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
+        onCompleted: () => {
           /* istanbul ignore next */
-          if (data) {
-            setSuccessModal(true);
-          }
+          setSuccessModal(true);
           doneCallback();
         },
       });
@@ -168,14 +166,12 @@ const EditSafetyPlanPage: NextPage = () => {
       await deleteSafetyPlan({
         variables: { questionId },
         fetchPolicy: "network-only",
-        onCompleted: (data) => {
-          if (data) {
-            successDeleteCallback();
-            doneCallback();
-            enqueueSnackbar("The question has been deleted successfully.", {
-              variant: "success",
-            });
-          }
+        onCompleted: () => {
+          successDeleteCallback();
+          doneCallback();
+          enqueueSnackbar("The question has been deleted successfully.", {
+            variant: "success",
+          });
           setLoader(false);
         },
       });

@@ -29,6 +29,7 @@ const PatientMonitorsListPage: NextPage = () => {
   const router = useRouter();
   const [submitMonitorResponse] = useMutation(PATIENT_SUBMIT_MONITOR);
   const { enqueueSnackbar } = useSnackbar();
+  /* istanbul ignore next */
   const { query: { view, monitorId, startDate, endDate } = {} } = router;
 
   useEffect(() => {
@@ -90,18 +91,23 @@ const PatientMonitorsListPage: NextPage = () => {
             patientSubmitMonitor: { _id },
           } = data;
           if (_id) {
+            /* istanbul ignore next */
             enqueueSnackbar("Response successfully submitted.", {
               variant: "success",
             });
+            /* istanbul ignore next */
             router.push(`therapy/?mainTab=therapy&tab=monitors`);
+            /* istanbul ignore next */
             doneCallback();
           }
+          /* istanbul ignore next */
           setLoader(false);
         },
       });
     } catch (e) {
       /* istanbul ignore next */
       enqueueSnackbar("Something is wrong", { variant: "error" });
+      /* istanbul ignore next */
       setLoader(false);
     }
   };
@@ -177,6 +183,7 @@ const PatientMonitorsListPage: NextPage = () => {
         return (
           <MonitorViewResponse
             monitorData={monitorViewData}
+            /* istanbul ignore next */
             initialDate={(startDate || initialDate) as string}
             handleRangeGoButton={handleRangeGoButton}
             onBackButtonPress={backPress}

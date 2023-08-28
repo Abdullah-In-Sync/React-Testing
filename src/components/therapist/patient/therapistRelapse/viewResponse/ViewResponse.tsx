@@ -39,6 +39,7 @@ interface ViewProps {
   onPressCancel?: () => void;
   handleDeleteQuestion?: (v) => void;
   isEditable?: boolean;
+  isSafetyPlan?: boolean;
 }
 
 const CreatePlanForm: React.FC<ViewProps> = ({
@@ -47,6 +48,7 @@ const CreatePlanForm: React.FC<ViewProps> = ({
   planData,
   handleDeleteQuestion,
   isEditable,
+  isSafetyPlan,
 }) => {
   const {
     description: planDescription = "",
@@ -59,10 +61,16 @@ const CreatePlanForm: React.FC<ViewProps> = ({
     questions !== null
       ? questions.map((item) => ({
           questionId: item._id,
-          question: item.relapse_ques,
-          description: item.relapse_additional_details,
-          questionType: item.relapse_ques_type,
-          questionOption: item.relapse_ques_typeoption,
+          question: isSafetyPlan ? item.safety_ques : item.relapse_ques,
+          description: isSafetyPlan
+            ? item.safety_additional_details
+            : item.relapse_additional_details,
+          questionType: isSafetyPlan
+            ? item.safety_ques_type
+            : item.relapse_ques_type,
+          questionOption: isSafetyPlan
+            ? item.safety_ques_typeoption
+            : item.relapse_ques_typeoption,
           patientAnswer: item.patient_answer,
         }))
       : [];

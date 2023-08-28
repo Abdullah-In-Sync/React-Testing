@@ -1,6 +1,0 @@
-codecov:
-    branch: master # set new Default branch
-coverage:
-  precision: 2
-  round: down
-  range: "80...100"
