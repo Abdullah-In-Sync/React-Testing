@@ -55,7 +55,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const { getTokenData: tData = {} } = orgTokenData;
         const { organization_settings: { _id: tokenOrgId = undefined } = {} } =
           tData;
-        if (orgId === tokenOrgId) {
+        if (orgId === tokenOrgId || userType === "admin") {
           setUser({
             ...tData,
           });

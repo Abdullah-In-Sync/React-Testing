@@ -386,7 +386,9 @@ describe("Therapist patient add assessment", () => {
     const submitButton2 = await screen.findByTestId("submitQuestion_cat2");
     fireEvent.click(submitButton2);
     expect(
-      await screen.findByText(/At least one response required./i)
+      await screen.findByText(
+        /Patient response text box cannot be left empty./i
+      )
     ).toBeInTheDocument();
   });
 

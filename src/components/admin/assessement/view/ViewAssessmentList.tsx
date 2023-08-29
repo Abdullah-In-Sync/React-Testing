@@ -48,7 +48,7 @@ const ViewAssessmentList: React.FC<ViewAssessmentProps> = ({
 
   const accordionList = () => {
     if (category.length <= 0 && !assessmentLoading)
-      return <MesageTextDisplay message="No data Found." />;
+      return <MesageTextDisplay message="No data found." />;
 
     return category.map((item, i) => {
       const { name } = item;
