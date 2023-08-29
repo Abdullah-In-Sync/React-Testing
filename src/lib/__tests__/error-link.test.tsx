@@ -24,6 +24,12 @@ const MockQuery = gql`
   }
 `;
 
+const GetOrgQuery = gql`
+  query GetOrgByDomain {
+    test
+  }
+`;
+
 class NetworkError extends Error {
   bodyText;
   statusCode;
@@ -82,6 +88,49 @@ describe("errorLink", () => {
       return new Promise<LinkResult<T>>((resolve) => {
         execute(from([errorLink, dataLink]), {
           query: MockQuery,
+        }).subscribe(
+          () => {
+            //
+          },
+          () => {
+            resolve(linkResult);
+          }
+        );
+      });
+    }
+
+    await executeLink(mockLink);
+
+    expect(Router.replace).toHaveBeenCalledWith("/account");
+  });
+
+  it("should handle success", async () => {
+    const mockLink = new ApolloLink(() => {
+      const fetchResult: FetchResult = {
+        errors: [],
+        data: null,
+      };
+
+      const linkResult = Observable.of(fetchResult).map(() => {
+        throw new NetworkError({
+          name: "ServerParseError",
+          message: "Unexpected token",
+          response: {},
+          bodyText:
+            "<!DOCTYPE html><html><head></head><body>Error</body></html>",
+          statusCode: 401,
+          result: {},
+        });
+      });
+      return linkResult;
+    });
+
+    async function executeLink<T = any>(dataLink: ApolloLink) {
+      const linkResult = {} as LinkResult<T>;
+
+      return new Promise<LinkResult<T>>((resolve) => {
+        execute(from([errorLink, dataLink]), {
+          query: GetOrgQuery,
         }).subscribe(
           () => {
             //

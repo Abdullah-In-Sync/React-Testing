@@ -41,12 +41,11 @@ export const useAuth = () => {
           data: userData,
           message: "Login successful!",
           userType,
+          setSubmitting,
         });
       });
     } catch (error) {
-      callback({ status: "error", message: error.message });
-    } finally {
-      setSubmitting(false);
+      callback({ status: "error", message: error.message, setSubmitting });
     }
   };
 
