@@ -382,9 +382,12 @@ const TherapistPatientAssessmentList: React.FC = () => {
 
     if (answerArr.length <= 0) {
       setSubmitting(false);
-      return enqueueSnackbar("At least one response required.", {
-        variant: "error",
-      });
+      return enqueueSnackbar(
+        "Patient response text box cannot be left empty.",
+        {
+          variant: "error",
+        }
+      );
     }
 
     confirmRef.current.openConfirm({

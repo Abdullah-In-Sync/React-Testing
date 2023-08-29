@@ -410,7 +410,7 @@ describe("Admin Assessment list", () => {
 
       await waitFor(async () => {
         expect(
-          screen.getByText("Assessment updates successfully!")
+          screen.getByText("Assessment updated successfully!")
         ).toBeInTheDocument();
       });
     });

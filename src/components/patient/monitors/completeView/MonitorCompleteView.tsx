@@ -260,7 +260,7 @@ const MonitorCompleteView: React.FC<any> = ({
         <Stack className={styles.completeListWrapper}>
           {questionsData.length > 0
             ? commonform()
-            : !loading && <MesageTextDisplay message="No data Found." />}
+            : !loading && <MesageTextDisplay message="No data found." />}
         </Stack>
       </CardWithHeader>
     </Stack>

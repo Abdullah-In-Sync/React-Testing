@@ -236,7 +236,7 @@ const MonitorViewResponse: React.FC<ViewProps> = ({
       Object.keys(filterQuesAnsData).length > 0 ? (
       answerList()
     ) : (
-      <MesageTextDisplay message="No data Found." />
+      <MesageTextDisplay message="No data found." />
     );
   };
 
