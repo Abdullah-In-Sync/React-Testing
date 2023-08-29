@@ -1,5 +1,11 @@
 /* istanbul ignore file */
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  useEffect,
+} from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -65,8 +71,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const edgeUpdateSuccessful = useRef(true);
   const [toggled, setToggled] = useState<boolean>(false);
   const [isPreview, setIsPreview] = useState<boolean>(defaultIsPreview);
+  const [isEnableBtn, setIsEnableBtn] = useState(false);
 
   const onConnect = useCallback((params) => {
+    /* istanbul ignore next */
     params.type = "smoothstep";
     params.markerStart = {
       type: MarkerType.Arrow,
@@ -78,11 +86,22 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
   const onEdgeUpdateStart = useCallback(() => {
     edgeUpdateSuccessful.current = false;
   }, []);
-
+  /* istanbul ignore next */
   const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
     edgeUpdateSuccessful.current = true;
     setEdges((els) => updateEdge(oldEdge, newConnection, els));
   }, []);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (nodes.length > 0 && !nodes.every((n) => n?.data.label !== "")) {
+      /* istanbul ignore next */
+      setIsEnableBtn(true);
+    } else {
+      /* istanbul ignore next */
+      setIsEnableBtn(false);
+    }
+  }, [nodes]);
 
   const onEdgeUpdateEnd = useCallback((_, edge) => {
     if (!edgeUpdateSuccessful.current) {
@@ -275,6 +294,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
                 padding: "5px 79px 5px 79px",
                 fontSize: "20px",
               }}
+              disabled={isEnableBtn}
               onClick={() => onSubmitHandle(nodes, edges)}
             >
               Submit

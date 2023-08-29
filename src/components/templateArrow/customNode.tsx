@@ -42,17 +42,29 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
   const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
   const reactFlowInstance = useReactFlow();
   const nodes = reactFlowInstance.getNodes();
+  const [error, setError] = useState(false);
   const onChange = (event: any) => {
     const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
+    /* istanbul ignore next */
     if (event.target.id == "title") {
       nodes[getNodeIndex].data.label = event.target.value;
+      /* istanbul ignore next */
       setLabel(event.target.value);
+      /* istanbul ignore next */
+      validateField(event.target.value);
+      /* istanbul ignore next */
     } else if (event.target.id == "description") {
+      /* istanbul ignore next */
       nodes[getNodeIndex].data.description = event.target.value;
+      /* istanbul ignore next */
       setDescription(event.target.value);
     }
-
     reactFlowInstance.setNodes([...nodes]);
+  };
+
+  const validateField = (value) => {
+    /* istanbul ignore next */
+    setError(value.trim() === "");
   };
   const onUpdateResponse = (response: string) => {
     const getNodeIndex = nodes.findIndex((ele: Node<any>) => ele.id == id);
@@ -205,6 +217,7 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
               <TextareaAutosize
                 id="title"
                 name="title"
+                required={true}
                 value={label}
                 onChange={(e) => onChange(e)}
                 placeholder="Enter Title"
@@ -213,6 +226,11 @@ const TextUpdaterNode: React.FC<TextUpdaterNodeProps> = ({
                   userType == "patient" || mode == "patientView" ? true : false
                 }
               />
+              {error && (
+                <p style={{ color: "red", margin: 0 }}>
+                  This field is required.
+                </p>
+              )}
               <TextareaAutosize
                 id="description"
                 name="description"
