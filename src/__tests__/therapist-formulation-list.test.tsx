@@ -424,7 +424,9 @@ describe("Therapist Formulation page", () => {
 
     fireEvent.click(favButton2);
     expect(
-      await screen.findByText(/Formulation added to favorites successfully/i)
+      await screen.findByText(
+        /Formulation removed from favorites successfully/i
+      )
     ).toBeInTheDocument();
   });
 });
