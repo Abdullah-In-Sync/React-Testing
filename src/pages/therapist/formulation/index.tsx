@@ -363,7 +363,7 @@ const TherapistFormulation = () => {
           formulation_id: formulationId,
         },
         onCompleted: () => {
-          enqueueSnackbar("Favorite formulation added successfully.", {
+          enqueueSnackbar("Formulation added to favorites successfully", {
             variant: "success",
           });
           refetchFormulationList();
@@ -382,7 +382,7 @@ const TherapistFormulation = () => {
           fav_formulation_id: removeFormulationId,
         },
         onCompleted: () => {
-          enqueueSnackbar("Favorite formulation deleted successfully.", {
+          enqueueSnackbar("Formulation added to favorites successfully", {
             variant: "success",
           });
           refetchFormulationList();
