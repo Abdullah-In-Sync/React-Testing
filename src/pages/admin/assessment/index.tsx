@@ -283,7 +283,7 @@ const AssessmentListPage: NextPage = () => {
         onCompleted: () => {
           setIsConfirmEditAssessment(false);
           handleCloseEditAssessmentModal();
-          enqueueSnackbar("Assessment updates successfully!", {
+          enqueueSnackbar("Assessment updated successfully!", {
             variant: "success",
           });
           refetch();
