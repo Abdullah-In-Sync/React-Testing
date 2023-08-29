@@ -25,16 +25,16 @@ const authLink = setContext((apiDetail, { headers }) => {
   const token = Cookies.get("myhelptoken");
   // return the headers to the context so httpLink can read them
 
-  const authHeader =
-    !token && publicApiNameAccessWithKey.includes(operationName)
-      ? { "x-api-key": env.graphql.apiKey }
-      : token
-      ? { authorization: token }
-      : {};
+  const getAuthHeader = () => {
+    if (!token && publicApiNameAccessWithKey.includes(operationName))
+      return { "x-api-key": env.graphql.apiKey };
+    else if (token) return { authorization: token };
+    else return {};
+  };
   return {
     headers: {
       ...headers,
-      ...authHeader,
+      ...getAuthHeader(),
       ContentType: "application/json",
     },
   };

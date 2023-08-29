@@ -117,6 +117,10 @@
   outline: unset !important;
 }
 
+.disabledElement {
+  pointer-events: none;
+}
+
 .ellipsisTextWrapper {
   height: auto;
   min-height: 1.4375em;

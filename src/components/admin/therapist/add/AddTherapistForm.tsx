@@ -43,7 +43,7 @@ const AddTherapistForm: React.FC<ViewProps & ModalRefs> = ({
     therapist_poa_attachment: undefined,
     therapist_inscover_file: undefined,
     therapist_poa_attachment_file: undefined,
-    phone_number: "",
+    phone_number: "+44",
     therapist_profaccredition: "",
   };
 
