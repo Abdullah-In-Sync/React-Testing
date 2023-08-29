@@ -98,7 +98,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
 
   const tableHeader = () => {
     return (
-      <TableHead className={`${isResponse ? "disbledFields" : ""}`}>
+      <TableHead className={`${isResponse ? "disabledElement" : ""}`}>
         <TableRow>
           {headerRow.map((column, i) => (
             <TableCell key={`tableHead_${column.id}`} align={column.align}>
@@ -129,7 +129,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                     key={`tableBodyCell_${column.id}`}
                     align={column.align}
                     className={`${
-                      isResponse && columnIndex === 0 ? "disbledFields" : ""
+                      isResponse && columnIndex === 0 ? "disabledElement" : ""
                     }`}
                   >
                     {inputTextField({
@@ -186,7 +186,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                       key={`tableFotterCell_${column.id}`}
                       align={column.align}
                       className={`${
-                        !isResponse && i === 0 ? "" : "disbledFields"
+                        !isResponse && i === 0 ? "" : "disabledElement"
                       }`}
                     >
                       {inputTextField({
@@ -209,7 +209,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                         key={column.id}
                         align={column.align}
                         colSpan={5}
-                        className="disbledFields"
+                        className="disabledElement"
                       >
                         {inputTextField({
                           ...valueProps,

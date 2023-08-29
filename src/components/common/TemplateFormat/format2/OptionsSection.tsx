@@ -67,7 +67,7 @@ const OptionsSection: React.FC<ViewProps> = ({
               <Box key={`radioOption_${i}`} className="radioWrapper">
                 <Box
                   className={`inputBox radioInputBox ${
-                    isResponse ? "disbledFields" : ""
+                    isResponse ? "disabledElement" : ""
                   }`}
                 >
                   <FormikTextField
@@ -79,7 +79,7 @@ const OptionsSection: React.FC<ViewProps> = ({
                     hideError
                   />
                 </Box>
-                <Box className={`${!isResponse ? "disbledFields" : ""}`}>
+                <Box className={`${!isResponse ? "disabledElement" : ""}`}>
                   <FormControlLabel
                     key={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
                     data-testid={`templateData.optionsQuestions.${optionIndex}.labels.${i}.answer`}
@@ -108,7 +108,7 @@ const OptionsSection: React.FC<ViewProps> = ({
         style={{
           width: "100%",
         }}
-        className={`${isResponse ? "disbledFields" : ""}`}
+        className={`${isResponse ? "disabledElement" : ""}`}
       >
         <Box className="radiosWrapper">
           {labels.map((_, i: number) => (

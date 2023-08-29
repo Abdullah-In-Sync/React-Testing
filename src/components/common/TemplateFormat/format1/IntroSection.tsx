@@ -27,7 +27,7 @@ const IntroSection: React.FC<ViewProps> = ({
     return (
       <Box
         className={`introSection commonFieldWrapper cSection ${
-          isResponse ? "disbledFields" : ""
+          isResponse ? "disabledElement" : ""
         }`}
       >
         <Paper

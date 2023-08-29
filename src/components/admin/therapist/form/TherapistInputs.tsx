@@ -22,7 +22,7 @@ const TherapistInputs = {
           className="form-control-bg"
           size="small"
           placeholder="Password*"
-          autoComplete="off"
+          autoComplete="new-password"
         />
       </Box>
       <Box>
@@ -37,7 +37,7 @@ const TherapistInputs = {
           className="form-control-bg"
           size="small"
           placeholder="Confirm Password*"
-          autoComplete="off"
+          autoComplete="new-password"
         />
       </Box>
     </>

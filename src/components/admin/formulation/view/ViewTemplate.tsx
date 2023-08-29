@@ -18,7 +18,7 @@ const ViewTemplateFormulation: React.FC<ViewProps> = ({
   const template = () => {
     if (componentName === "TemplateTable") {
       return (
-        <Box p={2} className="disbledFields">
+        <Box p={2} className="disabledElement">
           <TemplateTable
             initialData={{ rows }}
             mode="view"

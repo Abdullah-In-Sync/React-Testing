@@ -49,7 +49,6 @@ const QuestionsSection: React.FC<ViewProps> = ({
       confirmModalRef.current?.open();
     }
   };
-  //disbledFields
   return (
     <>
       <Box className="questionsSection commonFieldWrapper cSection">
@@ -80,7 +79,7 @@ const QuestionsSection: React.FC<ViewProps> = ({
                   >
                     <Box
                       className={`questionInputWrapper ${
-                        isResponse ? "disbledFields" : ""
+                        isResponse ? "disabledElement" : ""
                       }`}
                     >
                       <Typography>{i + 1}</Typography>

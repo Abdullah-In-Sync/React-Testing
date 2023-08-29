@@ -27,7 +27,7 @@ const DescriptionSection: React.FC<ViewProps> = ({
     return (
       <Box
         className={`descriptionSection commonFieldWrapper cSection ${
-          isResponse ? "disbledFields" : ""
+          isResponse ? "disabledElement" : ""
         }`}
       >
         <Paper
