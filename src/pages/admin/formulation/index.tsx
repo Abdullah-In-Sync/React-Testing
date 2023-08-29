@@ -142,7 +142,7 @@ const Formulation = () => {
           const { deleteFavouriteFormulation: { deleted = undefined } = {} } =
             data;
           if (deleted) {
-            enqueueSnackbar("Formulation added to favorites successfully", {
+            enqueueSnackbar("Formulation removed from favorites successfully", {
               variant: "success",
             });
             const tempDataList = JSON.parse(JSON.stringify(dataList));

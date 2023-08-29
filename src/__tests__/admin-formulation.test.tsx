@@ -338,7 +338,9 @@ describe(" Formulation page", () => {
     ).toBeInTheDocument();
     fireEvent.click(favButton);
     expect(
-      await screen.findByText(/Formulation added to favorites successfully/i)
+      await screen.findByText(
+        /Formulation removed from favorites successfully/i
+      )
     ).toBeInTheDocument();
   });
 

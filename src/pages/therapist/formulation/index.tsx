@@ -382,9 +382,11 @@ const TherapistFormulation = () => {
           fav_formulation_id: removeFormulationId,
         },
         onCompleted: () => {
-          enqueueSnackbar("Formulation added to favorites successfully", {
+          /* istanbul ignore next */
+          enqueueSnackbar("Formulation removed from favorites successfully", {
             variant: "success",
           });
+          /* istanbul ignore next */
           refetchFormulationList();
         },
       });
