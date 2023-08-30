@@ -48,7 +48,7 @@ const PatientHome = (props: propTypes) => {
     });
 
   const appointmentDate = moment(
-    homeDataData?.getPatientHomeData[0].appointment[0]?.app_date
+    homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_date
   ).format("DD/MM/YY");
 
   const appStartTime =
@@ -247,7 +247,7 @@ const PatientHome = (props: propTypes) => {
                   {therapistName}
                 </h2>
               </Box>
-              {homeDataData?.getPatientHomeData[0].appointment == 0 ? (
+              {homeDataData?.getPatientHomeData[0]?.appointment == 0 ? (
                 <Box
                   style={{
                     fontWeight: "600",
