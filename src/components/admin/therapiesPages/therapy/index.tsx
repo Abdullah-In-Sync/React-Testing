@@ -17,10 +17,13 @@ import {
 import AddTherapyForm from "./add/AddTherapy";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { useSnackbar } from "notistack";
+import EditTherapiesForm from "./edit/editTherapiesForm";
 
 const TherapiesListPage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const modalRefAddPlan = useRef<ModalElement>(null);
+  const modalRefEditPlan = useRef<ModalElement>(null);
+
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -29,13 +32,15 @@ const TherapiesListPage: NextPage = () => {
   const [page, setPage] = useState(1);
   const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
   const [isConfirmDelete, setIsConfirmDelete] = useState(false);
-
   const [getName, setGetName] = useState("");
   const [getOrgId, setGetOrgId] = useState([]);
-  const [deleteTherapyId, setDeleteTherapy] = useState("");
+  const [deleteAndUpdateTherapyId, setDeleteTherapy] = useState("");
+  const [isConfirmEditTherapt, setIsConfirmEditTherapy] = useState(false);
+  const [getEditOldName, setGetOldEditName] = useState("");
+  const [getEditNewName, setGetNewEditName] = useState("");
 
   const [addTherapy] = useMutation(ADMIN_ADD_THERAPY);
-  const [deleteTherapy] = useMutation(ADMIN_DELETE_THERAPY);
+  const [deleteAndUpdateTherapy] = useMutation(ADMIN_DELETE_THERAPY);
 
   useEffect(() => {
     getAdminTherapiesList({
@@ -118,6 +123,17 @@ const TherapiesListPage: NextPage = () => {
     modalRefAddPlan.current?.close();
   }, []);
 
+  const handleOpenEditTherapyModal = useCallback(
+    /* istanbul ignore next */
+    () => modalRefEditPlan.current?.open(),
+    []
+  );
+
+  const handleCloseEditTherapyModal = useCallback(() => {
+    /* istanbul ignore next */
+    modalRefEditPlan.current?.close();
+  }, []);
+
   const handleAddTherapy = async () => {
     try {
       await addTherapy({
@@ -146,9 +162,9 @@ const TherapiesListPage: NextPage = () => {
 
   const handleDeleteTherapy = async () => {
     try {
-      await deleteTherapy({
+      await deleteAndUpdateTherapy({
         variables: {
-          therapy_id: deleteTherapyId,
+          therapy_id: deleteAndUpdateTherapyId,
           update: {
             therapy_status: 0,
           },
@@ -173,6 +189,7 @@ const TherapiesListPage: NextPage = () => {
   const clearIsConfirmCancel = () => {
     setIsConfirmCompleteTask(false);
     setIsConfirmDelete(false);
+    setIsConfirmEditTherapy(false);
   };
 
   /* istanbul ignore next */
@@ -192,6 +209,43 @@ const TherapiesListPage: NextPage = () => {
     if (pressedIconButton === "delete") {
       setDeleteTherapy(value._id);
       setIsConfirmDelete(true);
+    }
+
+    if (pressedIconButton === "edit") {
+      handleOpenEditTherapyModal();
+      setDeleteTherapy(value._id);
+      setGetOldEditName(value.therapy_name);
+    }
+  };
+
+  /* istanbul ignore next */
+  const onChangeEditName = (value) => {
+    setGetNewEditName(value);
+  };
+
+  const handleEditTherapy = async () => {
+    try {
+      await deleteAndUpdateTherapy({
+        variables: {
+          therapy_id: deleteAndUpdateTherapyId,
+          update: {
+            therapy_name: getEditNewName,
+          },
+        },
+        onCompleted: () => {
+          setIsConfirmEditTherapy(false);
+          handleCloseEditTherapyModal();
+          enqueueSnackbar("Therapy updated successfully!", {
+            variant: "success",
+          });
+          refetch();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
     }
   };
 
@@ -228,6 +282,21 @@ const TherapiesListPage: NextPage = () => {
         />
       </CommonModal>
 
+      <CommonModal
+        ref={modalRefEditPlan}
+        headerTitleText={"Edit Therapy"}
+        maxWidth="sm"
+      >
+        <EditTherapiesForm
+          onPressSubmit={() =>
+            /* istanbul ignore next */
+            setIsConfirmEditTherapy(true)
+          }
+          prefilledAssessmentName={getEditOldName}
+          receiveName={onChangeEditName}
+        />
+      </CommonModal>
+
       {isConfirmCompleteTask && (
         <ConfirmationModal
           label="Are you sure you want to add this therapy?"
@@ -241,6 +310,14 @@ const TherapiesListPage: NextPage = () => {
           label="Associated disorder, model and categories will also get deleted. Would you like to proceed?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handleDeleteTherapy}
+        />
+      )}
+
+      {isConfirmEditTherapt && (
+        <ConfirmationModal
+          label="Are you sure you want to update the therapy?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={handleEditTherapy}
         />
       )}
     </>
