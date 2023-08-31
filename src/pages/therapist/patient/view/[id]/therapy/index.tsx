@@ -29,9 +29,9 @@ export default function TherapyMainComponent(props: propTypes) {
       component: <TherapistSafetyPlanIndex />,
     },
     {
-      label: "Measures",
-      value: "measures",
-      component: <Measures />,
+      label: "Formulation",
+      value: "formulation",
+      component: <TherapistPatientFormulation />,
     },
     {
       label: "Goals",
@@ -39,27 +39,26 @@ export default function TherapyMainComponent(props: propTypes) {
       component: <TherapyPatientGoalsIndex setTherapy={setTherapy} />,
     },
     {
-      label: "Monitor",
-      value: "monitor",
-      component: <TherapistMonotorTabs />,
-    },
-    {
       label: "Homework",
       value: "homework",
       component: <TherapyPatientHomeworkIndex setTherapy={setTherapy} />,
+    },
+    {
+      label: "Measures",
+      value: "measures",
+      component: <Measures />,
+    },
+
+    {
+      label: "Monitors",
+      value: "monitor",
+      component: <TherapistMonotorTabs />,
     },
     {
       label: "Resources",
       value: "resources",
       component: <PatientEditTemplatePage2 />,
     },
-    {
-      label: "Formulation",
-      value: "formulation",
-      component: <TherapistPatientFormulation />,
-      // redirectUrl: Link + `/therapist/patient/view/${patId}?tab=formulation`,
-    },
-
     {
       label: "Relapse",
       value: "relapse",

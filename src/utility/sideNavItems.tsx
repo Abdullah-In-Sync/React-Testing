@@ -110,7 +110,7 @@ export const therapistRoutes: RoutesType[] = [
   },
   {
     key: 2,
-    label: "Patient",
+    label: "Patients",
     // path: Link + "/therapist/patient/list",
     path: "/therapist/patientlist",
     icon: <GroupsIcon />,
