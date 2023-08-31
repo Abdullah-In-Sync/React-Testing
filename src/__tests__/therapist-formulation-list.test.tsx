@@ -413,7 +413,7 @@ describe("Therapist Formulation page", () => {
 
     fireEvent.click(favButton);
     expect(
-      await screen.findByText(/Favorite formulation added successfully./i)
+      await screen.findByText(/Formulation added to favorites successfully/i)
     ).toBeInTheDocument();
 
     const favButton2 = await screen.findByTestId(
@@ -424,7 +424,9 @@ describe("Therapist Formulation page", () => {
 
     fireEvent.click(favButton2);
     expect(
-      await screen.findByText(/Favorite formulation deleted successfully./i)
+      await screen.findByText(
+        /Formulation removed from favorites successfully/i
+      )
     ).toBeInTheDocument();
   });
 });

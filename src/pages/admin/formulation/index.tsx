@@ -110,7 +110,7 @@ const Formulation = () => {
             addFavouriteFormulation: { fav_formulation_id = undefined } = {},
           } = data;
           if (fav_formulation_id) {
-            enqueueSnackbar("Favorite formulation added successfully.", {
+            enqueueSnackbar("Formulation added to favorites successfully", {
               variant: "success",
             });
             const tempDataList = JSON.parse(JSON.stringify(dataList));
@@ -142,7 +142,7 @@ const Formulation = () => {
           const { deleteFavouriteFormulation: { deleted = undefined } = {} } =
             data;
           if (deleted) {
-            enqueueSnackbar("Favorite formulation deleted successfully.", {
+            enqueueSnackbar("Formulation removed from favorites successfully", {
               variant: "success",
             });
             const tempDataList = JSON.parse(JSON.stringify(dataList));
