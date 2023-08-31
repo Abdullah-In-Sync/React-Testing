@@ -153,6 +153,32 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADMIN_DELETE_THERAPY,
+    variables: {
+      therapy_id: "18a00bdb-a27d-40c5-a858-e6047444636b",
+      update: { therapy_name: "Update the name and submit" },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateTherapy: {
+        _id: "260e1216-1fb6-491c-a026-1f56043cb018",
+        created_date: "2023-08-23T08:35:23.566Z",
+        org_id: "[6a023824f3264894864fce5aded2311d",
+        organization_name: null,
+        therapy_name: "sdc,",
+        therapy_status: 0,
+        updated_date: "2023-08-23T11:04:32.867Z",
+        user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+        user_type: "admin",
+        __typename: "Therapy",
+      },
+    },
+  },
+});
+
 export const clickSelect = async (element: HTMLElement) => {
   const button = await within(element).findByRole("button");
   expect(button).toBeInTheDocument();
@@ -239,6 +265,47 @@ describe("Admin Therapies list", () => {
       await waitFor(async () => {
         expect(
           screen.getByText("Therapy deleted successfully!")
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("Create assessment", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_edit_18a00bdb-a27d-40c5-a858-e6047444636b"
+        )
+      ).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_18a00bdb-a27d-40c5-a858-e6047444636b"
+        )
+      );
+
+      await waitFor(async () => {
+        fireEvent.change(screen.queryByTestId("therapy_name"), {
+          target: { value: "Update the name and submit" },
+        });
+      });
+
+      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Are you sure you want to update the therapy?")
+        ).toBeInTheDocument();
+        fireEvent.click(screen.queryByTestId("confirmButton"));
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Therapy updated successfully!")
         ).toBeInTheDocument();
       });
     });
