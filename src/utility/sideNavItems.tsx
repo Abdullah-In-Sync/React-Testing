@@ -11,6 +11,7 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import TungstenIcon from "@mui/icons-material/Tungsten";
 
 import { SpaOutlined } from "@mui/icons-material";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 
 type RoutesType =
   | {
@@ -97,6 +98,12 @@ export const superadmin_routes: RoutesType[] = [
     label: "Feedback",
     path: "/admin/feedback",
     icon: <FeedbackIcon />,
+  },
+  {
+    key: 12,
+    label: "Agenda",
+    path: "/admin/agenda",
+    icon: <AppRegistrationIcon />,
   },
 ];
 

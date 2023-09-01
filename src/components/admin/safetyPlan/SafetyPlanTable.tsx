@@ -6,18 +6,19 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import * as React from "react";
-import * as safetyPlanInterface from "../../../graphql/SafetyPlan/types";
 import { columns } from "./data";
 import { useStyles } from "./safetyPlanStyles";
+import { agendaColumns } from "../agenda/data";
 
 interface ViewProps {
-  safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
+  safetyPlanList?: any;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
   pageActionButtonClick?: (value) => void;
   tableCurentPage?: number;
   rowsLimit?: number;
   loadingSafetyPlanList?: boolean;
+  isAgenda?: boolean;
 }
 
 const SafetyPlanTable: React.FC<ViewProps> = ({
@@ -28,10 +29,11 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
   tableCurentPage,
   rowsLimit,
   loadingSafetyPlanList,
+  isAgenda,
 }) => {
   const styles = useStyles();
   const { data: list, total = 0 } = safetyPlanList || {};
-
+  const column = isAgenda ? agendaColumns : columns;
   const messageCheck = () => {
     if (loadingSafetyPlanList) return <Typography>Loading...</Typography>;
     else if (!list && !loadingSafetyPlanList)
@@ -39,7 +41,9 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
         <>
           <Typography className="alertHead">Oops!</Typography>
           <Typography>
-            Currently you have not created any safety plan
+            {isAgenda
+              ? "Currently you have not created any agenda"
+              : "Currently you have not created any safety plan"}
           </Typography>
         </>
       );
@@ -69,7 +73,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
         <Table stickyHeader aria-label="sticky table">
           <TableHead className={styles.root}>
             <TableRow>
-              {columns.map((column) => (
+              {column.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -89,7 +93,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
                   tabIndex={-1}
                   key={`tableRow_${i}`}
                 >
-                  {columns.map((column) => {
+                  {column.map((column) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>

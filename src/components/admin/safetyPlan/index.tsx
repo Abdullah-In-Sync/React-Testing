@@ -2,6 +2,7 @@ import React from "react";
 import * as safetyPlanInterface from "../../../graphql/SafetyPlan/types";
 import Filter from "./Filter";
 import SafetyPlanTable from "./SafetyPlanTable";
+import AgendaFilter from "../agenda/Filter";
 
 interface ViewProps {
   safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
@@ -16,6 +17,7 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
+  isAgenda: boolean;
 }
 
 const SafetyPlanComponent: React.FC<ViewProps> = ({
@@ -31,16 +33,29 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
   selectFilterOptions,
   onChangeFilterDropdown,
   loadingSafetyPlanList,
+  isAgenda,
 }) => {
+  console.log(safetyPlanList, "listData");
   return (
     <>
-      <Filter
-        searchInputValue={searchInputValue}
-        onChangeSearchInput={onChangeSearchInput}
-        organizationList={organizationList}
-        selectFilterOptions={selectFilterOptions}
-        onChangeFilterDropdown={onChangeFilterDropdown}
-      />
+      {isAgenda ? (
+        <AgendaFilter
+          searchInputValue={searchInputValue}
+          onChangeSearchInput={onChangeSearchInput}
+          organizationList={organizationList}
+          selectFilterOptions={selectFilterOptions}
+          onChangeFilterDropdown={onChangeFilterDropdown}
+        />
+      ) : (
+        <Filter
+          searchInputValue={searchInputValue}
+          onChangeSearchInput={onChangeSearchInput}
+          organizationList={organizationList}
+          selectFilterOptions={selectFilterOptions}
+          onChangeFilterDropdown={onChangeFilterDropdown}
+        />
+      )}
+
       <SafetyPlanTable
         safetyPlanList={safetyPlanList}
         pageActionButtonClick={pageActionButtonClick}
@@ -49,6 +64,7 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
         tableCurentPage={tableCurentPage}
         rowsLimit={rowsLimit}
         loadingSafetyPlanList={loadingSafetyPlanList}
+        isAgenda={isAgenda}
       />
     </>
   );
