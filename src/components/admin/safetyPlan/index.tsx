@@ -17,7 +17,7 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
-  isAgenda: boolean;
+  isAgenda?: boolean;
 }
 
 const SafetyPlanComponent: React.FC<ViewProps> = ({
