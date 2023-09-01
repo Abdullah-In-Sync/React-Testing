@@ -1,12 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import AgendaPage from "../pages/admin/agenda";
