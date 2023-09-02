@@ -186,7 +186,7 @@ export default function CreateResource(props: propTypes) {
             /* istanbul ignore next */
           } else if (duplicateNames) {
             /* istanbul ignore next */
-            enqueueSnackbar("This formulation already exists", {
+            enqueueSnackbar("This formulation already exists!", {
               variant: "error",
             });
           }
