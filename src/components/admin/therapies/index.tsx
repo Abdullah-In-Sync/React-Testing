@@ -9,6 +9,7 @@ import { useStyles } from "./therapiesStyles";
 import DisorderPage from "../therapiesPages/disorder";
 import TherapiesListPage from "../therapiesPages/therapy";
 import CategoryPage from "../therapiesPages/category";
+import ModalListPage from "../therapiesPages/modal";
 
 const TherapyAdminComponent = () => {
   const styles = useStyles();
@@ -28,7 +29,7 @@ const TherapyAdminComponent = () => {
     {
       label: "Model",
       value: "model",
-      component: null,
+      component: <ModalListPage />,
     },
     {
       label: "Category",
