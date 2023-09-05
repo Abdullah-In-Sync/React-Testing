@@ -12,7 +12,7 @@ interface ViewProps {
 export const validationSchema = Yup.object().shape({
   category_name: Yup.string().required("Category name is required"),
   disorder_id: Yup.string().required("Disorder is required"),
-  model_id: Yup.string().required("Model is required"),
+  model_id: Yup.string().required("Modal is required"),
   org_id: Yup.string().required("Organisation is required"),
 });
 
