@@ -35,7 +35,7 @@ const TherapyAdminComponent = () => {
       label: "Category",
       value: "category",
       component: <CategoryPage />,
-    }
+    },
   ];
 
   return (
@@ -48,7 +48,7 @@ const TherapyAdminComponent = () => {
         </Stack>
       </Layout>
     </>
-  )
+  );
 };
 
 export default TherapyAdminComponent;
