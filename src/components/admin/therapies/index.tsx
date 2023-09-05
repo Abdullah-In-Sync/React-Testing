@@ -8,6 +8,7 @@ import TabsGeneratorTherapist from "../../common/TabsGenerator/TabsGeneratorTher
 import { useStyles } from "./therapiesStyles";
 import DisorderPage from "../therapiesPages/disorder";
 import TherapiesListPage from "../therapiesPages/therapy";
+import CategoryPage from "../therapiesPages/category";
 import ModalListPage from "../therapiesPages/modal";
 
 const TherapyAdminComponent = () => {
@@ -33,7 +34,7 @@ const TherapyAdminComponent = () => {
     {
       label: "Category",
       value: "category",
-      component: null,
+      component: <CategoryPage />,
     },
   ];
 
