@@ -48,7 +48,7 @@ const TherapyAdminComponent = () => {
         </Stack>
       </Layout>
     </>
-  );
+  )
 };
 
 export default TherapyAdminComponent;
