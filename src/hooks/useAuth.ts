@@ -13,6 +13,7 @@ Amplify.configure({
     region,
     userPoolId,
     userPoolWebClientId: clientId,
+    mandatorySignIn: false,
   },
 });
 

@@ -3,7 +3,11 @@ import Cookies from "js-cookie";
 export const setSessionToken = (data, callback) => {
   const { jwtToken, userType, exp } = data;
   const expires = new Date(exp * 1000);
-  Cookies.set("myhelptoken", jwtToken, { expires });
+  Cookies.set("myhelptoken", jwtToken, {
+    secure: true,
+    expires,
+    sameSite: "strict",
+  });
   Cookies.set("user_type", userType, { expires });
   return callback(data);
 };
