@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import SureModal from "../../admin/resource/SureModal";
+import { makeStyles } from "@mui/styles";
 
 interface ViewProps {
   label: string;
@@ -12,6 +13,15 @@ interface ViewProps {
   onOk?: () => void;
   mode?: string;
 }
+const useStyles = makeStyles({
+  root: {
+    fontWeight: "600",
+    fontSize: "20px",
+    lineHeight: 1.75,
+    textAlign: "center",
+    fontFamily: "Montserrat !important",
+  },
+});
 
 const ConfirmationModal: React.FC<ViewProps> = ({
   onCancel,
@@ -21,17 +31,12 @@ const ConfirmationModal: React.FC<ViewProps> = ({
   onOk,
   mode,
 }) => {
+  const classes = useStyles();
   return (
     <div data-testid="openFileUpload">
       <>
         <SureModal modalOpen={true} mode={mode}>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              fontWeight: "600",
-              textAlign: "center",
-            }}
-          >
+          <Typography className={classes.root} variant="subtitle1">
             {label}
           </Typography>
           {description && (
