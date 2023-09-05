@@ -10,6 +10,7 @@ import DisorderPage from "../therapiesPages/disorder";
 import TherapiesListPage from "../therapiesPages/therapy";
 import CategoryPage from "../therapiesPages/category";
 import ModalListPage from "../therapiesPages/modal";
+import CategoryPage from "../therapiesPages/category";
 
 const TherapyAdminComponent = () => {
   const styles = useStyles();
