@@ -35,7 +35,7 @@ const TherapyAdminComponent = () => {
       label: "Category",
       value: "category",
       component: <CategoryPage />,
-    },
+    }
   ];
 
   return (
