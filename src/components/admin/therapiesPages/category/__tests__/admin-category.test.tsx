@@ -36,14 +36,14 @@ mocksData.push({
             therapy_name: "appsync",
             therapy_status: 1,
             organization_name: "arti real",
-            org_id: "orgid1",
+            org_id: "org1",
             _id: "therapy1",
           },
           {
             therapy_name: "Therapy Model disorder Category Edit",
             therapy_status: 1,
             organization_name: "portal.dev-myhelp",
-            org_id: "orgid2",
+            org_id: "org2",
             _id: "therapy2",
           },
         ],
@@ -190,7 +190,7 @@ mocksData.push({
             therapy_detail: [
               {
                 _id: "therpayid1",
-                org_id: "orgid1",
+                org_id: "org1",
                 therapy_name: "rest therapy",
               },
             ],
@@ -218,7 +218,7 @@ mocksData.push({
             therapy_detail: [
               {
                 _id: "therpayid2",
-                org_id: "orgid2",
+                org_id: "org1",
                 therapy_name: "rest therapy",
               },
             ],
@@ -300,7 +300,7 @@ mocksData.push({
             therapy_detail: [
               {
                 _id: "therapyid1",
-                org_id: "orgid1",
+                org_id: "org1",
                 therapy_name: "T2",
               },
             ],
@@ -318,7 +318,7 @@ mocksData.push({
             therapy_detail: [
               {
                 _id: "therapyid2",
-                org_id: "orgid2",
+                org_id: "org1",
                 therapy_name: "T2",
               },
             ],
@@ -389,10 +389,13 @@ describe("Admin category list", () => {
     fireEvent.change(await screen.findByTestId("searchInput"), {
       target: { value: "stext" },
     });
-
+    await selectDropDown("therapySelect", 1);
+    expect(
+      await screen.findByText(/Please select organisation./i)
+    ).toBeInTheDocument();
     await selectDropDown("organizationSelect", 1);
-    await selectDropDown("modelSelect", 1);
     await selectDropDown("disorderSelect", 1);
+    await selectDropDown("modelSelect", 1);
     await selectDropDown("therapySelect", 1);
     expect(await screen.findByText(/search text/i)).toBeInTheDocument();
     fireEvent.click(await screen.findByTestId("addCatetoryButton"));
@@ -407,6 +410,23 @@ describe("Admin category list", () => {
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
       await screen.findByText(/Category added successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should render category filter validation", async () => {
+    await sut();
+    expect(await screen.findByText(/category test/i)).toBeInTheDocument();
+    fireEvent.change(await screen.findByTestId("searchInput"), {
+      target: { value: "stext" },
+    });
+
+    await selectDropDown("disorderSelect", 1);
+    expect(
+      await screen.findByText(/Please select organisation./i)
+    ).toBeInTheDocument();
+    await selectDropDown("modelSelect", 1);
+    expect(
+      await screen.findByText(/Please select disorder./i)
     ).toBeInTheDocument();
   });
 });

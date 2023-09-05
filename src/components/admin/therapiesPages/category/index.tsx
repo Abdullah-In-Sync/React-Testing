@@ -81,7 +81,6 @@ const CategoryPage: NextPage = () => {
       setLoader(false);
     },
   });
-  //GET_ADMIN_CATEGORY_LIST
 
   const [
     getAdminCategory,
@@ -122,8 +121,30 @@ const CategoryPage: NextPage = () => {
   };
 
   const onChangeFilterDropdown = async (e) => {
-    const temp = selectFilterOptions;
-    /* istanbul ignore next */
+    let temp = selectFilterOptions;
+    const { disorderId, orgId, modelId, therapyId } = temp as any;
+    if (e.target.name === "orgId") {
+      temp = {};
+    }
+    if (e.target.name === "disorderId") {
+      if (modelId) delete temp["modelId"];
+      if (therapyId) delete temp["therapyId"];
+      if (!orgId)
+        return enqueueSnackbar("Please select organisation.", {
+          variant: "error",
+        });
+    } else if (e.target.name === "modelId") {
+      if (therapyId) delete temp["therapyId"];
+      if (!disorderId)
+        return enqueueSnackbar("Please select disorder.", {
+          variant: "error",
+        });
+    } else if (e.target.name === "therapyId" && !orgId) {
+      return enqueueSnackbar("Please select organisation.", {
+        variant: "error",
+      });
+    }
+
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     setSelectFilterOptions({ ...temp });
     setTableCurrentPage(0);
@@ -180,7 +201,7 @@ const CategoryPage: NextPage = () => {
   const submitAddCategoryForm = (v, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: () => onAddCategorySubmit(v, submitCallback),
-      description: "Are you sure you want to add this disorder?",
+      description: "Are you sure you want to add this category?",
       setSubmitting,
     });
   };
