@@ -56,6 +56,29 @@ export const CREATE_RESOURCE = gql`
   }
 `;
 
+export const ADD_AGENDA = gql`
+  mutation MyMutation(
+    $agenda_name: String!
+    $disorder_id: String!
+    $display_order: Int
+    $model_id: String!
+    $session: String!
+    $therapy_id: String!
+  ) {
+    createAdminAgenda(
+      agenda_name: $agenda_name
+      disorder_id: $disorder_id
+      display_order: $display_order
+      model_id: $model_id
+      session: $session
+      therapy_id: $therapy_id
+    ) {
+      message
+      result
+    }
+  }
+`;
+
 export const CREATE_FORMULATION = gql`
   mutation CreateFormulation(
     $resourceName: String!
