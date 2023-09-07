@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack";
 import {
   ADD_ADMIN_CATEGORY,
   GET_ADMIN_CATEGORY_LIST,
+  UPDATE_ADMIN_CATEGORY,
 } from "../../../../../graphql/category/graphql";
 import {
   GET_ADMIN_DISORDER_LIST,
@@ -349,6 +350,25 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_ADMIN_CATEGORY,
+    variables: {
+      category_id: "categoryid1",
+      update_category: {
+        category_status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateCategory: {
+        _id: "categoryid1",
+      },
+    },
+  },
+});
+
 beforeEach(() => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
@@ -427,6 +447,25 @@ describe("Admin category list", () => {
     await selectDropDown("modelSelect", 1);
     expect(
       await screen.findByText(/Please select disorder./i)
+    ).toBeInTheDocument();
+  });
+
+  it("should delete category", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_delete_categoryid1"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Category deleted successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should delete category fail", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_delete_categoryid2"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+
+    expect(
+      await screen.findByText(/Server error please try later./i)
     ).toBeInTheDocument();
   });
 });
