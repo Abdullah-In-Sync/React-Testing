@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ADD_ADMIN_CATEGORY,
   GET_ADMIN_CATEGORY_LIST,
+  UPDATE_ADMIN_CATEGORY,
 } from "../../../../graphql/category/graphql";
 import { CategoryAdminData } from "../../../../graphql/category/types";
 import {
@@ -33,6 +34,7 @@ const CategoryPage: NextPage = () => {
   const confirmRef = useRef<ConfirmElement>(null);
   const [addAdminCategory] = useMutation(ADD_ADMIN_CATEGORY);
   const { enqueueSnackbar } = useSnackbar();
+  const [updateAdminCategory] = useMutation(UPDATE_ADMIN_CATEGORY);
 
   useEffect(() => {
     getOrgList();
@@ -206,9 +208,91 @@ const CategoryPage: NextPage = () => {
     });
   };
 
-  /* istanbul ignore next */
-  const handleTableActions = () => {
-    //
+  const onUpdateCategorySubmit = async (
+    formFields,
+    callback,
+    successMessage
+  ) => {
+    setLoader(true);
+    try {
+      await updateAdminCategory({
+        variables: formFields,
+        onCompleted: (data) => {
+          if (data) {
+            refetchCategoryData();
+            enqueueSnackbar(
+              successMessage || "Category deleted successfully!",
+              {
+                variant: "success",
+              }
+            );
+            callback();
+          }
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+      callback();
+    }
+  };
+
+  const submitUpdateCategoryForm = (v, { setSubmitting, category_id }) => {
+    const { category_name, disorder_id, model_id } = v;
+
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        onUpdateCategorySubmit(
+          {
+            category_id,
+            update_category: { category_name, disorder_id, model_id },
+          },
+          submitCallback,
+          "Category updated successfully!"
+        ),
+      description: "Are you sure you want to update this category?",
+      setSubmitting,
+    });
+  };
+
+  const handleTableActions = (value) => {
+    const {
+      pressedIconButton,
+      _id: category_id,
+      category_name,
+      disorder_id,
+      model_id,
+      therapy_detail = [],
+    } = value;
+    const { org_id } = therapy_detail[0];
+    if (pressedIconButton === "delete")
+      return confirmRef.current.openConfirm({
+        confirmFunction: () =>
+          onUpdateCategorySubmit(
+            { category_id, update_category: { category_status: 0 } },
+            () => confirmRef.current.close(),
+            undefined
+          ),
+        description: "Are you sure you want to delete this category?",
+      });
+    else if (pressedIconButton === "edit")
+      infoModalRef.current.openConfirm({
+        data: {
+          value: { category_name, disorder_id, model_id, org_id },
+          category_id,
+          therapyListData,
+          saveButtonText: "Update",
+          onSubmit: (v, formikProps) =>
+            submitUpdateCategoryForm(v, { ...formikProps, category_id }),
+          headerTitleText: "Edit Category",
+          organizationList,
+          disorderListData,
+          modelListData,
+        },
+      });
   };
 
   return (

@@ -59,6 +59,7 @@ export const GET_ADMIN_CATEGORY_LIST = gql`
     $therapyId: String
     $disorderId: String
     $modelId: String
+    $orgId: String
   ) {
     getAdminCategoryList(
       limit: $limit
@@ -67,6 +68,7 @@ export const GET_ADMIN_CATEGORY_LIST = gql`
       search_text: $searchText
       disorder_id: $disorderId
       model_id: $modelId
+      org_id: $orgId
     ) {
       total
       data {
@@ -126,6 +128,20 @@ export const ADD_ADMIN_CATEGORY = gql`
     ) {
       message
       result
+    }
+  }
+`;
+
+export const UPDATE_ADMIN_CATEGORY = gql`
+  mutation AdminUpdateCategory(
+    $category_id: ID!
+    $update_category: UpdateCategoryInput
+  ) {
+    adminUpdateCategory(
+      category_id: $category_id
+      update_category: $update_category
+    ) {
+      _id
     }
   }
 `;
