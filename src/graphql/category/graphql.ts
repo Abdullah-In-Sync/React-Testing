@@ -129,3 +129,17 @@ export const ADD_ADMIN_CATEGORY = gql`
     }
   }
 `;
+
+export const UPDATE_ADMIN_CATEGORY = gql`
+  mutation AdminUpdateCategory(
+    $category_id: ID!
+    $update_category: UpdateCategoryInput
+  ) {
+    adminUpdateCategory(
+      category_id: $category_id
+      update_category: $update_category
+    ) {
+      _id
+    }
+  }
+`;
