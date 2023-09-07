@@ -49,6 +49,7 @@ const AddDisorderForm: React.FC<any> = ({
               className="form-control-bg"
               showDefaultSelectOption={false}
               extraProps={{ "data-testid": "orgFormSelect" }}
+              disabled={saveButtonText === "Update"}
             />
           </Box>
           <Box mb={2}>

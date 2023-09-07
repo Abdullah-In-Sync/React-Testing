@@ -240,8 +240,34 @@ const CategoryPage: NextPage = () => {
     }
   };
 
+  const submitUpdateCategoryForm = (v, { setSubmitting, category_id }) => {
+    const { category_name, disorder_id, model_id } = v;
+
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        onUpdateCategorySubmit(
+          {
+            category_id,
+            update_category: { category_name, disorder_id, model_id },
+          },
+          submitCallback,
+          "Category updated successfully!"
+        ),
+      description: "Are you sure you want to update this category?",
+      setSubmitting,
+    });
+  };
+
   const handleTableActions = (value) => {
-    const { pressedIconButton, _id: category_id } = value;
+    const {
+      pressedIconButton,
+      _id: category_id,
+      category_name,
+      disorder_id,
+      model_id,
+      therapy_detail = [],
+    } = value;
+    const { org_id } = therapy_detail[0];
     if (pressedIconButton === "delete")
       return confirmRef.current.openConfirm({
         confirmFunction: () =>
@@ -251,6 +277,21 @@ const CategoryPage: NextPage = () => {
             undefined
           ),
         description: "Are you sure you want to delete this category?",
+      });
+    else if (pressedIconButton === "edit")
+      infoModalRef.current.openConfirm({
+        data: {
+          value: { category_name, disorder_id, model_id, org_id },
+          category_id,
+          therapyListData,
+          saveButtonText: "Update",
+          onSubmit: (v, formikProps) =>
+            submitUpdateCategoryForm(v, { ...formikProps, category_id }),
+          headerTitleText: "Edit Category",
+          organizationList,
+          disorderListData,
+          modelListData,
+        },
       });
   };
 
