@@ -1,166 +1,123 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { Box, Button } from "@mui/material";
+import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import ContentHeader from "../../../common/ContentHeader";
-import {
-  CommonModal,
-  ModalElement,
-} from "../../../common/CustomModal/CommonModal";
+import React, { useEffect, useRef, useState } from "react";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import AddModalForm from "./add/AddModal";
-import { GET_DISORDER_DATA_BY_ORG_ID } from "../../../../graphql/query/common";
-import ConfirmationModal from "../../../common/ConfirmationModal";
-import { useSnackbar } from "notistack";
-import { ADMIN_ADD_MODAL } from "../../../../graphql/assessment/graphql";
+import { ConfirmElement } from "../../../common/ConfirmWrapper";
 import Loader from "../../../common/Loader";
+import ModelComponent from "./modalComponent";
+import { GET_ADMIN_MODEL_LIST } from "../../../../graphql/category/graphql";
 
-const ModalListPage: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const modalRefAddPlan = useRef<ModalElement>(null);
+const ModelListPage: NextPage = () => {
+  const [tableCurentPage, setTableCurrentPage] = useState(0);
+  const [rowsLimit, setRowsLimit] = useState(10);
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
-  const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
-  const [getName, setGetName] = useState("");
-  const [getOrgId, setGetOrgId] = useState();
-  const [getDisordorId, setGetDisordorId] = useState();
+  const [page, setPage] = useState(1);
+  const confirmRef = useRef<ConfirmElement>(null);
 
-  const [addModal] = useMutation(ADMIN_ADD_MODAL);
+  useEffect(() => {
+    /* istanbul ignore next */
+    getOrgList();
+  }, []);
+
+  useEffect(() => {
+    getModelList({
+      variables: {
+        limit: rowsLimit,
+        pageNo: page,
+        searchText: searchInputValue,
+        ...selectFilterOptions,
+      },
+    });
+  }, [rowsLimit, selectFilterOptions, tableCurentPage, searchInputValue, page]);
 
   const [
     getOrgList,
+    /* istanbul ignore next */
     { data: { getOrganizationData: organizationList = [] } = {} },
   ] = useLazyQuery(GET_ORGANIZATION_LIST, {
     fetchPolicy: "cache-and-network",
+    /* istanbul ignore next */
     onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
     },
   });
 
-  useEffect(() => {
-    getOrgList();
-  }, []);
-
-  const [getDisorderByOrgId, { data: disorderDataList }] = useLazyQuery(
-    GET_DISORDER_DATA_BY_ORG_ID,
+  const [
+    getModelList,
     {
-      onCompleted: () => {
-        /* istanbul ignore next */
-        setLoader(false);
-      },
-    }
-  );
-
-  useEffect(() => {
-    if (getOrgId !== "") {
-      getDisorderByOrgId({
-        variables: { orgId: getOrgId },
-      });
-    }
-  }, [getOrgId]);
-
-  const handleOpenAddModal = useCallback(
+      /* istanbul ignore next */
+      data: { getAdminModelList: modelListData = undefined } = {},
+      /* istanbul ignore next */
+      refetch: refetchModelList,
+      loading: loadingModel,
+    },
+  ] = useLazyQuery(GET_ADMIN_MODEL_LIST, {
+    fetchPolicy: "cache-and-network",
     /* istanbul ignore next */
-    () => modalRefAddPlan.current?.open(),
-    []
-  );
-
-  const handleCloseAddModal = useCallback(() => {
-    /* istanbul ignore next */
-    modalRefAddPlan.current?.close();
-  }, []);
-
-  /* istanbul ignore next */
-  const receiveOrgId = (value) => {
-    setGetOrgId(value);
-  };
-
-  /* istanbul ignore next */
-  const receiveDisordorId = (value) => {
-    setGetDisordorId(value);
-  };
-
-  /* istanbul ignore next */
-  const receiveName = (value) => {
-    setGetName(value);
-  };
-
-  /* istanbul ignore next */
-  const clearIsConfirmCancel = () => {
-    setIsConfirmCompleteTask(false);
-  };
-
-  const handleAddModal = async () => {
-    try {
-      await addModal({
-        variables: {
-          model_name: getName,
-          disorder_id: getDisordorId,
-        },
-        onCompleted: () => {
-          handleCloseAddModal();
-          setIsConfirmCompleteTask(false);
-          // refetch();
-          enqueueSnackbar("Modal added successfully!", {
-            variant: "success",
-          });
-        },
-      });
-    } catch (e) {
+    onCompleted: () => {
       /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
-      enqueueSnackbar("There is something wrong.", { variant: "error" });
-    }
+    },
+  });
+
+  /* istanbul ignore next */
+  const onPageChange = (event?: any, newPage?: number) => {
+    /* istanbul ignore next */
+    setPage(newPage + 1);
+    /* istanbul ignore next */
+    setTableCurrentPage(newPage);
   };
+
+  const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /* istanbul ignore next */
+    setRowsLimit(+event.target.value);
+    /* istanbul ignore next */
+    setTableCurrentPage(0);
+  };
+
+  const onChangeFilterDropdown = async (e) => {
+    const temp = selectFilterOptions;
+    console.log(temp,'temp')
+    /* istanbul ignore next */
+    temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
+    setSelectFilterOptions({ ...temp });
+    setTableCurrentPage(0);
+    setPage(1);
+  };
+
+  const onChangeSearchInput = (e) => {
+    setSearchInputValue(e.target.value);
+    setTableCurrentPage(0);
+    setPage(1);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  const handleTableActions = (v) => {};
+
   return (
     <>
       <Loader visible={loader} />
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <ContentHeader title="Modal" style={{ flexGrow: 1 }} />
-
-        <Button
-          onClick={handleOpenAddModal}
-          data-testid="addModalButton"
-          variant="contained"
-          style={{
-            color: "#ffff",
-            fontWeight: "bold",
-          }}
-        >
-          Add Modal
-        </Button>
-      </Box>
-
-      <CommonModal
-        ref={modalRefAddPlan}
-        headerTitleText={"Add Modal"}
-        maxWidth="sm"
-      >
-        <AddModalForm
-          onPressSubmit={() => setIsConfirmCompleteTask(true)}
-          organizationList={organizationList}
-          disorderDataList={disorderDataList}
-          receiveOrgId={receiveOrgId}
-          receiveDisorderId={receiveDisordorId}
-          receiveName={receiveName}
-        />
-      </CommonModal>
-
-      {isConfirmCompleteTask && (
-        <ConfirmationModal
-          label="Are you sure you want to add this modal?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={handleAddModal}
-        />
-      )}
+      <ModelComponent
+        modelList={modelListData}
+        onPageChange={onPageChange}
+        onSelectPageDropdown={onSelectPageDropdown}
+        tableCurentPage={tableCurentPage}
+        rowsLimit={rowsLimit}
+        searchInputValue={searchInputValue}
+        onChangeSearchInput={onChangeSearchInput}
+        organizationList={organizationList}
+        selectFilterOptions={selectFilterOptions}
+        onChangeFilterDropdown={onChangeFilterDropdown}
+        loadingDisorderList={loadingModel}
+        pageActionButtonClick={handleTableActions}
+        confirmRef={confirmRef}
+        refetchList={refetchModelList}
+      />
     </>
   );
 };
-export default ModalListPage;
+
+export default ModelListPage;
