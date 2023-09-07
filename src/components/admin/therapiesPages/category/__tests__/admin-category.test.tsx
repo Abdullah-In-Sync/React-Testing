@@ -369,6 +369,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_ADMIN_CATEGORY,
+    variables: {
+      category_id: "categoryid1",
+      update_category: {
+        category_name: "category test",
+        disorder_id: "disorderid1",
+        model_id: "modelid1",
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateCategory: {
+        _id: "categoryid1",
+      },
+    },
+  },
+});
+
 beforeEach(() => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
@@ -466,6 +487,16 @@ describe("Admin category list", () => {
 
     expect(
       await screen.findByText(/Server error please try later./i)
+    ).toBeInTheDocument();
+  });
+
+  it("should update category", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_edit_categoryid1"));
+    fireEvent.click(await screen.findByTestId("addCategorySubmit"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Category updated successfully!/i)
     ).toBeInTheDocument();
   });
 });
