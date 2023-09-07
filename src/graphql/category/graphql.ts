@@ -59,7 +59,7 @@ export const GET_ADMIN_CATEGORY_LIST = gql`
     $therapyId: String
     $disorderId: String
     $modelId: String
-    $org_id: String
+    $orgId: String
   ) {
     getAdminCategoryList(
       limit: $limit
@@ -68,7 +68,7 @@ export const GET_ADMIN_CATEGORY_LIST = gql`
       search_text: $searchText
       disorder_id: $disorderId
       model_id: $modelId
-      org_id: $org_id
+      org_id: $orgId
     ) {
       total
       data {
