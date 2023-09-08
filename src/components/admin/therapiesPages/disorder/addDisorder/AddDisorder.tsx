@@ -12,19 +12,22 @@ interface ViewProps {
 export const validationSchema = Yup.object().shape({
   disorder_name: Yup.string().required("Disorder name is required"),
   therapy_id: Yup.string().required("Therapy is required"),
+  org_id: Yup.string().required("Organisation is required"),
 });
 
 const AddDisorder: React.FC<ViewProps> = ({
   data: {
     onSubmit,
-    value: { disorder_name = "", therapy_id = "" } = {},
+    value: { disorder_name = "", therapy_id = "", org_id = "" } = {},
     therapyListData,
     saveButtonText,
+    organizationList,
   } = {},
 }) => {
   const initialValues = {
     disorder_name,
     therapy_id,
+    org_id,
   };
 
   const commonform = () => {
@@ -38,6 +41,7 @@ const AddDisorder: React.FC<ViewProps> = ({
             {...props}
             therapyListData={therapyListData}
             saveButtonText={saveButtonText}
+            organizationList={organizationList}
           />
         )}
       />

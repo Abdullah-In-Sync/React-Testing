@@ -89,7 +89,7 @@ mocksData.push({
             disorder_status: 1,
             organization_settings: [
               {
-                _id: "517fa21a82c0464a92aaae90ae0d5c59",
+                _id: "org1",
                 name: "portal.dev-myhelp",
               },
             ],
@@ -106,7 +106,7 @@ mocksData.push({
             disorder_status: 1,
             organization_settings: [
               {
-                _id: "517fa21a82c0464a92aaae90ae0d5c59",
+                _id: "org2",
                 name: "portal.dev-myhelp",
               },
             ],
@@ -131,7 +131,6 @@ mocksData.push({
       limit: 10,
       pageNo: 1,
       searchText: "stext",
-      therapyId: "therapy1",
       orgId: "org1",
     },
   },
@@ -186,6 +185,7 @@ mocksData.push({
     variables: {
       disorder_name: "diordername",
       therapy_id: "therapy2",
+      org_id: "org2",
     },
   },
   result: {
@@ -285,6 +285,8 @@ describe("Admin disorder therapy list", () => {
       target: { value: "diordername" },
     });
     await selectDropDown("therapySelectModal");
+    await selectDropDown("orgFormSelect");
+
     fireEvent.click(await screen.findByTestId("addDisorderSubmit"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
@@ -300,6 +302,7 @@ describe("Admin disorder therapy list", () => {
       target: { value: "diordernamefail" },
     });
     await selectDropDown("therapySelectModal");
+    await selectDropDown("orgFormSelect");
     fireEvent.click(await screen.findByTestId("addDisorderSubmit"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
