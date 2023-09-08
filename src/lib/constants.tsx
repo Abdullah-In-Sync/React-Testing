@@ -109,7 +109,7 @@ export const homeRoute = {
   patient: "/patient/home/",
 };
 
-export const publicPaths = ["account", "forgotPassword"];
+export const publicPaths = ["account", "forgotPassword", "mobile"];
 export const allowedPaths = ["template", "mobile"];
 
 export const publicApiNameAccessWithKey = ["GetOrgByDomain"];
