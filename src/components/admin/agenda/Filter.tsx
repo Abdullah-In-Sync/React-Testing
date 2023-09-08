@@ -93,7 +93,9 @@ const AgendaFilter: React.FC<ViewProps> = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onPressCreateButton = () => {};
+  const onPressCreateButton = () => {
+    router.push("/admin/agenda/add/");
+  };
 
   return <Box className="actionsWrapper">{iconButtons()}</Box>;
 };
