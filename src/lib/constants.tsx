@@ -110,7 +110,7 @@ export const homeRoute = {
 };
 
 export const publicPaths = ["account", "forgotPassword"];
-export const allowedPaths = ["template"];
+export const allowedPaths = ["template", "mobile"];
 
 export const publicApiNameAccessWithKey = ["GetOrgByDomain"];
 
