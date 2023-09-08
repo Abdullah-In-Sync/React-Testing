@@ -96,8 +96,17 @@ const DisorderPage: NextPage = () => {
   };
 
   const onChangeFilterDropdown = async (e) => {
-    const temp = selectFilterOptions;
-    /* istanbul ignore next */
+    let temp = selectFilterOptions;
+
+    const { orgId } = temp as any;
+    if (e.target.name === "orgId") {
+      temp = {};
+    } else if (e.target.name === "therapyId" && !orgId) {
+      return enqueueSnackbar("Please select organisation.", {
+        variant: "error",
+      });
+    }
+
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     setSelectFilterOptions({ ...temp });
     setTableCurrentPage(0);
@@ -176,6 +185,7 @@ const DisorderPage: NextPage = () => {
         therapyListData,
         onSubmit: submitAddDisorderForm,
         headerTitleText: "Add Disorder",
+        organizationList,
       },
     });
   };
@@ -194,10 +204,11 @@ const DisorderPage: NextPage = () => {
   };
 
   const submitUpdateDisorderForm = (v, { setSubmitting, disorder_id }) => {
+    const { disorder_name, therapy_id } = v;
     confirmRef.current.openConfirm({
       confirmFunction: () =>
         onUpdateDisorderSubmit(
-          { disorder_id, update_disorder: v },
+          { disorder_id, update_disorder: { disorder_name, therapy_id } },
           submitCallback,
           "Disorder updated successfully!"
         ),
@@ -211,8 +222,10 @@ const DisorderPage: NextPage = () => {
       pressedIconButton,
       disorder_name,
       therapy_detail,
+      organization_settings,
       _id: disorder_id,
     } = v;
+    const { _id: org_id } = organization_settings[0];
     const therapy_id = therapy_detail[0]?._id;
     if (pressedIconButton === "delete")
       return confirmRef.current.openConfirm({
@@ -228,13 +241,14 @@ const DisorderPage: NextPage = () => {
     else if (pressedIconButton === "edit")
       infoModalRef.current.openConfirm({
         data: {
-          value: { disorder_name, therapy_id },
+          value: { disorder_name, therapy_id, org_id },
           disorder_id,
           therapyListData,
           saveButtonText: "Update",
           onSubmit: (v, formikProps) =>
             submitUpdateDisorderForm(v, { ...formikProps, disorder_id }),
           headerTitleText: "Edit Disorder",
+          organizationList,
         },
       });
   };

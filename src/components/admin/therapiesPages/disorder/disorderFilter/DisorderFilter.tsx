@@ -24,6 +24,15 @@ const Filter: React.FC<ViewProps> = ({
   therapyListData = [],
 }) => {
   const styles = useStyles();
+  const org_id = selectFilterOptions["orgId"];
+
+  const therapyDisorderData = therapyListData.filter((item) => {
+    const { org_id: therapyOrgId } = item;
+    if (org_id && therapyOrgId) {
+      return org_id === therapyOrgId;
+    }
+    return true;
+  });
 
   const filterRow = () => {
     return (
@@ -33,23 +42,6 @@ const Filter: React.FC<ViewProps> = ({
             inputValue={searchInputValue}
             handleClearInput={handleClearSearchInput}
             onChangeInput={onChangeSearchInput}
-          />
-          <SingleSelectComponent
-            id="therapySelect"
-            labelId="therapySelect"
-            name="therapyId"
-            value={selectFilterOptions["therapyId"]}
-            label="Select Therapy"
-            onChange={onChangeFilterDropdown}
-            options={[
-              ...[{ _id: "all", therapy_name: "All" }],
-              ...therapyListData,
-            ]}
-            mappingKeys={["_id", "therapy_name"]}
-            size="small"
-            className="form-control-bg"
-            showDefaultSelectOption={false}
-            extraProps={{ "data-testid": "therapySelect" }}
           />
           {organizationList && (
             <SingleSelectComponent
@@ -67,6 +59,23 @@ const Filter: React.FC<ViewProps> = ({
               extraProps={{ "data-testid": "organizationSelect" }}
             />
           )}
+          <SingleSelectComponent
+            id="therapySelect"
+            labelId="therapySelect"
+            name="therapyId"
+            value={selectFilterOptions["therapyId"] || "all"}
+            label="Select Therapy"
+            onChange={onChangeFilterDropdown}
+            options={[
+              ...[{ _id: "all", therapy_name: "All" }],
+              ...therapyDisorderData,
+            ]}
+            mappingKeys={["_id", "therapy_name"]}
+            size="small"
+            className="form-control-bg"
+            showDefaultSelectOption={false}
+            extraProps={{ "data-testid": "therapySelect" }}
+          />
         </Box>
       </Stack>
     );
