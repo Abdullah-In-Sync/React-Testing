@@ -80,7 +80,6 @@ const ModelListPage: NextPage = () => {
 
   const onChangeFilterDropdown = async (e) => {
     const temp = selectFilterOptions;
-    console.log(temp,'temp')
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     setSelectFilterOptions({ ...temp });
