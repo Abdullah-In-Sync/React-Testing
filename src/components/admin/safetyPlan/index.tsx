@@ -15,6 +15,7 @@ interface ViewProps {
   onChangeSearchInput?: (e) => void;
   organizationList?: object[];
   onChangeFilterDropdown?: (e) => void;
+  /* istanbul ignore next */
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
   isAgenda?: boolean;
@@ -35,7 +36,6 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
   loadingSafetyPlanList,
   isAgenda,
 }) => {
-  console.log(safetyPlanList, "listData");
   return (
     <>
       {isAgenda ? (
@@ -45,6 +45,7 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
+          sessionList={safetyPlanList?.data}
         />
       ) : (
         <Filter

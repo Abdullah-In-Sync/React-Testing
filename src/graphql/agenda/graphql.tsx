@@ -24,6 +24,7 @@ export const GET_ADMIN_AGENDA_LIST = gql`
         agenda_detail {
           agenda_name
           created_date
+          session
           _id
         }
         therapy_detail {
