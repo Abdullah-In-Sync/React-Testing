@@ -6,9 +6,11 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ADMIN_AGENDA_LIST } from "../../../graphql/agenda/graphql";
+import { useRouter } from "next/router";
 
 const AgendaPage: NextPage = () => {
   const initialPageNo = 1;
+  const router = useRouter();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
@@ -132,11 +134,15 @@ const AgendaPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
+  /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
     /* istanbul ignore next */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { pressedIconButton, _id } = value;
-    /* istanbul ignore next */
+
+    if (pressedIconButton === "edit") {
+      router.push(`/admin/agenda/edit/${_id}/`);
+    }
   };
 
   return (

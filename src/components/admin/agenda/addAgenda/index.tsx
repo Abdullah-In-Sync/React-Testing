@@ -16,7 +16,6 @@ import {
   GET_DISORDER_DATA_BY_ORG_ID,
   GET_MODEL_BY_DISORDERID_DATA,
 } from "../../../../graphql/query/common";
-import ContentHeader from "../../../common/ContentHeader";
 import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
 import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import ConfirmationModal from "../../../common/ConfirmationModal";
@@ -24,6 +23,7 @@ import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import { GET_THERAPIST_LIST_BY_ORG_ID } from "../../../../graphql/mutation/admin";
 
 const defaultFormValue = {
+  _id: "",
   agenda_name: "",
   org_id: "",
   therapy_id: "",
@@ -35,6 +35,7 @@ const defaultFormValue = {
 
 type propTypes = {
   onSubmit?: any;
+  adminAgendaData?: any;
   setLoader?: any;
 };
 
@@ -43,6 +44,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
     ...defaultFormValue,
   });
   const [isConfirmResource, setIsConfirmResource] = useState(false);
+  const [isConfirmEditAgenda, setIsConfirmEditAgenda] = useState(false);
   const [selectedSessions, setSelectedSessions] = useState([]);
 
   const [
@@ -86,6 +88,36 @@ export default function AdminAddAgendaForm(props: propTypes) {
     }
   );
 
+  /* istanbul ignore next */
+  const prefilledData = props?.adminAgendaData?.getAdminAgendaById[0];
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (prefilledData) {
+      setFormFields((prevFormFields) => ({
+        ...prevFormFields,
+        _id: prefilledData.id,
+        agenda_name: prefilledData.agenda_name,
+        org_id: prefilledData.org_id,
+        therapy_id: prefilledData.therapy_id,
+        disorder_id: prefilledData.disorder_id,
+        model_id: prefilledData.model_id,
+        session: prefilledData.session,
+        display_order: prefilledData.agenda_session_detail[0].display_order,
+      }));
+
+      /* istanbul ignore next */
+      if (prefilledData.session === "Select All") {
+        setSelectedSessions(allSessions);
+      } else {
+        const selectedSessionArray = prefilledData.session
+          .split(", ")
+          .map((session) => parseInt(session));
+        setSelectedSessions(selectedSessionArray);
+      }
+    }
+  }, [prefilledData]);
+
   useEffect(() => {
     getOrgList();
     /* istanbul ignore next */
@@ -101,11 +133,6 @@ export default function AdminAddAgendaForm(props: propTypes) {
     /* istanbul ignore next */
     if (formFields.org_id) {
       props.setLoader(true);
-      setFormFields((oldValues) => ({
-        ...oldValues,
-        disorder_id: "",
-        model_id: "",
-      }));
       getDisorderByOrgId({
         variables: { orgId: formFields.org_id },
       });
@@ -116,10 +143,6 @@ export default function AdminAddAgendaForm(props: propTypes) {
     /* istanbul ignore next */
     if (formFields.disorder_id) {
       props.setLoader(true);
-      setFormFields((oldValues) => ({
-        ...oldValues,
-        model_id: "",
-      }));
       getModelByDisorderId({
         variables: { disorderId: formFields.disorder_id },
       });
@@ -136,17 +159,22 @@ export default function AdminAddAgendaForm(props: propTypes) {
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
   };
 
+  /* istanbul ignore next */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    /* istanbul ignore next */
     e.preventDefault();
-    setIsConfirmResource(true);
-    /* istanbul ignore next */
+    if (prefilledData) {
+      setIsConfirmEditAgenda(true);
+    } else {
+      setIsConfirmResource(true);
+    }
+
     if (!isConfirmResource) return;
   };
 
+  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
-    /* istanbul ignore next */
     setIsConfirmResource(false);
+    setIsConfirmEditAgenda(false);
   };
 
   const allSessions = Array.from({ length: 50 }, (_, i) => i + 1);
@@ -187,11 +215,14 @@ export default function AdminAddAgendaForm(props: propTypes) {
     props.onSubmit(formFields);
   };
 
+  /* istanbul ignore next */
+  const editAgendaFunction = async () => {
+    props.onSubmit(formFields);
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} data-testid="resource-add-form">
-        <ContentHeader title="Add Agenda" />
-
         <Box
           sx={{
             flexGrow: 1,
@@ -233,6 +264,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
                 mappingKeys={["_id", "name"]}
                 size="small"
                 className="form-control-bg"
+                disabled={prefilledData}
               />
             </Grid>
 
@@ -251,7 +283,6 @@ export default function AdminAddAgendaForm(props: propTypes) {
                 mappingKeys={["_id", "therapy_name"]}
                 size="small"
                 className="form-control-bg"
-                // disabled={props.orgData}
               />
             </Grid>
           </Grid>
@@ -330,12 +361,17 @@ export default function AdminAddAgendaForm(props: propTypes) {
                     />
                     <ListItemText primary="Select All" />
                   </MenuItem>
-                  {allSessions.map((session) => (
-                    <MenuItem key={session} value={session}>
-                      <Checkbox checked={selectedSessions.includes(session)} />
-                      <ListItemText primary={`Session ${session}`} />
-                    </MenuItem>
-                  ))}
+                  {
+                    /* istanbul ignore next */
+                    allSessions.map((session) => (
+                      <MenuItem key={session} value={session}>
+                        <Checkbox
+                          checked={selectedSessions.includes(session)}
+                        />
+                        <ListItemText primary={`Session ${session}`} />
+                      </MenuItem>
+                    ))
+                  }
                 </Select>
               </FormControl>
             </Grid>
@@ -385,6 +421,17 @@ export default function AdminAddAgendaForm(props: propTypes) {
           onConfirm={() => {
             /* istanbul ignore next */
             addAgendaFunction();
+          }}
+        />
+      )}
+
+      {isConfirmEditAgenda && (
+        <ConfirmationModal
+          label="Are you sure want to update this agenda?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            editAgendaFunction();
           }}
         />
       )}
