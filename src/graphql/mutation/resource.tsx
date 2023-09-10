@@ -64,6 +64,7 @@ export const ADD_AGENDA = gql`
     $model_id: String!
     $session: String!
     $therapy_id: String!
+    $org_id: String
   ) {
     createAdminAgenda(
       agenda_name: $agenda_name
@@ -72,9 +73,39 @@ export const ADD_AGENDA = gql`
       model_id: $model_id
       session: $session
       therapy_id: $therapy_id
+      org_id: $org_id
     ) {
       message
       result
+    }
+  }
+`;
+
+export const ADMIN_UPDATE_AGENDA_BY_ID = gql`
+  mutation updateAdminAgendaById(
+    $agenda_id: String!
+    $updateAgenda: UpdateAgendaInput
+  ) {
+    updateAdminAgendaById(agenda_id: $agenda_id, updateAgenda: $updateAgenda) {
+      _id
+      agenda_name
+      agenda_session_detail {
+        _id
+        agenda_id
+        created_date
+        display_order
+        session_id
+        updated_date
+      }
+      agenda_status
+      created_date
+      disorder_id
+      org_id
+      model_id
+      session
+      therapy_id
+      user_id
+      user_type
     }
   }
 `;

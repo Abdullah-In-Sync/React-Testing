@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import Layout from "../../../../components/layout";
 import { useRouter } from "next/router";
 import Loader from "../../../../components/common/Loader";
+import ContentHeader from "../../../../components/common/ContentHeader";
 
 export default function AddAdminAgendaMain() {
   const { enqueueSnackbar } = useSnackbar();
@@ -25,6 +26,7 @@ export default function AddAdminAgendaMain() {
           model_id: formFields.model_id,
           session: formFields.session,
           therapy_id: formFields.therapy_id,
+          org_id: formFields.org_id,
         },
         onCompleted: () => {
           /* istanbul ignore next */
@@ -52,6 +54,8 @@ export default function AddAdminAgendaMain() {
     <div>
       <Box>
         <Layout boxStyle={{ height: "100vh" }}>
+          <ContentHeader title="Add Agenda" />
+
           <Loader visible={loader} />
           <AdminAddAgendaForm
             onSubmit={submitFormHandler}
