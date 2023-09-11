@@ -33,7 +33,7 @@ export default function EditAdminAgendaMain() {
   useEffect(() => {
     setLoader(true);
     getAdminAgendaById({
-      variables: { agenda_id: "190d1ae2-b566-4f00-9810-bc930b696fd2" },
+      variables: { agenda_id: agendaId },
     });
   }, [agendaId]);
 
@@ -41,7 +41,7 @@ export default function EditAdminAgendaMain() {
     try {
       updateAdminAgenda({
         variables: {
-          agenda_id: "190d1ae2-b566-4f00-9810-bc930b696fd2",
+          agenda_id: agendaId,
           updateAgenda: {
             agenda_name: formFields.agenda_name,
             disorder_id: formFields.disorder_id,
