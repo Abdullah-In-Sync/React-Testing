@@ -11,6 +11,7 @@ import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import AgendaPage from "../pages/admin/agenda";
 import { GET_ADMIN_AGENDA_LIST } from "../graphql/agenda/graphql";
+import { ADMIN_UPDATE_AGENDA_BY_ID } from "../graphql/mutation/resource";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
 import { GET_THERAPIST_LIST_BY_ORG_ID } from "../graphql/mutation/admin";
 
@@ -96,6 +97,24 @@ mocksData.push({
         ],
         total: "3",
         __typename: "AgendatListData",
+      },
+    },
+  },
+});
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_AGENDA_BY_ID,
+    variables: {
+      agenda_id: "ebff2f614d904c53be85bc1580b93901",
+      updateAgenda: { agenda_status: 0 },
+    },
+  },
+  result: {
+    data: {
+      updateAdminAgendaById: {
+        message: "Agenda edited Successfully",
+        result: true,
+        __typename: "result",
       },
     },
   },
@@ -305,6 +324,68 @@ describe("Render admin agenda list screen", () => {
       await selectDropDown("therapySelect");
       expect(
         screen.getByText("agenda filter by org and therapy")
+      ).toBeInTheDocument();
+      await selectDropDown("organizationSelect");
+      expect(screen.getByText("agenda filter by org")).toBeInTheDocument();
+    });
+    await (async () => {
+      await selectDropDown("therapySelect");
+      expect(
+        screen.getByText("agenda filter by org and therapy")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should render agenda data", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId("iconButton_delete_f0adacdc72384c7a9d79a8dd273f7523")
+      ).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_delete_f0adacdc72384c7a9d79a8dd273f7523"
+        )
+      );
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Agenda deleted successfully!")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should render agenda data", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId("iconButton_delete_f0adacdc72384c7a9d79a8dd273f7523")
+      ).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_delete_f0adacdc72384c7a9d79a8dd273f7523"
+        )
+      );
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Agenda deleted successfully!")
       ).toBeInTheDocument();
     });
   });
