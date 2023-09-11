@@ -18,8 +18,9 @@ export type addResourceFormField = {
 };
 
 export type addAdminAgendaFormField = {
+  _id?: string;
   agenda_name: string;
-  org_id: string;
+  org_id?: string;
   disorder_id: string;
   model_id: string;
   therapy_id: string;
