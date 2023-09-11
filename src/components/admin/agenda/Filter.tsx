@@ -6,7 +6,6 @@ import { useStyles } from "../safetyPlan/safetyPlanStyles";
 import { useRouter } from "next/router";
 import { GET_THERAPIST_LIST_BY_ORG_ID } from "../../../graphql/mutation/admin";
 import { useLazyQuery } from "@apollo/client";
-import _ from "lodash";
 
 interface ViewProps {
   searchInputValue?: string;
