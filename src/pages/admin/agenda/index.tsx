@@ -140,7 +140,11 @@ const AgendaPage: NextPage = () => {
       searchKey && searchKey !== "" ? { searchText: searchKey } : {};
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
-    console.log(temp, "temp");
+    /* istanbul ignore next */
+    if (e.target.name == "orgId") {
+      /* istanbul ignore next */
+      delete temp["therapy_id"];
+    }
     /* istanbul ignore next */
     getAdminAgendaList({
       variables: {

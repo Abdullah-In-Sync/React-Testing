@@ -45,7 +45,6 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          sessionList={safetyPlanList?.data}
         />
       ) : (
         <Filter

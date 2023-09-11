@@ -16,9 +16,14 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   /* istanbul ignore next */
   selectFilterOptions?: any;
-  /* istanbul ignore next */
-  sessionList?: any;
 }
+
+const sessionNumber = [
+  ...Array.from({ length: 50 }).map((i, index) => ({
+    id: (index + 1).toString(),
+    value: `Session ${index + 1}`,
+  })),
+];
 
 const AgendaFilter: React.FC<ViewProps> = ({
   searchInputValue,
@@ -27,13 +32,11 @@ const AgendaFilter: React.FC<ViewProps> = ({
   organizationList,
   selectFilterOptions = {},
   onChangeFilterDropdown,
-  sessionList,
 }) => {
   const styles = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = useRouter();
   /* istanbul ignore next */
-  sessionList = _.uniqBy(sessionList, "session");
 
   const iconButtons = () => {
     const [orgId, setOrgId] = React.useState("");
@@ -113,11 +116,8 @@ const AgendaFilter: React.FC<ViewProps> = ({
               value={selectFilterOptions["session_id"] || "all"}
               label="Select Session*"
               onChange={onChangeFilterDropdown}
-              options={[
-                ...[{ session_id: "all", session: "All" }],
-                ...sessionList,
-              ]}
-              mappingKeys={["session_id", "session"]}
+              options={[...[{ id: "all", value: "All" }], ...sessionNumber]}
+              mappingKeys={["id", "value"]}
               size="small"
               className="form-control-bg"
               extraProps={{ "data-testid": "agendaSessionSelect" }}
