@@ -146,7 +146,7 @@ mocksData.push({
 mocksData.push({
   request: {
     query: GET_ADMIN_AGENDA_BY_ID,
-    variables: { agenda_id: "190d1ae2-b566-4f00-9810-bc930b696fd2" },
+    variables: { agenda_id: undefined },
   },
   result: {
     data: {
@@ -184,7 +184,7 @@ mocksData.push({
   request: {
     query: ADMIN_UPDATE_AGENDA_BY_ID,
     variables: {
-      agenda_id: "190d1ae2-b566-4f00-9810-bc930b696fd2",
+      agenda_id: undefined,
       updateAgenda: {
         agenda_name: "name therapy updated",
         disorder_id: "e4090ea60d9048bf83ea9a82087d452e",

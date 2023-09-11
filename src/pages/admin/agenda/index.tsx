@@ -36,6 +36,7 @@ const AgendaPage: NextPage = () => {
               display_order: a.display_order,
               session_id: a.session_id,
               created_date: a.agenda_detail[0]?.created_date,
+              agenda_id: a.agenda_detail[0]?._id,
               therapy_name: a.therapy_detail[0]?.therapy_name,
               agenda_name: a.agenda_detail[0]?.agenda_name,
             };
@@ -55,6 +56,8 @@ const AgendaPage: NextPage = () => {
       },
     }
   );
+
+  console.log("Koca: loadingAgendaList ", loadingAgendaList);
 
   const onPageChange = (event?: any, newPage?: number) => {
     /* istanbul ignore next */
@@ -138,10 +141,10 @@ const AgendaPage: NextPage = () => {
   const handleActionButtonClick = (value) => {
     /* istanbul ignore next */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { pressedIconButton, _id } = value;
+    const { pressedIconButton, agenda_id } = value;
 
     if (pressedIconButton === "edit") {
-      router.push(`/admin/agenda/edit/${_id}/`);
+      router.push(`/admin/agenda/edit/${agenda_id}/`);
     }
   };
 
