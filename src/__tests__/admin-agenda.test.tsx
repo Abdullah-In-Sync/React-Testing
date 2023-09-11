@@ -1,10 +1,11 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import AgendaPage from "../pages/admin/agenda";
 import { GET_ADMIN_AGENDA_LIST } from "../graphql/agenda/graphql";
+import { ADMIN_UPDATE_AGENDA_BY_ID } from "../graphql/mutation/resource";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -93,6 +94,25 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_AGENDA_BY_ID,
+    variables: {
+      agenda_id: "ebff2f614d904c53be85bc1580b93901",
+      updateAgenda: { agenda_status: 0 },
+    },
+  },
+  result: {
+    data: {
+      updateAdminAgendaById: {
+        message: "Agenda edited Successfully",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -110,6 +130,33 @@ describe("Render admin agenda list screen", () => {
     await sut();
     await waitFor(async () => {
       expect(screen.getByText("A1")).toBeInTheDocument();
+    });
+  });
+
+  it("should render agenda data", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId("iconButton_delete_f0adacdc72384c7a9d79a8dd273f7523")
+      ).toBeInTheDocument();
+
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_delete_f0adacdc72384c7a9d79a8dd273f7523"
+        )
+      );
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Agenda deleted successfully!")
+      ).toBeInTheDocument();
     });
   });
 });
