@@ -74,6 +74,21 @@ export const ADMIN_ADD_MODAL = gql`
   }
 `;
 
+export const ADMIN_UPDATE_MODAL = gql`
+  mutation adminUpdateModel($model_id: ID!, $update_model: UpdateModelInput) {
+    adminUpdateModel(model_id: $model_id, update_model: $update_model) {
+      _id
+      created_date
+      model_name
+      disorder_id
+      model_status
+      updated_date
+      user_id
+      user_type
+    }
+  }
+`;
+
 export const ADMIN_DELETE_THERAPY = gql`
   mutation adminUpdateTherapy($therapy_id: ID!, $update: UpdateTherapyInput) {
     adminUpdateTherapy(therapy_id: $therapy_id, update: $update) {

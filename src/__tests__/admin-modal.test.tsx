@@ -8,7 +8,10 @@ import {
   within,
 } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-import { ADMIN_ADD_MODAL } from "../graphql/assessment/graphql";
+import {
+  ADMIN_ADD_MODAL,
+  ADMIN_UPDATE_MODAL,
+} from "../graphql/assessment/graphql";
 import theme from "../styles/theme/theme";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
 import AddModel from "../components/admin/therapiesPages/modal/create";
@@ -64,6 +67,24 @@ mocksData.push({
           therapist: "Ther",
           therapy: "Therap",
           __typename: "Organization",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_DISORDER_DATA_BY_ORG_ID,
+    variables: { orgId: "d1f2bbd3-3388-4ca2-9d68-55b95574a269" },
+  },
+  result: {
+    data: {
+      getDisorderByOrgId: [
+        {
+          _id: "disorder_id_1",
+          user_type: "admin",
+          disorder_name: "disorder 1",
         },
       ],
     },
@@ -151,127 +172,114 @@ listMocksData.push({
   },
 });
 // model list
-listMocksData.push({
+mocksData.push({
   request: {
     query: GET_ADMIN_MODEL_LIST,
+    variables: { limit: 10, pageNo: 1, searchText: "" },
+  },
+  result: {
+    data: {
+      getAdminModelList: {
+        total: 19,
+        data: [
+          {
+            _id: "5806b8eb-4386-4594-8b9b-bc241871f720",
+            created_date: "2023-09-11T09:05:28.705Z",
+            disorder_detail: [
+              {
+                _id: "8e65a3cf-410a-49e1-a7b9-ed2c2be916eb",
+                created_date: "2023-09-08T07:49:06.158Z",
+                disorder_name: "Test Data update",
+                disorder_status: 1,
+                therapy_id: "25a8e347-15c2-4a2d-ab6c-bb679a47a8d4",
+                user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+                user_type: "admin",
+                __typename: "Disorder",
+              },
+            ],
+            disorder_id: "8e65a3cf-410a-49e1-a7b9-ed2c2be916eb",
+            model_name: "11thSeptModel1",
+            therapy_detail: [
+              {
+                _id: "25a8e347-15c2-4a2d-ab6c-bb679a47a8d4",
+                created_date: "2023-08-31T10:10:26.535Z",
+                org_id: "3c4054dc-1888-4af5-8af2-586cadeecf2b",
+                therapy_name: "Therapy multi select",
+                therapy_status: 1,
+                updated_date: "2023-08-31T10:10:26.535Z",
+                user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+                user_type: "admin",
+                __typename: "TherapyData",
+              },
+            ],
+            updated_date: "2023-09-11T09:05:28.705Z",
+            user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+            user_type: "admin",
+            model_status: 1,
+            __typename: "ModelList",
+          },
+
+          {
+            _id: "2c2b4616-4528-498e-a125-974b0398ddc8",
+            created_date: "2023-09-01T07:45:01.036Z",
+            disorder_detail: [
+              {
+                _id: "83551da1033a49c3a9d9b0322c6f13de",
+                created_date: "2023-07-12T06:29:19.000Z",
+                disorder_name: "Add disorder 12 july",
+                disorder_status: 1,
+                therapy_id: "2952d449bf0f42969ae7bf0e44f6124b",
+                user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+                user_type: "admin",
+                __typename: "Disorder",
+              },
+            ],
+            disorder_id: "83551da1033a49c3a9d9b0322c6f13de",
+            model_name: "mvj",
+            therapy_detail: [
+              {
+                _id: "2952d449bf0f42969ae7bf0e44f6124b",
+                created_date: "2023-06-28T07:03:41.000Z",
+                org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+                therapy_name: "Mytherapy",
+                therapy_status: 1,
+                updated_date: null,
+                user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+                user_type: "admin",
+                __typename: "TherapyData",
+              },
+            ],
+            updated_date: "2023-09-01T07:45:01.036Z",
+            user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+            user_type: "admin",
+            model_status: 1,
+            __typename: "ModelList",
+          },
+        ],
+        __typename: "AdminModelList",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_UPDATE_MODAL,
     variables: {
-      limit: 10,
-      pageNo: 1,
-      searchText: "",
+      model_id: "5806b8eb-4386-4594-8b9b-bc241871f720",
+      update_model: {
+        model_name: "name therapy updated",
+        disorder_id: undefined,
+      },
     },
   },
   result: {
     data: {
-      getAdminModelList: [
-        {
-          _id: "b89f17ad-11ef-41a8-9a15-ceff2eb42cfa",
-          created_date: "2023-09-07T13:57:46.366Z",
-          disorder_detail: [
-            {
-              _id: "30eff80ba51745b39b92ae042271bca4",
-              created_date: "2023-06-28T08:06:18.000Z",
-              disorder_name: "Sun update",
-              disorder_status: 1,
-              therapy_id: "38f5c75b3950498ab548c8ab72a5e2be",
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              user_type: "admin",
-              __typename: "Disorder",
-            },
-          ],
-          disorder_id: "30eff80ba51745b39b92ae042271bca4",
-          model_name: "test-new-model",
-          therapy_detail: [
-            {
-              _id: "38f5c75b3950498ab548c8ab72a5e2be",
-              created_date: "2022-05-31T03:28:28.000Z",
-              org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-              therapy_name: "T2",
-              therapy_status: 1,
-              updated_date: null,
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              user_type: "admin",
-              __typename: "TherapyData",
-            },
-          ],
-          updated_date: "2023-09-07T13:57:46.366Z",
-          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-          user_type: "admin",
-          model_status: 1,
-          __typename: "ModelList",
-        },
-        {
-          _id: "57bf6fc2-6662-42c5-8687-0c23571efe56",
-          created_date: "2023-09-07T08:02:48.584Z",
-          disorder_detail: [
-            {
-              _id: "dc185f7d-eecf-4c9f-b9e3-6af40e72dc0f",
-              created_date: "2023-08-31T10:32:05.260Z",
-              disorder_name: "multi select disorder",
-              disorder_status: 1,
-              therapy_id: "dd1889b0-c33a-4012-a4b9-b7a124a741ca",
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              user_type: "admin",
-              __typename: "Disorder",
-            },
-          ],
-          disorder_id: "dc185f7d-eecf-4c9f-b9e3-6af40e72dc0f",
-          model_name: "Test Modal",
-          therapy_detail: [
-            {
-              _id: "dd1889b0-c33a-4012-a4b9-b7a124a741ca",
-              created_date: "2023-08-31T10:10:26.595Z",
-              org_id: "6245dc7e-9885-4a3d-8b9c-3eeb38213ce7",
-              therapy_name: "Therapy multi select",
-              therapy_status: 1,
-              updated_date: "2023-08-31T10:10:26.595Z",
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              user_type: "admin",
-              __typename: "TherapyData",
-            },
-          ],
-          updated_date: "2023-09-07T08:02:48.584Z",
-          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-          user_type: "admin",
-          model_status: 1,
-          __typename: "ModelList",
-        },
-        {
-          _id: "28e2b08d-7f58-4b09-90ea-424317b559f2",
-          created_date: "2023-08-08T08:33:14.781Z",
-          disorder_detail: [
-            {
-              _id: "467925dfc1d34c9e9eecd3cd915588d9",
-              created_date: "2021-12-30 16:15:05",
-              disorder_name: "test mong edit",
-              disorder_status: 1,
-              therapy_id: "a8bf94e308d04c598d0a06413cf30ef1",
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              user_type: "admin",
-              __typename: "Disorder",
-            },
-          ],
-          disorder_id: "467925dfc1d34c9e9eecd3cd915588d9",
-          model_name: "latest model",
-          therapy_detail: [
-            {
-              _id: "a8bf94e308d04c598d0a06413cf30ef1",
-              created_date: "2021-12-30 16:13:56",
-              org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-              therapy_name: "testing mongo",
-              therapy_status: 1,
-              updated_date: null,
-              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-              user_type: "admin",
-              __typename: "TherapyData",
-            },
-          ],
-          updated_date: "2023-08-08T08:33:14.781Z",
-          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-          user_type: "admin",
-          model_status: 1,
-          __typename: "ModelList",
-        },
-      ],
+      adminUpdateModel: {
+        message: "Agenda edited Successfully",
+        result: true,
+        __typename: "result",
+      },
     },
   },
 });
@@ -449,6 +457,46 @@ describe("Admin modal list", () => {
       expect(await screen.findByText("filter by org")).toBeInTheDocument();
       expect(await screen.findByText("test-new-model")).not.toBeInTheDocument();
       expect(await screen.findByText("Test Modal")).not.toBeInTheDocument();
+    });
+  });
+
+  it("submit edit modal form with valid data", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_edit_5806b8eb-4386-4594-8b9b-bc241871f720"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_5806b8eb-4386-4594-8b9b-bc241871f720"
+        )
+      );
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("therapy_name")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("therapy_name"), {
+        target: { value: "name therapy updated" },
+      });
+    });
+
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+    });
+    await waitFor(async () => {
+      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Modal updated successfully!")
+      ).toBeInTheDocument();
     });
   });
 });

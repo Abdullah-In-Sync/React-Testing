@@ -11,6 +11,10 @@ interface ViewProps {
   receiveOrgId?: any;
   receiveDisorderId?: any;
   receiveName?: any;
+
+  prefilledOrgId?: any;
+  prefilledDisordorId?: any;
+  prefilledModalName?: any;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -25,8 +29,11 @@ const AddModalForm: React.FC<ViewProps> = ({
   disorderDataList,
   receiveOrgId,
   receiveDisorderId,
-
   receiveName,
+
+  prefilledOrgId,
+  prefilledDisordorId,
+  prefilledModalName,
 }) => {
   const initialValues = {
     planDesc: "",
@@ -62,6 +69,10 @@ const AddModalForm: React.FC<ViewProps> = ({
             onChangeDisorderId={onChangeDisorderId}
             onPressSubmit={onPressSubmit}
             onModalNameChange={onChangeName}
+            //
+            prefilledOrgId={prefilledOrgId}
+            prefilledDisordorId={prefilledDisordorId}
+            prefilledModalName={prefilledModalName}
           />
         )}
       />
