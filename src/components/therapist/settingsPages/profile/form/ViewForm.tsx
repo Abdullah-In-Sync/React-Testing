@@ -49,7 +49,11 @@ const ProfileViewForm: React.FC<ViewProps> = ({
       />
     );
   };
-  return <>{commonform()}</>;
+  return (
+    <>
+      <div className="disbledFields">{commonform()}</div>
+    </>
+  );
 };
 
 export default ProfileViewForm;

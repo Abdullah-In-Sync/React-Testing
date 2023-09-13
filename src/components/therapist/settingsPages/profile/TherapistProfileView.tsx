@@ -61,7 +61,7 @@ const TherapistProfileView: React.FC<ViewProps> = ({
   };
   const secondCol = () => {
     return (
-      <Card variant="outlined" className="formCard disbledFields">
+      <Card variant="outlined" className="formCard">
         <ViewForm masterData={masterData} therapistData={therapistData} />
       </Card>
     );
