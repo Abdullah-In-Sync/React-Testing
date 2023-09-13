@@ -384,7 +384,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
                 required={true}
                 name="display_order"
                 id="display_order"
-                label="Display Ordor"
+                label="Display Order"
                 value={formFields?.display_order}
                 onChange={set2}
                 fullWidth={true}
