@@ -442,7 +442,7 @@ describe("Admin modal list", () => {
       });
       await waitFor(async () => {
         expect(
-          screen.getByText("Modal added successfully!")
+          screen.getByText("Model added successfully!")
         ).toBeInTheDocument();
       });
     });
