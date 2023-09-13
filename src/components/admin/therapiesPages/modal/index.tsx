@@ -179,9 +179,19 @@ const ModelListPage: NextPage = () => {
   };
 
   const onChangeFilterDropdown = async (e) => {
-    const temp = selectFilterOptions;
+    let temp = selectFilterOptions;
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
+    /* istanbul ignore next */
+    if (e.target.name == "orgId") {
+      /* istanbul ignore next */
+      temp = { orgId: e.target.value };
+    }
+    /* istanbul ignore next */
+    if (e.target.name == "therapyId") {
+      /* istanbul ignore next */
+      delete temp["disorderId"];
+    }
     setSelectFilterOptions({ ...temp });
     setTableCurrentPage(0);
     setPage(1);
