@@ -1,7 +1,7 @@
 import { Box, Button, Stack } from "@mui/material";
 import { Form } from "formik";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import { useStyles } from "../../../../therapist/patient/therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import SingleSelectComponent from "../../../../common/SelectBox/SingleSelect/SingleSelectComponent";
@@ -15,6 +15,10 @@ interface ViewProps {
   onModalNameChange?: any;
   onChangeOrgId?: any;
   onChangeDisorderId?: any;
+
+  prefilledOrgId?: any;
+  prefilledDisordorId?: any;
+  prefilledModalName?: any;
 }
 
 const FormBox: React.FC<ViewProps> = ({
@@ -24,6 +28,10 @@ const FormBox: React.FC<ViewProps> = ({
   onModalNameChange,
   onChangeOrgId,
   onChangeDisorderId,
+
+  prefilledOrgId,
+  prefilledDisordorId,
+  prefilledModalName,
 }) => {
   const styles = useStyles();
 
@@ -60,6 +68,14 @@ const FormBox: React.FC<ViewProps> = ({
       onChangeDisorderId(value);
     };
 
+    useEffect(() => {
+      if (prefilledOrgId) {
+        setOrgId(prefilledOrgId);
+        setDisorderId(prefilledDisordorId);
+        setModalNameValue(prefilledModalName);
+      }
+    }, [prefilledOrgId, prefilledDisordorId, prefilledModalName]);
+
     return (
       <Stack className={styles.formWrapper}>
         <Form>
@@ -78,6 +94,7 @@ const FormBox: React.FC<ViewProps> = ({
               mappingKeys={["_id", "name"]}
               size="small"
               className="form-control-bg"
+              disabled={prefilledOrgId}
             />
           </Box>
 

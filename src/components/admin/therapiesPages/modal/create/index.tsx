@@ -110,7 +110,7 @@ const AddModal: React.FC<ViewProps> = ({ refetchList }) => {
           /* istanbul ignore next */
           setIsConfirmCompleteTask(false);
           /* istanbul ignore next */
-          enqueueSnackbar("Modal added successfully!", {
+          enqueueSnackbar("Model added successfully!", {
             variant: "success",
           });
           /* istanbul ignore next */
