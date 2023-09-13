@@ -97,6 +97,27 @@ export const GET_THERAPIST_LIST_BY_ORG_ID = gql`
   }
 `;
 
+export const GET_ADMIN_AGENDA_BY_ID = gql`
+  query MyQuery($agenda_id: String) {
+    getAdminAgendaById(agenda_id: $agenda_id) {
+      _id
+      agenda_name
+      org_id
+      agenda_status
+      created_date
+      disorder_id
+      model_id
+      session
+      therapy_id
+      user_id
+      user_type
+      agenda_session_detail {
+        display_order
+      }
+    }
+  }
+`;
+
 export const GET_DISORDER_LIST_BY_THERAPY_ID = gql`
   query MyQuery($therapyId: String!) {
     getDisorderByTherapyId(therapyId: $therapyId) {

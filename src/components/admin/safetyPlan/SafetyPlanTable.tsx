@@ -32,6 +32,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
   isAgenda,
 }) => {
   const styles = useStyles();
+
   const { data: list, total = 0 } = safetyPlanList || {};
   const column = isAgenda ? agendaColumns : columns;
   const messageCheck = () => {

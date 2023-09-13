@@ -56,6 +56,60 @@ export const CREATE_RESOURCE = gql`
   }
 `;
 
+export const ADD_AGENDA = gql`
+  mutation MyMutation(
+    $agenda_name: String!
+    $disorder_id: String!
+    $display_order: Int
+    $model_id: String!
+    $session: String!
+    $therapy_id: String!
+    $org_id: String
+  ) {
+    createAdminAgenda(
+      agenda_name: $agenda_name
+      disorder_id: $disorder_id
+      display_order: $display_order
+      model_id: $model_id
+      session: $session
+      therapy_id: $therapy_id
+      org_id: $org_id
+    ) {
+      message
+      result
+    }
+  }
+`;
+
+export const ADMIN_UPDATE_AGENDA_BY_ID = gql`
+  mutation updateAdminAgendaById(
+    $agenda_id: String!
+    $updateAgenda: UpdateAgendaInput
+  ) {
+    updateAdminAgendaById(agenda_id: $agenda_id, updateAgenda: $updateAgenda) {
+      _id
+      agenda_name
+      agenda_session_detail {
+        _id
+        agenda_id
+        created_date
+        display_order
+        session_id
+        updated_date
+      }
+      agenda_status
+      created_date
+      disorder_id
+      org_id
+      model_id
+      session
+      therapy_id
+      user_id
+      user_type
+    }
+  }
+`;
+
 export const CREATE_FORMULATION = gql`
   mutation CreateFormulation(
     $resourceName: String!

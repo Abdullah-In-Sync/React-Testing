@@ -28,7 +28,7 @@ jobs:
       - run: env
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -71,7 +71,7 @@ jobs:
     - run: env
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node
       uses: actions/setup-node@v3
@@ -120,7 +120,7 @@ jobs:
     - run: env
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node
       uses: actions/setup-node@v3
@@ -152,7 +152,7 @@ jobs:
     - run: env
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node
       uses: actions/setup-node@v3
@@ -197,7 +197,7 @@ jobs:
       - run: env
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -225,7 +225,7 @@ jobs:
         working-directory: src
 
       - name: Archive coverage report results
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: coverage-report-chunk-${{ matrix.chunk }}
           path: src/coverage/lcov-chunk-${{ matrix.chunk }}.info
@@ -240,7 +240,7 @@ jobs:
       - run: env
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 

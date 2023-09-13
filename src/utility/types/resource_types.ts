@@ -17,6 +17,17 @@ export type addResourceFormField = {
   formulation_avail_for?: any;
 };
 
+export type addAdminAgendaFormField = {
+  _id?: string;
+  agenda_name: string;
+  org_id?: string;
+  disorder_id: string;
+  model_id: string;
+  therapy_id: string;
+  session?: any;
+  display_order?: any;
+};
+
 export type addPatientFormFields = {
   email: string;
   patient_firstname: string;

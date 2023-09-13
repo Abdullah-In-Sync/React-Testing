@@ -4,6 +4,8 @@ import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../safetyPlan/safetyPlanStyles";
 import { useRouter } from "next/router";
+import { GET_THERAPIST_LIST_BY_ORG_ID } from "../../../graphql/mutation/admin";
+import { useLazyQuery } from "@apollo/client";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -11,8 +13,16 @@ interface ViewProps {
   onChangeSearchInput?: (e) => void;
   organizationList?: any;
   onChangeFilterDropdown?: (e) => void;
+  /* istanbul ignore next */
   selectFilterOptions?: any;
 }
+
+const sessionNumber = [
+  ...Array.from({ length: 50 }).map((i, index) => ({
+    id: (index + 1).toString(),
+    value: `Session ${index + 1}`,
+  })),
+];
 
 const AgendaFilter: React.FC<ViewProps> = ({
   searchInputValue,
@@ -25,7 +35,38 @@ const AgendaFilter: React.FC<ViewProps> = ({
   const styles = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = useRouter();
+  /* istanbul ignore next */
+
   const iconButtons = () => {
+    const [orgId, setOrgId] = React.useState("");
+    const [
+      getTherapistList,
+      /* istanbul ignore next */
+      { data: { getTherapyListByOrgId: therapistDropdownData = [] } = {} },
+    ] = useLazyQuery(GET_THERAPIST_LIST_BY_ORG_ID, {
+      fetchPolicy: "cache-and-network",
+    });
+    React.useEffect(() => {
+      /* istanbul ignore next */
+      getTherapistList({
+        variables: {
+          orgId,
+        },
+      });
+    }, [orgId]);
+
+    /* istanbul ignore next */
+    const onChange = (e) => {
+      /* istanbul ignore next */
+      e.target.value = e.target.value !== "all" ? e.target.value : "";
+      /* istanbul ignore next */
+      if (e.target.name == "orgId") {
+        /* istanbul ignore next */
+        setOrgId(e.target.value);
+      }
+      /* istanbul ignore next */
+      onChangeFilterDropdown(e);
+    };
     return (
       <Stack>
         <Stack className={styles.filterWrapper}>
@@ -41,7 +82,7 @@ const AgendaFilter: React.FC<ViewProps> = ({
               name="orgId"
               value={selectFilterOptions["orgId"] || "all"}
               label="Select Organization"
-              onChange={onChangeFilterDropdown}
+              onChange={onChange}
               options={[...[{ _id: "all", name: "All" }], ...organizationList]}
               mappingKeys={["_id", "name"]}
               size="small"
@@ -52,13 +93,16 @@ const AgendaFilter: React.FC<ViewProps> = ({
             <SingleSelectComponent
               id="SelectTherapy*"
               labelId="SelectTherapy*"
-              name="SelectTherapy*"
+              name="therapy_id"
               showDefaultSelectOption={false}
-              value={selectFilterOptions["planType"] || "all"}
+              value={selectFilterOptions["therapy_id"] || "all"}
               label="Select Therapy*"
               onChange={onChangeFilterDropdown}
-              options={[]}
-              mappingKeys={["id", "value"]}
+              options={[
+                ...[{ _id: "all", therapy_name: "All" }],
+                ...therapistDropdownData,
+              ]}
+              mappingKeys={["_id", "therapy_name"]}
               size="small"
               className="form-control-bg"
               extraProps={{ "data-testid": "therapySelect" }}
@@ -66,12 +110,12 @@ const AgendaFilter: React.FC<ViewProps> = ({
             <SingleSelectComponent
               id="SelectSession"
               labelId="SelectSession"
-              name="SelectSession"
+              name="session_id"
               showDefaultSelectOption={false}
-              value={selectFilterOptions["planType"] || "all"}
+              value={selectFilterOptions["session_id"] || "all"}
               label="Select Session*"
               onChange={onChangeFilterDropdown}
-              options={[]}
+              options={[...[{ id: "all", value: "All" }], ...sessionNumber]}
               mappingKeys={["id", "value"]}
               size="small"
               className="form-control-bg"
@@ -93,7 +137,9 @@ const AgendaFilter: React.FC<ViewProps> = ({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onPressCreateButton = () => {};
+  const onPressCreateButton = () => {
+    router.push("/admin/agenda/add/");
+  };
 
   return <Box className="actionsWrapper">{iconButtons()}</Box>;
 };
