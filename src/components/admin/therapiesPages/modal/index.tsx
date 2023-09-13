@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useEffect, useRef, useState } from "react";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
@@ -6,6 +6,9 @@ import { ConfirmElement } from "../../../common/ConfirmWrapper";
 import Loader from "../../../common/Loader";
 import ModelComponent from "./modalComponent";
 import { GET_ADMIN_MODEL_LIST } from "../../../../graphql/category/graphql";
+import { ADMIN_UPDATE_MODEL } from "../../../../graphql/model/graphql";
+import ConfirmationModal from "../../../common/ConfirmationModal";
+import { useSnackbar } from "notistack";
 
 const ModelListPage: NextPage = () => {
   const [tableCurentPage, setTableCurrentPage] = useState(0);
@@ -15,6 +18,10 @@ const ModelListPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const confirmRef = useRef<ConfirmElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
+  const [selectedModel, setSelectedModel] = useState();
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
+  const [adminUpdateModel] = useMutation(ADMIN_UPDATE_MODEL);
 
   useEffect(() => {
     /* istanbul ignore next */
@@ -44,6 +51,49 @@ const ModelListPage: NextPage = () => {
       setLoader(false);
     },
   });
+
+  /* istanbul ignore next */
+  const confirmModelDelete = async () => {
+    /* istanbul ignore next */
+    setLoader(true);
+    const variables = {
+      model_id: selectedModel,
+      update_model: {
+        model_status: 0,
+      },
+    };
+
+    try {
+      /* istanbul ignore next */
+      await adminUpdateModel({
+        variables,
+        fetchPolicy: "network-only",
+        /* istanbul ignore next */
+        onCompleted: () => {
+          /* istanbul ignore next */
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          enqueueSnackbar("Model deleted successfully!", {
+            variant: "success",
+          });
+          /* istanbul ignore next */
+          refetchModelList();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      setIsConfirm(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    } finally {
+      /* istanbul ignore next */
+      setLoader(false);
+    }
+  };
 
   const [
     getModelList,
@@ -92,9 +142,23 @@ const ModelListPage: NextPage = () => {
     setTableCurrentPage(0);
     setPage(1);
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  const handleTableActions = (v) => {};
+  /* istanbul ignore next */
+  const clearIsConfirm = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
+  /* istanbul ignore next */
+  const handleTableActions = (v) => {
+    /* istanbul ignore next */
+    const { pressedIconButton, _id } = v;
+    /* istanbul ignore next */
+    if (pressedIconButton == "delete") {
+      /* istanbul ignore next */
+      setSelectedModel(_id);
+      /* istanbul ignore next */
+      setIsConfirm(true);
+    }
+  };
 
   return (
     <>
@@ -115,6 +179,13 @@ const ModelListPage: NextPage = () => {
         confirmRef={confirmRef}
         refetchList={refetchModelList}
       />
+      {isConfirm && (
+        <ConfirmationModal
+          label="Associated categories will also get deleted. Would you like to proceed?"
+          onCancel={clearIsConfirm}
+          onConfirm={confirmModelDelete}
+        />
+      )}
     </>
   );
 };

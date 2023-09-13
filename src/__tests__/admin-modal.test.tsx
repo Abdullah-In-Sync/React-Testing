@@ -16,6 +16,7 @@ import { GET_DISORDER_DATA_BY_ORG_ID } from "../graphql/query/common";
 import ModalListPage from "../components/admin/therapiesPages/modal";
 import { GET_ADMIN_MODEL_LIST } from "../graphql/category/graphql";
 import { GET_THERAPIST_LIST_BY_ORG_ID } from "../graphql/mutation/admin";
+import { ADMIN_UPDATE_MODEL } from "../graphql/model/graphql";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -357,6 +358,34 @@ listMocksData.push({
   },
 });
 
+// delete model
+listMocksData.push({
+  request: {
+    query: ADMIN_UPDATE_MODEL,
+    variables: {
+      model_id: "b89f17ad-11ef-41a8-9a15-ceff2eb42cfa",
+      update_model: {
+        model_status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      adminUpdateModel: {
+        user_type: "admin",
+        user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+        updated_date: "2023-09-13T03:20:57.333Z",
+        model_status: 0,
+        model_name: "test-new-model",
+        disorder_id: "3f577eb0417e437289eb595187a00563",
+        created_date: "2023-09-12T16:51:15.596Z",
+        _id: "b89f17ad-11ef-41a8-9a15-ceff2eb42cfa",
+        __typename: "DisorderModelData",
+      },
+    },
+  },
+});
+
 const createSut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -449,6 +478,26 @@ describe("Admin modal list", () => {
       expect(await screen.findByText("filter by org")).toBeInTheDocument();
       expect(await screen.findByText("test-new-model")).not.toBeInTheDocument();
       expect(await screen.findByText("Test Modal")).not.toBeInTheDocument();
+    });
+  });
+
+  it("delete model", async () => {
+    await sut();
+    waitFor(async () => {
+      const deleteBtn = await screen.findByTestId(
+        "iconButton_delete_b89f17ad-11ef-41a8-9a15-ceff2eb42cfa"
+      );
+      expect(deleteBtn).toBeInTheDocument();
+      fireEvent.click(deleteBtn);
+      expect(
+        screen.findByText(
+          "Associated categories will also get deleted. Would you like to proceed?"
+        )
+      ).toBeInTheDocument();
+      const confirmBtn = await screen.findByTestId("confirmButton");
+      expect(confirmBtn).toBeInTheDocument();
+      fireEvent.click(confirmBtn);
+      expect(await screen.findByText("Model deleted successfully!"));
     });
   });
 });
