@@ -9,6 +9,7 @@ import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import TungstenIcon from "@mui/icons-material/Tungsten";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { SpaOutlined } from "@mui/icons-material";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
@@ -127,6 +128,12 @@ export const therapistRoutes: RoutesType[] = [
     label: "Library",
     path: "/therapist/resource",
     icon: <LibraryBooksIcon />,
+  },
+  {
+    key: 5,
+    label: "Settings",
+    path: "/therapist/settings/?mainTab=profile",
+    icon: <SettingsIcon />,
   },
 ];
 

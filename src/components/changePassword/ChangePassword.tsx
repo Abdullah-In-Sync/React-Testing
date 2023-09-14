@@ -15,7 +15,8 @@ export const validationSchema = Yup.object().shape({
     .matches(/[a-z]+/, "Lowercase (a-z) and Uppercase (A-Z)")
     .matches(/[A-Z]+/, "Lowercase (a-z) and Uppercase (A-Z)")
     .matches(/[@$!%*#?&]+/, "Least one number (0-9) and a symbol")
-    .matches(/\d+/, "Least one number (0-9) and a symbol"),
+    .matches(/\d+/, "Least one number (0-9) and a symbol")
+    .notOneOf([Yup.ref("oldPassword"), null], "You entered old password"),
   confirmPassword: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("newPassword"), null], "Passwords must match"),
