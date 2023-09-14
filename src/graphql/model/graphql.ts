@@ -50,3 +50,17 @@ export const GET_ADMIN_MODEL_LIST = gql`
     }
   }
 `;
+export const ADMIN_UPDATE_MODEL = gql`
+  mutation adminUpdateModel($model_id: ID!, $update_model: UpdateModelInput!) {
+    adminUpdateModel(model_id: $model_id, update_model: $update_model) {
+      user_type
+      user_id
+      updated_date
+      model_status
+      model_name
+      disorder_id
+      created_date
+      _id
+    }
+  }
+`;
