@@ -119,27 +119,26 @@ const AgendaPage: NextPage = () => {
     /* istanbul ignore next */
     setTableCurrentPage(0);
   };
+  /* istanbul ignore next */
+  useEffect(() => {
+    /* istanbul ignore next */
+    getAdminAgendaList({
+      /* istanbul ignore next */
+      variables: {
+        limit: rowsLimit,
+        searchText: searchInputValue,
+        pageNo: initialPageNo,
+        ...selectFilterOptions,
+      },
+    });
+  }, [searchInputValue]);
 
   /* istanbul ignore next */
   const onChangeSearchInput = (e) => {
     /* istanbul ignore next */
-    setSearchInputValue(() => {
-      /* istanbul ignore next */
-      getAdminAgendaList({
-        variables: {
-          limit: rowsLimit,
-          searchText: e.target.value,
-          pageNo: initialPageNo,
-          ...selectFilterOptions,
-        },
-      });
-      /* istanbul ignore next */
-      setTableCurrentPage(0);
-      /* istanbul ignore next */
-      setSearchKey(e.target.value);
-      /* istanbul ignore next */
-      return e.target.value;
-    });
+    setSearchInputValue(e.target.value);
+    setSearchKey(e.target.value);
+    setTableCurrentPage(0);
   };
 
   /* istanbul ignore next */
