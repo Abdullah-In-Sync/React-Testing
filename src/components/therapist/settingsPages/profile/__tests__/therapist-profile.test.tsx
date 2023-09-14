@@ -1,16 +1,20 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { useAppContext } from "../../../../../contexts/AuthContext";
+import * as s3 from "../../../../../lib/helpers/s3";
+import { useRouter } from "next/router";
 
 import theme from "../../../../../styles/theme/theme";
 
-import ViewTherapistProfile from "..";
 import {
   GET_MASTER_DATA,
   GET_THERAPIST_BY_ID,
+  UPDATE_THERAPIST_BY_ID,
 } from "../../../../../graphql/Therapist/graphql";
+import SettingsTherapistComponent from "../../../settings";
+import { GET_FILE_UPLOAD_URl } from "../../../../../graphql/query/common";
 jest.mock("../../../../../contexts/AuthContext");
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -18,7 +22,7 @@ jest.mock("next/router", () => ({
 }));
 
 const mocksData = [];
-
+const file = new File(["hello"], "hello.png", { type: "image/png" });
 mocksData.push({
   request: {
     query: GET_MASTER_DATA,
@@ -113,7 +117,7 @@ mocksData.push({
         email: "test8@test.com",
         phone_number: "+46514",
         plan: "free",
-        therapist_proofaccredition: 1,
+        therapist_proofaccredition: 0,
         therapist_totexp: "10",
         therapist_status: 1,
         therapist_profaccredition: "student",
@@ -136,12 +140,56 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_THERAPIST_BY_ID,
+    variables: {
+      user_id: "user_id",
+      update: {
+        email: "test8@test.com",
+        therapist_name: "therapistname",
+        therapist_specialization: "cat",
+        therapist_profaccredition: "student",
+        therapist_proofaccredition: 1,
+        therapist_totexp: "10",
+        phone_number: "+46514",
+        therapist_poa_attachment: "dummy.pdf",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistById: {
+        _id: "therapist_id",
+        user_id: "user_id",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_FILE_UPLOAD_URl,
+    variables: {
+      fileName: "dummy.pdf",
+      imageFolder: "resource",
+    },
+  },
+  result: {
+    data: {
+      getFileUploadUrl: {
+        upload_file_url: "https://myhelp-",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
       <ThemeProvider theme={theme()}>
         <SnackbarProvider>
-          <ViewTherapistProfile />
+          <SettingsTherapistComponent />
         </SnackbarProvider>
       </ThemeProvider>
     </MockedProvider>
@@ -149,6 +197,11 @@ const sut = async () => {
 };
 
 beforeEach(() => {
+  (useRouter as jest.Mock).mockReturnValue({
+    query: {
+      mainTab: "profile",
+    },
+  });
   (useAppContext as jest.Mock).mockReturnValue({
     isAuthenticated: true,
     user: {
@@ -160,9 +213,38 @@ beforeEach(() => {
 
 describe("Admin view therapist", () => {
   it("should render view form", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "dummy.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
     await sut();
     expect(
       await screen.findByText(/Proof of Accreditation:/i)
     ).toBeInTheDocument();
+
+    const editProfileBtn = await screen.findByTestId("editProfileBtn");
+    fireEvent.click(editProfileBtn);
+
+    fireEvent.click(await screen.findByTestId("profileSubmit"));
+    const cancelButton = await screen.findByRole("button", { name: "Cancel" });
+    expect(cancelButton).toBeInTheDocument();
+    fireEvent.click(cancelButton);
+    expect(cancelButton).not.toBeInTheDocument();
+    fireEvent.click(editProfileBtn);
+    fireEvent.click(await screen.findByTestId("toggleAcc-Update"));
+    fireEvent.change(await screen.getByTestId("therapist_poa_attachment"), {
+      target: { files: [file] },
+    });
+    fireEvent.click(await screen.findByTestId("profileSubmit"));
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Profile updated successfully!/i)
+    ).toBeInTheDocument();
+    const changePasswordBtn = await screen.findByTestId("changePasswordBtn");
+    fireEvent.click(changePasswordBtn);
+    const oldPasswordInput = await screen.findByTestId("oldPasswordInput");
+    expect(oldPasswordInput).toBeInTheDocument();
   });
 });

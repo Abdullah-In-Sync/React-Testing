@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { Card } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { ForwardedRef, useRef } from "react";
 import {
   GetMasterDataEntity,
   GetTherapistById,
@@ -9,6 +9,12 @@ import {
 import CommonButton from "../../../common/Buttons/CommonButton";
 import ViewForm from "./form/ViewForm";
 import { useStyles } from "./therapistProfileStyles";
+import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
+import InfoModal, {
+  ConfirmInfoElement,
+} from "../../../common/CustomModal/InfoModal";
+import ProfileEditForm from "./form/EditForm";
+import ChangePassword from "../../../changePassword/ChangePassword";
 
 interface ViewProps {
   masterData?: {
@@ -16,13 +22,23 @@ interface ViewProps {
     professional: GetMasterDataEntity[];
   };
   therapistData?: GetTherapistById;
+  infoModalRef?: ForwardedRef<ConfirmInfoElement>;
+  confirmRef?: ForwardedRef<ConfirmElement>;
+  onPressEditProfileButton?: () => void;
 }
 
 const TherapistProfileView: React.FC<ViewProps> = ({
   masterData,
   therapistData,
+  infoModalRef,
+  confirmRef,
+  onPressEditProfileButton,
 }) => {
   const styles = useStyles();
+  const formModalRef = useRef<ConfirmInfoElement>(null);
+  const onPressChangePassword = () => {
+    formModalRef.current.openConfirm({});
+  };
 
   const firstCol = () => {
     return (
@@ -41,6 +57,7 @@ const TherapistProfileView: React.FC<ViewProps> = ({
             <CommonButton
               data-testid="editProfileBtn"
               variant="contained"
+              onClick={onPressEditProfileButton}
               fullWidth
             >
               Edit Profile
@@ -50,6 +67,7 @@ const TherapistProfileView: React.FC<ViewProps> = ({
             <CommonButton
               data-testid="changePasswordBtn"
               variant="outlined"
+              onClick={onPressChangePassword}
               fullWidth
             >
               Change Password
@@ -61,7 +79,7 @@ const TherapistProfileView: React.FC<ViewProps> = ({
   };
   const secondCol = () => {
     return (
-      <Card variant="outlined" className="formCard">
+      <Card variant="outlined" className="secondCol">
         <ViewForm masterData={masterData} therapistData={therapistData} />
       </Card>
     );
@@ -69,10 +87,20 @@ const TherapistProfileView: React.FC<ViewProps> = ({
 
   return (
     <>
-      <Box className={styles.profileContent}>
-        {firstCol()}
-        {secondCol()}
-      </Box>
+      <ConfirmWrapper ref={confirmRef}>
+        <Box className={styles.profileContent}>
+          {firstCol()}
+          {secondCol()}
+        </Box>
+        <InfoModal
+          ref={infoModalRef}
+          maxWidth="lg"
+          className={styles.editFormWrapper}
+        >
+          <ProfileEditForm />
+        </InfoModal>
+      </ConfirmWrapper>
+      <ChangePassword infoModalRef={formModalRef} />
     </>
   );
 };

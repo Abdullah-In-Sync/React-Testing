@@ -1,15 +1,27 @@
 import { Box, FormControlLabel, Stack } from "@mui/material";
-import { Form } from "formik";
+import { Form, ErrorMessage } from "formik";
 import * as React from "react";
 import FormikSelectDropdown from "../../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 import { IOSSwitch } from "../../../../common/ToggleButton/IosToggleButton";
+import { useStyles } from "../therapistProfileStyles";
+import CommonButton from "../../../../common/Buttons/CommonButton";
+import UploadButtonComponent from "../../../../common/UploadButton/UploadButtonComponent";
+import { getUpdatedFileName } from "../../../../../lib/helpers/s3";
 
 const ProfileForm: React.FC<any> = ({
+  values,
   setFieldValue,
-  therapist_proofaccredition,
   masterData = {},
+  isSubmitting,
+  saveButtonText,
 }) => {
+  const styles = useStyles();
+  const {
+    therapist_proofaccredition,
+    therapist_poa_attachment = "No file choosen",
+  } = values;
+
   const { specialization = [], professional = [] } = masterData;
 
   const accToggle = () => (
@@ -26,13 +38,29 @@ const ProfileForm: React.FC<any> = ({
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setFieldValue("therapist_proofaccredition", Number(e.target?.checked))
         }
-        data-testid="toggleAcc"
+        data-testid={`toggleAcc-${saveButtonText}`}
       />
     </Box>
   );
 
+  const fileOnChange = async (
+    name,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { target: { files } = {} } = event;
+    const fileObj = files && files[0];
+    const { fileName } = getUpdatedFileName(fileObj);
+
+    if (!fileName) {
+      return;
+    }
+
+    setFieldValue(name, fileName);
+    setFieldValue(`${name}_file`, fileObj);
+  };
+
   return (
-    <Stack className={"formWrapper"}>
+    <Stack className={styles.formWrapper}>
       <Form>
         <Box className="">
           <Box className="row1 crow">
@@ -129,19 +157,45 @@ const ProfileForm: React.FC<any> = ({
             />
             {accToggle()}
           </Box>
+
+          {Boolean(therapist_proofaccredition) && saveButtonText && (
+            <Box className="chooseFileWrapper">
+              <label className="uploadButtonLabel">
+                Attach proof of Accreditation:
+              </label>
+              <UploadButtonComponent
+                variant="contained"
+                name="therapist_poa_attachment"
+                inputProps={{
+                  "data-testid": "therapist_poa_attachment",
+                }}
+                onChange={(e) => fileOnChange("therapist_poa_attachment", e)}
+                fileName={therapist_poa_attachment}
+                buttonText="Choose File"
+                hideIcon
+              />
+              <ErrorMessage
+                name={`therapist_poa_attachment_file`}
+                component="div"
+                className="invalid-input-message"
+              />
+            </Box>
+          )}
         </Box>
-        {/* <Box className="row5 crow">
-          <Box>
-            <CommonButton
-              disabled={isSubmitting}
-              type="submit"
-              data-testid="addCategorySubmit"
-              variant="contained"
-            >
-              {saveButtonText || "Add"}
-            </CommonButton>
+        {saveButtonText && (
+          <Box className="row5 crow">
+            <Box>
+              <CommonButton
+                disabled={isSubmitting}
+                type="submit"
+                data-testid="profileSubmit"
+                variant="contained"
+              >
+                {saveButtonText}
+              </CommonButton>
+            </Box>
           </Box>
-        </Box> */}
+        )}
       </Form>
     </Stack>
   );
