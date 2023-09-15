@@ -6,6 +6,8 @@ import { ConfirmElement } from "../../../common/ConfirmWrapper";
 import Loader from "../../../common/Loader";
 import ModelComponent from "./modalComponent";
 import { GET_ADMIN_MODEL_LIST } from "../../../../graphql/category/graphql";
+import { ADMIN_UPDATE_MODEL } from "../../../../graphql/model/graphql";
+import ConfirmationModal from "../../../common/ConfirmationModal";
 import {
   CommonModal,
   ModalElement,
@@ -14,11 +16,9 @@ import {
 import { useSnackbar } from "notistack";
 import { GET_DISORDER_DATA_BY_ORG_ID } from "../../../../graphql/query/common";
 import AddModalForm from "./add/AddModal";
-import ConfirmationModal from "../../../common/ConfirmationModal";
 import { ADMIN_UPDATE_MODAL } from "../../../../graphql/assessment/graphql";
 
 const ModelListPage: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
@@ -27,6 +27,10 @@ const ModelListPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [page, setPage] = useState(1);
   const confirmRef = useRef<ConfirmElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
+  const [selectedModel, setSelectedModel] = useState();
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
+  const [adminUpdateModel] = useMutation(ADMIN_UPDATE_MODEL);
 
   const [isConfirmCompleteTask, setIsConfirmCompleteTask] = useState(false);
   const [updateModalId, setUpdateModalId] = useState("");
@@ -79,6 +83,48 @@ const ModelListPage: NextPage = () => {
     },
   });
 
+  /* istanbul ignore next */
+  const confirmModelDelete = async () => {
+    /* istanbul ignore next */
+    setLoader(true);
+    const variables = {
+      model_id: selectedModel,
+      update_model: {
+        model_status: 0,
+      },
+    };
+
+    try {
+      /* istanbul ignore next */
+      await adminUpdateModel({
+        variables,
+        fetchPolicy: "network-only",
+        /* istanbul ignore next */
+        onCompleted: () => {
+          /* istanbul ignore next */
+          setIsConfirm(false);
+          /* istanbul ignore next */
+          enqueueSnackbar("Model deleted successfully!", {
+            variant: "success",
+          });
+          /* istanbul ignore next */
+          refetchModelList();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      setIsConfirm(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    } finally {
+      /* istanbul ignore next */
+      setLoader(false);
+    }
+  };
   const [getDisorderByOrgId, { data: disorderDataList }] = useLazyQuery(
     GET_DISORDER_DATA_BY_ORG_ID,
     {
@@ -133,9 +179,19 @@ const ModelListPage: NextPage = () => {
   };
 
   const onChangeFilterDropdown = async (e) => {
-    const temp = selectFilterOptions;
+    let temp = selectFilterOptions;
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
+    /* istanbul ignore next */
+    if (e.target.name == "orgId") {
+      /* istanbul ignore next */
+      temp = { orgId: e.target.value };
+    }
+    /* istanbul ignore next */
+    if (e.target.name == "therapyId") {
+      /* istanbul ignore next */
+      delete temp["disorderId"];
+    }
     setSelectFilterOptions({ ...temp });
     setTableCurrentPage(0);
     setPage(1);
@@ -146,10 +202,22 @@ const ModelListPage: NextPage = () => {
     setTableCurrentPage(0);
     setPage(1);
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  /* istanbul ignore next */
+  const clearIsConfirm = () => {
+    /* istanbul ignore next */
+    setIsConfirm(false);
+  };
+  /* istanbul ignore next */
   const handleTableActions = (value) => {
-    const { pressedIconButton } = value;
+    /* istanbul ignore next */
+    const { pressedIconButton, _id } = value;
+    /* istanbul ignore next */
+    if (pressedIconButton == "delete") {
+      /* istanbul ignore next */
+      setSelectedModel(_id);
+      /* istanbul ignore next */
+      setIsConfirm(true);
+    }
 
     if (pressedIconButton === "edit") {
       const orgId = value.therapy_detail[0].org_id;
@@ -231,6 +299,13 @@ const ModelListPage: NextPage = () => {
         confirmRef={confirmRef}
         refetchList={refetchModelList}
       />
+      {isConfirm && (
+        <ConfirmationModal
+          label="Associated categories will also get deleted. Would you like to proceed?"
+          onCancel={clearIsConfirm}
+          onConfirm={confirmModelDelete}
+        />
+      )}
 
       <CommonModal
         ref={modalRefAddPlan}

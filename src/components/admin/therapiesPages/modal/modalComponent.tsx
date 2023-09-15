@@ -52,7 +52,7 @@ const ModelComponent: React.FC<ViewProps> = ({
           justifyContent={"space-between"}
           my={1}
         >
-          <ContentHeader title="Modal" />
+          <ContentHeader title="Model" />
           <AddModal refetchList={refetchList} />
         </Box>
         <Filter

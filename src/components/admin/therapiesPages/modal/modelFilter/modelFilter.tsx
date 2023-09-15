@@ -31,8 +31,9 @@ const Filter: React.FC<ViewProps> = ({
   const styles = useStyles();
 
   const filterRow = () => {
-    const [orgId, setOrgId] = React.useState();
+    const [orgId, setOrgId] = React.useState("");
     const [therapyId, setTherapyId] = React.useState();
+    const [disorderDropdownData, setDisorderDropdownData] = React.useState([]);
     const [
       getTherapistList,
       /* istanbul ignore next */
@@ -44,19 +45,38 @@ const Filter: React.FC<ViewProps> = ({
     const [
       getDisordorList,
       /* istanbul ignore next */
-      { data: { getDisorderByTherapyId: disorderDropdownData = [] } = {} },
     ] = useLazyQuery(GET_DISORDER_LIST_BY_THERAPY_ID, {
       fetchPolicy: "cache-and-network",
+      /* istanbul ignore next */
+      onCompleted(data) {
+        /* istanbul ignore next */
+        if (
+          /* istanbul ignore next */
+          data?.getDisorderByTherapyId &&
+          /* istanbul ignore next */
+          data?.getDisorderByTherapyId !== null
+        ) {
+          /* istanbul ignore next */
+          setDisorderDropdownData(data.getDisorderByTherapyId);
+        }
+      },
     });
     /* istanbul ignore next */
     const onChange = (e) => {
       /* istanbul ignore next */
+      e.target.value = e.target.value !== "all" ? e.target.value : "";
       if (e.target.name == "orgId") {
         /* istanbul ignore next */
         setOrgId(e.target.value);
+        setDisorderDropdownData([]);
       }
       /* istanbul ignore next */
       if (e.target.name == "therapyId") {
+        /* istanbul ignore next */
+        if (e.target.value == "") {
+          /* istanbul ignore next */
+          setDisorderDropdownData([]);
+        }
         /* istanbul ignore next */
         setTherapyId(e.target.value);
       }
@@ -65,14 +85,12 @@ const Filter: React.FC<ViewProps> = ({
     };
     React.useEffect(() => {
       /* istanbul ignore next */
-      if (orgId) {
-        /* istanbul ignore next */
-        getTherapistList({
-          variables: {
-            orgId,
-          },
-        });
-      }
+      /* istanbul ignore next */
+      getTherapistList({
+        variables: {
+          orgId,
+        },
+      });
     }, [orgId]);
 
     React.useEffect(() => {
@@ -116,7 +134,7 @@ const Filter: React.FC<ViewProps> = ({
             id="therapySelect"
             labelId="therapySelect"
             name="therapyId"
-            value={selectFilterOptions["therapyId"]}
+            value={selectFilterOptions["therapyId"] || "all"}
             label="Select Therapy"
             /* istanbul ignore next */
             onChange={onChange}
@@ -135,10 +153,10 @@ const Filter: React.FC<ViewProps> = ({
             id="disorderSelect"
             labelId="disorderSelect"
             name="disorderId"
-            value={selectFilterOptions["therapyId"]}
+            value={selectFilterOptions["disorderId"] || "all"}
             label="Select Disorder*"
             /* istanbul ignore next */
-            onChange={onChangeFilterDropdown}
+            onChange={onChange}
             /* istanbul ignore next */
             options={[
               ...[{ _id: "all", disorder_name: "All" }],
