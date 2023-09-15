@@ -33,7 +33,7 @@ const ChagnePasswordForm: React.FC<FormikProps<any>> = ({ isSubmitting }) => {
               variant="outlined"
               className="form-control-bg"
               size="small"
-              placeholder="Password"
+              placeholder="New Password"
               autoComplete="off"
             />
           </Box>
