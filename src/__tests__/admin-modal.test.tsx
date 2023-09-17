@@ -649,7 +649,7 @@ describe("Admin modal list", () => {
 
     await waitFor(async () => {
       expect(
-        screen.getByText("Modal updated successfully!")
+        screen.getByText("Model updated successfully!")
       ).toBeInTheDocument();
     });
   });
