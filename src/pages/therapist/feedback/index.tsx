@@ -251,7 +251,7 @@ const TherapyPatientFeedback: any = (props) => {
   return (
     <>
       <Loader visible={loader} />
-      <h1>jbsdcscbs</h1>
+
       <Box style={{ paddingBottom: "30px" }}>
         <Box>
           <Accordion
