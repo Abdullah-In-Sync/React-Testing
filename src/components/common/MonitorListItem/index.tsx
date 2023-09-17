@@ -1,27 +1,33 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import * as React from "react";
 
 import CommonButton from "../../common/Buttons/CommonButton";
 import { useStyles } from "./monitorListItemStyles";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ViewProps {
   monitors?: {
     name: string;
+    _id: string;
   }[];
   viewResponseButtonClick?: (V) => void;
   completeButtonClick?: (V) => void;
+  onClickDelete?: (V) => void;
+  userType?: string;
 }
 
 const MonitorsList: React.FC<ViewProps> = ({
   monitors = [],
   viewResponseButtonClick = null,
   completeButtonClick,
+  onClickDelete,
+  userType,
 }) => {
   const styles = useStyles();
 
   const monitorsRecords = () => {
     return monitors.map((item, index) => {
-      const { name } = item;
+      const { name, _id } = item;
       return (
         <Stack key={`monitoring_list_item_${index}`} className="monitorWrapper">
           <Box className={"monitor"}>
@@ -43,6 +49,28 @@ const MonitorsList: React.FC<ViewProps> = ({
               >
                 Complete
               </CommonButton>
+              {
+                /* istanbul ignore next */
+                userType == "therapist" && (
+                  <IconButton
+                    size="small"
+                    data-testid={`button-delete-icon_${_id}`}
+                    style={{
+                      backgroundColor: "#fff",
+                      width: "32px",
+                      height: "32px",
+                      marginRight: "10px",
+                      marginLeft: "10px",
+                    }}
+                    onClick={() => {
+                      /* istanbul ignore next */
+                      onClickDelete(_id);
+                    }}
+                  >
+                    <DeleteIcon style={{ fontSize: "18px", color: "black" }} />
+                  </IconButton>
+                )
+              }
             </Box>
           </Box>
         </Stack>
