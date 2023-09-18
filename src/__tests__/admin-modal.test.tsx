@@ -611,7 +611,9 @@ describe("Admin modal list", () => {
       const confirmBtn = await screen.findByTestId("confirmButton");
       expect(confirmBtn).toBeInTheDocument();
       fireEvent.click(confirmBtn);
-      expect(await screen.findByText("Model deleted successfully!"));
+      expect(
+        await screen.findByText("Model deleted successfully!")
+      ).toBeInTheDocument();
     });
   });
   it("submit edit modal form with valid data", async () => {

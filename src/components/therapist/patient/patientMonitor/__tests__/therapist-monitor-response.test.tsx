@@ -1,6 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { useAppContext } from "../../../../../contexts/AuthContext";
 import { useRouter } from "next/router";
@@ -9,6 +9,7 @@ import {
   THERAPIST_SUBMIT_MONITOR,
   THERAPIST_VIEW_MONITOR,
   GET_THERAPIST_PATIENT_MONITOR_LIST,
+  DELETE_SHARED_MONITOR,
 } from "../../../../../graphql/Monitor/graphql";
 import TherapyPatientMonitorList from "..";
 
@@ -233,6 +234,26 @@ mocksData.push({
   },
 });
 
+//delete shared monitor
+mocksData.push({
+  request: {
+    query: DELETE_SHARED_MONITOR,
+    variables: {
+      patient_id: "patient-id",
+      ptmon_id: "list-item-1",
+    },
+  },
+  result: {
+    data: {
+      deleteSharedMonitor: {
+        message: "Monitor Deleted Successfully",
+        status: true,
+        __typename: "TherapistMonitorResult",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -364,5 +385,32 @@ describe("Therapist monitor response submit", () => {
     expect(pushMock).toHaveBeenCalledWith(
       "patient-id/?mainTab=therapy&tab=monitor&subTab1=patient-monitor"
     );
+  });
+
+  it(" should delete monitor", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "patient-id",
+        tab: "monitor",
+        subTab1: "patient-monitor",
+      },
+      push: pushMock,
+    });
+    await sut();
+    const deleteBtn = await screen.findByTestId(
+      "button-delete-icon_list-item-1"
+    );
+    expect(deleteBtn).toBeInTheDocument();
+    fireEvent.click(deleteBtn);
+    expect(
+      await screen.findByText("Are you sure you want to delete the monitor?")
+    ).toBeInTheDocument();
+    const confirmBtn = await screen.findByTestId("confirmButton");
+    fireEvent.click(confirmBtn);
+    waitFor(async () => {
+      expect(
+        await screen.findByText("Monitor deleted successfully!")
+      ).toBeInTheDocument();
+    });
   });
 });

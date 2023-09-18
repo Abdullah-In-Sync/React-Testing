@@ -269,3 +269,12 @@ export const THERAPIST_ADD_MONITOR = gql`
     }
   }
 `;
+
+export const DELETE_SHARED_MONITOR = gql`
+  mutation deleteSharedMonitor($patient_id: String!, $ptmon_id: String!) {
+    deleteSharedMonitor(patient_id: $patient_id, ptmon_id: $ptmon_id) {
+      message
+      status
+    }
+  }
+`;

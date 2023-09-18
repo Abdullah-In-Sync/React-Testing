@@ -8,12 +8,16 @@ interface ViewProps {
   monitoringList: PatientMonitorList[];
   viewResponseButtonClick?: (V) => void;
   completeButtonClick?: (V) => void;
+  onClickDelete?: (v) => void;
+  userType?: string;
 }
 
 const MonitorsComponent: React.FC<ViewProps> = ({
   monitoringList,
   viewResponseButtonClick,
   completeButtonClick,
+  onClickDelete,
+  userType,
 }) => {
   const styles = useStyles();
   return (
@@ -23,6 +27,8 @@ const MonitorsComponent: React.FC<ViewProps> = ({
           monitors={monitoringList}
           viewResponseButtonClick={viewResponseButtonClick}
           completeButtonClick={completeButtonClick}
+          onClickDelete={onClickDelete}
+          userType={userType}
         />
       </Stack>
     </Stack>
