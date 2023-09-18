@@ -74,7 +74,7 @@ const UploadFileForm: React.FC<any> = ({
               variant="outlined"
               className="form-control-bg"
               size="small"
-              placeholder="Address"
+              placeholder="Description"
               multiline
               rows="2"
             />
