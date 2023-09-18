@@ -264,7 +264,7 @@ const ModelListPage: NextPage = () => {
           /* istanbul ignore next */
           setIsConfirmCompleteTask(false);
           /* istanbul ignore next */
-          enqueueSnackbar("Modal updated successfully!", {
+          enqueueSnackbar("Model updated successfully!", {
             variant: "success",
           });
           /* istanbul ignore next */
@@ -327,7 +327,7 @@ const ModelListPage: NextPage = () => {
 
       {isConfirmCompleteTask && (
         <ConfirmationModal
-          label="Are you sure you want to update this modal?"
+          label="Are you sure you want to update this model?"
           onCancel={clearIsConfirmCancel}
           onConfirm={handleUpdateModal}
         />

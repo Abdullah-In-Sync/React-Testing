@@ -275,3 +275,24 @@ export const CREATE_RESOURCE_FORMULATION = gql`
     }
   }
 `;
+
+export const ADD_PATIENT_FILE = gql`
+  mutation MyMutation(
+    $file_name: String!
+    $patient_id: String!
+    $title: String!
+    $description: String
+    $is_private: Int
+  ) {
+    addPatientFile(
+      file_name: $file_name
+      patient_id: $patient_id
+      title: $title
+      description: $description
+      is_private: $is_private
+    ) {
+      message
+      result
+    }
+  }
+`;
