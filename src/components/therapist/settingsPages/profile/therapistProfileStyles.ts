@@ -1,10 +1,14 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { commonModalWrapperObj } from "../../../common/CustomModal/commonModalStyles";
+import { Theme } from "@mui/system";
 
 export const useStyles = makeStyles(() => {
+  const theme = useTheme() as Theme;
   return {
     profileContent: {
-      display: "flex",
+      [theme.breakpoints.up("md")]: {
+        display: "flex",
+      },
       padding: 10,
       "& .firstCol": {
         flex: 1,
@@ -25,6 +29,15 @@ export const useStyles = makeStyles(() => {
         padding: 7,
         display: "flex",
         width: "100%",
+
+        [theme.breakpoints.down("sm")]: {
+          flexDirection: "column",
+          "& div:nth-of-type(1)": {
+            width: "100%",
+            marginBottom: 7,
+          },
+        },
+
         "& div:nth-of-type(1)": {
           width: "100%",
           marginRight: 7,
