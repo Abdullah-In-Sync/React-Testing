@@ -37,7 +37,7 @@ const Filter: React.FC<ViewProps> = ({
     if (org_id && organization_settings.length > 0) {
       return org_id === organization_settings[0]?._id;
     }
-    return true;
+    return false;
   });
 
   const modifyModelData = modelList.filter((item) => {
@@ -45,7 +45,7 @@ const Filter: React.FC<ViewProps> = ({
     if (disorder_id && itemDisorderId) {
       return disorder_id === itemDisorderId;
     }
-    return true;
+    return false;
   });
 
   const therapyDisorderData = therapyListData.filter((item) => {
@@ -53,7 +53,7 @@ const Filter: React.FC<ViewProps> = ({
     if (org_id && therapyOrgId) {
       return org_id === therapyOrgId;
     }
-    return true;
+    return false;
   });
 
   const filterRow = () => {

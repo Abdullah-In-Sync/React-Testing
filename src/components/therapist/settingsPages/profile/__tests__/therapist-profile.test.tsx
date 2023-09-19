@@ -146,14 +146,13 @@ mocksData.push({
     variables: {
       user_id: "user_id",
       update: {
-        email: "test8@test.com",
         therapist_name: "therapistname",
         therapist_specialization: "cat",
         therapist_profaccredition: "student",
         therapist_proofaccredition: 1,
         therapist_totexp: "10",
-        phone_number: "+46514",
         therapist_poa_attachment: "dummy.pdf",
+        therapist_add: "add",
       },
     },
   },

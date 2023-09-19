@@ -12,13 +12,15 @@ interface ViewProps {
     professional: GetMasterDataEntity[];
   };
   therapistData?: GetTherapistById;
+  therapistDataLoading?: any;
 }
 
 const ProfileViewForm: React.FC<ViewProps> = ({
   masterData,
   therapistData,
+  therapistDataLoading,
 }) => {
-  if (!therapistData) return null;
+  if (!therapistData || therapistDataLoading) return null;
   const {
     email = "",
     therapist_name = "",
@@ -27,6 +29,7 @@ const ProfileViewForm: React.FC<ViewProps> = ({
     therapist_proofaccredition = false,
     therapist_totexp = "",
     phone_number = "",
+    therapist_add = "",
   } = therapistData || {};
 
   const initialValues = {
@@ -38,6 +41,7 @@ const ProfileViewForm: React.FC<ViewProps> = ({
       therapist_proofaccredition === null ? 1 : therapist_proofaccredition,
     therapist_totexp,
     phone_number,
+    therapist_add,
   };
 
   const commonform = () => {

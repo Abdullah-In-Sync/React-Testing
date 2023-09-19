@@ -35,9 +35,10 @@ const TherapistProfile: React.FC = () => {
     {
       data: { getTherapistById: therapistData = undefined } = {},
       loading: therapistDataLoading,
+      refetch: refetchTherapistById,
     },
   ] = useLazyQuery<TherapistData>(GET_THERAPIST_BY_ID, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -80,21 +81,18 @@ const TherapistProfile: React.FC = () => {
         onCompleted: (data) => {
           const { updateTherapistById: { _id = undefined } = {} } = data;
           if (_id) {
+            refetchTherapistById();
             enqueueSnackbar("Profile updated successfully!", {
               variant: "success",
             });
+            doneCallback();
           }
         },
       });
     } catch (e) {
-      //   setLoader(false);
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      doneCallback();
-    } finally {
-      //   setLoader(false);
-      doneCallback();
     }
   };
 
@@ -123,9 +121,12 @@ const TherapistProfile: React.FC = () => {
       therapist_poa_attachment_file,
       therapist_proofaccredition,
     } = v;
-
+    const variables = removeProp(v, [
+      "therapist_poa_attachment_file",
+      "phone_number",
+      "email",
+    ]);
     if (therapist_poa_attachment_file && therapist_proofaccredition) {
-      const variables = removeProp(v, ["therapist_poa_attachment_file"]);
       getUrlAndUploadFile(
         {
           fileName: therapist_poa_attachment,
@@ -141,7 +142,8 @@ const TherapistProfile: React.FC = () => {
       );
     } else {
       confirmRef.current.openConfirm({
-        confirmFunction: () => submitUpdateProfileApi(v, submitCallback),
+        confirmFunction: () =>
+          submitUpdateProfileApi(variables, submitCallback),
         description: "Are you sure you want to update the profile?",
         setSubmitting,
       });
@@ -160,6 +162,7 @@ const TherapistProfile: React.FC = () => {
         onPressEditProfileButton={onPressEditProfileButton}
         infoModalRef={infoModalRef}
         confirmRef={confirmRef}
+        therapistDataLoading={therapistDataLoading}
       />
     </>
   );

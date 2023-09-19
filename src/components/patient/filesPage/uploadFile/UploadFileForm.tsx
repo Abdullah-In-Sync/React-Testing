@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, Stack } from "@mui/material";
 import { ErrorMessage, Form } from "formik";
 import * as React from "react";
-import { getUpdatedFileName } from "../../../../lib/helpers/s3";
+import { fileOnChange } from "../../../../utility/helper";
 import CommonButton from "../../../common/Buttons/CommonButton";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { IOSSwitch } from "../../../common/ToggleButton/IosToggleButton";
@@ -30,20 +30,11 @@ const UploadFileForm: React.FC<any> = ({
     </Box>
   );
 
-  const fileOnChange = async (
-    name,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { target: { files } = {} } = event;
-    const fileObj = files && files[0];
-    const { fileName } = getUpdatedFileName(fileObj);
-
-    if (!fileName) {
-      return;
-    }
-
-    setFieldValue(name, fileName);
-    setFieldValue(`${name}_file`, fileObj);
+  const onSelectFileChange = (name, e) => {
+    fileOnChange(e, ({ fileName, fileObj }) => {
+      setFieldValue(name, fileName);
+      setFieldValue(`${name}_file`, fileObj);
+    });
   };
 
   return (
@@ -89,7 +80,7 @@ const UploadFileForm: React.FC<any> = ({
                 inputProps={{
                   "data-testid": "file_name",
                 }}
-                onChange={(e) => fileOnChange("file_name", e)}
+                onChange={(e) => onSelectFileChange("file_name", e)}
                 fileName={file_name}
                 buttonText="Choose File"
                 hideIcon
