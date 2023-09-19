@@ -1,23 +1,42 @@
-import React, { useCallback, useRef, useState } from "react";
-import { useMutation } from "@apollo/client";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import Loader from "../../../../../../components/common/Loader";
-import ContentHeader from "../../../../../../components/common/ContentHeader";
 import { useSnackbar } from "notistack";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import {
   CommonModal,
   ModalElement,
 } from "../../../../../../components/common/CustomModal/CommonModal";
 import UploadFileMainForm from "../../../../../../components/therapist/patient/files/uploadFiles/UploadFiles";
 import { therapistUploadFile } from "../../../../../../utility/types/resource_types";
-import { ADD_PATIENT_FILE } from "../../../../../../graphql/mutation/resource";
+import {
+  ADD_PATIENT_FILE,
+  GET_THERAPIST_FILE_LIST,
+} from "../../../../../../graphql/mutation/resource";
+import TherapistFileList from "../../../../../../components/therapist/patient/files/list";
 
 export default function TherapistFilesList() {
   const { enqueueSnackbar } = useSnackbar();
   const modalRefAddPlan = useRef<ModalElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
+  const [searchValue, setSearchValue] = useState("");
 
   const [aadFile] = useMutation(ADD_PATIENT_FILE);
+
+  const [getPatientFileListByTherapist, { data: fileListData, refetch }] =
+    useLazyQuery(GET_THERAPIST_FILE_LIST, {
+      onCompleted: () => {
+        setLoader(false);
+      },
+    });
+
+  useEffect(() => {
+    getPatientFileListByTherapist({
+      variables: {
+        patient_id: sessionStorage.getItem("patient_id"),
+        search_text: searchValue,
+      },
+    });
+  }, [searchValue]);
 
   /* istanbul ignore next */
   const handleOpenAddFileModal = useCallback(
@@ -45,6 +64,7 @@ export default function TherapistFilesList() {
             variant: "success",
             autoHideDuration: 2000,
           });
+          refetch();
         },
       });
 
@@ -59,15 +79,20 @@ export default function TherapistFilesList() {
       });
     }
   };
+
+  /* istanbul ignore next */
+  const onSearchData = (data) => {
+    setSearchValue(data);
+  };
   return (
     <>
       <Loader visible={loader} />
-      <ContentHeader title="Files" />
-      <FileUploadIcon
-        data-testid="upload_file_button"
-        onClick={handleOpenAddFileModal}
-      />
 
+      <TherapistFileList
+        fileListData={fileListData}
+        onSearchData={onSearchData}
+        handleFileUpload={() => handleOpenAddFileModal()}
+      />
       <CommonModal
         ref={modalRefAddPlan}
         headerTitleText={"Upload File"}

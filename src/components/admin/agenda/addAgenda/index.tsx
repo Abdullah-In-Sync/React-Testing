@@ -111,7 +111,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
         setSelectedSessions(allSessions);
       } else {
         const selectedSessionArray = prefilledData.session
-          .split(", ")
+          .split(",")
           .map((session) => parseInt(session));
         setSelectedSessions(selectedSessionArray);
       }
@@ -197,7 +197,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
 
       setFormFields((oldValues) => ({
         ...oldValues,
-        session: allSessions.join(", "),
+        session: allSessions.join(","),
       }));
     } else {
       const filteredValue = value.filter((val) => val !== "Select All");
@@ -205,7 +205,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
 
       setFormFields((oldValues) => ({
         ...oldValues,
-        session: filteredValue.join(", "),
+        session: filteredValue.join(","),
       }));
     }
   };
@@ -334,6 +334,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
                   Select Sessions
                 </InputLabel>
                 <Select
+                  disabled={prefilledData}
                   label="Select Sessions"
                   labelId="multi-select-label"
                   id="multi-select"
@@ -347,7 +348,7 @@ export default function AdminAddAgendaForm(props: propTypes) {
                       return "Select All";
                     }
                     /* istanbul ignore next */
-                    return selected.join(", ");
+                    return selected.join(",");
                   }}
                 >
                   <MenuItem key="Select All" value="Select All">

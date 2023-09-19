@@ -160,7 +160,7 @@ const FormBox: React.FC<ViewProps> = ({
                   }
                 }}
               >
-                {prefilledOrgId ? "Edit" : "Add"}
+                {prefilledOrgId ? "Update" : "Add"}
               </Button>
             </Box>
           </Box>
