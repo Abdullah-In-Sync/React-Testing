@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import {
+  DELETE_SHARED_MONITOR,
   GET_THERAPIST_PATIENT_MONITOR_LIST,
   THERAPIST_ADD_MONITOR,
   THERAPIST_ADMIN_MONITOR_LIST,
@@ -23,14 +24,17 @@ import MonitorsComponent from "../../../patient/monitors";
 import MonitorCompleteView from "../../../patient/monitors/completeView/MonitorCompleteView";
 import MonitorViewResponse from "../../../patient/monitors/viewResponse/MonitorViewResponse";
 import MonitorListWrapper from "./monitors/MonitorListWrapper";
+import ConfirmationModal from "../../../common/ConfirmationModal";
 
 const TherapyPatientMonitorList: any = () => {
   const initialDate = "2022-03-02";
   const modalRefAddMonitor = useRef<ConfirmInfoElement>(null);
   /* istanbul ignore next */
   const { user = {} } = useAppContext();
+  console.log(user, "user");
   /* istanbul ignore next */
-  const { therapist_data: { org_id: orgId = undefined } = {} } = user;
+  const { therapist_data: { org_id: orgId = undefined } = {}, user_type } =
+    user;
   const router = useRouter();
   /* istanbul ignore next */
   const { query: { id: patientId, view, monitorId, startDate, endDate } = {} } =
@@ -39,7 +43,10 @@ const TherapyPatientMonitorList: any = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [submitMonitorResponse] = useMutation(THERAPIST_SUBMIT_MONITOR);
   const [submitAddMonitorApi] = useMutation(THERAPIST_ADD_MONITOR);
+  const [deleteSharedMonitor] = useMutation(DELETE_SHARED_MONITOR);
   const { enqueueSnackbar } = useSnackbar();
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [selectedMonitor, setSelectedMonitor] = useState();
 
   const [getTherapistAdminMonitorList] = useLazyQuery(
     THERAPIST_ADMIN_MONITOR_LIST,
@@ -171,7 +178,45 @@ const TherapyPatientMonitorList: any = () => {
       setLoader(false);
     }
   };
-
+  /* istanbul ignore next */
+  const deleteMonitor = async () => {
+    try {
+      /* istanbul ignore next */
+      await deleteSharedMonitor({
+        variables: {
+          patient_id: patientId,
+          ptmon_id: selectedMonitor,
+        },
+        onCompleted: (data) => {
+          /* istanbul ignore next */
+          const {
+            /* istanbul ignore next */
+            deleteSharedMonitor: { status, message },
+          } = data;
+          if (status) {
+            setIsConfirm(false);
+            /* istanbul ignore next */
+            enqueueSnackbar("Monitor deleted successfully!", {
+              variant: "success",
+            });
+            /* istanbul ignore next */
+            therapistPatientMonitorListRefetch();
+            /* istanbul ignore next */
+          } else {
+            /* istanbul ignore next */
+            enqueueSnackbar(message, { variant: "error" });
+          }
+          /* istanbul ignore next */
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong", { variant: "error" });
+      /* istanbul ignore next */
+      setLoader(false);
+    }
+  };
   useEffect(() => {
     if (monitorId) {
       setLoader(true);
@@ -255,6 +300,13 @@ const TherapyPatientMonitorList: any = () => {
       setSubmitting,
     });
   };
+  /* istanbul ignore next */
+  const onClickDelete = (_id) => {
+    /* istanbul ignore next */
+    setSelectedMonitor(_id);
+    /* istanbul ignore next */
+    setIsConfirm(true);
+  };
 
   const currentView = () => {
     switch (view) {
@@ -283,19 +335,34 @@ const TherapyPatientMonitorList: any = () => {
         );
       default:
         return (
-          <ConfirmWrapper ref={confirmRef}>
-            <MonitorListWrapper
-              modalRefAddMonitor={modalRefAddMonitor}
-              onPressAddMonitor={handlePressAddMonitor}
-              onClickMonitor={onClickMonitor}
-            >
-              <MonitorsComponent
-                monitoringList={therapistMonitorList}
-                viewResponseButtonClick={viewResponseButtonClick}
-                completeButtonClick={completeButtonClick}
+          <>
+            <ConfirmWrapper ref={confirmRef}>
+              <MonitorListWrapper
+                modalRefAddMonitor={modalRefAddMonitor}
+                onPressAddMonitor={handlePressAddMonitor}
+                onClickMonitor={onClickMonitor}
+              >
+                <MonitorsComponent
+                  monitoringList={therapistMonitorList}
+                  viewResponseButtonClick={viewResponseButtonClick}
+                  completeButtonClick={completeButtonClick}
+                  /* istanbul ignore next */
+                  onClickDelete={onClickDelete}
+                  /* istanbul ignore next */
+                  userType={user_type}
+                />
+              </MonitorListWrapper>
+            </ConfirmWrapper>
+            {isConfirm && (
+              <ConfirmationModal
+                label="Are you sure you want to delete the monitor?"
+                /* istanbul ignore next */
+                onCancel={() => setIsConfirm(false)}
+                /* istanbul ignore next */
+                onConfirm={deleteMonitor}
               />
-            </MonitorListWrapper>
-          </ConfirmWrapper>
+            )}
+          </>
         );
     }
   };

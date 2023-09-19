@@ -24,6 +24,7 @@ import TherapisTherapyList from "../../../therapy";
 import TherapistNotesList from "./notes";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
+import TherapistFilesList from "./files";
 
 interface Props {
   children: React.ReactNode;
@@ -119,6 +120,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Notes",
       value: "notes",
       component: <TherapistNotesList setTherapy={therapy} />,
+    },
+    {
+      label: "Files",
+      value: "files",
+      component: <TherapistFilesList />,
     },
   ];
 
