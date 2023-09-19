@@ -5,7 +5,10 @@ import { MockedProvider } from "@apollo/react-testing";
 import theme from "../styles/theme/theme";
 import { ThemeProvider } from "@mui/styles";
 import TherapistFilesList from "../pages/therapist/patient/view/[id]/files";
-import { ADD_PATIENT_FILE } from "../graphql/mutation/resource";
+import {
+  ADD_PATIENT_FILE,
+  GET_THERAPIST_FILE_LIST,
+} from "../graphql/mutation/resource";
 import { GET_UPLOAD_LOGO_URL } from "../graphql/query/resource";
 import * as s3 from "../lib/helpers/s3";
 
@@ -61,6 +64,40 @@ mocks.push({
           status: 1,
           title: "csdc",
           updated_date: "2023-09-16T09:34:50.752Z",
+          __typename: "patientFile",
+        },
+      ],
+    },
+  },
+});
+
+mocks.push({
+  request: {
+    query: GET_THERAPIST_FILE_LIST,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      search_text: "",
+    },
+  },
+  result: {
+    data: {
+      getPatientFileListByTherapist: [
+        {
+          _id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
+          added_by: "therapist",
+          created_date: "2023-09-18T11:38:02.613Z",
+          description: "adcn",
+          download_file_url:
+            "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/patientfiles/091137573__070858348__Screenshot%202023-03-16%20at%205.21.17%20PM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJARR23LRXA%2F20230918%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230918T114141Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMSJIMEYCIQCBtocOThwlwCnnFjPZHpv%2FkDbUVCyX%2F5UlYmTuG8oJYwIhAITex%2Bp09CYZY%2FYvHPZKRj%2F1mjuKqSuUHUwFdmS89eK7KoUDCKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMNjczOTI4MjU4MTEzIgxo1KSEpxPqKjcQvn4q2QIVCH69s1opHMLQZMUAoCeh0RuMfAD%2F81Mho78eSSxiqVh637G0g3VFieRGnNNzcRvVo0J1pxWU4akZ87%2Fvac9W8Sn4PPGirb9YTJgTO11f5MRl48YcHY6NJk5WIQk%2F4PQowlmNgfDS9KpQLbo7yGDH6z6OPT%2Fg9DkJXQB5IKoFFBWXt4HpcPUDwlyzkX%2BgbRkgQjrTFn9cXkHT30boJSOrig2yQOyPmqdw51S%2F1jEkSjnTf6oCJEt3UM8S842z71VGMRJj7TW3mkfMsPHJGPbZknOtNZ5HOZAB3Mddx2ErbzyxiWRpPlR04cZ3bwmfI8BLNPd9yrSe%2BBOsnlDnqdhe1nkdFiieYqeUU7aMfqGY7WHMjbjKmaP1KC5tRRA345hLgfjrF7ql1U%2FKnOh4W8leLqDp15kSwpJtAyQ%2FCmQ5GMp9tVj512U2JIoGT8jKH7u%2B3ecR3tJDqdAw%2B%2BygqAY6nQFLcdta1uX2eZKRvXfccdm3K1wm9Nc0T0steH6D9e9FL7K2mJEPea%2Bgmh0tFd1xbYZXFgXSitekkQz77s%2B4Xv1b0BUDWaiouKQx6W1UHfevTqkUrCtysAvF1C4TIjT2%2BPsh6rPaFMb16%2FpsgBDwCjUH915V%2F4AoWqpS4yMg%2BNTmqIk%2B4O%2FZWyCV5mVMEQzJhtCQQdpAXIGvYp8X1coD&X-Amz-Signature=e7bd0e2cdcc993ede0af5174c14e1e70f0f9069471b0ad51a4e3b3b2db53b107&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D091137573__070858348__Screenshot%202023-03-16%20at%205.21.17%20PM.png&x-id=GetObject",
+          file_name:
+            "091137573__070858348__Screenshot 2023-03-16 at 5.21.17 PM.png",
+          file_url:
+            "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/patientfiles/091137573__070858348__Screenshot%202023-03-16%20at%205.21.17%20PM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJARR23LRXA%2F20230918%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230918T114141Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjELz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCWV1LXdlc3QtMSJIMEYCIQCBtocOThwlwCnnFjPZHpv%2FkDbUVCyX%2F5UlYmTuG8oJYwIhAITex%2Bp09CYZY%2FYvHPZKRj%2F1mjuKqSuUHUwFdmS89eK7KoUDCKX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMNjczOTI4MjU4MTEzIgxo1KSEpxPqKjcQvn4q2QIVCH69s1opHMLQZMUAoCeh0RuMfAD%2F81Mho78eSSxiqVh637G0g3VFieRGnNNzcRvVo0J1pxWU4akZ87%2Fvac9W8Sn4PPGirb9YTJgTO11f5MRl48YcHY6NJk5WIQk%2F4PQowlmNgfDS9KpQLbo7yGDH6z6OPT%2Fg9DkJXQB5IKoFFBWXt4HpcPUDwlyzkX%2BgbRkgQjrTFn9cXkHT30boJSOrig2yQOyPmqdw51S%2F1jEkSjnTf6oCJEt3UM8S842z71VGMRJj7TW3mkfMsPHJGPbZknOtNZ5HOZAB3Mddx2ErbzyxiWRpPlR04cZ3bwmfI8BLNPd9yrSe%2BBOsnlDnqdhe1nkdFiieYqeUU7aMfqGY7WHMjbjKmaP1KC5tRRA345hLgfjrF7ql1U%2FKnOh4W8leLqDp15kSwpJtAyQ%2FCmQ5GMp9tVj512U2JIoGT8jKH7u%2B3ecR3tJDqdAw%2B%2BygqAY6nQFLcdta1uX2eZKRvXfccdm3K1wm9Nc0T0steH6D9e9FL7K2mJEPea%2Bgmh0tFd1xbYZXFgXSitekkQz77s%2B4Xv1b0BUDWaiouKQx6W1UHfevTqkUrCtysAvF1C4TIjT2%2BPsh6rPaFMb16%2FpsgBDwCjUH915V%2F4AoWqpS4yMg%2BNTmqIk%2B4O%2FZWyCV5mVMEQzJhtCQQdpAXIGvYp8X1coD&X-Amz-Signature=de52cbc85100e72889a5f48e34529a819066db29be280a7c1cc3c24f619503fe&X-Amz-SignedHeaders=host&response-content-disposition=inline%3B%20filename%3D091137573__070858348__Screenshot%202023-03-16%20at%205.21.17%20PM.png&x-id=GetObject",
+          patient_id: "37ee9ea7-8477-4954-8190-bde7414046c5",
+          share_status: 0,
+          status: 1,
+          title: "kasn",
+          updated_date: "2023-09-18T11:38:02.613Z",
           __typename: "patientFile",
         },
       ],
@@ -142,6 +179,16 @@ describe("Therapist client feedback list", () => {
         expect(
           screen.getByText("File added successfully!")
         ).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("Render list", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      await waitFor(async () => {
+        expect(screen.getByText("adcn")).toBeInTheDocument();
       });
     });
   });
