@@ -12,9 +12,8 @@ import { queryMasterData } from "../../../../components/admin/therapist/hook/fet
 import { ConfirmElement } from "../../../../components/common/ConfirmWrapper";
 import Layout from "../../../../components/layout";
 import { ADD_ADMIN_THERAPIST } from "../../../../graphql/Therapist/graphql";
-import { GET_FILE_UPLOAD_URl } from "../../../../graphql/query/common";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
-import { uploadToS3 } from "../../../../lib/helpers/s3";
+import { fetchUrlAndUploadFile } from "../../../../hooks/fetchUrlAndUploadFile";
 import { cogMessageToJson, removeProp } from "../../../../utility/helper";
 
 const AddTherapistPage: NextPage = () => {
@@ -24,6 +23,7 @@ const AddTherapistPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [addTherapist] = useMutation(ADD_ADMIN_THERAPIST);
+  const { uploadFile } = fetchUrlAndUploadFile();
   const [specializationQuery, professionalQuery, planTrialQuery] =
     queryMasterData();
 
@@ -44,30 +44,16 @@ const AddTherapistPage: NextPage = () => {
     },
   });
 
-  const [getUploadUrl] = useLazyQuery(GET_FILE_UPLOAD_URl);
-
   useEffect(() => {
     getOrgList();
   }, []);
 
   /* istanbul ignore file */
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    getUploadUrl({
-      variables: {
-        fileName,
-        imageFolder: "resource",
-      },
-      onCompleted: async (data) => {
-        const { getFileUploadUrl: { upload_file_url = undefined } = {} } = data;
-        if (upload_file_url) {
-          if (await uploadToS3(file, upload_file_url)) callback();
-        }
-      },
-      onError: () => {
-        enqueueSnackbar("Server error please try later.", {
-          variant: "error",
-        });
-      },
+    uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
     });
   };
 

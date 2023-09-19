@@ -16,9 +16,8 @@ import {
   UPDATE_THERAPIST_BY_ID,
 } from "../../../../../graphql/Therapist/graphql";
 import { TherapistData } from "../../../../../graphql/Therapist/types";
-import { GET_FILE_UPLOAD_URl } from "../../../../../graphql/query/common";
 import { GET_ORGANIZATION_LIST } from "../../../../../graphql/query/organization";
-import { uploadToS3 } from "../../../../../lib/helpers/s3";
+import { fetchUrlAndUploadFile } from "../../../../../hooks/fetchUrlAndUploadFile";
 import { removeProp } from "../../../../../utility/helper";
 
 const EditTherapistPage: NextPage = () => {
@@ -31,6 +30,7 @@ const EditTherapistPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [updateTherapist] = useMutation(UPDATE_THERAPIST_BY_ID);
+  const { uploadFile } = fetchUrlAndUploadFile();
   const [specializationQuery, professionalQuery, planTrialQuery] =
     queryMasterData();
 
@@ -62,8 +62,6 @@ const EditTherapistPage: NextPage = () => {
     },
   });
 
-  const [getUploadUrl] = useLazyQuery(GET_FILE_UPLOAD_URl);
-
   useEffect(() => {
     getOrgList();
     getTherapist({
@@ -75,22 +73,10 @@ const EditTherapistPage: NextPage = () => {
 
   /* istanbul ignore file */
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    getUploadUrl({
-      variables: {
-        fileName,
-        imageFolder: "resource",
-      },
-      onCompleted: async (data) => {
-        const { getFileUploadUrl: { upload_file_url = undefined } = {} } = data;
-        if (upload_file_url) {
-          if (await uploadToS3(file, upload_file_url)) callback();
-        }
-      },
-      onError: () => {
-        enqueueSnackbar("Server error please try later.", {
-          variant: "error",
-        });
-      },
+    uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
     });
   };
 

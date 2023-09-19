@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useSnackbar } from "notistack";
 import { useRef, useState } from "react";
@@ -6,8 +6,7 @@ import { useAppContext } from "../../../contexts/AuthContext";
 
 import { Box } from "@mui/material";
 import { ADD_PATIENT_FILE } from "../../../graphql/patientFile/graphql";
-import { GET_FILE_UPLOAD_URl } from "../../../graphql/query/common";
-import { uploadToS3 } from "../../../lib/helpers/s3";
+import { fetchUrlAndUploadFile } from "../../../hooks/fetchUrlAndUploadFile";
 import { removeProp } from "../../../utility/helper";
 import ConfirmWrapper, { ConfirmElement } from "../../common/ConfirmWrapper";
 import ContentHeader from "../../common/ContentHeader";
@@ -18,16 +17,15 @@ import Loader from "../../common/Loader";
 import UploadIconButton from "./UploadFileButton";
 import { useStyles } from "./filesStyles";
 import AddUploadFileForm from "./uploadFile/AddUploadFileForm";
-
 const FilesPage: NextPage = () => {
   const styles = useStyles();
   const { user: { _id: patient_id } = {} } = useAppContext();
+  const { uploadFile } = fetchUrlAndUploadFile();
   const [loader, setLoader] = useState<boolean>(false);
 
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
-  const [getUploadUrl] = useLazyQuery(GET_FILE_UPLOAD_URl);
   const [addPatientFile] = useMutation(ADD_PATIENT_FILE);
 
   const onPressUploadIconBtn = () => {
@@ -40,22 +38,10 @@ const FilesPage: NextPage = () => {
   };
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    getUploadUrl({
-      variables: {
-        fileName,
-        imageFolder: "imageFolder",
-      },
-      onCompleted: async (data) => {
-        const { getFileUploadUrl: { upload_file_url = undefined } = {} } = data;
-        if (upload_file_url) {
-          if (await uploadToS3(file, upload_file_url)) callback();
-        }
-      },
-      onError: () => {
-        enqueueSnackbar("Server error please try later.", {
-          variant: "error",
-        });
-      },
+    uploadFile({ fileName, file, imageFolder: "imageFolder" }, callback, () => {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
     });
   };
 

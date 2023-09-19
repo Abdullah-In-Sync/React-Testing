@@ -1,30 +1,29 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import React, { useEffect, useRef } from "react";
 
+import { useSnackbar } from "notistack";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import {
   GET_THERAPIST_BY_ID,
   UPDATE_THERAPIST_BY_ID,
 } from "../../../../graphql/Therapist/graphql";
 import { TherapistData } from "../../../../graphql/Therapist/types";
+import { fetchUrlAndUploadFile } from "../../../../hooks/fetchUrlAndUploadFile";
+import { removeProp } from "../../../../utility/helper";
+import { ConfirmElement } from "../../../common/ConfirmWrapper";
+import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
+import Loader from "../../../common/Loader";
 import TherapistProfileView from "./TherapistProfileView";
 import { queryMasterData } from "./hook/fetchDropdown";
-import Loader from "../../../common/Loader";
-import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
-import { ConfirmElement } from "../../../common/ConfirmWrapper";
-import { useSnackbar } from "notistack";
-import { GET_FILE_UPLOAD_URl } from "../../../../graphql/query/common";
-import { uploadToS3 } from "../../../../lib/helpers/s3";
-import { removeProp } from "../../../../utility/helper";
 
 const TherapistProfile: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const { uploadFile } = fetchUrlAndUploadFile();
   const { user: { _id: user_id } = {} } = useAppContext();
   const [specializationQuery, professionalQuery] = queryMasterData();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
   const [updateTherapist] = useMutation(UPDATE_THERAPIST_BY_ID);
-  const [getUploadUrl] = useLazyQuery(GET_FILE_UPLOAD_URl);
   const { data: { getMasterData: specialization = undefined } = {} } =
     specializationQuery;
   const { data: { getMasterData: professional = undefined } = {} } =
@@ -51,22 +50,10 @@ const TherapistProfile: React.FC = () => {
   }, [user_id]);
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    getUploadUrl({
-      variables: {
-        fileName,
-        imageFolder: "resource",
-      },
-      onCompleted: async (data) => {
-        const { getFileUploadUrl: { upload_file_url = undefined } = {} } = data;
-        if (upload_file_url) {
-          if (await uploadToS3(file, upload_file_url)) callback();
-        }
-      },
-      onError: () => {
-        enqueueSnackbar("Server error please try later.", {
-          variant: "error",
-        });
-      },
+    uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
     });
   };
 
