@@ -9,19 +9,24 @@ export const addPatientFileSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   file_name_file: Yup.mixed()
     .required("File is required")
-    .test("type", "Only support PDF, PNG and JPEG file.", function (value) {
-      if (value == "undefined" || value) {
-        return (
-          value &&
-          (value.type === "image/jpg" ||
-            value.type === "image/jpeg" ||
-            value.type === "image/png" ||
-            value.type === "application/pdf")
-        );
-      } else {
-        return true;
+    .test(
+      "type",
+      "Only support PDF, MP4, PNG and JPEG file.",
+      function (value) {
+        if (value == "undefined" || value) {
+          return (
+            value &&
+            (value.type === "image/jpg" ||
+              value.type === "image/jpeg" ||
+              value.type === "image/png" ||
+              value.type === "application/pdf" ||
+              value.type === "video/mp4")
+          );
+        } else {
+          return true;
+        }
       }
-    }),
+    ),
 });
 
 interface ViewProps {
