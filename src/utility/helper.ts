@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 import moment from "moment";
 import { getSessionToken } from "./storage";
+import { getUpdatedFileName } from "../lib/helpers/s3";
 
 type SessionObject = {
   label: string;
@@ -167,4 +168,19 @@ export const getOrgNameFromCurrentUrl = () => {
     } = window;
     return hostname.split(".")[0];
   }
+};
+
+export const fileOnChange = async (
+  event: React.ChangeEvent<HTMLInputElement>,
+  callback
+) => {
+  const { target: { files } = {} } = event;
+  const fileObj = files.length ? files[0] : undefined;
+  const { fileName } = getUpdatedFileName(fileObj);
+
+  if (!fileName) {
+    return;
+  }
+
+  callback({ fileName, fileObj });
 };

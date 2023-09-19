@@ -1,14 +1,13 @@
 import { Box, FormControlLabel, Stack } from "@mui/material";
-import { Form, ErrorMessage } from "formik";
+import { ErrorMessage, Form } from "formik";
 import * as React from "react";
+import { fileOnChange } from "../../../../../utility/helper";
+import CommonButton from "../../../../common/Buttons/CommonButton";
 import FormikSelectDropdown from "../../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 import { IOSSwitch } from "../../../../common/ToggleButton/IosToggleButton";
-import { useStyles } from "../therapistProfileStyles";
-import CommonButton from "../../../../common/Buttons/CommonButton";
 import UploadButtonComponent from "../../../../common/UploadButton/UploadButtonComponent";
-import { getUpdatedFileName } from "../../../../../lib/helpers/s3";
-
+import { useStyles } from "../therapistProfileStyles";
 const ProfileForm: React.FC<any> = ({
   values,
   setFieldValue,
@@ -43,20 +42,11 @@ const ProfileForm: React.FC<any> = ({
     </Box>
   );
 
-  const fileOnChange = async (
-    name,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { target: { files } = {} } = event;
-    const fileObj = files && files[0];
-    const { fileName } = getUpdatedFileName(fileObj);
-
-    if (!fileName) {
-      return;
-    }
-
-    setFieldValue(name, fileName);
-    setFieldValue(`${name}_file`, fileObj);
+  const onSelectFileChange = (name, e) => {
+    fileOnChange(e, ({ fileName, fileObj }) => {
+      setFieldValue(name, fileName);
+      setFieldValue(`${name}_file`, fileObj);
+    });
   };
 
   return (
@@ -69,7 +59,7 @@ const ProfileForm: React.FC<any> = ({
               id="therapist_name"
               label="Name"
               fullWidth={true}
-              inputProps={{ "data-testid": "address_input" }}
+              inputProps={{ "data-testid": "therapist_name" }}
               variant="outlined"
               className="form-control-bg"
               size="small"
@@ -85,6 +75,7 @@ const ProfileForm: React.FC<any> = ({
               className="form-control-bg"
               size="small"
               placeholder="Phone*"
+              disabled
             />
           </Box>
 
@@ -99,6 +90,7 @@ const ProfileForm: React.FC<any> = ({
               className="form-control-bg"
               size="small"
               placeholder="Email*"
+              disabled
             />
             <FormikSelectDropdown
               showDefaultSelectOption={false}
@@ -169,7 +161,9 @@ const ProfileForm: React.FC<any> = ({
                 inputProps={{
                   "data-testid": "therapist_poa_attachment",
                 }}
-                onChange={(e) => fileOnChange("therapist_poa_attachment", e)}
+                onChange={(e) =>
+                  onSelectFileChange("therapist_poa_attachment", e)
+                }
                 fileName={therapist_poa_attachment}
                 buttonText="Choose File"
                 hideIcon

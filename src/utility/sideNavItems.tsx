@@ -10,6 +10,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import TungstenIcon from "@mui/icons-material/Tungsten";
 import SettingsIcon from "@mui/icons-material/Settings";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 import { SpaOutlined } from "@mui/icons-material";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
@@ -184,6 +185,13 @@ export const patient_routes: RoutesType[] = [
     label: "Therapy",
     path: "/patient/therapy/?mainTab=therapy&tab=safety-plan",
     icon: <SpaOutlined />,
+    type: "THERAPY",
+  },
+  {
+    key: 4,
+    label: "Files",
+    path: "/patient/files/?mainTab=therapy",
+    icon: <DescriptionOutlinedIcon />,
     type: "THERAPY",
   },
 ];

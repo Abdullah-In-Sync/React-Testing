@@ -1,30 +1,29 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import React, { useEffect, useRef } from "react";
 
+import { useSnackbar } from "notistack";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import {
   GET_THERAPIST_BY_ID,
   UPDATE_THERAPIST_BY_ID,
 } from "../../../../graphql/Therapist/graphql";
 import { TherapistData } from "../../../../graphql/Therapist/types";
+import { fetchUrlAndUploadFile } from "../../../../hooks/fetchUrlAndUploadFile";
+import { removeProp } from "../../../../utility/helper";
+import { ConfirmElement } from "../../../common/ConfirmWrapper";
+import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
+import Loader from "../../../common/Loader";
 import TherapistProfileView from "./TherapistProfileView";
 import { queryMasterData } from "./hook/fetchDropdown";
-import Loader from "../../../common/Loader";
-import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
-import { ConfirmElement } from "../../../common/ConfirmWrapper";
-import { useSnackbar } from "notistack";
-import { GET_FILE_UPLOAD_URl } from "../../../../graphql/query/common";
-import { uploadToS3 } from "../../../../lib/helpers/s3";
-import { removeProp } from "../../../../utility/helper";
 
 const TherapistProfile: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const { uploadFile } = fetchUrlAndUploadFile();
   const { user: { _id: user_id } = {} } = useAppContext();
   const [specializationQuery, professionalQuery] = queryMasterData();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);
   const [updateTherapist] = useMutation(UPDATE_THERAPIST_BY_ID);
-  const [getUploadUrl] = useLazyQuery(GET_FILE_UPLOAD_URl);
   const { data: { getMasterData: specialization = undefined } = {} } =
     specializationQuery;
   const { data: { getMasterData: professional = undefined } = {} } =
@@ -35,9 +34,10 @@ const TherapistProfile: React.FC = () => {
     {
       data: { getTherapistById: therapistData = undefined } = {},
       loading: therapistDataLoading,
+      refetch: refetchTherapistById,
     },
   ] = useLazyQuery<TherapistData>(GET_THERAPIST_BY_ID, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -50,22 +50,10 @@ const TherapistProfile: React.FC = () => {
   }, [user_id]);
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    getUploadUrl({
-      variables: {
-        fileName,
-        imageFolder: "resource",
-      },
-      onCompleted: async (data) => {
-        const { getFileUploadUrl: { upload_file_url = undefined } = {} } = data;
-        if (upload_file_url) {
-          if (await uploadToS3(file, upload_file_url)) callback();
-        }
-      },
-      onError: () => {
-        enqueueSnackbar("Server error please try later.", {
-          variant: "error",
-        });
-      },
+    uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
     });
   };
 
@@ -80,21 +68,18 @@ const TherapistProfile: React.FC = () => {
         onCompleted: (data) => {
           const { updateTherapistById: { _id = undefined } = {} } = data;
           if (_id) {
+            refetchTherapistById();
             enqueueSnackbar("Profile updated successfully!", {
               variant: "success",
             });
+            doneCallback();
           }
         },
       });
     } catch (e) {
-      //   setLoader(false);
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      doneCallback();
-    } finally {
-      //   setLoader(false);
-      doneCallback();
     }
   };
 
@@ -123,9 +108,12 @@ const TherapistProfile: React.FC = () => {
       therapist_poa_attachment_file,
       therapist_proofaccredition,
     } = v;
-
+    const variables = removeProp(v, [
+      "therapist_poa_attachment_file",
+      "phone_number",
+      "email",
+    ]);
     if (therapist_poa_attachment_file && therapist_proofaccredition) {
-      const variables = removeProp(v, ["therapist_poa_attachment_file"]);
       getUrlAndUploadFile(
         {
           fileName: therapist_poa_attachment,
@@ -141,7 +129,8 @@ const TherapistProfile: React.FC = () => {
       );
     } else {
       confirmRef.current.openConfirm({
-        confirmFunction: () => submitUpdateProfileApi(v, submitCallback),
+        confirmFunction: () =>
+          submitUpdateProfileApi(variables, submitCallback),
         description: "Are you sure you want to update the profile?",
         setSubmitting,
       });
@@ -160,6 +149,7 @@ const TherapistProfile: React.FC = () => {
         onPressEditProfileButton={onPressEditProfileButton}
         infoModalRef={infoModalRef}
         confirmRef={confirmRef}
+        therapistDataLoading={therapistDataLoading}
       />
     </>
   );

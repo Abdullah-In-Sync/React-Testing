@@ -25,6 +25,7 @@ interface ViewProps {
   infoModalRef?: ForwardedRef<ConfirmInfoElement>;
   confirmRef?: ForwardedRef<ConfirmElement>;
   onPressEditProfileButton?: () => void;
+  therapistDataLoading?: boolean;
 }
 
 const TherapistProfileView: React.FC<ViewProps> = ({
@@ -33,6 +34,7 @@ const TherapistProfileView: React.FC<ViewProps> = ({
   infoModalRef,
   confirmRef,
   onPressEditProfileButton,
+  therapistDataLoading,
 }) => {
   const styles = useStyles();
   const formModalRef = useRef<ConfirmInfoElement>(null);
@@ -80,7 +82,11 @@ const TherapistProfileView: React.FC<ViewProps> = ({
   const secondCol = () => {
     return (
       <Card variant="outlined" className="secondCol">
-        <ViewForm masterData={masterData} therapistData={therapistData} />
+        <ViewForm
+          masterData={masterData}
+          therapistData={therapistData}
+          therapistDataLoading={therapistDataLoading}
+        />
       </Card>
     );
   };

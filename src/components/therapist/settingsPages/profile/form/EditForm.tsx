@@ -1,5 +1,6 @@
 import { Formik } from "formik";
 import React from "react";
+import * as Yup from "yup";
 import {
   GetMasterDataEntity,
   GetTherapistById,
@@ -18,6 +19,33 @@ interface ViewProps {
   };
 }
 
+export const editTherapistValidationSchema = Yup.object().shape({
+  therapist_name: Yup.string().required("Name is required"),
+  therapist_poa_attachment_file: Yup.mixed().when(
+    "therapist_proofaccredition",
+    {
+      is: 1,
+      then: Yup.mixed()
+        .test("optional", null, (value) => {
+          return value != null;
+        })
+        .test("type", "Only support PDF, PNG and JPEG file.", function (value) {
+          if (value == "undefined" || value) {
+            return (
+              value &&
+              (value.type === "image/jpg" ||
+                value.type === "image/jpeg" ||
+                value.type === "image/png" ||
+                value.type === "application/pdf")
+            );
+          } else {
+            return true;
+          }
+        }),
+    }
+  ),
+});
+
 const ProfileEditForm: React.FC<ViewProps> = ({
   data: { masterData, therapistData, onSubmit } = {},
 }) => {
@@ -31,6 +59,7 @@ const ProfileEditForm: React.FC<ViewProps> = ({
     therapist_totexp = "",
     phone_number = "",
     therapist_poa_attachment,
+    therapist_add = "",
   } = therapistData || {};
 
   const initialValues = {
@@ -44,11 +73,13 @@ const ProfileEditForm: React.FC<ViewProps> = ({
     phone_number,
     therapist_poa_attachment,
     therapist_poa_attachment_file: undefined,
+    therapist_add,
   };
 
   const commonform = () => {
     return (
       <Formik
+        validationSchema={editTherapistValidationSchema}
         initialValues={initialValues}
         onSubmit={onSubmit}
         children={(props) => (
