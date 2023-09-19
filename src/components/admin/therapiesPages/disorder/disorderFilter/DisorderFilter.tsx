@@ -31,7 +31,7 @@ const Filter: React.FC<ViewProps> = ({
     if (org_id && therapyOrgId) {
       return org_id === therapyOrgId;
     }
-    return false;
+    return true;
   });
 
   const filterRow = () => {
