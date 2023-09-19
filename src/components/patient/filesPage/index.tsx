@@ -4,8 +4,11 @@ import { useSnackbar } from "notistack";
 import { useRef, useState } from "react";
 import { useAppContext } from "../../../contexts/AuthContext";
 
+import { Box } from "@mui/material";
+import { ADD_PATIENT_FILE } from "../../../graphql/patientFile/graphql";
 import { GET_FILE_UPLOAD_URl } from "../../../graphql/query/common";
 import { uploadToS3 } from "../../../lib/helpers/s3";
+import { removeProp } from "../../../utility/helper";
 import ConfirmWrapper, { ConfirmElement } from "../../common/ConfirmWrapper";
 import ContentHeader from "../../common/ContentHeader";
 import InfoModal, {
@@ -15,8 +18,6 @@ import Loader from "../../common/Loader";
 import UploadIconButton from "./UploadFileButton";
 import { useStyles } from "./filesStyles";
 import AddUploadFileForm from "./uploadFile/AddUploadFileForm";
-import { Box } from "@mui/material";
-import { ADD_PATIENT_FILE } from "../../../graphql/patientFile/graphql";
 
 const FilesPage: NextPage = () => {
   const styles = useStyles();
@@ -60,15 +61,22 @@ const FilesPage: NextPage = () => {
 
   const submitUpdateProfileApi = async (formFields, doneCallback) => {
     setLoader(true);
-    if (formFields.file_name_file) delete formFields.file_name_file;
+    const variables = removeProp(formFields, ["file_name_file"]);
     try {
       await addPatientFile({
-        variables: { ...formFields, patient_id },
+        variables: { ...variables, patient_id },
         onCompleted: (data) => {
-          const { addPatientFile: { result = undefined } = {} } = data;
+          const {
+            addPatientFile: { result = undefined, message = undefined } = {},
+          } = data;
           if (result) {
             enqueueSnackbar("File uploaded successfully!", {
               variant: "success",
+            });
+            doneCallback();
+          } else if (message) {
+            enqueueSnackbar(message, {
+              variant: "error",
             });
           }
         },
@@ -77,9 +85,7 @@ const FilesPage: NextPage = () => {
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
-      doneCallback();
     } finally {
-      doneCallback();
       setLoader(false);
     }
   };

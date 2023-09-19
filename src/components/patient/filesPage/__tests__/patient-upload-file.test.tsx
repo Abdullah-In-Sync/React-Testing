@@ -43,6 +43,27 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: ADD_PATIENT_FILE,
+    variables: {
+      file_name: "dummy.pdf",
+      title: "textsecondtitle",
+      is_private: 0,
+      description: "textseconddes",
+      patient_id: "user_id",
+    },
+  },
+  result: {
+    data: {
+      addPatientFile: {
+        result: false,
+        message: "This file name already exists",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: GET_FILE_UPLOAD_URl,
     variables: {
       fileName: "dummy.pdf",
@@ -113,6 +134,36 @@ describe("Patient files", () => {
     fireEvent.click(confirmButton);
     expect(
       await screen.findByText(/File uploaded successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should render message file name already exists", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "dummy.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+    await sut();
+    fireEvent.click(await screen.findByTestId("uploadIconButton"));
+    expect(await screen.findByText(/Set as Private:/i)).toBeInTheDocument();
+    fireEvent.change(await screen.findByTestId("title"), {
+      target: { value: "textsecondtitle" },
+    });
+
+    fireEvent.change(await screen.findByTestId("description"), {
+      target: { value: "textseconddes" },
+    });
+
+    fireEvent.change(await screen.getByTestId("file_name"), {
+      target: { files: [file] },
+    });
+
+    fireEvent.click(await screen.findByTestId("formSubmit"));
+
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/This file name already exists/i)
     ).toBeInTheDocument();
   });
 });
