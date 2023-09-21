@@ -21,7 +21,7 @@ export default [
   {
     id: "created_date",
     label: "Uploaded on",
-    render: (value) => moment(value.created_date).format("DD-MM-YYYY"),
+    render: (value) => moment(value.created_date).format("DD MMMM YYYY"),
   },
   {
     id: "actions",
