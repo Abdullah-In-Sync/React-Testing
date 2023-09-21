@@ -1,22 +1,24 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import { useSnackbar } from "notistack";
 import { useRef, useState } from "react";
 import { useAppContext } from "../../../contexts/AuthContext";
 
 import { Box } from "@mui/material";
-import { ADD_PATIENT_FILE } from "../../../graphql/patientFile/graphql";
+import {
+  ADD_PATIENT_FILE,
+  GET_PATIENT_FILE_LIST,
+} from "../../../graphql/patientFile/graphql";
+import { PaitentFileListData } from "../../../graphql/patientFile/type";
 import { fetchUrlAndUploadFile } from "../../../hooks/fetchUrlAndUploadFile";
 import { removeProp } from "../../../utility/helper";
-import ConfirmWrapper, { ConfirmElement } from "../../common/ConfirmWrapper";
+import { ConfirmElement } from "../../common/ConfirmWrapper";
 import ContentHeader from "../../common/ContentHeader";
-import InfoModal, {
-  ConfirmInfoElement,
-} from "../../common/CustomModal/InfoModal";
+import { ConfirmInfoElement } from "../../common/CustomModal/InfoModal";
 import Loader from "../../common/Loader";
 import UploadIconButton from "./UploadFileButton";
+import FilesListComponent from "./filesList/FilesList";
 import { useStyles } from "./filesStyles";
-import AddUploadFileForm from "./uploadFile/AddUploadFileForm";
 const FilesPage: NextPage = () => {
   const styles = useStyles();
   const { user: { _id: patient_id } = {} } = useAppContext();
@@ -28,6 +30,16 @@ const FilesPage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [addPatientFile] = useMutation(ADD_PATIENT_FILE);
 
+  const {
+    data: { getPatientFileListByTherapist: patientFilesList = undefined } = {},
+    refetch: refetchPatientList,
+  } = useQuery<PaitentFileListData>(GET_PATIENT_FILE_LIST, {
+    variables: {
+      patient_id,
+    },
+    fetchPolicy: "no-cache",
+  });
+
   const onPressUploadIconBtn = () => {
     infoModalRef.current.openConfirm({
       data: {
@@ -38,11 +50,15 @@ const FilesPage: NextPage = () => {
   };
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    uploadFile({ fileName, file, imageFolder: "imageFolder" }, callback, () => {
-      enqueueSnackbar("Server error please try later.", {
-        variant: "error",
-      });
-    });
+    uploadFile(
+      { fileName, file, imageFolder: "patientfiles" },
+      callback,
+      () => {
+        enqueueSnackbar("Server error please try later.", {
+          variant: "error",
+        });
+      }
+    );
   };
 
   const submitUpdateProfileApi = async (formFields, doneCallback) => {
@@ -56,6 +72,7 @@ const FilesPage: NextPage = () => {
             addPatientFile: { result = undefined, message = undefined } = {},
           } = data;
           if (result) {
+            refetchPatientList();
             enqueueSnackbar("File uploaded successfully!", {
               variant: "success",
             });
@@ -99,25 +116,23 @@ const FilesPage: NextPage = () => {
 
   return (
     <>
-      <ConfirmWrapper ref={confirmRef}>
-        <Loader visible={loader} />
-        <Box
-          display={"flex"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          className={styles.header}
-        >
-          <ContentHeader title="Files" />
-          <UploadIconButton onClick={onPressUploadIconBtn} />
-        </Box>
-        <InfoModal
-          ref={infoModalRef}
-          maxWidth="sm"
-          className={styles.addUploadModalWrapper}
-        >
-          <AddUploadFileForm />
-        </InfoModal>
-      </ConfirmWrapper>
+      <Loader visible={loader} />
+      <Box
+        display={"flex"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        className={styles.header}
+      >
+        <ContentHeader title="Files" />
+        <UploadIconButton onClick={onPressUploadIconBtn} />
+      </Box>
+      {patientFilesList && (
+        <FilesListComponent
+          listData={patientFilesList}
+          confirmRef={confirmRef}
+          infoModalRef={infoModalRef}
+        />
+      )}
     </>
   );
 };

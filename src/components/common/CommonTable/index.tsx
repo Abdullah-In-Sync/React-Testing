@@ -12,7 +12,7 @@ import { useStyles } from "./tableStyles";
 interface ViewProps {
   data?: {
     list: any;
-    total: number;
+    total?: number;
   } | null;
   onPageChange?: (event, newPage) => void;
   onSelectPageDropdown?: (event) => void;
@@ -109,8 +109,10 @@ const CommonTable: React.FC<ViewProps> = ({
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.render ? (
-                            <Typography>{column.render(value)}</Typography>
+                          {column.renderc ? (
+                            column.renderc(row)
+                          ) : column.render ? (
+                            <Typography>{column.render(value, i)}</Typography>
                           ) : column.format ? (
                             column.format(
                               row,

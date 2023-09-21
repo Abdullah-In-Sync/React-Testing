@@ -8,7 +8,10 @@ import * as s3 from "../../../../lib/helpers/s3";
 
 import theme from "../../../../styles/theme/theme";
 
-import { ADD_PATIENT_FILE } from "../../../../graphql/patientFile/graphql";
+import {
+  ADD_PATIENT_FILE,
+  GET_PATIENT_FILE_LIST,
+} from "../../../../graphql/patientFile/graphql";
 import { GET_FILE_UPLOAD_URl } from "../../../../graphql/query/common";
 import FilesPatientComponent from "../../files";
 
@@ -79,6 +82,44 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_PATIENT_FILE_LIST,
+    variables: {
+      patient_id: "user_id",
+    },
+  },
+  result: {
+    data: {
+      getPatientFileListByTherapist: [
+        {
+          _id: "pu1",
+          added_by: "patient",
+          created_date: "2023-09-20T10:29:49.922Z",
+          download_file_url: "https://imagefile",
+          file_name: "091029428__format_1.png",
+          file_url: "https://imagefileUrl",
+          share_status: 0,
+          status: 1,
+          title: "some",
+        },
+        {
+          _id: "c34cdc3a-d144-4540-afc2-7981a347bcea",
+          added_by: "patient",
+          created_date: "2023-09-20T10:28:30.286Z",
+          description: "",
+          download_file_url: "https://imagefile2",
+          file_name: "091028216__format_2.png",
+          file_url: "https://imagefieleurl2",
+          share_status: 0,
+          status: 1,
+          title: "test",
+        },
+      ],
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -107,6 +148,13 @@ beforeEach(() => {
 });
 
 describe("Patient files", () => {
+  it("should render patient upload list", async () => {
+    await sut();
+    expect(
+      await screen.findByText(/091028216__format_2.png/i)
+    ).toBeInTheDocument();
+  });
+
   it("should render upload form modal", async () => {
     jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
       fileName: "dummy.pdf",
