@@ -13,6 +13,7 @@ interface ViewProps {
   pageActionButtonClick?: (value) => void;
   confirmRef?: any;
   infoModalRef?: any;
+  loadingPatientFileData?: boolean;
 }
 
 const FilesListComponent: React.FC<ViewProps> = ({
@@ -20,36 +21,39 @@ const FilesListComponent: React.FC<ViewProps> = ({
   pageActionButtonClick,
   confirmRef,
   infoModalRef,
+  loadingPatientFileData,
 }) => {
   const styles = useStyles();
   return (
     <ConfirmWrapper ref={confirmRef}>
-      <Stack className={styles.tableWrapper}>
-        <CommonTable
-          hidePagination
-          data={{ list: listData }}
-          pageActionButtonClick={pageActionButtonClick}
-          actionButton={[
-            {
-              id: "upload",
-              icon: require("@mui/icons-material/FileUploadOutlined").default,
-            },
-            {
-              id: "view",
-              icon: require("@mui/icons-material/Visibility").default,
-            },
-            {
-              id: "edit",
-              icon: require("@mui/icons-material/Edit").default,
-            },
-            {
-              id: "delete",
-              icon: require("@mui/icons-material/DeleteSharp").default,
-            },
-          ]}
-          headerData={therapistData}
-        />
-      </Stack>
+      {!loadingPatientFileData && (
+        <Stack className={styles.tableWrapper}>
+          <CommonTable
+            hidePagination
+            data={{ list: listData }}
+            pageActionButtonClick={pageActionButtonClick}
+            actionButton={[
+              {
+                id: "upload",
+                icon: require("@mui/icons-material/FileUploadOutlined").default,
+              },
+              {
+                id: "view",
+                icon: require("@mui/icons-material/Visibility").default,
+              },
+              {
+                id: "edit",
+                icon: require("@mui/icons-material/Edit").default,
+              },
+              {
+                id: "delete",
+                icon: require("@mui/icons-material/DeleteSharp").default,
+              },
+            ]}
+            headerData={therapistData}
+          />
+        </Stack>
+      )}
       <InfoModal
         ref={infoModalRef}
         maxWidth="sm"

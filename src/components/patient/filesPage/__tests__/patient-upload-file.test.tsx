@@ -11,6 +11,7 @@ import theme from "../../../../styles/theme/theme";
 import {
   ADD_PATIENT_FILE,
   GET_PATIENT_FILE_LIST,
+  UPDATE_PATIENT_FILE,
 } from "../../../../graphql/patientFile/graphql";
 import { GET_FILE_UPLOAD_URl } from "../../../../graphql/query/common";
 import FilesPatientComponent from "../../files";
@@ -70,7 +71,7 @@ mocksData.push({
     query: GET_FILE_UPLOAD_URl,
     variables: {
       fileName: "dummy.pdf",
-      imageFolder: "imageFolder",
+      imageFolder: "patientfiles",
     },
   },
   result: {
@@ -116,6 +117,64 @@ mocksData.push({
           title: "test",
         },
       ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_PATIENT_FILE,
+    variables: {
+      file_id: "pu1",
+      patient_id: "user_id",
+      update: {
+        file_name: "091029428__format_1.png",
+        title: "some",
+        description: "",
+      },
+    },
+  },
+  result: {
+    data: {
+      updatePatientFile: {
+        _id: "pu1",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_PATIENT_FILE,
+    variables: {
+      file_id: "pu1",
+      patient_id: "user_id",
+      update: {
+        file_name: "091029428__format_1.png",
+        title: "some",
+        description: "",
+      },
+    },
+  },
+  result: {
+    data: {
+      updatePatientFile: {
+        _id: "pu1",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_PATIENT_FILE,
+    variables: { file_id: "pu1", patient_id: "user_id", update: { status: 0 } },
+  },
+  result: {
+    data: {
+      updatePatientFile: {
+        _id: "pu1",
+      },
     },
   },
 });
@@ -212,6 +271,35 @@ describe("Patient files", () => {
     fireEvent.click(confirmButton);
     expect(
       await screen.findByText(/This file name already exists/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should update upload file", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "dummy.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_edit_pu1"));
+
+    fireEvent.click(await screen.findByTestId("formSubmit"));
+
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/File updated successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should delete upload file", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_delete_pu1"));
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/File deleted successfully!/i)
     ).toBeInTheDocument();
   });
 });

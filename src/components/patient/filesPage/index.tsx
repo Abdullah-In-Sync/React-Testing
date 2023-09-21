@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 import {
   ADD_PATIENT_FILE,
   GET_PATIENT_FILE_LIST,
+  UPDATE_PATIENT_FILE,
 } from "../../../graphql/patientFile/graphql";
 import { PaitentFileListData } from "../../../graphql/patientFile/type";
 import { fetchUrlAndUploadFile } from "../../../hooks/fetchUrlAndUploadFile";
@@ -29,25 +30,18 @@ const FilesPage: NextPage = () => {
   const confirmRef = useRef<ConfirmElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [addPatientFile] = useMutation(ADD_PATIENT_FILE);
+  const [updatePatientFile] = useMutation(UPDATE_PATIENT_FILE);
 
   const {
     data: { getPatientFileListByTherapist: patientFilesList = undefined } = {},
     refetch: refetchPatientList,
+    loading: loadingPatientFileData,
   } = useQuery<PaitentFileListData>(GET_PATIENT_FILE_LIST, {
     variables: {
       patient_id,
     },
     fetchPolicy: "no-cache",
   });
-
-  const onPressUploadIconBtn = () => {
-    infoModalRef.current.openConfirm({
-      data: {
-        onSubmit: submitUploadForm,
-        headerTitleText: "Upload File",
-      },
-    });
-  };
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
     uploadFile(
@@ -61,7 +55,7 @@ const FilesPage: NextPage = () => {
     );
   };
 
-  const submitUpdateProfileApi = async (formFields, doneCallback) => {
+  const submitAddUploadApi = async (formFields, doneCallback) => {
     setLoader(true);
     const variables = removeProp(formFields, ["file_name_file"]);
     try {
@@ -93,6 +87,40 @@ const FilesPage: NextPage = () => {
     }
   };
 
+  const submitUpdateUploadApi = async (
+    v,
+    doneCallback,
+    successMessage?: string
+  ) => {
+    setLoader(true);
+    const { formFields, file_id } = v;
+    const variables = removeProp(formFields, ["file_name_file", "is_private"]);
+    try {
+      await updatePatientFile({
+        variables: { file_id, patient_id, update: variables },
+        onCompleted: (data) => {
+          const { updatePatientFile: { _id = undefined } = {} } = data;
+          if (_id) {
+            refetchPatientList();
+            enqueueSnackbar(
+              successMessage ? successMessage : "File updated successfully!",
+              {
+                variant: "success",
+              }
+            );
+            doneCallback();
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    } finally {
+      setLoader(false);
+    }
+  };
+
   const submitCallback = () => {
     confirmRef.current.close();
     infoModalRef.current.close();
@@ -107,16 +135,73 @@ const FilesPage: NextPage = () => {
       },
       () =>
         confirmRef.current.openConfirm({
-          confirmFunction: () => submitUpdateProfileApi(v, submitCallback),
+          confirmFunction: () => submitAddUploadApi(v, submitCallback),
           description: "Are you sure you want to upload this file?",
           setSubmitting,
         })
     );
   };
 
+  const submitUpdateUploadedFile = (v, { setSubmitting }) => {
+    const { formFields } = v;
+    const { file_name, file_name_file } = formFields;
+    if (file_name_file)
+      getUrlAndUploadFile(
+        {
+          fileName: file_name,
+          file: file_name_file,
+        },
+        () =>
+          confirmRef.current.openConfirm({
+            confirmFunction: () => submitUpdateUploadApi(v, submitCallback),
+            description: "Are you sure you want to update the file?",
+            setSubmitting,
+          })
+      );
+    else
+      confirmRef.current.openConfirm({
+        confirmFunction: () => submitUpdateUploadApi(v, submitCallback),
+        description: "Are you sure you want to update the file?",
+        setSubmitting,
+      });
+  };
+
+  const onPressUploadIconBtn = () => {
+    infoModalRef.current.openConfirm({
+      data: {
+        onSubmit: submitUploadForm,
+        headerTitleText: "Upload File",
+      },
+    });
+  };
+
+  const pageActionButtonClick = (value) => {
+    const { pressedIconButton, _id: file_id } = value;
+    if (pressedIconButton === "edit")
+      infoModalRef.current.openConfirm({
+        data: {
+          onSubmit: (v, formikProps) =>
+            submitUpdateUploadedFile({ formFields: v, file_id }, formikProps),
+          headerTitleText: "Upload File",
+          uploadInitialData: value,
+          saveButtonText: "Update",
+        },
+      });
+    else if (pressedIconButton === "delete")
+      confirmRef.current.openConfirm({
+        confirmFunction: () =>
+          submitUpdateUploadApi(
+            { formFields: { status: 0 }, file_id },
+            submitCallback,
+            "File deleted successfully!"
+          ),
+        description: "Are you sure you want to delete?",
+      });
+  };
+
   return (
     <>
-      <Loader visible={loader} />
+      <Loader visible={loader || loadingPatientFileData} />
       <Box
         display={"flex"}
         justifyContent={"space-between"}
@@ -126,13 +211,13 @@ const FilesPage: NextPage = () => {
         <ContentHeader title="Files" />
         <UploadIconButton onClick={onPressUploadIconBtn} />
       </Box>
-      {patientFilesList && (
-        <FilesListComponent
-          listData={patientFilesList}
-          confirmRef={confirmRef}
-          infoModalRef={infoModalRef}
-        />
-      )}
+      <FilesListComponent
+        listData={patientFilesList}
+        confirmRef={confirmRef}
+        infoModalRef={infoModalRef}
+        pageActionButtonClick={pageActionButtonClick}
+        loadingPatientFileData={loadingPatientFileData}
+      />
     </>
   );
 };

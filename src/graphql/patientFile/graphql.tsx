@@ -45,3 +45,19 @@ export const GET_PATIENT_FILE_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_PATIENT_FILE = gql`
+  mutation UpdatePatientFile(
+    $file_id: String!
+    $patient_id: String!
+    $update: UpdatePatientFileInput
+  ) {
+    updatePatientFile(
+      file_id: $file_id
+      patient_id: $patient_id
+      update: $update
+    ) {
+      _id
+    }
+  }
+`;

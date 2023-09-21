@@ -7,43 +7,44 @@ import * as Yup from "yup";
 
 export const addPatientFileSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
-  file_name_file: Yup.mixed()
-    .required("File is required")
-    .test(
-      "type",
-      "Only support PDF, MP4, PNG and JPEG file.",
-      function (value) {
-        if (value == "undefined" || value) {
-          return (
-            value &&
-            (value.type === "image/jpg" ||
-              value.type === "image/jpeg" ||
-              value.type === "image/png" ||
-              value.type === "application/pdf" ||
-              value.type === "video/mp4")
-          );
-        } else {
-          return true;
-        }
+  file_name: Yup.string().required("File is required"),
+  file_name_file: Yup.mixed().test(
+    "type",
+    "Only support PDF, MP4, PNG and JPEG file.",
+    function (value) {
+      if (value == "undefined" || value) {
+        return (
+          value &&
+          (value.type === "image/jpg" ||
+            value.type === "image/jpeg" ||
+            value.type === "image/png" ||
+            value.type === "application/pdf" ||
+            value.type === "video/mp4")
+        );
+      } else {
+        return true;
       }
-    ),
+    }
+  ),
 });
 
 interface ViewProps {
   data?: {
     uploadInitialData?: any;
     onSubmit?: any;
+    saveButtonText?: string;
   };
 }
 
 const AddUploadFileForm: React.FC<ViewProps> = ({
-  data: { uploadInitialData, onSubmit } = {},
+  data: { uploadInitialData, onSubmit, saveButtonText = "Save" } = {},
 }) => {
   const {
     file_name,
     title = "",
     is_private = 0,
     description = "",
+    pressedIconButton,
   } = uploadInitialData || {};
 
   const initialValues = {
@@ -60,7 +61,13 @@ const AddUploadFileForm: React.FC<ViewProps> = ({
         validationSchema={addPatientFileSchema}
         initialValues={initialValues}
         onSubmit={onSubmit}
-        children={(props) => <Form {...props} saveButtonText={"Save"} />}
+        children={(props) => (
+          <Form
+            {...props}
+            saveButtonText={saveButtonText}
+            pressedIconButton={pressedIconButton}
+          />
+        )}
       />
     );
   };
