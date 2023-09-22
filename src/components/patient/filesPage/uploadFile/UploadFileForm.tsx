@@ -87,7 +87,7 @@ const UploadFileForm: React.FC<any> = ({
                 hideIcon
               />
               <ErrorMessage
-                name={`file_name_file`}
+                name={`file_name`}
                 component="div"
                 className="invalid-input-message"
               />
