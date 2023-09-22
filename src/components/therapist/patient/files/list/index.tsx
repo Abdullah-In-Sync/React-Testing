@@ -55,6 +55,13 @@ const TherapistFileList: React.FC<ViewProps> = ({
   const setCheckBox = (data) => {
     setSelectedCheckBox(data._id);
   };
+  /* istanbul ignore next */
+  const openInNewTab = (url) => {
+    /* istanbul ignore next */
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    /* istanbul ignore next */
+    if (newWindow) newWindow.opener = null;
+  };
   return (
     <Box>
       <Box
@@ -223,9 +230,12 @@ const TherapistFileList: React.FC<ViewProps> = ({
                         bgcolor: "#6EC9DB",
                         borderRadius: "3px 3px 3px 3px",
                         paddingBottom: "13px",
+                        cursor: "pointer",
                       }}
+                      /* istanbul ignore next */
+                      onClick={() => openInNewTab(data.file_url)}
                     >
-                      <Tooltip title={data.title} arrow>
+                      <Tooltip title={data.title} arrow={true}>
                         <Typography
                           data-testid={`reource_description${index}`}
                           sx={{ color: "white", paddingTop: "10px" }}
