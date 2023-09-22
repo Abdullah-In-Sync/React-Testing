@@ -129,7 +129,7 @@ describe("Nav bar", () => {
       await result.current.changePassword("Happ1ness", "Myhelp@123", jest.fn);
     });
     expect(
-      await screen.findByText(/Password changed successfully!/i)
+      await screen.findByText(/Password updated successfully!/i)
     ).toBeInTheDocument();
   });
 

@@ -6,6 +6,12 @@ import { commonModalWrapperObj } from "../../common/CustomModal/commonModalStyle
 export const useStyles = makeStyles(() => {
   const theme = useTheme() as Theme;
   return {
+    tableWrapper: {
+      "& .linkWithouDecoration": {
+        color: theme.palette.primary.main,
+        textDecoration: "none",
+      },
+    },
     header: {
       "& .uploadButtonWrapper": {
         textAlign: "right",

@@ -11,6 +11,7 @@ const UploadFileForm: React.FC<any> = ({
   setFieldValue,
   isSubmitting,
   saveButtonText,
+  pressedIconButton,
 }) => {
   const { file_name = "No file choosen", is_private } = values;
 
@@ -91,7 +92,7 @@ const UploadFileForm: React.FC<any> = ({
                 className="invalid-input-message"
               />
             </Box>
-            {accToggle()}
+            {pressedIconButton !== "edit" && accToggle()}
           </Box>
         </Box>
         {saveButtonText && (

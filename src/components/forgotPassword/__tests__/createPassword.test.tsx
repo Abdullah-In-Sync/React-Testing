@@ -72,7 +72,7 @@ describe("Create new password", () => {
       );
     });
     expect(
-      await screen.findByText(/Password changed successfully!/i)
+      await screen.findByText(/Password updated successfully!/i)
     ).toBeInTheDocument();
     expect(pushMock).toHaveBeenCalledWith("/account");
   });
