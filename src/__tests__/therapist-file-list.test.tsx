@@ -7,6 +7,7 @@ import { ThemeProvider } from "@mui/styles";
 import TherapistFilesList from "../pages/therapist/patient/view/[id]/files";
 import {
   ADD_PATIENT_FILE,
+  DELETE_THERAPIST_FILE,
   GET_THERAPIST_FILE_LIST,
 } from "../graphql/mutation/resource";
 import { GET_UPLOAD_LOGO_URL } from "../graphql/query/resource";
@@ -105,6 +106,25 @@ mocks.push({
   },
 });
 
+mocks.push({
+  request: {
+    query: DELETE_THERAPIST_FILE,
+    variables: {
+      file_id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
+      update: { status: 0 },
+    },
+  },
+  result: {
+    data: {
+      bulkUpdatePatientFile: {
+        message: null,
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   sessionStorage.setItem("patient_id", "4937a27dc00d48bf983fdcd4b0762ebd");
   sessionStorage.setItem("patient_name", "test");
@@ -151,6 +171,7 @@ describe("Therapist client feedback list", () => {
 
     await waitFor(async () => {
       expect(screen.getByTestId("upload_file_button")).toBeInTheDocument();
+      expect(screen.getByTestId("delete-file-button")).toBeInTheDocument();
 
       fireEvent.click(screen.queryByTestId("upload_file_button"));
 
@@ -189,6 +210,41 @@ describe("Therapist client feedback list", () => {
     await waitFor(async () => {
       await waitFor(async () => {
         expect(screen.getByText("adcn")).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("Delete file", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("delete-file-button")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("delete-file-button"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText(
+            "Please select at least one file to perform the action."
+          )
+        ).toBeInTheDocument();
+      });
+      await waitFor(async () => {
+        expect(screen.getByText("adcn")).toBeInTheDocument();
+        expect(screen.getByTestId("resource_checkbox0")).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("resource_checkbox0"));
+
+        fireEvent.click(screen.queryByTestId("delete-file-button"));
+      });
+
+      await expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("File deleted successfully!")
+        ).toBeInTheDocument();
       });
     });
   });

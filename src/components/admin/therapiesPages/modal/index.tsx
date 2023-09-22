@@ -239,6 +239,7 @@ const ModelListPage: NextPage = () => {
 
   /* istanbul ignore next */
   const receiveName = (value) => {
+    console.log("Koca: name value ", value);
     setGetName(value);
   };
 
@@ -309,7 +310,7 @@ const ModelListPage: NextPage = () => {
 
       <CommonModal
         ref={modalRefAddPlan}
-        headerTitleText={"Edit Modal"}
+        headerTitleText={"Edit Model"}
         maxWidth="sm"
       >
         <AddModalForm
