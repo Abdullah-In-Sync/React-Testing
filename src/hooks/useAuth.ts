@@ -60,7 +60,7 @@ export const useAuth = () => {
       const data = await Auth.changePassword(user, oldPassword, newPassword);
       callback({
         status: "success",
-        ...{ data, message: "Password changed successfully!" },
+        ...{ data, message: "Password updated successfully!" },
       });
     } catch (err) {
       callback({ status: "error", message: err.message });
@@ -113,7 +113,7 @@ export const useAuth = () => {
       await Auth.forgotPasswordSubmit(username, code, newPassword);
       return callback({
         status: "success",
-        message: "Password changed successfully!",
+        message: "Password updated successfully!",
       });
     } catch (error) {
       return callback({
