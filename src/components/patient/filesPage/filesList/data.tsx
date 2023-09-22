@@ -10,9 +10,13 @@ export default [
   {
     id: "file_name",
     label: "File Name",
-    renderc: ({ file_name, file_url }) => (
+    renderc: ({ file_name, file_url, _id }) => (
       <Link href={file_url}>
-        <a target="_blank" className="linkWithouDecoration">
+        <a
+          target="_blank"
+          className="linkWithouDecoration"
+          data-testid={`openLink_${_id}`}
+        >
           {file_name}
         </a>
       </Link>

@@ -21,6 +21,7 @@ jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
 }));
+const windowOpenSpy = jest.spyOn(window, "open");
 
 const mocksData = [];
 const file = new File(["hello"], "hello.png", { type: "image/png" });
@@ -99,7 +100,7 @@ mocksData.push({
           created_date: "2023-09-20T10:29:49.922Z",
           download_file_url: "https://imagefile",
           file_name: "091029428__format_1.png",
-          file_url: "https://imagefileUrl",
+          file_url: "https://imagefileUrl.com",
           share_status: 0,
           status: 1,
           title: "some",
@@ -301,5 +302,17 @@ describe("Patient files", () => {
     expect(
       await screen.findByText(/File deleted successfully!/i)
     ).toBeInTheDocument();
+  });
+
+  it("should open file to new tab", async () => {
+    await sut();
+    expect(await screen.findByTestId("openLink_pu1")).toHaveAttribute(
+      "href",
+      "https://imagefileUrl.com"
+    );
+    fireEvent.click(await screen.findByTestId("openLink_pu1"));
+    fireEvent.click(await screen.findByTestId("iconButton_view_pu1"));
+    expect(windowOpenSpy).toHaveBeenCalledTimes(1);
+    expect(windowOpenSpy).toBeCalledWith("https://imagefileUrl.com", "_blank");
   });
 });

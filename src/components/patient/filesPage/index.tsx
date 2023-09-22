@@ -176,9 +176,9 @@ const FilesPage: NextPage = () => {
   };
 
   const pageActionButtonClick = (value) => {
-    const { pressedIconButton, _id: file_id } = value;
+    const { pressedIconButton, _id: file_id, file_url } = value;
     if (pressedIconButton === "edit")
-      infoModalRef.current.openConfirm({
+      return infoModalRef.current.openConfirm({
         data: {
           onSubmit: (v, formikProps) =>
             submitUpdateUploadedFile({ formFields: v, file_id }, formikProps),
@@ -188,7 +188,7 @@ const FilesPage: NextPage = () => {
         },
       });
     else if (pressedIconButton === "delete")
-      confirmRef.current.openConfirm({
+      return confirmRef.current.openConfirm({
         confirmFunction: () =>
           submitUpdateUploadApi(
             { formFields: { status: 0 }, file_id },
@@ -197,6 +197,7 @@ const FilesPage: NextPage = () => {
           ),
         description: "Are you sure you want to delete?",
       });
+    else if (pressedIconButton === "view") window.open(file_url, "_blank");
   };
 
   return (
