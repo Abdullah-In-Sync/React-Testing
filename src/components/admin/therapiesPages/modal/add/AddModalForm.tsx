@@ -15,7 +15,6 @@ interface ViewProps {
   onModalNameChange?: any;
   onChangeOrgId?: any;
   onChangeDisorderId?: any;
-
   prefilledOrgId?: any;
   prefilledDisordorId?: any;
   prefilledModalName?: any;
@@ -28,7 +27,6 @@ const FormBox: React.FC<ViewProps> = ({
   onModalNameChange,
   onChangeOrgId,
   onChangeDisorderId,
-
   prefilledOrgId,
   prefilledDisordorId,
   prefilledModalName,
@@ -40,7 +38,9 @@ const FormBox: React.FC<ViewProps> = ({
     const [orgId, setOrgId] = useState("");
     const [disorderId, setDisorderId] = useState("");
 
-    const [modalNameValue, setModalNameValue] = useState("");
+    const [modalNameValue, setModalNameValue] = useState(
+      prefilledModalName || ""
+    );
 
     const modelNameChange = (
       e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -54,7 +54,6 @@ const FormBox: React.FC<ViewProps> = ({
       e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
     ) => {
       const value = e.target.value;
-      console.log("Koca:org value ", value);
       setOrgId(value);
       onChangeOrgId(value);
     };
@@ -73,6 +72,7 @@ const FormBox: React.FC<ViewProps> = ({
         setOrgId(prefilledOrgId);
         setDisorderId(prefilledDisordorId);
         setModalNameValue(prefilledModalName);
+        onModalNameChange(prefilledModalName);
       }
     }, [prefilledOrgId, prefilledDisordorId, prefilledModalName]);
 
@@ -127,7 +127,7 @@ const FormBox: React.FC<ViewProps> = ({
                 required={true}
                 name="therapy_name"
                 id="therapy_name"
-                label="Modal Name"
+                label="Model Name"
                 value={modalNameValue}
                 onChange={modelNameChange}
                 fullWidth={true}

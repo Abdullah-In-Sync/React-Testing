@@ -26,6 +26,7 @@ interface ViewProps {
   handleFileUpload?: any;
   handleShare?: any;
   handleDelete?: any;
+  // onSelectedCheckboxes?: any;
 }
 
 const TherapistFileList: React.FC<ViewProps> = ({
@@ -34,10 +35,10 @@ const TherapistFileList: React.FC<ViewProps> = ({
   handleFileUpload,
   handleShare,
   handleDelete,
+  // onSelectedCheckboxes,
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [selectedCheckBoxId, setSelectedCheckBox] = useState(0);
-  console.log("Koca: selectedCheckBoxId ", selectedCheckBoxId);
+  const [selectedCheckBoxId, setSelectedCheckBox] = useState<string[]>([]);
 
   /* istanbul ignore next */
   const handleClearInput = () => {
@@ -46,14 +47,24 @@ const TherapistFileList: React.FC<ViewProps> = ({
   };
 
   /* istanbul ignore next */
-  const handleSearchChange = (event) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
     onSearchData(event.target.value);
   };
 
   /* istanbul ignore next */
-  const setCheckBox = (data) => {
-    setSelectedCheckBox(data._id);
+  const toggleCheckBox = (data: any) => {
+    setSelectedCheckBox((prevSelected) => {
+      if (prevSelected.includes(data._id)) {
+        const updatedSelected = prevSelected.filter((id) => id !== data._id);
+        // onSelectedCheckboxes(updatedSelected);
+        return updatedSelected;
+      } else {
+        const updatedSelected = [...prevSelected, data._id];
+        // onSelectedCheckboxes(updatedSelected);
+        return updatedSelected;
+      }
+    });
   };
   /* istanbul ignore next */
   const openInNewTab = (url) => {
@@ -62,6 +73,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
     /* istanbul ignore next */
     if (newWindow) newWindow.opener = null;
   };
+
   return (
     <Box>
       <Box
@@ -138,7 +150,10 @@ const TherapistFileList: React.FC<ViewProps> = ({
               marginLeft: "10px",
             }}
             size="small"
-            onClick={handleShare}
+            onClick={() =>
+              /* istanbul ignore next */
+              handleShare(selectedCheckBoxId)
+            }
           >
             <ShareIcon
               style={{
@@ -154,13 +169,16 @@ const TherapistFileList: React.FC<ViewProps> = ({
               marginLeft: "10px",
             }}
             size="small"
-            onClick={handleDelete}
+            onClick={() =>
+              /* istanbul ignore next */
+              handleDelete(selectedCheckBoxId)
+            }
           >
             <DeleteIcon
               style={{
                 color: "#ffff",
               }}
-              data-testid="share-agenda-button"
+              data-testid="delete-file-button"
             />
           </IconButton>
         </Box>
@@ -186,10 +204,11 @@ const TherapistFileList: React.FC<ViewProps> = ({
                     }}
                   >
                     <FormControlLabel
+                      disabled={data.added_by === "patient"}
                       sx={{ gridColumn: "1", m: 0 }}
                       data-testid={`resource_checkbox${index}`}
                       control={<Checkbox />}
-                      onChange={() => setCheckBox(data)}
+                      onChange={() => toggleCheckBox(data)}
                       label=""
                     />
 
@@ -248,9 +267,11 @@ const TherapistFileList: React.FC<ViewProps> = ({
                     </Box>
                     <Tooltip title={data?.description} arrow>
                       <Box>
-                        <Typography>
+                        <Typography style={{ fontSize: "14px" }}>
                           File uploaded on: {data.updated_date.slice(0, 10)}
                         </Typography>
+
+                        <Typography>Shared by: {data.added_by}</Typography>
                         <Typography
                           variant="body2"
                           color="#30373E"
@@ -259,9 +280,14 @@ const TherapistFileList: React.FC<ViewProps> = ({
                             height: "200px",
                           }}
                         >
-                          {data.description.length > 250
-                            ? `${data.description.substring(0, 250)}...`
-                            : data.description}
+                          {
+                            /* istanbul ignore next */
+                            data.description
+                              ? data.description.length > 250
+                                ? `${data.description.substring(0, 250)}...`
+                                : data.description
+                              : "No description"
+                          }
                         </Typography>
                       </Box>
                     </Tooltip>

@@ -458,7 +458,7 @@ export default function AddEditOrganization(props: propTypes) {
                   labelId="patientMaritalStatus"
                   name="model_id"
                   value={formFields?.model_id}
-                  label="Select Modal"
+                  label="Select Model"
                   onChange={handleChangeModel}
                   inputProps={{ "data-testid": "model_id" }}
                   options={
