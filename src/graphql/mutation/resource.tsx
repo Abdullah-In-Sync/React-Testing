@@ -321,3 +321,12 @@ export const GET_THERAPIST_FILE_LIST = gql`
     }
   }
 `;
+
+export const DELETE_THERAPIST_FILE = gql`
+  mutation MyMutation($file_id: String!, $update: BulkUpdatePatientFileInput) {
+    bulkUpdatePatientFile(file_id: $file_id, update: $update) {
+      message
+      result
+    }
+  }
+`;

@@ -21,7 +21,7 @@ import {
 } from "../../../graphql/query/patient";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 const defaultFormValue = {
   _id: "",
@@ -106,13 +106,7 @@ export default function ProfileForm(props: propTypes) {
     useState<patientProfileFormFeild>(defaultFormValue);
   const [healthValue, setHealthValue] = useState("");
   const [illnessValue, setIlnessValue] = useState("");
-
-  const changeDate = (date: string) => {
-    setFormFields((prev) => ({
-      ...prev,
-      birthdate: dayjs(date).format("DD-MM-YYYY"),
-    }));
-  };
+  const [startDatevalue, setStartDateValue] = useState<Dayjs | null>(null);
 
   //Queries GraphQl
   // Gender queries
@@ -192,15 +186,19 @@ export default function ProfileForm(props: propTypes) {
       setIlnessValue(
         props.therapistProfileData?.getPatientDetailById.patient_illness_ability
       );
+      const birthdate =
+        props.therapistProfileData?.getPatientDetailById.birthdate;
+      if (birthdate) {
+        const birthdateDayjs = dayjs(birthdate, "DD-MM-YYYY");
+        setStartDateValue(birthdateDayjs);
+      }
     }
   }, [props.therapistProfileData?.getPatientDetailById]);
-
   useEffect(() => {
     props.setLoader(true);
     getPatientData();
     props.setLoader(false);
   }, [props.userType]);
-
   useEffect(() => {
     props.setLoader(true);
     getDropdownGenderData({ variables: { name: "gender" } });
@@ -274,7 +272,14 @@ export default function ProfileForm(props: propTypes) {
     setIlnessValue(val);
   };
 
-  console.log("Koca: formFields?.birthdate ", formFields?.birthdate);
+  /* istanbul ignore next */
+  const handleChangeStartDate = (newValue: Dayjs | null) => {
+    setStartDateValue(newValue);
+    setFormFields((prev) => ({
+      ...prev,
+      birthdate: newValue.format("DD-MM-YYYY"),
+    }));
+  };
 
   return (
     <>
@@ -359,13 +364,14 @@ export default function ProfileForm(props: propTypes) {
                             },
                           }}
                           disableFuture
-                          // inputFormat="DD-MM-YYYY"
+                          inputFormat="DD-MM-YYYY"
+                          data-testid="StartDateBox"
                           disabled={props.disabled}
                           label="Date of Birth*"
                           openTo="year"
                           views={["year", "month", "day"]}
-                          value={formFields?.birthdate || null}
-                          onChange={changeDate}
+                          value={startDatevalue}
+                          onChange={handleChangeStartDate}
                           renderInput={(params) => <TextField {...params} />}
                           className="form-control-bg"
                         />
