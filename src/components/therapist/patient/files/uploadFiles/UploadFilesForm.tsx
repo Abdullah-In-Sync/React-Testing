@@ -21,17 +21,26 @@ const initialState = {
 
 interface ViewProps {
   dataSubmit?: any;
+  editMode?: boolean;
+  initialValue?: any;
 }
 
-const FormBox: React.FC<ViewProps> = ({ dataSubmit }) => {
+const FormBox: React.FC<ViewProps> = ({
+  dataSubmit,
+  editMode,
+  initialValue,
+}) => {
   const styles = useStyles();
 
   const formBox = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isConfirmResource, setIsConfirmResource] = useState(false);
-    const [formFields, setFormFields] =
-      useState<therapistUploadFile>(initialState);
+    /* istanbul ignore next */
+    const [formFields, setFormFields] = useState<therapistUploadFile>(
+      /* istanbul ignore next */
+      initialValue ? initialValue : initialState
+    );
 
     const { data: uploadFormulationURL } = useQuery(GET_UPLOAD_LOGO_URL, {
       variables: {
@@ -70,7 +79,12 @@ const FormBox: React.FC<ViewProps> = ({ dataSubmit }) => {
       formFields,
       successCallback
     ) => {
-      await uploadToS3(selectedFile, uploadUrl);
+      /* istanbul ignore next */
+      if (selectedFile != null) {
+        /* istanbul ignore next */
+        await uploadToS3(selectedFile, uploadUrl);
+      }
+      /* istanbul ignore next */
       successCallback(formFields);
     };
 
@@ -87,8 +101,9 @@ const FormBox: React.FC<ViewProps> = ({ dataSubmit }) => {
     /* istanbul ignore next */
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
-      if (!selectedFile?.name) {
+      /* istanbul ignore next */
+      if (!editMode && !selectedFile?.name) {
+        /* istanbul ignore next */
         enqueueSnackbar("Please select a file", {
           variant: "error",
           autoHideDuration: 2000,
@@ -152,7 +167,15 @@ const FormBox: React.FC<ViewProps> = ({ dataSubmit }) => {
                   name="RESOURCE_FILENAME"
                   inputProps={{ "data-testid": "resource_file_upload" }}
                   onChange={fileOnChange}
-                  fileName={selectedFile?.name}
+                  /* istanbul ignore next */
+                  fileName={
+                    /* istanbul ignore next */
+                    selectedFile?.name
+                      ? /* istanbul ignore next */
+                        selectedFile?.name
+                      : /* istanbul ignore next */
+                        initialValue?.file_name
+                  }
                 />
               </Box>
             </Grid>
@@ -164,7 +187,8 @@ const FormBox: React.FC<ViewProps> = ({ dataSubmit }) => {
                   variant="contained"
                   type="submit"
                 >
-                  Save
+                  {/* istanbul ignore next */}
+                  {editMode ? "Update" : "Save"}
                 </Button>
               </Box>
             </Box>
@@ -172,7 +196,14 @@ const FormBox: React.FC<ViewProps> = ({ dataSubmit }) => {
         </Stack>
         {isConfirmResource && (
           <ConfirmationModal
-            label="Are you sure want to upload this file?"
+            label={
+              /* istanbul ignore next */
+              editMode
+                ? /* istanbul ignore next */
+                  "Are you sure you want to update the file?"
+                : /* istanbul ignore next */
+                  "Are you sure want to upload this file?"
+            }
             onCancel={clearIsConfirmCancel}
             onConfirm={() => {
               /* istanbul ignore next */

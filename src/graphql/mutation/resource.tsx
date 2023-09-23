@@ -330,3 +330,30 @@ export const DELETE_THERAPIST_FILE = gql`
     }
   }
 `;
+
+export const UPDATE_PATIENT_FILE = gql`
+  mutation MyMutation(
+    $file_id: String!
+    $patient_id: String!
+    $update: UpdatePatientFileInput
+  ) {
+    updatePatientFile(
+      file_id: $file_id
+      patient_id: $patient_id
+      update: $update
+    ) {
+      _id
+      added_by
+      created_date
+      description
+      download_file_url
+      file_name
+      file_url
+      patient_id
+      status
+      share_status
+      title
+      updated_date
+    }
+  }
+`;

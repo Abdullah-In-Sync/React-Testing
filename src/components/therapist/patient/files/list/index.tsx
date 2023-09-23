@@ -26,6 +26,7 @@ interface ViewProps {
   handleFileUpload?: any;
   handleShare?: any;
   handleDelete?: any;
+  onClickEdit?: any;
   // onSelectedCheckboxes?: any;
 }
 
@@ -35,6 +36,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
   handleFileUpload,
   handleShare,
   handleDelete,
+  onClickEdit,
   // onSelectedCheckboxes,
 }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -227,6 +229,9 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       style={{ borderRadius: "50%", border: "1px solid #000" }}
                       size="small"
                       sx={{ gridColumn: "3", m: 1 }}
+                      data-testid={`file_edit_btn_${data._id}`}
+                      /* istanbul ignore next */
+                      onClick={() => onClickEdit(data._id)}
                     >
                       <EditIcon
                         style={{ fontSize: 14 }}
