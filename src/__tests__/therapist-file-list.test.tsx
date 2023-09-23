@@ -125,6 +125,24 @@ mocks.push({
     },
   },
 });
+mocks.push({
+  request: {
+    query: DELETE_THERAPIST_FILE,
+    variables: {
+      file_id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
+      update: { status: 1 },
+    },
+  },
+  result: {
+    data: {
+      bulkUpdatePatientFile: {
+        message: null,
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
 
 // update file
 mocks.push({
@@ -250,6 +268,42 @@ describe("Therapist client feedback list", () => {
     await waitFor(async () => {
       await waitFor(async () => {
         expect(screen.getByText("adcn")).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("Share file", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(screen.getByTestId("share-file-button")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("share-file-button"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText(
+            "Please select at least one file to perform the action."
+          )
+        ).toBeInTheDocument();
+      });
+      await waitFor(async () => {
+        expect(screen.getByTestId("resource_checkbox0")).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("resource_checkbox0"));
+
+        expect(screen.getByTestId("share-file-button")).toBeInTheDocument();
+
+        fireEvent.click(screen.queryByTestId("share-file-button"));
+      });
+
+      await expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("File shared successfully!")
+        ).toBeInTheDocument();
       });
     });
   });
