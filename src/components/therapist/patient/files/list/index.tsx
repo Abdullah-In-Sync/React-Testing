@@ -159,7 +159,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
               style={{
                 color: "#ffff",
               }}
-              data-testid="share-agenda-button"
+              data-testid="share-file-button"
             />
           </IconButton>
           <IconButton
