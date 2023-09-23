@@ -24,13 +24,12 @@ export default function TherapistFilesList() {
   const [loader, setLoader] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState("");
   const [isConfirmDeleteFile, setIsConfirmDeleteFile] = useState(false);
+  const [isConfirmShareFile, setIsConfirmShareFile] = useState(false);
+
   const [selectCheckBoxForDeleteAndShare, setSelectCheckBoxForDeleteAndShare] =
     useState("");
-  console.log(
-    "Koca: selectCheckBoxForDeleteAndShare ",
-    selectCheckBoxForDeleteAndShare
-  );
   const [aadFile] = useMutation(ADD_PATIENT_FILE);
+  const [deleteAndShareFile] = useMutation(DELETE_THERAPIST_FILE);
 
   const [getPatientFileListByTherapist, { data: fileListData, refetch }] =
     useLazyQuery(GET_THERAPIST_FILE_LIST, {
@@ -109,11 +108,23 @@ export default function TherapistFilesList() {
   };
 
   /* istanbul ignore next */
-  const clearIsConfirmCancel = () => {
-    setIsConfirmDeleteFile(false);
+  const shareFile = (data) => {
+    const joinedData = data.join(",");
+    setSelectCheckBoxForDeleteAndShare(joinedData);
+
+    /* istanbul ignore next */
+    if (joinedData) {
+      setIsConfirmShareFile(true);
+    } else {
+      confirmModalRef.current?.open();
+    }
   };
 
-  const [deleteAndShareFile] = useMutation(DELETE_THERAPIST_FILE);
+  /* istanbul ignore next */
+  const clearIsConfirmCancel = () => {
+    setIsConfirmDeleteFile(false);
+    setIsConfirmShareFile(false);
+  };
 
   const deleteFileHandler = async () => {
     try {
@@ -148,6 +159,45 @@ export default function TherapistFilesList() {
     }
   };
 
+  const shareFileHandler = async () => {
+    console.debug("Share file variable", {
+      file_id: selectCheckBoxForDeleteAndShare,
+      update: {
+        status: 1,
+      },
+    });
+    try {
+      deleteAndShareFile({
+        variables: {
+          file_id: selectCheckBoxForDeleteAndShare,
+          update: {
+            status: 1,
+          },
+        },
+        onCompleted: () => {
+          setIsConfirmShareFile(false);
+          /* istanbul ignore next */
+          enqueueSnackbar("File shared successfully!", {
+            variant: "success",
+            autoHideDuration: 2000,
+          });
+          setSelectCheckBoxForDeleteAndShare("");
+          /* istanbul ignore next */
+          refetch();
+        },
+      });
+      setLoader(false);
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
+  };
+
   return (
     <>
       <Loader visible={loader} />
@@ -157,6 +207,8 @@ export default function TherapistFilesList() {
         onSearchData={onSearchData}
         handleFileUpload={() => handleOpenAddFileModal()}
         handleDelete={checkBoxIds}
+        handleShare={shareFile}
+
         // onSelectedCheckboxes={checkBoxIds}
       />
       <CommonModal
@@ -172,6 +224,14 @@ export default function TherapistFilesList() {
           label="Are you sure, you want to delete?"
           onCancel={clearIsConfirmCancel}
           onConfirm={deleteFileHandler}
+        />
+      )}
+
+      {isConfirmShareFile && (
+        <ConfirmationModal
+          label="Are you sure, you want to share?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={shareFileHandler}
         />
       )}
 
