@@ -111,7 +111,7 @@ mocks.push({
     query: DELETE_THERAPIST_FILE,
     variables: {
       file_id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
-      update: { status: 0 },
+      update: { status: 0, share_status: 0 },
     },
   },
   result: {
@@ -130,7 +130,7 @@ mocks.push({
     query: DELETE_THERAPIST_FILE,
     variables: {
       file_id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
-      update: { status: 1 },
+      update: { share_status: 1 },
     },
   },
   result: {
