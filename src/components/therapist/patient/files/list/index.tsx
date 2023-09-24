@@ -16,7 +16,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentHeader from "../../../../common/ContentHeader";
 
@@ -26,7 +26,6 @@ interface ViewProps {
   handleFileUpload?: any;
   handleShare?: any;
   handleDelete?: any;
-  // onSelectedCheckboxes?: any;
 }
 
 const TherapistFileList: React.FC<ViewProps> = ({
@@ -35,7 +34,6 @@ const TherapistFileList: React.FC<ViewProps> = ({
   handleFileUpload,
   handleShare,
   handleDelete,
-  // onSelectedCheckboxes,
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedCheckBoxId, setSelectedCheckBox] = useState<string[]>([]);
@@ -57,11 +55,9 @@ const TherapistFileList: React.FC<ViewProps> = ({
     setSelectedCheckBox((prevSelected) => {
       if (prevSelected.includes(data._id)) {
         const updatedSelected = prevSelected.filter((id) => id !== data._id);
-        // onSelectedCheckboxes(updatedSelected);
         return updatedSelected;
       } else {
         const updatedSelected = [...prevSelected, data._id];
-        // onSelectedCheckboxes(updatedSelected);
         return updatedSelected;
       }
     });
@@ -73,6 +69,11 @@ const TherapistFileList: React.FC<ViewProps> = ({
     /* istanbul ignore next */
     if (newWindow) newWindow.opener = null;
   };
+
+  useEffect(() => {
+    // Whenever fileListData changes, clear selectedCheckBoxId
+    setSelectedCheckBox([]);
+  }, [fileListData]);
 
   return (
     <Box>
@@ -207,8 +208,12 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       disabled={data.added_by === "patient"}
                       sx={{ gridColumn: "1", m: 0 }}
                       data-testid={`resource_checkbox${index}`}
-                      control={<Checkbox />}
-                      onChange={() => toggleCheckBox(data)}
+                      control={
+                        <Checkbox
+                          checked={selectedCheckBoxId.includes(data._id)}
+                          onChange={() => toggleCheckBox(data)}
+                        />
+                      }
                       label=""
                     />
 

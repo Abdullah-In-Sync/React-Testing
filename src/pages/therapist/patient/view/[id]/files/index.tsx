@@ -95,7 +95,7 @@ export default function TherapistFilesList() {
   };
 
   /* istanbul ignore next */
-  const checkBoxIds = (data) => {
+  const deleteFile = (data) => {
     const joinedData = data.join(",");
     setSelectCheckBoxForDeleteAndShare(joinedData);
 
@@ -133,6 +133,7 @@ export default function TherapistFilesList() {
           file_id: selectCheckBoxForDeleteAndShare,
           update: {
             status: 0,
+            share_status: 0,
           },
         },
         onCompleted: () => {
@@ -160,18 +161,12 @@ export default function TherapistFilesList() {
   };
 
   const shareFileHandler = async () => {
-    console.debug("Share file variable", {
-      file_id: selectCheckBoxForDeleteAndShare,
-      update: {
-        status: 1,
-      },
-    });
     try {
       deleteAndShareFile({
         variables: {
           file_id: selectCheckBoxForDeleteAndShare,
           update: {
-            status: 1,
+            share_status: 1,
           },
         },
         onCompleted: () => {
@@ -181,7 +176,6 @@ export default function TherapistFilesList() {
             variant: "success",
             autoHideDuration: 2000,
           });
-          setSelectCheckBoxForDeleteAndShare("");
           /* istanbul ignore next */
           refetch();
         },
@@ -206,10 +200,8 @@ export default function TherapistFilesList() {
         fileListData={fileListData}
         onSearchData={onSearchData}
         handleFileUpload={() => handleOpenAddFileModal()}
-        handleDelete={checkBoxIds}
+        handleDelete={deleteFile}
         handleShare={shareFile}
-
-        // onSelectedCheckboxes={checkBoxIds}
       />
       <CommonModal
         ref={modalRefAddPlan}
