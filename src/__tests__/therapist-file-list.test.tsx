@@ -9,6 +9,7 @@ import {
   ADD_PATIENT_FILE,
   DELETE_THERAPIST_FILE,
   GET_THERAPIST_FILE_LIST,
+  UPDATE_PATIENT_FILE,
 } from "../graphql/mutation/resource";
 import { GET_UPLOAD_LOGO_URL } from "../graphql/query/resource";
 import * as s3 from "../lib/helpers/s3";
@@ -124,7 +125,6 @@ mocks.push({
     },
   },
 });
-
 mocks.push({
   request: {
     query: DELETE_THERAPIST_FILE,
@@ -137,6 +137,32 @@ mocks.push({
     data: {
       bulkUpdatePatientFile: {
         message: null,
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
+// update file
+mocks.push({
+  request: {
+    query: UPDATE_PATIENT_FILE,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      file_id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
+      update: {
+        description: "update-description",
+        file_name:
+          "091137573__070858348__Screenshot 2023-03-16 at 5.21.17 PM.png",
+        title: "update-title",
+      },
+    },
+  },
+  result: {
+    data: {
+      updatePatientFile: {
+        message: "File updated successfully!",
         result: true,
         __typename: "result",
       },
@@ -301,6 +327,35 @@ describe("Therapist client feedback list", () => {
           screen.getByText("File deleted successfully!")
         ).toBeInTheDocument();
       });
+    });
+  });
+
+  it("update file", async () => {
+    await sut();
+    await waitFor(async () => {
+      const editBtn = await screen.findByTestId(
+        "file_edit_btn_49ee7ee8-e92f-4aee-90ef-392a154d640c"
+      );
+      expect(editBtn).toBeInTheDocument();
+      fireEvent.click(editBtn);
+      const title = await screen.findByTestId("title");
+      expect(title).toBeInTheDocument();
+      fireEvent.change(title, {
+        target: { value: "update-title" },
+      });
+      fireEvent.change(screen.queryByTestId("description"), {
+        target: { value: "update-description" },
+      });
+      fireEvent.click(await screen.findByTestId("addSubmitForm"));
+    });
+    expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
+    await waitFor(async () => {
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+    });
+    await waitFor(async () => {
+      expect(
+        screen.getByText("File updated successfully!")
+      ).toBeInTheDocument();
     });
   });
 });

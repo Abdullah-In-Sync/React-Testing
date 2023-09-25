@@ -12,6 +12,7 @@ import {
   ADD_PATIENT_FILE,
   DELETE_THERAPIST_FILE,
   GET_THERAPIST_FILE_LIST,
+  UPDATE_PATIENT_FILE,
 } from "../../../../../../graphql/mutation/resource";
 import TherapistFileList from "../../../../../../components/therapist/patient/files/list";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
@@ -21,6 +22,7 @@ export default function TherapistFilesList() {
   const { enqueueSnackbar } = useSnackbar();
   const confirmModalRef = useRef<ModalElement>(null);
   const modalRefAddPlan = useRef<ModalElement>(null);
+  const modalRefUpdateFile = useRef<ModalElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState("");
   const [isConfirmDeleteFile, setIsConfirmDeleteFile] = useState(false);
@@ -28,6 +30,12 @@ export default function TherapistFilesList() {
 
   const [selectCheckBoxForDeleteAndShare, setSelectCheckBoxForDeleteAndShare] =
     useState("");
+  const [initialValue, setInitialValue] = useState();
+  console.log(
+    "Koca: selectCheckBoxForDeleteAndShare ",
+    selectCheckBoxForDeleteAndShare
+  );
+  const [updateFile] = useMutation(UPDATE_PATIENT_FILE);
   const [aadFile] = useMutation(ADD_PATIENT_FILE);
   const [deleteAndShareFile] = useMutation(DELETE_THERAPIST_FILE);
 
@@ -52,6 +60,15 @@ export default function TherapistFilesList() {
     () => modalRefAddPlan.current?.open(),
     []
   );
+  /* istanbul ignore next */
+  const handleOpenUpdateFileModal = useCallback(
+    () => modalRefUpdateFile.current?.open(),
+    []
+  );
+  /* istanbul ignore next */
+  const handleCloseUpdateFileModal = useCallback(() => {
+    modalRefUpdateFile.current?.close();
+  }, []);
 
   /* istanbul ignore next */
   const handleCloseAddFileModal = useCallback(() => {
@@ -77,6 +94,54 @@ export default function TherapistFilesList() {
         },
       });
 
+      setLoader(false);
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
+  };
+  /* istanbul ignore next */
+  const updateDataSubmit = async (formFields: therapistUploadFile) => {
+    try {
+      updateFile({
+        variables: {
+          patient_id: sessionStorage.getItem("patient_id"),
+          file_id: formFields["_id"],
+          update: {
+            description: formFields.description,
+            file_name: formFields.file_name,
+            title: formFields.title,
+          },
+        },
+        /* istanbul ignore next */
+        onCompleted: (data) => {
+          /* istanbul ignore next */
+          handleCloseUpdateFileModal();
+          refetch();
+          /* istanbul ignore next */
+          if (data.updatePatientFile?.result) {
+            /* istanbul ignore next */
+            enqueueSnackbar("File updated successfully!", {
+              variant: "success",
+              autoHideDuration: 2000,
+            });
+          }
+          /* istanbul ignore next */
+          if (!data.updatePatientFile?.result) {
+            /* istanbul ignore next */
+            enqueueSnackbar("This file name is already exists!", {
+              variant: "error",
+              autoHideDuration: 2000,
+            });
+          }
+        },
+      });
+      /* istanbul ignore next */
       setLoader(false);
     } catch (e) {
       /* istanbul ignore next */
@@ -159,6 +224,17 @@ export default function TherapistFilesList() {
       });
     }
   };
+  /* istanbul ignore next */
+  const onClickEdit = (id) => {
+    /* istanbul ignore next */
+    const index = fileListData?.getPatientFileListByTherapist?.findIndex(
+      (f) => f._id == id
+    );
+    /* istanbul ignore next */
+    setInitialValue(fileListData?.getPatientFileListByTherapist[index]);
+    /* istanbul ignore next */
+    handleOpenUpdateFileModal();
+  };
 
   const shareFileHandler = async () => {
     try {
@@ -200,6 +276,7 @@ export default function TherapistFilesList() {
         fileListData={fileListData}
         onSearchData={onSearchData}
         handleFileUpload={() => handleOpenAddFileModal()}
+        onClickEdit={onClickEdit}
         handleDelete={deleteFile}
         handleShare={shareFile}
       />
@@ -208,7 +285,22 @@ export default function TherapistFilesList() {
         headerTitleText={"Upload File"}
         maxWidth="sm"
       >
-        <UploadFileMainForm uploadDataSubmit={dataSubmit} />
+        <UploadFileMainForm
+          initialValue={undefined}
+          uploadDataSubmit={dataSubmit}
+          editMode={false}
+        />
+      </CommonModal>
+      <CommonModal
+        ref={modalRefUpdateFile}
+        headerTitleText={"Edit File"}
+        maxWidth="sm"
+      >
+        <UploadFileMainForm
+          initialValue={initialValue}
+          uploadDataSubmit={updateDataSubmit}
+          editMode={true}
+        />
       </CommonModal>
 
       {isConfirmDeleteFile && (
