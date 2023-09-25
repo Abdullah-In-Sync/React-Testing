@@ -162,22 +162,9 @@ mocks.push({
   result: {
     data: {
       updatePatientFile: {
-        _id: "49ee7ee8-e92f-4aee-90ef-392a154d640c",
-        added_by: "therapist",
-        created_date: "2023-09-23T10:06:35.647Z",
-        description: "update-description",
-        download_file_url:
-          "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/patientfiles/091007038__Screenshot%20from%202022-11-14%2017-04-40.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJA7R43ZVGZ%2F20230923%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230923T104856Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCWV1LXdlc3QtMSJHMEUCIQDjB1PBSfvPZ7ARW7S15i%2BII9kMqjUc3vMd%2FDt93p%2BEkwIgGZniEUWVb4BKh6Y26zlGuyKxIa1WQEBMj%2BJE0ArWJUMq%2FAIILBABGgw2NzM5MjgyNTgxMTMiDMX4AJi58wp0QsVoUSrZAhP8vyoutq%2FiglLvjNzoQY3jJhGLnV0F%2FekXyDK3oLH4PBHWIqfR%2FIBooxRPpkCecsw3hBNQcosVeXwyloe0Ka%2BPFViMcu9enzZKHXBAPxm9xp6yOg54FiDZM2Nu5aGCGdQSMdtPeaBBJti%2FGqDz7HFcSG81ARfcIVLIyvSygPaRbQr43F7Xd7v7ABi4L37jFJho98HQcmOpBHXy1LtuVDezrhZsEMITyqvuU3%2B2RVpDs%2BmsLpCBnNVqnL%2FGpt7hgBeDSods6EvC5I6OjNKEzkkQ39Xhofr3DwW3qw1TTy8d9WNfV%2F8HRzSvHbAUybDj4uKTXN%2B1%2BdKkwe4qSy%2Btm3UspU7GeibD1cyagt1H6VZqKuaM93MFPARk8XOTHYk1DdUA7ayhcjdLItNAhOUEDW7KVrQn39p8arDHTO3HsZ3%2BPUlilLFfjUYpGX9NWxI7DOBmq7accLr1VDCXhbuoBjqeAVl9tUABtSpRBPyb5COvpbUWououYN8g23C3riGJ357M5c%2FQtBhMzmcRury0YwW6K5UnwVbliudOC5PKID%2Bmm3%2FNTTwBMhDtgPxr%2F1DnkO8MalUcsZkHD1vO2nsGMKxqcpVM8RkleJldQorA3n8FxBSEF8uA9Jf4YxAEe8B6NVNvZaIgokAJjOh6iVFUzc%2BiYwQV9Azx5lNhsd9%2BepQF&X-Amz-Signature=2ae48bfcadcbc1edf4edb0c77a2ae67673151d02339429cb69d97ce2743713d1&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D091007038__Screenshot%20from%202022-11-14%2017-04-40.png&x-id=GetObject",
-        file_name:
-          "091137573__070858348__Screenshot 2023-03-16 at 5.21.17 PM.png",
-        file_url:
-          "https://myhelp-dev-webapp-s3-eu-west-1-673928258113.s3.eu-west-1.amazonaws.com/patientfiles/091007038__Screenshot%20from%202022-11-14%2017-04-40.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZZ2KBEJA7R43ZVGZ%2F20230923%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20230923T104856Z&X-Amz-Expires=1800&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCWV1LXdlc3QtMSJHMEUCIQDjB1PBSfvPZ7ARW7S15i%2BII9kMqjUc3vMd%2FDt93p%2BEkwIgGZniEUWVb4BKh6Y26zlGuyKxIa1WQEBMj%2BJE0ArWJUMq%2FAIILBABGgw2NzM5MjgyNTgxMTMiDMX4AJi58wp0QsVoUSrZAhP8vyoutq%2FiglLvjNzoQY3jJhGLnV0F%2FekXyDK3oLH4PBHWIqfR%2FIBooxRPpkCecsw3hBNQcosVeXwyloe0Ka%2BPFViMcu9enzZKHXBAPxm9xp6yOg54FiDZM2Nu5aGCGdQSMdtPeaBBJti%2FGqDz7HFcSG81ARfcIVLIyvSygPaRbQr43F7Xd7v7ABi4L37jFJho98HQcmOpBHXy1LtuVDezrhZsEMITyqvuU3%2B2RVpDs%2BmsLpCBnNVqnL%2FGpt7hgBeDSods6EvC5I6OjNKEzkkQ39Xhofr3DwW3qw1TTy8d9WNfV%2F8HRzSvHbAUybDj4uKTXN%2B1%2BdKkwe4qSy%2Btm3UspU7GeibD1cyagt1H6VZqKuaM93MFPARk8XOTHYk1DdUA7ayhcjdLItNAhOUEDW7KVrQn39p8arDHTO3HsZ3%2BPUlilLFfjUYpGX9NWxI7DOBmq7accLr1VDCXhbuoBjqeAVl9tUABtSpRBPyb5COvpbUWououYN8g23C3riGJ357M5c%2FQtBhMzmcRury0YwW6K5UnwVbliudOC5PKID%2Bmm3%2FNTTwBMhDtgPxr%2F1DnkO8MalUcsZkHD1vO2nsGMKxqcpVM8RkleJldQorA3n8FxBSEF8uA9Jf4YxAEe8B6NVNvZaIgokAJjOh6iVFUzc%2BiYwQV9Azx5lNhsd9%2BepQF&X-Amz-Signature=bd5f76bf60b488eda907ec4825d235bc240a049e9c3429a6ad67f086464c6ec5&X-Amz-SignedHeaders=host&response-content-disposition=inline%3B%20filename%3D091007038__Screenshot%20from%202022-11-14%2017-04-40.png&x-id=GetObject",
-        patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-        status: 1,
-        share_status: 0,
-        title: "update-title",
-        updated_date: "2023-09-23T10:48:56.875Z",
-        __typename: "patientFile",
+        message: "File updated successfully!",
+        result: true,
+        __typename: "result",
       },
     },
   },

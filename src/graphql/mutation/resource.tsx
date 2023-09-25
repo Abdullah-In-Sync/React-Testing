@@ -342,18 +342,8 @@ export const UPDATE_PATIENT_FILE = gql`
       patient_id: $patient_id
       update: $update
     ) {
-      _id
-      added_by
-      created_date
-      description
-      download_file_url
-      file_name
-      file_url
-      patient_id
-      status
-      share_status
-      title
-      updated_date
+      message
+      result
     }
   }
 `;

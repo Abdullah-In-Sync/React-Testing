@@ -124,16 +124,18 @@ export default function TherapistFilesList() {
           handleCloseUpdateFileModal();
           refetch();
           /* istanbul ignore next */
-          if (data.updatePatientFile == null) {
-            /* istanbul ignore next */
-            enqueueSnackbar("This file name is already exists!", {
-              variant: "error",
-              autoHideDuration: 2000,
-            });
-          } else {
+          if (data.updatePatientFile?.result) {
             /* istanbul ignore next */
             enqueueSnackbar("File updated successfully!", {
               variant: "success",
+              autoHideDuration: 2000,
+            });
+          }
+          /* istanbul ignore next */
+          if (!data.updatePatientFile?.result) {
+            /* istanbul ignore next */
+            enqueueSnackbar("This file name is already exists!", {
+              variant: "error",
               autoHideDuration: 2000,
             });
           }
