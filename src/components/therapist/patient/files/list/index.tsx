@@ -16,7 +16,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentHeader from "../../../../common/ContentHeader";
 
@@ -26,6 +26,7 @@ interface ViewProps {
   handleFileUpload?: any;
   handleShare?: any;
   handleDelete?: any;
+  onClickEdit?: any;
   // onSelectedCheckboxes?: any;
 }
 
@@ -35,6 +36,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
   handleFileUpload,
   handleShare,
   handleDelete,
+  onClickEdit,
   // onSelectedCheckboxes,
 }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -57,11 +59,9 @@ const TherapistFileList: React.FC<ViewProps> = ({
     setSelectedCheckBox((prevSelected) => {
       if (prevSelected.includes(data._id)) {
         const updatedSelected = prevSelected.filter((id) => id !== data._id);
-        // onSelectedCheckboxes(updatedSelected);
         return updatedSelected;
       } else {
         const updatedSelected = [...prevSelected, data._id];
-        // onSelectedCheckboxes(updatedSelected);
         return updatedSelected;
       }
     });
@@ -73,6 +73,11 @@ const TherapistFileList: React.FC<ViewProps> = ({
     /* istanbul ignore next */
     if (newWindow) newWindow.opener = null;
   };
+
+  useEffect(() => {
+    // Whenever fileListData changes, clear selectedCheckBoxId
+    setSelectedCheckBox([]);
+  }, [fileListData]);
 
   return (
     <Box>
@@ -159,7 +164,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
               style={{
                 color: "#ffff",
               }}
-              data-testid="share-agenda-button"
+              data-testid="share-file-button"
             />
           </IconButton>
           <IconButton
@@ -207,8 +212,12 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       disabled={data.added_by === "patient"}
                       sx={{ gridColumn: "1", m: 0 }}
                       data-testid={`resource_checkbox${index}`}
-                      control={<Checkbox />}
-                      onChange={() => toggleCheckBox(data)}
+                      control={
+                        <Checkbox
+                          checked={selectedCheckBoxId.includes(data._id)}
+                          onChange={() => toggleCheckBox(data)}
+                        />
+                      }
                       label=""
                     />
 
@@ -227,6 +236,9 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       style={{ borderRadius: "50%", border: "1px solid #000" }}
                       size="small"
                       sx={{ gridColumn: "3", m: 1 }}
+                      data-testid={`file_edit_btn_${data._id}`}
+                      /* istanbul ignore next */
+                      onClick={() => onClickEdit(data._id)}
                     >
                       <EditIcon
                         style={{ fontSize: 14 }}

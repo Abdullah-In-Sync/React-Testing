@@ -6,6 +6,8 @@ import UploadFile from "./UploadFilesForm";
 interface ViewProps {
   submitForm?: any;
   uploadDataSubmit?: any;
+  initialValue?: any;
+  editMode?: boolean;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -16,6 +18,8 @@ export const safetyPlanValidationSchema = Yup.object().shape({
 const UploadFileMainForm: React.FC<ViewProps> = ({
   submitForm,
   uploadDataSubmit,
+  initialValue,
+  editMode,
 }) => {
   const initialValues = {
     planDesc: "",
@@ -30,9 +34,16 @@ const UploadFileMainForm: React.FC<ViewProps> = ({
     return (
       <Formik
         validationSchema={safetyPlanValidationSchema}
-        initialValues={initialValues}
+        /* istanbul ignore next */
+        initialValues={initialValue ? initialValue : initialValues}
         onSubmit={submitForm}
-        children={() => <UploadFile dataSubmit={dataSubmit} />}
+        children={() => (
+          <UploadFile
+            initialValue={initialValue}
+            editMode={editMode}
+            dataSubmit={dataSubmit}
+          />
+        )}
       />
     );
   };

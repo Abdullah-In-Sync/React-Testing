@@ -12,6 +12,7 @@ import {
   ADD_PATIENT_FILE,
   DELETE_THERAPIST_FILE,
   GET_THERAPIST_FILE_LIST,
+  UPDATE_PATIENT_FILE,
 } from "../../../../../../graphql/mutation/resource";
 import TherapistFileList from "../../../../../../components/therapist/patient/files/list";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
@@ -21,16 +22,22 @@ export default function TherapistFilesList() {
   const { enqueueSnackbar } = useSnackbar();
   const confirmModalRef = useRef<ModalElement>(null);
   const modalRefAddPlan = useRef<ModalElement>(null);
+  const modalRefUpdateFile = useRef<ModalElement>(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState("");
   const [isConfirmDeleteFile, setIsConfirmDeleteFile] = useState(false);
+  const [isConfirmShareFile, setIsConfirmShareFile] = useState(false);
+
   const [selectCheckBoxForDeleteAndShare, setSelectCheckBoxForDeleteAndShare] =
     useState("");
+  const [initialValue, setInitialValue] = useState();
   console.log(
     "Koca: selectCheckBoxForDeleteAndShare ",
     selectCheckBoxForDeleteAndShare
   );
+  const [updateFile] = useMutation(UPDATE_PATIENT_FILE);
   const [aadFile] = useMutation(ADD_PATIENT_FILE);
+  const [deleteAndShareFile] = useMutation(DELETE_THERAPIST_FILE);
 
   const [getPatientFileListByTherapist, { data: fileListData, refetch }] =
     useLazyQuery(GET_THERAPIST_FILE_LIST, {
@@ -53,6 +60,15 @@ export default function TherapistFilesList() {
     () => modalRefAddPlan.current?.open(),
     []
   );
+  /* istanbul ignore next */
+  const handleOpenUpdateFileModal = useCallback(
+    () => modalRefUpdateFile.current?.open(),
+    []
+  );
+  /* istanbul ignore next */
+  const handleCloseUpdateFileModal = useCallback(() => {
+    modalRefUpdateFile.current?.close();
+  }, []);
 
   /* istanbul ignore next */
   const handleCloseAddFileModal = useCallback(() => {
@@ -89,6 +105,54 @@ export default function TherapistFilesList() {
       });
     }
   };
+  /* istanbul ignore next */
+  const updateDataSubmit = async (formFields: therapistUploadFile) => {
+    try {
+      updateFile({
+        variables: {
+          patient_id: sessionStorage.getItem("patient_id"),
+          file_id: formFields["_id"],
+          update: {
+            description: formFields.description,
+            file_name: formFields.file_name,
+            title: formFields.title,
+          },
+        },
+        /* istanbul ignore next */
+        onCompleted: (data) => {
+          /* istanbul ignore next */
+          handleCloseUpdateFileModal();
+          refetch();
+          /* istanbul ignore next */
+          if (data.updatePatientFile?.result) {
+            /* istanbul ignore next */
+            enqueueSnackbar("File updated successfully!", {
+              variant: "success",
+              autoHideDuration: 2000,
+            });
+          }
+          /* istanbul ignore next */
+          if (!data.updatePatientFile?.result) {
+            /* istanbul ignore next */
+            enqueueSnackbar("This file name is already exists!", {
+              variant: "error",
+              autoHideDuration: 2000,
+            });
+          }
+        },
+      });
+      /* istanbul ignore next */
+      setLoader(false);
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
+  };
 
   /* istanbul ignore next */
   const onSearchData = (data) => {
@@ -96,7 +160,7 @@ export default function TherapistFilesList() {
   };
 
   /* istanbul ignore next */
-  const checkBoxIds = (data) => {
+  const deleteFile = (data) => {
     const joinedData = data.join(",");
     setSelectCheckBoxForDeleteAndShare(joinedData);
 
@@ -109,11 +173,23 @@ export default function TherapistFilesList() {
   };
 
   /* istanbul ignore next */
-  const clearIsConfirmCancel = () => {
-    setIsConfirmDeleteFile(false);
+  const shareFile = (data) => {
+    const joinedData = data.join(",");
+    setSelectCheckBoxForDeleteAndShare(joinedData);
+
+    /* istanbul ignore next */
+    if (joinedData) {
+      setIsConfirmShareFile(true);
+    } else {
+      confirmModalRef.current?.open();
+    }
   };
 
-  const [deleteAndShareFile] = useMutation(DELETE_THERAPIST_FILE);
+  /* istanbul ignore next */
+  const clearIsConfirmCancel = () => {
+    setIsConfirmDeleteFile(false);
+    setIsConfirmShareFile(false);
+  };
 
   const deleteFileHandler = async () => {
     try {
@@ -122,6 +198,7 @@ export default function TherapistFilesList() {
           file_id: selectCheckBoxForDeleteAndShare,
           update: {
             status: 0,
+            share_status: 0,
           },
         },
         onCompleted: () => {
@@ -147,6 +224,49 @@ export default function TherapistFilesList() {
       });
     }
   };
+  /* istanbul ignore next */
+  const onClickEdit = (id) => {
+    /* istanbul ignore next */
+    const index = fileListData?.getPatientFileListByTherapist?.findIndex(
+      (f) => f._id == id
+    );
+    /* istanbul ignore next */
+    setInitialValue(fileListData?.getPatientFileListByTherapist[index]);
+    /* istanbul ignore next */
+    handleOpenUpdateFileModal();
+  };
+
+  const shareFileHandler = async () => {
+    try {
+      deleteAndShareFile({
+        variables: {
+          file_id: selectCheckBoxForDeleteAndShare,
+          update: {
+            share_status: 1,
+          },
+        },
+        onCompleted: () => {
+          setIsConfirmShareFile(false);
+          /* istanbul ignore next */
+          enqueueSnackbar("File shared successfully!", {
+            variant: "success",
+            autoHideDuration: 2000,
+          });
+          /* istanbul ignore next */
+          refetch();
+        },
+      });
+      setLoader(false);
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Something is wrong.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
+  };
 
   return (
     <>
@@ -156,15 +276,31 @@ export default function TherapistFilesList() {
         fileListData={fileListData}
         onSearchData={onSearchData}
         handleFileUpload={() => handleOpenAddFileModal()}
-        handleDelete={checkBoxIds}
-        // onSelectedCheckboxes={checkBoxIds}
+        onClickEdit={onClickEdit}
+        handleDelete={deleteFile}
+        handleShare={shareFile}
       />
       <CommonModal
         ref={modalRefAddPlan}
         headerTitleText={"Upload File"}
         maxWidth="sm"
       >
-        <UploadFileMainForm uploadDataSubmit={dataSubmit} />
+        <UploadFileMainForm
+          initialValue={undefined}
+          uploadDataSubmit={dataSubmit}
+          editMode={false}
+        />
+      </CommonModal>
+      <CommonModal
+        ref={modalRefUpdateFile}
+        headerTitleText={"Edit File"}
+        maxWidth="sm"
+      >
+        <UploadFileMainForm
+          initialValue={initialValue}
+          uploadDataSubmit={updateDataSubmit}
+          editMode={true}
+        />
       </CommonModal>
 
       {isConfirmDeleteFile && (
@@ -172,6 +308,14 @@ export default function TherapistFilesList() {
           label="Are you sure, you want to delete?"
           onCancel={clearIsConfirmCancel}
           onConfirm={deleteFileHandler}
+        />
+      )}
+
+      {isConfirmShareFile && (
+        <ConfirmationModal
+          label="Are you sure, you want to share?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={shareFileHandler}
         />
       )}
 
