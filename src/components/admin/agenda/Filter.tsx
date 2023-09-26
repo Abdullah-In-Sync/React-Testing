@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from "@mui/material";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../safetyPlan/safetyPlanStyles";
@@ -37,37 +37,42 @@ const AgendaFilter: React.FC<ViewProps> = ({
   const router = useRouter();
   /* istanbul ignore next */
 
-  const iconButtons = () => {
-    const [orgId, setOrgId] = React.useState("");
-    const [
-      getTherapistList,
-      /* istanbul ignore next */
-      { data: { getTherapyListByOrgId: therapistDropdownData = [] } = {} },
-    ] = useLazyQuery(GET_THERAPIST_LIST_BY_ORG_ID, {
-      fetchPolicy: "cache-and-network",
-    });
-    React.useEffect(() => {
-      /* istanbul ignore next */
-      getTherapistList({
-        variables: {
-          orgId,
-        },
-      });
-    }, [orgId]);
-
+  const [orgId, setOrgId] = useState("");
+  const [
+    getTherapistList,
     /* istanbul ignore next */
-    const onChange = (e) => {
+    { data: { getTherapyListByOrgId: therapistDropdownData = [] } = {} },
+  ] = useLazyQuery(GET_THERAPIST_LIST_BY_ORG_ID, {
+    fetchPolicy: "cache-and-network",
+  });
+  useEffect(() => {
+    /* istanbul ignore next */
+    getTherapistList({
+      variables: {
+        orgId,
+      },
+    });
+  }, [orgId]);
+
+  /* istanbul ignore next */
+  const onChange = (e) => {
+    /* istanbul ignore next */
+    e.target.value = e.target.value !== "all" ? e.target.value : "";
+    /* istanbul ignore next */
+    if (e.target.name == "orgId") {
       /* istanbul ignore next */
-      e.target.value = e.target.value !== "all" ? e.target.value : "";
-      /* istanbul ignore next */
-      if (e.target.name == "orgId") {
-        /* istanbul ignore next */
-        setOrgId(e.target.value);
-      }
-      /* istanbul ignore next */
-      onChangeFilterDropdown(e);
-    };
-    return (
+      setOrgId(e.target.value);
+    }
+    /* istanbul ignore next */
+    onChangeFilterDropdown(e);
+  };
+
+  const onPressCreateButton = () => {
+    router.push("/admin/agenda/add/");
+  };
+
+  return (
+    <Box className="actionsWrapper">
       <Stack>
         <Stack className={styles.filterWrapper}>
           <Box className="filterDropdownInput">
@@ -133,15 +138,8 @@ const AgendaFilter: React.FC<ViewProps> = ({
           </Box>
         </Stack>
       </Stack>
-    );
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onPressCreateButton = () => {
-    router.push("/admin/agenda/add/");
-  };
-
-  return <Box className="actionsWrapper">{iconButtons()}</Box>;
+    </Box>
+  );
 };
 
 export default AgendaFilter;
