@@ -10,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { useSnackbar } from "notistack";
 
 interface Organization {
   _id: string;
@@ -31,6 +32,7 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
   onChangePlanId,
   onAssessmentNameChange,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [patientInputs, setpatientInputs] = useState<string>("");
   const [selected, setSelected] = useState<string | string[]>([]);
 
@@ -73,6 +75,7 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
             <TextFieldComponent
               style={{ backgroundColor: "white" }}
               name="patient_firstname"
+              required={true}
               id="patientFirstname"
               label="Enter assessment name"
               value={patientInputs}
@@ -88,14 +91,15 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
 
         <Box>
           <FormControl style={{ width: "100%", backgroundColor: "" }}>
-            <InputLabel id="mutiple-select-label">
-              Select organisation
+            <InputLabel size="small" id="mutiple-select-label">
+              Select organisation*
             </InputLabel>
             <Select
               data-testid="select_organisation1"
               name="select_organisation"
               label="Select_Organisation"
               multiple
+              size="small"
               value={selected}
               onChange={handleChange}
               //   renderValue={(selected) => {
@@ -158,13 +162,13 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
             data-testid="addSubmitForm"
             variant="contained"
             onClick={() => {
-              //   if (patientInputs.length) {
-              onPressSubmit();
-              //   } else {
-              //     enqueueSnackbar("Please enter assessment name", {
-              //       variant: "error",
-              //     });
-              //   }
+              if (patientInputs && selected) {
+                onPressSubmit?.();
+              } else {
+                enqueueSnackbar("Please enter assessment name", {
+                  variant: "error",
+                });
+              }
             }}
           >
             Save

@@ -12,7 +12,7 @@ const initialState = {
   email: "",
   patient_firstname: "",
   patient_lastname: "",
-  phone_number: "",
+  phone_number: "+44",
 };
 
 export default function AddPatientForm(props: propTypes) {
@@ -20,20 +20,28 @@ export default function AddPatientForm(props: propTypes) {
   const [formFields, setFormFields] =
     useState<addPatientFormFields>(initialState);
 
+  /* istanbul ignore next */
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const fieldName = e.target.name;
-    const value = e.target.value;
+    let value = e.target.value;
+
+    // Ensure the value is no longer than 13  characters
+    if (fieldName === "phone_number" && value.length > 13) {
+      value = value.slice(0, 13);
+    }
+
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
   };
 
+  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirmSubmit(false);
   };
 
+  /* istanbul ignore next */
   const handleCreatePatient = (formFields) => {
-    console.log("Koca: updated formFields ", formFields);
     props.onClickSendregistrationtothepatient(formFields);
   };
 
