@@ -359,12 +359,8 @@ export default function AddForm(props: propTypes) {
     const value = event.target.value as string[];
 
     if (value[value.length - 1] === "all") {
-      const updatedSelected = [
-        "all",
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        ...orgData?.getOrganizationData?.map((org) => org._id),
-      ];
-
+      const orgArray = orgData?.getOrganizationData || [];
+      const updatedSelected = ["all", ...orgArray.map((org) => org?._id)];
       setFormFields((oldValues) => ({
         ...oldValues,
         org_id: updatedSelected.join(","),
