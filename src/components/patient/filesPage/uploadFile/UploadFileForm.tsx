@@ -91,6 +91,11 @@ const UploadFileForm: React.FC<any> = ({
                 component="div"
                 className="invalid-input-message"
               />
+              <ErrorMessage
+                name={`file_name_file`}
+                component="div"
+                className="invalid-input-message"
+              />
             </Box>
             {pressedIconButton !== "edit" && accToggle()}
           </Box>

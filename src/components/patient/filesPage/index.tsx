@@ -99,17 +99,24 @@ const FilesPage: NextPage = () => {
       await updatePatientFile({
         variables: { file_id, patient_id, update: variables },
         onCompleted: (data) => {
-          const { updatePatientFile: { _id = undefined } = {} } = data;
-          if (_id) {
+          const {
+            updatePatientFile: { result = undefined, message = "" } = {},
+          } = data;
+
+          if (result) {
             refetchPatientList();
-            enqueueSnackbar(
+            doneCallback();
+            return enqueueSnackbar(
               successMessage ? successMessage : "File updated successfully!",
               {
                 variant: "success",
               }
             );
-            doneCallback();
           }
+          doneCallback();
+          return enqueueSnackbar(message, {
+            variant: "error",
+          });
         },
       });
     } catch (e) {

@@ -106,7 +106,7 @@ mocksData.push({
           title: "some",
         },
         {
-          _id: "c34cdc3a-d144-4540-afc2-7981a347bcea",
+          _id: "pu2",
           added_by: "patient",
           created_date: "2023-09-20T10:28:30.286Z",
           description: "",
@@ -138,7 +138,8 @@ mocksData.push({
   result: {
     data: {
       updatePatientFile: {
-        _id: "pu1",
+        result: true,
+        message: "file update successfully",
       },
     },
   },
@@ -160,7 +161,8 @@ mocksData.push({
   result: {
     data: {
       updatePatientFile: {
-        _id: "pu1",
+        result: true,
+        message: "file update successfully",
       },
     },
   },
@@ -174,7 +176,23 @@ mocksData.push({
   result: {
     data: {
       updatePatientFile: {
-        _id: "pu1",
+        result: true,
+        message: "file update successfully",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_PATIENT_FILE,
+    variables: { file_id: "pu2", patient_id: "user_id", update: { status: 0 } },
+  },
+  result: {
+    data: {
+      updatePatientFile: {
+        result: false,
+        message: "You are not authorized for this action",
       },
     },
   },
@@ -301,6 +319,17 @@ describe("Patient files", () => {
     fireEvent.click(confirmButton);
     expect(
       await screen.findByText(/File deleted successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should not delete upload file due to result false", async () => {
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_delete_pu2"));
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/You are not authorized for this action/i)
     ).toBeInTheDocument();
   });
 
