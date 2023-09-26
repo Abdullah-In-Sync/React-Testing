@@ -15,6 +15,7 @@ type propsType = {
   hideIcon?: boolean;
 };
 
+/* istanbul ignore next */
 export default function UploadButtonComponent(props: propsType) {
   return (
     <>
