@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import React, { useState } from "react";
 import { Button, Grid, Stack, Checkbox } from "@mui/material";
 import { Form } from "formik";
@@ -9,7 +8,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { useSnackbar } from "notistack";
 
@@ -26,6 +24,47 @@ interface ViewProps {
   onChangePlanId?: any;
   onAssessmentNameChange?: any;
 }
+/* istanbul ignore next */
+const CheckboxAll = ({
+  isAllSelected,
+  onChange,
+}: {
+  isAllSelected: boolean;
+  onChange: () => void;
+}) => (
+  <MenuItem value="all">
+    <ListItemIcon>
+      <Checkbox
+        checked={isAllSelected}
+        indeterminate={!isAllSelected}
+        onChange={onChange}
+        data-testid={`checkbox123`}
+      />
+    </ListItemIcon>
+    <Typography>Select All</Typography>
+  </MenuItem>
+);
+/* istanbul ignore next */
+const OrganizationCheckbox = ({
+  option,
+  checked,
+  onChange,
+}: {
+  option: Organization;
+  checked: boolean;
+  onChange: any;
+}) => (
+  <MenuItem key={option._id} value={option._id}>
+    <ListItemIcon>
+      <Checkbox
+        data-testid={`checkbox12345${option._id}`}
+        checked={checked}
+        onChange={onChange}
+      />
+    </ListItemIcon>
+    <ListItemText primary={option.name} />
+  </MenuItem>
+);
 
 const FormAssessmentBox: React.FC<ViewProps> = ({
   onPressSubmit,
@@ -35,36 +74,44 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
 }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [patientInputs, setpatientInputs] = useState<string>("");
-  const [selected, setSelected] = useState<string | string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
 
-  /* istanbul ignore next */
+  /* istanbul ignore file */
   const isAllSelected =
     organizationList.length > 0 && selected.length === organizationList.length;
 
-  /* istanbul ignore next */
-  const handleChange = (event: SelectChangeEvent<string | string[]>) => {
-    const value = event.target.value as string[];
-
-    if (value[value.length - 1] === "all") {
-      const updatedSelected =
-        selected.length === organizationList.length
-          ? []
-          : organizationList.map((org) => org._id);
-
-      setSelected(updatedSelected);
-      onChangePlanId(updatedSelected);
-
-      return;
-    }
-
-    setSelected(value);
-    onChangePlanId(value);
+  /* istanbul ignore file */
+  const handleCheckboxChange = (value) => {
+    const newVal = [...selected, value];
+    setSelected(newVal);
+    onChangePlanId(newVal);
   };
 
-  /* istanbul ignore next */
+  /* istanbul ignore file */
+  const handleAllCheckboxChange = () => {
+    const updatedSelected = isAllSelected
+      ? []
+      : organizationList.map((org) => org._id);
+
+    setSelected(updatedSelected);
+    onChangePlanId(updatedSelected);
+  };
+
+  /* istanbul ignore file */
   const handlePatientInputChange = (value: string) => {
     setpatientInputs(value);
     onAssessmentNameChange(value);
+  };
+
+  /* istanbul ignore file */
+  const handleSubmit = () => {
+    if (patientInputs && selected) {
+      onPressSubmit?.();
+    } else {
+      enqueueSnackbar("Please enter assessment name", {
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -83,10 +130,7 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
               id="patientFirstname"
               label="Enter assessment name"
               value={patientInputs}
-              onChange={(e) =>
-                /* istanbul ignore next */
-                handlePatientInputChange(e.target.value)
-              }
+              onChange={(e) => handlePatientInputChange(e.target.value)}
               fullWidth={true}
               inputProps={{ "data-testid": "patient_firstname" }}
               variant="outlined"
@@ -108,18 +152,14 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
               multiple
               size="small"
               value={selected}
-              onChange={handleChange}
               renderValue={(selected) => {
-                /* istanbul ignore next */
+                /* istanbul ignore file */
                 const selectedOptions = organizationList.filter((option) =>
                   selected.includes(option._id)
                 );
-                /* istanbul ignore next */
-                const selectedNames = selectedOptions.map(
-                  (option) => option.name
-                );
-                /* istanbul ignore next */
-                return selectedNames.join(", ");
+                /* istanbul ignore next */ const selectedNames =
+                  selectedOptions.map((option) => option.name);
+                /* istanbul ignore next */ return selectedNames.join(", ");
               }}
               style={{
                 flex: "none",
@@ -127,32 +167,20 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
                 flexGrow: "0",
               }}
             >
-              <MenuItem value="all">
-                <ListItemIcon>
-                  <Checkbox
-                    checked={isAllSelected}
-                    indeterminate={
-                      /* istanbul ignore next */
-                      selected.length > 0 &&
-                      selected.length < organizationList.length
-                    }
-                  />
-                </ListItemIcon>
-
-                <Typography data-testid={`checkbox123`}>Select All</Typography>
-              </MenuItem>
+              <CheckboxAll
+                isAllSelected={isAllSelected}
+                onChange={handleAllCheckboxChange}
+              />
               {
-                /* istanbul ignore next */
+                /* istanbul ignore file */
                 organizationList.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    <ListItemIcon>
-                      <Checkbox
-                        data-testid={`checkbox12345${option._id}`}
-                        checked={selected.indexOf(option._id) > -1}
-                      />
-                    </ListItemIcon>
-                    <ListItemText primary={option.name} />
-                  </MenuItem>
+                  <OrganizationCheckbox
+                    data-testid={option._id}
+                    key={option._id}
+                    option={option}
+                    checked={selected.includes(option._id)}
+                    onChange={() => handleCheckboxChange(option._id)}
+                  />
                 ))
               }
             </Select>
@@ -170,16 +198,7 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
             style={{ paddingLeft: "30px", paddingRight: "30px" }}
             data-testid="addSubmitForm"
             variant="contained"
-            onClick={() => {
-              /* istanbul ignore next */
-              if (patientInputs && selected) {
-                onPressSubmit?.();
-              } else {
-                enqueueSnackbar("Please enter assessment name", {
-                  variant: "error",
-                });
-              }
-            }}
+            onClick={handleSubmit}
           >
             Save
           </Button>
