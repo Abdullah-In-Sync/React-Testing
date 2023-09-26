@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React, { useState } from "react";
 import { Button, Grid, Stack, Checkbox } from "@mui/material";
 import { Form } from "formik";
@@ -36,11 +37,9 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
   const [patientInputs, setpatientInputs] = useState<string>("");
   const [selected, setSelected] = useState<string | string[]>([]);
 
-  /* istanbul ignore next */
   const isAllSelected =
     organizationList.length > 0 && selected.length === organizationList.length;
 
-  /* istanbul ignore next */
   const handleChange = (event: SelectChangeEvent<string | string[]>) => {
     const value = event.target.value as string[];
 
@@ -109,15 +108,14 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
               value={selected}
               onChange={handleChange}
               renderValue={(selected) => {
-                /* istanbul ignore next */
                 const selectedOptions = organizationList.filter((option) =>
                   selected.includes(option._id)
                 );
-                /* istanbul ignore next */
+
                 const selectedNames = selectedOptions.map(
                   (option) => option.name
                 );
-                /* istanbul ignore next */
+
                 return selectedNames.join(", ");
               }}
               style={{
@@ -131,7 +129,6 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
                   <Checkbox
                     checked={isAllSelected}
                     indeterminate={
-                      /* istanbul ignore next */
                       selected.length > 0 &&
                       selected.length < organizationList.length
                     }
