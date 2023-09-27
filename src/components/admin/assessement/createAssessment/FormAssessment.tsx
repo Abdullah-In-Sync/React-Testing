@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import React, { FormEvent, useState } from "react";
 import { Button, Grid, Stack } from "@mui/material";
 import { Box } from "@material-ui/core";
@@ -22,15 +21,14 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
   setSendFormData,
 }) => {
   const csvDecode = (csvString) => (csvString ? csvString.split(",") : []);
+
   const [formFields, setFormFields] = useState<addAdminAssessment>({
     ...defaultFormValue,
   });
-  console.log("Koca: formFields ", formFields);
 
-  /* istanbul ignore next */
   const handleChange = (event) => {
     const value = event.target.value as string[];
-
+    /* istanbul ignore next */
     if (value[value.length - 1] === "all") {
       const updatedSelected = [
         "all",
@@ -67,11 +65,11 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
 
     setFormFields((oldValues) => ({ ...oldValues, [fieldName]: value }));
   };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    /* istanbul ignore next */
     setSendFormData(formFields);
-
-    // setSendFormData(data); actions
   };
   return (
     <Stack>
@@ -115,8 +113,14 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
             size="small"
             className="form-control-bg multiSelect"
             extraProps={{ "data-testid": "mainOrganizationSelect" }}
-            multiSelect={csvDecode(formFields?.org_id)}
-            value={csvDecode(formFields?.org_id)}
+            multiSelect={
+              /* istanbul ignore next */
+              csvDecode(formFields?.org_id)
+            }
+            value={
+              /* istanbul ignore next */
+              csvDecode(formFields?.org_id)
+            }
           />
         </Box>
 

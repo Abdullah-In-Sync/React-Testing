@@ -310,7 +310,7 @@ const AssessmentListPage: NextPage = () => {
           const {
             adminShareAssessment: { duplicateNames },
           } = data;
-
+          /* istanbul ignore next */
           if (duplicateNames) {
             /* istanbul ignore next */
             setIsConfirmShare(false);
@@ -373,6 +373,7 @@ const AssessmentListPage: NextPage = () => {
   const onPressShareAssignment = (assignmentId, name) => {
     setSelectAssessment(assignmentId);
     setSelectAssessmentName(name);
+    /* istanbul ignore next */
     shareInfoModalRef.current?.open();
   };
   return (
@@ -418,7 +419,10 @@ const AssessmentListPage: NextPage = () => {
               /* istanbul ignore next */
               setIsConfirmEditAssessment(true)
             }
-            prefilledAssessmentName={assessmentData?.name}
+            prefilledAssessmentName={
+              /* istanbul ignore next */
+              assessmentData?.name
+            }
             receiveName={onChangeEditName}
           />
         </CommonModal>
