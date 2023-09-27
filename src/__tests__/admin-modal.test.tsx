@@ -565,7 +565,9 @@ describe("Admin modal list", () => {
 
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
-      expect(screen.getByText("Model added successfully!")).toBeInTheDocument();
+      expect(
+        await screen.getByText("Model added successfully!")
+      ).toBeInTheDocument();
     });
   });
 
