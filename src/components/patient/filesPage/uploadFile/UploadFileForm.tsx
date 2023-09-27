@@ -2,7 +2,7 @@ import { Box, FormControlLabel, Stack } from "@mui/material";
 import { ErrorMessage, Form } from "formik";
 import * as React from "react";
 import { fileOnChange } from "../../../../utility/helper";
-import CommonButton from "../../../common/Buttons/CommonButton";
+import CommonLoadingButton from "../../../common/Buttons/CommonLoadingButton";
 import FormikTextField from "../../../common/FormikFields/FormikTextField";
 import { IOSSwitch } from "../../../common/ToggleButton/IosToggleButton";
 import UploadButtonComponent from "../../../common/UploadButton/UploadButtonComponent";
@@ -106,14 +106,14 @@ const UploadFileForm: React.FC<any> = ({
         {saveButtonText && (
           <Box className="row5 crow">
             <Box>
-              <CommonButton
-                disabled={isSubmitting}
+              <CommonLoadingButton
                 type="submit"
-                data-testid="formSubmit"
                 variant="contained"
+                loading={isSubmitting}
+                data-testid="formSubmit"
               >
                 {saveButtonText}
-              </CommonButton>
+              </CommonLoadingButton>
             </Box>
           </Box>
         )}
