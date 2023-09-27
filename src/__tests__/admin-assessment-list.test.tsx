@@ -141,7 +141,10 @@ mocksData.push({
 mocksData.push({
   request: {
     query: ADMIN_CREATE_ASSESSMENT,
-    variables: { name: "Namelkmsllvslm", org_id: undefined },
+    variables: {
+      name: "Namelkmsllvslm",
+      org_id: "2301536c4d674b3598814174d8f19593",
+    },
   },
   result: {
     data: {
@@ -273,6 +276,22 @@ export const clickSelect = async (element: HTMLElement) => {
   fireEvent.click(selectOption);
 };
 
+export const checkSelected = async (element: HTMLElement, id: string) => {
+  const button = await within(element).findByRole("button");
+  expect(button).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.mouseDown(button);
+  });
+  const listBox = await screen.findByRole("listbox");
+  expect(listBox).toBeInTheDocument();
+  const selectOption = await screen.findByTestId(`shareOrg_${id}`);
+  expect(selectOption).toBeInTheDocument();
+  fireEvent.click(selectOption);
+  const hideEle = await screen.findAllByRole("presentation");
+  hideEle[0].style.display = "none";
+  // expect(listBox).toBeUndefined();
+};
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -302,18 +321,15 @@ describe("Admin Assessment list", () => {
       fireEvent.click(screen.queryByTestId("createPlanButton"));
 
       expect(screen.getByText("Create assessment")).toBeInTheDocument();
-      expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
+      expect(screen.getByTestId("assessment_name")).toBeInTheDocument();
 
-      fireEvent.change(screen.queryByTestId("patient_firstname"), {
+      fireEvent.change(screen.queryByTestId("assessment_name"), {
         target: { value: "Namelkmsllvslm" },
       });
 
-      const selectElement = screen.getByTestId(
-        "select_organisation1"
-      ) as HTMLSelectElement;
-      expect(screen.getByTestId("select_organisation1")).toBeInTheDocument();
+      const select = await screen.findByTestId("mainOrganizationSelect");
+      await checkSelected(select, "2301536c4d674b3598814174d8f19593");
 
-      fireEvent.change(selectElement, { target: { selectedIndex: 1 } });
       expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
 
       fireEvent.click(screen.queryByTestId("addSubmitForm"));
@@ -326,9 +342,11 @@ describe("Admin Assessment list", () => {
 
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
-      expect(
-        screen.getByText("Assessment created successfully!")
-      ).toBeInTheDocument();
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Assessment created successfully!")
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -362,7 +380,7 @@ describe("Admin Assessment list", () => {
     });
   });
 
-  it("Creat assessment", async () => {
+  it("Update assessment", async () => {
     await sut();
 
     await waitFor(async () => {
@@ -391,10 +409,6 @@ describe("Admin Assessment list", () => {
           target: { value: "Update the name and submit" },
         });
       });
-
-      // fireEvent.change(screen.queryByTestId("patient_firstname"), {
-      //   target: { value: "Namelkmsllvslm" },
-      // });
 
       expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
 
