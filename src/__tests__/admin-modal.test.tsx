@@ -565,9 +565,11 @@ describe("Admin modal list", () => {
 
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
-      expect(
-        await screen.getByText("Model added successfully!")
-      ).toBeInTheDocument();
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Model added successfully!")
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -599,9 +601,12 @@ describe("Admin modal list", () => {
       const confirmBtn = await screen.findByTestId("confirmButton");
       expect(confirmBtn).toBeInTheDocument();
       fireEvent.click(confirmBtn);
-      expect(
-        await screen.findByText("Model deleted successfully!")
-      ).toBeInTheDocument();
+
+      waitFor(async () => {
+        expect(
+          screen.findByText("Model deleted successfully!")
+        ).toBeInTheDocument();
+      });
     });
   });
   it("submit edit modal form with valid data", async () => {
@@ -621,10 +626,11 @@ describe("Admin modal list", () => {
       fireEvent.click(screen.queryByTestId("addSubmitForm"));
 
       fireEvent.click(screen.queryByTestId("confirmButton"));
-
-      await expect(
-        screen.getByText("Model updated successfully!")
-      ).toBeInTheDocument();
+      waitFor(async () => {
+        expect(
+          screen.getByText("Model updated successfully!")
+        ).toBeInTheDocument();
+      });
     });
   });
 });
