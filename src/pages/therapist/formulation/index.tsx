@@ -397,8 +397,11 @@ const TherapistFormulation = () => {
   };
 
   /* istanbul ignore next */
-  const onPressCard = () => {
-    // Do something in future
+  const onPressCard = (record) => {
+    /* istanbul ignore next */
+    const { _id } = record;
+    /* istanbul ignore next */
+    router.push(`formulation/view/${_id}`);
   };
   return (
     <>

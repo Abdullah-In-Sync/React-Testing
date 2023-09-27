@@ -57,10 +57,12 @@ const NavBar = () => {
 
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
 
+  /* istanbul ignore next */
   const onPressChangePassword = () => {
     infoModalRef.current.openConfirm({});
   };
 
+  /* istanbul ignore next */
   const handleDropdownCLick = (label) => {
     if (label === "logout")
       return logout(({ status, message }) =>

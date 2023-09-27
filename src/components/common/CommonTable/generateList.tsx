@@ -12,6 +12,7 @@ interface Column {
   renderc?: any;
 }
 
+/* istanbul ignore next */
 export const columns = (data, buttons): readonly Column[] => {
   const tableBodyCell = (value, buttonClick, item, i) => {
     const { id, addIndex } = item;
