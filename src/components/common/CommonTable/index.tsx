@@ -39,7 +39,6 @@ const CommonTable: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
   const { list, total = 0 } = data || {};
-  console.log(list, "list");
   const columnsData = columns(headerData, actionButton);
 
   const messageCheck = () => {
