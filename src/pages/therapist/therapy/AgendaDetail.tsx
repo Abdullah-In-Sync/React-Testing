@@ -208,7 +208,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
               setDeleteModalOpen(true);
               setDeleteAgendaId(value._id);
             }}
-            data-testid="delete-icon-button"
+            data-testid={`delete-icon-button${value._id}`}
           >
             <DeleteIcon />
           </IconButton>
@@ -229,7 +229,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
               marginRight: "10px",
             }}
             size="small"
-            data-testid="edit-icon-button"
+            data-testid={`edit-icon-button${value._id}`}
             onClick={() => {
               setOpenResourceModal(true);
               setDeleteAgendaId(value._id);
@@ -265,16 +265,25 @@ export default function AgendaDetailAccordian(props: propTypes) {
             }}
             size="small"
             onClick={() => {
-              setShareModalOpen(true);
-              setDeleteAgendaId(value._id);
-              setPtShareId(value.ptsharres_id);
+              if (value.resource_id) {
+                setShareModalOpen(true);
+                setDeleteAgendaId(value._id);
+                setPtShareId(value.ptsharres_id);
+              } else {
+                enqueueSnackbar(
+                  "Please assign resource first in order to share with the patient",
+                  {
+                    variant: "error",
+                  }
+                );
+              }
             }}
           >
             <ShareIcon
               style={{
                 color: value.share_status == 1 ? "#ffff" : undefined,
               }}
-              data-testid="share-agenda-button"
+              data-testid={`share-agenda-button${value._id}`}
             />
           </IconButton>
         </>
