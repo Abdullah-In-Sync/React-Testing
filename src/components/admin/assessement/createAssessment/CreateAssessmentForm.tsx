@@ -5,11 +5,8 @@ import FormAssessmentBox from "./FormAssessment";
 
 interface ViewProps {
   submitForm?: any;
-  onPressSubmit?: () => void;
-  setPlanId?: any;
   organizationList?: any;
-  receivePlanId: any;
-  receiveName?: any;
+  receiveAllData?: any;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -19,34 +16,16 @@ export const safetyPlanValidationSchema = Yup.object().shape({
 
 const CreateAssessmentForm: React.FC<ViewProps> = ({
   submitForm,
-  onPressSubmit,
-  setPlanId,
   organizationList,
-  receivePlanId,
-  receiveName,
+  receiveAllData,
 }) => {
   const initialValues = {
     planDesc: "",
     planName: "",
   };
 
-  //   const onChangePlanId = (value) => {
-  //     console.log("Koca: onChangePlanId value ", value);
-  //     /* istanbul ignore next */
-  //     receivePlanId(value);
-  //   };
-
-  const onChangePlanId = (value) => {
-    console.log("Koca: onChangePlanId value ", value);
-    /* istanbul ignore next */
-    const convertedValue = value.flat();
-    receivePlanId(convertedValue);
-  };
-
-  const onChangeName = (value) => {
-    console.log("Koca:onChangeName value ", value);
-    /* istanbul ignore next */
-    receiveName(value);
+  const setSendRecFormData = (value) => {
+    receiveAllData(value);
   };
 
   const commonform = () => {
@@ -58,10 +37,7 @@ const CreateAssessmentForm: React.FC<ViewProps> = ({
         children={() => (
           <FormAssessmentBox
             organizationList={organizationList}
-            setPlanId={setPlanId}
-            onChangePlanId={onChangePlanId}
-            onPressSubmit={onPressSubmit}
-            onAssessmentNameChange={onChangeName}
+            setSendFormData={setSendRecFormData}
           />
         )}
       />

@@ -17,6 +17,11 @@ export type addResourceFormField = {
   formulation_avail_for?: any;
 };
 
+export type addAdminAssessment = {
+  name: string;
+  org_id: string;
+};
+
 export type therapistUploadFile = {
   title: string;
   description: string;
