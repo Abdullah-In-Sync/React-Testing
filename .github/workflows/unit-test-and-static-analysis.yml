@@ -57,7 +57,7 @@ jobs:
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         uses: nick-invision/retry@v2
         with:
-          timeout_minutes: 10
+          timeout_minutes: 15
           retry_wait_seconds: 60
           max_attempts: 3
           command: pushd src && yarn install --frozen-lockfile

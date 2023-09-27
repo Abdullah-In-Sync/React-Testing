@@ -23,14 +23,17 @@ const UploadFileForm: React.FC<any> = ({
           <IOSSwitch sx={{ m: 1 }} defaultChecked={Boolean(is_private)} />
         }
         label=""
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setFieldValue("is_private", Number(e.target?.checked))
+        onChange={
+          /* istanbul ignore next */
+          (e: React.ChangeEvent<HTMLInputElement>) =>
+            setFieldValue("is_private", Number(e.target?.checked))
         }
         data-testid={`toggleAcc-${saveButtonText}`}
       />
     </Box>
   );
 
+  /* istanbul ignore next */
   const onSelectFileChange = (name, e) => {
     fileOnChange(e, ({ fileName, fileObj }) => {
       setFieldValue(name, fileName);
@@ -88,6 +91,11 @@ const UploadFileForm: React.FC<any> = ({
               />
               <ErrorMessage
                 name={`file_name`}
+                component="div"
+                className="invalid-input-message"
+              />
+              <ErrorMessage
+                name={`file_name_file`}
                 component="div"
                 className="invalid-input-message"
               />

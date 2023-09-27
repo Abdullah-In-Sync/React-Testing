@@ -57,7 +57,8 @@ export const UPDATE_PATIENT_FILE = gql`
       patient_id: $patient_id
       update: $update
     ) {
-      _id
+      result
+      message
     }
   }
 `;
