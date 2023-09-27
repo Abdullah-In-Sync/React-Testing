@@ -4,7 +4,11 @@ import { GET_FILE_UPLOAD_URl } from "../graphql/query/common";
 import { uploadToS3 } from "../lib/helpers/s3";
 export const fetchUrlAndUploadFile = () => {
   const [getUploadUrl] = useLazyQuery(GET_FILE_UPLOAD_URl);
-  const uploadFile = ({ fileName, file, imageFolder }, callback, onError) => {
+  const uploadFile = (
+    { fileName, file, imageFolder },
+    callback,
+    onError?: any
+  ) => {
     getUploadUrl({
       variables: {
         fileName,

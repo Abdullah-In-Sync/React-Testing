@@ -35,7 +35,8 @@ const FilesListComponent: React.FC<ViewProps> = ({
             actionButton={[
               {
                 id: "upload",
-                icon: require("@mui/icons-material/FileUploadOutlined").default,
+                icon: require("@mui/icons-material/FileDownloadOutlined")
+                  .default,
               },
               {
                 id: "view",
