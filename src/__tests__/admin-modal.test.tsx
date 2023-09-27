@@ -538,48 +538,34 @@ const selectDropDown = async (dropdownTestId) => {
 describe("Admin modal list", () => {
   it("Add modal", async () => {
     await createSut();
-
-    expect(screen.getByTestId("addModalButton")).toBeInTheDocument();
-    fireEvent.click(screen.queryByTestId("addModalButton"));
     await waitFor(async () => {
-      expect(screen.getByTestId("therapy_name")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("addModalButton"));
 
-      await waitFor(async () => {
-        fireEvent.change(screen.queryByTestId("therapy_name"), {
-          target: { value: "name therapy" },
-        });
-
-        fireEvent.change(screen.queryByTestId("select_organisation1"), {
-          target: { value: "d1f2bbd3-3388-4ca2-9d68-55b95574a269" },
-        });
-
-        await expect(
-          screen.queryByTestId("select_organisation1").getAttribute("value")
-        ).toBe("d1f2bbd3-3388-4ca2-9d68-55b95574a269");
+      fireEvent.change(screen.queryByTestId("therapy_name"), {
+        target: { value: "name therapy" },
       });
 
-      await waitFor(async () => {
-        fireEvent.change(screen.queryByTestId("disorder_id"), {
-          target: { value: "disorder_id_1" },
-        });
-
-        await expect(
-          screen.queryByTestId("disorder_id").getAttribute("value")
-        ).toBe("disorder_id_1");
+      fireEvent.change(screen.queryByTestId("select_organisation1"), {
+        target: { value: "d1f2bbd3-3388-4ca2-9d68-55b95574a269" },
       });
 
-      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+      expect(
+        screen.queryByTestId("select_organisation1").getAttribute("value")
+      ).toBe("d1f2bbd3-3388-4ca2-9d68-55b95574a269");
+
+      fireEvent.change(screen.queryByTestId("disorder_id"), {
+        target: { value: "disorder_id_1" },
+      });
+
+      expect(screen.queryByTestId("disorder_id").getAttribute("value")).toBe(
+        "disorder_id_1"
+      );
 
       fireEvent.click(screen.queryByTestId("addSubmitForm"));
 
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("confirmButton"));
-      });
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Model added successfully!")
-        ).toBeInTheDocument();
-      });
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(screen.getByText("Model added successfully!")).toBeInTheDocument();
     });
   });
 
@@ -620,37 +606,21 @@ describe("Admin modal list", () => {
     await sut();
 
     await waitFor(async () => {
-      expect(
-        screen.getByTestId(
-          "iconButton_edit_5806b8eb-4386-4594-8b9b-bc241871f720"
-        )
-      ).toBeInTheDocument();
       fireEvent.click(
         screen.queryByTestId(
           "iconButton_edit_5806b8eb-4386-4594-8b9b-bc241871f720"
         )
       );
-    });
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("therapy_name")).toBeInTheDocument();
 
       fireEvent.change(screen.queryByTestId("therapy_name"), {
         target: { value: "name therapy updated" },
       });
-    });
 
-    await waitFor(async () => {
       fireEvent.click(screen.queryByTestId("addSubmitForm"));
-    });
-    await waitFor(async () => {
-      expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
 
       fireEvent.click(screen.queryByTestId("confirmButton"));
-    });
 
-    await waitFor(async () => {
-      expect(
+      await expect(
         screen.getByText("Model updated successfully!")
       ).toBeInTheDocument();
     });

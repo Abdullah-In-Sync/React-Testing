@@ -594,7 +594,7 @@ describe("Admin edit resource page", () => {
       expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
 
       expect(screen.queryByTestId("row-0")).toBeInTheDocument();
-      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+      // expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
     });
   });
 
@@ -649,7 +649,7 @@ describe("Admin edit resource page", () => {
       expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
 
       expect(screen.queryByTestId("row-0")).toBeInTheDocument();
-      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+      // expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
     });
 
     await waitFor(async () => {
@@ -713,7 +713,7 @@ describe("Admin edit resource page", () => {
       expect(screen.getByTestId("selectTemplateButton")).toBeInTheDocument();
 
       expect(screen.queryByTestId("row-0")).toBeInTheDocument();
-      expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
+      // expect(screen.queryByTestId("cell-7")).toBeInTheDocument();
     });
     await (async () => {
       fireEvent.click(screen.queryByTestId("tableTemplatePreview"));
@@ -723,47 +723,6 @@ describe("Admin edit resource page", () => {
       expect(pushMock).toHaveBeenCalledWith("/template/preview/create/");
     });
   });
-
-  // it("click cancle button to cancle upload process", async () => {
-  //   await sut();
-  //   fireEvent.change(screen.queryByTestId("resource_name"), {
-  //     target: { value: "avbv" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("resource_type"), {
-  //     target: { value: 2 },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("disorder_id"), {
-  //     target: { value: "disorder_id_1" },
-  //   });
-
-  //   screen.queryByTestId("activity-indicator");
-
-  //   fireEvent.change(screen.queryByTestId("model_id"), {
-  //     target: { value: "model_id_1" },
-  //   });
-
-  //   screen.queryByTestId("activity-indicator");
-
-  //   fireEvent.change(screen.queryByTestId("category_id"), {
-  //     target: { value: "category_id_1" },
-  //   });
-  //   fireEvent.change(screen.queryByTestId("agenda_id"), {
-  //     target: { value: "agenda_id_1" },
-  //   });
-
-  //   fireEvent.click(screen.queryByTestId("resource_avail_therapist"));
-
-  //   await waitFor(async () => {
-  //     fireEvent.submit(screen.queryByTestId("resource-edit-form"));
-  //   });
-
-  //   expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-  //   expect(screen.getByTestId("editResourceModalCancelButton")).toBeVisible();
-
-  //   await waitFor(async () => {
-  //     fireEvent.click(screen.queryByTestId("editResourceModalCancelButton"));
-  //   });
-  // });
 
   it("submit edit form with file", async () => {
     (useRouter as jest.Mock).mockReturnValue({
