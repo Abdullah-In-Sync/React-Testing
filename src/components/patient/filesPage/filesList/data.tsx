@@ -8,8 +8,12 @@ export default [
     render: (_, i) => i + 1,
   },
   {
-    id: "file_name",
+    id: "title",
     label: "File Name",
+  },
+  {
+    id: "file_name",
+    label: "File Link",
     renderc: ({ file_name, file_url, _id }) => (
       <Link href={file_url}>
         <a

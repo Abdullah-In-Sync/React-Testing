@@ -25,7 +25,7 @@ const windowOpenSpy = jest.spyOn(window, "open");
 
 const mocksData = [];
 const file = new File(["hello"], "hello.png", { type: "image/png" });
-
+const originalWindowLocation = window.location;
 mocksData.push({
   request: {
     query: ADD_PATIENT_FILE,
@@ -254,6 +254,19 @@ beforeEach(() => {
       user_type: "paitent",
     },
   });
+  Object.defineProperty(window, "location", {
+    configurable: true,
+    enumerable: true,
+    value: new URL(window.location.href),
+  });
+});
+
+afterEach(() => {
+  Object.defineProperty(window, "location", {
+    configurable: true,
+    enumerable: true,
+    value: originalWindowLocation,
+  });
 });
 
 describe("Patient files", () => {
@@ -412,6 +425,14 @@ describe("Patient files", () => {
     fireEvent.click(await screen.findByTestId("iconButton_view_pu1"));
     expect(windowOpenSpy).toHaveBeenCalledTimes(1);
     expect(windowOpenSpy).toBeCalledWith("https://imagefileUrl.com", "_blank");
+  });
+
+  it("should download file", async () => {
+    const expectedUrl = "https://imagefile/";
+    await sut();
+    fireEvent.click(await screen.findByTestId("iconButton_download_pu1"));
+    window.location.href = expectedUrl;
+    expect(window.location.href).toBe(expectedUrl);
   });
 
   it("should update upload with file", async () => {

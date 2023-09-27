@@ -175,7 +175,12 @@ const FilesPage: NextPage = () => {
   };
 
   const pageActionButtonClick = (value) => {
-    const { pressedIconButton, _id: file_id, file_url } = value;
+    const {
+      pressedIconButton,
+      _id: file_id,
+      file_url,
+      download_file_url,
+    } = value;
     if (pressedIconButton === "edit")
       return infoModalRef.current.openConfirm({
         data: {
@@ -196,7 +201,10 @@ const FilesPage: NextPage = () => {
           ),
         description: "Are you sure you want to delete?",
       });
-    else if (pressedIconButton === "view") window.open(file_url, "_blank");
+    else if (pressedIconButton === "view")
+      return window.open(file_url, "_blank");
+    else if (pressedIconButton === "download")
+      window.location.href = download_file_url;
   };
 
   return (
