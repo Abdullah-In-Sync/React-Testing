@@ -163,6 +163,25 @@ mocksData.push({
     variables: {
       file_id: "pu1",
       patient_id: "user_id",
+      update: { file_name: "dummy.pdf", title: "some", description: "" },
+    },
+  },
+  result: {
+    data: {
+      updatePatientFile: {
+        result: true,
+        message: "file update successfully",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_PATIENT_FILE,
+    variables: {
+      file_id: "pu1",
+      patient_id: "user_id",
       update: {
         file_name: "091029428__format_1.png",
         title: "some",
@@ -404,14 +423,12 @@ describe("Patient files", () => {
     fireEvent.click(await screen.findByTestId("iconButton_edit_pu1"));
 
     fireEvent.click(await screen.findByTestId("formSubmit"));
-
-    const confirmButton = await screen.findByTestId("confirmButton");
-    expect(confirmButton).toBeInTheDocument();
-    fireEvent.click(confirmButton);
-
     fireEvent.change(await screen.getByTestId("file_name"), {
       target: { files: [file] },
     });
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
 
     expect(
       await screen.findByText(/File updated successfully!/i)

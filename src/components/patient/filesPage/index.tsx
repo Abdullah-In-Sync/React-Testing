@@ -44,15 +44,7 @@ const FilesPage: NextPage = () => {
   });
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
-    uploadFile(
-      { fileName, file, imageFolder: "patientfiles" },
-      callback,
-      () => {
-        enqueueSnackbar("Server error please try later.", {
-          variant: "error",
-        });
-      }
-    );
+    uploadFile({ fileName, file, imageFolder: "patientfiles" }, callback);
   };
 
   const submitAddUploadApi = async (formFields, doneCallback) => {
