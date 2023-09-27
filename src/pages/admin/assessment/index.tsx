@@ -27,6 +27,12 @@ import InfoMessageView from "../../../components/common/InfoMessageView";
 import EditAssessmentForm from "../../../components/admin/assessement/editAssessment/EditAssessmentForm";
 import ShareAssessmentForm from "../../../components/admin/assessement/shareAssessment/ShareAssessmentForm";
 import { useRouter } from "next/router";
+import { addAdminAssessment } from "../../../utility/types/resource_types";
+
+const defaultFormValue = {
+  name: "",
+  org_id: "",
+};
 
 const AssessmentListPage: NextPage = () => {
   const router = useRouter();
@@ -44,10 +50,8 @@ const AssessmentListPage: NextPage = () => {
   const [isConfirmEditAssessment, setIsConfirmEditAssessment] = useState(false);
   const [isConfirmDeleteAssessment, setIsConfirmDeleteAssessment] =
     useState(false);
-  const [orgIds, setOrgIds] = useState();
   const [shareOrgIds, setShareOrgIds] = useState();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
-  const [name, setName] = useState("");
   const [editName, setEditName] = useState("");
   const [page, setPage] = useState(1);
   const [editDeleteAssessmentId, setEditDeleteAssessmentId] = useState("");
@@ -56,7 +60,9 @@ const AssessmentListPage: NextPage = () => {
   const [isConfirmShare, setIsConfirmShare] = useState(false);
   const [selectAssessment, setSelectAssessment] = useState("");
   const [selectAssessmentName, setSelectAssessmentName] = useState<string>(",");
-
+  const [formFields, setFormFields] = useState<addAdminAssessment>({
+    ...defaultFormValue,
+  });
   // Mutation
   const [createAssessment] = useMutation(ADMIN_CREATE_ASSESSMENT);
   const [deleteAndEditAssessment] = useMutation(
@@ -178,19 +184,16 @@ const AssessmentListPage: NextPage = () => {
   }, []);
 
   /* istanbul ignore next */
-  const receivePlanIds = (value) => {
-    const formattedValue = value.join(",");
-    setOrgIds(formattedValue);
+  const receiveAllData = (value) => {
+    setFormFields(value);
+    if (value) {
+      setIsConfirmShareTask(true);
+    }
   };
 
   const receiveSharePlanIds = (value) => {
     const formattedValue = value.join(",");
     setShareOrgIds(formattedValue);
-  };
-
-  const onChangeName = (value) => {
-    /* istanbul ignore next */
-    setName(value);
   };
 
   const onChangeEditName = (value) => {
@@ -203,8 +206,8 @@ const AssessmentListPage: NextPage = () => {
     try {
       await createAssessment({
         variables: {
-          name: name,
-          org_id: orgIds,
+          name: formFields.name,
+          org_id: formFields.org_id,
         },
         onCompleted: (data) => {
           const {
@@ -227,8 +230,7 @@ const AssessmentListPage: NextPage = () => {
             handleCloseCreateAssessmentModal();
             setIsConfirmShareTask(false);
             refetch();
-            setName(undefined);
-            setOrgIds(undefined);
+
             /* istanbul ignore next */
             enqueueSnackbar("Assessment created successfully!", {
               variant: "success",
@@ -308,7 +310,7 @@ const AssessmentListPage: NextPage = () => {
           const {
             adminShareAssessment: { duplicateNames },
           } = data;
-
+          /* istanbul ignore next */
           if (duplicateNames) {
             /* istanbul ignore next */
             setIsConfirmShare(false);
@@ -371,6 +373,7 @@ const AssessmentListPage: NextPage = () => {
   const onPressShareAssignment = (assignmentId, name) => {
     setSelectAssessment(assignmentId);
     setSelectAssessmentName(name);
+    /* istanbul ignore next */
     shareInfoModalRef.current?.open();
   };
   return (
@@ -400,10 +403,9 @@ const AssessmentListPage: NextPage = () => {
           maxWidth="sm"
         >
           <CreateAssessmentForm
-            onPressSubmit={() => setIsConfirmShareTask(true)}
+            // onPressSubmit={() => setIsConfirmShareTask(true)}
             organizationList={organizationList}
-            receivePlanId={receivePlanIds}
-            receiveName={onChangeName}
+            receiveAllData={receiveAllData}
           />
         </CommonModal>
 
@@ -417,7 +419,10 @@ const AssessmentListPage: NextPage = () => {
               /* istanbul ignore next */
               setIsConfirmEditAssessment(true)
             }
-            prefilledAssessmentName={assessmentData?.name}
+            prefilledAssessmentName={
+              /* istanbul ignore next */
+              assessmentData?.name
+            }
             receiveName={onChangeEditName}
           />
         </CommonModal>

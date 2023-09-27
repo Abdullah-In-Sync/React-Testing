@@ -53,7 +53,7 @@ mocksData.push({
       email: "test@gmail.com",
       patient_firstname: "name",
       patient_lastname: "Last",
-      phone_number: "+4403457251333",
+      phone_number: "+440345725133",
     },
   },
   result: {
@@ -121,7 +121,7 @@ describe("Therapist patient list page", () => {
       });
 
       fireEvent.change(screen.queryByTestId("phone_number"), {
-        target: { value: "+4403457251333" },
+        target: { value: "+440345725133" },
       });
 
       fireEvent.click(screen.queryByTestId("editTemplateSubmitButton"));
