@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/material";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "../../../../common/SearchInput";
 import SingleSelectComponent from "../../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "./modelFilterStyles";
@@ -30,81 +30,81 @@ const Filter: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
 
-  const filterRow = () => {
-    const [orgId, setOrgId] = React.useState("");
-    const [therapyId, setTherapyId] = React.useState();
-    const [disorderDropdownData, setDisorderDropdownData] = React.useState([]);
-    const [
-      getTherapistList,
-      /* istanbul ignore next */
-      { data: { getTherapyListByOrgId: therapistDropdownData = [] } = {} },
-    ] = useLazyQuery(GET_THERAPIST_LIST_BY_ORG_ID, {
-      fetchPolicy: "cache-and-network",
-    });
-
-    const [
-      getDisordorList,
-      /* istanbul ignore next */
-    ] = useLazyQuery(GET_DISORDER_LIST_BY_THERAPY_ID, {
-      fetchPolicy: "cache-and-network",
-      /* istanbul ignore next */
-      onCompleted(data) {
-        /* istanbul ignore next */
-        if (
-          /* istanbul ignore next */
-          data?.getDisorderByTherapyId &&
-          /* istanbul ignore next */
-          data?.getDisorderByTherapyId !== null
-        ) {
-          /* istanbul ignore next */
-          setDisorderDropdownData(data.getDisorderByTherapyId);
-        }
-      },
-    });
+  const [orgId, setOrgId] = useState("");
+  const [therapyId, setTherapyId] = useState();
+  const [disorderDropdownData, setDisorderDropdownData] = useState([]);
+  const [
+    getTherapistList,
     /* istanbul ignore next */
-    const onChange = (e) => {
+    { data: { getTherapyListByOrgId: therapistDropdownData = [] } = {} },
+  ] = useLazyQuery(GET_THERAPIST_LIST_BY_ORG_ID, {
+    fetchPolicy: "cache-and-network",
+  });
+
+  const [
+    getDisordorList,
+    /* istanbul ignore next */
+  ] = useLazyQuery(GET_DISORDER_LIST_BY_THERAPY_ID, {
+    fetchPolicy: "cache-and-network",
+    /* istanbul ignore next */
+    onCompleted(data) {
       /* istanbul ignore next */
-      e.target.value = e.target.value !== "all" ? e.target.value : "";
-      if (e.target.name == "orgId") {
+      if (
         /* istanbul ignore next */
-        setOrgId(e.target.value);
+        data?.getDisorderByTherapyId &&
+        /* istanbul ignore next */
+        data?.getDisorderByTherapyId !== null
+      ) {
+        /* istanbul ignore next */
+        setDisorderDropdownData(data.getDisorderByTherapyId);
+      }
+    },
+  });
+  /* istanbul ignore next */
+  const onChange = (e) => {
+    /* istanbul ignore next */
+    e.target.value = e.target.value !== "all" ? e.target.value : "";
+    if (e.target.name == "orgId") {
+      /* istanbul ignore next */
+      setOrgId(e.target.value);
+      setDisorderDropdownData([]);
+    }
+    /* istanbul ignore next */
+    if (e.target.name == "therapyId") {
+      /* istanbul ignore next */
+      if (e.target.value == "") {
+        /* istanbul ignore next */
         setDisorderDropdownData([]);
       }
       /* istanbul ignore next */
-      if (e.target.name == "therapyId") {
-        /* istanbul ignore next */
-        if (e.target.value == "") {
-          /* istanbul ignore next */
-          setDisorderDropdownData([]);
-        }
-        /* istanbul ignore next */
-        setTherapyId(e.target.value);
-      }
+      setTherapyId(e.target.value);
+    }
+    /* istanbul ignore next */
+    onChangeFilterDropdown(e);
+  };
+  useEffect(() => {
+    /* istanbul ignore next */
+    /* istanbul ignore next */
+    getTherapistList({
+      variables: {
+        orgId,
+      },
+    });
+  }, [orgId]);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (therapyId) {
       /* istanbul ignore next */
-      onChangeFilterDropdown(e);
-    };
-    React.useEffect(() => {
-      /* istanbul ignore next */
-      /* istanbul ignore next */
-      getTherapistList({
+      getDisordorList({
         variables: {
-          orgId,
+          therapyId,
         },
       });
-    }, [orgId]);
-
-    React.useEffect(() => {
-      /* istanbul ignore next */
-      if (therapyId) {
-        /* istanbul ignore next */
-        getDisordorList({
-          variables: {
-            therapyId,
-          },
-        });
-      }
-    }, [therapyId]);
-    return (
+    }
+  }, [therapyId]);
+  return (
+    <Box className="actionsWrapper">
       <Stack className={styles.filterWrapper}>
         <Box className="filterDropdownInput">
           <SearchInput
@@ -170,10 +170,8 @@ const Filter: React.FC<ViewProps> = ({
           />
         </Box>
       </Stack>
-    );
-  };
-
-  return <Box className="actionsWrapper">{filterRow()}</Box>;
+    </Box>
+  );
 };
 
 export default Filter;

@@ -134,7 +134,7 @@ export default function TherapistFilesList() {
           /* istanbul ignore next */
           if (!data.updatePatientFile?.result) {
             /* istanbul ignore next */
-            enqueueSnackbar("This file name is already exists!", {
+            enqueueSnackbar("This file name already exists!", {
               variant: "error",
               autoHideDuration: 2000,
             });
