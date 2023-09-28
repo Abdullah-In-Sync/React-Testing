@@ -153,6 +153,20 @@ mocks.push({
           updated_date: "2023-07-31T08:23:05.181Z",
           __typename: "PatientAgenda",
         },
+
+        {
+          _id: "8977-7af0e9446335",
+          type: "agenda",
+          agenda_id: "cf6f24428d5a",
+          agenda_name: "Agendas",
+          display_order: 2,
+          resource_id: "cdfdfvdfv-vkldmvm",
+          ptsharres_id: "",
+          share_status: 0,
+          created_date: "2023-09-26T06:38:11.869Z",
+          updated_date: "2023-09-26T08:21:01.761Z",
+          __typename: "PatientAgenda",
+        },
       ],
     },
   },
@@ -325,10 +339,7 @@ mocks.push({
 mocks.push({
   request: {
     query: PATIENT_SHARE_AGENDA_BY_ID,
-    variables: {
-      ptsharres_id: "",
-      ptagenda_id: "68c1c055-d2a8-4d02-8977-7af0e9446335",
-    },
+    variables: { ptsharres_id: "", ptagenda_id: "8977-7af0e9446335" },
   },
   result: {
     data: {
@@ -448,10 +459,18 @@ describe("Therapist client feedback list", () => {
 
       await waitFor(async () => {
         expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
-        expect(screen.queryAllByTestId("table-row").length).toBe(1);
-        expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
-        expect(screen.getByTestId("delete-icon-button")).toBeInTheDocument();
-        fireEvent.click(screen.queryByTestId("delete-icon-button"));
+        expect(screen.queryAllByTestId("table-row").length).toBe(2);
+
+        expect(
+          screen.getByTestId(
+            "delete-icon-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+          )
+        ).toBeInTheDocument();
+        fireEvent.click(
+          screen.queryByTestId(
+            "delete-icon-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+          )
+        );
       });
 
       await waitFor(async () => {
@@ -523,10 +542,22 @@ describe("Therapist client feedback list", () => {
 
     await waitFor(async () => {
       expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
-      expect(screen.queryAllByTestId("table-row").length).toBe(1);
-      expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
-      expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("edit-icon-button"));
+      expect(screen.queryAllByTestId("table-row").length).toBe(2);
+      expect(
+        screen.getByTestId(
+          "edit-icon-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId(
+          "edit-icon-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "edit-icon-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+        )
+      );
     });
 
     await waitFor(async () => {
@@ -562,11 +593,12 @@ describe("Therapist client feedback list", () => {
       );
 
       await waitFor(async () => {
-        expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
-        expect(screen.queryAllByTestId("table-row").length).toBe(1);
-        expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
-        expect(screen.getByTestId("share-agenda-button")).toBeInTheDocument();
-        fireEvent.click(screen.queryByTestId("share-agenda-button"));
+        expect(
+          screen.getByTestId("share-agenda-button8977-7af0e9446335")
+        ).toBeInTheDocument();
+        fireEvent.click(
+          screen.queryByTestId("share-agenda-button8977-7af0e9446335")
+        );
       });
 
       await waitFor(async () => {
@@ -577,6 +609,41 @@ describe("Therapist client feedback list", () => {
       await waitFor(async () => {
         expect(
           screen.getByText("Resource shared successfully!")
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  test("Share agenda item without resource", async () => {
+    await sut();
+    await waitFor(async () => {
+      await sut();
+      const list = await screen.findAllByTestId("list-tile");
+
+      const firstAccordion = list[0];
+
+      await fireEvent.click(
+        within(firstAccordion).queryByTestId("toggleContent")
+      );
+
+      await waitFor(async () => {
+        expect(
+          screen.getByTestId(
+            "share-agenda-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+          )
+        ).toBeInTheDocument();
+        fireEvent.click(
+          screen.queryByTestId(
+            "share-agenda-button68c1c055-d2a8-4d02-8977-7af0e9446335"
+          )
+        );
+      });
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText(
+            "Please assign resource first in order to share with the patient"
+          )
         ).toBeInTheDocument();
       });
     });
