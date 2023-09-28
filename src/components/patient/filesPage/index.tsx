@@ -22,7 +22,8 @@ import FilesListComponent from "./filesList/FilesList";
 import { useStyles } from "./filesStyles";
 const FilesPage: NextPage = () => {
   const styles = useStyles();
-  const { user: { _id: patient_id } = {} } = useAppContext();
+  const { user } = useAppContext();
+  const patient_id = user?.patient_data._id;
   const { uploadFile } = fetchUrlAndUploadFile();
   const [loader, setLoader] = useState<boolean>(false);
 
