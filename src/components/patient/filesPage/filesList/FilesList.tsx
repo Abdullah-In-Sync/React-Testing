@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import React from "react";
-import { GetPatientFileListByTherapistEntity } from "../../../../graphql/patientFile/type";
+import { GetPatientFileListEntity } from "../../../../graphql/patientFile/type";
 import CommonTable from "../../../common/CommonTable";
 import ConfirmWrapper from "../../../common/ConfirmWrapper";
 import InfoModal from "../../../common/CustomModal/InfoModal";
@@ -9,7 +9,7 @@ import AddUploadFileForm from "../uploadFile/AddUploadFileForm";
 import therapistData from "./data";
 
 interface ViewProps {
-  listData?: GetPatientFileListByTherapistEntity[];
+  listData?: GetPatientFileListEntity[];
   pageActionButtonClick?: (value) => void;
   confirmRef?: any;
   infoModalRef?: any;
