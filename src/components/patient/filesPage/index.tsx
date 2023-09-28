@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useSnackbar } from "notistack";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../../../contexts/AuthContext";
 
 import { Box } from "@mui/material";
@@ -35,16 +35,25 @@ const FilesPage: NextPage = () => {
   const [addPatientFile] = useMutation(ADD_PATIENT_FILE);
   const [updatePatientFile] = useMutation(UPDATE_PATIENT_FILE);
 
-  const {
-    data: { getPatientFileListByTherapist: patientFilesList = undefined } = {},
-    refetch: refetchPatientList,
-    loading: loadingPatientFileData,
-  } = useQuery<PaitentFileListData>(GET_PATIENT_FILE_LIST, {
-    variables: {
-      patient_id,
+  const [
+    getPatientFiles,
+    {
+      data: { getPatientFileList: patientFilesList = undefined } = {},
+      refetch: refetchPatientList,
+      loading: loadingPatientFileData,
     },
+  ] = useLazyQuery<PaitentFileListData>(GET_PATIENT_FILE_LIST, {
     fetchPolicy: "no-cache",
   });
+
+  useEffect(() => {
+    if (patient_id)
+      getPatientFiles({
+        variables: {
+          patient_id,
+        },
+      });
+  }, [patient_id]);
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
     uploadFile({ fileName, file, imageFolder: "patientfiles" }, callback);

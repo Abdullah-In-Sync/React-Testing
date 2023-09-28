@@ -22,14 +22,8 @@ export const ADD_PATIENT_FILE = gql`
 `;
 
 export const GET_PATIENT_FILE_LIST = gql`
-  query GetPatientFileListByTherapist(
-    $patient_id: String!
-    $search_text: String
-  ) {
-    getPatientFileListByTherapist(
-      patient_id: $patient_id
-      search_text: $search_text
-    ) {
+  query GetPatientFileList($patient_id: String!) {
+    getPatientFileList(patient_id: $patient_id) {
       _id
       added_by
       created_date

@@ -1,7 +1,7 @@
 export interface PaitentFileListData {
-  getPatientFileListByTherapist?: GetPatientFileListByTherapistEntity[] | null;
+  getPatientFileList?: GetPatientFileListEntity[] | null;
 }
-export interface GetPatientFileListByTherapistEntity {
+export interface GetPatientFileListEntity {
   _id: string;
   added_by: string;
   created_date: string;

@@ -93,7 +93,7 @@ mocksData.push({
   },
   result: {
     data: {
-      getPatientFileListByTherapist: [
+      getPatientFileList: [
         {
           _id: "pu1",
           added_by: "patient",
