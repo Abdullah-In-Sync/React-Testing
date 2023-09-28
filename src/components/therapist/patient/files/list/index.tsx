@@ -79,6 +79,10 @@ const TherapistFileList: React.FC<ViewProps> = ({
     setSelectedCheckBox([]);
   }, [fileListData]);
 
+  const downloadFile = (download_file_url) => {
+    window.location.href = download_file_url;
+  };
+
   return (
     <Box>
       <Box
@@ -225,10 +229,11 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       style={{ borderRadius: "50%", border: "1px solid #000" }}
                       size="small"
                       sx={{ gridColumn: "2", m: 1 }}
+                      onClick={() => downloadFile(data.download_file_url)}
                     >
                       <DownloadIcon
                         style={{ fontSize: 14 }}
-                        data-testid="share-agenda-button"
+                        data-testid="download-file-button"
                       />
                     </IconButton>
 
