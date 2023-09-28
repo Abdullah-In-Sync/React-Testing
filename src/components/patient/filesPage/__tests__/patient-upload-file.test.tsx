@@ -252,6 +252,9 @@ beforeEach(() => {
     user: {
       _id: "user_id",
       user_type: "paitent",
+      patient_data: {
+        _id: "user_id",
+      },
     },
   });
   Object.defineProperty(window, "location", {

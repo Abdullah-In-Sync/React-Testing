@@ -22,7 +22,10 @@ import FilesListComponent from "./filesList/FilesList";
 import { useStyles } from "./filesStyles";
 const FilesPage: NextPage = () => {
   const styles = useStyles();
-  const { user: { _id: patient_id } = {} } = useAppContext();
+  /* istanbul ignore next */
+  const { user } = useAppContext();
+  /* istanbul ignore next */
+  const patient_id = user?.patient_data._id;
   const { uploadFile } = fetchUrlAndUploadFile();
   const [loader, setLoader] = useState<boolean>(false);
 
