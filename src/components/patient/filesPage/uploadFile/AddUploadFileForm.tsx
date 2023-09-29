@@ -4,23 +4,17 @@ import React from "react";
 import Form from "./UploadFileForm";
 import { Stack } from "@mui/material";
 import * as Yup from "yup";
+import { FILEEXTENSION } from "../../../../lib/constants";
 
 export const addPatientFileSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   file_name: Yup.string().required("File is required"),
   file_name_file: Yup.mixed().test(
     "type",
-    "Only support PDF, MP4, PNG and JPEG file.",
+    "You can upload jpg, jpeg, png, gif, mp3, wav, mp4, mov, .pdf, doc, docx file type Only.",
     function (value) {
       if (value == "undefined" || value) {
-        return (
-          value &&
-          (value.type === "image/jpg" ||
-            value.type === "image/jpeg" ||
-            value.type === "image/png" ||
-            value.type === "application/pdf" ||
-            value.type === "video/mp4")
-        );
+        return value && FILEEXTENSION.indexOf(value.type) > -1;
       } else {
         return true;
       }
