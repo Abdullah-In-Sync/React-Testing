@@ -96,7 +96,6 @@ export default function CreateResource(props: propTypes) {
   //useState for prefilled input data
   const [templateModal, setTemplateModal] = useState<boolean>(false);
   const [dimensionModal, setDimensionModal] = useState<boolean>(false);
-  const [successModal, setSuccessModal] = useState<boolean>(false);
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [createFormulation] = useMutation(CREATE_FORMULATION);
 
@@ -159,7 +158,12 @@ export default function CreateResource(props: propTypes) {
         });
       } else {
         /* istanbul ignore next */
-        setSuccessModal(true);
+        // setSuccessModal(true);
+        enqueueSnackbar("Resource has been created successfully!", {
+          variant: "success",
+        });
+
+        router.push(`/${userType}/resource/`);
       }
     },
   });
@@ -895,18 +899,6 @@ export default function CreateResource(props: propTypes) {
           onSubmit={onSaveArrowTemplate}
           onCancel={onTemplateCancel}
           userType="fullAccess"
-        />
-      )}
-      {successModal && (
-        /* istanbul ignore next */
-        <SuccessModal
-          isOpen={successModal}
-          description="Your resource has been created successfully."
-          title="Success"
-          onOk={() => {
-            /* istanbul ignore next */
-            router.push(`/${userType}/resource/`);
-          }}
         />
       )}
 
