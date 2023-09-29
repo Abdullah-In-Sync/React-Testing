@@ -34,20 +34,24 @@ const ActionsButtons: React.FC<ViewProps> = ({
   const { _id = data.i } = data;
   const iconButtons = () => {
     return buttons.map((item) => {
-      const { id, icon: Icon, isActive } = item;
+      const { id, icon: Icon, isActive, checkIsDisabled } = item;
       return (
-        <Fab
-          key={`iconButton_${id}_${_id}`}
-          aria-label={`iconButton_${id}_${_id}`}
-          data-testid={`iconButton_${id}_${_id}`}
-          onClick={() => buttonClick({ ...data, ...{ pressedIconButton: id } })}
-          style={item?.styles ? item.styles : {}}
-          className={`isActive_${data[isActive]} ${
-            data?.isAttachment && id == "attachment" ? "active" : ""
-          }`}
-        >
-          <Icon />
-        </Fab>
+        !data[checkIsDisabled] && (
+          <Fab
+            key={`iconButton_${id}_${_id}`}
+            aria-label={`iconButton_${id}_${_id}`}
+            data-testid={`iconButton_${id}_${_id}`}
+            onClick={() =>
+              buttonClick({ ...data, ...{ pressedIconButton: id } })
+            }
+            style={item?.styles ? item.styles : {}}
+            className={`isActive_${data[isActive]} ${
+              data?.isAttachment && id == "attachment" ? "active" : ""
+            }`}
+          >
+            <Icon />
+          </Fab>
+        )
       );
     });
   };

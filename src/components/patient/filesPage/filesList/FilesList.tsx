@@ -49,6 +49,7 @@ const FilesListComponent: React.FC<ViewProps> = ({
               {
                 id: "delete",
                 icon: require("@mui/icons-material/DeleteSharp").default,
+                checkIsDisabled: "share_status",
               },
             ]}
             headerData={therapistData}

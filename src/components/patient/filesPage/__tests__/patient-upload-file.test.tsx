@@ -125,7 +125,7 @@ mocksData.push({
           download_file_url: "https://imagefile2",
           file_name: "091028216__format_3.png",
           file_url: "https://imagefieleurl2",
-          share_status: 0,
+          share_status: 1,
           status: 1,
           title: "test",
         },
