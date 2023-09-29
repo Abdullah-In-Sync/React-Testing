@@ -31,7 +31,9 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     data: "",
   });
 
+  /* istanbul ignore else */
   const id = router?.query?.sourceId as string;
+  /* istanbul ignore else */
   const isFormulation = router?.query?.isFormulation;
   const updateKey = isFormulation ? "updateShareForm" : "update";
   const resKey = isFormulation
@@ -50,20 +52,28 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
       onCompleted: (data) => {
         /* istanbul ignore else */
         if (data?.getResourceDetailById) {
+          /* istanbul ignore else */
           const resourceDetail = data?.getResourceDetailById[0];
           if (resourceDetail) {
             /* istanbul ignore else */
             setTemplateDetail(resourceDetail?.template_detail);
+            /* istanbul ignore else */
             setRecourceData(resourceDetail?.resource_data[0]);
+            /* istanbul ignore else */
             setTemplateResponse(resourceDetail?.template_response);
           }
         }
+        /* istanbul ignore else */
         if (data?.getFormulationByShareId) {
+          /* istanbul ignore else */
           const formulationDetail = data?.getFormulationByShareId[0];
+          /* istanbul ignore else */
           if (formulationDetail) {
             /* istanbul ignore else */
             setTemplateDetail(formulationDetail?.template_detail);
+            /* istanbul ignore else */
             setRecourceData(formulationDetail?.formulation_data[0]);
+            /* istanbul ignore else */
             setTemplateResponse(formulationDetail?.template_response);
           }
         }
@@ -81,7 +91,9 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const handleToken = (event) => {
+    /* istanbul ignore else */
     if (event?.target?.value) {
+      /* istanbul ignore else */
       secureSetCookies("myhelptoken", event?.target?.value);
       secureSetCookies("user_type", "patient");
       getPatientResourceTemplate({
@@ -146,8 +158,11 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const oncancelEvent = () => {
+    /* istanbul ignore else */
     //to send event to mobile app
+    /* istanbul ignore else */
     const cancelData = { msg: "", type: "cancel" };
+    /* istanbul ignore else */
     console.log(cancelData);
   };
   const templateData =

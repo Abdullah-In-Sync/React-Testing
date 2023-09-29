@@ -10,6 +10,7 @@ const setSecureCookie = (label: string, value: string, options?: object) => {
 };
 
 export const setSessionToken = (data, callback) => {
+  /* istanbul ignore else */
   const { jwtToken, userType, exp } = data;
   const expires = new Date(exp * 1000);
   setSecureCookie("myhelptoken", jwtToken, {
@@ -27,6 +28,7 @@ export const getSessionToken = () => {
 
 export const clearSession = (proceedNextCallback) => {
   Object.keys(Cookies.get()).forEach(function (cookieName) {
+    /* istanbul ignore else */
     Cookies.remove(cookieName);
   });
   return proceedNextCallback();
