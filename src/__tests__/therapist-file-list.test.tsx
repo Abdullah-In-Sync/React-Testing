@@ -358,4 +358,12 @@ describe("Therapist client feedback list", () => {
       ).toBeInTheDocument();
     });
   });
+
+  it("should download file", async () => {
+    const expectedUrl = "http://localhost/";
+    await sut();
+    fireEvent.click(await screen.findByTestId("download-file-button"));
+    window.location.href = expectedUrl;
+    expect(window.location.href).toBe(expectedUrl);
+  });
 });
