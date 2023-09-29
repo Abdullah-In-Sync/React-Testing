@@ -36,7 +36,7 @@ const AddUploadFileForm: React.FC<ViewProps> = ({
   const {
     file_name,
     title = "",
-    is_private = 0,
+    is_private = 1,
     description = "",
     pressedIconButton,
   } = uploadInitialData || {};

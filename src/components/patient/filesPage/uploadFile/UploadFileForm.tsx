@@ -26,7 +26,7 @@ const UploadFileForm: React.FC<any> = ({
         onChange={
           /* istanbul ignore next */
           (e: React.ChangeEvent<HTMLInputElement>) =>
-            setFieldValue("is_private", Number(!e.target?.checked))
+            setFieldValue("is_private", Number(e.target?.checked))
         }
         data-testid={`toggleAcc-${saveButtonText}`}
       />
