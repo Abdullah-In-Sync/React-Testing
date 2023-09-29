@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 const setSecureCookie = (label: string, value: string, options?: object) => {
   Cookies.set(label, value, {
     secure: true,
+    httpOnly: true,
     sameSite: "strict",
     ...options,
   });

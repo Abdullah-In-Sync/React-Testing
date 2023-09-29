@@ -72,11 +72,18 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
       },
     }
   );
+  const secureSetCookies = (key: string, value: string) => {
+    Cookies.set(key, value, {
+      secure: true,
+      httpOnly: true,
+      sameSite: "strict",
+    });
+  };
 
   const handleToken = (event) => {
     if (event?.target?.value) {
-      Cookies.set("myhelptoken", event?.target?.value);
-      Cookies.set("user_type", "patient");
+      secureSetCookies("myhelptoken", event?.target?.value);
+      secureSetCookies("user_type", "patient");
       getPatientResourceTemplate({
         variables: { ptsharresId: id },
       });
