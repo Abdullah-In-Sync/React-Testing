@@ -26,7 +26,6 @@ import {
   CREATE_RESOURCE,
   CREATE_FORMULATION,
 } from "../../../graphql/mutation/resource";
-import { SuccessModal } from "../SuccessModal";
 import { useRouter } from "next/router";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { GET_ORG_DATA } from "../../../graphql/query";
