@@ -50,34 +50,27 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
-        /* istanbul ignore else */
-        if (data?.getResourceDetailById) {
-          /* istanbul ignore else */
-          const resourceDetail = data?.getResourceDetailById[0];
+        /* istanbul ignore next */
+        if (data.getResourceDetailById) {
+          const resourceDetail = data.getResourceDetailById[0];
+          /* istanbul ignore next */
           if (resourceDetail) {
-            /* istanbul ignore else */
-            setTemplateDetail(resourceDetail?.template_detail);
-            /* istanbul ignore else */
-            setRecourceData(resourceDetail?.resource_data[0]);
-            /* istanbul ignore else */
-            setTemplateResponse(resourceDetail?.template_response);
+            setTemplateDetail(resourceDetail.template_detail);
+            setRecourceData(resourceDetail.resource_data[0]);
+            setTemplateResponse(resourceDetail.template_response);
           }
         }
-        /* istanbul ignore else */
-        if (data?.getFormulationByShareId) {
-          /* istanbul ignore else */
-          const formulationDetail = data?.getFormulationByShareId[0];
-          /* istanbul ignore else */
+        /* istanbul ignore next */
+        if (data.getFormulationByShareId) {
+          const formulationDetail = data.getFormulationByShareId[0];
+          /* istanbul ignore next */
           if (formulationDetail) {
-            /* istanbul ignore else */
-            setTemplateDetail(formulationDetail?.template_detail);
-            /* istanbul ignore else */
-            setRecourceData(formulationDetail?.formulation_data[0]);
-            /* istanbul ignore else */
-            setTemplateResponse(formulationDetail?.template_response);
+            setTemplateDetail(formulationDetail.template_detail);
+            setRecourceData(formulationDetail.formulation_data[0]);
+            setTemplateResponse(formulationDetail.template_response);
           }
         }
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
