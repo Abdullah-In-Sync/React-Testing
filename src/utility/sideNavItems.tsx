@@ -190,9 +190,9 @@ export const patient_routes: RoutesType[] = [
   {
     key: 4,
     label: "Files",
-    path: "/patient/files/?mainTab=therapy",
+    path: "/patient/files/?mainTab=files",
     icon: <DescriptionOutlinedIcon />,
-    type: "THERAPY",
+    type: "FILES",
   },
 ];
 
