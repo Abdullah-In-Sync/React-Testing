@@ -50,7 +50,7 @@ export const superadmin_routes: RoutesType[] = [
   {
     key: 3,
     label: "Therapies",
-    path: "/admin/therapies?mainTab=disorder",
+    path: "/admin/therapies?mainTab=therapy",
     icon: <PersonIcon />,
   },
   {
