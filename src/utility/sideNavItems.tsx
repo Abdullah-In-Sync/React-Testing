@@ -50,7 +50,7 @@ export const superadmin_routes: RoutesType[] = [
   {
     key: 3,
     label: "Therapies",
-    path: "/admin/therapies?mainTab=disorder",
+    path: "/admin/therapies?mainTab=therapy",
     icon: <PersonIcon />,
   },
   {
@@ -190,9 +190,9 @@ export const patient_routes: RoutesType[] = [
   {
     key: 4,
     label: "Files",
-    path: "/patient/files/?mainTab=therapy",
+    path: "/patient/files/?mainTab=files",
     icon: <DescriptionOutlinedIcon />,
-    type: "THERAPY",
+    type: "FILES",
   },
 ];
 

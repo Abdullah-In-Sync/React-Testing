@@ -29,11 +29,6 @@ const FilesPatientComponent = () => {
   /* istanbul ignore next */
   const tabs2 = [
     {
-      label: "Therapy",
-      value: "therapy",
-      component: null,
-    },
-    {
       label: "Files",
       value: "files",
       component: <FilesPage />,
