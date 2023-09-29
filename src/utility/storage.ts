@@ -28,7 +28,7 @@ export const getSessionToken = () => {
 
 export const clearSession = (proceedNextCallback) => {
   Object.keys(Cookies.get()).forEach(function (cookieName) {
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     Cookies.remove(cookieName);
   });
   return proceedNextCallback();

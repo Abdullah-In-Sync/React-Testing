@@ -31,9 +31,9 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     data: "",
   });
 
-  /* istanbul ignore else */
+  /* istanbul ignore next */
   const id = router?.query?.sourceId as string;
-  /* istanbul ignore else */
+  /* istanbul ignore next */
   const isFormulation = router?.query?.isFormulation;
   const updateKey = isFormulation ? "updateShareForm" : "update";
   const resKey = isFormulation
@@ -93,7 +93,6 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   const handleToken = (event) => {
     /* istanbul ignore else */
     if (event?.target?.value) {
-      /* istanbul ignore else */
       secureSetCookies("myhelptoken", event?.target?.value);
       secureSetCookies("user_type", "patient");
       getPatientResourceTemplate({
@@ -158,11 +157,11 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const oncancelEvent = () => {
-    /* istanbul ignore else */
+    //* istanbul ignore next */
     //to send event to mobile app
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     const cancelData = { msg: "", type: "cancel" };
-    /* istanbul ignore else */
+    /* istanbul ignore next */
     console.log(cancelData);
   };
   const templateData =
