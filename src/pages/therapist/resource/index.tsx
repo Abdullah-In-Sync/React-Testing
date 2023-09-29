@@ -209,6 +209,15 @@ const Resource: NextPage = () => {
       searchText: searchText ?? "",
       orgId: orgId,
     },
+    /* istanbul ignore next */
+    fetchPolicy: "cache-and-network",
+    /* istanbul ignore next */
+    onError: () => {
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    },
   });
 
   const { data: disorderList } = useQuery(GET_DISORDER_MODEL_LIST);
@@ -237,6 +246,16 @@ const Resource: NextPage = () => {
   useEffect(() => {
     refetch();
   }, []);
+
+  /* istanbul ignore next */
+  const setSearch = (value) => {
+    // eslint-disable-next-line no-useless-escape
+    const disallowedPattern = /[^A-Za-z0-9_]/g;
+    /* istanbul ignore next */
+    const sanitizedInput = value.replace(disallowedPattern, "");
+    /* istanbul ignore next */
+    setSearchText(sanitizedInput);
+  };
 
   /* istanbul ignore next */
   const addFavour = async (id: string, isFav: string) => {
@@ -531,9 +550,11 @@ const Resource: NextPage = () => {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                /* istanbul ignore next */
+                value={searchText}
                 onChange={
                   /* istanbul ignore next */
-                  (e) => setSearchText(e.target.value)
+                  (e) => setSearch(e.target.value)
                 }
               />
             </Search>
