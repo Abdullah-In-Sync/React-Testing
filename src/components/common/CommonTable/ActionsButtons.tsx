@@ -34,7 +34,18 @@ const ActionsButtons: React.FC<ViewProps> = ({
   const { _id = data.i } = data;
   const iconButtons = () => {
     return buttons.map((item) => {
-      const { id, icon: Icon, isActive } = item;
+      const {
+        id,
+        icon: Icon,
+        isActive,
+        checkIsParam,
+        checkIsDisabledFor,
+        disableIdCheck,
+      } = item;
+
+      if (data[checkIsParam] === checkIsDisabledFor && disableIdCheck === id)
+        return null;
+
       return (
         <Fab
           key={`iconButton_${id}_${_id}`}
