@@ -121,3 +121,17 @@ export const tokenValidationQuery = {
 };
 
 export const defaultOrgName = "portal";
+
+export const FILEEXTENSION = [
+  "image/jpg",
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "audio/mpeg",
+  "audio/wav",
+  "video/mp4",
+  "video/quicktime",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
