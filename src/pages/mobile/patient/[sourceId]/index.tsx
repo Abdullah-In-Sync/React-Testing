@@ -49,22 +49,22 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore else */
-        if (data?.getResourceDetailById) {
-          const resourceDetail = data?.getResourceDetailById[0];
+        if (data.getResourceDetailById) {
+          const resourceDetail = data.getResourceDetailById[0];
           if (resourceDetail) {
             /* istanbul ignore else */
-            setTemplateDetail(resourceDetail?.template_detail);
-            setRecourceData(resourceDetail?.resource_data[0]);
-            setTemplateResponse(resourceDetail?.template_response);
+            setTemplateDetail(resourceDetail.template_detail);
+            setRecourceData(resourceDetail.resource_data[0]);
+            setTemplateResponse(resourceDetail.template_response);
           }
         }
-        if (data?.getFormulationByShareId) {
-          const formulationDetail = data?.getFormulationByShareId[0];
+        if (data.getFormulationByShareId) {
+          const formulationDetail = data.getFormulationByShareId[0];
           if (formulationDetail) {
             /* istanbul ignore else */
-            setTemplateDetail(formulationDetail?.template_detail);
-            setRecourceData(formulationDetail?.formulation_data[0]);
-            setTemplateResponse(formulationDetail?.template_response);
+            setTemplateDetail(formulationDetail.template_detail);
+            setRecourceData(formulationDetail.formulation_data[0]);
+            setTemplateResponse(formulationDetail.template_response);
           }
         }
         /* istanbul ignore else */
@@ -72,11 +72,18 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
       },
     }
   );
+  const secureSetCookies = (key: string, value: string) => {
+    Cookies.set(key, value, {
+      secure: true,
+      httpOnly: true,
+      sameSite: "strict",
+    });
+  };
 
   const handleToken = (event) => {
     if (event?.target?.value) {
-      Cookies.set("myhelptoken", event?.target?.value);
-      Cookies.set("user_type", "patient");
+      secureSetCookies("myhelptoken", event.target.value);
+      secureSetCookies("user_type", "patient");
       getPatientResourceTemplate({
         variables: { ptsharresId: id },
       });
