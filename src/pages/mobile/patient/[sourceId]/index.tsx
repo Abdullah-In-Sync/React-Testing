@@ -31,9 +31,7 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     data: "",
   });
 
-  /* istanbul ignore next */
   const id = router?.query?.sourceId as string;
-  /* istanbul ignore next */
   const isFormulation = router?.query?.isFormulation;
   const updateKey = isFormulation ? "updateShareForm" : "update";
   const resKey = isFormulation
@@ -50,27 +48,26 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
-        /* istanbul ignore next */
+        /* istanbul ignore else */
         if (data.getResourceDetailById) {
           const resourceDetail = data.getResourceDetailById[0];
-          /* istanbul ignore next */
           if (resourceDetail) {
+            /* istanbul ignore else */
             setTemplateDetail(resourceDetail.template_detail);
             setRecourceData(resourceDetail.resource_data[0]);
             setTemplateResponse(resourceDetail.template_response);
           }
         }
-        /* istanbul ignore next */
         if (data.getFormulationByShareId) {
           const formulationDetail = data.getFormulationByShareId[0];
-          /* istanbul ignore next */
           if (formulationDetail) {
+            /* istanbul ignore else */
             setTemplateDetail(formulationDetail.template_detail);
             setRecourceData(formulationDetail.formulation_data[0]);
             setTemplateResponse(formulationDetail.template_response);
           }
         }
-        /* istanbul ignore next */
+        /* istanbul ignore else */
         setLoader(false);
       },
     }
@@ -84,9 +81,8 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const handleToken = (event) => {
-    /* istanbul ignore else */
     if (event?.target?.value) {
-      secureSetCookies("myhelptoken", event?.target?.value);
+      secureSetCookies("myhelptoken", event.target.value);
       secureSetCookies("user_type", "patient");
       getPatientResourceTemplate({
         variables: { ptsharresId: id },
@@ -150,11 +146,8 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const oncancelEvent = () => {
-    //* istanbul ignore next */
     //to send event to mobile app
-    /* istanbul ignore next */
     const cancelData = { msg: "", type: "cancel" };
-    /* istanbul ignore next */
     console.log(cancelData);
   };
   const templateData =
