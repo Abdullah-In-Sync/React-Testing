@@ -75,7 +75,6 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   const secureSetCookies = (key: string, value: string) => {
     Cookies.set(key, value, {
       secure: true,
-      httpOnly: true,
       sameSite: "strict",
     });
   };
