@@ -32,7 +32,7 @@ mocksData.push({
     variables: {
       file_name: "dummy.pdf",
       title: "texttitle",
-      is_private: 1,
+      is_private: 0,
       description: "textdes",
       patient_id: "user_id",
     },
@@ -52,7 +52,7 @@ mocksData.push({
     variables: {
       file_name: "dummy.pdf",
       title: "textsecondtitle",
-      is_private: 1,
+      is_private: 0,
       description: "textseconddes",
       patient_id: "user_id",
     },
@@ -131,7 +131,7 @@ mocksData.push({
         },
         {
           _id: "pu4",
-          added_by: "patient",
+          added_by: "therapist",
           created_date: "2023-09-20T10:28:30.286Z",
           description: "",
           download_file_url: "https://imagefile4",

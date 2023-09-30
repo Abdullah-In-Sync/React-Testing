@@ -34,24 +34,31 @@ const ActionsButtons: React.FC<ViewProps> = ({
   const { _id = data.i } = data;
   const iconButtons = () => {
     return buttons.map((item) => {
-      const { id, icon: Icon, isActive, checkIsDisabled } = item;
+      const {
+        id,
+        icon: Icon,
+        isActive,
+        checkIsParam,
+        checkIsDisabledFor,
+        disableIdCheck,
+      } = item;
+
+      if (data[checkIsParam] === checkIsDisabledFor && disableIdCheck === id)
+        return null;
+
       return (
-        !data[checkIsDisabled] && (
-          <Fab
-            key={`iconButton_${id}_${_id}`}
-            aria-label={`iconButton_${id}_${_id}`}
-            data-testid={`iconButton_${id}_${_id}`}
-            onClick={() =>
-              buttonClick({ ...data, ...{ pressedIconButton: id } })
-            }
-            style={item?.styles ? item.styles : {}}
-            className={`isActive_${data[isActive]} ${
-              data?.isAttachment && id == "attachment" ? "active" : ""
-            }`}
-          >
-            <Icon />
-          </Fab>
-        )
+        <Fab
+          key={`iconButton_${id}_${_id}`}
+          aria-label={`iconButton_${id}_${_id}`}
+          data-testid={`iconButton_${id}_${_id}`}
+          onClick={() => buttonClick({ ...data, ...{ pressedIconButton: id } })}
+          style={item?.styles ? item.styles : {}}
+          className={`isActive_${data[isActive]} ${
+            data?.isAttachment && id == "attachment" ? "active" : ""
+          }`}
+        >
+          <Icon />
+        </Fab>
       );
     });
   };
