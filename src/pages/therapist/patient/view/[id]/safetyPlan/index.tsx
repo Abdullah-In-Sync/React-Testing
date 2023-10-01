@@ -11,7 +11,6 @@ import {
   ModalElement,
 } from "../../../../../../components/common/CustomModal/CommonModal";
 import Loader from "../../../../../../components/common/Loader";
-import { SuccessModal } from "../../../../../../components/common/SuccessModal";
 import CreateSafetyPlan from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/CreateSafetyPlan";
 import {
   ADD_THERAPIST_SAFETY_PLAN,
@@ -43,7 +42,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   }, []);
   const handleCloseCreatePlanModal = useCallback(() => {
     // setCurrentSafetyPlan(undefined)
-    return modalRef.current.close();
+    return modalRef?.current?.close();
   }, []);
 
   const handleOpenAddPlanModal = useCallback(
@@ -55,7 +54,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     modalRefAddPlan.current.close();
   }, []);
 
-  const [successModal, setSuccessModal] = useState<any>();
   /* istanbul ignore next */
   const patId = router?.query?.id as string;
   const [planid, setPlanId] = useState();
@@ -167,9 +165,11 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             createTherapistSafetyPlan: { _id },
           } = data;
           /* istanbul ignore next */
-          setSuccessModal({
-            description: "Your plan has been created successfully.",
+          enqueueSnackbar("Plan has been created successfully!", {
+            variant: "success",
           });
+          handleCloseCreatePlanModal();
+
           await handleAddIconButton(0, _id);
           /* istanbul ignore next */
           getSafetyPlanList({
@@ -230,8 +230,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
             variables: { patientId: patId },
           });
           /* istanbul ignore next */
-          setSuccessModal({
-            description: "Your plan has been deleted successfully.",
+          enqueueSnackbar("Plan has been deleted successfully!", {
+            variant: "success",
           });
         },
       });
@@ -263,11 +263,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: () => {
           /* istanbul ignore next */
-          setSuccessModal({
-            description: share_status
-              ? "Your plan has been shared successfully."
-              : "Your plan has been updated successfully.",
-          });
+          enqueueSnackbar(
+            share_status
+              ? "Plan has been shared successfully."
+              : "Plan has been updated successfully.",
+            {
+              variant: "success",
+            }
+          );
+          handleCloseCreatePlanModal();
           getSafetyPlanList({
             variables: { patientId: patId },
           });
@@ -388,13 +392,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     });
   };
 
-  const handleOk = () => {
-    /* istanbul ignore next */
-    handleCloseCreatePlanModal();
-    /* istanbul ignore next */
-    setSuccessModal(undefined);
-  };
-
   /* istanbul ignore next */
   const receivePlanId = (value) => {
     setPlanId(value);
@@ -420,8 +417,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         /* istanbul ignore next */
         onCompleted: async () => {
           /* istanbul ignore next */
-          setSuccessModal({
-            description: "Your question has been updated successfully.",
+          enqueueSnackbar("Question has been updated successfully", {
+            variant: "success",
           });
           /* istanbul ignore next */
           await fetchPlanData(planId);
@@ -470,8 +467,8 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           /* istanbul ignore next */
           doneCallback();
           /* istanbul ignore next */
-          setSuccessModal({
-            description: "Your question has been deleted successfully.",
+          enqueueSnackbar("Question has been deleted successfully", {
+            variant: "success",
           });
         },
       });
@@ -541,14 +538,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           onConfirm={onConfirmSubmit}
         />
       )}
-      {successModal && (
-        <SuccessModal
-          isOpen={Boolean(successModal)}
-          title="Successful"
-          description={successModal.description}
-          onOk={handleOk}
-        />
-      )}
+
       <CommonModal
         ref={modalRef}
         headerTitleText={currentSafetyPlan ? "Edit Plan" : "Create Plan"}

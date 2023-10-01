@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Box, Stack } from "@mui/material";
 import { Form } from "formik";
 import * as React from "react";
