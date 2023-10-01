@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 import { Theme } from "@mui/system";
 import { useTheme } from "@mui/styles";

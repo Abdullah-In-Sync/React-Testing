@@ -288,7 +288,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
                           File uploaded on: {data.updated_date.slice(0, 10)}
                         </Typography>
 
-                        <Typography>Added by: {data.added_by}</Typography>
+                        <Typography>Shared by: {data.added_by}</Typography>
                         <Typography
                           variant="body2"
                           color="#30373E"
