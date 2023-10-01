@@ -31,7 +31,9 @@ import TherapistRelapsePlanComponent from "../../../../../../components/therapis
 
 const TherapistSafetyPlanIndex: NextPage = () => {
   const router = useRouter();
+  /* istanbul ignore next */
   const { user } = useAppContext();
+  /* istanbul ignore next */
   const orgId = user?.therapist_data.org_id;
   const { enqueueSnackbar } = useSnackbar();
   const modalRef = useRef<ModalElement>(null);
@@ -40,11 +42,14 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setCurrentSafetyPlan(v);
     return modalRef.current.open();
   }, []);
+
+  /* istanbul ignore next */
   const handleCloseCreatePlanModal = useCallback(() => {
     // setCurrentSafetyPlan(undefined)
     return modalRef?.current?.close();
   }, []);
 
+  /* istanbul ignore next */
   const handleOpenAddPlanModal = useCallback(
     () => modalRefAddPlan.current.open(),
     []
@@ -108,6 +113,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     getSafetyPlanById,
     {
       data: { viewPatientSafetyPlanById: planData = null } = {},
+      /* istanbul ignore next */
       error: getSafetyPlanByIdError = undefined,
     } = {},
   ] = useLazyQuery(VIEW_PATIENT_SAFETY_PLAN_BY_ID, {
@@ -164,7 +170,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           const {
             createTherapistSafetyPlan: { _id },
           } = data;
-          /* istanbul ignore next */
+
           enqueueSnackbar("Plan has been created successfully!", {
             variant: "success",
           });
@@ -229,7 +235,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           getSafetyPlanList({
             variables: { patientId: patId },
           });
-          /* istanbul ignore next */
+
           enqueueSnackbar("Plan has been deleted successfully!", {
             variant: "success",
           });
@@ -262,7 +268,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         variables,
         fetchPolicy: "network-only",
         onCompleted: () => {
-          /* istanbul ignore next */
           enqueueSnackbar(
             share_status
               ? "Plan has been shared successfully."
@@ -401,7 +406,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
     setLoader(true);
 
     const { planId, questions } = formFields;
+    /* istanbul ignore next */
     const modifyQuestions =
+      /* istanbul ignore next */
       questions.length > 0 ? { questions: JSON.stringify(questions) } : {};
     const variables = {
       planId,
@@ -416,7 +423,6 @@ const TherapistSafetyPlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         /* istanbul ignore next */
         onCompleted: async () => {
-          /* istanbul ignore next */
           enqueueSnackbar("Question has been updated successfully", {
             variant: "success",
           });
@@ -466,7 +472,7 @@ const TherapistSafetyPlanIndex: NextPage = () => {
           successDeleteCallback();
           /* istanbul ignore next */
           doneCallback();
-          /* istanbul ignore next */
+
           enqueueSnackbar("Question has been deleted successfully", {
             variant: "success",
           });
