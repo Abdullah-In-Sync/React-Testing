@@ -263,7 +263,8 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       sx={{
                         display: "flex",
                         justifyContent: "center",
-                        bgcolor: "#6EC9DB",
+                        bgcolor:
+                          data.share_status === 0 ? "#6EC9DB" : "#7EBCA7",
                         borderRadius: "3px 3px 3px 3px",
                         paddingBottom: "13px",
                         cursor: "pointer",

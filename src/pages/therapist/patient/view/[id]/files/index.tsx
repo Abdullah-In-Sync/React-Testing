@@ -31,10 +31,7 @@ export default function TherapistFilesList() {
   const [selectCheckBoxForDeleteAndShare, setSelectCheckBoxForDeleteAndShare] =
     useState("");
   const [initialValue, setInitialValue] = useState();
-  console.log(
-    "Koca: selectCheckBoxForDeleteAndShare ",
-    selectCheckBoxForDeleteAndShare
-  );
+
   const [updateFile] = useMutation(UPDATE_PATIENT_FILE);
   const [aadFile] = useMutation(ADD_PATIENT_FILE);
   const [deleteAndShareFile] = useMutation(DELETE_THERAPIST_FILE);
@@ -44,6 +41,7 @@ export default function TherapistFilesList() {
       onCompleted: () => {
         setLoader(false);
       },
+      fetchPolicy: "cache-and-network",
     });
 
   useEffect(() => {
