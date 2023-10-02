@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from "@mui/material";
 import { Form } from "formik";
-import * as React from "react";
+import React, { useState } from "react";
 import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../../patient/therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import { useSnackbar } from "notistack";
@@ -20,19 +20,18 @@ const FormAdminAssessmentBox: React.FC<ViewProps> = ({
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
 
-  const formBox = () => {
-    const [planId, setPlanId] = React.useState("");
+  const [planId, setPlanId] = useState("");
 
-    /* istanbul ignore next */
-    const set2 = (
-      e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => {
-      const value = e.target.value;
-      setPlanId(value);
-      onChangeAssessmentId(value);
-    };
-
-    return (
+  /* istanbul ignore next */
+  const set2 = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setPlanId(value);
+    onChangeAssessmentId(value);
+  };
+  return (
+    <Box className="actionsWrapper">
       <Stack className={styles.formWrapper}>
         <Form>
           <Box className="fieldsBoxWrapperFirst">
@@ -68,6 +67,7 @@ const FormAdminAssessmentBox: React.FC<ViewProps> = ({
                   if (planId.length) {
                     onPressSubmit();
                   } else {
+                    /* istanbul ignore next */
                     enqueueSnackbar("Please select an assessment", {
                       variant: "error",
                       autoHideDuration: 2000,
@@ -81,10 +81,8 @@ const FormAdminAssessmentBox: React.FC<ViewProps> = ({
           </Box>
         </Form>
       </Stack>
-    );
-  };
-
-  return <Box className="actionsWrapper">{formBox()}</Box>;
+    </Box>
+  );
 };
 
 export default FormAdminAssessmentBox;

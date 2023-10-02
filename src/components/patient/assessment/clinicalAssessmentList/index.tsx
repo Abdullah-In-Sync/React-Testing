@@ -80,7 +80,7 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
       questionaries.push(data);
     } else {
       let found = false;
-      questionData.map((data) => {
+      questionData.forEach((data) => {
         if (data.question_id === questionId) {
           data.answer = updatedQuestion.answer;
           found = true;
