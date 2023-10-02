@@ -7,7 +7,7 @@ import { useStyles } from "../../../../therapist/patient/therapistSafetyPlan/cre
 import TextFieldComponent from "../../../../common/TextField/TextFieldComponent";
 import UploadButtonComponent from "../../../../common/UploadButton/UploadButtonComponent";
 import { therapistUploadFile } from "../../../../../utility/types/resource_types";
-import { getUpdatedFileName, uploadToS3 } from "../../../../../lib/helpers/s3";
+import { uploadToS3 } from "../../../../../lib/helpers/s3";
 import { useQuery } from "@apollo/client";
 import { GET_UPLOAD_LOGO_URL } from "../../../../../graphql/query/resource";
 import ConfirmationModal from "../../../../common/ConfirmationModal";
@@ -52,14 +52,51 @@ const FormBox: React.FC<ViewProps> = ({
     /* istanbul ignore next */
     const fileOnChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
       const fileObj = event.target.files && event.target.files[0];
-      const { fileName } = getUpdatedFileName(event.target.files[0]);
+      if (!fileObj) {
+        return;
+      }
 
-      if (!fileName) {
+      const fileName = fileObj.name;
+      const fileExtension = getFileExtension(fileName);
+
+      /* istanbul ignore next */
+      if (!isValidFileType(fileExtension)) {
+        enqueueSnackbar(
+          "You can upload  jpg , jpeg , png , gif , mp3 , wav ,mp4 ,mov .pdf , doc ,docx file type Only",
+          {
+            variant: "error",
+            autoHideDuration: 2000,
+          }
+        );
         return;
       }
 
       setSelectedFile(fileObj);
       setFormFields((oldValues) => ({ ...oldValues, ["file_name"]: fileName }));
+    };
+
+    /* istanbul ignore next */
+    const getFileExtension = (fileName: string) => {
+      const parts = fileName.split(".");
+      return parts[parts.length - 1];
+    };
+
+    /* istanbul ignore next */
+    const isValidFileType = (extension: string) => {
+      const allowedExtensions = [
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "mp3",
+        "wav",
+        "mp4",
+        "mov",
+        "pdf",
+        "doc",
+        "docx",
+      ];
+      return allowedExtensions.includes(extension.toLowerCase());
     };
 
     /* istanbul ignore next */
