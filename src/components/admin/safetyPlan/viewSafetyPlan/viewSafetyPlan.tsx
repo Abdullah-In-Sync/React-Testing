@@ -17,8 +17,8 @@ type propTypes = {
   // setLoader: any;
 };
 
-export default function viewSafetyPlan(props: propTypes) {
-  const safetyPlanData = props.viewData;
+const ViewSafetyPlan: React.FC<propTypes> = ({ viewData }) => {
+  const safetyPlanData = viewData;
   const router = useRouter();
 
   return (
@@ -149,7 +149,7 @@ export default function viewSafetyPlan(props: propTypes) {
                   <Box>No data found.</Box>
                 ) : (
                   <Box>
-                    {props.viewData?.viewSafetyPlanById.questions?.map(
+                    {viewData?.viewSafetyPlanById.questions?.map(
                       (data, index) => (
                         <Box>
                           {data?.safety_ques_type == "1" ? (
@@ -250,4 +250,5 @@ export default function viewSafetyPlan(props: propTypes) {
       </form>
     </div>
   );
-}
+};
+export default ViewSafetyPlan;
