@@ -1,7 +1,7 @@
 import { Button, Stack, TextField, Tooltip } from "@mui/material";
 import { Form } from "formik";
 import { Autocomplete } from "@mui/lab";
-import * as React from "react";
+import React, { useState } from "react";
 import { useStyles } from "../../therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import { Box } from "@material-ui/core";
 import { useSnackbar } from "notistack";
@@ -21,11 +21,11 @@ const FormShareBox: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
 
-  const formBox = () => {
-    const { enqueueSnackbar } = useSnackbar();
-    const [planId, setPlanId] = React.useState<string[]>([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const [planId, setPlanId] = useState<string[]>([]);
 
-    return (
+  return (
+    <div className="actionsWrapper">
       <Stack className={styles.formWrapper}>
         <Form>
           <div>
@@ -119,10 +119,8 @@ const FormShareBox: React.FC<ViewProps> = ({
           </div>
         </Form>
       </Stack>
-    );
-  };
-
-  return <div className="actionsWrapper">{formBox()}</div>;
+    </div>
+  );
 };
 
 export default FormShareBox;
