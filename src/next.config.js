@@ -8,7 +8,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)?", // Matches all pages
+        source: "/:path*", // Matches all pages
         headers: [
           {
             key: "Content-Security-Policy",
