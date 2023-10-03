@@ -110,7 +110,8 @@ const SelectField = (props) => {
                     checked={
                       field.multiple
                         ? !!_value?.find((x) => x === option.value)
-                        : [] === option.value
+                        : Array.isArray(option.value) &&
+                          option.value.length === 0
                     }
                   />
                 )}
