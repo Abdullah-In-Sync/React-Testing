@@ -1,6 +1,6 @@
 import { Box, Button, Stack } from "@mui/material";
 import { Form } from "formik";
-import * as React from "react";
+import React, { useState } from "react";
 import { useStyles } from "../patient/therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 
@@ -19,18 +19,18 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
 
-  const formBox = () => {
-    const [planId, setPlanId] = React.useState("");
+  const [planId, setPlanId] = useState("");
 
-    const set2 = (
-      e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-    ) => {
-      const value = e.target.value;
-      setPlanId(value);
-      onChangePlanId(value);
-    };
+  const set2 = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setPlanId(value);
+    onChangePlanId(value);
+  };
 
-    return (
+  return (
+    <Box className="actionsWrapper">
       <Stack className={styles.formWrapper}>
         <Form>
           <Box className="fieldsBoxWrapperFirst">
@@ -70,10 +70,8 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
           </Box>
         </Form>
       </Stack>
-    );
-  };
-
-  return <Box className="actionsWrapper">{formBox()}</Box>;
+    </Box>
+  );
 };
 
 export default MeasuresFormAdd;
