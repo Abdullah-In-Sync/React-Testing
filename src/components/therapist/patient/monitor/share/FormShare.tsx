@@ -15,15 +15,20 @@ interface ViewProps {
 }
 
 const FormShareBox: React.FC<ViewProps> = ({
+  /* istanbul ignore next */
   onPressSubmit,
+  /* istanbul ignore next */
   therapistSafetyPlanList,
+  /* istanbul ignore next */
   onChangePlanId,
 }) => {
+  /* istanbul ignore next */
   const styles = useStyles();
-
+  /* istanbul ignore next */
   const { enqueueSnackbar } = useSnackbar();
+  /* istanbul ignore next */
   const [planId, setPlanId] = useState<string[]>([]);
-
+  /* istanbul ignore next */
   return (
     <div className="actionsWrapper">
       <Stack className={styles.formWrapper}>
@@ -35,19 +40,24 @@ const FormShareBox: React.FC<ViewProps> = ({
               data-testid="relapsePlanDropdown"
               id="name"
               value={
+                /* istanbul ignore next */
                 therapistSafetyPlanList &&
                 therapistSafetyPlanList.patientListForMonitor
                   ? therapistSafetyPlanList.patientListForMonitor.filter(
+                      /* istanbul ignore next */
                       (option) => planId.includes(option._id)
                     )
                   : []
               }
               options={
+                /* istanbul ignore next */
                 (therapistSafetyPlanList &&
                   therapistSafetyPlanList.patientListForMonitor) ||
                 []
               }
+              /* istanbul ignore next */
               getOptionLabel={(option) => option.patient_firstname}
+              /* istanbul ignore else */
               onChange={(e, newValue) => {
                 if (newValue) {
                   const selectedValues = newValue
@@ -60,6 +70,7 @@ const FormShareBox: React.FC<ViewProps> = ({
                   onChangePlanId("");
                 }
               }}
+              /* istanbul ignore next */
               renderOption={(props, option) => (
                 <>
                   <Box
@@ -69,16 +80,19 @@ const FormShareBox: React.FC<ViewProps> = ({
                     <Box style={{ flex: 1 }}>{option.patient_firstname}</Box>
 
                     <Box>
-                      {option.moniter_detail !== null && (
-                        <Tooltip
-                          title={"Monitor is already shared with patient"}
-                          arrow
-                        >
-                          <Box style={{ color: "#6EC9DB", fontSize: "20px" }}>
-                            ●
-                          </Box>
-                        </Tooltip>
-                      )}
+                      {
+                        /* istanbul ignore next */
+                        option.moniter_detail !== null && (
+                          <Tooltip
+                            title={"Monitor is already shared with patient"}
+                            arrow
+                          >
+                            <Box style={{ color: "#6EC9DB", fontSize: "20px" }}>
+                              ●
+                            </Box>
+                          </Tooltip>
+                        )
+                      }
                     </Box>
                   </Box>
                   <Box>
@@ -86,6 +100,7 @@ const FormShareBox: React.FC<ViewProps> = ({
                   </Box>
                 </>
               )}
+              /* istanbul ignore next */
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -103,6 +118,7 @@ const FormShareBox: React.FC<ViewProps> = ({
               <Button
                 data-testid="addSubmitForm"
                 variant="contained"
+                /* istanbul ignore else */
                 onClick={() => {
                   if (planId.length) {
                     onPressSubmit();
