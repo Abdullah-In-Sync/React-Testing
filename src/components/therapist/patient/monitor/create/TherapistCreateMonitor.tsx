@@ -1,11 +1,10 @@
 import { Formik } from "formik";
 import React from "react";
 import TherapistMonoitorCommonForm from "../form/TherapistMonitorCommonForm";
-import { ModalRefs } from "../../../../admin/monitor/form/types";
 import { TherapistMonitorValidationSchema } from "../form/therapistMonitorValidationSchema";
 import { defalutEmojis } from "../../../../../lib/constants";
 
-type ViewProps = any & ModalRefs;
+type ViewProps = any;
 
 const TherapistCreateMonitorForm: React.FC<ViewProps> = ({
   submitForm,
