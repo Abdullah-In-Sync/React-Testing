@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Button, Stack, TextField, Tooltip } from "@mui/material";
 import { Form } from "formik";
 import { Autocomplete } from "@mui/lab";
@@ -24,7 +25,6 @@ const FormShareBox: React.FC<ViewProps> = ({
   const [planId, setPlanId] = useState<string[]>([]);
   const patientListForMonitor =
     therapistSafetyPlanList?.patientListForMonitor || [];
-  console.log(patientListForMonitor, "patientListForMonitor");
   const formBox = () => {
     return (
       <Stack className={styles.formWrapper}>

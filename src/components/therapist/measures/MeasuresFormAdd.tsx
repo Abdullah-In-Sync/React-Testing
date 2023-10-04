@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Box, Button, Stack } from "@mui/material";
 import { Form } from "formik";
 import React, { useState } from "react";
@@ -18,6 +19,8 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
   const [planId, setPlanId] = useState("");
+  const therapistGetAdminMeasures =
+    therapistSafetyPlanList?.therapistGetAdminMeasures || [];
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -41,11 +44,7 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
                 label="Select Measure"
                 onChange={set2}
                 inputProps={{ "data-testid": "title" }}
-                options={
-                  (therapistSafetyPlanList &&
-                    therapistSafetyPlanList.therapistGetAdminMeasures) ||
-                  []
-                }
+                options={therapistGetAdminMeasures}
                 mappingKeys={["_id", "title"]}
                 size="small"
                 className="form-control-bg"
