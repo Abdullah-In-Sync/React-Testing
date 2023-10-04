@@ -22,6 +22,9 @@ const FormShareBox: React.FC<ViewProps> = ({
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [planId, setPlanId] = useState<string[]>([]);
+  const patientListForMonitor =
+    therapistSafetyPlanList?.patientListForMonitor || [];
+  console.log(patientListForMonitor, "patientListForMonitor");
   const formBox = () => {
     return (
       <Stack className={styles.formWrapper}>
@@ -32,19 +35,10 @@ const FormShareBox: React.FC<ViewProps> = ({
               fullWidth={true}
               data-testid="relapsePlanDropdown"
               id="name"
-              value={
-                therapistSafetyPlanList &&
-                therapistSafetyPlanList.patientListForMonitor
-                  ? therapistSafetyPlanList.patientListForMonitor.filter(
-                      (option) => planId.includes(option._id)
-                    )
-                  : []
-              }
-              options={
-                (therapistSafetyPlanList &&
-                  therapistSafetyPlanList.patientListForMonitor) ||
-                []
-              }
+              value={patientListForMonitor.filter((option) =>
+                planId.includes(option._id)
+              )}
+              options={patientListForMonitor}
               getOptionLabel={(option) => option.patient_firstname}
               onChange={(e, newValue) => {
                 if (newValue) {
