@@ -902,11 +902,5 @@ describe("Patient relapse page", () => {
     );
 
     fireEvent.click(confirmButton);
-
-    expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
-
-    await screen.findByTestId("SuccessOkBtn");
-
-    fireEvent.click(screen.getByTestId("SuccessOkBtn"));
   });
 });

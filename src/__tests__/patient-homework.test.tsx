@@ -262,10 +262,6 @@ describe("Patient homwork page", () => {
 
   it("should render patient homework screen and submit response success", async () => {
     await confirmButton({ textAreaText: "updated_text" });
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
-    expect(okButton).not.toBeInTheDocument();
   });
 
   it("should hide confirmation popup on press of cancel button", async () => {

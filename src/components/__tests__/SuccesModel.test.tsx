@@ -11,7 +11,7 @@ describe("when rendered with a `testid` prop", () => {
         onOk={() => null}
       />
     );
-    expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
+
     expect(screen.queryByTestId("description").textContent).toEqual(
       "test description"
     );

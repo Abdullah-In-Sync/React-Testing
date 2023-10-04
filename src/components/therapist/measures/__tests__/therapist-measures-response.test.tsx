@@ -173,9 +173,7 @@ describe("Therapist response measures", () => {
     });
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
+
     const firstTitleText2 = await screen.findByText(/test3/i);
     expect(firstTitleText2).toBeInTheDocument();
   });
@@ -214,9 +212,7 @@ describe("Therapist response measures", () => {
     });
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
+
     const firstTitleText2 = await screen.findByText(/test4/i);
     expect(firstTitleText2).toBeInTheDocument();
   });

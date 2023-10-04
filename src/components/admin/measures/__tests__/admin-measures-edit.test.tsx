@@ -259,8 +259,6 @@ describe("Admin update measures", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("when cancel button press", async () => {
@@ -284,8 +282,6 @@ describe("Admin update measures", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should render delete", async () => {

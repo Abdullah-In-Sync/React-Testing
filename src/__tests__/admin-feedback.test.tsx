@@ -543,10 +543,6 @@ describe("Admin feedback page", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
-    expect(okButton).not.toBeInTheDocument();
   });
 
   test("Click delete feedback button with cancelButton", async () => {

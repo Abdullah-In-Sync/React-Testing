@@ -325,17 +325,9 @@ describe("Admin edit resource page", () => {
     });
 
     await waitFor(async () => {
-      expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-    });
-
-    await waitFor(async () => {
       expect(
         screen.getByText("Organisation Updated Successfully")
       ).toBeInTheDocument();
-    });
-
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
     });
 
     expect(pushMock).toHaveBeenCalledWith("/admin/organization/list");

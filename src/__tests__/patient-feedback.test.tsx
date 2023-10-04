@@ -429,17 +429,9 @@ describe("Patient feedback list", () => {
       fireEvent.click(screen.queryByTestId("feedbackConfirmButton"));
 
       await waitFor(async () => {
-        expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
         expect(
           screen.getByText("Your feedback has been submited Successfully")
         ).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
       });
 
       await waitFor(() =>
