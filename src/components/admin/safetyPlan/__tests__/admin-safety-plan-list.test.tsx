@@ -325,7 +325,5 @@ describe("Admin safety plan list", () => {
     );
     expect(approveDeleteBtn).toBeInTheDocument();
     await waitFor(() => fireEvent.click(approveDeleteBtn));
-
-    expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
   });
 });

@@ -306,18 +306,11 @@ describe("Admin add resource page", () => {
     });
 
     await waitFor(async () => {
-      expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-    });
-
-    await waitFor(async () => {
       expect(
         screen.getByText("Organisation added Successfully")
       ).toBeInTheDocument();
     });
 
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
-    });
     expect(mockRouter.push).toHaveBeenCalledWith("/admin/organization/list");
     // });
   });

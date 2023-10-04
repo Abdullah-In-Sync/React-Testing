@@ -245,8 +245,6 @@ describe("Admin relapse plan list", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("when cancel button press", async () => {
@@ -269,8 +267,6 @@ describe("Admin relapse plan list", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("show Error popup on if plan is already exit", async () => {

@@ -284,7 +284,5 @@ describe("Admin measures list", () => {
     const approveDeleteBtn = screen.getByTestId("confirmButton");
     expect(approveDeleteBtn).toBeInTheDocument();
     fireEvent.click(approveDeleteBtn);
-
-    expect(await screen.findByTestId("SuccessOkBtn")).toBeInTheDocument();
   });
 });

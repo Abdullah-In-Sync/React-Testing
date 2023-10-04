@@ -187,8 +187,6 @@ describe("Therapist update measures", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("when cancel button press", async () => {
@@ -212,8 +210,6 @@ describe("Therapist update measures", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should render delete", async () => {

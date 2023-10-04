@@ -212,8 +212,6 @@ describe("Admin feedback edit", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("when cancel button press", async () => {

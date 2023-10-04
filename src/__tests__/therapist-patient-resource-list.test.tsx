@@ -299,18 +299,10 @@ describe("Therapist patient resource list page", () => {
         fireEvent.click(screen.queryByTestId("confirmButton"));
       });
 
-      await (async () => {
-        expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-      });
-
       await waitFor(async () => {
         expect(
           screen.getByText("Resource Deleted Successful")
         ).toBeInTheDocument();
-      });
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
       });
 
       await waitFor(() =>

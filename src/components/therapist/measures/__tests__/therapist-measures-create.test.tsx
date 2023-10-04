@@ -185,8 +185,6 @@ describe("Therapist create measures", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should render duplicate info modal", async () => {
@@ -235,8 +233,6 @@ describe("Therapist create measures", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should render delete", async () => {

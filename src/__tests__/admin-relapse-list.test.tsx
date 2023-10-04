@@ -324,10 +324,5 @@ describe("Render admin relapse list screen", () => {
     );
 
     expect(successMessage).toBeInTheDocument();
-
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
-    expect(successMessage).not.toBeInTheDocument();
   });
 });

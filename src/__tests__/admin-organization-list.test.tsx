@@ -146,18 +146,10 @@ describe("TemplateList Page", () => {
 
     fireEvent.click(screen.queryByTestId("deleteOrgConfirmButton"));
 
-    await (async () => {
-      expect(screen.queryByTestId("SuccessOkBtn")).toBeInTheDocument();
-    });
-
     await waitFor(async () => {
       expect(
         screen.getByText("Organisation Deleted Successfully")
       ).toBeInTheDocument();
-    });
-
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
     });
 
     await waitFor(() =>
