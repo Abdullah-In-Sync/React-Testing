@@ -229,11 +229,6 @@ const submitForm = async () => {
 describe("Admin safety plan list", () => {
   it("should render admin create safety plan page and submit the form", async () => {
     await submitForm();
-
-    // const confirmButton = await screen.findByTestId("confirmButton");
-    // fireEvent.click(confirmButton);
-    // const okButton = await screen.findByTestId("SuccessOkBtn");
-    // expect(okButton).toBeInTheDocument();
   });
 
   it("when cancel button press", async () => {
@@ -249,22 +244,4 @@ describe("Admin safety plan list", () => {
 
     expect(confirmButton).toBeInTheDocument();
   });
-
-  // it("should submit full form data", async () => {
-  //   await submitFullForm();
-  //   const confirmButton = await screen.findByRole("button", {
-  //     name: "Confirm",
-  //   });
-  //   fireEvent.click(confirmButton);
-  //   const okButton = await screen.findByTestId("SuccessOkBtn");
-  //   expect(okButton).toBeInTheDocument();
-  // });
-
-  // it("should render admin cancel the submition", async () => {
-  //   await submitForm();
-  //   const cancelButton = await screen.findByRole("button", { name: "Cancel" });
-  //   expect(cancelButton).toBeInTheDocument();
-  //   fireEvent.click(cancelButton);
-  //   expect(cancelButton).not.toBeInTheDocument();
-  // });
 });

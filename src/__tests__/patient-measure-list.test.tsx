@@ -149,8 +149,6 @@ describe("Measure list", () => {
     expect(
       screen.queryByText("No Score information is available")
     ).toBeInTheDocument();
-
-    await waitFor(() => fireEvent.click(screen.queryByTestId("SuccessOkBtn")));
   });
 
   test("If test already token for today it will show the error popup", async () => {
@@ -170,8 +168,6 @@ describe("Measure list", () => {
     expect(
       screen.queryByText("Today’s test has been taken already")
     ).toBeInTheDocument();
-
-    await waitFor(() => fireEvent.click(screen.queryByTestId("SuccessOkBtn")));
 
     await waitFor(() =>
       fireEvent.click(screen.queryByTestId("view-score-btn"))

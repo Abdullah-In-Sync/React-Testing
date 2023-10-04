@@ -15,7 +15,7 @@ import { GET_UPLOAD_LOGO_URL } from "../graphql/query/resource";
 import * as s3 from "../lib/helpers/s3";
 
 jest.mock("../contexts/AuthContext");
-const file = new File(["hello"], "hello.png", { type: "image/png" });
+const file = new File(["hello"], "hello.pdf", { type: "image/png" });
 
 const mocks = [];
 
@@ -43,7 +43,7 @@ mocks.push({
     query: ADD_PATIENT_FILE,
     variables: {
       description: "Description",
-      file_name: "invalid.pdf",
+      file_name: "hello.pdf",
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       title: "Title",
     },

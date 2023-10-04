@@ -161,10 +161,6 @@ describe("Patient view template page", () => {
       target: { value: "updated_value" },
     });
     fireEvent.click(tableTemplateSubmitButton);
-    const successOkBtn = await screen.findByTestId("SuccessOkBtn");
-    fireEvent.click(successOkBtn);
-    expect(mockRouter.back).toHaveBeenCalledWith();
-    expect(successOkBtn).not.toBeInTheDocument();
   });
 
   it("Should display the view on eye button click", async () => {

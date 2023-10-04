@@ -901,8 +901,12 @@ describe("Therapist patient safety plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Plan has been created successfully!")
+      ).toBeInTheDocument();
+    });
   });
 
   it("should render admin cancel the submition", async () => {
@@ -940,8 +944,12 @@ describe("Therapist patient safety plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Plan has been updated successfully.")
+      ).toBeInTheDocument();
+    });
   });
 
   it("should share safety plan", async () => {
@@ -958,8 +966,12 @@ describe("Therapist patient safety plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Plan has been shared successfully.")
+      ).toBeInTheDocument();
+    });
   });
 
   it("submit form with valid data to add safety plan.", async () => {
@@ -1006,7 +1018,12 @@ describe("Therapist patient safety plan", () => {
       await waitFor(async () => {
         fireEvent.click(screen.queryByTestId("confirmButton"));
       });
-      expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("Plan has been deleted successfully!")
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -1027,10 +1044,6 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(saveButton);
     const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
-    // waitFor(() => {
-    //   const okButton = screen.queryByTestId("SuccessOkBtn");
-    //   expect(okButton).toBeInTheDocument();
-    // });
   });
 
   it("should update plan fail", async () => {
@@ -1090,9 +1103,12 @@ describe("Therapist patient safety plan", () => {
     fireEvent.click(deleteButton);
     const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Question has been deleted successfully")
+      ).toBeInTheDocument();
+    });
   });
 
   it("should add and delete new safety plan question", async () => {
@@ -1224,6 +1240,11 @@ describe("Therapist patient safety plan", () => {
     const confirmBtn = await screen.findByTestId("confirmButton");
     expect(confirmBtn).toBeInTheDocument();
     fireEvent.click(confirmBtn);
-    expect(await screen.findByTestId("SuccessOkBtn"));
+
+    await waitFor(async () => {
+      expect(
+        screen.getByText("Question has been deleted successfully")
+      ).toBeInTheDocument();
+    });
   });
 });

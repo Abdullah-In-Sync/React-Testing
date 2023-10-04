@@ -526,10 +526,6 @@ describe("Admin add resource page", () => {
     });
 
     await (async () => {
-      fireEvent.click(screen.queryByTestId("SuccessOkBtn"));
-    });
-
-    await (async () => {
       expect(pushMock).toHaveBeenCalledWith("/admin/resource/");
     });
   });
