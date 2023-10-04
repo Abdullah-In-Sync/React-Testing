@@ -11,7 +11,6 @@ interface ViewProps {
   setPlanId?: any;
   onChangePlanId?: any;
 }
-/* istanbul ignore next */
 const MeasuresFormAdd: React.FC<ViewProps> = ({
   onPressSubmit,
   therapistSafetyPlanList,
@@ -21,7 +20,6 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
   const styles = useStyles();
   /* istanbul ignore next */
   const [planId, setPlanId] = useState("");
-  /* istanbul ignore next */
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -32,7 +30,6 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
     /* istanbul ignore next */
     onChangePlanId(value);
   };
-  /* istanbul ignore next */
   return (
     <Box className="actionsWrapper">
       <Stack className={styles.formWrapper}>
