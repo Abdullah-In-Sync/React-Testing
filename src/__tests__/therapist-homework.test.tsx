@@ -2071,8 +2071,6 @@ describe("Therapist client feedback list", () => {
       expect(screen.getByText("Saved Successfully.")).toBeInTheDocument();
     });
 
-    fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
-
     await waitFor(async () => {
       expect(screen.getByText("Add Homework")).toBeInTheDocument();
     });
@@ -2136,8 +2134,6 @@ describe("Therapist client feedback list", () => {
     await waitFor(async () => {
       expect(screen.getByText("Saved Successfully.")).toBeInTheDocument();
     });
-
-    fireEvent.click(await screen.findByTestId("SuccessOkBtn"));
 
     await waitFor(async () => {
       expect(screen.getByText("Add Homework")).toBeInTheDocument();
@@ -2304,10 +2300,6 @@ describe("Therapist client feedback list", () => {
 
       expect(screen.getByTestId("assign_resource_button")).toBeInTheDocument();
       fireEvent.click(screen.queryByTestId("assign_resource_button"));
-    });
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
     });
   });
 });

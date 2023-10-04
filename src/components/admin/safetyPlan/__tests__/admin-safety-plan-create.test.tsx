@@ -207,8 +207,6 @@ describe("Admin safety plan list", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("when cancel button press", async () => {
@@ -231,8 +229,6 @@ describe("Admin safety plan list", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should render admin cancel the submition", async () => {

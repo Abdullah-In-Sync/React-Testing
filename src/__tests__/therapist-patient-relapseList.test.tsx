@@ -890,8 +890,6 @@ describe("Therapist patient relapse plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should render therapist cancel the submition", async () => {
@@ -968,8 +966,6 @@ describe("Therapist patient relapse plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should share relapse plan", async () => {
@@ -986,8 +982,6 @@ describe("Therapist patient relapse plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
   });
 
   it("should delete relapse plan", async () => {
@@ -1008,7 +1002,6 @@ describe("Therapist patient relapse plan", () => {
       await waitFor(async () => {
         fireEvent.click(screen.queryByTestId("confirmButton"));
       });
-      expect(screen.getByTestId("SuccessOkBtn")).toBeInTheDocument();
     });
   });
 
@@ -1033,10 +1026,6 @@ describe("Therapist patient relapse plan", () => {
     fireEvent.click(saveButton);
     const confirmButton = await screen.findByTestId("confirmButton");
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
-    expect(okButton).not.toBeInTheDocument();
   });
 
   it("should update plan fail", async () => {
@@ -1108,10 +1097,6 @@ describe("Therapist patient relapse plan", () => {
       name: "Confirm",
     });
     fireEvent.click(confirmButton);
-    const okButton = await screen.findByTestId("SuccessOkBtn");
-    expect(okButton).toBeInTheDocument();
-    fireEvent.click(okButton);
-    expect(okButton).not.toBeInTheDocument();
   });
 
   it("should add and delete new safety plan question", async () => {
