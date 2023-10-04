@@ -263,7 +263,8 @@ const TherapistFileList: React.FC<ViewProps> = ({
                       sx={{
                         display: "flex",
                         justifyContent: "center",
-                        bgcolor: "#6EC9DB",
+                        bgcolor:
+                          data.share_status === 0 ? "#6EC9DB" : "#7EBCA7",
                         borderRadius: "3px 3px 3px 3px",
                         paddingBottom: "13px",
                         cursor: "pointer",
@@ -288,7 +289,7 @@ const TherapistFileList: React.FC<ViewProps> = ({
                           File uploaded on: {data.updated_date.slice(0, 10)}
                         </Typography>
 
-                        <Typography>Shared by: {data.added_by}</Typography>
+                        <Typography>Added by: {data.added_by}</Typography>
                         <Typography
                           variant="body2"
                           color="#30373E"
