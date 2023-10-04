@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, FormLabel } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import { FILEEXTENSION } from "../../../lib/constants";
+import { useSnackbar } from "notistack";
 
 type propsType = {
   variant?: "contained" | "text" | "outlined";
@@ -17,6 +19,17 @@ type propsType = {
 
 /* istanbul ignore next */
 export default function UploadButtonComponent(props: propsType) {
+  const { enqueueSnackbar } = useSnackbar();
+  const handleOnChange = (e) => {
+    if (!FILEEXTENSION.includes(e.target.files[0]["type"])) {
+      return enqueueSnackbar(
+        "You can upload jpg, jpeg, png, gif, mp3, wav, mp4, mov, .pdf, doc, docx file type Only.",
+        { variant: "error" }
+      );
+    }
+    return props.onChange(e);
+  };
+
   return (
     <>
       <Button
@@ -31,7 +44,7 @@ export default function UploadButtonComponent(props: propsType) {
           {...props.inputProps}
           accept={props.accept}
           multiple={props.multiple}
-          onChange={props.onChange}
+          onChange={handleOnChange}
           type="file"
         />
       </Button>
