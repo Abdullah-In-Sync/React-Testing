@@ -1,44 +1,17 @@
-import { MockedProvider, MockedResponse } from "@apollo/react-testing";
-import { render, screen } from "@testing-library/react";
-import { GET_UPLOAD_RESOURCE_URL } from "../../graphql/query/resource";
-import UploadButtonComponent from "../common/UploadButton/UploadButtonComponent";
+import { MockedProvider } from "@apollo/react-testing";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
-
-const buildMocks = (): {
-  mocks: MockedResponse[];
-} => {
-  const _mocks: MockedResponse[] = [];
-
-  _mocks.push({
-    request: {
-      query: GET_UPLOAD_RESOURCE_URL,
-      variables: {
-        fileName: "test.png",
-      },
-    },
-    result: {
-      data: {
-        preSignedData: {
-          getUploadResourceUrl: {
-            resource_upload: "https:myhelp.aws.com",
-          },
-        },
-      },
-    },
-  });
-
-  return { mocks: _mocks };
-};
-
-const { mocks } = buildMocks();
+import UploadButtonComponent from "../common/UploadButton/UploadButtonComponent";
+const file = new File(["hello"], "hello.txt", { type: "text/plain" });
+const imageFile = new File(["hello"], "hello.png", { type: "image/png" });
 const sut = async () => {
   render(
-    <MockedProvider mocks={mocks}>
+    <MockedProvider>
       <SnackbarProvider>
         <UploadButtonComponent
           name="upload_file"
           variant="contained"
-          onChange="javascript:void(0)"
+          onChange={() => null}
           inputProps={{ "data-testid": "resource_file_upload" }}
         />
       </SnackbarProvider>
@@ -50,5 +23,23 @@ describe("when rendered with a `upload button`", () => {
   it("should create upload button in screen", async () => {
     await sut();
     expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
+    fireEvent.change(screen.getByTestId("resource_file_upload"), {
+      target: { files: [file] },
+    });
+    expect(
+      await screen.findByText(
+        "You can upload jpg, jpeg, png, gif, mp3, wav, mp4, mov, .pdf, doc, docx file type Only."
+      )
+    ).toBeInTheDocument();
+  });
+
+  it("should not call enqueueSnackbar function when file type is in FILEEXTENSION array", async () => {
+    const enqueueSnackbar = jest.fn();
+    await sut();
+    const input = screen.getByTestId("resource_file_upload");
+    fireEvent.change(input, {
+      target: { files: [imageFile] },
+    });
+    expect(enqueueSnackbar).not.toHaveBeenCalled();
   });
 });
