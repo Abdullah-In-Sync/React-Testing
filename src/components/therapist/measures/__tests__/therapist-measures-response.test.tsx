@@ -1,6 +1,12 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 
 import Measures from "..";
@@ -213,7 +219,9 @@ describe("Therapist response measures", () => {
     expect(confirmButton).toBeInTheDocument();
     fireEvent.click(confirmButton);
 
-    const firstTitleText2 = await screen.findByText(/test4/i);
-    expect(firstTitleText2).toBeInTheDocument();
+    await waitFor(async () => {
+      const firstTitleText2 = await screen.findByText(/test4/i);
+      expect(firstTitleText2).toBeInTheDocument();
+    });
   });
 });
