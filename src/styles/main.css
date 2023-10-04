@@ -165,3 +165,7 @@ p {
  .disableClickSelected .MuiAutocomplete-option[aria-selected="true"]{
   pointer-events: none;
  }
+
+ textarea {  
+  font-family: 'Montserrat', sans-serif;
+ }
