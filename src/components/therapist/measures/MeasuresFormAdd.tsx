@@ -16,18 +16,13 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
   therapistSafetyPlanList,
   onChangePlanId,
 }) => {
-  /* istanbul ignore next */
   const styles = useStyles();
-  /* istanbul ignore next */
   const [planId, setPlanId] = useState("");
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    /* istanbul ignore next */
     const value = e.target.value;
-    /* istanbul ignore next */
     setPlanId(value);
-    /* istanbul ignore next */
     onChangePlanId(value);
   };
   return (
@@ -54,6 +49,7 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
                 mappingKeys={["_id", "title"]}
                 size="small"
                 className="form-control-bg"
+                data-testid="select_add_measure"
               />
             </Box>
           </Box>

@@ -68,6 +68,7 @@ export default function SingleSelectComponent(props: propTypes) {
         inputProps={props.inputProps}
         className={props.className}
         disabled={props.disabled}
+        data-testid={props["data-testid"]}
         {...props.extraProps}
       >
         {props.showDefaultSelectOption !== false && (
