@@ -25,8 +25,8 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       };
     });
 
-    const seriesY = scoreDetail?.map((e) => e.score)?.reverse();
-    const seriesX = scoreDetail?.map((e) => e.created_date)?.reverse();
+    const seriesY = scoreDetail?.map((e) => e.score);
+    const seriesX = scoreDetail?.map((e) => e.created_date);
 
     return {
       seriesX: seriesX || ["2030"],
