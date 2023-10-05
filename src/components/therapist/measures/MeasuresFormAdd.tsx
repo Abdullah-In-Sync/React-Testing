@@ -9,7 +9,6 @@ interface ViewProps {
   therapistSafetyPlanList: any;
   onChangePlanId: any;
 }
-/* istanbul ignore next */
 const MeasuresFormAdd: React.FC<ViewProps> = ({
   onPressSubmit,
   therapistSafetyPlanList,
@@ -17,9 +16,7 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
 }) => {
   /* istanbul ignore next */
   const styles = useStyles();
-  /* istanbul ignore next */
   const [planId, setPlanId] = useState("");
-  /* istanbul ignore next */
   const therapistGetAdminMeasures =
     therapistSafetyPlanList?.therapistGetAdminMeasures || [];
   const set2 = (

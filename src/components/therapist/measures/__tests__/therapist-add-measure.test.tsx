@@ -19,69 +19,6 @@ jest.mock("next/router", () => ({
 }));
 
 const mocksData = [];
-const emptyMock = [
-  {
-    request: {
-      query: GET_THERAPIST_MEASURES_LIST,
-      variables: {
-        patientId: "572b4bce-4a25-4c23-90d5-d85d6bc7fddf",
-      },
-    },
-    result: {
-      data: {
-        therapistListMeasures: [
-          {
-            _id: "7cff4b39-0668-4e8f-b63f-d4b2b496a059",
-            created_date: "2023-04-29T12:35:59.449Z",
-            description: "des",
-            patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-            score: 16,
-            score_date: "2023-04-29T12:38:25.426Z",
-            scores_list: null,
-            share_status: 1,
-            status: 1,
-            template_data:
-              '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh1ytgif","col1":"quest","col2":"1","col3":"2","col4":"3","col5":"4","answer":""},{"id":"lh1yu5cv","col1":"test","col2":"4","col3":"5","col4":"5","col5":"8","answer":""},{"id":"lh1yufoc","col1":"some","col2":"2","col3":"8","col4":"6","col5":"4","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
-            template_id: "format2",
-            therapist_id: "686802e5123a482681a680a673ef7f53",
-            title: "new tets",
-            updated_date: "2023-04-29T12:38:25.426Z",
-            __typename: "TherapistMeasures",
-          },
-          {
-            _id: "d80cde21-6867-45fb-a257-99dad0b965ac",
-            created_date: "2023-04-29T11:30:31.267Z",
-            description: "some des",
-            patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-            score: 11,
-            score_date: "2023-04-29T11:43:25.365Z",
-            scores_list: null,
-            share_status: 1,
-            status: 1,
-            template_data:
-              '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh1wgjyd","col1":"quest1","col2":"1","col3":"2","col4":"3","col5":"4","answer":""},{"id":"lh1wi7rs","col1":"quest2","col2":"4","col3":"6","col4":"7","col5":"8","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
-            template_id: "format2",
-            therapist_id: "686802e5123a482681a680a673ef7f53",
-            title: "Testformat2",
-            updated_date: "2023-04-29T11:43:25.365Z",
-            __typename: "TherapistMeasures",
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_THERAPIST_MEASURES_PLAN_LIST,
-      variables: { measure_id: "d80cde21-6867-45fb-a257-99dad0b965ac" },
-    },
-    result: {
-      data: {
-        therapistGetAdminMeasures: null,
-      },
-    },
-  },
-];
 
 // for listing
 mocksData.push({
@@ -181,6 +118,69 @@ mocksData.push({
   },
 });
 
+//for check empty
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_MEASURES_LIST,
+    variables: {
+      patientId: "572b4bce-4a25-4c23-90d5-d85d6bc7fddg",
+    },
+  },
+  result: {
+    data: {
+      therapistListMeasures: [
+        {
+          _id: "7cff4b39-0668-4e8f-b63f-d4b2b496a059",
+          created_date: "2023-04-29T12:35:59.449Z",
+          description: "des",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          score: 16,
+          score_date: "2023-04-29T12:38:25.426Z",
+          scores_list: null,
+          share_status: 1,
+          status: 1,
+          template_data:
+            '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh1ytgif","col1":"quest","col2":"1","col3":"2","col4":"3","col5":"4","answer":""},{"id":"lh1yu5cv","col1":"test","col2":"4","col3":"5","col4":"5","col5":"8","answer":""},{"id":"lh1yufoc","col1":"some","col2":"2","col3":"8","col4":"6","col5":"4","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
+          template_id: "format2",
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          title: "new tets",
+          updated_date: "2023-04-29T12:38:25.426Z",
+          __typename: "TherapistMeasures",
+        },
+        {
+          _id: "d80cde21-6867-45fb-a257-99dad0b965ab",
+          created_date: "2023-04-29T11:30:31.267Z",
+          description: "some des",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          score: 11,
+          score_date: "2023-04-29T11:43:25.365Z",
+          scores_list: null,
+          share_status: 1,
+          status: 1,
+          template_data:
+            '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lh1wgjyd","col1":"quest1","col2":"1","col3":"2","col4":"3","col5":"4","answer":""},{"id":"lh1wi7rs","col1":"quest2","col2":"4","col3":"6","col4":"7","col5":"8","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
+          template_id: "format2",
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          title: "Testformat2",
+          updated_date: "2023-04-29T11:43:25.365Z",
+          __typename: "TherapistMeasures",
+        },
+      ],
+    },
+  },
+});
+mocksData.push({
+  request: {
+    query: GET_THERAPIST_MEASURES_PLAN_LIST,
+    variables: { measure_id: "d80cde21-6867-45fb-a257-99dad0b965ab" },
+  },
+  result: {
+    data: {
+      therapistGetAdminMeasures: null,
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -193,19 +193,7 @@ const sut = async () => {
   );
 };
 
-const emptySelectSut = async () => {
-  render(
-    <MockedProvider mocks={emptyMock} addTypename={false}>
-      <ThemeProvider theme={theme()}>
-        <SnackbarProvider>
-          <Measures />
-        </SnackbarProvider>
-      </ThemeProvider>
-    </MockedProvider>
-  );
-};
-
-beforeEach(() => {
+beforeAll(() => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
       id: "572b4bce-4a25-4c23-90d5-d85d6bc7fddf",
@@ -217,7 +205,6 @@ beforeEach(() => {
 describe("Therapist Add measure", () => {
   it("Should add measure", async () => {
     await sut();
-
     const addBtn = await screen.findByTestId("addMeasureButton");
     expect(addBtn).toBeInTheDocument();
     fireEvent.click(addBtn);
@@ -252,6 +239,12 @@ describe("Therapist Add measure", () => {
     });
   });
   it("Check with null", async () => {
-    await emptySelectSut();
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "572b4bce-4a25-4c23-90d5-d85d6bc7fddg",
+      },
+      push: pushMock,
+    });
+    await sut();
   });
 });
