@@ -11,7 +11,6 @@ interface ViewProps {
   ) => void;
 
   onPressSubmit?: () => void;
-  setPlanId?: any;
   therapistSafetyPlanList?: any;
   receivePlanId: any;
 }
@@ -24,7 +23,6 @@ export const safetyPlanValidationSchema = Yup.object().shape({
 const AddMeasuresPlanForm: React.FC<ViewProps> = ({
   submitForm,
   onPressSubmit,
-  setPlanId,
   therapistSafetyPlanList,
   receivePlanId,
 }) => {
@@ -49,7 +47,6 @@ const AddMeasuresPlanForm: React.FC<ViewProps> = ({
         children={() => (
           <MeasuresFormAdd
             therapistSafetyPlanList={therapistSafetyPlanList}
-            setPlanId={setPlanId}
             onChangePlanId={onChangePlanId}
             onPressSubmit={onPressSubmit}
           />

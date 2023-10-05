@@ -6,11 +6,9 @@ import { useStyles } from "../patient/therapistSafetyPlan/create/therapistSafety
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 
 interface ViewProps {
-  buttonClick?: (value) => void;
-  onPressSubmit?: () => void;
-  therapistSafetyPlanList?: any;
-  setPlanId?: any;
-  onChangePlanId?: any;
+  onPressSubmit: () => void;
+  therapistSafetyPlanList: any;
+  onChangePlanId: any;
 }
 /* istanbul ignore next */
 const MeasuresFormAdd: React.FC<ViewProps> = ({
