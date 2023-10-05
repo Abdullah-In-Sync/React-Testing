@@ -283,7 +283,7 @@ beforeEach(() => {
   });
 });
 
-describe("Paitent monitor view response", () => {
+describe("Patient monitor view response", () => {
   it("should render patient monitor list and click view response button", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {

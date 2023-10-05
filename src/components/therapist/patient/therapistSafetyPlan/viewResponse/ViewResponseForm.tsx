@@ -84,7 +84,7 @@ const CommonForm: React.FC<ViewProps> = ({
     }
   };
 
-  const paitentResponse = () => {
+  const patientResponse = () => {
     if (!questions) return null;
 
     return questions.map(
@@ -150,7 +150,7 @@ const CommonForm: React.FC<ViewProps> = ({
               </Stack>
             </Stack>
           )}
-          {paitentResponse()}
+          {patientResponse()}
         </Box>
         {!isPatientResponse && (
           <AddQuestionsBox

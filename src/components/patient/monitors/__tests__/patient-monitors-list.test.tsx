@@ -60,13 +60,13 @@ beforeEach(() => {
   });
 });
 
-describe("Paitent monitors list", () => {
+describe("Patient monitors list", () => {
   (useRouter as jest.Mock).mockReturnValue({
     query: {
       tab: "monitors",
     },
   });
-  it("should render paitent monitor list", async () => {
+  it("should render patient monitor list", async () => {
     await sut();
     expect(await screen.findAllByText(/Final testing/i)).toHaveLength(1);
   });

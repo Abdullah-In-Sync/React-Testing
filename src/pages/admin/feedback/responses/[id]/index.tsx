@@ -9,7 +9,7 @@ import Layout from "../../../../../components/layout";
 import { VIEW_RESPONSE_DOWNLOAD_CSV } from "../../../../../graphql/Feedback/graphql";
 import { ViewResponseDownload } from "../../../../../graphql/Feedback/types";
 import { GET_ADMIN_FEEDBACK_RESPONSE_LIST } from "../../../../../graphql/query";
-const csvHeader = ["Therapist Name", "Assigned Paitent Name", "Therapy Name"];
+const csvHeader = ["Therapist Name", "Assigned Patient Name", "Therapy Name"];
 const AdminFeedbackResponses = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [selectedStartDate, setSelectedStartDate] = useState("");
@@ -119,7 +119,7 @@ const AdminFeedbackResponses = () => {
   const groupByRow = (data) => {
     const mergedMap = new Map();
     data.forEach((obj) => {
-      const key = `${obj["Therapist Name"]}-${obj["Assigned Paitent Name"]}-${obj["Therapy Name"]}`;
+      const key = `${obj["Therapist Name"]}-${obj["Assigned Patient Name"]}-${obj["Therapy Name"]}`;
       if (!mergedMap.has(key)) {
         mergedMap.set(key, obj);
       } else {
