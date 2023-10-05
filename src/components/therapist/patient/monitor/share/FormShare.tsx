@@ -21,12 +21,12 @@ const FormShareBox: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  /* istanbul ignore file */
+  /* istanbul ignore next */
   const [planId, setPlanId] = useState<string[]>([]);
-  /* istanbul ignore file */
+  /* istanbul ignore next */
   const patientListForMonitor =
     therapistSafetyPlanList?.patientListForMonitor || [];
-  /* istanbul ignore file */
+  /* istanbul ignore next */
   const formBox = () => {
     return (
       <Stack className={styles.formWrapper}>
