@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { Box, Button, Stack } from "@mui/material";
 import { Form } from "formik";
 import React, { useState } from "react";
@@ -18,7 +17,9 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
   onChangePlanId,
 }) => {
   const styles = useStyles();
+  /* istanbul ignore next */
   const [planId, setPlanId] = useState("");
+  /* istanbul ignore next */
   const therapistGetAdminMeasures =
     therapistSafetyPlanList?.therapistGetAdminMeasures || [];
   const set2 = (

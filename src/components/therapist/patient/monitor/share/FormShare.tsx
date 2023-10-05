@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { Button, Stack, TextField, Tooltip } from "@mui/material";
 import { Form } from "formik";
 import { Autocomplete } from "@mui/lab";
@@ -22,9 +21,12 @@ const FormShareBox: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+  /* istanbul ignore file */
   const [planId, setPlanId] = useState<string[]>([]);
+  /* istanbul ignore file */
   const patientListForMonitor =
     therapistSafetyPlanList?.patientListForMonitor || [];
+  /* istanbul ignore file */
   const formBox = () => {
     return (
       <Stack className={styles.formWrapper}>
