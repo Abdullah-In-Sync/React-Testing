@@ -70,7 +70,7 @@ mocksData.push({
   },
   result: {
     data: {
-      paitentMeasureSubmitTest: {
+      patientMeasureSubmitTest: {
         _id: "180a65ac-a777-4e82-b13e-5cea79e62608",
       },
     },
@@ -124,7 +124,7 @@ mocksData.push({
   },
   result: {
     data: {
-      paitentMeasureSubmitTest: {
+      patientMeasureSubmitTest: {
         _id: "180a65ac-a777-4e82-b13e-5cea79e62608",
       },
     },
@@ -165,8 +165,8 @@ beforeEach(() => {
   });
 });
 
-describe("Paitent response measures", () => {
-  it("should render paitent format 1 response", async () => {
+describe("Patient response measures", () => {
+  it("should render patient format 1 response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "9776be15-4e15-4573-9c45-9868dad0e50a",
@@ -217,7 +217,7 @@ describe("Paitent response measures", () => {
     });
   });
 
-  it("should render paitent format 2 response", async () => {
+  it("should render patient format 2 response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "b8423205-7a90-4cd6-8324-65f8372880be",

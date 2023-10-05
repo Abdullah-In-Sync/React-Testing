@@ -5,12 +5,12 @@ import React from "react";
 
 import BreadCrumbsWithBackButton from "../../common/BreadCrumbsWithBackButton";
 
-import * as PaitentTemplateInterface from "./types";
+import * as PatientTemplateInterface from "./types";
 
 import { useStyles } from "./resourcestyles";
 
 interface ViewProps {
-  resourceData?: PaitentTemplateInterface.ResourceData;
+  resourceData?: PatientTemplateInterface.ResourceData;
   templateResponse?: string;
   onSubmit?: (v) => void;
   onClickView?: () => void;
@@ -19,7 +19,7 @@ interface ViewProps {
   handleNextButton?: () => void;
 }
 
-const PaitentTemplateEdit: React.FC<ViewProps> = ({
+const PatientTemplateEdit: React.FC<ViewProps> = ({
   resourceData,
   onPressBack,
   handleNextButton,
@@ -99,4 +99,4 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   );
 };
 
-export default PaitentTemplateEdit;
+export default PatientTemplateEdit;

@@ -279,7 +279,7 @@ export interface PatientMeasureSubmitTest {
   __typename: string;
 }
 
-export interface PaitentListMeasureData {
+export interface PatientListMeasureData {
   patientMeasureList?: PatientMeasureListEntity[] | null;
 }
 

@@ -5,14 +5,14 @@ import { TemplateFormData } from "../../../templateTable/table.model";
 import BreadCrumbsWithBackButton from "../../../common/BreadCrumbsWithBackButton";
 import { templateComponents } from "./patientTemplateData";
 
-import * as PaitentTemplateInterface from "./patientTemplateEditInterface";
+import * as PatientTemplateInterface from "./patientTemplateEditInterface";
 
 import { useAppContext } from "../../../../contexts/AuthContext";
 import TemplateArrow from "../../../templateArrow";
 
 interface ViewProps {
-  resourceData?: PaitentTemplateInterface.ResourceDataInterface;
-  templateDetail?: PaitentTemplateInterface.TemplateDetailInterface;
+  resourceData?: PatientTemplateInterface.ResourceDataInterface;
+  templateDetail?: PatientTemplateInterface.TemplateDetailInterface;
   templateResponse?: string;
   onSubmit?: (v) => void;
   onClickView?: () => void;
@@ -23,7 +23,7 @@ interface ViewProps {
   defaultUserType?: string;
 }
 
-const PaitentTemplateEdit: React.FC<ViewProps> = ({
+const PatientTemplateEdit: React.FC<ViewProps> = ({
   resourceData,
   templateDetail,
   templateResponse,
@@ -98,4 +98,4 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   );
 };
 
-export default PaitentTemplateEdit;
+export default PatientTemplateEdit;

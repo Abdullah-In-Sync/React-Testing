@@ -10,7 +10,7 @@ import {
   GET_PATIENT_FILE_LIST,
   UPDATE_PATIENT_FILE,
 } from "../../../graphql/patientFile/graphql";
-import { PaitentFileListData } from "../../../graphql/patientFile/type";
+import { PatientFileListData } from "../../../graphql/patientFile/type";
 import { fetchUrlAndUploadFile } from "../../../hooks/fetchUrlAndUploadFile";
 import { removeProp } from "../../../utility/helper";
 import { ConfirmElement } from "../../common/ConfirmWrapper";
@@ -42,7 +42,7 @@ const FilesPage: NextPage = () => {
       refetch: refetchPatientList,
       loading: loadingPatientFileData,
     },
-  ] = useLazyQuery<PaitentFileListData>(GET_PATIENT_FILE_LIST, {
+  ] = useLazyQuery<PatientFileListData>(GET_PATIENT_FILE_LIST, {
     fetchPolicy: "no-cache",
   });
 

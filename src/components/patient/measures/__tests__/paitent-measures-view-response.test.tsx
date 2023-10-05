@@ -117,8 +117,8 @@ beforeEach(() => {
   });
 });
 
-describe("Paitent view response measures", () => {
-  it("should render paitent format 1 response", async () => {
+describe("Patient view response measures", () => {
+  it("should render patient format 1 response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "7cc1eb5e-f319-4033-b04b-45f697e9de51",
@@ -130,7 +130,7 @@ describe("Paitent view response measures", () => {
     expect(await screen.findAllByText(/7/i)).toHaveLength(2);
   });
 
-  it("should render paitent format 2 response", async () => {
+  it("should render patient format 2 response", async () => {
     (useRouter as jest.Mock).mockReturnValue({
       query: {
         id: "d80cde21-6867-45fb-a257-99dad0b965ac",
