@@ -42,7 +42,7 @@ const AnswerType: FC<AnswerTypeProps> = ({
         <TextFieldComponent
           key={`${formCellKey}.patientAns`}
           id={`${formCellKey}.patientAns`}
-          label="Paitent to write answer here..."
+          label="Patient to write answer here..."
           value={(cellData?.patientAns as string) || ""}
           name={`${formCellKey}.patientAns`}
           onChange={formikHelper?.handleChange}

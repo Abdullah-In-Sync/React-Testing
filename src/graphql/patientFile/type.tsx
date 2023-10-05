@@ -1,4 +1,4 @@
-export interface PaitentFileListData {
+export interface PatientFileListData {
   getPatientFileList?: GetPatientFileListEntity[] | null;
 }
 export interface GetPatientFileListEntity {

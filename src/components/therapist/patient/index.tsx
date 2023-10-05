@@ -9,7 +9,7 @@ interface ViewProps {
   buttonClick: (value) => void;
 }
 
-const PaitentTemplateEdit: React.FC<ViewProps> = ({
+const PatientTemplateEdit: React.FC<ViewProps> = ({
   patientResourceList,
   buttonClick,
 }) => {
@@ -23,4 +23,4 @@ const PaitentTemplateEdit: React.FC<ViewProps> = ({
   );
 };
 
-export default PaitentTemplateEdit;
+export default PatientTemplateEdit;

@@ -263,7 +263,7 @@ beforeEach(() => {
     isAuthenticated: true,
     user: {
       _id: "user_id",
-      user_type: "paitent",
+      user_type: "patient",
       patient_data: {
         _id: "user_id",
       },

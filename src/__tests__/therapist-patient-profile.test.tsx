@@ -393,7 +393,7 @@ describe("Patient profile page", () => {
     );
   });
 
-  it("should click radio button for paitent illness", async () => {
+  it("should click radio button for patient illness", async () => {
     await sut();
     expect(screen.getByText("Not at all")).toBeInTheDocument();
 

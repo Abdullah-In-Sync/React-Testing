@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import PaitentTemplateEdit from "../patient/resource/edit";
+import PatientTemplateEdit from "../patient/resource/edit";
 import {
   TemplateDetailInterface,
   ResourceDataInterface,
@@ -54,7 +54,7 @@ const ArrowTemplateResourceData: ResourceDataInterface = {
 
 const sut = () => {
   render(
-    <PaitentTemplateEdit
+    <PatientTemplateEdit
       templateDetail={currentTemplateData}
       resourceData={resourceData}
       mode={"edit"}
@@ -64,7 +64,7 @@ const sut = () => {
 
 const arrowSut = () => {
   render(
-    <PaitentTemplateEdit
+    <PatientTemplateEdit
       templateDetail={currentArrowTemplateData}
       resourceData={ArrowTemplateResourceData}
       mode={"edit"}
@@ -72,7 +72,7 @@ const arrowSut = () => {
   );
 };
 
-describe("When render a paitent template edit", () => {
+describe("When render a patient template edit", () => {
   it("Should display name text in card header and breadcrum", async () => {
     await sut();
     expect(screen.getAllByText(/test name/i)).toHaveLength(2);

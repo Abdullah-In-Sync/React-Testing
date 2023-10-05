@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { GET_PAITENT_MEASURES_LIST } from "../../../graphql/Measure/graphql";
 import {
-  PaitentListMeasureData,
+  PatientListMeasureData,
   PatientMeasureListEntity,
 } from "../../../graphql/Measure/types";
 import {
@@ -23,7 +23,7 @@ const MeasureList: FC = () => {
   const sessionOptions = getSessionOptions();
 
   const { data: { patientMeasureList = null } = {}, loading } =
-    useQuery<PaitentListMeasureData>(GET_PAITENT_MEASURES_LIST, {
+    useQuery<PatientListMeasureData>(GET_PAITENT_MEASURES_LIST, {
       fetchPolicy: "no-cache",
     });
 
