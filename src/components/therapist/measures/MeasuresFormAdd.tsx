@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { Box, Button, Stack } from "@mui/material";
 import { Form } from "formik";
 import React, { useState } from "react";
