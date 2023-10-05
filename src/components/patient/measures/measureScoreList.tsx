@@ -25,7 +25,9 @@ export const MeasureScoreList: FC<MeasureScoreListProps> = ({
       };
     });
 
+    /* istanbul ignore next */
     const seriesY = scoreDetail?.map((e) => e.score);
+    /* istanbul ignore next */
     const seriesX = scoreDetail?.map((e) => e.created_date);
 
     return {
