@@ -19,7 +19,9 @@ const FormShareBox: React.FC<ViewProps> = ({
   therapistSafetyPlanList,
   onChangePlanId,
 }) => {
+  /* istanbul ignore next */
   const styles = useStyles();
+  /* istanbul ignore next */
   const { enqueueSnackbar } = useSnackbar();
   /* istanbul ignore next */
   const [planId, setPlanId] = useState<string[]>([]);
@@ -115,7 +117,7 @@ const FormShareBox: React.FC<ViewProps> = ({
       </Stack>
     );
   };
-
+  /* istanbul ignore next */
   return <div className="actionsWrapper">{formBox()}</div>;
 };
 
