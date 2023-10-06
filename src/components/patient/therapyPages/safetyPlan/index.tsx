@@ -7,13 +7,11 @@ import ContentHeader from "../../../common/ContentHeader";
 import Loader from "../../../common/Loader";
 import { ViewSafetyPlanById } from "../../../../graphql/SafetyPlan/types";
 import { ANSWER_SAFETY_PLAN_BY_PATIENT_ID } from "../../../../graphql/SafetyPlan/graphql";
-import { SuccessModal } from "../../../common/SuccessModal";
 
 const PatientById: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [updateTemplate] = useMutation(ANSWER_SAFETY_PLAN_BY_PATIENT_ID);
   const [loader, setLoader] = useState<boolean>(true);
-  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
   /* istanbul ignore next */
   const handleEdit = async (safetyPlan: ViewSafetyPlanById, callback: any) => {
@@ -31,8 +29,11 @@ const PatientById: NextPage = () => {
         },
         onCompleted: () => {
           setLoader(false);
-          setShowSuccessModal(true);
           callback?.();
+          /* istanbul ignore next */
+          enqueueSnackbar("Your response has been submitted successfully.", {
+            variant: "success",
+          });
         },
       });
     } catch (e) {
@@ -45,17 +46,9 @@ const PatientById: NextPage = () => {
 
   return (
     <>
-      {/* <Layout> */}
       <Loader visible={loader} />
       <ContentHeader title="Safety Plan" />
       <SafetyPlan setLoader={setLoader} onSubmit={handleEdit} />
-      <SuccessModal
-        isOpen={showSuccessModal}
-        title={"Successful"}
-        description={"Your response has been submitted successfully."}
-        onOk={() => setShowSuccessModal(false)}
-      />
-      {/* </Layout> */}
     </>
   );
 };
