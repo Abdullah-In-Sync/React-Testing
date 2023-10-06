@@ -250,7 +250,7 @@ const Resource: NextPage = () => {
   /* istanbul ignore next */
   const setSearch = (value) => {
     // eslint-disable-next-line no-useless-escape
-    const disallowedPattern = /[^A-Za-z0-9_]/g;
+    const disallowedPattern = /[^A-Za-z0-9_\s]/g;
     /* istanbul ignore next */
     const sanitizedInput = value.replace(disallowedPattern, "");
     /* istanbul ignore next */
