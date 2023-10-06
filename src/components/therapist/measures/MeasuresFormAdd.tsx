@@ -14,7 +14,6 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
   therapistSafetyPlanList,
   onChangePlanId,
 }) => {
-  /* istanbul ignore next */
   const styles = useStyles();
   const [planId, setPlanId] = useState("");
   const therapistGetAdminMeasures =

@@ -235,7 +235,7 @@ describe("Therapist Add measure", () => {
     await (async () => {
       expect(
         await screen.findByText("Your measure has been added successfully.")
-      );
+      ).toBeInTheDocument();
     });
   });
   it("Check with null", async () => {

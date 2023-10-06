@@ -4,9 +4,7 @@ import TherapistMonoitorCommonForm from "../form/TherapistMonitorCommonForm";
 import { TherapistMonitorValidationSchema } from "../form/therapistMonitorValidationSchema";
 import { defalutEmojis } from "../../../../../lib/constants";
 
-type ViewProps = any;
-
-const TherapistCreateMonitorForm: React.FC<ViewProps> = ({
+const TherapistCreateMonitorForm = ({
   submitForm,
 
   onPressCancel,

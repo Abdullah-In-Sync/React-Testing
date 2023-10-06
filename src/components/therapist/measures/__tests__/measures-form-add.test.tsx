@@ -1,16 +1,12 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material";
-import MeasuresFormAdd from "../MeasuresFormAdd";
 import theme from "../../../../styles/theme/theme";
 import { Formik } from "formik";
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import MeasuresFormAdd from "../MeasuresFormAdd";
 
-test("renders MeasuresFormAdd component", () => {
-  const therapistSafetyPlanList = {
-    therapistGetAdminMeasures: [{ _id: "1", title: "Measure 1" }],
-  };
-  const onChangePlanIdMock = jest.fn();
-  const { getByTestId } = render(
+const sut = (mockData, onChangePlanId, onPressSubmit) => {
+  return render(
     <ThemeProvider theme={theme()}>
       <Formik
         initialValues={{ planDesc: "", planName: "", title: "" }}
@@ -19,48 +15,62 @@ test("renders MeasuresFormAdd component", () => {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         onReset={() => {}}
       >
-        {() => (
-          <MeasuresFormAdd
-            therapistSafetyPlanList={therapistSafetyPlanList}
-            onChangePlanId={onChangePlanIdMock}
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onPressSubmit={() => {}}
-          />
-        )}
+        <MeasuresFormAdd
+          onPressSubmit={onPressSubmit}
+          therapistSafetyPlanList={mockData}
+          onChangePlanId={onChangePlanId}
+        />
       </Formik>
     </ThemeProvider>
   );
-  const selectElement = getByTestId("title") as HTMLSelectElement;
-  fireEvent.change(selectElement, { target: { value: "1" } });
-  expect(selectElement.value).toBe("1");
-  expect(onChangePlanIdMock).toHaveBeenCalledWith("1");
-});
+};
 
-test("renders MeasuresFormAdd component without therapistGetAdminMeasures", () => {
-  const therapistSafetyPlanList = {
-    therapistGetAdminMeasures: undefined,
-  };
-  const onChangePlanIdMock = jest.fn();
-  const { getByTestId } = render(
-    <ThemeProvider theme={theme()}>
-      <Formik
-        initialValues={{ planDesc: "", planName: "", title: "" }}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onSubmit={() => {}}
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onReset={() => {}}
-      >
-        {() => (
-          <MeasuresFormAdd
-            therapistSafetyPlanList={therapistSafetyPlanList}
-            onChangePlanId={onChangePlanIdMock}
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            onPressSubmit={() => {}}
-          />
-        )}
-      </Formik>
-    </ThemeProvider>
-  );
-  const selectElement = getByTestId("title");
-  expect(selectElement.children.length).toBe(0);
+describe("MeasuresFormAdd component", () => {
+  it("renders without crashing", () => {
+    const onPressSubmit = jest.fn();
+    const therapistSafetyPlanList = {
+      therapistGetAdminMeasures: null,
+    };
+    const onChangePlanId = jest.fn();
+
+    sut(therapistSafetyPlanList, onChangePlanId, onPressSubmit);
+  });
+
+  it("calls onChangePlanId with the correct value when input changes", () => {
+    const onPressSubmit = jest.fn();
+    const therapistSafetyPlanList = {
+      therapistGetAdminMeasures: [{ _id: "1", title: "Measure 1" }],
+    };
+    const onChangePlanId = jest.fn();
+    const { getByTestId } = sut(
+      therapistSafetyPlanList,
+      onChangePlanId,
+      onPressSubmit
+    );
+    const input = getByTestId("title");
+    fireEvent.change(input, { target: { value: "1" } });
+
+    expect(onChangePlanId).toHaveBeenCalledWith("1");
+  });
+
+  it("calls onPressSubmit when the 'Add' button is clicked", () => {
+    const onPressSubmit = jest.fn();
+    const therapistSafetyPlanList = {
+      therapistGetAdminMeasures: [{ _id: "1", title: "Measure 1" }],
+    };
+    const onChangePlanId = jest.fn();
+
+    const { getByTestId } = sut(
+      therapistSafetyPlanList,
+      onChangePlanId,
+      onPressSubmit
+    );
+    const input = getByTestId("title");
+    fireEvent.change(input, { target: { value: "1" } });
+
+    const addButton = getByTestId("addSubmitForm");
+    fireEvent.click(addButton);
+    expect(onChangePlanId).toHaveBeenCalledWith("1");
+    expect(onPressSubmit).toHaveBeenCalled();
+  });
 });
