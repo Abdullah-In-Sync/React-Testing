@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import TableGenerator from "../../../components/common/TableGenerator";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, styled } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
@@ -32,6 +32,13 @@ type propTypes = {
   sessionId?: any;
   therapyId?: any;
 };
+
+const IconButtonWrapper = styled(IconButton)(
+  () => `
+  box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+  margin-right: 5px;
+`
+);
 export default function AgendaDetailAccordian(props: propTypes) {
   const { user } = useAppContext();
   const router = useRouter();
@@ -202,7 +209,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton
+          <IconButtonWrapper
             size="small"
             onClick={() => {
               setDeleteModalOpen(true);
@@ -211,7 +218,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
             data-testid={`delete-icon-button${value._id}`}
           >
             <DeleteIcon />
-          </IconButton>
+          </IconButtonWrapper>
         </>
       ),
     },
@@ -222,12 +229,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
       visible: true,
       render: (_, value) => (
         <>
-          <IconButton
-            style={{
-              borderRadius: "50%",
-              border: "1px solid #000",
-              marginRight: "10px",
-            }}
+          <IconButtonWrapper
             size="small"
             data-testid={`edit-icon-button${value._id}`}
             onClick={() => {
@@ -237,32 +239,18 @@ export default function AgendaDetailAccordian(props: propTypes) {
             }}
           >
             <VisibilityIcon />
-          </IconButton>
+          </IconButtonWrapper>
 
-          <IconButton
-            style={{
-              borderRadius: "50%",
-              border: "1px solid #000",
-              marginRight: "10px",
-              backgroundColor: value.resource_id !== "" ? "#6EC9DB" : undefined,
-            }}
-            size="small"
-            data-testid={"viewIcon_" + value._id}
-          >
+          <IconButtonWrapper size="small" data-testid={"viewIcon_" + value._id}>
             <CheckIcon
               style={{
-                color: value.resource_id !== "" ? "#ffff" : undefined,
+                color: value.resource_id !== "" ? "#6EC9DB" : undefined,
               }}
             />
-          </IconButton>
+          </IconButtonWrapper>
 
-          <IconButton
+          <IconButtonWrapper
             disabled={value.share_status == 1}
-            style={{
-              borderRadius: "50%",
-              border: "1px solid #000",
-              backgroundColor: value.share_status == 1 ? "#6EC9DB" : undefined,
-            }}
             size="small"
             onClick={() => {
               if (value.resource_id) {
@@ -281,11 +269,11 @@ export default function AgendaDetailAccordian(props: propTypes) {
           >
             <ShareIcon
               style={{
-                color: value.share_status == 1 ? "#ffff" : undefined,
+                color: value.share_status == 1 ? "#6EC9DB" : undefined,
               }}
               data-testid={`share-agenda-button${value._id}`}
             />
-          </IconButton>
+          </IconButtonWrapper>
         </>
       ),
     },
