@@ -16,7 +16,7 @@ export const useStyles = makeStyles(() => {
         },
         [theme.breakpoints.up("md")]: {
           marginBottom: 5,
-          minWidth: 300,
+          minWidth: 290,
         },
       },
     },

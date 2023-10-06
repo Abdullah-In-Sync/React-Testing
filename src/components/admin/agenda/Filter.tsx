@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
@@ -75,58 +75,72 @@ const AgendaFilter: React.FC<ViewProps> = ({
     <Box className="actionsWrapper">
       <Stack>
         <Stack className={styles.filterWrapper}>
-          <Box className="filterDropdownInput">
-            <SearchInput
-              inputValue={searchInputValue}
-              handleClearInput={handleClearSearchInput}
-              onChangeInput={onChangeSearchInput}
-            />
-            <SingleSelectComponent
-              id="organizationSelect"
-              labelId="organizationSelect"
-              name="orgId"
-              value={selectFilterOptions["orgId"] || "all"}
-              label="Select Organization"
-              onChange={onChange}
-              options={[...[{ _id: "all", name: "All" }], ...organizationList]}
-              mappingKeys={["_id", "name"]}
-              size="small"
-              className="form-control-bg"
-              showDefaultSelectOption={false}
-              extraProps={{ "data-testid": "organizationSelect" }}
-            />
-            <SingleSelectComponent
-              id="SelectTherapy*"
-              labelId="SelectTherapy*"
-              name="therapy_id"
-              showDefaultSelectOption={false}
-              value={selectFilterOptions["therapy_id"] || "all"}
-              label="Select Therapy*"
-              onChange={onChangeFilterDropdown}
-              options={[
-                ...[{ _id: "all", therapy_name: "All" }],
-                ...therapistDropdownData,
-              ]}
-              mappingKeys={["_id", "therapy_name"]}
-              size="small"
-              className="form-control-bg"
-              extraProps={{ "data-testid": "therapySelect" }}
-            />
-            <SingleSelectComponent
-              id="SelectSession"
-              labelId="SelectSession"
-              name="session_id"
-              showDefaultSelectOption={false}
-              value={selectFilterOptions["session_id"] || "all"}
-              label="Select Session*"
-              onChange={onChangeFilterDropdown}
-              options={[...[{ id: "all", value: "All" }], ...sessionNumber]}
-              mappingKeys={["id", "value"]}
-              size="small"
-              className="form-control-bg"
-              extraProps={{ "data-testid": "agendaSessionSelect" }}
-            />
-          </Box>
+          <Grid container spacing={1} marginBottom={1}>
+            <Grid item xs={3}>
+              <SearchInput
+                inputValue={searchInputValue}
+                handleClearInput={handleClearSearchInput}
+                onChangeInput={onChangeSearchInput}
+              />
+            </Grid>
+
+            <Grid item xs={3}>
+              <SingleSelectComponent
+                id="organizationSelect"
+                labelId="organizationSelect"
+                name="orgId"
+                value={selectFilterOptions["orgId"] || "all"}
+                label="Select Organization"
+                onChange={onChange}
+                options={[
+                  ...[{ _id: "all", name: "All" }],
+                  ...organizationList,
+                ]}
+                mappingKeys={["_id", "name"]}
+                size="small"
+                className="form-control-bg"
+                showDefaultSelectOption={false}
+                extraProps={{ "data-testid": "organizationSelect" }}
+              />
+            </Grid>
+
+            <Grid item xs={3}>
+              <SingleSelectComponent
+                id="SelectTherapy*"
+                labelId="SelectTherapy*"
+                name="therapy_id"
+                showDefaultSelectOption={false}
+                value={selectFilterOptions["therapy_id"] || "all"}
+                label="Select Therapy*"
+                onChange={onChangeFilterDropdown}
+                options={[
+                  ...[{ _id: "all", therapy_name: "All" }],
+                  ...therapistDropdownData,
+                ]}
+                mappingKeys={["_id", "therapy_name"]}
+                size="small"
+                className="form-control-bg"
+                extraProps={{ "data-testid": "therapySelect" }}
+              />
+            </Grid>
+
+            <Grid item xs={3}>
+              <SingleSelectComponent
+                id="SelectSession"
+                labelId="SelectSession"
+                name="session_id"
+                showDefaultSelectOption={false}
+                value={selectFilterOptions["session_id"] || "all"}
+                label="Select Session*"
+                onChange={onChangeFilterDropdown}
+                options={[...[{ id: "all", value: "All" }], ...sessionNumber]}
+                mappingKeys={["id", "value"]}
+                size="small"
+                className="form-control-bg"
+                extraProps={{ "data-testid": "agendaSessionSelect" }}
+              />
+            </Grid>
+          </Grid>
           <Box>
             <Button
               data-testid="createAgendaButton"
