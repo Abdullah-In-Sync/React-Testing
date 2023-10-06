@@ -18,9 +18,8 @@ const Homework: NextPage = () => {
     useAppContext();
   const { enqueueSnackbar } = useSnackbar();
   const [updateHomeworkById] = useMutation(UPDATE_PATIENT_HOMEWORK_BY_ID);
-  const [loader, setLoader] = useState<boolean>(true);
-  const [therapyData, setTherapyData] = useState<object[]>([]);
-  const [homeworkList, setHomeworkList] = useState<object[]>([]);
+  const [loader, setLoader] = useState<boolean>(false);
+  // const [homeworkList, setHomeworkList] = useState<object[]>([]);
   const [isConfirm, setIsConfirm] = useState<any>({
     status: false,
     storedFunction: null,
@@ -28,35 +27,35 @@ const Homework: NextPage = () => {
   });
   const [successModal, setSuccessModal] = useState<boolean>(false);
 
-  //grphql apis
-  const [getPatientTherapyData] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
-    onCompleted: (data) => {
-      /* istanbul ignore else */
-      if (data!.getPatientTherapy) {
-        setTherapyData(data!.getPatientTherapy);
-        /* istanbul ignore else */
-      }
-      setLoader(false);
+  const [
+    getPatientHomeworkList,
+    {
+      data: { getHomeworksByPatientId: homeworkList = undefined } = {},
+      loading: loadingHomeworkList,
     },
-  });
-
-  const [getPatientHomeworkList] = useLazyQuery(GET_PATIENT_HOMEWORK_LIST, {
+  ] = useLazyQuery(GET_PATIENT_HOMEWORK_LIST, {
     fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      /* istanbul ignore else */
-      const { getHomeworksByPatientId } = data;
-      if (getHomeworksByPatientId) setHomeworkList(getHomeworksByPatientId);
-      else setHomeworkList([]);
-
-      setLoader(false);
-    },
   });
+
+  const [getPatientTherapyData, { loading: loadingPatientTherapy }] =
+    useLazyQuery(GET_PATIENTTHERAPY_DATA, {
+      onCompleted: (data) => {
+        /* istanbul ignore else */
+        const { _id: therapyId } = data!.getPatientTherapy[0] || [];
+        if (therapyId) {
+          getPatientHomeworkList({
+            variables: { therapyId },
+          });
+        }
+      },
+    });
 
   useEffect(() => {
-    setLoader(true);
-    getPatientTherapyData({
-      variables: { patientId: patientId },
-    });
+    if (patientId) {
+      getPatientTherapyData({
+        variables: { patientId: patientId },
+      });
+    }
   }, [patientId]);
 
   const handleSubmit = (formFields, setSubmitting) => {
@@ -91,13 +90,6 @@ const Homework: NextPage = () => {
     }
   };
 
-  const onChangeTherapy = (v) => {
-    setLoader(true);
-    getPatientHomeworkList({
-      variables: { therapyId: v },
-    });
-  };
-
   const onConfirmSubmit = () => {
     isConfirm.storedFunction();
     setIsConfirm({ status: false, storedFunction: null, setSubmitting: null });
@@ -114,12 +106,12 @@ const Homework: NextPage = () => {
 
   return (
     <>
-      <Loader visible={loader} />
+      <Loader
+        visible={loader || loadingHomeworkList || loadingPatientTherapy}
+      />
       <HomeworkComponent
         homeworkList={homeworkList}
         handleSubmit={handleSubmit}
-        therapyData={therapyData}
-        onChangeTherapy={onChangeTherapy}
       />
       {isConfirm.status && (
         <ConfirmationModal
