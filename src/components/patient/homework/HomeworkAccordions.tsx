@@ -114,6 +114,8 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
   }
 
   const commonform = (completed?: number) => {
+    if (!homeworkList) return [];
+
     return homeworkList
       .filter(({ complete_status }) => {
         return completed == complete_status;
