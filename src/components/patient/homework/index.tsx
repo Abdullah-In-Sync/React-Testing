@@ -2,34 +2,22 @@ import * as React from "react";
 import ContentHeader from "../../../components/common/ContentHeader";
 import HomeworkAccordions from "./HomeworkAccordions";
 import { useStyles } from "./homeworkStyles";
-import TherapySelectBox from "./TherapySelectBox";
 import * as homeworkListTypes from "./types";
 
 const PatientHomeWorkComponent: React.FC<
   homeworkListTypes.HomeworkListProps
-> = ({
-  homeworkList = [],
-  therapyData = [],
-  handleSubmit,
-  onChangeTherapy,
-}) => {
+> = ({ homeworkList, handleSubmit }) => {
   const styles = useStyles();
   return (
-    therapyData.length > 0 && (
-      <div>
-        <div className={styles.headerWrapper}>
-          <ContentHeader title="Homework" />
-          <TherapySelectBox
-            therapyData={therapyData}
-            onChangeTherapy={onChangeTherapy}
-          />
-        </div>
-        <HomeworkAccordions
-          homeworkList={homeworkList}
-          handleSubmit={handleSubmit}
-        />
+    <div>
+      <div className={styles.headerWrapper}>
+        <ContentHeader title="Homework" />
       </div>
-    )
+      <HomeworkAccordions
+        homeworkList={homeworkList}
+        handleSubmit={handleSubmit}
+      />
+    </div>
   );
 };
 

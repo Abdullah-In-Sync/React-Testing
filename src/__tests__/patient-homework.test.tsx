@@ -1,13 +1,13 @@
 import { MockedProvider } from "@apollo/client/testing";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 
 import { ThemeProvider } from "@mui/material";
+import Homework from "../components/patient/therapyPages/homework";
 import { UPDATE_PATIENT_HOMEWORK_BY_ID } from "../graphql/mutation/patient";
 import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
 import { GET_PATIENT_HOMEWORK_LIST } from "../graphql/query/patient";
-import Homework from "../components/patient/therapyPages/homework";
 import theme from "../styles/theme/theme";
 
 import { useAppContext } from "../contexts/AuthContext";
@@ -217,23 +217,8 @@ const sut = async () => {
   );
 };
 
-const selectFromTherapyDropdown = async () => {
-  await sut();
-  const selectTherapy = await screen.findByTestId("selectTherapy");
-
-  expect(selectTherapy).toBeInTheDocument();
-
-  const button = within(selectTherapy).getByRole("button");
-  fireEvent.mouseDown(button);
-
-  const listbox = within(screen.getByRole("presentation")).getByRole("listbox");
-  const options = within(listbox).getAllByRole("option");
-
-  fireEvent.click(options[0]);
-};
-
 const therapySaveButtonPress = async ({ textAreaText }) => {
-  selectFromTherapyDropdown();
+  await sut();
   const firstTherapyTextarea = await screen.findByTestId("therapy_response_1");
   expect(firstTherapyTextarea).toBeInTheDocument();
   fireEvent.change(firstTherapyTextarea, { target: { value: textAreaText } });
@@ -245,8 +230,8 @@ const therapySaveButtonPress = async ({ textAreaText }) => {
 
 const confirmButton = async ({ textAreaText }) => {
   await therapySaveButtonPress({ textAreaText });
-  const confirmButton = await screen.findByRole("button", { name: "Confirm" });
-  fireEvent.click(confirmButton);
+  const confirmBtn = await screen.findByRole("button", { name: "Confirm" });
+  fireEvent.click(confirmBtn);
 };
 
 describe("Patient homwork page", () => {
@@ -286,7 +271,7 @@ describe("Patient homwork page", () => {
         id: "05be3e5df21a40a3b04bcbb5a22b219bempty",
       },
     }));
-    selectFromTherapyDropdown();
+    await sut();
     expect(
       await screen.findByText("There is no homework assigned to you yet.")
     ).toBeInTheDocument();
