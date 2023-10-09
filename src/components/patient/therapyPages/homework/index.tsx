@@ -109,10 +109,12 @@ const Homework: NextPage = () => {
       <Loader
         visible={loader || loadingHomeworkList || loadingPatientTherapy}
       />
-      <HomeworkComponent
-        homeworkList={homeworkList}
-        handleSubmit={handleSubmit}
-      />
+      {!loadingHomeworkList && !loadingPatientTherapy && (
+        <HomeworkComponent
+          homeworkList={homeworkList}
+          handleSubmit={handleSubmit}
+        />
+      )}
       {isConfirm.status && (
         <ConfirmationModal
           label="Are you sure want to save the homework?"
