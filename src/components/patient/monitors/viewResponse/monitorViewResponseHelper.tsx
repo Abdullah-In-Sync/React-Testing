@@ -162,7 +162,7 @@ export const generateEmojiLineData = ({
   filterQuesAnsData.forEach((value) => {
     const { created_date, answer } = value;
     if (answer) {
-      const formatCreateDate = moment(created_date).format("YYYY-MM-DD");
+      const formatCreateDate = moment(created_date).format("DD/MM/YYYY");
       const emojisAnsObj = filterBasedOnEmojis(answer);
 
       if (emojisAnsObj) {
