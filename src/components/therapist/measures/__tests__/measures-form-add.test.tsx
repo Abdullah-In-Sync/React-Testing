@@ -39,7 +39,10 @@ describe("MeasuresFormAdd component", () => {
   it("calls onChangePlanId with the correct value when input changes", () => {
     const onPressSubmit = jest.fn();
     const therapistSafetyPlanList = {
-      therapistGetAdminMeasures: [{ _id: "1", title: "Measure 1" }],
+      therapistGetAdminMeasures: [
+        { _id: "1", title: "Measure 1" },
+        { _id: "2", title: "Measure 2" },
+      ],
     };
     const onChangePlanId = jest.fn();
     const { getByTestId } = sut(
@@ -48,9 +51,9 @@ describe("MeasuresFormAdd component", () => {
       onPressSubmit
     );
     const input = getByTestId("title");
-    fireEvent.change(input, { target: { value: "1" } });
+    fireEvent.change(input, { target: { value: "2" } });
 
-    expect(onChangePlanId).toHaveBeenCalledWith("1");
+    expect(onChangePlanId).toHaveBeenCalledWith("2");
   });
 
   it("calls onPressSubmit when the 'Add' button is clicked", () => {

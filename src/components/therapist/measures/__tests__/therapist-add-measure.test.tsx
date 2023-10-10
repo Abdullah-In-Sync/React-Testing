@@ -94,7 +94,6 @@ mocksData.push({
 mocksData.push({
   request: {
     query: GET_THERAPIST_MEASURES_PLAN_LIST,
-    variables: { measure_id: "d80cde21-6867-45fb-a257-99dad0b965ac" },
   },
   result: {
     data: {
@@ -172,7 +171,6 @@ mocksData.push({
 mocksData.push({
   request: {
     query: GET_THERAPIST_MEASURES_PLAN_LIST,
-    variables: { measure_id: "d80cde21-6867-45fb-a257-99dad0b965ab" },
   },
   result: {
     data: {
