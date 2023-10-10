@@ -13,9 +13,10 @@ import {
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
+import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import CardContent from "@mui/material/CardContent";
 
 interface ViewProps {
   openResourceModal: boolean;
@@ -26,6 +27,19 @@ interface ViewProps {
   handleMyRes: any;
   handleMyFav: any;
 }
+
+const CardWrapper = styled(Card)(
+  () => `
+    box-shadow: rgb(0 0 0 / 20%) 0px 3px 3px -2px, rgb(0 0 0 / 14%) 0px 3px 4px 0px, rgb(0 0 0 / 12%) 0px 1px 8px 0px;
+    height: 200px;
+  `
+);
+
+const CardContentWrapper = styled(CardContent)(
+  () => `
+    padding-top:0
+  `
+);
 
 const ResourcePopup: React.FC<ViewProps> = ({
   openResourceModal,
@@ -63,8 +77,8 @@ const ResourcePopup: React.FC<ViewProps> = ({
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 800,
-            height: 600,
+            width: 1300,
+            height: 700,
             position: "fixed",
             overflowY: "auto",
             bgcolor: "background.paper",
@@ -85,11 +99,11 @@ const ResourcePopup: React.FC<ViewProps> = ({
                 display: "flex",
                 placeItems: "center",
                 justifyContent: "space-between",
-                p: 1,
+                p: "9px",
                 bgcolor: "background.paper",
                 backgroundColor: "#6EC9DB",
                 borderRadius: "5px 5px 0 0",
-                paddingBottom: "13px",
+                paddingBottom: "9px",
               }}
             >
               <div></div>
@@ -180,68 +194,61 @@ const ResourcePopup: React.FC<ViewProps> = ({
           <Box sx={{ padding: "20px" }}>
             <Grid container spacing={3}>
               {popupData?.getPopupResourceList?.map((data, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card
-                    sx={{
-                      border: "1px solid #cecece",
-                      borderRadius: "3px",
-                    }}
-                  >
-                    <FormControlLabel
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "flex-end",
-                      }}
-                      data-testid={`resource_checkbox${index}`}
-                      control={<Radio />}
-                      onChange={() => setCheckBox(data)}
-                      label={""}
-                    />
-
-                    <Box
-                      style={{
-                        paddingLeft: "15px",
-                        paddingRight: "15px",
-                        paddingBottom: "10px",
-                      }}
-                    >
-                      <Box
+                <Grid item xs={4} sm={6} md={4} key={index}>
+                  <CardWrapper>
+                    <Card>
+                      <FormControlLabel
                         sx={{
                           display: "flex",
-                          justifyContent: "center",
-                          bgcolor: "#6EC9DB",
-                          borderRadius: "3px 3px 3px 3px",
-                          paddingBottom: "13px",
+                          flexDirection: "row",
+                          justifyContent: "flex-end",
                         }}
-                      >
-                        <Tooltip title={data.resource_name} arrow>
-                          <Typography
-                            data-testid={`reource_description${index}`}
-                            sx={{ color: "white", paddingTop: "10px" }}
+                        data-testid={`resource_checkbox${index}`}
+                        control={<Radio />}
+                        onChange={() => setCheckBox(data)}
+                        label={""}
+                      />
+                      <CardContentWrapper>
+                        <Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              bgcolor: "#6EC9DB",
+                              borderRadius: "3px 3px 3px 3px",
+                              paddingBottom: "13px",
+                            }}
                           >
-                            {data.resource_name.length > 20
-                              ? `${data.resource_name.substring(0, 20)}...`
-                              : data.resource_name}
-                          </Typography>
-                        </Tooltip>
-                      </Box>
-                      <Tooltip title={data.resource_desc} arrow>
-                        <Typography
-                          variant="body2"
-                          color="#30373E"
-                          sx={{
-                            pt: 1,
-                            height: "200px",
-                          }}
-                        >
-                          {data.resource_desc.length > 250
-                            ? `${data.resource_desc.substring(0, 250)}...`
-                            : data.resource_desc}
-                        </Typography>
-                      </Tooltip>
-                    </Box>
-                  </Card>
+                            <Tooltip title={data.resource_name} arrow>
+                              <Typography
+                                data-testid={`reource_description${index}`}
+                                sx={{ color: "white", paddingTop: "10px" }}
+                              >
+                                {data.resource_name.length > 20
+                                  ? `${data.resource_name.substring(0, 20)}...`
+                                  : data.resource_name}
+                              </Typography>
+                            </Tooltip>
+                          </Box>
+                          <Tooltip title={data.resource_desc} arrow>
+                            <Typography
+                              variant="body2"
+                              className={`text-ellipsis`}
+                              color="text.secondary"
+                              mt={1}
+                              sx={{
+                                height: "97px",
+                              }}
+                            >
+                              {data.resource_desc.length > 250
+                                ? `${data.resource_desc.substring(0, 250)}...`
+                                : data.resource_desc}
+                            </Typography>
+                          </Tooltip>
+                        </Box>
+                      </CardContentWrapper>
+                    </Card>
+                  </CardWrapper>
                 </Grid>
               ))}
             </Grid>
