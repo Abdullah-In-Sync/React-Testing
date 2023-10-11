@@ -109,7 +109,7 @@ const Homework: NextPage = () => {
       <Loader
         visible={loader || loadingHomeworkList || loadingPatientTherapy}
       />
-      {!loadingHomeworkList && !loadingPatientTherapy && (
+      {!loadingPatientTherapy && (
         <HomeworkComponent
           homeworkList={homeworkList}
           handleSubmit={handleSubmit}
