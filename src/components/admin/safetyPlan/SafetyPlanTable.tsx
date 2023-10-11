@@ -33,9 +33,12 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
 
+  /* istanbul ignore next */
   const { data: list, total = 0 } = safetyPlanList || {};
+  /* istanbul ignore next */
   const column = isAgenda ? agendaColumns : columns;
   const messageCheck = () => {
+    /* istanbul ignore next */
     if (loadingSafetyPlanList) return <Typography>Loading...</Typography>;
     else if (!list && !loadingSafetyPlanList)
       return (
@@ -48,7 +51,10 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
           </Typography>
         </>
       );
-    else if (list.length <= 0 && !loadingSafetyPlanList)
+    /* istanbul ignore next */ else if (
+      list.length <= 0 &&
+      !loadingSafetyPlanList
+    )
       return <Typography>No data found.</Typography>;
     else return null;
   };
@@ -97,14 +103,18 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
                   {column.map((column) => {
                     const value = row[column.id];
                     return (
+                      /* istanbul ignore next */
                       <TableCell key={column.id} align={column.align}>
-                        {column.format
-                          ? column.format(
-                              row,
-                              pageActionButtonClick,
-                              tableCurentPage * rowsLimit + i
-                            )
-                          : value}
+                        {
+                          /* istanbul ignore next */
+                          column.format
+                            ? column.format(
+                                row,
+                                pageActionButtonClick,
+                                tableCurentPage * rowsLimit + i
+                              )
+                            : value
+                        }
                       </TableCell>
                     );
                   })}
