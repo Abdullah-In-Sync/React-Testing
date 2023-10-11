@@ -77,7 +77,7 @@ const Filter: React.FC<ViewProps> = ({
       </Stack>
     );
   };
-  /* istanbul ignore next */
+
   const onPressCreateButton = () => {
     router.push("/admin/safetyPlan/create");
   };
