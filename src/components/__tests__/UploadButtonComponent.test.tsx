@@ -1,9 +1,10 @@
 import { MockedProvider } from "@apollo/react-testing";
 import { fireEvent, render, screen } from "@testing-library/react";
-import axios from "axios";
 import { SnackbarProvider } from "notistack";
 import { ignoreExifGenerateBlob, uploadToS3 } from "../../lib/helpers/s3";
 import UploadButtonComponent from "../common/UploadButton/UploadButtonComponent";
+import axios from "axios";
+const file = new File(["hello"], "hello.txt", { type: "text/plain" });
 const imageFile = new File(["hello"], "hello.png", { type: "image/png" });
 const sut = async () => {
   render(
@@ -25,7 +26,7 @@ describe("when rendered with a `upload button`", () => {
     await sut();
     expect(screen.getByTestId("resource_file_upload")).toBeInTheDocument();
     fireEvent.change(screen.getByTestId("resource_file_upload"), {
-      target: { files: [imageFile] },
+      target: { files: [file] },
     });
     expect(
       await screen.findByText(
@@ -58,7 +59,7 @@ describe("when rendered with a `upload button`", () => {
     const fileReaderResult = new ArrayBuffer(10);
     const view = new DataView(fileReaderResult);
     view.setUint16(0, 0xffd8);
-    const selectedFile = new Blob([imageFile], { type: "image/jpeg" });
+    const selectedFile = new Blob([file], { type: "image/jpeg" });
 
     const result = ignoreExifGenerateBlob(fileReaderResult, selectedFile);
     expect(result).toBeInstanceOf(Blob);
