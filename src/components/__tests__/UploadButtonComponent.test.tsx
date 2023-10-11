@@ -56,12 +56,11 @@ describe("when rendered with a `upload button`", () => {
 
   it("should return a Blob object without the EXIF data", () => {
     const fileReaderResult = new ArrayBuffer(10);
-    const selectedFile = new File([], "test.jpg", { type: "image/jpeg" });
+    const view = new DataView(fileReaderResult);
+    view.setUint16(0, 0xffd8);
+    const selectedFile = new Blob([file], { type: "image/jpeg" });
 
     const result = ignoreExifGenerateBlob(fileReaderResult, selectedFile);
-
-    // Check if the result Blob does not contain any EXIF data
-    // by checking if the result Blob is smaller than the original fileReaderResult
     expect(result).toBeInstanceOf(Blob);
     expect(result.size).toBeLessThanOrEqual(fileReaderResult.byteLength);
   });
