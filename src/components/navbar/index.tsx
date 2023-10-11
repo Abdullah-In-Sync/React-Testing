@@ -19,6 +19,7 @@ import { useAppContext } from "../../contexts/AuthContext";
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../hooks/useAuth";
 import {
+  expired_user_routes,
   patient_routes,
   superadmin_routes,
   therapistRoutes,
@@ -39,10 +40,11 @@ const NavBar = () => {
     patient: patient_routes,
     therapist: therapistRoutes,
     admin: superadmin_routes,
+    expiredUser: expired_user_routes,
   };
   const getRouteByUser = () => {
     const { userType } = getSessionToken();
-    return userRoute[userType] || [];
+    return userRoute[userType] || userRoute["expiredUser"];
   };
 
   /* istanbul ignore next */
@@ -64,7 +66,7 @@ const NavBar = () => {
 
   /* istanbul ignore next */
   const handleDropdownCLick = (label) => {
-    if (label === "logout")
+    if (label === "logout" || label == "expired")
       return logout(({ status, message }) =>
         enqueueSnackbar(message, {
           variant: status,

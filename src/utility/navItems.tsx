@@ -45,3 +45,19 @@ export const patient_routes = [
     path: "",
   },
 ];
+
+//** EXPIRED USER ROUTES **//
+export const expired_user_routes = [
+  {
+    id: "expired",
+    key: 1,
+    label: "Change Password",
+    path: "",
+  },
+  {
+    id: "expired",
+    key: 2,
+    label: "Log Out",
+    path: "",
+  },
+];
