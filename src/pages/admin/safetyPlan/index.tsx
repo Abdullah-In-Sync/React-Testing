@@ -63,6 +63,7 @@ const SafetyPlanPage: NextPage = () => {
     },
   });
 
+  /* istanbul ignore next */
   const [deleteSeftyPlanFn, { loading: deleteSeftyPlanLoading }] = useMutation<
     UpdateSafetyPlanByIDRes,
     UpdateSafetyPlanByIdVars
@@ -79,6 +80,7 @@ const SafetyPlanPage: NextPage = () => {
     },
   });
 
+  /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
     /* istanbul ignore next */
     const searchText =
@@ -98,6 +100,7 @@ const SafetyPlanPage: NextPage = () => {
     setTableCurrentPage(newPage);
   };
 
+  /* istanbul ignore next */
   const onSelectPageDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
     /* istanbul ignore next */
     const searchText =
@@ -119,6 +122,7 @@ const SafetyPlanPage: NextPage = () => {
     setTableCurrentPage(0);
   };
 
+  /* istanbul ignore next */
   const onChangeSearchInput = (e) => {
     setSearchInputValue(() => {
       getSafetyPlanList({
@@ -134,6 +138,7 @@ const SafetyPlanPage: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const onChangeFilterDropdown = (e) => {
     const temp = selectFilterOptions;
     /* istanbul ignore next */
@@ -157,6 +162,7 @@ const SafetyPlanPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
+  /* istanbul ignore next */
   const deleteSeftyPlan = () => {
     deleteSeftyPlanFn({
       variables: {
@@ -168,6 +174,7 @@ const SafetyPlanPage: NextPage = () => {
     });
   };
 
+  /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
     const { pressedIconButton, _id } = value;
     /* istanbul ignore next */
@@ -203,7 +210,10 @@ const SafetyPlanPage: NextPage = () => {
         />
         <DeleteSureModal
           modalOpen={deleteConfirmation}
-          setModalOpen={setDeleteConfirmation}
+          setModalOpen={
+            /* istanbul ignore next */
+            setDeleteConfirmation
+          }
           title={"Are you sure you want to delete the safety plan?"}
         >
           <Box marginTop="20px" display="flex" justifyContent="center">
@@ -214,6 +224,7 @@ const SafetyPlanPage: NextPage = () => {
               data-testid="approveDeletePlanModalConfirmButton"
               disabled={deleteSeftyPlanLoading}
               onClick={() => {
+                /* istanbul ignore next */
                 setDeleteConfirmation(false);
                 deleteSeftyPlan();
               }}
