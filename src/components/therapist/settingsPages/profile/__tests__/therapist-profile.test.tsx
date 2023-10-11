@@ -219,9 +219,6 @@ describe("Admin view therapist", () => {
       fileName: "dummy.pdf",
     });
     jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
-    jest
-      .spyOn(s3, "strippedBlob")
-      .mockImplementation((_, callback) => callback(file));
 
     await sut();
     expect(
