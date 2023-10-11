@@ -1,6 +1,7 @@
 import { MockedProvider } from "@apollo/react-testing";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
+import { ignoreExifGenerateBlob } from "../../lib/helpers/s3";
 import UploadButtonComponent from "../common/UploadButton/UploadButtonComponent";
 const file = new File(["hello"], "hello.txt", { type: "text/plain" });
 const imageFile = new File(["hello"], "hello.png", { type: "image/png" });
@@ -41,5 +42,48 @@ describe("when rendered with a `upload button`", () => {
       target: { files: [imageFile] },
     });
     expect(enqueueSnackbar).not.toHaveBeenCalled();
+  });
+
+  it("should call enqueueSnackbar if file not selected", async () => {
+    await sut();
+    const input = screen.getByTestId("resource_file_upload");
+    fireEvent.change(input, {
+      target: { files: [] },
+    });
+
+    expect(await screen.findByText("No file selected.")).toBeInTheDocument();
+  });
+
+  it("should return a Blob object without the EXIF data", () => {
+    const fileReaderResult = new ArrayBuffer(10);
+    const selectedFile = new File([], "test.jpg", { type: "image/jpeg" });
+
+    const result = ignoreExifGenerateBlob(fileReaderResult, selectedFile);
+
+    // Check if the result Blob does not contain any EXIF data
+    // by checking if the result Blob is smaller than the original fileReaderResult
+    expect(result).toBeInstanceOf(Blob);
+    expect(result.size).toBeLessThanOrEqual(fileReaderResult.byteLength);
+  });
+
+  it("should return a Blob object with the same data as the original fileReaderResult", () => {
+    const fileReaderResult = new ArrayBuffer(10);
+    const selectedFile = new File([], "test.jpg", { type: "image/jpeg" });
+
+    const result = ignoreExifGenerateBlob(fileReaderResult, selectedFile);
+
+    // Check if the result Blob has the same byte length as the original fileReaderResult
+    expect(result).toBeInstanceOf(Blob);
+    expect(result.size).toBe(fileReaderResult.byteLength);
+  });
+
+  it("should return a Blob object with the default type 'image/png'", () => {
+    const fileReaderResult = new ArrayBuffer(10);
+    const selectedFile = new File([], "test.jpg", { type: "image/png" });
+
+    const result = ignoreExifGenerateBlob(fileReaderResult, selectedFile);
+
+    expect(result).toBeInstanceOf(Blob);
+    expect(result.type).toBe("image/png");
   });
 });

@@ -3,6 +3,7 @@ import { Button, FormLabel } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { FILEEXTENSION } from "../../../lib/constants";
 import { useSnackbar } from "notistack";
+import { strippedBlob } from "../../../lib/helpers/s3";
 
 type propsType = {
   variant?: "contained" | "text" | "outlined";
@@ -21,13 +22,18 @@ type propsType = {
 export default function UploadButtonComponent(props: propsType) {
   const { enqueueSnackbar } = useSnackbar();
   const handleOnChange = (e) => {
-    if (!FILEEXTENSION.includes(e.target.files[0]["type"])) {
+    const file = e.target.files[0];
+    if (!file)
+      return enqueueSnackbar("No file selected.", { variant: "error" });
+    else if (!FILEEXTENSION.includes(file["type"])) {
       return enqueueSnackbar(
         "You can upload jpg, jpeg, png, gif, mp3, wav, mp4, mov, .pdf, doc, docx file type Only.",
         { variant: "error" }
       );
     }
-    return props.onChange(e);
+    strippedBlob(file, async (strippedFile) =>
+      props.onChange({ ...e, ...{ target: { files: [strippedFile] } } })
+    );
   };
 
   return (
