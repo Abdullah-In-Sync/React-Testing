@@ -1,10 +1,9 @@
 import { MockedProvider } from "@apollo/react-testing";
 import { fireEvent, render, screen } from "@testing-library/react";
+import axios from "axios";
 import { SnackbarProvider } from "notistack";
-import { ignoreExifGenerateBlob } from "../../lib/helpers/s3";
+import { ignoreExifGenerateBlob, uploadToS3 } from "../../lib/helpers/s3";
 import UploadButtonComponent from "../common/UploadButton/UploadButtonComponent";
-const file = new File(["hello"], "hello.txt", { type: "text/plain" });
-const imageFile = new File(["hello"], "hello.png", { type: "image/png" });
 const sut = async () => {
   render(
     <MockedProvider>
@@ -84,5 +83,24 @@ describe("when rendered with a `upload button`", () => {
 
     expect(result).toBeInstanceOf(Blob);
     expect(result.type).toBe("image/png");
+  });
+
+  it("should handle different file types when uploading to S3", async () => {
+    // Mock axios.put to return a successful response
+    axios.put = jest.fn().mockResolvedValue({ status: 200 });
+
+    // Call the uploadToS3 function with an image file
+    const imageFile = new File(["image"], "image.jpg", { type: "image/jpeg" });
+    const result1 = await uploadToS3(imageFile, "test.com");
+
+    // Call the uploadToS3 function with a document file
+    const documentFile = new File(["document"], "document.pdf", {
+      type: "application/pdf",
+    });
+    const result2 = await uploadToS3(documentFile, "test.com");
+
+    // Expect both results to be true
+    expect(result1).toBe(true);
+    expect(result2).toBe(true);
   });
 });
