@@ -6,7 +6,6 @@ import DeleteSureModal from "../../../components/admin/resource/DeleteSureModal"
 import SafetyPlanComponent from "../../../components/admin/safetyPlan";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
-import { SuccessModal } from "../../../components/common/SuccessModal";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import {
@@ -18,9 +17,11 @@ import {
   UpdateSafetyPlanByIdVars,
 } from "../../../graphql/SafetyPlan/types";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 
 const SafetyPlanPage: NextPage = () => {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
@@ -28,7 +29,6 @@ const SafetyPlanPage: NextPage = () => {
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const actionClickedId = useRef();
 
   useEffect(() => {
@@ -72,7 +72,10 @@ const SafetyPlanPage: NextPage = () => {
       getSafetyPlanList({
         variables: { limit: rowsLimit, pageNo: initialPageNo },
       });
-      setShowSuccessModal(true);
+      // setShowSuccessModal(true);
+      enqueueSnackbar("Your plan has been deleted successfully.", {
+        variant: "success",
+      });
     },
   });
 
@@ -232,15 +235,6 @@ const SafetyPlanPage: NextPage = () => {
             </Button>
           </Box>
         </DeleteSureModal>
-        <SuccessModal
-          isOpen={showSuccessModal}
-          onOk={() =>
-            /* istanbul ignore next */
-            setShowSuccessModal(false)
-          }
-          description={"Your plan has been deleted successfully."}
-          title={"Successful"}
-        />
       </Layout>
     </>
   );
