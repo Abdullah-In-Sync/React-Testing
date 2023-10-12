@@ -24,7 +24,9 @@ export default function UploadButtonComponent(props: propsType) {
   const handleOnChange = (e) => {
     const file = e.target.files[0];
     if (!file)
-      return enqueueSnackbar("No file selected.", { variant: "error" });
+      return enqueueSnackbar("Fail to select file please try again.", {
+        variant: "error",
+      });
     else if (!FILEEXTENSION.includes(file["type"])) {
       return enqueueSnackbar(
         "You can upload jpg, jpeg, png, gif, mp3, wav, mp4, mov, .pdf, doc, docx file type Only.",

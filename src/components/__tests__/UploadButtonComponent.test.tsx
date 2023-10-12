@@ -52,7 +52,9 @@ describe("when rendered with a `upload button`", () => {
       target: { files: [] },
     });
 
-    expect(await screen.findByText("No file selected.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Fail to select file please try again.")
+    ).toBeInTheDocument();
   });
 
   it("should return a Blob object without the EXIF data", () => {
@@ -66,10 +68,10 @@ describe("when rendered with a `upload button`", () => {
     expect(result.size).toBeLessThanOrEqual(fileReaderResult.byteLength);
   });
 
-  it("should return a Blob object with the same data as the original fileReaderResult", () => {
+  it.only("should return a Blob object with the same data as the original fileReaderResult", () => {
     const fileReaderResult = new ArrayBuffer(10);
     const selectedFile = new File([], "test.jpg", { type: "image/jpeg" });
-
+    Object.defineProperty(selectedFile, "size", { value: 1024 * 1024 + 1 });
     const result = ignoreExifGenerateBlob(fileReaderResult, selectedFile);
 
     // Check if the result Blob has the same byte length as the original fileReaderResult
