@@ -1,9 +1,8 @@
 import { ThemeProvider } from "@mui/material";
-import theme from "../../../../styles/theme/theme";
+import { fireEvent, render } from "@testing-library/react";
 import { Formik } from "formik";
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import MeasuresFormAdd from "../MeasuresFormAdd";
+import theme from "../../../../styles/theme/theme";
+import AddMeasuresPlanForm from "../AddMeasuresPlan";
 
 const sut = (mockData, onChangePlanId, onPressSubmit) => {
   return render(
@@ -15,10 +14,10 @@ const sut = (mockData, onChangePlanId, onPressSubmit) => {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         onReset={() => {}}
       >
-        <MeasuresFormAdd
+        <AddMeasuresPlanForm
           onPressSubmit={onPressSubmit}
           therapistSafetyPlanList={mockData}
-          onChangePlanId={onChangePlanId}
+          receivePlanId={onChangePlanId}
         />
       </Formik>
     </ThemeProvider>
