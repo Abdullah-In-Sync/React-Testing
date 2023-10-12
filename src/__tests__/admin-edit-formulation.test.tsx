@@ -19,6 +19,9 @@ import * as s3 from "../lib/helpers/s3";
 
 jest.mock("../contexts/AuthContext");
 const file = new File(["hello"], "hello.png", { type: "image/png" });
+jest
+  .spyOn(s3, "strippedBlob")
+  .mockImplementation((_, callback) => callback(file));
 
 // mocks
 const buildMocks = (): {

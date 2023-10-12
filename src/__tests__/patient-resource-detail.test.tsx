@@ -16,6 +16,9 @@ import { SnackbarProvider } from "notistack";
 
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 const file = new File(["hello"], "hello.png", { type: "image/png" });
+jest
+  .spyOn(s3, "strippedBlob")
+  .mockImplementation((_, callback) => callback(file));
 jest.mock("../contexts/AuthContext");
 // mocks
 const buildMocks = (): {

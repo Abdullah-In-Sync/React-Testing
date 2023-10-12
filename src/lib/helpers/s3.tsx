@@ -1,6 +1,7 @@
 import axios from "axios";
 import { msToTime } from "./common";
 
+/* istanbul ignore next */
 export const getUpdatedFileName = (
   selectedFile: File
 ): { fileName: string } => {
@@ -22,5 +23,71 @@ export const uploadToS3 = async (
   });
   if (response.status == 200) {
     return true;
+  }
+};
+
+export const strippedBlob = async (
+  selectedFile: File,
+  callback: any
+): Promise<any> => {
+  const stripped = new FileReader();
+  let blob;
+  stripped.readAsArrayBuffer(selectedFile);
+  /* istanbul ignore next */
+  stripped.onload = function () {
+    blob = ignoreExifGenerateBlob(this.result, selectedFile);
+    callback(new File([blob], selectedFile.name, { type: blob.type }));
+  };
+};
+
+export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
+  const type = selectedFile.type;
+  let offset = 0;
+  let recess = 0;
+  const pieces = [];
+  let i = 0;
+  const dataView = new DataView(fileReaderResult);
+  if (dataView.getUint16(offset) === 0xffd8) {
+    offset += 2;
+    let app1 = dataView.getUint16(offset);
+    offset += 2;
+    // This loop doing the acutal reading of the data
+    // and creating an array with only the pieces we want.
+    while (offset < dataView.byteLength) {
+      /* istanbul ignore next */
+      if (app1 === 0xffe1) {
+        pieces[i] = {
+          recess: recess,
+          offset: offset - 2,
+        };
+
+        recess = offset + dataView.getUint16(offset);
+
+        i++;
+      } else if (app1 === 0xffda) {
+        /* istanbul ignore next */
+        break;
+      }
+
+      offset += dataView.getUint16(offset);
+      app1 = dataView.getUint16(offset);
+      offset += 2;
+    }
+
+    /* istanbul ignore next */
+    if (pieces.length > 0) {
+      const newPieces = [];
+
+      pieces.forEach(function (v) {
+        newPieces.push(fileReaderResult.slice(v.recess, v.offset));
+      }, this);
+
+      newPieces.push(fileReaderResult.slice(recess));
+      return new Blob(newPieces, { type });
+    } else {
+      return new Blob([dataView], { type });
+    }
+  } else {
+    return new Blob([dataView], { type });
   }
 };
