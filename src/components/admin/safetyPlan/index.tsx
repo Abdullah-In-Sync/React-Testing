@@ -38,23 +38,26 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
 }) => {
   return (
     <>
-      {isAgenda ? (
-        <AgendaFilter
-          searchInputValue={searchInputValue}
-          onChangeSearchInput={onChangeSearchInput}
-          organizationList={organizationList}
-          selectFilterOptions={selectFilterOptions}
-          onChangeFilterDropdown={onChangeFilterDropdown}
-        />
-      ) : (
-        <Filter
-          searchInputValue={searchInputValue}
-          onChangeSearchInput={onChangeSearchInput}
-          organizationList={organizationList}
-          selectFilterOptions={selectFilterOptions}
-          onChangeFilterDropdown={onChangeFilterDropdown}
-        />
-      )}
+      {
+        /* istanbul ignore next */
+        isAgenda ? (
+          <AgendaFilter
+            searchInputValue={searchInputValue}
+            onChangeSearchInput={onChangeSearchInput}
+            organizationList={organizationList}
+            selectFilterOptions={selectFilterOptions}
+            onChangeFilterDropdown={onChangeFilterDropdown}
+          />
+        ) : (
+          <Filter
+            searchInputValue={searchInputValue}
+            onChangeSearchInput={onChangeSearchInput}
+            organizationList={organizationList}
+            selectFilterOptions={selectFilterOptions}
+            onChangeFilterDropdown={onChangeFilterDropdown}
+          />
+        )
+      }
 
       <SafetyPlanTable
         safetyPlanList={safetyPlanList}

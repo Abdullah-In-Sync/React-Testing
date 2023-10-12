@@ -23,6 +23,9 @@ jest.mock("next/router", () => ({
 
 const mocksData = [];
 const file = new File(["hello"], "hello.png", { type: "image/png" });
+jest
+  .spyOn(s3, "strippedBlob")
+  .mockImplementation((_, callback) => callback(file));
 mocksData.push({
   request: {
     query: GET_MASTER_DATA,
@@ -216,6 +219,7 @@ describe("Admin view therapist", () => {
       fileName: "dummy.pdf",
     });
     jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
     await sut();
     expect(
       await screen.findByText(/Proof of Accreditation:/i)
