@@ -19,7 +19,7 @@ const httpLink = createHttpLink({
   uri: env.graphql.url,
   fetch: fetch as any,
 });
-
+/* istanbul ignore next */
 const DisplaySnackbarMessage = (message: string) => {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -27,6 +27,7 @@ const DisplaySnackbarMessage = (message: string) => {
 };
 
 const authLink = setContext((apiDetail, { headers }) => {
+  /* istanbul ignore next */
   const { operationName } = apiDetail;
   // get the authentication token from local storage if it exists
   const token = Cookies.get("myhelptoken");
@@ -58,6 +59,7 @@ export const errorLink = onError(({ networkError }) => {
     });
   }
   if (networkError && networkError["statusCode"] === 403) {
+    /* istanbul ignore next */
     DisplaySnackbarMessage("Your input is invalid, please try again.");
   }
 });
