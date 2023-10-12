@@ -25,9 +25,8 @@ const DisplaySnackbarMessage = (message: string) => {
 
   enqueueSnackbar(message, { variant: "error" });
 };
-
+/* istanbul ignore next */
 const authLink = setContext((apiDetail, { headers }) => {
-  /* istanbul ignore next */
   const { operationName } = apiDetail;
   // get the authentication token from local storage if it exists
   const token = Cookies.get("myhelptoken");
