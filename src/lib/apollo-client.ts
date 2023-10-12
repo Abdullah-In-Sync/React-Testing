@@ -13,11 +13,18 @@ import { clearSession } from "../utility/storage";
 import { env } from "./env";
 import { publicApiNameAccessWithKey, publicPaths } from "./constants";
 import { getIntialPath } from "../utility/helper";
+import { useSnackbar } from "notistack";
 
 const httpLink = createHttpLink({
   uri: env.graphql.url,
   fetch: fetch as any,
 });
+
+const DisplaySnackbarMessage = (message: string) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  enqueueSnackbar(message, { variant: "error" });
+};
 
 const authLink = setContext((apiDetail, { headers }) => {
   const { operationName } = apiDetail;
@@ -49,6 +56,9 @@ export const errorLink = onError(({ networkError }) => {
     clearSession(() => {
       Router.replace("/account");
     });
+  }
+  if (networkError && networkError["statusCode"] === 403) {
+    DisplaySnackbarMessage("Your input is invalid, please try again.");
   }
 });
 
