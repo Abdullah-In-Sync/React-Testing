@@ -1,6 +1,7 @@
 import axios from "axios";
 import { msToTime } from "./common";
 
+/* istanbul ignore next */
 export const getUpdatedFileName = (
   selectedFile: File
 ): { fileName: string } => {
@@ -25,7 +26,6 @@ export const uploadToS3 = async (
   }
 };
 
-/* istanbul ignore next */
 export const strippedBlob = async (
   selectedFile: File,
   callback: any
@@ -33,13 +33,13 @@ export const strippedBlob = async (
   const stripped = new FileReader();
   let blob;
   stripped.readAsArrayBuffer(selectedFile);
-  stripped.onload = async function () {
+  /* istanbul ignore next */
+  stripped.onload = function () {
     blob = ignoreExifGenerateBlob(this.result, selectedFile);
-    callback(await new File([blob], selectedFile.name, { type: blob.type }));
+    callback(new File([blob], selectedFile.name, { type: blob.type }));
   };
 };
 
-/* istanbul ignore next */
 export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
   const type = selectedFile.type;
   let offset = 0;
@@ -53,7 +53,6 @@ export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
     offset += 2;
     // This loop doing the acutal reading of the data
     // and creating an array with only the pieces we want.
-    /* istanbul ignore next */
     while (offset < dataView.byteLength) {
       /* istanbul ignore next */
       if (app1 === 0xffe1) {
@@ -74,6 +73,7 @@ export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
       app1 = dataView.getUint16(offset);
       offset += 2;
     }
+
     /* istanbul ignore next */
     if (pieces.length > 0) {
       const newPieces = [];
