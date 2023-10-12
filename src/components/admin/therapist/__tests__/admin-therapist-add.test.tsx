@@ -19,6 +19,9 @@ jest.mock("next/router", () => ({
 }));
 
 const file = new File(["hello"], "hello.png", { type: "image/png" });
+jest
+  .spyOn(s3, "strippedBlob")
+  .mockImplementation((_, callback) => callback(file));
 
 const mocksData = [];
 

@@ -25,6 +25,9 @@ const windowOpenSpy = jest.spyOn(window, "open");
 
 const mocksData = [];
 const file = new File(["hello"], "hello.png", { type: "image/png" });
+jest
+  .spyOn(s3, "strippedBlob")
+  .mockImplementation((_, callback) => callback(file));
 const originalWindowLocation = window.location;
 mocksData.push({
   request: {
