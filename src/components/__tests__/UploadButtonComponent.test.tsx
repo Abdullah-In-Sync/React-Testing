@@ -68,7 +68,7 @@ describe("when rendered with a `upload button`", () => {
     expect(result.size).toBeLessThanOrEqual(fileReaderResult.byteLength);
   });
 
-  it.only("should return a Blob object with the same data as the original fileReaderResult", () => {
+  it("should return a Blob object with the same data as the original fileReaderResult", () => {
     const fileReaderResult = new ArrayBuffer(10);
     const selectedFile = new File([], "test.jpg", { type: "image/jpeg" });
     Object.defineProperty(selectedFile, "size", { value: 1024 * 1024 + 1 });

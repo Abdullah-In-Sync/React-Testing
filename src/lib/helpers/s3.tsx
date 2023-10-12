@@ -55,7 +55,6 @@ export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
     // and creating an array with only the pieces we want.
     /* istanbul ignore next */
     while (offset < dataView.byteLength) {
-      console.debug("chek1", offset, dataView.byteLength, dataView);
       /* istanbul ignore next */
       if (app1 === 0xffe1) {
         pieces[i] = {
@@ -74,7 +73,6 @@ export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
       offset += dataView.getUint16(offset);
       app1 = dataView.getUint16(offset);
       offset += 2;
-      console.debug("chek2", offset, app1);
     }
     /* istanbul ignore next */
     if (pieces.length > 0) {
@@ -85,7 +83,6 @@ export const ignoreExifGenerateBlob = (fileReaderResult, selectedFile) => {
       }, this);
 
       newPieces.push(fileReaderResult.slice(recess));
-      console.debug("chek3", newPieces);
       return new Blob(newPieces, { type });
     } else {
       return new Blob([dataView], { type });
