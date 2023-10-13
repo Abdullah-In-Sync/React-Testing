@@ -2,7 +2,7 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import * as Yup from "yup";
 import { InitialFormValues } from "../patient/therapistSafetyPlan/types";
-import MeasuresFormAdd from "./MeasuresFormAdd";
+import MeasuresFormAdd from "./AddFormMeausure";
 
 interface ViewProps {
   submitForm?: (
