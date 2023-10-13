@@ -94,7 +94,6 @@ describe("Admin edit template page", () => {
     await waitFor(async () => {
       expect(screen.getByTestId("acceptCookiesButton")).toBeInTheDocument();
       fireEvent.click(screen.queryByTestId("acceptCookiesButton"));
-      expect(screen.getByTestId("wiewAppointmentButton")).toBeInTheDocument();
     });
   });
 
@@ -110,18 +109,6 @@ describe("Admin edit template page", () => {
       expect(screen.getByTestId("monitor_card")).toBeInTheDocument();
       expect(screen.getByTestId("relapse_card")).toBeInTheDocument();
       expect(screen.getByTestId("Main")).toBeInTheDocument();
-    });
-  });
-
-  test("Renders home data", async () => {
-    await sut();
-    await waitFor(async () => {
-      expect(screen.getByTestId("home-form")).toBeInTheDocument();
-      expect(screen.getByTestId("wiewAppointmentButton")).toBeInTheDocument();
-
-      expect(screen.getByTestId("wiewAppointmentButton")).toHaveTextContent(
-        "Next appointment: 03/07/23 06:30 - 07:30"
-      );
     });
   });
 

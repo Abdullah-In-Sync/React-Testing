@@ -17,7 +17,6 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_PATIENT_HOME_DATA } from "../../../graphql/query/resource";
 import SureModal from "../../admin/resource/SureModal";
 import { cancleAppointmentPatientHome } from "../../../utility/types/resource_types";
-import moment from "moment";
 import CustomModal from "../CustomModal/customModel";
 import { env } from "../../../lib/env";
 
@@ -46,19 +45,6 @@ const PatientHome = (props: propTypes) => {
         setFormFields(data?.getPatientHomeData[0]?.appointment[0]?._id);
       },
     });
-
-  const appointmentDate = moment(
-    homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_date
-  ).format("DD/MM/YY");
-
-  const appStartTime =
-    homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_start;
-
-  const sTime = homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_start;
-  console.log("Koca: sTime ", moment.utc(sTime).local());
-
-  const appEndTime =
-    homeDataData?.getPatientHomeData[0]?.appointment[0]?.app_finish;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -185,16 +171,45 @@ const PatientHome = (props: propTypes) => {
         onSubmit={handleSubmit}
       >
         <Box data-testid="Main" style={{ padding: "25px" }}>
-          <h4
+          <div
             style={{
-              color: theme.palette.primary.main,
-              fontSize: "20px",
-              fontFamily: "Montserrat",
-              fontWeight: "700",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            {` Welcome to MyHelp Dear ${username?.patient_firstname} ${username?.patient_lastname}`}
-          </h4>
+            <div>
+              <h4
+                style={{
+                  color: theme.palette.primary.main,
+                  fontSize: "20px",
+                  fontFamily: "Montserrat",
+                  fontWeight: "700",
+                }}
+              >
+                {` Welcome to MyHelp Dear ${username?.patient_firstname} ${username?.patient_lastname}`}
+              </h4>
+            </div>
+            <div>
+              <Typography
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                }}
+              >
+                Your Therapist is:{" "}
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    color: theme.palette.primary.main,
+                    fontSize: "14px",
+                  }}
+                >
+                  {therapistName}
+                </span>
+              </Typography>
+            </div>
+          </div>
           <p
             style={{
               fontWeight: "600",
@@ -212,103 +227,8 @@ const PatientHome = (props: propTypes) => {
             will enhance the therapeutic relationship in order to deliver better
             results.
           </p>
+          <hr />
 
-          <Box
-            style={{
-              border: "2px ",
-              borderStyle: "solid",
-              borderColor: theme.palette.primary.main,
-              overflow: "visible",
-              backgroundColor: "white",
-              zIndex: 0,
-              borderRadius: "7px",
-              padding: "20px",
-            }}
-          >
-            <Box style={{ display: "flex", justifyContent: "space-evenly" }}>
-              <Box>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontFamily: "Montserrat",
-                    fontWeight: "600",
-                    paddingTop: "10px",
-                  }}
-                >
-                  Your Therapist is:
-                </p>
-                <h2
-                  style={{
-                    color: theme.palette.primary.main,
-                    fontSize: "30px",
-                    fontFamily: "Montserrat",
-                  }}
-                >
-                  {therapistName}
-                </h2>
-              </Box>
-              {homeDataData?.getPatientHomeData[0]?.appointment == 0 ? (
-                <Box
-                  style={{
-                    fontWeight: "600",
-                    fontSize: "14px",
-                    fontFamily: "Montserrat",
-                    paddingTop: "50px",
-                    paddingLeft: "20px",
-                  }}
-                >
-                  No appointments have yet been booked
-                </Box>
-              ) : (
-                <Box
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    className={`text-white`}
-                    variant="contained"
-                    sx={{
-                      textTransform: "none",
-                      bottom: "14px",
-                      height: "50px",
-                      fontFamily: "Montserrat",
-                      borderRadius: "10px",
-                      fontSize: "14px",
-                      paddingLeft: "40px",
-                      paddingRight: "40px",
-                      fontWeight: "600",
-                    }}
-                    data-testid="wiewAppointmentButton"
-                  >
-                    {`Next appointment: ${appointmentDate} 
-                    ${appStartTime} - ${appEndTime}`}
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    type="submit"
-                    sx={{
-                      textTransform: "none",
-                      color: "black",
-                      height: "50px",
-                      fontFamily: "Montserrat",
-                      borderRadius: "10px",
-                      fontSize: "14px",
-                      paddingLeft: "100px",
-                      paddingRight: "100px",
-                      fontWeight: "600",
-                    }}
-                    data-testid="cancelAppointmentClick"
-                  >
-                    Cancel Appointment
-                  </Button>
-                </Box>
-              )}
-            </Box>
-          </Box>
           <Box sx={{ paddingTop: "30px" }}>
             <Grid container spacing={3} marginBottom={5}>
               <Grid item xs={4}>
