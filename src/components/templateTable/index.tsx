@@ -123,8 +123,9 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                     variant="contained"
                     type="submit"
                     style={{
-                      padding: "5px 79px 5px 79px",
-                      fontSize: "20px",
+                      paddingLeft: "40px",
+                      paddingRight: "40px",
+                      marginRight: "10px",
                     }}
                     disabled={!formikHelper.isValid}
                   >
@@ -135,9 +136,9 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                     color="secondary"
                     variant="contained"
                     style={{
-                      margin: "0px 27px 0px 27px",
-                      padding: "5px 79px 5px 79px",
-                      fontSize: "20px",
+                      paddingLeft: "40px",
+                      paddingRight: "40px",
+                      backgroundColor: "#6BA08E",
                     }}
                     disabled={formikHelper?.isSubmitting}
                     onClick={() =>
@@ -152,8 +153,9 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                       color="primary"
                       variant="contained"
                       style={{
-                        padding: "5px 79px 5px 79px",
-                        fontSize: "20px",
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                        marginLeft: "10px",
                       }}
                       disabled={formikHelper?.isSubmitting}
                       onClick={() =>
