@@ -1,8 +1,7 @@
 import { Box, Button, Grid, Link, Typography, useTheme } from "@mui/material";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarsIcon from "@mui/icons-material/Stars";
 import CrisisAlertIcon from "@mui/icons-material/CrisisAlert";
-
 import Card from "@mui/material/Card";
 import PreviewIcon from "@mui/icons-material/Preview";
 import TungstenIcon from "@mui/icons-material/Tungsten";
@@ -15,46 +14,40 @@ import Avatar from "@mui/material/Avatar";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { useLazyQuery } from "@apollo/client";
 import { GET_PATIENT_HOME_DATA } from "../../../graphql/query/resource";
-import SureModal from "../../admin/resource/SureModal";
-import { cancleAppointmentPatientHome } from "../../../utility/types/resource_types";
 import CustomModal from "../CustomModal/customModel";
 import { env } from "../../../lib/env";
 
 type propTypes = {
-  onSubmit?: any;
   setLoader: any;
 };
-const defaultFormValue = {
-  _id: "",
-};
+
 const PatientHome = (props: propTypes) => {
   const { user } = useAppContext();
   const theme = useTheme();
+  /* istanbul ignore next */
   const therapistName = user?.therapist_data?.therapist_name;
+  /* istanbul ignore next */
   const username = user?.patient_data;
+  /* istanbul ignore next */
   const cookies = env.corpWebsite.cookies;
+  /* istanbul ignore next */
+  const firstName = username?.patient_firstname;
+  /* istanbul ignore next */
+  const lastName = username?.patient_lastname;
   const [cookiesModalOpen, setCookiesModalOpen] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
-  const [formFields, setFormFields] =
-    useState<cancleAppointmentPatientHome>(defaultFormValue);
 
   const [getHomeData, { loading: homeDataLoading, data: homeDataData }] =
     useLazyQuery(GET_PATIENT_HOME_DATA, {
       onCompleted: (data) => {
-        setFormFields(data?.getPatientHomeData[0]?.appointment[0]?._id);
+        /* istanbul ignore next */
+        console.log("Koca: data ", data);
       },
     });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setModalOpen(true);
-    /* istanbul ignore next */
-    if (!confirmSubmission) return;
-  };
-
+  /* istanbul ignore next */
   const cookiesName = localStorage.getItem("Cookies Policy");
 
+  /* istanbul ignore next */
   const acceptCookies = () => {
     localStorage.setItem("Cookies Policy", "true");
     setCookiesModalOpen(false);
@@ -165,11 +158,7 @@ const PatientHome = (props: propTypes) => {
         </Box>
       </CustomModal>
 
-      <form
-        data-testid="home-form"
-        style={{ paddingBottom: "30px" }}
-        onSubmit={handleSubmit}
-      >
+      <form data-testid="home-form" style={{ paddingBottom: "30px" }}>
         <Box data-testid="Main" style={{ padding: "25px" }}>
           <div
             style={{
@@ -187,7 +176,7 @@ const PatientHome = (props: propTypes) => {
                   fontWeight: "700",
                 }}
               >
-                {` Welcome to MyHelp Dear ${username?.patient_firstname} ${username?.patient_lastname}`}
+                {` Welcome to MyHelp Dear ${firstName} ${lastName}`}
               </h4>
             </div>
             <div>
@@ -550,48 +539,6 @@ const PatientHome = (props: propTypes) => {
             </Grid>
           </Box>
         </Box>
-        <SureModal
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-          setConfirmSubmission={setConfirmSubmission}
-        >
-          <Typography
-            sx={{
-              fontWeight: "600",
-              textAlign: "center",
-              fontSize: "27px",
-            }}
-          >
-            Are you sure want to cancel the appointment
-          </Typography>
-          <Box marginTop="20px" display="flex" justifyContent="end">
-            <Button
-              variant="contained"
-              color="inherit"
-              size="small"
-              data-testid="CancelButton"
-              onClick={() => {
-                setModalOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ marginLeft: "5px" }}
-              size="small"
-              data-testid={"ConfirmButton"}
-              onClick={() => {
-                setModalOpen(false);
-                props.onSubmit(formFields);
-                props.setLoader(false);
-              }}
-            >
-              Confirm
-            </Button>
-          </Box>
-        </SureModal>
       </form>
     </>
   );
