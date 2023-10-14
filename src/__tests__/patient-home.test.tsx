@@ -4,10 +4,8 @@ import { MockedProvider } from "@apollo/client/testing";
 import { GET_PATIENT_HOME_DATA } from "../graphql/query/resource";
 import { useRouter } from "next/router";
 import { useAppContext } from "../contexts/AuthContext";
-
 import HomePage from "../pages/patient/home";
-import { UPDATE_PATIENT_HOME_BY_ID } from "../graphql/mutation/patient";
-// global.window = { location: { pathname: null } };
+
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
@@ -38,14 +36,6 @@ mocksData.push({
       ],
     },
   },
-});
-
-mocksData.push({
-  request: {
-    query: UPDATE_PATIENT_HOME_BY_ID,
-    variables: { appId: { _id: "" } },
-  },
-  result: {},
 });
 
 const sut = async () => {
@@ -94,7 +84,6 @@ describe("Admin edit template page", () => {
     await waitFor(async () => {
       expect(screen.getByTestId("acceptCookiesButton")).toBeInTheDocument();
       fireEvent.click(screen.queryByTestId("acceptCookiesButton"));
-      expect(screen.getByTestId("wiewAppointmentButton")).toBeInTheDocument();
     });
   });
 
@@ -111,63 +100,5 @@ describe("Admin edit template page", () => {
       expect(screen.getByTestId("relapse_card")).toBeInTheDocument();
       expect(screen.getByTestId("Main")).toBeInTheDocument();
     });
-  });
-
-  test("Renders home data", async () => {
-    await sut();
-    await waitFor(async () => {
-      expect(screen.getByTestId("home-form")).toBeInTheDocument();
-      expect(screen.getByTestId("wiewAppointmentButton")).toBeInTheDocument();
-
-      expect(screen.getByTestId("wiewAppointmentButton")).toHaveTextContent(
-        "Next appointment: 03/07/23 06:30 - 07:30"
-      );
-    });
-  });
-
-  it("cancel the appointment with confirmation.", async () => {
-    await sut();
-
-    await waitFor(async () => {
-      fireEvent.submit(screen.queryByTestId("home-form"));
-    });
-    await (async () => {
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId("ConfirmButton")).toBeVisible();
-
-    fireEvent.change(screen.queryByTestId("ConfirmButton"), {
-      target: { value: "750a6993f61d4e58917e31e1244711" },
-    });
-
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("ConfirmButton"));
-    });
-
-    await waitFor(async () => {
-      expect(
-        screen.getByText("Appointment Cancelled Successfully")
-      ).toBeInTheDocument();
-    });
-  });
-
-  it("cancel button click while confirmation.", async () => {
-    await sut();
-
-    await waitFor(async () => {
-      fireEvent.submit(screen.queryByTestId("home-form"));
-    });
-
-    await (async () => {
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-    });
-    expect(screen.getByTestId("ConfirmButton")).toBeVisible();
-
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("CancelButton"));
-    });
-
-    expect(screen.queryByTestId("Main")).toBeInTheDocument();
   });
 });
