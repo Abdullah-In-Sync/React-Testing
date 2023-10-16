@@ -3,9 +3,11 @@ import {
   InMemoryCache,
   createHttpLink,
   from,
+  FetchResult,
+  Observable,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { onError } from "@apollo/client/link/error";
+import { onError, ErrorResponse } from "@apollo/client/link/error";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import fetch from "node-fetch";
@@ -40,7 +42,7 @@ const authLink = setContext((apiDetail, { headers }) => {
   };
 });
 
-export const errorLink = onError(({ networkError }) => {
+export const errorLink = onError(({ networkError }: ErrorResponse) => {
   if (
     networkError &&
     networkError["statusCode"] === 401 &&
@@ -59,6 +61,10 @@ export const errorLink = onError(({ networkError }) => {
         variant: "error",
       }
     );
+    return new Observable<FetchResult>((observer) => {
+      observer.next({ data: null });
+      observer.complete();
+    });
   }
 });
 
