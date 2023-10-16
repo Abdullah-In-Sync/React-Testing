@@ -840,7 +840,7 @@ export default function CreateResource(props: propTypes) {
                 data-testid="selectTemplateButton"
                 variant="contained"
                 type="submit"
-                label="SELECT TEMPLATE"
+                label="Select Template"
               />
             </Grid>
           </Grid>
