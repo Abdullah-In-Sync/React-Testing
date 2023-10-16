@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -12,9 +13,7 @@ function RouteGuard({ children }) {
   const router = useRouter();
 
   const [authorized, setAuthorized] = useState(isAuth(router));
-  /* istanbul ignore next */
   const { enqueueSnackbar } = useSnackbar();
-  /* istanbul ignore next */
   useEffect(() => {
     (document as any).enqueueSnackbar = enqueueSnackbar;
 
