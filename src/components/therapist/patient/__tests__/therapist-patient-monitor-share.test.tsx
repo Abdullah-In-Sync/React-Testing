@@ -1,7 +1,7 @@
 jest.mock("notistack");
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import FormShareBox from "../monitor/share/FormShare";
+import MonitorFormShareBox from "../monitor/share/monitorFormShare";
 import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@mui/material";
 import theme from "../../../../styles/theme/theme";
@@ -34,14 +34,16 @@ const mocksData = [
     patient_lastname: "patient",
   },
 ];
+const Sut = async () => {
+  const enqueueSnackbar = jest.fn();
 
-const sut = async () => {
   render(
     <ThemeProvider theme={theme()}>
       <SnackbarProvider>
-        <FormShareBox
+        <MonitorFormShareBox
           onPressSubmit={mockOnPressSubmit}
           therapistSafetyPlanList={{ patientListForMonitor: mocksData }}
+          snackBar={enqueueSnackbar}
         />
       </SnackbarProvider>
     </ThemeProvider>
@@ -50,7 +52,7 @@ const sut = async () => {
 
 describe("FormShareBox Component", () => {
   it("calls onPressSubmit when Share button is clicked with selected patients", async () => {
-    await sut();
+    await Sut();
     await (async () => {
       const shareButton = await screen.findByTestId("addSubmitForm");
       fireEvent.click(shareButton);
@@ -61,7 +63,7 @@ describe("FormShareBox Component", () => {
     });
   });
   it("shows error snackbar if Share button is clicked without selecting patients", async () => {
-    await sut();
+    await Sut();
     await (async () => {
       const shareButton = await screen.findByTestId("addSubmitForm");
       fireEvent.click(shareButton);
@@ -75,7 +77,7 @@ describe("FormShareBox Component", () => {
   });
 
   it("updates selected patients when Autocomplete is used", async () => {
-    await sut();
+    await Sut();
     await (async () => {
       const autocomplete = await screen.findByTestId("relapsePlanDropdown");
       fireEvent.change(autocomplete, { target: { value: "Patient 1" } });

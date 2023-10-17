@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import FormShareBox from "./FormShare";
+import MonitorFormShareBox from "./monitorFormShare";
 
 interface ViewProps {
   submitForm?: any;
@@ -9,6 +9,7 @@ interface ViewProps {
   setPlanId?: any;
   therapistSafetyPlanList?: any;
   receivePlanId: any;
+  snackBar: any;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -22,6 +23,7 @@ const SharePlanForm: React.FC<ViewProps> = ({
   setPlanId,
   therapistSafetyPlanList,
   receivePlanId,
+  snackBar,
 }) => {
   const initialValues = {
     planDesc: "",
@@ -40,11 +42,12 @@ const SharePlanForm: React.FC<ViewProps> = ({
         initialValues={initialValues}
         onSubmit={submitForm}
         children={() => (
-          <FormShareBox
+          <MonitorFormShareBox
             therapistSafetyPlanList={therapistSafetyPlanList}
             setPlanId={setPlanId}
             onChangePlanId={onChangePlanId}
             onPressSubmit={onPressSubmit}
+            snackBar={snackBar}
           />
         )}
       />

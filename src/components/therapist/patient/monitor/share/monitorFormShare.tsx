@@ -4,7 +4,6 @@ import { Autocomplete } from "@mui/lab";
 import React, { useState } from "react";
 import { useStyles } from "../../therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import { Box } from "@material-ui/core";
-import { useSnackbar } from "notistack";
 
 interface ViewProps {
   buttonClick?: (value) => void;
@@ -12,15 +11,16 @@ interface ViewProps {
   therapistSafetyPlanList?: any;
   setPlanId?: any;
   onChangePlanId?: any;
+  snackBar: any;
 }
 
-const FormShareBox: React.FC<ViewProps> = ({
+const MonitorFormShareBox: React.FC<ViewProps> = ({
   onPressSubmit,
   therapistSafetyPlanList,
   onChangePlanId,
+  snackBar,
 }) => {
   const styles = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const [planId, setPlanId] = useState<string[]>([]);
   const patientListForMonitor =
     therapistSafetyPlanList?.patientListForMonitor || [];
@@ -98,7 +98,7 @@ const FormShareBox: React.FC<ViewProps> = ({
                   if (planId.length) {
                     onPressSubmit();
                   } else {
-                    enqueueSnackbar("Patient can not be empty.", {
+                    snackBar("Patient can not be empty.", {
                       variant: "error",
                     });
                   }
@@ -115,4 +115,4 @@ const FormShareBox: React.FC<ViewProps> = ({
   return <div className="actionsWrapper">{formBox()}</div>;
 };
 
-export default FormShareBox;
+export default MonitorFormShareBox;
