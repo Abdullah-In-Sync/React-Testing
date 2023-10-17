@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import FormShareBox from "./monitorFormShare";
+import FormShareBox from "./monitorShare";
 
 interface ViewProps {
   submitForm?: any;

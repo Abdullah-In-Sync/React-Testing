@@ -1,7 +1,7 @@
 jest.mock("notistack");
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
-import MonitorFormShareBox from "../monitor/share/monitorFormShare";
+import MonitorFormShareBox from "../monitor/share/monitorShare";
 import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@mui/material";
 import theme from "../../../../styles/theme/theme";
