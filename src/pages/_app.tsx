@@ -22,7 +22,7 @@ import "@fontsource/roboto/700.css";
 import { SnackbarProvider } from "notistack";
 import { AuthProvider } from "../contexts/AuthContext";
 import { SidebarProvider } from "../contexts/SidebarContext";
-import { RouteGuard } from "../hoc/routeGaurd";
+import { RouteGuard } from "../hoc/routeAuthGaurd";
 import "../styles/main.css";
 import createEmotionCache from "../utility/createEmotionCache";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { RouteGuard } from "../routeGaurd";
+import { RouteGuard } from "../routeAuthGaurd";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 
