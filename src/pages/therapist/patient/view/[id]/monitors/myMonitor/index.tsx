@@ -245,7 +245,6 @@ const TherapyMyMonitorList: any = () => {
           onPressSubmit={() => setIsConfirmShareTask(true)}
           therapistSafetyPlanList={monitorSharePatientListData}
           receivePlanId={receivePatientIds}
-          snackBar={enqueueSnackbar}
         />
       </CommonModal>
 

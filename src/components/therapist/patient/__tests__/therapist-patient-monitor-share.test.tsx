@@ -34,16 +34,14 @@ const mocksData = [
     patient_lastname: "patient",
   },
 ];
-const Sut = async () => {
-  const enqueueSnackbar = jest.fn();
 
+const sut = async () => {
   render(
     <ThemeProvider theme={theme()}>
       <SnackbarProvider>
         <MonitorFormShareBox
           onPressSubmit={mockOnPressSubmit}
           therapistSafetyPlanList={{ patientListForMonitor: mocksData }}
-          snackBar={enqueueSnackbar}
         />
       </SnackbarProvider>
     </ThemeProvider>
@@ -52,7 +50,7 @@ const Sut = async () => {
 
 describe("FormShareBox Component", () => {
   it("calls onPressSubmit when Share button is clicked with selected patients", async () => {
-    await Sut();
+    await sut();
     await (async () => {
       const shareButton = await screen.findByTestId("addSubmitForm");
       fireEvent.click(shareButton);
@@ -63,7 +61,7 @@ describe("FormShareBox Component", () => {
     });
   });
   it("shows error snackbar if Share button is clicked without selecting patients", async () => {
-    await Sut();
+    await sut();
     await (async () => {
       const shareButton = await screen.findByTestId("addSubmitForm");
       fireEvent.click(shareButton);
@@ -77,7 +75,7 @@ describe("FormShareBox Component", () => {
   });
 
   it("updates selected patients when Autocomplete is used", async () => {
-    await Sut();
+    await sut();
     await (async () => {
       const autocomplete = await screen.findByTestId("relapsePlanDropdown");
       fireEvent.change(autocomplete, { target: { value: "Patient 1" } });
