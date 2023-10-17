@@ -43,4 +43,32 @@ describe("RouteGuard Component", () => {
       query: { returnUrl: "/private-route" },
     });
   });
+  it("redirects to home page when user is authenticated but accessing an unauthorized route", () => {
+    jest.spyOn(require("js-cookie"), "get").mockImplementation(() => {
+      return {
+        myhelptoken: "validToken123",
+        user_type: "admin",
+      };
+    });
+
+    // Mock the router's behavior
+    const pushMock = jest.fn();
+    (useRouter as jest.Mock).mockReturnValue({
+      asPath: "therapist/therapies/?mainTab=therapy",
+      push: pushMock,
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+    });
+
+    render(
+      <SnackbarProvider>
+        <RouteGuard>
+          <div>Unauthorized Content</div>
+        </RouteGuard>
+      </SnackbarProvider>
+    );
+    expect(pushMock).toHaveBeenCalledWith("/admin/dashboard/");
+  });
 });
