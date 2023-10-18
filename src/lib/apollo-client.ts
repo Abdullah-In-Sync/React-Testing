@@ -3,9 +3,11 @@ import {
   InMemoryCache,
   createHttpLink,
   from,
+  FetchResult,
+  Observable,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { onError } from "@apollo/client/link/error";
+import { onError, ErrorResponse } from "@apollo/client/link/error";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import fetch from "node-fetch";
@@ -18,7 +20,7 @@ const httpLink = createHttpLink({
   uri: env.graphql.url,
   fetch: fetch as any,
 });
-
+/* istanbul ignore next */
 const authLink = setContext((apiDetail, { headers }) => {
   const { operationName } = apiDetail;
   // get the authentication token from local storage if it exists
@@ -40,7 +42,7 @@ const authLink = setContext((apiDetail, { headers }) => {
   };
 });
 
-export const errorLink = onError(({ networkError }) => {
+export const errorLink = onError(({ networkError }: ErrorResponse) => {
   if (
     networkError &&
     networkError["statusCode"] === 401 &&
@@ -48,6 +50,20 @@ export const errorLink = onError(({ networkError }) => {
   ) {
     clearSession(() => {
       Router.replace("/account");
+    });
+  }
+  /* istanbul ignore next */
+  if (networkError && networkError["statusCode"] === 403) {
+    /* istanbul ignore next */
+    (document as any)?.enqueueSnackbar?.(
+      "Your input is invalid, please try again.",
+      {
+        variant: "error",
+      }
+    );
+    return new Observable<FetchResult>((observer) => {
+      observer.next({ data: null });
+      observer.complete();
     });
   }
 });

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { allowedPaths, homeRoute, publicPaths } from "../lib/constants";
 import { getSessionToken } from "../utility/storage";
 import { isAuth } from "../utility/helper";
+import { useSnackbar } from "notistack";
 
 export { RouteGuard };
 
@@ -11,6 +12,14 @@ function RouteGuard({ children }) {
   const router = useRouter();
 
   const [authorized, setAuthorized] = useState(isAuth(router));
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    (document as any).enqueueSnackbar = enqueueSnackbar;
+
+    return () => {
+      (document as any).enqueueSnackbar = null;
+    };
+  }, []);
 
   useEffect(() => {
     authCheck(router.asPath);
