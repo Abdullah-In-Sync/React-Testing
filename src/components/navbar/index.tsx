@@ -27,10 +27,12 @@ import {
 import { getSessionToken } from "../../utility/storage";
 import ChangePassword from "../changePassword/ChangePassword";
 import { ConfirmInfoElement } from "../common/CustomModal/InfoModal";
+import { useRouter } from "next/router";
 
 const NavBar = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { logout } = useAuth();
+  const router = useRouter();
 
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -66,13 +68,18 @@ const NavBar = () => {
 
   /* istanbul ignore next */
   const handleDropdownCLick = (label) => {
-    if (label === "logout" || label == "expired")
+    if (label === "logout")
       return logout(({ status, message }) =>
         enqueueSnackbar(message, {
           variant: status,
         })
       );
-    else if (label === "changePassword") return onPressChangePassword();
+    else if (label == "expired") {
+      enqueueSnackbar("session expired, please login again!", {
+        variant: "error",
+      });
+      return router.replace("/account");
+    } else if (label === "changePassword") return onPressChangePassword();
   };
   return (
     <>
