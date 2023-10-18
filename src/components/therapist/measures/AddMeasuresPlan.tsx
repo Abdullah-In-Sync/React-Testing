@@ -2,7 +2,7 @@ import { Formik, FormikProps } from "formik";
 import React from "react";
 import * as Yup from "yup";
 import { InitialFormValues } from "../patient/therapistSafetyPlan/types";
-import MeasuresFormAdd from "./MeasuresFormAdd";
+import MeasuresFormAdd from "./AddFormMeausure";
 
 interface ViewProps {
   submitForm?: (
@@ -11,7 +11,6 @@ interface ViewProps {
   ) => void;
 
   onPressSubmit?: () => void;
-  setPlanId?: any;
   therapistSafetyPlanList?: any;
   receivePlanId: any;
 }
@@ -24,7 +23,6 @@ export const safetyPlanValidationSchema = Yup.object().shape({
 const AddMeasuresPlanForm: React.FC<ViewProps> = ({
   submitForm,
   onPressSubmit,
-  setPlanId,
   therapistSafetyPlanList,
   receivePlanId,
 }) => {
@@ -49,7 +47,6 @@ const AddMeasuresPlanForm: React.FC<ViewProps> = ({
         children={() => (
           <MeasuresFormAdd
             therapistSafetyPlanList={therapistSafetyPlanList}
-            setPlanId={setPlanId}
             onChangePlanId={onChangePlanId}
             onPressSubmit={onPressSubmit}
           />

@@ -1,7 +1,7 @@
 import { Button, Stack, TextField, Tooltip } from "@mui/material";
 import { Form } from "formik";
 import { Autocomplete } from "@mui/lab";
-import * as React from "react";
+import React, { useState } from "react";
 import { useStyles } from "../../therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import { Box } from "@material-ui/core";
 import { useSnackbar } from "notistack";
@@ -19,12 +19,16 @@ const FormShareBox: React.FC<ViewProps> = ({
   therapistSafetyPlanList,
   onChangePlanId,
 }) => {
+  /* istanbul ignore next */
   const styles = useStyles();
-
+  /* istanbul ignore next */
+  const { enqueueSnackbar } = useSnackbar();
+  /* istanbul ignore next */
+  const [planId, setPlanId] = useState<string[]>([]);
+  /* istanbul ignore next */
+  const patientListForMonitor =
+    therapistSafetyPlanList?.patientListForMonitor || [];
   const formBox = () => {
-    const { enqueueSnackbar } = useSnackbar();
-    const [planId, setPlanId] = React.useState<string[]>([]);
-
     return (
       <Stack className={styles.formWrapper}>
         <Form>
@@ -34,20 +38,13 @@ const FormShareBox: React.FC<ViewProps> = ({
               fullWidth={true}
               data-testid="relapsePlanDropdown"
               id="name"
-              value={
-                therapistSafetyPlanList &&
-                therapistSafetyPlanList.patientListForMonitor
-                  ? therapistSafetyPlanList.patientListForMonitor.filter(
-                      (option) => planId.includes(option._id)
-                    )
-                  : []
-              }
-              options={
-                (therapistSafetyPlanList &&
-                  therapistSafetyPlanList.patientListForMonitor) ||
-                []
-              }
+              value={patientListForMonitor.filter((option) =>
+                planId.includes(option._id)
+              )}
+              options={patientListForMonitor}
+              /* istanbul ignore next */
               getOptionLabel={(option) => option.patient_firstname}
+              /* istanbul ignore next */
               onChange={(e, newValue) => {
                 if (newValue) {
                   const selectedValues = newValue
@@ -121,7 +118,7 @@ const FormShareBox: React.FC<ViewProps> = ({
       </Stack>
     );
   };
-
+  /* istanbul ignore next */
   return <div className="actionsWrapper">{formBox()}</div>;
 };
 

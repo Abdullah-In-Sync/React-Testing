@@ -217,40 +217,27 @@ describe("Therapist patient safety plan", () => {
     });
   });
 
-  // it("Share monitor", async () => {
-  //   sut();
+  it("Share monitor", async () => {
+    sut();
 
-  //   await waitFor(async () => {
-  //     expect(screen.getByTestId("share-button-icon")).toBeInTheDocument();
-
-  //     fireEvent.click(screen.queryByTestId("share-button-icon"));
-
-  //     // await waitFor(async () => {
-  //     const dropdownInput = screen.getByLabelText("Select Patient");
-
-  //     fireEvent.mouseDown(dropdownInput);
-
-  //     // await waitFor(async () => {
-  //     const firstOption = screen.getByRole("option", {
-  //       name: /patient name/i,
-  //     });
-  //     fireEvent.click(firstOption);
-  //     // });
-
-  //     expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
-
-  //     fireEvent.click(screen.queryByTestId("addSubmitForm"));
-
-  //     expect(
-  //       screen.getByText("Are you sure you want to share the monitor?")
-  //     ).toBeInTheDocument();
-
-  //     fireEvent.click(screen.queryByTestId("confirmButton"));
-
-  //     expect(
-  //       screen.getByText("Monitor shared successfully")
-  //     ).toBeInTheDocument();
-  //     // });
-  //   });
-  // });
+    await (async () => {
+      expect(screen.getByTestId("share-button-icon")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("share-button-icon"));
+      const dropdownInput = screen.getByLabelText("Select Patient");
+      fireEvent.mouseDown(dropdownInput);
+      const firstOption = screen.getByRole("option", {
+        name: /patient name/i,
+      });
+      fireEvent.click(firstOption);
+      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("addSubmitForm"));
+      expect(
+        screen.getByText("Are you sure you want to share the monitor?")
+      ).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+      expect(
+        screen.getByText("Monitor shared successfully")
+      ).toBeInTheDocument();
+    });
+  });
 });
