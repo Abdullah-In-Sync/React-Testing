@@ -75,25 +75,20 @@ const AdminAddUserRole: NextPage = () => {
   };
 
   return (
-    <>
-      <Layout
-        boxStyle={{ height: "100vh" }}
-        cardWrapper={{ minHeight: "85vh" }}
-      >
-        <Loader
-          visible={loadingModule || loadingOrganizations || addUserRoleLoading}
+    <Layout boxStyle={{ height: "100vh" }} cardWrapper={{ minHeight: "85vh" }}>
+      <Loader
+        visible={loadingModule || loadingOrganizations || addUserRoleLoading}
+      />
+      <ContentHeader title="Add User Role" />
+      {!loadingModule && !loadingOrganizations && getAdminModuleList && (
+        <AddUserRole
+          organizationList={organizationList}
+          modulelistData={getAdminModuleList}
+          submitForm={handleSavePress}
+          confirmRef={confirmRef}
         />
-        <ContentHeader title="Add User Role" />
-        {!loadingModule && !loadingOrganizations && getAdminModuleList && (
-          <AddUserRole
-            organizationList={organizationList}
-            modulelistData={getAdminModuleList}
-            submitForm={handleSavePress}
-            confirmRef={confirmRef}
-          />
-        )}
-      </Layout>
-    </>
+      )}
+    </Layout>
   );
 };
 

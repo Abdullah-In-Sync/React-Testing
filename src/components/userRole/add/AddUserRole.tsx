@@ -70,11 +70,7 @@ const AddUserRole: React.FC<ViewProps> = ({
     );
   };
 
-  return (
-    <>
-      <ConfirmWrapper ref={confirmRef}>{commonform()}</ConfirmWrapper>
-    </>
-  );
+  return <ConfirmWrapper ref={confirmRef}>{commonform()}</ConfirmWrapper>;
 };
 
 export default AddUserRole;

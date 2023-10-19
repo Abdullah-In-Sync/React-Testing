@@ -42,7 +42,11 @@ const TableAddUserRole: React.FC<ViewProps> = ({
                 Modules
               </TableCell>
               {privilegesData.map((item) => {
-                return <TableCell align="center">{item.name}</TableCell>;
+                return (
+                  <TableCell key={`prev_${item._id}`} align="center">
+                    {item.name}
+                  </TableCell>
+                );
               })}
             </TableRow>
           </TableHead>

@@ -12,7 +12,6 @@ import { useStyles } from "../tableAddUserRoleStyles";
 interface ViewProps {
   modulesData: GetAdminModuleList;
   formikProps?: any;
-  onChangePrivilege?: any;
   onPressCancel?: any;
   organizationList?: any;
 }
@@ -50,94 +49,92 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   };
 
   return (
-    <>
-      <Form className={styles.addUserForm}>
-        <Box className="row1">
-          <FormikTextField
-            name="name"
-            id="name"
-            fullWidth={true}
-            inputProps={{ "data-testid": "userRoleName" }}
-            variant="outlined"
-            className="form-control-bg"
-            size="small"
-            placeholder="Enter User Role*"
-          />
+    <Form className={styles.addUserForm}>
+      <Box className="row1">
+        <FormikTextField
+          name="name"
+          id="name"
+          fullWidth={true}
+          inputProps={{ "data-testid": "userRoleName" }}
+          variant="outlined"
+          className="form-control-bg"
+          size="small"
+          placeholder="Enter User Role*"
+        />
 
-          <FormikSelectDropdown
-            name="accessibility"
-            label="Select Accessibility*"
-            options={accessibility}
-            mappingKeys={["id", "label"]}
-            size="small"
-            className="form-control-bg"
-            showDefaultSelectOption={false}
-            extraProps={{ "data-testid": "accessibilitySelect" }}
-          />
+        <FormikSelectDropdown
+          name="accessibility"
+          label="Select Accessibility*"
+          options={accessibility}
+          mappingKeys={["id", "label"]}
+          size="small"
+          className="form-control-bg"
+          showDefaultSelectOption={false}
+          extraProps={{ "data-testid": "accessibilitySelect" }}
+        />
 
-          <FormikSelectDropdown
-            fullWidth
-            inputProps={{
-              "data-testid": organizationList[0]?.name,
-            }}
-            onChange={handleChange}
-            id="organizationSelect"
-            labelId="organizationSelect"
-            name="org_id"
-            label="Select Organization*"
-            options={[
-              ...[{ _id: "all", name: "Select All" }],
-              ...organizationList,
-            ]}
-            mappingKeys={["_id", "name"]}
-            size="small"
-            className="form-control-bg multiSelect"
-            extraProps={{ "data-testid": "organizationSelect" }}
-            multiSelect={csvDecode(org_id)}
-          />
+        <FormikSelectDropdown
+          fullWidth
+          inputProps={{
+            "data-testid": organizationList[0]?.name,
+          }}
+          onChange={handleChange}
+          id="organizationSelect"
+          labelId="organizationSelect"
+          name="org_id"
+          label="Select Organization*"
+          options={[
+            ...[{ _id: "all", name: "Select All" }],
+            ...organizationList,
+          ]}
+          mappingKeys={["_id", "name"]}
+          size="small"
+          className="form-control-bg multiSelect"
+          extraProps={{ "data-testid": "organizationSelect" }}
+          multiSelect={csvDecode(org_id)}
+        />
 
-          <FormikSelectDropdown
-            name="position"
-            label="Select Position*"
-            options={navPosition}
-            mappingKeys={["id", "label"]}
-            size="small"
-            className="form-control-bg"
-            showDefaultSelectOption={false}
-            extraProps={{ "data-testid": "navPositionSelect" }}
-          />
+        <FormikSelectDropdown
+          name="position"
+          label="Select Position*"
+          options={navPosition}
+          mappingKeys={["id", "label"]}
+          size="small"
+          className="form-control-bg"
+          showDefaultSelectOption={false}
+          extraProps={{ "data-testid": "navPositionSelect" }}
+        />
+      </Box>
+      <Box>
+        <TableAddUserRole
+          modulesData={modulesData}
+          onChangePrivilege={onChangePrivilege}
+          formikProps={formikProps}
+        />
+      </Box>
+      <Box className="bottomActionButtonsWrapper">
+        <Box>
+          <CommonButton
+            type="submit"
+            data-testid="submitForm"
+            variant="contained"
+            disabled={isSubmitting}
+          >
+            Save
+          </CommonButton>
         </Box>
         <Box>
-          <TableAddUserRole
-            modulesData={modulesData}
-            onChangePrivilege={onChangePrivilege}
-            formikProps={formikProps}
-          />
+          <CommonButton
+            variant="contained"
+            className="cancelButton"
+            data-testid="cancelForm"
+            onClick={onPressCancel}
+          >
+            Cancel
+          </CommonButton>
         </Box>
-        <Box className="bottomActionButtonsWrapper">
-          <Box>
-            <CommonButton
-              type="submit"
-              data-testid="submitForm"
-              variant="contained"
-              disabled={isSubmitting}
-            >
-              Save
-            </CommonButton>
-          </Box>
-          <Box>
-            <CommonButton
-              variant="contained"
-              className="cancelButton"
-              data-testid="cancelForm"
-              onClick={onPressCancel}
-            >
-              Cancel
-            </CommonButton>
-          </Box>
-        </Box>
-      </Form>
-    </>
+      </Box>
+    </Form>
   );
 };
 
