@@ -5,7 +5,6 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 import HomeIcon from "@mui/icons-material/Home";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import LockIcon from "@mui/icons-material/Lock";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined";
 import PersonIcon from "@mui/icons-material/Person";
@@ -15,6 +14,7 @@ import TungstenIcon from "@mui/icons-material/Tungsten";
 
 import { SpaOutlined } from "@mui/icons-material";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import LockPersonIcon from "@mui/icons-material/LockPerson";
 
 type RoutesType =
   | {
@@ -57,8 +57,8 @@ export const superadmin_routes: RoutesType[] = [
   {
     key: 4,
     label: "Access Control Listing",
-    path: "/admin/userRole/add/",
-    icon: <LockIcon />,
+    path: "/admin/accessControl",
+    icon: <LockPersonIcon />,
   },
   {
     key: 5,
@@ -66,6 +66,7 @@ export const superadmin_routes: RoutesType[] = [
     path: "/admin/therapist/list",
     icon: <PsychologyIcon />,
   },
+
   {
     key: 6,
     label: "Library",
