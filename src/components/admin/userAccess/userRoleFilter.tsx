@@ -3,6 +3,7 @@ import * as React from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "./userRoleStyles";
+import { useRouter } from "next/router";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -41,6 +42,7 @@ const UserRoleFilter: React.FC<ViewProps> = ({
   onChangeFilterDropdown,
 }) => {
   const styles = useStyles();
+  const router = useRouter();
   const userRoleButtons = () => {
     return (
       <Stack>
@@ -81,13 +83,21 @@ const UserRoleFilter: React.FC<ViewProps> = ({
             />
           </Box>
           <Box>
-            <Button data-testid="addUserRoleButton" variant="contained">
+            <Button
+              data-testid="addUserRoleButton"
+              variant="contained"
+              onClick={onPressCreateButton}
+            >
               Add User Role
             </Button>
           </Box>
         </Stack>
       </Stack>
     );
+  };
+
+  const onPressCreateButton = () => {
+    router.push("/admin/userRole/add");
   };
 
   return <Box className="actionsWrapper">{userRoleButtons()}</Box>;
