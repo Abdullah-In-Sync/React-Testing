@@ -291,8 +291,9 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               variant="contained"
               type="submit"
               style={{
-                padding: "5px 79px 5px 79px",
-                fontSize: "20px",
+                paddingLeft: "40px",
+                paddingRight: "40px",
+                marginRight: "10px",
               }}
               disabled={isEnableBtn}
               onClick={() => onSubmitHandle(nodes, edges)}
@@ -304,9 +305,9 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
               color="secondary"
               variant="contained"
               style={{
-                margin: "0px 27px 0px 27px",
-                padding: "5px 79px 5px 79px",
-                fontSize: "20px",
+                paddingLeft: "40px",
+                paddingRight: "40px",
+                backgroundColor: "#6BA08E",
               }}
               onClick={() => onCancel()}
             >

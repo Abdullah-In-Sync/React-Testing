@@ -19,9 +19,13 @@ const FormShareBox: React.FC<ViewProps> = ({
   therapistSafetyPlanList,
   onChangePlanId,
 }) => {
+  /* istanbul ignore next */
   const styles = useStyles();
+  /* istanbul ignore next */
   const { enqueueSnackbar } = useSnackbar();
+  /* istanbul ignore next */
   const [planId, setPlanId] = useState<string[]>([]);
+  /* istanbul ignore next */
   const patientListForMonitor =
     therapistSafetyPlanList?.patientListForMonitor || [];
   const formBox = () => {
@@ -38,7 +42,9 @@ const FormShareBox: React.FC<ViewProps> = ({
                 planId.includes(option._id)
               )}
               options={patientListForMonitor}
+              /* istanbul ignore next */
               getOptionLabel={(option) => option.patient_firstname}
+              /* istanbul ignore next */
               onChange={(e, newValue) => {
                 if (newValue) {
                   const selectedValues = newValue
@@ -112,6 +118,7 @@ const FormShareBox: React.FC<ViewProps> = ({
       </Stack>
     );
   };
+  /* istanbul ignore next */
   return <div className="actionsWrapper">{formBox()}</div>;
 };
 

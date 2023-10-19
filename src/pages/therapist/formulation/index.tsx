@@ -412,24 +412,30 @@ const TherapistFormulation = () => {
           <Box sx={crudButtons}>
             <AddButton
               href="/therapist/resource"
+              style={{
+                backgroundColor: "#6EC9DB",
+              }}
               className="mr-3"
               label="Resource"
               data-testid={`resource`}
             />
             <AddButton
               href="/therapist/formulation"
-              style={{
-                backgroundColor: "#6EC9DB",
-              }}
               className="mr-3"
               label="Formulation"
             />
             <AddButton
+              style={{
+                backgroundColor: "#6EC9DB",
+              }}
               href="/therapist/resource/add"
               className="mr-3"
               label="Add Resource"
             />
             <AddButton
+              style={{
+                backgroundColor: "#6EC9DB",
+              }}
               href="/therapist/resource/create"
               className="mr-3"
               label="Create Resource"
