@@ -1,16 +1,17 @@
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import FeedbackIcon from "@mui/icons-material/Feedback";
 import GroupsIcon from "@mui/icons-material/Groups";
 import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 import HomeIcon from "@mui/icons-material/Home";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import LockIcon from "@mui/icons-material/Lock";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import PsychologyIcon from "@mui/icons-material/Psychology";
-import TungstenIcon from "@mui/icons-material/Tungsten";
 import SettingsIcon from "@mui/icons-material/Settings";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import TungstenIcon from "@mui/icons-material/Tungsten";
 
 import { SpaOutlined } from "@mui/icons-material";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
@@ -55,54 +56,60 @@ export const superadmin_routes: RoutesType[] = [
   },
   {
     key: 4,
+    label: "Access Control Listing",
+    path: "/admin/userRole/add/",
+    icon: <LockIcon />,
+  },
+  {
+    key: 5,
     label: "Therapist",
     path: "/admin/therapist/list",
     icon: <PsychologyIcon />,
   },
   {
-    key: 5,
+    key: 6,
     label: "Library",
     path: "/admin/resource",
     icon: <LibraryBooksIcon />,
   },
   {
-    key: 6,
+    key: 7,
     label: "Assesment",
     path: "/admin/assessment",
     icon: <MedicalInformationOutlinedIcon />,
   },
   {
-    key: 7,
+    key: 8,
     label: "Relapse",
     path: "/admin/relapsePlan",
     icon: <TungstenIcon />,
   },
   {
-    key: 8,
+    key: 9,
     label: "Safety Plan",
     path: "/admin/safetyPlan/",
     icon: <HealthAndSafetyOutlinedIcon />,
   },
   {
-    key: 9,
+    key: 10,
     label: "Measures",
     path: "/admin/measures",
     icon: <EqualizerIcon />,
   },
   {
-    key: 10,
+    key: 11,
     label: "Monitors",
     path: "/admin/monitor",
     icon: <MonitorOutlinedIcon />,
   },
   {
-    key: 11,
+    key: 12,
     label: "Feedback",
     path: "/admin/feedback",
     icon: <FeedbackIcon />,
   },
   {
-    key: 12,
+    key: 13,
     label: "Agenda",
     path: "/admin/agenda",
     icon: <AppRegistrationIcon />,

@@ -135,3 +135,29 @@ export const FILEEXTENSION = [
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
+
+export const accessibility = [
+  {
+    label: "Admin",
+    id: "admin",
+  },
+  {
+    label: "Therapist",
+    id: "therapist",
+  },
+  {
+    label: "Patient",
+    id: "patient",
+  },
+];
+
+export const navPosition = [
+  {
+    label: "Sidebar",
+    id: "sidebar",
+  },
+  {
+    label: "Tabs",
+    id: "tabs",
+  },
+];
