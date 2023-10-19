@@ -14,7 +14,6 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 import { SpaOutlined } from "@mui/icons-material";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import Image from "next/image";
 import LockPersonIcon from "@mui/icons-material/LockPerson";
 
 type RoutesType =

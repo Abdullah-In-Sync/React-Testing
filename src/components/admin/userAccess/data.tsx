@@ -35,13 +35,6 @@ export const userRoleColumns: readonly Column[] = [
       );
     },
   },
-//   {
-//     id: "Therapy",
-//     label: "Therapy",
-//     minWidth: 170,
-//     align: "center",
-//     format: (value) => <Typography>{value.therapy_name}</Typography>,
-//   },
   {
     id: "actions",
     label: "Actions",
