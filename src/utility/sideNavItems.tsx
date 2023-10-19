@@ -5,7 +5,6 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import HealthAndSafetyOutlinedIcon from "@mui/icons-material/HealthAndSafetyOutlined";
 import HomeIcon from "@mui/icons-material/Home";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import LockIcon from "@mui/icons-material/Lock";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import MonitorOutlinedIcon from "@mui/icons-material/MonitorOutlined";
 import PersonIcon from "@mui/icons-material/Person";
