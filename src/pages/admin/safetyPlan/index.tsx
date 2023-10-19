@@ -207,6 +207,7 @@ const SafetyPlanPage: NextPage = () => {
           onChangeFilterDropdown={onChangeFilterDropdown}
           loadingSafetyPlanList={loadingSafetyPlanList}
           pageActionButtonClick={handleActionButtonClick}
+          platForm={"safetyPlan"}
         />
         <DeleteSureModal
           modalOpen={deleteConfirmation}

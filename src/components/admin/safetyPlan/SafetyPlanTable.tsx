@@ -9,6 +9,7 @@ import * as React from "react";
 import { columns } from "./data";
 import { useStyles } from "./safetyPlanStyles";
 import { agendaColumns } from "../agenda/data";
+import { userRoleColumns } from "../userAccess/data";
 
 interface ViewProps {
   safetyPlanList?: any;
@@ -18,7 +19,7 @@ interface ViewProps {
   tableCurentPage?: number;
   rowsLimit?: number;
   loadingSafetyPlanList?: boolean;
-  isAgenda?: boolean;
+  platForm: string;
 }
 
 const SafetyPlanTable: React.FC<ViewProps> = ({
@@ -29,14 +30,24 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
   tableCurentPage,
   rowsLimit,
   loadingSafetyPlanList,
-  isAgenda,
+  platForm,
 }) => {
   const styles = useStyles();
 
   /* istanbul ignore next */
   const { data: list, total = 0 } = safetyPlanList || {};
+  const platform = {
+    safetyPlan: columns,
+    agenda: agendaColumns,
+    userRole: userRoleColumns,
+  };
+  const msg = {
+    safetyPlan: "Currently you have not created any safety plan",
+    agenda: "Currently you have not created any agenda",
+    userRole: "Currently you have not created any user role",
+  };
   /* istanbul ignore next */
-  const column = isAgenda ? agendaColumns : columns;
+  const column = platform[platForm];
   const messageCheck = () => {
     /* istanbul ignore next */
     if (loadingSafetyPlanList) return <Typography>Loading...</Typography>;
@@ -44,11 +55,7 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
       return (
         <>
           <Typography className="alertHead">Oops!</Typography>
-          <Typography>
-            {isAgenda
-              ? "Currently you have not created any agenda"
-              : "Currently you have not created any safety plan"}
-          </Typography>
+          <Typography>{msg[platForm]}</Typography>
         </>
       );
     /* istanbul ignore next */ else if (

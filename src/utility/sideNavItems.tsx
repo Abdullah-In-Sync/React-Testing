@@ -14,6 +14,8 @@ import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 import { SpaOutlined } from "@mui/icons-material";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import Image from "next/image";
+import LockPersonIcon from "@mui/icons-material/LockPerson";
 
 type RoutesType =
   | {
@@ -55,54 +57,61 @@ export const superadmin_routes: RoutesType[] = [
   },
   {
     key: 4,
+    label: "Access Control Listing",
+    path: "/admin/accessControl",
+    icon: <LockPersonIcon />,
+  },
+  {
+    key: 5,
     label: "Therapist",
     path: "/admin/therapist/list",
     icon: <PsychologyIcon />,
   },
+
   {
-    key: 5,
+    key: 6,
     label: "Library",
     path: "/admin/resource",
     icon: <LibraryBooksIcon />,
   },
   {
-    key: 6,
+    key: 7,
     label: "Assesment",
     path: "/admin/assessment",
     icon: <MedicalInformationOutlinedIcon />,
   },
   {
-    key: 7,
+    key: 8,
     label: "Relapse",
     path: "/admin/relapsePlan",
     icon: <TungstenIcon />,
   },
   {
-    key: 8,
+    key: 9,
     label: "Safety Plan",
     path: "/admin/safetyPlan/",
     icon: <HealthAndSafetyOutlinedIcon />,
   },
   {
-    key: 9,
+    key: 10,
     label: "Measures",
     path: "/admin/measures",
     icon: <EqualizerIcon />,
   },
   {
-    key: 10,
+    key: 11,
     label: "Monitors",
     path: "/admin/monitor",
     icon: <MonitorOutlinedIcon />,
   },
   {
-    key: 11,
+    key: 12,
     label: "Feedback",
     path: "/admin/feedback",
     icon: <FeedbackIcon />,
   },
   {
-    key: 12,
+    key: 13,
     label: "Agenda",
     path: "/admin/agenda",
     icon: <AppRegistrationIcon />,

@@ -3,6 +3,7 @@ import * as safetyPlanInterface from "../../../graphql/SafetyPlan/types";
 import Filter from "./Filter";
 import SafetyPlanTable from "./SafetyPlanTable";
 import AgendaFilter from "../agenda/Filter";
+import UserRoleFilter from "../userAccess/userRoleFilter";
 
 interface ViewProps {
   safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
@@ -18,8 +19,14 @@ interface ViewProps {
   /* istanbul ignore next */
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
-  isAgenda?: boolean;
+  platForm: string;
 }
+
+const platFormComponent = {
+  userRole: (props) => <UserRoleFilter {...props} />,
+  agenda: (props) => <AgendaFilter {...props} />,
+  safetyPlan: (props) => <Filter {...props} />,
+};
 
 const SafetyPlanComponent: React.FC<ViewProps> = ({
   safetyPlanList,
@@ -34,30 +41,17 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
   selectFilterOptions,
   onChangeFilterDropdown,
   loadingSafetyPlanList,
-  isAgenda,
+  platForm,
 }) => {
   return (
     <>
-      {
-        /* istanbul ignore next */
-        isAgenda ? (
-          <AgendaFilter
-            searchInputValue={searchInputValue}
-            onChangeSearchInput={onChangeSearchInput}
-            organizationList={organizationList}
-            selectFilterOptions={selectFilterOptions}
-            onChangeFilterDropdown={onChangeFilterDropdown}
-          />
-        ) : (
-          <Filter
-            searchInputValue={searchInputValue}
-            onChangeSearchInput={onChangeSearchInput}
-            organizationList={organizationList}
-            selectFilterOptions={selectFilterOptions}
-            onChangeFilterDropdown={onChangeFilterDropdown}
-          />
-        )
-      }
+      {platFormComponent[platForm]?.({
+        searchInputValue,
+        onChangeSearchInput,
+        organizationList,
+        selectFilterOptions,
+        onChangeFilterDropdown,
+      })}
 
       <SafetyPlanTable
         safetyPlanList={safetyPlanList}
@@ -67,7 +61,7 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
         tableCurentPage={tableCurentPage}
         rowsLimit={rowsLimit}
         loadingSafetyPlanList={loadingSafetyPlanList}
-        isAgenda={isAgenda}
+        platForm={platForm}
       />
     </>
   );
