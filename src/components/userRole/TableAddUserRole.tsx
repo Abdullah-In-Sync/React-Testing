@@ -14,12 +14,14 @@ interface ViewProps {
   modulesData: GetAdminModuleList;
   formikProps?: any;
   onChangePrivilege?: any;
+  view?: boolean;
 }
 
 const TableAddUserRole: React.FC<ViewProps> = ({
   modulesData,
   formikProps,
   onChangePrivilege,
+  view,
 }) => {
   const styles = useStyles();
   const {
@@ -77,6 +79,7 @@ const TableAddUserRole: React.FC<ViewProps> = ({
                     return (
                       <TableCell key={item._id} align="center">
                         <FormControlLabel
+                          className={view && "disabledElement"}
                           data-testid={`${row._id}_${item._id}_check`}
                           control={
                             <Checkbox

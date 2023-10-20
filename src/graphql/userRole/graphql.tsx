@@ -43,3 +43,33 @@ export const ADMIN_ADD_USER_ROLE = gql`
     }
   }
 `;
+
+export const ADMIN_VIEW_ROLE = gql`
+  query AdminViewRole($role_id: ID!) {
+    adminViewRole(role_id: $role_id) {
+      _id
+      accessibility
+      created_date
+      org_id
+      name
+      organization_name
+      position
+      privileges
+      status
+      updated_date
+    }
+  }
+`;
+
+export const ADMIN_UPDATE_USER_ROLE = gql`
+  mutation UpdateAdminRoleById(
+    $role_id: String!
+    $updateRole: UpdateRoleInput
+  ) {
+    updateAdminRoleById(role_id: $role_id, updateRole: $updateRole) {
+      result
+      message
+      role_id
+    }
+  }
+`;
