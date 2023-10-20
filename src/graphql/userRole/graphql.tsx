@@ -75,3 +75,16 @@ export const ADMIN_ADD_USER_ROLE = gql`
     }
   }
 `;
+
+export const UPDATE_ADMIN_ROLE_BY_ID = gql`
+  mutation updateAdminRoleById(
+    $role_id: String!
+    $updateRole: UpdateRoleInput
+  ) {
+    updateAdminRoleById(role_id: $role_id, updateRole: $updateRole) {
+      message
+      result
+      role_id
+    }
+  }
+`;

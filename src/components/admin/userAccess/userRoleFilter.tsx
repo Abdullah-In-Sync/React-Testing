@@ -2,7 +2,7 @@ import { Box, Button, Stack } from "@mui/material";
 import * as React from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
-import { useStyles } from "./userRoleStyles";
+import { useStyles } from "../safetyPlan/safetyPlanStyles";
 import { useRouter } from "next/router";
 
 interface ViewProps {
