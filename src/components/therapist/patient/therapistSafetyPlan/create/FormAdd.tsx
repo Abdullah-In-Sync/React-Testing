@@ -3,6 +3,7 @@ import { Form } from "formik";
 import * as React from "react";
 import { useStyles } from "./therapistSafetyPlanStyles";
 import SingleSelectComponent from "../../../../common/SelectBox/SingleSelect/SingleSelectComponent";
+import { useState } from "react";
 
 interface ViewProps {
   buttonClick?: (value) => void;
@@ -18,10 +19,9 @@ const FormBox: React.FC<ViewProps> = ({
   onChangePlanId,
 }) => {
   const styles = useStyles();
+  const [planId, setPlanId] = useState("");
 
   const formBox = () => {
-    const [planId, setPlanId] = React.useState("");
-
     const set2 = (
       e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
     ) => {
