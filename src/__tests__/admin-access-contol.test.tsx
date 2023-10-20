@@ -10,7 +10,10 @@ import {
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
-import { GET_USER_ROLE_LIST } from "../graphql/userRole/graphql";
+import {
+  GET_USER_ROLE_LIST,
+  UPDATE_ADMIN_ROLE_BY_ID,
+} from "../graphql/userRole/graphql";
 import AccessControlPage from "../pages/admin/accessControl";
 
 jest.mock("next/router", () => ({
@@ -236,6 +239,28 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_ADMIN_ROLE_BY_ID,
+    variables: {
+      role_id: "e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9",
+      updateRole: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateAdminRoleById: {
+        message: "Record has been successfully deleted!",
+        result: true,
+        role_id: "e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9",
+        __typename: "adminRoleUpdate",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -276,5 +301,20 @@ describe("Render admin user role list screen", () => {
     await waitFor(async () => {
       expect(screen.getByText("test88")).toBeInTheDocument();
     });
+  });
+
+  it("should delete user role", async () => {
+    await sut();
+    const deleteBtn = await screen.findByTestId(
+      "iconButton_delete_e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9"
+    );
+    expect(deleteBtn).toBeInTheDocument();
+    fireEvent.click(deleteBtn);
+    const confirmBtn = await screen.findByTestId("confirmButton");
+    expect(confirmBtn).toBeInTheDocument();
+    fireEvent.click(confirmBtn);
+    expect(
+      await screen.findByText("User Role deleted successfully!")
+    ).toBeInTheDocument();
   });
 });

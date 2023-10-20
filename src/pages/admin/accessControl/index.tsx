@@ -23,6 +23,7 @@ const AccessControlPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [listData, setListData] = useState({ data: [], total: 0 });
   const [isConfirm, setIsConfirm] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState("");
 
   const [searchKey, setSearchKey] = useState("");
   const [updateByRoleId] = useMutation(UPDATE_ADMIN_ROLE_BY_ID);
@@ -73,14 +74,14 @@ const AccessControlPage: NextPage = () => {
       },
     });
 
-  const onUpdateUserRoleSubmit = async (roleId) => {
+  const onUpdateUserRoleSubmit = async () => {
     setLoader(true);
     try {
       await updateByRoleId({
         variables: {
-          role_id: roleId,
+          role_id: selectedRoleId,
           updateRole: {
-            status: 1,
+            status: 0,
           },
         },
         onCompleted: (data) => {
@@ -189,8 +190,11 @@ const AccessControlPage: NextPage = () => {
   /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
     /* istanbul ignore next */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { pressedIconButton, agenda_id } = value;
+    const { pressedIconButton, _id } = value;
+    if (pressedIconButton == "delete") {
+      setIsConfirm(true);
+      setSelectedRoleId(_id);
+    }
   };
 
   return (
@@ -219,7 +223,8 @@ const AccessControlPage: NextPage = () => {
           label="Are you sure you want to delete this user role ?"
           description="(Note: no HCP will be able to access MyHelp in the future.)"
           onCancel={() => setIsConfirm(false)}
-          onConfirm={() => setIsConfirm(false)}
+          onConfirm={onUpdateUserRoleSubmit}
+          isWarning={true}
         />
       )}
     </>
