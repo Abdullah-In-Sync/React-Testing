@@ -25,7 +25,7 @@ interface ViewProps {
   initialValue?: any;
 }
 
-const formBox: React.FC<ViewProps> = ({
+const FormBox: React.FC<ViewProps> = ({
   dataSubmit,
   editMode,
   initialValue,
@@ -251,4 +251,4 @@ const formBox: React.FC<ViewProps> = ({
   );
 };
 
-export default formBox;
+export default FormBox;
