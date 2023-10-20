@@ -1,36 +1,27 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import SafetyPlanComponent from "../../../components/admin/safetyPlan";
 import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
-import { GET_ADMIN_AGENDA_LIST } from "../../../graphql/agenda/graphql";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import { useRouter } from "next/router";
-import ConfirmationModal from "../../../components/common/ConfirmationModal";
-import { ADMIN_UPDATE_AGENDA_BY_ID } from "../../../graphql/mutation/resource";
-import { useSnackbar } from "notistack";
+import { GET_USER_ROLE_LIST } from "../../../graphql/userRole/graphql";
 
-const AgendaPage: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
+const AccessControlPage: NextPage = () => {
   const initialPageNo = 1;
-  const router = useRouter();
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
   const [listData, setListData] = useState({ data: [], total: 0 });
-  const [deleteAgendaModal, setDeleteAgendaModal] = useState<boolean>(false);
-  const [deleteAgendaId, setDeleteAgendaId] = useState("");
 
-  const [deleteAdminAgenda] = useMutation(ADMIN_UPDATE_AGENDA_BY_ID);
   const [searchKey, setSearchKey] = useState("");
 
   useEffect(() => {
     getOrgList();
-    getAdminAgendaList({
+    getUserRoleList({
       variables: { limit: rowsLimit, pageNo: initialPageNo },
     });
   }, []);
@@ -48,35 +39,33 @@ const AgendaPage: NextPage = () => {
     },
   });
 
-  const [getAdminAgendaList, { loading: loadingAgendaList, refetch }] =
-    useLazyQuery(GET_ADMIN_AGENDA_LIST, {
+  const [getUserRoleList, { loading: loadingUserRoleList }] = useLazyQuery(
+    GET_USER_ROLE_LIST,
+    {
       fetchPolicy: "no-cache",
       onCompleted: (data) => {
         /* istanbul ignore next */
-        if (data.getAdminAgendaList?.agendalist) {
+        if (data.getUserRoleList?.rolelist) {
           /* istanbul ignore next */
-          const newData = data.getAdminAgendaList?.agendalist.map((a) => {
+          const newData = data.getUserRoleList.rolelist.map((a) => {
             return {
               _id: a._id,
-              display_order: a.display_order,
-              session_id: a.session_id,
-              session: a.session_id,
-              created_date: a.agenda_detail[0]?.created_date,
-              agenda_id: a.agenda_detail[0]?._id,
-              therapy_name: a.therapy_detail[0]?.therapy_name,
-              agenda_name: a.agenda_detail[0]?.agenda_name,
+              userRole: a.name,
+              organization: a.organization_name,
+              accessibility: a.accessibility,
             };
           });
           /* istanbul ignore next */
           setListData({
             data: newData,
-            total: data.getAdminAgendaList?.total,
+            total: data.getUserRoleList.totalcount,
           });
         }
         /* istanbul ignore next */
         setLoader(false);
       },
-    });
+    }
+  );
 
   /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
@@ -86,7 +75,7 @@ const AgendaPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getAdminAgendaList({
+    getUserRoleList({
       variables: {
         limit: rowsLimit,
         pageNo: newPage + 1,
@@ -106,7 +95,7 @@ const AgendaPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getAdminAgendaList({
+    getUserRoleList({
       variables: {
         limit: +event.target.value,
         pageNo: initialPageNo,
@@ -122,7 +111,7 @@ const AgendaPage: NextPage = () => {
   /* istanbul ignore next */
   useEffect(() => {
     /* istanbul ignore next */
-    getAdminAgendaList({
+    getUserRoleList({
       /* istanbul ignore next */
       variables: {
         limit: rowsLimit,
@@ -150,12 +139,7 @@ const AgendaPage: NextPage = () => {
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     /* istanbul ignore next */
-    if (e.target.name == "orgId") {
-      /* istanbul ignore next */
-      delete temp["therapy_id"];
-    }
-    /* istanbul ignore next */
-    getAdminAgendaList({
+    getUserRoleList({
       variables: {
         limit: rowsLimit,
         pageNo: initialPageNo,
@@ -173,58 +157,13 @@ const AgendaPage: NextPage = () => {
     /* istanbul ignore next */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { pressedIconButton, agenda_id } = value;
-
-    if (pressedIconButton === "edit") {
-      router.push(`/admin/agenda/edit/${agenda_id}/`);
-    }
-
-    if (pressedIconButton === "delete") {
-      setDeleteAgendaModal(true);
-      setDeleteAgendaId(agenda_id);
-    }
   };
 
-  /* istanbul ignore next */
-  const clearIsConfirmCancel = () => {
-    setDeleteAgendaModal(false);
-  };
-
-  const deleteAgendaHandler = async () => {
-    try {
-      deleteAdminAgenda({
-        variables: {
-          agenda_id: deleteAgendaId,
-          updateAgenda: {
-            agenda_status: 0,
-          },
-        },
-        onCompleted: () => {
-          setDeleteAgendaModal(false);
-          /* istanbul ignore next */
-          enqueueSnackbar("Agenda deleted successfully!", {
-            variant: "success",
-            autoHideDuration: 2000,
-          });
-          /* istanbul ignore next */
-          refetch();
-        },
-      });
-      setLoader(false);
-    } catch (e) {
-      /* istanbul ignore next */
-      setLoader(false);
-      /* istanbul ignore next */
-      enqueueSnackbar("Something is wrong.", {
-        variant: "error",
-        autoHideDuration: 2000,
-      });
-    }
-  };
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
-        <ContentHeader title="Agenda" />
+        <ContentHeader title="Access Control Listing" />
         <SafetyPlanComponent
           safetyPlanList={listData}
           onPageChange={onPageChange}
@@ -236,20 +175,12 @@ const AgendaPage: NextPage = () => {
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          loadingSafetyPlanList={loadingAgendaList}
+          loadingSafetyPlanList={loadingUserRoleList}
           pageActionButtonClick={handleActionButtonClick}
-          platForm={"agenda"}
+          platForm={"userRole"}
         />
       </Layout>
-
-      {deleteAgendaModal && (
-        <ConfirmationModal
-          label="Are you sure, you want to delete this agenda?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={deleteAgendaHandler}
-        />
-      )}
     </>
   );
 };
-export default AgendaPage;
+export default AccessControlPage;
