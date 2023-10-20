@@ -137,8 +137,7 @@ mocksData.push({
   },
   result: {
     data: {
-      adminAddRole: {
-        duplicateNames: null,
+      updateAdminRoleById: {
         message: "User Role added successfully!",
         result: true,
       },
@@ -163,7 +162,7 @@ mocksData.push({
   },
   result: {
     data: {
-      adminAddRole: {
+      updateAdminRoleById: {
         message: "Error message!",
         result: false,
       },
@@ -188,7 +187,7 @@ mocksData.push({
   },
   result: {
     data: {
-      adminAddRole: null,
+      updateAdminRoleById: null,
     },
   },
 });
@@ -247,5 +246,16 @@ describe("Admin update user role", () => {
     expect(
       await screen.findByText("Server error please try later.")
     ).toBeInTheDocument();
+  });
+
+  it("when cancel button press", async () => {
+    await sut();
+    const cancelButton = await screen.findByTestId("cancelForm");
+    fireEvent.click(cancelButton);
+    const confirmButton = screen.getByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    expect(pushMock).toBeCalledWith("/admin/accessControl");
   });
 });

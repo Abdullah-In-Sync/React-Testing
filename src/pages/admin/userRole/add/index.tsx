@@ -13,8 +13,10 @@ import {
 } from "../../../../graphql/userRole/graphql";
 import { ModulesData } from "../../../../graphql/userRole/types";
 import ContentHeader from "../../../../components/common/ContentHeader";
+import { useRouter } from "next/router";
 
 const AdminAddUserRole: NextPage = () => {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const confirmRef = useRef<ConfirmElement>(null);
   const [addAdminUserRole, { loading: addUserRoleLoading }] =
@@ -29,6 +31,7 @@ const AdminAddUserRole: NextPage = () => {
       variables: {
         accessibility: "admin",
       },
+      fetchPolicy: "cache-and-network",
     });
 
   const onSubmitForm = async (formFields, doneCallback): Promise<void> => {
@@ -49,6 +52,7 @@ const AdminAddUserRole: NextPage = () => {
             enqueueSnackbar("User role added successfully!", {
               variant: "success",
             });
+            router.push(`/admin/accessControl`);
           } else if (!result && message) {
             enqueueSnackbar(message, {
               variant: "error",
@@ -76,7 +80,7 @@ const AdminAddUserRole: NextPage = () => {
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
-      confirmFunction: null,
+      confirmFunction: () => router.push(`/admin/accessControl`),
       description:
         "Are you sure you want to cancel the user role HCP without saving?",
     });

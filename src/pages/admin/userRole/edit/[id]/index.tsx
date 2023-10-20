@@ -30,13 +30,16 @@ const AdminAddUserRole: NextPage = () => {
   const {
     data: { getOrganizationData: organizationList = [] } = {},
     loading: loadingOrganizations,
-  } = useQuery(GET_ORGANIZATION_LIST);
+  } = useQuery(GET_ORGANIZATION_LIST, {
+    fetchPolicy: "cache-and-network",
+  });
 
   const { data: { getAdminModuleList = {} } = {}, loading: loadingModule } =
     useQuery<ModulesData>(GET_ADMIN_MODULE_LIST, {
       variables: {
         accessibility: "admin",
       },
+      fetchPolicy: "cache-and-network",
     });
 
   const { data: { adminViewRole = {} } = {}, loading: loadingAdminViewRole } =
@@ -44,6 +47,7 @@ const AdminAddUserRole: NextPage = () => {
       variables: {
         role_id,
       },
+      fetchPolicy: "cache-and-network",
     });
 
   const onSubmitForm = async (formFields, doneCallback) => {
@@ -63,12 +67,16 @@ const AdminAddUserRole: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           const {
-            adminAddRole: { result = undefined, message = undefined } = {},
+            updateAdminRoleById: {
+              result = undefined,
+              message = undefined,
+            } = {},
           } = data;
           if (result) {
             enqueueSnackbar("User role updated successfully!", {
               variant: "success",
             });
+            router.push(`/admin/accessControl`);
           } else if (!result && message) {
             enqueueSnackbar(message, {
               variant: "error",
@@ -96,7 +104,7 @@ const AdminAddUserRole: NextPage = () => {
 
   const onPressCancel = () => {
     confirmRef.current.openConfirm({
-      confirmFunction: null,
+      confirmFunction: () => router.push(`/admin/accessControl`),
       description:
         "Are you sure you want to cancel the user role HCP without saving?",
     });

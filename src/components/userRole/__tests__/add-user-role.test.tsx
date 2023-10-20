@@ -10,11 +10,14 @@ import {
 } from "../../../graphql/userRole/graphql";
 import AdminAddUserRole from "../../../pages/admin/userRole/add";
 import theme from "../../../styles/theme/theme";
+import { useRouter } from "next/router";
 
 jest.mock("next/router", () => ({
   __esModule: true,
   useRouter: jest.fn(),
 }));
+
+const pushMock = jest.fn();
 
 const mocksData = [];
 
@@ -193,6 +196,12 @@ const selectDropdownByTestid = async (dropdonwTestid) => {
   fireEvent.click(optionsSelect[0]);
 };
 
+beforeEach(() => {
+  (useRouter as jest.Mock).mockReturnValue({
+    push: pushMock,
+  });
+});
+
 describe("Admin add user role", () => {
   it("should render admin module and add user role", async () => {
     await sut();
@@ -220,7 +229,6 @@ describe("Admin add user role", () => {
     fireEvent.change(await screen.findByTestId("userRoleName"), {
       target: { value: "usertestname" },
     });
-    // expect(await screen.findByTestId("moduleId1_prev1_check")).toBeInTheDocument()
     await selectDropdownByTestid("accessibilitySelect");
     await selectDropdownByTestid("navPositionSelect");
 
@@ -240,7 +248,6 @@ describe("Admin add user role", () => {
     fireEvent.change(await screen.findByTestId("userRoleName"), {
       target: { value: "usertestname" },
     });
-    // expect(await screen.findByTestId("moduleId1_prev1_check")).toBeInTheDocument()
     await selectDropdownByTestid("accessibilitySelect");
     await selectDropdownByTestid("navPositionSelect");
 
@@ -250,5 +257,15 @@ describe("Admin add user role", () => {
     expect(
       await screen.findByText("Server error please try later.")
     ).toBeInTheDocument();
+  });
+  it("when cancel button press", async () => {
+    await sut();
+    const cancelButton = await screen.findByTestId("cancelForm");
+    fireEvent.click(cancelButton);
+    const confirmButton = screen.getByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    expect(pushMock).toBeCalledWith("/admin/accessControl");
   });
 });
