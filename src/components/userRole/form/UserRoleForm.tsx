@@ -12,14 +12,16 @@ import { useStyles } from "../tableAddUserRoleStyles";
 interface ViewProps {
   modulesData: GetAdminModuleList;
   formikProps?: any;
-  onPressCancel?: any;
+  onPressCancel?: () => void;
   organizationList?: any;
+  view?: boolean;
 }
 const AddUserRoleForm: React.FC<ViewProps> = ({
   onPressCancel,
   formikProps,
   modulesData,
   organizationList,
+  view,
 }) => {
   const styles = useStyles();
   const {
@@ -50,7 +52,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
 
   return (
     <Form className={styles.addUserForm}>
-      <Box className="row1">
+      <Box className={`row1 ${view && "disabledElement"}`}>
         <FormikTextField
           name="name"
           id="name"
@@ -110,30 +112,34 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           modulesData={modulesData}
           onChangePrivilege={onChangePrivilege}
           formikProps={formikProps}
+          view={view}
         />
       </Box>
-      <Box className="bottomActionButtonsWrapper">
-        <Box>
-          <CommonButton
-            type="submit"
-            data-testid="submitForm"
-            variant="contained"
-            disabled={isSubmitting}
-          >
-            Save
-          </CommonButton>
+      {view && <Box mb={2} />}
+      {!view && (
+        <Box className="bottomActionButtonsWrapper">
+          <Box>
+            <CommonButton
+              type="submit"
+              data-testid="submitForm"
+              variant="contained"
+              disabled={isSubmitting}
+            >
+              Save
+            </CommonButton>
+          </Box>
+          <Box>
+            <CommonButton
+              variant="contained"
+              className="cancelButton"
+              data-testid="cancelForm"
+              onClick={onPressCancel}
+            >
+              Cancel
+            </CommonButton>
+          </Box>
         </Box>
-        <Box>
-          <CommonButton
-            variant="contained"
-            className="cancelButton"
-            data-testid="cancelForm"
-            onClick={onPressCancel}
-          >
-            Cancel
-          </CommonButton>
-        </Box>
-      </Box>
+      )}
     </Form>
   );
 };
