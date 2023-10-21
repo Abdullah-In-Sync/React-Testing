@@ -15,6 +15,7 @@ import {
   GET_ADMIN_MODULE_LIST,
 } from "../../../../../graphql/userRole/graphql";
 import { ModulesData } from "../../../../../graphql/userRole/types";
+import { commonLogic } from "../../../../../components/userRole/hooks/commonLogic";
 
 const AdminAddUserRole: NextPage = () => {
   const router = useRouter();
@@ -24,6 +25,9 @@ const AdminAddUserRole: NextPage = () => {
 
   const { enqueueSnackbar } = useSnackbar();
   const confirmRef = useRef<ConfirmElement>(null);
+  const { handleSavePress, onPressCancel, redirectionWithDisplayMessage } =
+    commonLogic({ confirmRef });
+  const redirectUrl = `/admin/accessControl`;
   const [updateAdminUserRole, { loading: updateUserRoleLoading }] = useMutation(
     ADMIN_UPDATE_USER_ROLE
   );
@@ -72,16 +76,12 @@ const AdminAddUserRole: NextPage = () => {
               message = undefined,
             } = {},
           } = data;
-          if (result) {
-            enqueueSnackbar("User role updated successfully!", {
-              variant: "success",
-            });
-            router.push(`/admin/accessControl`);
-          } else if (!result && message) {
-            enqueueSnackbar(message, {
-              variant: "error",
-            });
-          }
+          redirectionWithDisplayMessage({
+            result,
+            message,
+            cMessage: "User role updated successfully!",
+            redirectUrl,
+          });
         },
       });
     } catch (e) {
@@ -92,22 +92,6 @@ const AdminAddUserRole: NextPage = () => {
     } finally {
       doneCallback();
     }
-  };
-
-  const handleSavePress = (formFields, { setSubmitting }) => {
-    confirmRef.current.openConfirm({
-      confirmFunction: (callback) => onSubmitForm(formFields, callback),
-      description: "Are you sure you want to update user role HCP?",
-      setSubmitting,
-    });
-  };
-
-  const onPressCancel = () => {
-    confirmRef.current.openConfirm({
-      confirmFunction: () => router.push(`/admin/accessControl`),
-      description:
-        "Are you sure you want to cancel the user role HCP without saving?",
-    });
   };
 
   return (
@@ -123,10 +107,21 @@ const AdminAddUserRole: NextPage = () => {
           <EditUserRole
             organizationList={organizationList}
             modulelistData={getAdminModuleList}
-            submitForm={handleSavePress}
+            submitForm={(formFields, formikProps) =>
+              handleSavePress(formFields, formikProps, {
+                onSubmitForm,
+                description: "Are you sure you want to update user role HCP?",
+              })
+            }
             confirmRef={confirmRef}
             viewData={adminViewRole}
-            onPressCancel={onPressCancel}
+            onPressCancel={() =>
+              onPressCancel({
+                description:
+                  "Are you sure you want to cancel the user role HCP without saving?",
+                redirectUrl,
+              })
+            }
           />
         )}
     </Layout>

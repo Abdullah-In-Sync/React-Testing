@@ -3,22 +3,24 @@ import { NextPage } from "next";
 import { useSnackbar } from "notistack";
 import { useRef } from "react";
 import { ConfirmElement } from "../../../../components/common/ConfirmWrapper";
+import ContentHeader from "../../../../components/common/ContentHeader";
 import Loader from "../../../../components/common/Loader";
 import Layout from "../../../../components/layout";
 import AddUserRole from "../../../../components/userRole/add/AddUserRole";
+import { commonLogic } from "../../../../components/userRole/hooks/commonLogic";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
 import {
   ADMIN_ADD_USER_ROLE,
   GET_ADMIN_MODULE_LIST,
 } from "../../../../graphql/userRole/graphql";
 import { ModulesData } from "../../../../graphql/userRole/types";
-import ContentHeader from "../../../../components/common/ContentHeader";
-import { useRouter } from "next/router";
 
 const AdminAddUserRole: NextPage = () => {
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const confirmRef = useRef<ConfirmElement>(null);
+  const { handleSavePress, onPressCancel, redirectionWithDisplayMessage } =
+    commonLogic({ confirmRef });
+  const redirectUrl = `/admin/accessControl`;
   const [addAdminUserRole, { loading: addUserRoleLoading }] =
     useMutation(ADMIN_ADD_USER_ROLE);
   const {
@@ -48,16 +50,12 @@ const AdminAddUserRole: NextPage = () => {
           const {
             adminAddRole: { result = undefined, message = undefined } = {},
           } = data;
-          if (result) {
-            enqueueSnackbar("User role added successfully!", {
-              variant: "success",
-            });
-            router.push(`/admin/accessControl`);
-          } else if (!result && message) {
-            enqueueSnackbar(message, {
-              variant: "error",
-            });
-          }
+          redirectionWithDisplayMessage({
+            result,
+            message,
+            cMessage: "User role added successfully!",
+            redirectUrl,
+          });
         },
       });
     } catch (e) {
@@ -70,22 +68,6 @@ const AdminAddUserRole: NextPage = () => {
     }
   };
 
-  const handleSavePress = (formFields, { setSubmitting }) => {
-    confirmRef.current.openConfirm({
-      confirmFunction: (callback) => onSubmitForm(formFields, callback),
-      description: "Are you sure you want to add user role HCP?",
-      setSubmitting,
-    });
-  };
-
-  const onPressCancel = () => {
-    confirmRef.current.openConfirm({
-      confirmFunction: () => router.push(`/admin/accessControl`),
-      description:
-        "Are you sure you want to cancel the user role HCP without saving?",
-    });
-  };
-
   return (
     <Layout boxStyle={{ height: "100vh" }} cardWrapper={{ minHeight: "85vh" }}>
       <Loader
@@ -96,9 +78,20 @@ const AdminAddUserRole: NextPage = () => {
         <AddUserRole
           organizationList={organizationList}
           modulelistData={getAdminModuleList}
-          submitForm={handleSavePress}
           confirmRef={confirmRef}
-          onPressCancel={onPressCancel}
+          submitForm={(formFields, formikProps) =>
+            handleSavePress(formFields, formikProps, {
+              onSubmitForm,
+              description: "Are you sure you want to add user role HCP?",
+            })
+          }
+          onPressCancel={() =>
+            onPressCancel({
+              description:
+                "Are you sure you want to cancel the user role HCP without saving?",
+              redirectUrl,
+            })
+          }
         />
       )}
     </Layout>
