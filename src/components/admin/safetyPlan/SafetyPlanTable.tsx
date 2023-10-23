@@ -10,6 +10,7 @@ import { columns } from "./data";
 import { useStyles } from "./safetyPlanStyles";
 import { agendaColumns } from "../agenda/data";
 import { userRoleColumns } from "../userAccess/data";
+import { usersColumns } from "../users/data";
 
 interface ViewProps {
   safetyPlanList?: any;
@@ -40,11 +41,13 @@ const SafetyPlanTable: React.FC<ViewProps> = ({
     safetyPlan: columns,
     agenda: agendaColumns,
     userRole: userRoleColumns,
+    userList: usersColumns,
   };
   const msg = {
     safetyPlan: "Currently you have not created any safety plan",
     agenda: "Currently you have not created any agenda",
     userRole: "Currently you have not created any user role",
+    userList: "Currently you have not created any users",
   };
   /* istanbul ignore next */
   const column = platform[platForm];

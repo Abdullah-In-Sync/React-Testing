@@ -115,6 +115,12 @@ export const superadmin_routes: RoutesType[] = [
     path: "/admin/agenda",
     icon: <AppRegistrationIcon />,
   },
+  {
+    key: 15,
+    label: "Users",
+    path: "/admin/users",
+    icon: <GroupsIcon />,
+  },
 ];
 
 //** THERAPIST ROUTES **//
