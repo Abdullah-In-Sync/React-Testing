@@ -30,3 +30,13 @@ export const GET_CUSTOM_USERS_LIST = gql`
     }
   }
 `;
+
+export const GET_ROLES_BY_ACCESSBILITY = gql`
+  query getRolesbyAccessbility($orgId: String) {
+    getRolesbyAccessbility(org_id: $orgId) {
+      _id
+      name
+      org_id
+    }
+  }
+`;

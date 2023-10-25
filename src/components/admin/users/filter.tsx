@@ -1,8 +1,10 @@
 import { Box, Button, Stack } from "@mui/material";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import SearchInput from "../../common/SearchInput";
 import SingleSelectComponent from "../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../safetyPlan/safetyPlanStyles";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ROLES_BY_ACCESSBILITY } from "../../../graphql/customUsers/graphql";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -13,21 +15,6 @@ interface ViewProps {
   selectFilterOptions?: any;
 }
 
-export const rolesFilter = [
-  {
-    id: "all",
-    value: "All",
-  },
-  {
-    id: "sub admin",
-    value: "Sub Admin",
-  },
-  {
-    id: "hospital admin",
-    value: "Hospital Admin",
-  },
-];
-
 const UsersFilter: React.FC<ViewProps> = ({
   searchInputValue,
   handleClearSearchInput,
@@ -37,7 +24,30 @@ const UsersFilter: React.FC<ViewProps> = ({
   onChangeFilterDropdown,
 }) => {
   const styles = useStyles();
-  //   const router = useRouter();
+  const [selectedOrg, setSelectedOrg] = useState("");
+  useEffect(() => {
+    getRolesList({
+      variables: { orgId: selectedOrg },
+    });
+  }, [selectedOrg]);
+  const [
+    getRolesList,
+    { data: { getRolesbyAccessbility: rolesList = [] } = {} },
+  ] = useLazyQuery(GET_ROLES_BY_ACCESSBILITY, {
+    fetchPolicy: "no-cache",
+  });
+
+  /* istanbul ignore next */
+  const onChangeOrg = (e) => {
+    onChangeFilterDropdown(e);
+    /* istanbul ignore next */
+    if (e.target.value == "all") {
+      setSelectedOrg("");
+    } else {
+      /* istanbul ignore next */
+      setSelectedOrg(e.target.value);
+    }
+  };
   const userRoleButtons = () => {
     return (
       <Stack>
@@ -53,11 +63,11 @@ const UsersFilter: React.FC<ViewProps> = ({
               labelId="selectRole"
               name="roleId"
               showDefaultSelectOption={false}
-              value={selectFilterOptions["role"] || "all"}
+              value={selectFilterOptions["roleId"] || "all"}
               label="Roles*"
               onChange={onChangeFilterDropdown}
-              options={rolesFilter}
-              mappingKeys={["id", "value"]}
+              options={[...[{ _id: "all", name: "All" }], ...rolesList]}
+              mappingKeys={["_id", "name"]}
               size="small"
               className="form-control-bg"
               extraProps={{ "data-testid": "roleSelect" }}
@@ -68,7 +78,7 @@ const UsersFilter: React.FC<ViewProps> = ({
               name="orgId"
               value={selectFilterOptions["orgId"] || "all"}
               label="Organisation*"
-              onChange={onChangeFilterDropdown}
+              onChange={onChangeOrg}
               options={[...[{ _id: "all", name: "All" }], ...organizationList]}
               mappingKeys={["_id", "name"]}
               size="small"
