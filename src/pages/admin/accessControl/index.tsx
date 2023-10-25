@@ -18,7 +18,7 @@ const AccessControlPage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const initialPageNo = 1;
-  const [tableCurentPage, setTableCurrentPage] = useState(0);
+  const [tableCurrentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
@@ -213,7 +213,7 @@ const AccessControlPage: NextPage = () => {
           safetyPlanList={listData}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
-          tableCurentPage={tableCurentPage}
+          tableCurentPage={tableCurrentPage}
           rowsLimit={rowsLimit}
           searchInputValue={searchInputValue}
           onChangeSearchInput={onChangeSearchInput}
