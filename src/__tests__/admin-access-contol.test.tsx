@@ -12,7 +12,7 @@ import theme from "../styles/theme/theme";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
 import {
   GET_USER_ROLE_LIST,
-  ADMIN_ADD_USER_ROLE,
+  ADMIN_UPDATE_USER_ROLE,
 } from "../graphql/userRole/graphql";
 import AccessControlPage from "../pages/admin/accessControl";
 
@@ -241,7 +241,7 @@ mocksData.push({
 
 mocksData.push({
   request: {
-    query: ADMIN_ADD_USER_ROLE,
+    query: ADMIN_UPDATE_USER_ROLE,
     variables: {
       role_id: "e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9",
       updateRole: {
