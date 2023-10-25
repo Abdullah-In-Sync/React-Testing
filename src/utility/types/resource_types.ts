@@ -17,6 +17,14 @@ export type addResourceFormField = {
   formulation_avail_for?: any;
 };
 
+export type therapistAddUser = {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  select_role: string;
+};
+
 export type addAdminAssessment = {
   name: string;
   org_id: string;
