@@ -51,7 +51,7 @@ const UsersFilter: React.FC<ViewProps> = ({
             <SingleSelectComponent
               id="selectRole"
               labelId="selectRole"
-              name="role"
+              name="roleId"
               showDefaultSelectOption={false}
               value={selectFilterOptions["role"] || "all"}
               label="Roles*"

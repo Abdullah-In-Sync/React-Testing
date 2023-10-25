@@ -118,7 +118,7 @@ export const superadmin_routes: RoutesType[] = [
   {
     key: 15,
     label: "Users",
-    path: "/admin/users",
+    path: "/admin/customUsers",
     icon: <GroupsIcon />,
   },
 ];

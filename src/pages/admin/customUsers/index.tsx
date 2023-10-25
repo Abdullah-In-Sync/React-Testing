@@ -6,42 +6,10 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
+import { GET_CUSTOM_USERS_LIST } from "../../../graphql/customUsers/graphql";
+import { UsersData } from "../../../graphql/customUsers/types";
 
-const testData = [
-  {
-    _id: "id1",
-    first_name: "user first1",
-    last_name: "user last1",
-    role: "admin1",
-    organisation: "testOrg1",
-  },
-  {
-    _id: "id2",
-    first_name: "user first2",
-    last_name: "user last2",
-    role: "admin2",
-    organisation: "testOrg2",
-  },
-  {
-    _id: "id3",
-    first_name: "user first3",
-    last_name: "user last3",
-    role: "admin3",
-    organisation: "testOrg3",
-  },
-  {
-    _id: "id4",
-    first_name: "user first4",
-    last_name: "user last4",
-    role: "admin4",
-    organisation: "testOrg4",
-  },
-];
-const UserListPage: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter();
+const CustomUserListPage: NextPage = () => {
   const initialPageNo = 1;
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
@@ -54,10 +22,8 @@ const UserListPage: NextPage = () => {
 
   useEffect(() => {
     getOrgList();
-    //add list api call
-    setListData({
-      data: testData,
-      total: testData.length,
+    getCustomUserList({
+      variables: { limit: rowsLimit, pageNo: initialPageNo },
     });
   }, []);
 
@@ -74,6 +40,33 @@ const UserListPage: NextPage = () => {
     },
   });
 
+  const [getCustomUserList, { loading: loadingCustomerUsersList }] =
+    useLazyQuery<UsersData>(GET_CUSTOM_USERS_LIST, {
+      fetchPolicy: "no-cache",
+      onCompleted: (data) => {
+        /* istanbul ignore next */
+        if (data.getCustomUsersList?.data) {
+          /* istanbul ignore next */
+          const newData = data.getCustomUsersList?.data.map((a) => {
+            return {
+              _id: a._id,
+              first_name: a.first_name,
+              last_name: a.last_name,
+              role: a.role_detail?.name,
+              organisation: a.role_detail?.organization_name,
+            };
+          });
+          /* istanbul ignore next */
+          setListData({
+            data: newData,
+            total: data.getCustomUsersList.total,
+          });
+        }
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    });
+
   /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
     /* istanbul ignore next */
@@ -82,7 +75,14 @@ const UserListPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    //add list api call
+    getCustomUserList({
+      variables: {
+        limit: rowsLimit,
+        pageNo: newPage + 1,
+        ...searchText,
+        ...selectFilterOptions,
+      },
+    });
     /* istanbul ignore next */
     setTableCurrentPage(newPage);
   };
@@ -95,7 +95,14 @@ const UserListPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    //add list api call
+    getCustomUserList({
+      variables: {
+        limit: +event.target.value,
+        pageNo: initialPageNo,
+        ...searchText,
+        ...selectFilterOptions,
+      },
+    });
     /* istanbul ignore next */
     setRowsLimit(+event.target.value);
     /* istanbul ignore next */
@@ -104,7 +111,15 @@ const UserListPage: NextPage = () => {
   /* istanbul ignore next */
   useEffect(() => {
     /* istanbul ignore next */
-    //add list api call
+    getCustomUserList({
+      /* istanbul ignore next */
+      variables: {
+        limit: rowsLimit,
+        searchText: searchInputValue,
+        pageNo: initialPageNo,
+        ...selectFilterOptions,
+      },
+    });
   }, [searchInputValue]);
 
   /* istanbul ignore next */
@@ -124,7 +139,14 @@ const UserListPage: NextPage = () => {
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     /* istanbul ignore next */
-    //add list api call
+    getCustomUserList({
+      variables: {
+        limit: rowsLimit,
+        pageNo: initialPageNo,
+        ...searchText,
+        ...temp,
+      },
+    });
     /* istanbul ignore next */
     setTableCurrentPage(0);
     setSelectFilterOptions({ ...temp });
@@ -153,7 +175,7 @@ const UserListPage: NextPage = () => {
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          loadingSafetyPlanList={false}
+          loadingSafetyPlanList={loadingCustomerUsersList}
           pageActionButtonClick={handleActionButtonClick}
           platForm={"userList"}
         />
@@ -161,4 +183,4 @@ const UserListPage: NextPage = () => {
     </>
   );
 };
-export default UserListPage;
+export default CustomUserListPage;
