@@ -8,7 +8,7 @@ import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
 import {
   GET_USER_ROLE_LIST,
-  ADMIN_ADD_USER_ROLE,
+  ADMIN_UPDATE_USER_ROLE,
 } from "../../../graphql/userRole/graphql";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -28,7 +28,7 @@ const AccessControlPage: NextPage = () => {
   const [selectedRoleId, setSelectedRoleId] = useState("");
 
   const [searchKey, setSearchKey] = useState("");
-  const [updateByRoleId] = useMutation(ADMIN_ADD_USER_ROLE);
+  const [updateByRoleId] = useMutation(ADMIN_UPDATE_USER_ROLE);
 
   useEffect(() => {
     getOrgList();
