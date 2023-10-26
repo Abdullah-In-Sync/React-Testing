@@ -209,6 +209,13 @@ export const patient_routes: RoutesType[] = [
     icon: <DescriptionOutlinedIcon />,
     type: "FILES",
   },
+  {
+    key: 5,
+    label: "Users",
+    path: "/patient/users",
+    icon: <GroupsIcon />,
+    type: "FILES",
+  },
 ];
 
 export const default_patient_routes: RoutesType[] = [

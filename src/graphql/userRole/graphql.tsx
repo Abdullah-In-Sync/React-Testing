@@ -105,3 +105,83 @@ export const ADMIN_UPDATE_USER_ROLE = gql`
     }
   }
 `;
+
+export const PATIENT_CUSTOM_USER_LIST = gql`
+  query GetCustomUsersList(
+    $limit: Int!
+    $pageNo: Int!
+    $orgId: String
+    $name: String
+    $roleId: String
+  ) {
+    getCustomUsersList(
+      limit: $limit
+      page_no: $pageNo
+      org_id: $orgId
+      name: $name
+      role_id: $roleId
+    ) {
+      data {
+        _id
+        added_by
+        created_by
+        created_date
+        first_name
+        last_name
+        role_id
+        status
+        updated_date
+        user_id
+        org_detail {
+          _id
+          contract
+          created_date
+          disorder_id
+          logo
+          logo_url
+          model_id
+          name
+          panel_color
+          patient
+          patient_plural
+          patient_welcome_email
+          side_menu_color
+          therapist
+          therapy
+          therapy_id
+        }
+        org_id
+        role_detail {
+          _id
+          accessibility
+          created_date
+          name
+          org_id
+          position
+          organization_name
+          privileges
+          status
+          updated_date
+        }
+      }
+      total
+    }
+  }
+`;
+
+export const GET_ROLES_ACCESSBILITY = gql`
+  query GetRolesbyAccessbility($org_id: String) {
+    getRolesbyAccessbility(org_id: $org_id) {
+      _id
+      created_date
+      name
+      accessibility
+      org_id
+      organization_name
+      position
+      privileges
+      status
+      updated_date
+    }
+  }
+`;
