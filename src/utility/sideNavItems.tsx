@@ -144,6 +144,13 @@ export const therapistRoutes: RoutesType[] = [
     path: "/therapist/settings/?mainTab=profile",
     icon: <SettingsIcon />,
   },
+  {
+    key: 6,
+    label: "Users",
+
+    path: "/therapist/userList",
+    icon: <GroupsIcon />,
+  },
 ];
 
 export const btb_actions_patient_routes: RoutesType[] = [
