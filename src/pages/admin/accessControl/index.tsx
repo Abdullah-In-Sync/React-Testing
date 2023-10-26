@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import SafetyPlanComponent from "../../../components/admin/safetyPlan";
@@ -6,20 +6,29 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import { GET_USER_ROLE_LIST } from "../../../graphql/userRole/graphql";
+import {
+  GET_USER_ROLE_LIST,
+  ADMIN_UPDATE_USER_ROLE,
+} from "../../../graphql/userRole/graphql";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import ConfirmationModal from "../../../components/common/ConfirmationModal";
 
 const AccessControlPage: NextPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const initialPageNo = 1;
-  const [tableCurentPage, setTableCurrentPage] = useState(0);
+  const [tableCurrentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
   const [listData, setListData] = useState({ data: [], total: 0 });
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState("");
 
   const [searchKey, setSearchKey] = useState("");
+  const [updateByRoleId] = useMutation(ADMIN_UPDATE_USER_ROLE);
 
   useEffect(() => {
     getOrgList();
@@ -41,9 +50,8 @@ const AccessControlPage: NextPage = () => {
     },
   });
 
-  const [getUserRoleList, { loading: loadingUserRoleList }] = useLazyQuery(
-    GET_USER_ROLE_LIST,
-    {
+  const [getUserRoleList, { loading: loadingUserRoleList, refetch }] =
+    useLazyQuery(GET_USER_ROLE_LIST, {
       fetchPolicy: "no-cache",
       onCompleted: (data) => {
         /* istanbul ignore next */
@@ -66,8 +74,35 @@ const AccessControlPage: NextPage = () => {
         /* istanbul ignore next */
         setLoader(false);
       },
+    });
+
+  const onUpdateUserRoleSubmit = async () => {
+    setLoader(true);
+    try {
+      await updateByRoleId({
+        variables: {
+          role_id: selectedRoleId,
+          updateRole: {
+            status: 0,
+          },
+        },
+        onCompleted: (data) => {
+          setIsConfirm(false);
+          refetch();
+          enqueueSnackbar(data.message || "User Role deleted successfully!", {
+            variant: "success",
+          });
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      setIsConfirm(false);
+      setLoader(false);
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
     }
-  );
+  };
 
   /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
@@ -159,6 +194,10 @@ const AccessControlPage: NextPage = () => {
     /* istanbul ignore next */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { pressedIconButton, _id } = value;
+    if (pressedIconButton == "delete") {
+      setIsConfirm(true);
+      setSelectedRoleId(_id);
+    }
     if (pressedIconButton === "edit")
       router.push(`/admin/userRole/edit/${_id}`);
     else if (pressedIconButton === "view")
@@ -174,7 +213,7 @@ const AccessControlPage: NextPage = () => {
           safetyPlanList={listData}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
-          tableCurentPage={tableCurentPage}
+          tableCurentPage={tableCurrentPage}
           rowsLimit={rowsLimit}
           searchInputValue={searchInputValue}
           onChangeSearchInput={onChangeSearchInput}
@@ -186,6 +225,15 @@ const AccessControlPage: NextPage = () => {
           platForm={"userRole"}
         />
       </Layout>
+      {isConfirm && (
+        <ConfirmationModal
+          label="Are you sure you want to delete this user role ?"
+          description="(Note: no HCP will be able to access MyHelp in the future.)"
+          onCancel={() => setIsConfirm(false)}
+          onConfirm={onUpdateUserRoleSubmit}
+          isWarning={true}
+        />
+      )}
     </>
   );
 };
