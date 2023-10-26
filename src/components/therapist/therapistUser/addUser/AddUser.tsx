@@ -4,15 +4,10 @@ import Form from "./FormAddUser";
 
 interface ViewProps {
   submitForm?: any;
-  onPressCancel?: () => void;
   roleListData?: any;
 }
 
-const AddUserMain: React.FC<ViewProps> = ({
-  submitForm,
-  onPressCancel,
-  roleListData,
-}) => {
+const AddUserMain: React.FC<ViewProps> = ({ submitForm, roleListData }) => {
   const submitFormData = (data) => {
     submitForm(data);
   };
@@ -24,11 +19,7 @@ const AddUserMain: React.FC<ViewProps> = ({
         initialValues={{}}
         onSubmit={submitForm}
         children={() => (
-          <Form
-            onPressCancel={onPressCancel}
-            roleListData={roleListData}
-            submit={submitFormData}
-          />
+          <Form roleListData={roleListData} submit={submitFormData} />
         )}
       />
     );

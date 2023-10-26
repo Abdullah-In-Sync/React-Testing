@@ -17,16 +17,11 @@ const defaultFormValue = {
 
 interface ViewProps {
   buttonClick?: (value) => void;
-  onPressCancel?: () => void;
   submit?: any;
   roleListData?: any;
 }
 
-const FormBox: React.FC<ViewProps> = ({
-  onPressCancel,
-  submit,
-  roleListData,
-}) => {
+const FormBox: React.FC<ViewProps> = ({ submit, roleListData }) => {
   const styles = useStyles();
 
   const [formFields, setFormFields] = useState<therapistAddUser>({
@@ -151,16 +146,6 @@ const FormBox: React.FC<ViewProps> = ({
                 variant="contained"
               >
                 Save
-              </Button>
-            </Box>
-            <Box>
-              <Button
-                variant="contained"
-                className="cancelButton"
-                data-testid="cancelForm"
-                onClick={onPressCancel}
-              >
-                Cancel
               </Button>
             </Box>
           </Box>
