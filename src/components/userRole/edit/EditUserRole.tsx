@@ -68,6 +68,7 @@ const EditUserRole: React.FC<ViewProps> = ({
             formikProps={props}
             onPressCancel={onPressCancel}
             organizationList={organizationList}
+            isEdit
           />
         )}
       />

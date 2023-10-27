@@ -24,48 +24,35 @@ export const useStyles = makeStyles(() => {
         },
       },
     },
-    addUploadModalWrapper: {
-      "& label": {
-        fontWeight: 500,
-        marginBottom: 5,
-        display: "inline-block",
-      },
-      "& .chooseFileWrapper": {
-        "& legend": {
-          display: "contents",
+    modalWrapper: {
+      "& .addUserFormWrapper": {
+        paddingTop: 10,
+        "& .crow": {
+          padding: "7px 0px",
         },
-        "& .uploadButtonLabel": {
-          display: "block",
-          marginBottom: 5,
+        "& .row4": {
+          textAlign: "center",
         },
-        "& .MuiButton-outlined": {
-          marginRight: 10,
-        },
-      },
-      "& .addCategoryFormWrapper": {
-        paddingTop: "20px !important",
-      },
-      "& .crow": {
-        padding: "5px 0px",
-      },
-      "& .row3": {
-        display: "flex",
-        justifyContent: "space-between",
-        "& .accToggleWrapper": {
-          textAlign: "right",
-          "& .accLabel": {
-            display: "inline-block",
-            marginRight: 10,
+        [theme.breakpoints.up("md")]: {
+          "& .crow": {
+            display: "flex",
+            flex: 1,
+            "& > .MuiBox-root:nth-child(1)": {
+              paddingRight: 10,
+            },
+            "& .MuiBox-root": {
+              width: "100%",
+            },
           },
-          "& .MuiFormControlLabel-root": {
-            margin: 0,
+        },
+        [theme.breakpoints.down("md")]: {
+          "& .crow": {
+            "& > .MuiBox-root:nth-child(1)": {
+              marginBottom: 10,
+            },
           },
         },
       },
-      "& .row5": {
-        textAlign: "center",
-      },
-
       ...commonModalWrapperObj(),
     },
   };

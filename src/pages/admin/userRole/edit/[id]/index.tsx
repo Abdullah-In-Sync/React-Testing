@@ -41,7 +41,7 @@ const AdminAddUserRole: NextPage = () => {
   const { data: { getAdminModuleList = {} } = {}, loading: loadingModule } =
     useQuery<ModulesData>(GET_ADMIN_MODULE_LIST, {
       variables: {
-        accessibility: "admin",
+        accessibility: "",
       },
       fetchPolicy: "cache-and-network",
     });
