@@ -15,6 +15,7 @@ interface ViewProps {
   onChangeFilterDropdown?: (e) => void;
   /* istanbul ignore next */
   selectFilterOptions?: any;
+  onPressAdd?: () => void;
 }
 
 const sessionNumber = [

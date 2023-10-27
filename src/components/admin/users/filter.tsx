@@ -13,6 +13,7 @@ interface ViewProps {
   organizationList?: any;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
+  onPressAdd?: () => void;
 }
 
 const UsersFilter: React.FC<ViewProps> = ({
@@ -22,6 +23,7 @@ const UsersFilter: React.FC<ViewProps> = ({
   organizationList,
   selectFilterOptions = {},
   onChangeFilterDropdown,
+  onPressAdd,
 }) => {
   const styles = useStyles();
   const [selectedOrg, setSelectedOrg] = useState("");
@@ -88,7 +90,11 @@ const UsersFilter: React.FC<ViewProps> = ({
             />
           </Box>
           <Box>
-            <Button data-testid="addUserRoleButton" variant="contained">
+            <Button
+              data-testid="addUserRoleButton"
+              variant="contained"
+              onClick={onPressAdd}
+            >
               Add User
             </Button>
           </Box>

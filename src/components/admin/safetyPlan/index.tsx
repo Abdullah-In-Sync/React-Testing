@@ -21,6 +21,7 @@ interface ViewProps {
   selectFilterOptions?: any;
   loadingSafetyPlanList?: boolean;
   platForm: string;
+  onPressAdd?: () => void;
 }
 
 const platFormComponent = {
@@ -44,6 +45,7 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
   onChangeFilterDropdown,
   loadingSafetyPlanList,
   platForm,
+  onPressAdd,
 }) => {
   return (
     <>
@@ -53,6 +55,7 @@ const SafetyPlanComponent: React.FC<ViewProps> = ({
         organizationList,
         selectFilterOptions,
         onChangeFilterDropdown,
+        onPressAdd,
       })}
 
       <SafetyPlanTable
