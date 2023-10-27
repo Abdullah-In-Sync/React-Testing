@@ -151,8 +151,8 @@ const selectFromOrganizationDropdown = async () => {
   fireEvent.click(options[0]);
 };
 
-describe("Patient user list", () => {
-  it("should render admin users list", async () => {
+describe("Patient user add", () => {
+  it("should render admin users list and can new user", async () => {
     await sut();
     fireEvent.click(await screen.findByTestId("addUserRoleButton"));
     fireEvent.change(await screen.findByTestId("firstNameInput"), {
