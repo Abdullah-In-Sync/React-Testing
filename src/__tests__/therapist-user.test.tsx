@@ -254,11 +254,11 @@ describe("Therapist user list", () => {
         target: { value: "+444323334234" },
       });
 
-      fireEvent.change(screen.queryByTestId("select_roledsd"), {
+      fireEvent.change(screen.queryByTestId("select_role_dropdown"), {
         target: { value: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a" },
       });
       await expect(
-        screen.queryByTestId("select_roledsd").getAttribute("value")
+        screen.queryByTestId("select_role_dropdown").getAttribute("value")
       ).toBe("dd25567c-4b33-4e08-9d78-9bebd9f37b9a");
 
       expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
@@ -294,11 +294,11 @@ describe("Therapist user list", () => {
         target: { value: "+444323334234" },
       });
 
-      fireEvent.change(screen.queryByTestId("select_roledsd"), {
+      fireEvent.change(screen.queryByTestId("select_role_dropdown"), {
         target: { value: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a" },
       });
       await expect(
-        screen.queryByTestId("select_roledsd").getAttribute("value")
+        screen.queryByTestId("select_role_dropdown").getAttribute("value")
       ).toBe("dd25567c-4b33-4e08-9d78-9bebd9f37b9a");
 
       expect(screen.getByTestId("role-add-form")).toBeInTheDocument();

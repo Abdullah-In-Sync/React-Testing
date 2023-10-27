@@ -155,7 +155,6 @@ const CustomUserListPage: NextPage = () => {
       /* istanbul ignore next */
       handleCloseAddUserModal();
     } catch (e) {
-      console.log(e, "in create");
       /* istanbul ignore next */
       setLoader(false);
       /* istanbul ignore next */

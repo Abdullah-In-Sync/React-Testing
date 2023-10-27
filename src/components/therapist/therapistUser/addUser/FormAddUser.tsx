@@ -173,7 +173,7 @@ const FormBox: React.FC<ViewProps> = ({
                   value={formFields.select_role}
                   label="Select Role"
                   onChange={set2}
-                  inputProps={{ "data-testid": "select_roledsd" }}
+                  inputProps={{ "data-testid": "select_role_dropdown" }}
                   options={
                     (roleListData && roleListData.getRolesbyAccessbility) || []
                   }
