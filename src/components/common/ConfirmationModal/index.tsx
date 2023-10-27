@@ -8,6 +8,7 @@ interface ViewProps {
   description?: string;
   onCancel?: () => void;
   onConfirm?: any;
+  isWarning?: boolean;
   // onConfirm?: () => void;
 
   onOk?: () => void;
@@ -30,23 +31,45 @@ const ConfirmationModal: React.FC<ViewProps> = ({
   description,
   onOk,
   mode,
+  isWarning,
 }) => {
   const classes = useStyles();
   return (
     <div data-testid="openFileUpload">
       <>
         <SureModal modalOpen={true} mode={mode}>
-          <Typography className={classes.root} variant="subtitle1">
-            {label}
-          </Typography>
-          {description && (
-            <Typography
-              sx={{
-                textAlign: "center",
-              }}
-            >
-              {description}
-            </Typography>
+          {isWarning ? (
+            <>
+              {description && (
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    color: "#EA1717",
+                    fontWeight: 600,
+                  }}
+                >
+                  {description}
+                </Typography>
+              )}
+              <Typography className={classes.root} variant="subtitle1">
+                {label}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography className={classes.root} variant="subtitle1">
+                {label}
+              </Typography>
+              {description && (
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  {description}
+                </Typography>
+              )}
+            </>
           )}
           {!onOk ? (
             <Box marginTop="20px" display="flex" justifyContent="center">

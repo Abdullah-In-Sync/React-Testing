@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
 import SafetyPlanComponent from "../../../components/admin/safetyPlan";
@@ -6,33 +6,23 @@ import ContentHeader from "../../../components/common/ContentHeader";
 import Loader from "../../../components/common/Loader";
 import Layout from "../../../components/layout";
 import { GET_ORGANIZATION_LIST } from "../../../graphql/query/organization";
-import {
-  GET_USER_ROLE_LIST,
-  ADMIN_UPDATE_USER_ROLE,
-} from "../../../graphql/userRole/graphql";
-import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import ConfirmationModal from "../../../components/common/ConfirmationModal";
+import { GET_CUSTOM_USERS_LIST } from "../../../graphql/customUsers/graphql";
+import { UsersData } from "../../../graphql/customUsers/types";
 
-const AccessControlPage: NextPage = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const router = useRouter();
+const CustomUserListPage: NextPage = () => {
   const initialPageNo = 1;
-  const [tableCurrentPage, setTableCurrentPage] = useState(0);
+  const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
   const [loader, setLoader] = useState<boolean>(true);
   const [listData, setListData] = useState({ data: [], total: 0 });
-  const [isConfirm, setIsConfirm] = useState(false);
-  const [selectedRoleId, setSelectedRoleId] = useState("");
 
   const [searchKey, setSearchKey] = useState("");
-  const [updateByRoleId] = useMutation(ADMIN_UPDATE_USER_ROLE);
 
   useEffect(() => {
     getOrgList();
-    getUserRoleList({
+    getCustomUserList({
       variables: { limit: rowsLimit, pageNo: initialPageNo },
     });
   }, []);
@@ -50,59 +40,32 @@ const AccessControlPage: NextPage = () => {
     },
   });
 
-  const [getUserRoleList, { loading: loadingUserRoleList, refetch }] =
-    useLazyQuery(GET_USER_ROLE_LIST, {
+  const [getCustomUserList, { loading: loadingCustomerUsersList }] =
+    useLazyQuery<UsersData>(GET_CUSTOM_USERS_LIST, {
       fetchPolicy: "no-cache",
       onCompleted: (data) => {
         /* istanbul ignore next */
-        if (data.getUserRoleList?.rolelist) {
+        if (data.getCustomUsersList?.data) {
           /* istanbul ignore next */
-          const newData = data.getUserRoleList.rolelist.map((a) => {
+          const newData = data.getCustomUsersList?.data.map((a) => {
             return {
               _id: a._id,
-              userRole: a.name,
-              organization: a.organization_name,
-              accessibility: a.accessibility,
+              first_name: a.first_name,
+              last_name: a.last_name,
+              role: a.role_detail?.name,
+              organisation: a.role_detail?.organization_name,
             };
           });
           /* istanbul ignore next */
           setListData({
             data: newData,
-            total: data.getUserRoleList.totalcount,
+            total: data.getCustomUsersList.total,
           });
         }
         /* istanbul ignore next */
         setLoader(false);
       },
     });
-
-  const onUpdateUserRoleSubmit = async () => {
-    setLoader(true);
-    try {
-      await updateByRoleId({
-        variables: {
-          role_id: selectedRoleId,
-          updateRole: {
-            status: 0,
-          },
-        },
-        onCompleted: (data) => {
-          setIsConfirm(false);
-          refetch();
-          enqueueSnackbar(data.message || "User Role deleted successfully!", {
-            variant: "success",
-          });
-          setLoader(false);
-        },
-      });
-    } catch (e) {
-      setIsConfirm(false);
-      setLoader(false);
-      enqueueSnackbar("Server error please try later.", {
-        variant: "error",
-      });
-    }
-  };
 
   /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
@@ -112,7 +75,7 @@ const AccessControlPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getUserRoleList({
+    getCustomUserList({
       variables: {
         limit: rowsLimit,
         pageNo: newPage + 1,
@@ -132,7 +95,7 @@ const AccessControlPage: NextPage = () => {
         ? { searchText: searchInputValue }
         : {};
     /* istanbul ignore next */
-    getUserRoleList({
+    getCustomUserList({
       variables: {
         limit: +event.target.value,
         pageNo: initialPageNo,
@@ -148,7 +111,7 @@ const AccessControlPage: NextPage = () => {
   /* istanbul ignore next */
   useEffect(() => {
     /* istanbul ignore next */
-    getUserRoleList({
+    getCustomUserList({
       /* istanbul ignore next */
       variables: {
         limit: rowsLimit,
@@ -176,7 +139,7 @@ const AccessControlPage: NextPage = () => {
     /* istanbul ignore next */
     temp[e.target.name] = e.target.value !== "all" ? e.target.value : "";
     /* istanbul ignore next */
-    getUserRoleList({
+    getCustomUserList({
       variables: {
         limit: rowsLimit,
         pageNo: initialPageNo,
@@ -194,47 +157,30 @@ const AccessControlPage: NextPage = () => {
     /* istanbul ignore next */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { pressedIconButton, _id } = value;
-    if (pressedIconButton == "delete") {
-      setIsConfirm(true);
-      setSelectedRoleId(_id);
-    }
-    if (pressedIconButton === "edit")
-      router.push(`/admin/userRole/edit/${_id}`);
-    else if (pressedIconButton === "view")
-      router.push(`/admin/userRole/view/${_id}`);
   };
 
   return (
     <>
       <Layout boxStyle={{ height: "100vh" }}>
         <Loader visible={loader} />
-        <ContentHeader title="Access Control Listing" />
+        <ContentHeader title="User List" />
         <SafetyPlanComponent
           safetyPlanList={listData}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
-          tableCurentPage={tableCurrentPage}
+          tableCurentPage={tableCurentPage}
           rowsLimit={rowsLimit}
           searchInputValue={searchInputValue}
           onChangeSearchInput={onChangeSearchInput}
           organizationList={organizationList}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          loadingSafetyPlanList={loadingUserRoleList}
+          loadingSafetyPlanList={loadingCustomerUsersList}
           pageActionButtonClick={handleActionButtonClick}
-          platForm={"userRole"}
+          platForm={"userList"}
         />
       </Layout>
-      {isConfirm && (
-        <ConfirmationModal
-          label="Are you sure you want to delete this user role ?"
-          description="(Note: no HCP will be able to access MyHelp in the future.)"
-          onCancel={() => setIsConfirm(false)}
-          onConfirm={onUpdateUserRoleSubmit}
-          isWarning={true}
-        />
-      )}
     </>
   );
 };
-export default AccessControlPage;
+export default CustomUserListPage;

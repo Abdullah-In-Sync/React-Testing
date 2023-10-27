@@ -4,6 +4,7 @@ import Filter from "./Filter";
 import SafetyPlanTable from "./SafetyPlanTable";
 import AgendaFilter from "../agenda/Filter";
 import UserRoleFilter from "../userAccess/userRoleFilter";
+import UsersFilter from "../users/filter";
 
 interface ViewProps {
   safetyPlanList?: safetyPlanInterface.GetSafetyPlanList | null;
@@ -26,6 +27,7 @@ const platFormComponent = {
   userRole: (props) => <UserRoleFilter {...props} />,
   agenda: (props) => <AgendaFilter {...props} />,
   safetyPlan: (props) => <Filter {...props} />,
+  userList: (props) => <UsersFilter {...props} />,
 };
 
 const SafetyPlanComponent: React.FC<ViewProps> = ({
