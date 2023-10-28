@@ -27,7 +27,6 @@ const AdminDefaultFormValue = {
 
 interface ViewProps {
   buttonClick?: (value) => void;
-  onPressCancel?: () => void;
   submit?: any;
   roleListData?: any;
   organizationList?: any;
@@ -35,7 +34,6 @@ interface ViewProps {
 }
 
 const FormBox: React.FC<ViewProps> = ({
-  onPressCancel,
   submit,
   roleListData,
   organizationList,
@@ -193,16 +191,6 @@ const FormBox: React.FC<ViewProps> = ({
                 variant="contained"
               >
                 Save
-              </Button>
-            </Box>
-            <Box>
-              <Button
-                variant="contained"
-                className="cancelButton"
-                data-testid="cancelForm"
-                onClick={onPressCancel}
-              >
-                Cancel
               </Button>
             </Box>
           </Box>

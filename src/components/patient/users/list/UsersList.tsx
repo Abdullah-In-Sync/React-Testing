@@ -9,6 +9,8 @@ import {
   GetCustomUsersList,
   GetRolesbyAccessbilityEntity,
 } from "../../../../graphql/userRole/types";
+import InfoModal from "../../../common/CustomModal/InfoModal";
+import PatientAddUser from "../addUser/AddUser";
 
 interface ViewProps {
   pageActionButtonClick?: (value) => void;
@@ -25,6 +27,7 @@ interface ViewProps {
   rowsLimit?: number;
   roles?: GetRolesbyAccessbilityEntity[];
   loadingCustomUsersList?: boolean;
+  infoModalRef?: any;
 }
 
 const PatientUsersComponent: React.FC<ViewProps> = ({
@@ -41,6 +44,7 @@ const PatientUsersComponent: React.FC<ViewProps> = ({
   rowsLimit,
   roles,
   loadingCustomUsersList,
+  infoModalRef,
 }) => {
   const styles = useStyles();
   return (
@@ -77,6 +81,14 @@ const PatientUsersComponent: React.FC<ViewProps> = ({
           loading={loadingCustomUsersList}
         />
       </Stack>
+
+      <InfoModal
+        ref={infoModalRef}
+        maxWidth="sm"
+        className={styles.modalWrapper}
+      >
+        <PatientAddUser />
+      </InfoModal>
     </ConfirmWrapper>
   );
 };

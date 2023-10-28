@@ -39,7 +39,6 @@ export default function TherapistUserMain() {
   const [selectRoleForFilter, setSelectRoleForFilter] = useState("");
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [isConfirmAddUser, setIsConfirmAddUser] = useState(false);
-  const [isConfirmCancelAddUser, setIsConfirmCancelAddUser] = useState(false);
 
   const [searchInputValue, setSearchInputValue] = useState();
   const [formFields, setFormFields] = useState<therapistAddUser>({
@@ -62,7 +61,6 @@ export default function TherapistUserMain() {
   /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
-    setIsConfirmCancelAddUser(false);
   };
 
   useEffect(() => {
@@ -164,12 +162,6 @@ export default function TherapistUserMain() {
     setSelectRoleForFilter(data);
   };
 
-  const confirmCancel = () => {
-    setIsConfirmCancelAddUser(false);
-    handleCloseAddUserModal();
-    enqueueSnackbar("User cancel Successfully!", { variant: "success" });
-  };
-
   return (
     <Layout>
       <ContentHeader title="User List" />
@@ -201,8 +193,6 @@ export default function TherapistUserMain() {
             setFormFields(data);
             setIsConfirmAddUser(true);
           }}
-          // onPressCancel={handleCloseAddUserModal}
-          onPressCancel={() => setIsConfirmCancelAddUser(true)}
         />
       </CommonModal>
 
@@ -213,17 +203,6 @@ export default function TherapistUserMain() {
           onConfirm={() => {
             /* istanbul ignore next */
             handleAddUser();
-          }}
-        />
-      )}
-
-      {isConfirmCancelAddUser && (
-        <ConfirmationModal
-          label="Are you sure you want cancel this user without saving?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={() => {
-            /* istanbul ignore next */
-            confirmCancel();
           }}
         />
       )}

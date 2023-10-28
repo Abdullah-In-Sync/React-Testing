@@ -53,7 +53,7 @@ mocksData.push({
   request: {
     query: GET_ADMIN_MODULE_LIST,
     variables: {
-      accessibility: "admin",
+      accessibility: "",
     },
   },
   result: {

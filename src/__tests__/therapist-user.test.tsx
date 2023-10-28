@@ -271,44 +271,4 @@ describe("Therapist user list", () => {
       expect(screen.getByText("User added Successfully!")).toBeInTheDocument();
     });
   });
-
-  it("Add user confirm cancel", async () => {
-    await sut();
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("addPlanButton")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("addPlanButton"));
-      expect(screen.getByTestId("first_name")).toBeInTheDocument();
-
-      fireEvent.change(screen.queryByTestId("first_name"), {
-        target: { value: "first" },
-      });
-
-      fireEvent.change(screen.queryByTestId("last_name"), {
-        target: { value: "last" },
-      });
-      fireEvent.change(screen.queryByTestId("email"), {
-        target: { value: "email@gmail.com" },
-      });
-      fireEvent.change(screen.queryByTestId("phone"), {
-        target: { value: "+444323334234" },
-      });
-
-      fireEvent.change(screen.queryByTestId("select_role_dropdown"), {
-        target: { value: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a" },
-      });
-      await expect(
-        screen.queryByTestId("select_role_dropdown").getAttribute("value")
-      ).toBe("dd25567c-4b33-4e08-9d78-9bebd9f37b9a");
-
-      expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
-
-      fireEvent.click(screen.queryByText("Cancel"));
-
-      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("confirmButton"));
-
-      expect(screen.getByText("User cancel Successfully!")).toBeInTheDocument();
-    });
-  });
 });

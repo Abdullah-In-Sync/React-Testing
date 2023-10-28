@@ -41,7 +41,6 @@ const CustomUserListPage: NextPage = () => {
   const [listData, setListData] = useState({ data: [], total: 0 });
   const modalRefAddUser = useRef<ModalElement>(null);
   const [isConfirmAddUser, setIsConfirmAddUser] = useState(false);
-  const [isConfirmCancelAddUser, setIsConfirmCancelAddUser] = useState(false);
   const [selectOrg, setSelectOrg] = useState("");
 
   const [searchKey, setSearchKey] = useState("");
@@ -256,13 +255,8 @@ const CustomUserListPage: NextPage = () => {
 
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
-    setIsConfirmCancelAddUser(false);
   };
 
-  const confirmCancel = () => {
-    setIsConfirmCancelAddUser(false);
-    handleCloseAddUserModal();
-  };
   const setOrg = (id: string) => {
     setSelectOrg(id);
   };
@@ -301,7 +295,6 @@ const CustomUserListPage: NextPage = () => {
               setFormFields(data);
               setIsConfirmAddUser(true);
             }}
-            onPressCancel={() => setIsConfirmCancelAddUser(true)}
           />
         </CommonModal>
         {isConfirmAddUser && (
@@ -311,17 +304,6 @@ const CustomUserListPage: NextPage = () => {
             onConfirm={() => {
               /* istanbul ignore next */
               handleAddUser();
-            }}
-          />
-        )}
-
-        {isConfirmCancelAddUser && (
-          <ConfirmationModal
-            label="Are you sure you want to cancel add user without saving?"
-            onCancel={clearIsConfirmCancel}
-            onConfirm={() => {
-              /* istanbul ignore next */
-              confirmCancel();
             }}
           />
         )}

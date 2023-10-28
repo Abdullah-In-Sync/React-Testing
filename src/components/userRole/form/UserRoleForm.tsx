@@ -15,6 +15,7 @@ interface ViewProps {
   onPressCancel?: () => void;
   organizationList?: any;
   view?: boolean;
+  isEdit?: boolean;
 }
 const AddUserRoleForm: React.FC<ViewProps> = ({
   onPressCancel,
@@ -22,6 +23,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   modulesData,
   organizationList,
   view,
+  isEdit,
 }) => {
   const styles = useStyles();
   const {
@@ -73,6 +75,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           className="form-control-bg"
           showDefaultSelectOption={false}
           extraProps={{ "data-testid": "accessibilitySelect" }}
+          disabled={isEdit}
         />
 
         <FormikSelectDropdown
@@ -94,6 +97,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           className="form-control-bg multiSelect"
           extraProps={{ "data-testid": "organizationSelect" }}
           multiSelect={csvDecode(org_id)}
+          disabled={isEdit}
         />
 
         <FormikSelectDropdown

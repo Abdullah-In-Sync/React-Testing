@@ -185,3 +185,26 @@ export const GET_ROLES_ACCESSBILITY = gql`
     }
   }
 `;
+
+export const ADD_CUSTOM_USER = gql`
+  mutation AddCustomUser(
+    $email: String!
+    $first_name: String!
+    $last_name: String!
+    $role_id: String!
+    $org_id: String
+    $phone_no: String
+  ) {
+    addCustomUser(
+      email: $email
+      first_name: $first_name
+      last_name: $last_name
+      role_id: $role_id
+      org_id: $org_id
+      phone_no: $phone_no
+    ) {
+      message
+      result
+    }
+  }
+`;
