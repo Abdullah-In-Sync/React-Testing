@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -33,7 +34,7 @@ const defaultFormValue = {
 const CustomUserListPage: NextPage = () => {
   const initialPageNo = 1;
   const { enqueueSnackbar } = useSnackbar();
-  const [tableCurentPage, setTableCurrentPage] = useState(0);
+  const [tableCurrentPage, setTableCurrentPage] = useState(0);
   const [rowsLimit, setRowsLimit] = useState(10);
   const [searchInputValue, setSearchInputValue] = useState();
   const [selectFilterOptions, setSelectFilterOptions] = useState({});
@@ -247,11 +248,8 @@ const CustomUserListPage: NextPage = () => {
   };
 
   /* istanbul ignore next */
-  const handleActionButtonClick = (value) => {
-    /* istanbul ignore next */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { pressedIconButton, _id } = value;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleActionButtonClick = (value) => {};
 
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
@@ -262,53 +260,51 @@ const CustomUserListPage: NextPage = () => {
   };
 
   return (
-    <>
-      <Layout boxStyle={{ height: "100vh" }}>
-        <Loader visible={loader} />
-        <ContentHeader title="User List" />
-        <SafetyPlanComponent
-          safetyPlanList={listData}
-          onPageChange={onPageChange}
-          onSelectPageDropdown={onSelectPageDropdown}
-          tableCurentPage={tableCurentPage}
-          rowsLimit={rowsLimit}
-          searchInputValue={searchInputValue}
-          onChangeSearchInput={onChangeSearchInput}
+    <Layout boxStyle={{ height: "100vh" }}>
+      <Loader visible={loader} />
+      <ContentHeader title="User List" />
+      <SafetyPlanComponent
+        safetyPlanList={listData}
+        onPageChange={onPageChange}
+        onSelectPageDropdown={onSelectPageDropdown}
+        tableCurentPage={tableCurrentPage}
+        rowsLimit={rowsLimit}
+        searchInputValue={searchInputValue}
+        onChangeSearchInput={onChangeSearchInput}
+        organizationList={organizationList}
+        selectFilterOptions={selectFilterOptions}
+        onChangeFilterDropdown={onChangeFilterDropdown}
+        loadingSafetyPlanList={loadingCustomerUsersList}
+        pageActionButtonClick={handleActionButtonClick}
+        platForm={"userList"}
+        onPressAdd={handleOpenAddUserModal}
+      />
+      <CommonModal
+        ref={modalRefAddUser}
+        headerTitleText={"Add User"}
+        maxWidth="sm"
+      >
+        <AddUserMain
+          roleListData={roleListData}
           organizationList={organizationList}
-          selectFilterOptions={selectFilterOptions}
-          onChangeFilterDropdown={onChangeFilterDropdown}
-          loadingSafetyPlanList={loadingCustomerUsersList}
-          pageActionButtonClick={handleActionButtonClick}
-          platForm={"userList"}
-          onPressAdd={handleOpenAddUserModal}
+          setOrg={setOrg}
+          submitForm={(data) => {
+            setFormFields(data);
+            setIsConfirmAddUser(true);
+          }}
         />
-        <CommonModal
-          ref={modalRefAddUser}
-          headerTitleText={"Add User"}
-          maxWidth="sm"
-        >
-          <AddUserMain
-            roleListData={roleListData}
-            organizationList={organizationList}
-            setOrg={setOrg}
-            submitForm={(data) => {
-              setFormFields(data);
-              setIsConfirmAddUser(true);
-            }}
-          />
-        </CommonModal>
-        {isConfirmAddUser && (
-          <ConfirmationModal
-            label="Are you sure you want to add this user?"
-            onCancel={clearIsConfirmCancel}
-            onConfirm={() => {
-              /* istanbul ignore next */
-              handleAddUser();
-            }}
-          />
-        )}
-      </Layout>
-    </>
+      </CommonModal>
+      {isConfirmAddUser && (
+        <ConfirmationModal
+          label="Are you sure you want to add this user?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            handleAddUser();
+          }}
+        />
+      )}
+    </Layout>
   );
 };
 export default CustomUserListPage;
