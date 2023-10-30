@@ -7,6 +7,7 @@ interface ViewProps {
   roleListData?: any;
   organizationList?: any;
   setOrg?: any;
+  editPrefilledData?: any;
 }
 
 const AddUserMain: React.FC<ViewProps> = ({
@@ -14,6 +15,7 @@ const AddUserMain: React.FC<ViewProps> = ({
   roleListData,
   organizationList,
   setOrg,
+  editPrefilledData,
 }) => {
   const submitFormData = (data) => {
     submitForm(data);
@@ -28,9 +30,10 @@ const AddUserMain: React.FC<ViewProps> = ({
         children={() => (
           <Form
             roleListData={roleListData}
-            submit={submitFormData}
             organizationList={organizationList}
             setOrg={setOrg}
+            editPrefilledData={editPrefilledData}
+            submit={submitFormData}
           />
         )}
       />

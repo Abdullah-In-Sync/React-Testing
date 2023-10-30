@@ -4,7 +4,7 @@ import * as React from "react";
 import { useStyles } from "../../patient/therapistSafetyPlan/create/therapistSafetyPlanStyles";
 import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { therapistAddUser } from "../../../../utility/types/resource_types";
 
 const defaultFormValue = {
@@ -31,6 +31,7 @@ interface ViewProps {
   roleListData?: any;
   organizationList?: any;
   setOrg?: any;
+  editPrefilledData?: any;
 }
 
 const FormBox: React.FC<ViewProps> = ({
@@ -38,6 +39,7 @@ const FormBox: React.FC<ViewProps> = ({
   roleListData,
   organizationList,
   setOrg,
+  editPrefilledData,
 }) => {
   const styles = useStyles();
   const defaultData = organizationList
@@ -46,6 +48,8 @@ const FormBox: React.FC<ViewProps> = ({
   const [formFields, setFormFields] = useState<therapistAddUser>({
     ...defaultData,
   });
+
+  console.log("Koca: Last editPrefilledData ", editPrefilledData);
 
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -68,6 +72,21 @@ const FormBox: React.FC<ViewProps> = ({
     e.preventDefault();
     submit(formFields);
   };
+  console.log("Koca: editPrefilledData ", editPrefilledData);
+
+  useEffect(() => {
+    if (editPrefilledData) {
+      setFormFields((oldValues) => ({
+        ...oldValues,
+        first_name: editPrefilledData.first_name,
+        last_name: editPrefilledData.last_name,
+        email: editPrefilledData.email_id,
+        phone: editPrefilledData.phone_no,
+        select_role: editPrefilledData.role_id,
+      }));
+    }
+  }, [editPrefilledData]);
+
   const formBox = () => {
     return (
       <Stack className={styles.formWrapper}>
@@ -120,6 +139,7 @@ const FormBox: React.FC<ViewProps> = ({
                   variant="outlined"
                   className="form-control-bg"
                   size="small"
+                  disabled={editPrefilledData}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -135,6 +155,7 @@ const FormBox: React.FC<ViewProps> = ({
                   variant="outlined"
                   className="form-control-bg"
                   size="small"
+                  disabled={editPrefilledData}
                 />
               </Grid>
             </Grid>
@@ -179,7 +200,10 @@ const FormBox: React.FC<ViewProps> = ({
                   size="small"
                   className="form-control-bg"
                   disabled={
-                    organizationList && formFields.org_id == "" ? true : false
+                    (organizationList && formFields.org_id == "") ||
+                    editPrefilledData
+                      ? true
+                      : false
                   }
                 />
               </Grid>
@@ -190,7 +214,7 @@ const FormBox: React.FC<ViewProps> = ({
                 data-testid="submitForm"
                 variant="contained"
               >
-                Save
+                {editPrefilledData ? "Update" : "Save"}
               </Button>
             </Box>
           </Box>

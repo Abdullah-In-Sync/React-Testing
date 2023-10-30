@@ -8,6 +8,8 @@ import {
   ADD_THERAPIST_ADD_USER,
   GET_ROLE_LIST,
   GET_THERAPIST_USER_LIST,
+  GET_USER_DATA_BY_ID,
+  THERAPIST_EDIT_USER,
 } from "../graphql/customerUsers/graphql";
 
 const mocksData = [];
@@ -187,6 +189,47 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_USER_DATA_BY_ID,
+    variables: { custom_user_id: "d2f84b2a-845f-4abc-8ab6-aa3107c58514" },
+  },
+  result: {
+    data: {
+      getCustomUserById: {
+        _id: "aa9f8005-f555-4747-81d5-c520f6ac14b9",
+        added_by: "therapist",
+        created_by: "dbdd2446-093c-4ec4-abc9-df275634a817",
+        created_date: "2023-10-27T07:17:53.390Z",
+        email_id: null,
+        first_name: "scs10",
+        last_name: "Name",
+        phone_no: "+444323334231",
+        __typename: "CustomUser",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_EDIT_USER,
+    variables: {
+      custom_user_id: "d2f84b2a-845f-4abc-8ab6-aa3107c58514",
+      update: { first_name: "change name", last_name: "Name" },
+    },
+  },
+  result: {
+    data: {
+      addCustomUser: {
+        message: "User created successfully",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -269,6 +312,57 @@ describe("Therapist user list", () => {
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
       expect(screen.getByText("User added Successfully!")).toBeInTheDocument();
+    });
+  });
+
+  it("To see the pre filled data before edit", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      );
+      await expect(screen.getByTestId("first_name")).toBeInTheDocument();
+
+      expect(screen.getByTestId("first_name")).toHaveValue("scs10");
+    });
+  });
+
+  it("Edit user", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      );
+      await expect(screen.getByTestId("first_name")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("first_name"), {
+        target: { value: "change name" },
+      });
+
+      expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByText("Update"));
+
+      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(screen.getByText("User edit Successfully!")).toBeInTheDocument();
     });
   });
 });
