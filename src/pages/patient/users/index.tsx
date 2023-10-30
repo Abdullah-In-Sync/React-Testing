@@ -154,7 +154,7 @@ const PatientUsersListPage: NextPage = () => {
   const submitAddUserForm = (v, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: () => onAddUserSubmit(v, submitCallback),
-      description: "Are you sure you want to add this user?",
+      description: "Are you sure you want to add the user?",
       setSubmitting,
     });
   };

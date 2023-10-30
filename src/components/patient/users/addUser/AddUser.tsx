@@ -15,6 +15,7 @@ export const validationSchema = Yup.object().shape({
   phone_no: Yup.string()
     .required("Phone number is required")
     .matches(phoneRegExp, "Phone number is not valid"),
+  role_id: Yup.string().required("Role is required"),
 });
 
 const PatientAddUser: React.FC<ViewProps> = ({
