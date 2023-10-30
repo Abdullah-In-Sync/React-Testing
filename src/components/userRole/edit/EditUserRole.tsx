@@ -27,8 +27,6 @@ interface ViewProps {
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Please enter user role"),
-  accessibility: Yup.string().required("Please select accessibility"),
-  org_id: Yup.string().required("Please select organization"),
   position: Yup.string().required("Please select position"),
 });
 
@@ -41,7 +39,7 @@ const EditUserRole: React.FC<ViewProps> = ({
   viewData,
 }) => {
   const {
-    privileges: initPrivileges = "{}",
+    privileges: initPrivileges = "[]",
     accessibility = "",
     name = "",
     org_id = "",

@@ -161,3 +161,5 @@ export const navPosition = [
     id: "tabs",
   },
 ];
+
+export const phoneRegExp = /^\+[1-9]\d{3,14}$/;

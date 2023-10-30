@@ -127,8 +127,6 @@ mocksData.push({
       role_id: "roleid1",
       updateRole: {
         name: "testupdate",
-        org_id: "orgid1",
-        accessibility: "therapist",
         position: "sidebar",
         privileges:
           '{"Library":["prev1"],"Assessment":["prev2"],"Notes":["prev1"]}',
@@ -152,8 +150,6 @@ mocksData.push({
       role_id: "roleid1",
       updateRole: {
         name: "testupdateerror",
-        org_id: "orgid1",
-        accessibility: "therapist",
         position: "sidebar",
         privileges:
           '{"Library":["prev1"],"Assessment":["prev2"],"Notes":["prev1"]}',
@@ -177,8 +173,6 @@ mocksData.push({
       role_id: "roleid1",
       updateRole: {
         name: "servererror",
-        org_id: "orgid1",
-        accessibility: "therapist",
         position: "sidebar",
         privileges:
           '{"Library":["prev1"],"Assessment":["prev2"],"Notes":["prev1"]}',

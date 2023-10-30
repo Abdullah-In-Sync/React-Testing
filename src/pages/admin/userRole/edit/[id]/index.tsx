@@ -57,7 +57,7 @@ const AdminAddUserRole: NextPage = () => {
   const onSubmitForm = async (formFields, doneCallback) => {
     const { privileges } = formFields;
     const updateRole = {
-      ...formFields,
+      ...{ name: formFields.name, position: formFields.position },
       ...{ privileges: JSON.stringify(privileges) },
     };
     const variables = {

@@ -154,41 +154,39 @@ const PatientUsersListPage: NextPage = () => {
   const submitAddUserForm = (v, { setSubmitting }) => {
     confirmRef.current.openConfirm({
       confirmFunction: () => onAddUserSubmit(v, submitCallback),
-      description: "Are you sure you want to add this user?",
+      description: "Are you sure you want to add the user?",
       setSubmitting,
     });
   };
 
   return (
-    <>
-      <Layout>
-        <Loader
-          visible={
-            loadingCustomUsersList || loadingRolesList || loadingAddCustomUser
-          }
+    <Layout>
+      <Loader
+        visible={
+          loadingCustomUsersList || loadingRolesList || loadingAddCustomUser
+        }
+      />
+      <ContentHeader title="User List" />
+      {!loadingRolesList && roles && (
+        <PatientUsersComponent
+          usersListData={usersListData}
+          onPageChange={onPageChange}
+          onSelectPageDropdown={onSelectPageDropdown}
+          tableCurentPage={tableCurentPage}
+          rowsLimit={rowsLimit}
+          searchInputValue={searchInputValue}
+          onChangeSearchInput={onChangeSearchInput}
+          selectFilterOptions={selectFilterOptions}
+          onChangeFilterDropdown={onChangeFilterDropdown}
+          pageActionButtonClick={null}
+          onPressSideButton={onPressSideButton}
+          confirmRef={confirmRef}
+          roles={roles}
+          loadingCustomUsersList={loadingCustomUsersList}
+          infoModalRef={infoModalRef}
         />
-        <ContentHeader title="User List" />
-        {!loadingRolesList && roles && (
-          <PatientUsersComponent
-            usersListData={usersListData}
-            onPageChange={onPageChange}
-            onSelectPageDropdown={onSelectPageDropdown}
-            tableCurentPage={tableCurentPage}
-            rowsLimit={rowsLimit}
-            searchInputValue={searchInputValue}
-            onChangeSearchInput={onChangeSearchInput}
-            selectFilterOptions={selectFilterOptions}
-            onChangeFilterDropdown={onChangeFilterDropdown}
-            pageActionButtonClick={null}
-            onPressSideButton={onPressSideButton}
-            confirmRef={confirmRef}
-            roles={roles}
-            loadingCustomUsersList={loadingCustomUsersList}
-            infoModalRef={infoModalRef}
-          />
-        )}
-      </Layout>
-    </>
+      )}
+    </Layout>
   );
 };
 
