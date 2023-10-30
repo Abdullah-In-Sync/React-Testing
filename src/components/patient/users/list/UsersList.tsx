@@ -45,6 +45,7 @@ const PatientUsersComponent: React.FC<ViewProps> = ({
   roles,
   loadingCustomUsersList,
   infoModalRef,
+  onSelectPageDropdown,
 }) => {
   const styles = useStyles();
   return (
@@ -79,6 +80,7 @@ const PatientUsersComponent: React.FC<ViewProps> = ({
           tableCurentPage={tableCurentPage}
           rowsLimit={rowsLimit}
           loading={loadingCustomUsersList}
+          onSelectPageDropdown={onSelectPageDropdown}
         />
       </Stack>
 

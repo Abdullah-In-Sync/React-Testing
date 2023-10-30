@@ -160,35 +160,33 @@ const PatientUsersListPage: NextPage = () => {
   };
 
   return (
-    <>
-      <Layout>
-        <Loader
-          visible={
-            loadingCustomUsersList || loadingRolesList || loadingAddCustomUser
-          }
+    <Layout>
+      <Loader
+        visible={
+          loadingCustomUsersList || loadingRolesList || loadingAddCustomUser
+        }
+      />
+      <ContentHeader title="User List" />
+      {!loadingRolesList && roles && (
+        <PatientUsersComponent
+          usersListData={usersListData}
+          onPageChange={onPageChange}
+          onSelectPageDropdown={onSelectPageDropdown}
+          tableCurentPage={tableCurentPage}
+          rowsLimit={rowsLimit}
+          searchInputValue={searchInputValue}
+          onChangeSearchInput={onChangeSearchInput}
+          selectFilterOptions={selectFilterOptions}
+          onChangeFilterDropdown={onChangeFilterDropdown}
+          pageActionButtonClick={null}
+          onPressSideButton={onPressSideButton}
+          confirmRef={confirmRef}
+          roles={roles}
+          loadingCustomUsersList={loadingCustomUsersList}
+          infoModalRef={infoModalRef}
         />
-        <ContentHeader title="User List" />
-        {!loadingRolesList && roles && (
-          <PatientUsersComponent
-            usersListData={usersListData}
-            onPageChange={onPageChange}
-            onSelectPageDropdown={onSelectPageDropdown}
-            tableCurentPage={tableCurentPage}
-            rowsLimit={rowsLimit}
-            searchInputValue={searchInputValue}
-            onChangeSearchInput={onChangeSearchInput}
-            selectFilterOptions={selectFilterOptions}
-            onChangeFilterDropdown={onChangeFilterDropdown}
-            pageActionButtonClick={null}
-            onPressSideButton={onPressSideButton}
-            confirmRef={confirmRef}
-            roles={roles}
-            loadingCustomUsersList={loadingCustomUsersList}
-            infoModalRef={infoModalRef}
-          />
-        )}
-      </Layout>
-    </>
+      )}
+    </Layout>
   );
 };
 
