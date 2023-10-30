@@ -162,4 +162,4 @@ export const navPosition = [
   },
 ];
 
-export const phoneRegExp = /^\+[1-9]{1}[0-9]{3,14}$/;
+export const phoneRegExp = /^\+[1-9]\d{3,14}$/;
