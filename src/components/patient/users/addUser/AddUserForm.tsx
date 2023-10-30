@@ -58,7 +58,7 @@ const AddUserForm: React.FC<any> = ({
             <FormikTextField
               name="phone_no"
               id="phone_no"
-              label="Phone number"
+              label="Phone number*"
               fullWidth={true}
               inputProps={{ "data-testid": "phoneNumberInput" }}
               variant="outlined"
