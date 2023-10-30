@@ -14,6 +14,8 @@ import {
   ADD_THERAPIST_ADD_USER,
   GET_ROLE_LIST,
   GET_THERAPIST_USER_LIST,
+  GET_USER_DATA_BY_ID,
+  THERAPIST_EDIT_USER,
 } from "../../../graphql/customerUsers/graphql";
 import { useSnackbar } from "notistack";
 import { useAppContext } from "../../../contexts/AuthContext";
@@ -32,20 +34,24 @@ export default function TherapistUserMain() {
   /* istanbul ignore next */
   const orgId = user?.therapist_data?.org_id;
   const modalRefAddUser = useRef<ModalElement>(null);
+  const modalRefEditUser = useRef<ModalElement>(null);
+
   const { enqueueSnackbar } = useSnackbar();
   const [rowsLimit, setRowsLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loader, setLoader] = useState<boolean>(true);
   const [selectRoleForFilter, setSelectRoleForFilter] = useState("");
+  const [editAndDeletId, setEditAndDeletId] = useState("");
+  const [isConfirmEditUser, setIsConfirmEditUser] = useState(false);
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [isConfirmAddUser, setIsConfirmAddUser] = useState(false);
-
   const [searchInputValue, setSearchInputValue] = useState();
   const [formFields, setFormFields] = useState<therapistAddUser>({
     ...defaultFormValue,
   });
 
   const [addTherapistUser] = useMutation(ADD_THERAPIST_ADD_USER);
+  const [editTherapistUser] = useMutation(THERAPIST_EDIT_USER);
 
   /* istanbul ignore next */
   const handleOpenAddUserModal = useCallback(
@@ -59,8 +65,20 @@ export default function TherapistUserMain() {
   }, []);
 
   /* istanbul ignore next */
+  const handleOpenEditUserModal = useCallback(
+    () => modalRefEditUser.current?.open(),
+    []
+  );
+
+  /* istanbul ignore next */
+  const handleCloseEditUserModal = useCallback(() => {
+    modalRefEditUser.current?.close();
+  }, []);
+
+  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
+    setIsConfirmEditUser(false);
   };
 
   useEffect(() => {
@@ -111,6 +129,25 @@ export default function TherapistUserMain() {
     },
   });
 
+  useEffect(() => {
+    getCustomUserById({
+      variables: {
+        custom_user_id: editAndDeletId,
+      },
+    });
+  }, [editAndDeletId]);
+
+  const [getCustomUserById, { data: prefilledData }] = useLazyQuery(
+    GET_USER_DATA_BY_ID,
+    {
+      fetchPolicy: "network-only",
+      onCompleted: () => {
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    }
+  );
+
   /* istanbul ignore next */
   const onChangeSearchInput = (e) => {
     setSearchInputValue(e.target.value);
@@ -158,8 +195,46 @@ export default function TherapistUserMain() {
     }
   };
 
+  const handleEditUser = async () => {
+    try {
+      await editTherapistUser({
+        variables: {
+          custom_user_id: editAndDeletId,
+
+          update: {
+            first_name: formFields.first_name,
+            last_name: formFields.last_name,
+          },
+        },
+        onCompleted: () => {
+          /* istanbul ignore next */
+          enqueueSnackbar("User edit Successfully!", { variant: "success" });
+          setIsConfirmEditUser(false);
+          refetch();
+        },
+      });
+      /* istanbul ignore next */
+      handleCloseEditUserModal();
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
   const roleFilter = (data) => {
     setSelectRoleForFilter(data);
+  };
+
+  /* istanbul ignore next */
+  const handleActionButtonClick = (value) => {
+    const { _id, pressedIconButton } = value;
+
+    if (pressedIconButton === "edit") {
+      setEditAndDeletId(_id);
+      handleOpenEditUserModal();
+    }
   };
 
   return (
@@ -179,7 +254,7 @@ export default function TherapistUserMain() {
         rowsLimit={rowsLimit}
         sendSelectedRoleId={roleFilter}
         loadingMonitorList={loadingSafetyPlanList}
-        // pageActionButtonClick={handleActionButtonClick}
+        pageActionButtonClick={handleActionButtonClick}
       />
 
       <CommonModal
@@ -196,13 +271,42 @@ export default function TherapistUserMain() {
         />
       </CommonModal>
 
+      <CommonModal
+        ref={modalRefEditUser}
+        headerTitleText={"Edit User"}
+        maxWidth="sm"
+      >
+        <AddUserMain
+          roleListData={roleListData}
+          editPrefilledData={
+            /* istanbul ignore next */
+            prefilledData?.getCustomUserById
+          }
+          submitForm={(data) => {
+            setFormFields(data);
+            setIsConfirmEditUser(true);
+          }}
+        />
+      </CommonModal>
+
       {isConfirmAddUser && (
         <ConfirmationModal
-          label="Are you sure you want to add this formulation?"
+          label="Are you sure you want to add this user?"
           onCancel={clearIsConfirmCancel}
           onConfirm={() => {
             /* istanbul ignore next */
             handleAddUser();
+          }}
+        />
+      )}
+
+      {isConfirmEditUser && (
+        <ConfirmationModal
+          label="Are you sure you want to edit this user?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            handleEditUser();
           }}
         />
       )}
