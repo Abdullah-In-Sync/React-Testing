@@ -43,11 +43,40 @@ export const GET_THERAPIST_USER_LIST = gql`
         _id
         first_name
         last_name
+        email_id
+        phone_no
         role_id
         role_detail {
           name
         }
       }
+    }
+  }
+`;
+
+export const GET_USER_DATA_BY_ID = gql`
+  query getCustomUserById($custom_user_id: String) {
+    getCustomUserById(custom_user_id: $custom_user_id) {
+      _id
+      added_by
+      created_by
+      created_date
+      email_id
+      first_name
+      last_name
+      phone_no
+    }
+  }
+`;
+
+export const THERAPIST_EDIT_USER = gql`
+  mutation updateCustomUserById(
+    $custom_user_id: String!
+    $update: UpdateCustomUserInput
+  ) {
+    updateCustomUserById(custom_user_id: $custom_user_id, update: $update) {
+      message
+      result
     }
   }
 `;
