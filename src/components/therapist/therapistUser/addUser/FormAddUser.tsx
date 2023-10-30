@@ -13,24 +13,40 @@ const defaultFormValue = {
   email: "",
   phone: "+44",
   select_role: "",
+  org_id: "",
+};
+
+const AdminDefaultFormValue = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  phone: "",
+  select_role: "",
+  org_id: "",
 };
 
 interface ViewProps {
   buttonClick?: (value) => void;
   submit?: any;
   roleListData?: any;
+  organizationList?: any;
+  setOrg?: any;
   editPrefilledData?: any;
 }
 
 const FormBox: React.FC<ViewProps> = ({
   submit,
   roleListData,
+  organizationList,
+  setOrg,
   editPrefilledData,
 }) => {
   const styles = useStyles();
-
+  const defaultData = organizationList
+    ? AdminDefaultFormValue
+    : defaultFormValue;
   const [formFields, setFormFields] = useState<therapistAddUser>({
-    ...defaultFormValue,
+    ...defaultData,
   });
 
   console.log("Koca: Last editPrefilledData ", editPrefilledData);
@@ -40,6 +56,9 @@ const FormBox: React.FC<ViewProps> = ({
   ) => {
     const fieldName = e.target.name;
     let value = e.target.value;
+    if (fieldName == "org_id" && setOrg) {
+      setOrg(value);
+    }
 
     /* istanbul ignore next */
     if (fieldName === "phone" && value.length > 13) {
@@ -125,7 +144,7 @@ const FormBox: React.FC<ViewProps> = ({
               </Grid>
               <Grid item xs={6}>
                 <TextFieldComponent
-                  required={true}
+                  required={!organizationList ? true : false}
                   name="phone"
                   id="phone"
                   label="Phone Number"
@@ -142,6 +161,26 @@ const FormBox: React.FC<ViewProps> = ({
             </Grid>
 
             <Grid container spacing={2} marginBottom={3}>
+              {organizationList && (
+                <Grid item xs={6}>
+                  <SingleSelectComponent
+                    fullWidth={true}
+                    required={true}
+                    id="org_id"
+                    labelId="org_id"
+                    name="org_id"
+                    /* istanbul ignore next */
+                    value={formFields.org_id}
+                    label="Select Organisation"
+                    onChange={set2}
+                    inputProps={{ "data-testid": "select_org" }}
+                    options={[...organizationList] || []}
+                    mappingKeys={["_id", "name"]}
+                    size="small"
+                    className="form-control-bg"
+                  />
+                </Grid>
+              )}
               <Grid item xs={6}>
                 <SingleSelectComponent
                   fullWidth={true}
@@ -153,14 +192,19 @@ const FormBox: React.FC<ViewProps> = ({
                   value={formFields.select_role}
                   label="Select Role"
                   onChange={set2}
-                  inputProps={{ "data-testid": "select_roledsd" }}
+                  inputProps={{ "data-testid": "select_role_dropdown" }}
                   options={
                     (roleListData && roleListData.getRolesbyAccessbility) || []
                   }
                   mappingKeys={["_id", "name"]}
                   size="small"
                   className="form-control-bg"
-                  disabled={editPrefilledData}
+                  disabled={
+                    (organizationList && formFields.org_id == "") ||
+                    editPrefilledData
+                      ? true
+                      : false
+                  }
                 />
               </Grid>
             </Grid>

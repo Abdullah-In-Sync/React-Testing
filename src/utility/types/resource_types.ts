@@ -23,6 +23,7 @@ export type therapistAddUser = {
   email: string;
   phone: string;
   select_role: string;
+  org_id?: string;
 };
 
 export type addAdminAssessment = {

@@ -13,6 +13,7 @@ interface ViewProps {
   organizationList?: any;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
+  onPressAdd?: () => void;
 }
 
 const Filter: React.FC<ViewProps> = ({

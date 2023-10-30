@@ -5,12 +5,16 @@ import Form from "./FormAddUser";
 interface ViewProps {
   submitForm?: any;
   roleListData?: any;
+  organizationList?: any;
+  setOrg?: any;
   editPrefilledData?: any;
 }
 
 const AddUserMain: React.FC<ViewProps> = ({
   submitForm,
   roleListData,
+  organizationList,
+  setOrg,
   editPrefilledData,
 }) => {
   const submitFormData = (data) => {
@@ -26,6 +30,8 @@ const AddUserMain: React.FC<ViewProps> = ({
         children={() => (
           <Form
             roleListData={roleListData}
+            organizationList={organizationList}
+            setOrg={setOrg}
             editPrefilledData={editPrefilledData}
             submit={submitFormData}
           />
