@@ -25,17 +25,7 @@ mocksData.push({
       getRolesbyAccessbility: [
         {
           _id: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a",
-          accessibility: "therapist",
-          created_date: "2023-10-18T13:47:28.301Z",
           name: "testn1",
-          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-          organization_name: null,
-          position: "sidebar",
-          privileges:
-            '{"Library":["65264f596fc24c909367859c1"],"Assessment":[],"Relapse":[],"Safety Plan":[],"Measures":[],"Monitors":[],"Notes":[],"Homework":[],"Goals":[],"Formulation":["65264f596fc24c909367859c1"],"Resources":[]}',
-          status: 1,
-          updated_date: "2023-10-20T17:36:31.984Z",
-          __typename: "AdminRole",
         },
       ],
     },
@@ -198,14 +188,10 @@ mocksData.push({
     data: {
       getCustomUserById: {
         _id: "aa9f8005-f555-4747-81d5-c520f6ac14b9",
-        added_by: "therapist",
-        created_by: "dbdd2446-093c-4ec4-abc9-df275634a817",
-        created_date: "2023-10-27T07:17:53.390Z",
-        email_id: null,
+        email: null,
         first_name: "scs10",
         last_name: "Name",
         phone_no: "+444323334231",
-        __typename: "CustomUser",
       },
     },
   },
@@ -311,7 +297,7 @@ describe("Therapist user list", () => {
       expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
-      expect(screen.getByText("User added Successfully!")).toBeInTheDocument();
+      expect(screen.getByText("User created successfully")).toBeInTheDocument();
     });
   });
 

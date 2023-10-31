@@ -49,8 +49,6 @@ const FormBox: React.FC<ViewProps> = ({
     ...defaultData,
   });
 
-  console.log("Koca: Last editPrefilledData ", editPrefilledData);
-
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -72,7 +70,6 @@ const FormBox: React.FC<ViewProps> = ({
     e.preventDefault();
     submit(formFields);
   };
-  console.log("Koca: editPrefilledData ", editPrefilledData);
 
   useEffect(() => {
     if (editPrefilledData) {
@@ -80,7 +77,7 @@ const FormBox: React.FC<ViewProps> = ({
         ...oldValues,
         first_name: editPrefilledData.first_name,
         last_name: editPrefilledData.last_name,
-        email: editPrefilledData.email_id,
+        email: editPrefilledData.email,
         phone: editPrefilledData.phone_no,
         select_role: editPrefilledData.role_id,
       }));
