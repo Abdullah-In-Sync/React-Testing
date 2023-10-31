@@ -208,3 +208,31 @@ export const ADD_CUSTOM_USER = gql`
     }
   }
 `;
+
+export const GET_CUSTOM_USER_BY_ID = gql`
+  query GetCustomUserById($custom_user_id: String!) {
+    getCustomUserById(custom_user_id: $custom_user_id) {
+      added_by
+      _id
+      email
+      first_name
+      last_name
+      phone_no
+      role_id
+    }
+  }
+`;
+
+export const UPDATE_CUSTOM_USER = gql`
+  mutation UpdateCustomUserById(
+    $custom_user_id: String!
+    $update: UpdateCustomUserInput
+  ) {
+    updateCustomUserById(custom_user_id: $custom_user_id, update: $update) {
+      message
+      result
+    }
+  }
+`;
+
+// getCustomUserById
