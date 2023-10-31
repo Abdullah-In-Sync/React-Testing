@@ -178,9 +178,11 @@ export default function TherapistUserMain() {
           org_id: orgId,
           phone_no: formFields.phone,
         },
-        onCompleted: () => {
+        onCompleted: (data) => {
+          const { result, message } = data.addCustomUser;
           /* istanbul ignore next */
-          enqueueSnackbar("User added Successfully!", { variant: "success" });
+          const variant = result ? "success" : "error";
+          enqueueSnackbar(message, { variant });
           setIsConfirmAddUser(false);
           refetch();
         },
