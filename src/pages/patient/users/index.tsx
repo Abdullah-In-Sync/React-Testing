@@ -8,8 +8,10 @@ import Loader from "../../../components/common/Loader";
 import PatientUsersComponent from "../../../components/patient/users/list/UsersList";
 import {
   ADD_CUSTOM_USER,
+  GET_CUSTOM_USER_BY_ID,
   GET_ROLES_ACCESSBILITY,
   PATIENT_CUSTOM_USER_LIST,
+  UPDATE_CUSTOM_USER,
 } from "../../../graphql/userRole/graphql";
 import Layout from "../../../components/layout";
 import {
@@ -29,6 +31,10 @@ const PatientUsersListPage: NextPage = () => {
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [addCustomUser, { loading: loadingAddCustomUser }] =
     useMutation(ADD_CUSTOM_USER);
+  const [updateCustomUser] = useMutation(UPDATE_CUSTOM_USER);
+  const [getCustomUserById] = useLazyQuery(GET_CUSTOM_USER_BY_ID, {
+    fetchPolicy: "cache-and-network",
+  });
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAppContext();
   const org_id = user?.organization_settings?._id;
@@ -117,8 +123,34 @@ const PatientUsersListPage: NextPage = () => {
             addCustomUser: { message, result },
           } = data;
           if (result) {
-            refetchCustomUserList();
             enqueueSnackbar("User added successfully!", {
+              variant: "success",
+            });
+            callback();
+          } else if (message) {
+            enqueueSnackbar(message, {
+              variant: "error",
+            });
+          }
+        },
+      });
+    } catch (e) {
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    }
+  };
+
+  const onUpdateUserSubmit = async (formFields, callback) => {
+    try {
+      await updateCustomUser({
+        variables: formFields,
+        onCompleted: (data) => {
+          const {
+            updateCustomUserById: { message, result },
+          } = data;
+          if (result) {
+            enqueueSnackbar(message, {
               variant: "success",
             });
             callback();
@@ -149,6 +181,7 @@ const PatientUsersListPage: NextPage = () => {
   const submitCallback = () => {
     confirmRef.current.close();
     infoModalRef.current.close();
+    refetchCustomUserList();
   };
 
   const submitAddUserForm = (v, { setSubmitting }) => {
@@ -157,6 +190,68 @@ const PatientUsersListPage: NextPage = () => {
       description: "Are you sure you want to add the user?",
       setSubmitting,
     });
+  };
+
+  const submitUpdateUserForm = (v, { setSubmitting }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () =>
+        onUpdateUserSubmit(
+          {
+            custom_user_id: v.custom_user_id,
+            update: {
+              first_name: v.first_name,
+              last_name: v.last_name,
+            },
+          },
+          submitCallback
+        ),
+      description: "Are you sure you want to update the user?",
+      setSubmitting,
+    });
+  };
+
+  const onClickActionButton = (v) => {
+    const {
+      first_name,
+      last_name,
+      role_id,
+      _id: custom_user_id,
+      pressedIconButton,
+    } = v;
+    if (pressedIconButton === "edit") {
+      let t = false;
+      getCustomUserById({
+        variables: {
+          custom_user_id,
+        },
+        onCompleted: (data) => {
+          const { getCustomUserById: { email = "", phone_no = "" } = {} } =
+            data;
+          if (!t)
+            infoModalRef.current.openConfirm({
+              data: {
+                onSubmit: (v, formikProps) =>
+                  submitUpdateUserForm(
+                    { ...v, ...{ custom_user_id } },
+                    formikProps
+                  ),
+                headerTitleText: "Edit User",
+                roles,
+                value: {
+                  first_name,
+                  last_name,
+                  email,
+                  phone_no,
+                  role_id,
+                },
+                isEdit: true,
+                buttonText: "Update",
+              },
+            });
+          t = true;
+        },
+      });
+    }
   };
 
   return (
@@ -178,7 +273,7 @@ const PatientUsersListPage: NextPage = () => {
           onChangeSearchInput={onChangeSearchInput}
           selectFilterOptions={selectFilterOptions}
           onChangeFilterDropdown={onChangeFilterDropdown}
-          pageActionButtonClick={null}
+          pageActionButtonClick={onClickActionButton}
           onPressSideButton={onPressSideButton}
           confirmRef={confirmRef}
           roles={roles}
