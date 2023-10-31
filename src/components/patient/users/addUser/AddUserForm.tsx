@@ -8,6 +8,8 @@ import FormikSelectDropdown from "../../../common/FormikFields/FormikSelectDropd
 const AddUserForm: React.FC<any> = ({
   formikProps: { isSubmitting },
   roles,
+  isEdit,
+  buttonText,
 }) => {
   return (
     <Stack className={"addUserFormWrapper"}>
@@ -52,6 +54,7 @@ const AddUserForm: React.FC<any> = ({
               className="form-control-bg"
               size="small"
               placeholder="Email*"
+              disabled={isEdit}
             />
           </Box>
           <Box>
@@ -65,6 +68,7 @@ const AddUserForm: React.FC<any> = ({
               className="form-control-bg"
               size="small"
               placeholder="Phone number"
+              disabled={isEdit}
             />
           </Box>
         </Box>
@@ -81,6 +85,7 @@ const AddUserForm: React.FC<any> = ({
               size="small"
               className="form-control-bg addRoleDropdown"
               extraProps={{ "data-testid": `addRoleDropdown` }}
+              disabled={isEdit}
             />
           </Box>
           <Box />
@@ -93,7 +98,7 @@ const AddUserForm: React.FC<any> = ({
               data-testid="newUserSubmit"
               variant="contained"
             >
-              Save
+              {buttonText || "Save"}
             </CommonButton>
           </Box>
         </Box>

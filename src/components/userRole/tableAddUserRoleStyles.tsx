@@ -73,13 +73,8 @@ export const useStyles = makeStyles(() => {
 
     tablePaper: {
       "& .tableContainer": {
-        "&::-webkit-scrollbar": {
-          width: 0,
-          background: "transparent",
-        },
         maxHeight: "80vh",
       },
-
       padding: "10px 0px 10px 0px",
       "& table": {
         width: "100%",

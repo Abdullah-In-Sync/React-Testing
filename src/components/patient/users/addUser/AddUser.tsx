@@ -29,6 +29,8 @@ const PatientAddUser: React.FC<ViewProps> = ({
       role_id = "",
     } = {},
     roles = [],
+    isEdit,
+    buttonText,
   } = {},
 }) => {
   const initialValues = {
@@ -45,7 +47,14 @@ const PatientAddUser: React.FC<ViewProps> = ({
         validationSchema={validationSchema}
         initialValues={initialValues}
         onSubmit={onSubmit}
-        children={(props) => <AddUserForm formikProps={props} roles={roles} />}
+        children={(props) => (
+          <AddUserForm
+            formikProps={props}
+            roles={roles}
+            isEdit={isEdit}
+            buttonText={buttonText}
+          />
+        )}
       />
     );
   };

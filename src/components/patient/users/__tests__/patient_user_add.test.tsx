@@ -7,8 +7,10 @@ import theme from "../../../../styles/theme/theme";
 import PatientUsersListPage from "../../../../pages/patient/users";
 import {
   ADD_CUSTOM_USER,
+  GET_CUSTOM_USER_BY_ID,
   GET_ROLES_ACCESSBILITY,
   PATIENT_CUSTOM_USER_LIST,
+  UPDATE_CUSTOM_USER,
 } from "../../../../graphql/userRole/graphql";
 
 jest.mock("next/router", () => ({
@@ -58,8 +60,9 @@ mocksData.push({
           {
             _id: "customeruserid1",
             added_by: "patient",
+            first_name: "testname",
             last_name: "Nvang",
-            role_id: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a",
+            role_id: "roleid1",
             updated_date: "2023-10-25T07:18:24.622Z",
             user_id: "b5860117-3f9f-40a9-8b7f-1a7b69370be5",
             org_detail: {
@@ -69,7 +72,31 @@ mocksData.push({
             },
             org_id: "orgid1",
             role_detail: {
-              _id: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a",
+              _id: "roleid1",
+              accessibility: "therapist",
+              name: "testn1",
+              org_id: "orgid1",
+              position: "sidebar",
+              privileges:
+                '{"Library":["65264f596fc24c909367859c1"],"Assessment":[],"Relapse":[],"Safety Plan":[],"Measures":[],"Monitors":[],"Notes":[],"Homework":[],"Goals":[],"Formulation":["65264f596fc24c909367859c1"],"Resources":[]}',
+            },
+          },
+          {
+            _id: "errorcustomeuserid1",
+            added_by: "patient",
+            first_name: "testname",
+            last_name: "Nvang",
+            role_id: "roleid2",
+            updated_date: "2023-10-25T07:18:24.622Z",
+            user_id: "b5860117-3f9f-40a9-8b7f-1a7b69370be5",
+            org_detail: {
+              _id: "orgid1",
+              name: "portal.dev-myhelp",
+              patient: "Patient",
+            },
+            org_id: "orgid1",
+            role_detail: {
+              _id: "roleid2",
               accessibility: "therapist",
               name: "testn1",
               org_id: "orgid1",
@@ -127,6 +154,92 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_CUSTOM_USER_BY_ID,
+    variables: {
+      custom_user_id: "customeruserid1",
+    },
+  },
+  result: {
+    data: {
+      getCustomUserById: {
+        added_by: "patient",
+        _id: "customuserid1",
+        email: "test@test50.com",
+        first_name: "testfirsthupdateadsf231",
+        last_name: "lastnameupdate1",
+        phone_no: "+4489786543211",
+        role_id: "roleid1",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: GET_CUSTOM_USER_BY_ID,
+    variables: {
+      custom_user_id: "errorcustomeuserid1",
+    },
+  },
+  result: {
+    data: {
+      getCustomUserById: {
+        added_by: "patient",
+        _id: "errorcustomeuserid1",
+        email: "test@test50.com",
+        first_name: "testfirsthupdateadsf231",
+        last_name: "lastnameupdate1",
+        phone_no: "+4489786543211",
+        role_id: "roleid1",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_CUSTOM_USER,
+    variables: {
+      custom_user_id: "customeruserid1",
+      update: {
+        first_name: "testname",
+        last_name: "Nvang",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateCustomUserById: {
+        message: "Updated successfully!",
+        result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: UPDATE_CUSTOM_USER,
+    variables: {
+      custom_user_id: "errorcustomeuserid1",
+      update: {
+        first_name: "testname",
+        last_name: "Nvang",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateCustomUserById: {
+        message: "Fail to update!",
+        result: false,
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -139,14 +252,14 @@ const sut = async () => {
   );
 };
 
-const selectFromOrganizationDropdown = async () => {
+const selectFromRoleDropdown = async () => {
   const button = within(await screen.findByTestId("addRoleDropdown")).getByRole(
     "button"
   );
   fireEvent.mouseDown(button);
 
   const listbox = within(screen.getByRole("presentation")).getByRole("listbox");
-  const options = await within(listbox).findAllByRole("option");
+  const options = within(listbox).getAllByRole("option");
 
   fireEvent.click(options[0]);
 };
@@ -154,7 +267,7 @@ const selectFromOrganizationDropdown = async () => {
 describe("Patient user add", () => {
   it("should render admin users list and can new user", async () => {
     await sut();
-    fireEvent.click(await screen.findByTestId("addUserRoleButton"));
+    await fireEvent.click(await screen.findByTestId("addUserRoleButton"));
     fireEvent.change(await screen.findByTestId("firstNameInput"), {
       target: { value: "firstnametext" },
     });
@@ -167,7 +280,7 @@ describe("Patient user add", () => {
     fireEvent.change(await screen.findByTestId("phoneNumberInput"), {
       target: { value: "+44747847541" },
     });
-    await selectFromOrganizationDropdown();
+    await selectFromRoleDropdown();
     fireEvent.click(await screen.findByTestId("newUserSubmit"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
@@ -190,11 +303,33 @@ describe("Patient user add", () => {
     fireEvent.change(await screen.findByTestId("phoneNumberInput"), {
       target: { value: "+44747847541" },
     });
-    await selectFromOrganizationDropdown();
+    await selectFromRoleDropdown();
     fireEvent.click(await screen.findByTestId("newUserSubmit"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
       await screen.findByText(/Something went wrong./i)
     ).toBeInTheDocument();
+  });
+
+  it("should edit user", async () => {
+    await sut();
+    fireEvent.click(
+      await screen.findByTestId("iconButton_edit_customeruserid1")
+    );
+    fireEvent.click(await screen.findByTestId("newUserSubmit"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/Updated successfully!/i)
+    ).toBeInTheDocument();
+  });
+
+  it("should render edit error", async () => {
+    await sut();
+    fireEvent.click(
+      await screen.findByTestId("iconButton_edit_errorcustomeuserid1")
+    );
+    fireEvent.click(await screen.findByTestId("newUserSubmit"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(await screen.findByText(/Fail to update!/i)).toBeInTheDocument();
   });
 });
