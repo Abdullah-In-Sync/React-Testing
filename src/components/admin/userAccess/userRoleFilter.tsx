@@ -12,6 +12,7 @@ interface ViewProps {
   organizationList?: any;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
+  onPressAdd?: () => void;
 }
 
 export const accessibilityFilter = [

@@ -8,6 +8,8 @@ import {
   ADD_THERAPIST_ADD_USER,
   GET_ROLE_LIST,
   GET_THERAPIST_USER_LIST,
+  GET_USER_DATA_BY_ID,
+  THERAPIST_EDIT_USER,
 } from "../graphql/customerUsers/graphql";
 
 const mocksData = [];
@@ -23,17 +25,7 @@ mocksData.push({
       getRolesbyAccessbility: [
         {
           _id: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a",
-          accessibility: "therapist",
-          created_date: "2023-10-18T13:47:28.301Z",
           name: "testn1",
-          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-          organization_name: null,
-          position: "sidebar",
-          privileges:
-            '{"Library":["65264f596fc24c909367859c1"],"Assessment":[],"Relapse":[],"Safety Plan":[],"Measures":[],"Monitors":[],"Notes":[],"Homework":[],"Goals":[],"Formulation":["65264f596fc24c909367859c1"],"Resources":[]}',
-          status: 1,
-          updated_date: "2023-10-20T17:36:31.984Z",
-          __typename: "AdminRole",
         },
       ],
     },
@@ -187,6 +179,43 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_USER_DATA_BY_ID,
+    variables: { custom_user_id: "d2f84b2a-845f-4abc-8ab6-aa3107c58514" },
+  },
+  result: {
+    data: {
+      getCustomUserById: {
+        _id: "aa9f8005-f555-4747-81d5-c520f6ac14b9",
+        email: null,
+        first_name: "scs10",
+        last_name: "Name",
+        phone_no: "+444323334231",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_EDIT_USER,
+    variables: {
+      custom_user_id: "d2f84b2a-845f-4abc-8ab6-aa3107c58514",
+      update: { first_name: "change name", last_name: "Name" },
+    },
+  },
+  result: {
+    data: {
+      addCustomUser: {
+        message: "User created successfully",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -254,11 +283,11 @@ describe("Therapist user list", () => {
         target: { value: "+444323334234" },
       });
 
-      fireEvent.change(screen.queryByTestId("select_roledsd"), {
+      fireEvent.change(screen.queryByTestId("select_role_dropdown"), {
         target: { value: "dd25567c-4b33-4e08-9d78-9bebd9f37b9a" },
       });
       await expect(
-        screen.queryByTestId("select_roledsd").getAttribute("value")
+        screen.queryByTestId("select_role_dropdown").getAttribute("value")
       ).toBe("dd25567c-4b33-4e08-9d78-9bebd9f37b9a");
 
       expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
@@ -268,7 +297,58 @@ describe("Therapist user list", () => {
       expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
-      expect(screen.getByText("User added Successfully!")).toBeInTheDocument();
+      expect(screen.getByText("User created successfully")).toBeInTheDocument();
+    });
+  });
+
+  it("To see the pre filled data before edit", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      );
+      await expect(screen.getByTestId("first_name")).toBeInTheDocument();
+
+      expect(screen.getByTestId("first_name")).toHaveValue("scs10");
+    });
+  });
+
+  it("Edit user", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      );
+      await expect(screen.getByTestId("first_name")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("first_name"), {
+        target: { value: "change name" },
+      });
+
+      expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByText("Update"));
+
+      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(screen.getByText("User edit Successfully!")).toBeInTheDocument();
     });
   });
 });

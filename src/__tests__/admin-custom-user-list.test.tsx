@@ -12,6 +12,10 @@ import theme from "../styles/theme/theme";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
 import CustomUserListPage from "../pages/admin/customUsers";
 import { GET_CUSTOM_USERS_LIST } from "../graphql/customUsers/graphql";
+import {
+  ADD_THERAPIST_ADD_USER,
+  GET_ROLE_LIST,
+} from "../graphql/customerUsers/graphql";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -162,6 +166,59 @@ mocksData.push({
   },
 });
 
+// role dropdown for add user
+mocksData.push({
+  request: {
+    query: GET_ROLE_LIST,
+    variables: {
+      org_id: "d1f2bbd3-3388-4ca2-9d68-55b95574a269",
+    },
+  },
+  result: {
+    data: {
+      getRolesbyAccessbility: [
+        {
+          _id: "372a1a61-7146-4f32-baf1-c0eefee750b3",
+          accessibility: "admin",
+          created_date: "2023-10-19T04:19:49.196Z",
+          name: "tesusername",
+          org_id: "d1f2bbd3-3388-4ca2-9d68-55b95574a269",
+          organization_name: null,
+          position: "sidebar",
+          privileges:
+            '{"Goals":["65264f596fc24c909367859c1"],"Assessment":["65264f596fc24c909367859c9"],"Notes":[],"Homework":[],"Monitors":[],"Safety Plan":[],"Relapse":[],"Library":[],"Resources":[],"Measures":[],"Formulation":[]}',
+          status: 1,
+          updated_date: "2023-10-19T04:19:49.196Z",
+          __typename: "AdminRole",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADD_THERAPIST_ADD_USER,
+    variables: {
+      first_name: "first-name-1",
+      last_name: "last-name-1",
+      email: "firstLast@mail.com",
+      role_id: "372a1a61-7146-4f32-baf1-c0eefee750b3",
+      org_id: "d1f2bbd3-3388-4ca2-9d68-55b95574a269",
+      phone_no: "+441212121212",
+    },
+  },
+  result: {
+    data: {
+      addCustomUser: {
+        message: "User created successfully",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -207,6 +264,52 @@ describe("Render admin custom users list screen", () => {
       });
 
       expect(screen.getByText("test by search")).toBeInTheDocument();
+    });
+  });
+
+  it("Add user", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("addUserRoleButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("addUserRoleButton"));
+      expect(screen.getByTestId("first_name")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("first_name"), {
+        target: { value: "first-name-1" },
+      });
+
+      fireEvent.change(screen.queryByTestId("last_name"), {
+        target: { value: "last-name-1" },
+      });
+      fireEvent.change(screen.queryByTestId("email"), {
+        target: { value: "firstLast@mail.com" },
+      });
+      fireEvent.change(screen.queryByTestId("phone"), {
+        target: { value: "+441212121212" },
+      });
+
+      fireEvent.change(screen.queryByTestId("select_org"), {
+        target: { value: "d1f2bbd3-3388-4ca2-9d68-55b95574a269" },
+      });
+      await expect(
+        screen.queryByTestId("select_org").getAttribute("value")
+      ).toBe("d1f2bbd3-3388-4ca2-9d68-55b95574a269");
+
+      fireEvent.change(screen.queryByTestId("select_role_dropdown"), {
+        target: { value: "372a1a61-7146-4f32-baf1-c0eefee750b3" },
+      });
+      await expect(
+        screen.queryByTestId("select_role_dropdown").getAttribute("value")
+      ).toBe("372a1a61-7146-4f32-baf1-c0eefee750b3");
+
+      expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByText("Save"));
+
+      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(screen.getByText("User added Successfully!")).toBeInTheDocument();
     });
   });
 });

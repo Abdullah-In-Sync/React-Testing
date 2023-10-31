@@ -52,19 +52,36 @@ export const GET_THERAPIST_USER_LIST = gql`
   }
 `;
 
+export const GET_USER_DATA_BY_ID = gql`
+  query getCustomUserById($custom_user_id: String) {
+    getCustomUserById(custom_user_id: $custom_user_id) {
+      _id
+      email
+      first_name
+      last_name
+      phone_no
+      role_id
+    }
+  }
+`;
+
+export const THERAPIST_EDIT_USER = gql`
+  mutation updateCustomUserById(
+    $custom_user_id: String!
+    $update: UpdateCustomUserInput
+  ) {
+    updateCustomUserById(custom_user_id: $custom_user_id, update: $update) {
+      message
+      result
+    }
+  }
+`;
+
 export const GET_ROLE_LIST = gql`
   query getRolesbyAccessbility($org_id: String) {
     getRolesbyAccessbility(org_id: $org_id) {
       _id
-      accessibility
-      created_date
       name
-      org_id
-      organization_name
-      position
-      privileges
-      status
-      updated_date
     }
   }
 `;
