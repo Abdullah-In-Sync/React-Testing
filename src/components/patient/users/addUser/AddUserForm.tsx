@@ -85,6 +85,7 @@ const AddUserForm: React.FC<any> = ({
               size="small"
               className="form-control-bg addRoleDropdown"
               extraProps={{ "data-testid": `addRoleDropdown` }}
+              disabled={isEdit}
             />
           </Box>
           <Box />

@@ -201,7 +201,6 @@ const PatientUsersListPage: NextPage = () => {
             update: {
               first_name: v.first_name,
               last_name: v.last_name,
-              role_id: v.role_id,
             },
           },
           submitCallback

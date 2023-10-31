@@ -206,7 +206,6 @@ mocksData.push({
       update: {
         first_name: "testname",
         last_name: "Nvang",
-        role_id: "roleid1",
       },
     },
   },
@@ -228,7 +227,6 @@ mocksData.push({
       update: {
         first_name: "testname",
         last_name: "Nvang",
-        role_id: "roleid2",
       },
     },
   },
