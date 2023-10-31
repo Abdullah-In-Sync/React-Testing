@@ -80,6 +80,7 @@ const FormBox: React.FC<ViewProps> = ({
         email: editPrefilledData.email,
         phone: editPrefilledData.phone_no,
         select_role: editPrefilledData.role_id,
+        ...(organizationList ? { org_id: editPrefilledData.org_id } : {}),
       }));
     }
   }, [editPrefilledData]);
@@ -175,6 +176,7 @@ const FormBox: React.FC<ViewProps> = ({
                     mappingKeys={["_id", "name"]}
                     size="small"
                     className="form-control-bg"
+                    disabled={editPrefilledData}
                   />
                 </Grid>
               )}

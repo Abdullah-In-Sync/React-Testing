@@ -18,6 +18,8 @@ import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import {
   ADD_THERAPIST_ADD_USER,
   GET_ROLE_LIST,
+  GET_USER_DATA_BY_ID,
+  THERAPIST_EDIT_USER,
 } from "../../../graphql/customerUsers/graphql";
 import { therapistAddUser } from "../../../utility/types/resource_types";
 import { useSnackbar } from "notistack";
@@ -41,15 +43,18 @@ const CustomUserListPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [listData, setListData] = useState({ data: [], total: 0 });
   const modalRefAddUser = useRef<ModalElement>(null);
+  const modalRefEditUser = useRef<ModalElement>(null);
   const [isConfirmAddUser, setIsConfirmAddUser] = useState(false);
   const [selectOrg, setSelectOrg] = useState("");
-
+  const [selectedUser, setSelectedUser] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [isConfirmEditUser, setIsConfirmEditUser] = useState(false);
   const [formFields, setFormFields] = useState<therapistAddUser>({
     ...defaultFormValue,
   });
 
   const [addTherapistUser] = useMutation(ADD_THERAPIST_ADD_USER);
+  const [editTherapistUser] = useMutation(THERAPIST_EDIT_USER);
 
   /* istanbul ignore next */
   const handleOpenAddUserModal = useCallback(
@@ -60,6 +65,21 @@ const CustomUserListPage: NextPage = () => {
   /* istanbul ignore next */
   const handleCloseAddUserModal = useCallback(() => {
     modalRefAddUser.current?.close();
+  }, []);
+
+  /* istanbul ignore next */
+  const handleOpenEditUserModal = useCallback(() => {
+    getRoleList({
+      variables: {
+        org_id: "",
+      },
+    });
+    modalRefEditUser.current?.open();
+  }, []);
+
+  /* istanbul ignore next */
+  const handleCloseEditUserModal = useCallback(() => {
+    modalRefEditUser.current?.close();
   }, []);
 
   useEffect(() => {
@@ -105,7 +125,7 @@ const CustomUserListPage: NextPage = () => {
               first_name: a.first_name,
               last_name: a.last_name,
               role: a.role_detail?.name,
-              organisation: a.role_detail?.organization_name,
+              organisation: a.org_detail?.name,
             };
           });
           /* istanbul ignore next */
@@ -154,6 +174,55 @@ const CustomUserListPage: NextPage = () => {
       });
       /* istanbul ignore next */
       handleCloseAddUserModal();
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+  useEffect(() => {
+    getCustomUserById({
+      variables: {
+        custom_user_id: selectedUser,
+      },
+    });
+  }, [selectedUser]);
+  const [getCustomUserById, { data: prefilledData }] = useLazyQuery(
+    GET_USER_DATA_BY_ID,
+    {
+      fetchPolicy: "network-only",
+      onCompleted: () => {
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    }
+  );
+
+  const handleEditUser = async () => {
+    try {
+      await editTherapistUser({
+        variables: {
+          custom_user_id: selectedUser,
+
+          update: {
+            first_name: formFields.first_name,
+            last_name: formFields.last_name,
+          },
+        },
+        onCompleted: (data) => {
+          const variant = data?.updateCustomUserById?.result
+            ? "success"
+            : "error";
+
+          /* istanbul ignore next */
+          enqueueSnackbar(data?.updateCustomUserById?.message, { variant });
+          setIsConfirmEditUser(false);
+          refetch();
+        },
+      });
+      /* istanbul ignore next */
+      handleCloseEditUserModal();
     } catch (e) {
       /* istanbul ignore next */
       setLoader(false);
@@ -249,16 +318,23 @@ const CustomUserListPage: NextPage = () => {
 
   /* istanbul ignore next */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleActionButtonClick = (value) => {};
+  const handleActionButtonClick = (value) => {
+    const { _id, pressedIconButton } = value;
+    if (pressedIconButton == "edit") {
+      setSelectedUser(_id);
+      handleOpenEditUserModal();
+    }
+  };
 
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
+    setIsConfirmEditUser(false);
   };
 
   const setOrg = (id: string) => {
     setSelectOrg(id);
   };
-
+  const operationFunction = isConfirmAddUser ? handleAddUser : handleEditUser;
   return (
     <Layout boxStyle={{ height: "100vh" }}>
       <Loader visible={loader} />
@@ -294,14 +370,33 @@ const CustomUserListPage: NextPage = () => {
           }}
         />
       </CommonModal>
-      {isConfirmAddUser && (
-        <ConfirmationModal
-          label="Are you sure you want to add this user?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={() => {
+      <CommonModal
+        ref={modalRefEditUser}
+        headerTitleText={"Update User"}
+        maxWidth="sm"
+      >
+        <AddUserMain
+          roleListData={roleListData}
+          editPrefilledData={
             /* istanbul ignore next */
-            handleAddUser();
+            prefilledData?.getCustomUserById
+          }
+          organizationList={organizationList}
+          submitForm={(data) => {
+            setFormFields(data);
+            setIsConfirmEditUser(true);
           }}
+        />
+      </CommonModal>
+      {(isConfirmAddUser || isConfirmEditUser) && (
+        <ConfirmationModal
+          label={
+            isConfirmAddUser
+              ? "Are you sure you want to add this user?"
+              : "Are you sure you want to update these user details?"
+          }
+          onCancel={clearIsConfirmCancel}
+          onConfirm={operationFunction}
         />
       )}
     </Layout>
