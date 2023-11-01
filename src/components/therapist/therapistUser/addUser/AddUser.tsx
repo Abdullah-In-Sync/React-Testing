@@ -20,7 +20,6 @@ const AddUserMain: React.FC<ViewProps> = ({
   const submitFormData = (data) => {
     submitForm(data);
   };
-
   const commonform = () => {
     return (
       <Formik
