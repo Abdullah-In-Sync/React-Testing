@@ -34,12 +34,25 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
 
   const onChangePrivilege = async (row, item) => {
     const module = privileges[row.name] || [];
+    const moduleKey = `privileges.${[row.name]}`;
+    const { privileges: privilegesData = [] } = modulesData;
     const index = module.indexOf(item._id);
+    const viewText = "View";
+    const viewId = privilegesData.filter((item) => item.name === viewText)[0][
+      "_id"
+    ];
     if (index <= -1) {
-      setFieldValue(`privileges.${[row.name]}`, [...module, ...[item._id]]);
+      if (item.name !== viewText && viewId && !module.includes(viewId))
+        setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
+      else setFieldValue(moduleKey, [...module, ...[item._id]]);
     } else {
-      module.splice(index, 1);
-      setFieldValue(`privileges.${[row.name]}`, module);
+      if (
+        (item.name === viewText && module.length === 1) ||
+        item.name !== viewText
+      ) {
+        module.splice(index, 1);
+        setFieldValue(moduleKey, module);
+      }
     }
   };
 
