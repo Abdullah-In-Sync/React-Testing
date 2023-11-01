@@ -15,6 +15,8 @@ import { GET_CUSTOM_USERS_LIST } from "../graphql/customUsers/graphql";
 import {
   ADD_THERAPIST_ADD_USER,
   GET_ROLE_LIST,
+  GET_USER_DATA_BY_ID,
+  THERAPIST_EDIT_USER,
 } from "../graphql/customerUsers/graphql";
 
 jest.mock("next/router", () => ({
@@ -45,7 +47,11 @@ mocksData.push({
               status: 1,
               __typename: "AdminRole",
             },
-            __typename: "CustomUser",
+            org_detail: {
+              _id: "517fa21a82c0464a92aaae90ae0d5c59",
+              name: "admin resource draw5",
+              __typename: "Organization",
+            },
           },
           {
             _id: "7c7dc511-c086-4cf1-ac79-09773416a29e",
@@ -57,6 +63,11 @@ mocksData.push({
               organization_name: null,
               status: 1,
               __typename: "AdminRole",
+            },
+            org_detail: {
+              _id: "517fa21a82c0464a92aaae90ae0d5c59",
+              name: null,
+              __typename: "Organization",
             },
             __typename: "CustomUser",
           },
@@ -122,6 +133,11 @@ mocksData.push({
               status: 1,
               __typename: "AdminRole",
             },
+            org_detail: {
+              _id: "517fa21a82c0464a92aaae90ae0d5c59",
+              name: null,
+              __typename: "Organization",
+            },
             __typename: "CustomUser",
           },
         ],
@@ -156,6 +172,11 @@ mocksData.push({
               organization_name: "admin resource draw5",
               status: 1,
               __typename: "AdminRole",
+            },
+            org_detail: {
+              _id: "d1f2bbd3-3388-4ca2-9d68-55b95574a269",
+              name: "admin resource draw5",
+              __typename: "Organization",
             },
             __typename: "CustomUser",
           },
@@ -212,6 +233,52 @@ mocksData.push({
     data: {
       addCustomUser: {
         message: "User created successfully",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
+//get user by id
+mocksData.push({
+  request: {
+    query: GET_USER_DATA_BY_ID,
+    variables: {
+      custom_user_id: "50baaa6a-5cd9-4941-9395-b7152a12b432",
+    },
+  },
+  result: {
+    data: {
+      getCustomUserById: {
+        _id: "59420730-82cd-46bc-a9be-57d9dd4c8d51",
+        email: "test963@mail.com",
+        first_name: "test-org2",
+        last_name: "last-test",
+        phone_no: "+441212121266",
+        role_id: "372a1a61-7146-4f32-baf1-c0eefee750b3",
+        __typename: "CustomUser",
+      },
+    },
+  },
+});
+
+// update user
+mocksData.push({
+  request: {
+    query: THERAPIST_EDIT_USER,
+    variables: {
+      custom_user_id: "50baaa6a-5cd9-4941-9395-b7152a12b432",
+      update: {
+        first_name: "updated-test-org22",
+        last_name: "updated-test-org22",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateCustomUserById: {
+        message: "User updated successfully!",
         result: true,
         __typename: "result",
       },
@@ -310,6 +377,42 @@ describe("Render admin custom users list screen", () => {
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
       expect(screen.getByText("User added Successfully!")).toBeInTheDocument();
+    });
+  });
+
+  it("Edit user", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("addUserRoleButton")).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_edit_50baaa6a-5cd9-4941-9395-b7152a12b432"
+        )
+      );
+      expect(screen.getByTestId("first_name")).toBeInTheDocument();
+
+      fireEvent.change(screen.queryByTestId("first_name"), {
+        target: { value: "updated-test-org22" },
+      });
+
+      fireEvent.change(screen.queryByTestId("last_name"), {
+        target: { value: "updated-test-org22" },
+      });
+
+      expect(screen.getByTestId("role-add-form")).toBeInTheDocument();
+
+      fireEvent.click(screen.queryByText("Update"));
+
+      expect(
+        screen.queryByText(
+          "Are you sure you want to update these user details?"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(
+        screen.getByText("User updated successfully!")
+      ).toBeInTheDocument();
     });
   });
 });

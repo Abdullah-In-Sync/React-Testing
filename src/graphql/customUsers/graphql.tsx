@@ -26,6 +26,10 @@ export const GET_CUSTOM_USERS_LIST = gql`
           organization_name
           status
         }
+        org_detail {
+          _id
+          name
+        }
       }
     }
   }
