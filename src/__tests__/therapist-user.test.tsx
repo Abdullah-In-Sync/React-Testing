@@ -1,6 +1,13 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/material";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import theme from "../styles/theme/theme";
 import TherapistUserMain from "../pages/therapist/userList";
@@ -10,7 +17,9 @@ import {
   GET_THERAPIST_USER_LIST,
   GET_USER_DATA_BY_ID,
   THERAPIST_EDIT_USER,
+  THERAPIST_TAG_USER,
 } from "../graphql/customerUsers/graphql";
+import { GET_PATIENT_SHARED_LIST } from "../graphql/formulation/graphql";
 
 const mocksData = [];
 
@@ -216,6 +225,62 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: GET_PATIENT_SHARED_LIST,
+    variables: {
+      name: "d2f84b2a-845f-4abc-8ab6-aa3107c58514",
+      share_type: "customusers",
+    },
+  },
+  result: {
+    data: {
+      getPatientSharedList: [
+        {
+          _id: "c23c9f27c6d94696bf6b86db389dc8de",
+          is_shared: false,
+          patient_firstname: "Ben",
+          patient_lastname: "Stock",
+          __typename: "SharePatientList",
+        },
+        {
+          _id: "f0f426ffb1344c35b728f88ca9651e5a",
+          is_shared: false,
+          patient_firstname: "Ben s",
+          patient_lastname: "smith",
+          __typename: "SharePatientList",
+        },
+        {
+          _id: "ee597ffa07cd43a8af1741dbe7c17b45",
+          is_shared: false,
+          patient_firstname: "Biku",
+          patient_lastname: "Matree",
+          __typename: "SharePatientList",
+        },
+      ],
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_TAG_USER,
+    variables: {
+      patient_id: "c23c9f27c6d94696bf6b86db389dc8de",
+      custom_user_id: "d2f84b2a-845f-4abc-8ab6-aa3107c58514",
+    },
+  },
+  result: {
+    data: {
+      tagCustomUser: {
+        message: "User tagged successfully",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -226,6 +291,22 @@ const sut = async () => {
       </ThemeProvider>
     </MockedProvider>
   );
+};
+
+export const checkSelected = async (element: HTMLElement, id: string) => {
+  const button = await within(element).findByRole("button");
+  expect(button).toBeInTheDocument();
+  await act(async () => {
+    fireEvent.mouseDown(button);
+  });
+  const listBox = await screen.findByRole("listbox");
+  expect(listBox).toBeInTheDocument();
+  const selectOption = await screen.findByTestId(`shareOrg_${id}`);
+  expect(selectOption).toBeInTheDocument();
+  fireEvent.click(selectOption);
+  const hideEle = await screen.findAllByRole("presentation");
+  hideEle[0].style.display = "none";
+  // expect(listBox).toBeUndefined();
 };
 
 describe("Therapist user list", () => {
@@ -349,6 +430,41 @@ describe("Therapist user list", () => {
       fireEvent.click(screen.queryByTestId("confirmButton"));
 
       expect(screen.getByText("User edit Successfully!")).toBeInTheDocument();
+    });
+  });
+
+  it("Tag user", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_person_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_person_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      );
+
+      const select = await screen.findByTestId("mainOrganizationSelect");
+      expect(
+        screen.queryByTestId("mainOrganizationSelect")
+      ).toBeInTheDocument();
+
+      await checkSelected(select, "c23c9f27c6d94696bf6b86db389dc8de");
+
+      fireEvent.click(screen.queryByText("Tag"));
+
+      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("User tagged successfully")
+        ).toBeInTheDocument();
+      });
     });
   });
 });
