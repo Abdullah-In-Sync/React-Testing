@@ -16,10 +16,13 @@ import {
   GET_THERAPIST_USER_LIST,
   GET_USER_DATA_BY_ID,
   THERAPIST_EDIT_USER,
+  THERAPIST_TAG_USER,
 } from "../../../graphql/customerUsers/graphql";
 import { useSnackbar } from "notistack";
 import { useAppContext } from "../../../contexts/AuthContext";
 import Loader from "../../../components/common/Loader";
+import TagUserMain from "../../../components/therapist/therapistUser/tagUser/TagUser";
+import { GET_PATIENT_SHARED_LIST } from "../../../graphql/formulation/graphql";
 
 const defaultFormValue = {
   first_name: "",
@@ -27,6 +30,7 @@ const defaultFormValue = {
   email: "",
   phone: "",
   select_role: "",
+  org_id: "",
 };
 
 export default function TherapistUserMain() {
@@ -35,6 +39,7 @@ export default function TherapistUserMain() {
   const orgId = user?.therapist_data?.org_id;
   const modalRefAddUser = useRef<ModalElement>(null);
   const modalRefEditUser = useRef<ModalElement>(null);
+  const modalRefTagUser = useRef<ModalElement>(null);
 
   const { enqueueSnackbar } = useSnackbar();
   const [rowsLimit, setRowsLimit] = useState(10);
@@ -42,7 +47,9 @@ export default function TherapistUserMain() {
   const [loader, setLoader] = useState<boolean>(true);
   const [selectRoleForFilter, setSelectRoleForFilter] = useState("");
   const [editAndDeletId, setEditAndDeletId] = useState("");
+  const [tagId, setTagId] = useState("");
   const [isConfirmEditUser, setIsConfirmEditUser] = useState(false);
+  const [isConfirmtagUser, setIsConfirmTagUser] = useState(false);
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [isConfirmAddUser, setIsConfirmAddUser] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState();
@@ -52,6 +59,7 @@ export default function TherapistUserMain() {
 
   const [addTherapistUser] = useMutation(ADD_THERAPIST_ADD_USER);
   const [editTherapistUser] = useMutation(THERAPIST_EDIT_USER);
+  const [tagTherapistUser] = useMutation(THERAPIST_TAG_USER);
 
   /* istanbul ignore next */
   const handleOpenAddUserModal = useCallback(
@@ -76,9 +84,21 @@ export default function TherapistUserMain() {
   }, []);
 
   /* istanbul ignore next */
+  const handleOpenTagUserModal = useCallback(
+    () => modalRefTagUser.current?.open(),
+    []
+  );
+
+  /* istanbul ignore next */
+  const handleCloseTagUserModal = useCallback(() => {
+    modalRefTagUser.current?.close();
+  }, []);
+
+  /* istanbul ignore next */
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
     setIsConfirmEditUser(false);
+    setIsConfirmTagUser(false);
   };
 
   useEffect(() => {
@@ -100,6 +120,26 @@ export default function TherapistUserMain() {
       },
     });
   }, [orgId]);
+
+  useEffect(() => {
+    getPatientSharedList({
+      variables: {
+        name: tagId,
+        share_type: "customusers",
+      },
+    });
+  }, [tagId]);
+
+  const [getPatientSharedList, { data: patientList }] = useLazyQuery(
+    GET_PATIENT_SHARED_LIST,
+    {
+      fetchPolicy: "cache-and-network",
+      onCompleted: () => {
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    }
+  );
 
   const [
     getSafetyPlanList,
@@ -197,6 +237,33 @@ export default function TherapistUserMain() {
     }
   };
 
+  const handleTagUser = async () => {
+    try {
+      await tagTherapistUser({
+        variables: {
+          patient_id: formFields.org_id,
+          custom_user_id: tagId,
+        },
+        onCompleted: (data) => {
+          const { result, message } = data.tagCustomUser;
+          /* istanbul ignore next */
+          const variant = result ? "success" : "error";
+          enqueueSnackbar(message, { variant });
+          setIsConfirmTagUser(false);
+          refetch();
+        },
+      });
+      /* istanbul ignore next */
+      handleCloseTagUserModal();
+      setTagId("");
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
   const handleEditUser = async () => {
     try {
       await editTherapistUser({
@@ -236,6 +303,11 @@ export default function TherapistUserMain() {
     if (pressedIconButton === "edit") {
       setEditAndDeletId(_id);
       handleOpenEditUserModal();
+    }
+
+    if (pressedIconButton === "person") {
+      setTagId(_id);
+      handleOpenTagUserModal();
     }
   };
 
@@ -290,6 +362,19 @@ export default function TherapistUserMain() {
           }}
         />
       </CommonModal>
+      <CommonModal
+        ref={modalRefTagUser}
+        headerTitleText={"Tag Patient"}
+        maxWidth="sm"
+      >
+        <TagUserMain
+          patientList={patientList}
+          submitForm={(data) => {
+            setFormFields(data);
+            setIsConfirmTagUser(true);
+          }}
+        />
+      </CommonModal>
 
       {isConfirmAddUser && (
         <ConfirmationModal
@@ -309,6 +394,17 @@ export default function TherapistUserMain() {
           onConfirm={() => {
             /* istanbul ignore next */
             handleEditUser();
+          }}
+        />
+      )}
+
+      {isConfirmtagUser && (
+        <ConfirmationModal
+          label="Are you sure you want to tag the patients?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            handleTagUser();
           }}
         />
       )}
