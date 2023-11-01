@@ -83,7 +83,6 @@ const PatientUsersComponent: React.FC<ViewProps> = ({
           onSelectPageDropdown={onSelectPageDropdown}
         />
       </Stack>
-
       <InfoModal
         ref={infoModalRef}
         maxWidth="sm"

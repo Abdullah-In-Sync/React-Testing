@@ -250,6 +250,20 @@ const PatientUsersListPage: NextPage = () => {
           t = true;
         },
       });
+    } else if (pressedIconButton === "delete") {
+      confirmRef.current.openConfirm({
+        confirmFunction: () =>
+          onUpdateUserSubmit(
+            {
+              custom_user_id,
+              update: {
+                status: 0,
+              },
+            },
+            submitCallback
+          ),
+        description: "Are you sure you want to delete the user?",
+      });
     }
   };
 

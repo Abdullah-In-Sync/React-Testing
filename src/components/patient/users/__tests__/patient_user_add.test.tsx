@@ -240,6 +240,26 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: UPDATE_CUSTOM_USER,
+    variables: {
+      custom_user_id: "customeruserid1",
+      update: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateCustomUserById: {
+        message: "User deleted successfully!",
+        result: true,
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -331,5 +351,16 @@ describe("Patient user add", () => {
     fireEvent.click(await screen.findByTestId("newUserSubmit"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(await screen.findByText(/Fail to update!/i)).toBeInTheDocument();
+  });
+
+  it("should delete user", async () => {
+    await sut();
+    fireEvent.click(
+      await screen.findByTestId("iconButton_delete_customeruserid1")
+    );
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText(/User deleted successfully!/i)
+    ).toBeInTheDocument();
   });
 });
