@@ -61,6 +61,7 @@ export const GET_USER_DATA_BY_ID = gql`
       last_name
       phone_no
       role_id
+      org_id
     }
   }
 `;
