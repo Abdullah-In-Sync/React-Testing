@@ -212,7 +212,7 @@ mocksData.push({
   result: {
     data: {
       updateCustomUserById: {
-        message: "Updated successfully!",
+        message: "User updated successfully!",
         result: true,
       },
     },
@@ -319,7 +319,7 @@ describe("Patient user add", () => {
     fireEvent.click(await screen.findByTestId("newUserSubmit"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
-      await screen.findByText(/Updated successfully!/i)
+      await screen.findByText(/User updated successfully!/i)
     ).toBeInTheDocument();
   });
 

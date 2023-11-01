@@ -42,7 +42,6 @@ mocksData.push({
           side_menu_color: "#6ec9db",
           therapist: "Therapist",
           therapy: "Therapy",
-          __typename: "Organization",
         },
       ],
     },
@@ -107,7 +106,7 @@ mocksData.push({
       org_id: "all",
       accessibility: "admin",
       position: "sidebar",
-      privileges: '{"Library":[],"Assessment":["prev2"],"Notes":[]}',
+      privileges: '{"Library":["prev2"],"Assessment":["prev2"],"Notes":[]}',
     },
   },
   result: {
@@ -129,7 +128,8 @@ mocksData.push({
       org_id: "all",
       accessibility: "admin",
       position: "sidebar",
-      privileges: '{"Library":["prev1"],"Assessment":["prev2"],"Notes":[]}',
+      privileges:
+        '{"Library":["prev1","prev2"],"Assessment":["prev2"],"Notes":[]}',
     },
   },
   result: {

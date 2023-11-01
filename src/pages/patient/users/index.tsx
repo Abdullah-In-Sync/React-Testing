@@ -154,11 +154,10 @@ const PatientUsersListPage: NextPage = () => {
               variant: "success",
             });
             callback();
-          } else if (message) {
+          } else
             enqueueSnackbar(message, {
               variant: "error",
             });
-          }
         },
       });
     } catch (e) {
