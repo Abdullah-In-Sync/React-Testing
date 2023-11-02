@@ -45,14 +45,12 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       if (item.name !== viewText && viewId && !module.includes(viewId))
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
       else setFieldValue(moduleKey, [...module, ...[item._id]]);
-    } else {
-      if (
-        (item.name === viewText && module.length === 1) ||
-        item.name !== viewText
-      ) {
-        module.splice(index, 1);
-        setFieldValue(moduleKey, module);
-      }
+    } else if (
+      (item.name === viewText && module.length === 1) ||
+      item.name !== viewText
+    ) {
+      module.splice(index, 1);
+      setFieldValue(moduleKey, module);
     }
   };
 
