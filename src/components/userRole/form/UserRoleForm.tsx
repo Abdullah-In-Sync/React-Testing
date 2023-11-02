@@ -16,6 +16,7 @@ interface ViewProps {
   organizationList?: any;
   view?: boolean;
   isEdit?: boolean;
+  defaultPrivileges?: any;
 }
 const AddUserRoleForm: React.FC<ViewProps> = ({
   onPressCancel,
@@ -24,6 +25,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   organizationList,
   view,
   isEdit,
+  defaultPrivileges,
 }) => {
   const styles = useStyles();
   const {
@@ -54,13 +56,22 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     }
   };
 
-  const handleChange = (event) => {
+  const handleOrgChange = (event) => {
     const {
       target: { value },
     } = event;
 
     if (value.indexOf("all") > -1) setFieldValue("org_id", "all");
     else setFieldValue("org_id", value.join(","));
+  };
+
+  const handleDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value },
+    } = event;
+    if (defaultPrivileges) setFieldValue("privileges", defaultPrivileges);
+
+    setFieldValue(name, value);
   };
 
   return (
@@ -87,6 +98,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           showDefaultSelectOption={false}
           extraProps={{ "data-testid": "accessibilitySelect" }}
           disabled={isEdit}
+          onChange={handleDropdown}
         />
 
         <FormikSelectDropdown
@@ -94,7 +106,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           inputProps={{
             "data-testid": organizationList[0]?.name,
           }}
-          onChange={handleChange}
+          onChange={handleOrgChange}
           id="organizationSelect"
           labelId="organizationSelect"
           name="org_id"
