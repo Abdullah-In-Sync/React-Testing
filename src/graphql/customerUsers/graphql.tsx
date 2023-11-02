@@ -61,6 +61,7 @@ export const GET_USER_DATA_BY_ID = gql`
       last_name
       phone_no
       role_id
+      org_id
     }
   }
 `;
@@ -82,6 +83,15 @@ export const GET_ROLE_LIST = gql`
     getRolesbyAccessbility(org_id: $org_id) {
       _id
       name
+    }
+  }
+`;
+
+export const THERAPIST_TAG_USER = gql`
+  mutation tagCustomUser($custom_user_id: String!, $patient_id: String!) {
+    tagCustomUser(custom_user_id: $custom_user_id, patient_id: $patient_id) {
+      message
+      result
     }
   }
 `;
