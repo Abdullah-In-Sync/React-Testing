@@ -35,13 +35,13 @@ const defaultFormValue = {
 
 export default function TherapistUserMain() {
   const { user } = useAppContext();
+  const { enqueueSnackbar } = useSnackbar();
   /* istanbul ignore next */
   const orgId = user?.therapist_data?.org_id;
   const modalRefAddUser = useRef<ModalElement>(null);
   const modalRefEditUser = useRef<ModalElement>(null);
   const modalRefTagUser = useRef<ModalElement>(null);
 
-  const { enqueueSnackbar } = useSnackbar();
   const [rowsLimit, setRowsLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [loader, setLoader] = useState<boolean>(true);
@@ -50,6 +50,8 @@ export default function TherapistUserMain() {
   const [tagId, setTagId] = useState("");
   const [isConfirmEditUser, setIsConfirmEditUser] = useState(false);
   const [isConfirmtagUser, setIsConfirmTagUser] = useState(false);
+  const [isConfirmDeleteUser, setIsConfirmDeleteUser] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
   const [tableCurentPage, setTableCurrentPage] = useState(0);
   const [isConfirmAddUser, setIsConfirmAddUser] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState();
@@ -99,6 +101,7 @@ export default function TherapistUserMain() {
     setIsConfirmAddUser(false);
     setIsConfirmEditUser(false);
     setIsConfirmTagUser(false);
+    setIsConfirmDeleteUser(false);
   };
 
   useEffect(() => {
@@ -292,6 +295,33 @@ export default function TherapistUserMain() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      await editTherapistUser({
+        variables: {
+          custom_user_id: deleteId,
+
+          update: {
+            status: 0,
+          },
+        },
+        onCompleted: (data) => {
+          const { result, message } = data.updateCustomUserById;
+          /* istanbul ignore next */
+          const variant = result ? "success" : "error";
+          enqueueSnackbar(message, { variant });
+          setIsConfirmDeleteUser(false);
+          refetch();
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("There is something wrong.", { variant: "error" });
+    }
+  };
+
   const roleFilter = (data) => {
     setSelectRoleForFilter(data);
   };
@@ -308,6 +338,11 @@ export default function TherapistUserMain() {
     if (pressedIconButton === "person") {
       setTagId(_id);
       handleOpenTagUserModal();
+    }
+
+    if (pressedIconButton === "delete") {
+      setDeleteId(_id);
+      setIsConfirmDeleteUser(true);
     }
   };
 
@@ -405,6 +440,17 @@ export default function TherapistUserMain() {
           onConfirm={() => {
             /* istanbul ignore next */
             handleTagUser();
+          }}
+        />
+      )}
+
+      {isConfirmDeleteUser && (
+        <ConfirmationModal
+          label="Are you sure you want to delete the user?"
+          onCancel={clearIsConfirmCancel}
+          onConfirm={() => {
+            /* istanbul ignore next */
+            handleDeleteUser();
           }}
         />
       )}
