@@ -31,10 +31,11 @@ const AdminAddUserRole: NextPage = () => {
     });
 
   const { data: { adminViewRole = {} } = {}, loading: loadingAdminViewRole } =
-    useQuery<any>(ADMIN_VIEW_ROLE, {
+    useQuery(ADMIN_VIEW_ROLE, {
       variables: {
         role_id,
       },
+      fetchPolicy: "cache-and-network",
     });
 
   return (
