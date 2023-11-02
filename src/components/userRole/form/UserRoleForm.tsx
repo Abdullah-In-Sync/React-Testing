@@ -16,6 +16,7 @@ interface ViewProps {
   organizationList?: any;
   view?: boolean;
   isEdit?: boolean;
+  defaultPrivileges?: any;
 }
 const AddUserRoleForm: React.FC<ViewProps> = ({
   onPressCancel,
@@ -24,6 +25,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   organizationList,
   view,
   isEdit,
+  defaultPrivileges,
 }) => {
   const styles = useStyles();
   const {
@@ -67,7 +69,8 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const {
       target: { name, value },
     } = event;
-    setFieldValue("privileges", []);
+    if (defaultPrivileges) setFieldValue("privileges", defaultPrivileges);
+
     setFieldValue(name, value);
   };
 
