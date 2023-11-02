@@ -26,6 +26,10 @@ export type therapistAddUser = {
   org_id?: string;
 };
 
+export type therapistTagUser = {
+  org_id?: string;
+};
+
 export type addAdminAssessment = {
   name: string;
   org_id: string;

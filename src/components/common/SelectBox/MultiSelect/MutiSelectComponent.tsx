@@ -22,7 +22,7 @@ type propTypes = {
   inputProps?: any;
   extraProps?: any;
   options: Option[];
-  mappingKeys: [string, string];
+  mappingKeys: string[];
   size: "small" | "medium";
   disabled?: boolean;
   showDefaultSelectOption?: boolean;
@@ -33,12 +33,17 @@ type propTypes = {
 export type Option = {
   id: any;
   value: string;
+  active?: any;
 };
 
 /* istanbul ignore next */
 const mapping = (options: Option[], keys = []) => {
   return options.reduce((mappingOptions: Option[], option) => {
-    mappingOptions.push({ id: option[keys[0]], value: option[keys[1]] });
+    mappingOptions.push({
+      id: option[keys[0]],
+      value: option[keys[1]],
+      active: option[keys[2]],
+    });
     return mappingOptions;
   }, []);
 };
@@ -83,16 +88,20 @@ export default function MultiSelectComponent(props: propTypes) {
           <MenuItem value="">Select</MenuItem>
         )} */}
 
-        {modifyOptions.map(({ id, value }) => (
+        {modifyOptions.map(({ id, value, active }) => (
           <MenuItem
             key={`${id}-${value}`}
             value={id}
             data-testid={`shareOrg_${id}`}
+            disabled={active}
           >
             <Checkbox
               checked={
-                props.multiSelect.indexOf(id) > -1 ||
-                props.multiSelect.indexOf("all") > -1
+                /* istanbul ignore next */
+                !active
+                  ? props.multiSelect.indexOf(id) > -1 ||
+                    props.multiSelect.indexOf("all") > -1
+                  : false
               }
             />
             <ListItemText primary={value} />

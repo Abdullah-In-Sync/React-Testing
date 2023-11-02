@@ -86,3 +86,12 @@ export const GET_ROLE_LIST = gql`
     }
   }
 `;
+
+export const THERAPIST_TAG_USER = gql`
+  mutation tagCustomUser($custom_user_id: String!, $patient_id: String!) {
+    tagCustomUser(custom_user_id: $custom_user_id, patient_id: $patient_id) {
+      message
+      result
+    }
+  }
+`;
