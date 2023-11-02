@@ -39,7 +39,7 @@ const EditUserRole: React.FC<ViewProps> = ({
   viewData,
 }) => {
   const {
-    privileges: initPrivileges = "[]",
+    privileges: initPrivileges = "{}",
     accessibility = "",
     name = "",
     org_id = "",

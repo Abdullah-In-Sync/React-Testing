@@ -64,6 +64,7 @@ const AddUserRole: React.FC<ViewProps> = ({
             formikProps={props}
             onPressCancel={onPressCancel}
             organizationList={organizationList}
+            defaultPrivileges={privileges}
           />
         )}
       />
