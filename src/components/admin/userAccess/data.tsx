@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import ActionsButtons from "../safetyPlan/ActionsButtons";
+import ActionsButtons from "./actionButtons";
 
 interface Column {
   id: string;
