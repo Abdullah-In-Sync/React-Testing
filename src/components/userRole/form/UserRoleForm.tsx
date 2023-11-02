@@ -54,13 +54,21 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     }
   };
 
-  const handleChange = (event) => {
+  const handleOrgChange = (event) => {
     const {
       target: { value },
     } = event;
 
     if (value.indexOf("all") > -1) setFieldValue("org_id", "all");
     else setFieldValue("org_id", value.join(","));
+  };
+
+  const handleDropdown = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { name, value },
+    } = event;
+    setFieldValue("privileges", []);
+    setFieldValue(name, value);
   };
 
   return (
@@ -87,6 +95,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           showDefaultSelectOption={false}
           extraProps={{ "data-testid": "accessibilitySelect" }}
           disabled={isEdit}
+          onChange={handleDropdown}
         />
 
         <FormikSelectDropdown
@@ -94,7 +103,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           inputProps={{
             "data-testid": organizationList[0]?.name,
           }}
-          onChange={handleChange}
+          onChange={handleOrgChange}
           id="organizationSelect"
           labelId="organizationSelect"
           name="org_id"
