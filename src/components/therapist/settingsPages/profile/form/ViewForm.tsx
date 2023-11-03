@@ -30,6 +30,9 @@ const ProfileViewForm: React.FC<ViewProps> = ({
     therapist_totexp = "",
     phone_number = "",
     therapist_add = "",
+    therapist_inscover = "",
+    therapist_poa_attachment = "",
+    accredited_body = "",
   } = therapistData || {};
 
   const initialValues = {
@@ -42,6 +45,9 @@ const ProfileViewForm: React.FC<ViewProps> = ({
     therapist_totexp,
     phone_number,
     therapist_add,
+    therapist_poa_attachment,
+    therapist_inscover,
+    accredited_body,
   };
 
   const commonform = () => {

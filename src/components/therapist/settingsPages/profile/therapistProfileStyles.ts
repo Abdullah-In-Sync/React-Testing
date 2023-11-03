@@ -68,6 +68,19 @@ export const useStyles = makeStyles(() => {
           marginRight: 10,
         },
       },
+      [theme.breakpoints.up("md")]: {
+        "& .fieldsBoxWrapperFirst": {
+          display: "flex",
+          "& > .chooseFileWrapper:nth-of-type(2)": {
+            marginLeft: 10,
+          },
+        },
+      },
+      "& .fieldsBoxWrapperFirst": {
+        "& legend": {
+          color: "#6EC9DB",
+        },
+      },
     },
     editFormWrapper: {
       "& .formWrapper": {
@@ -81,7 +94,7 @@ export const useStyles = makeStyles(() => {
       "& .addCategoryFormWrapper": {
         paddingTop: "20px !important",
       },
-      "& .row5": {
+      "& .row7": {
         textAlign: "center",
       },
       ...commonModalWrapperObj(),

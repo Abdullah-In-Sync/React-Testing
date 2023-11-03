@@ -107,13 +107,42 @@ const TherapistProfile: React.FC = () => {
       therapist_poa_attachment,
       therapist_poa_attachment_file,
       therapist_proofaccredition,
+      therapist_inscover,
+      therapist_inscover_file,
     } = v;
     const variables = removeProp(v, [
       "therapist_poa_attachment_file",
+      "therapist_inscover_file",
       "phone_number",
       "email",
     ]);
-    if (therapist_poa_attachment_file && therapist_proofaccredition) {
+
+    if (therapist_poa_attachment_file && therapist_inscover_file) {
+      getUrlAndUploadFile(
+        { fileName: therapist_inscover, file: therapist_inscover_file },
+        () =>
+          !therapist_proofaccredition
+            ? confirmRef.current.openConfirm({
+                confirmFunction: () =>
+                  submitUpdateProfileApi(variables, submitCallback),
+                description: "Are you sure you want to update the profile?",
+                setSubmitting,
+              })
+            : getUrlAndUploadFile(
+                {
+                  fileName: therapist_poa_attachment,
+                  file: therapist_poa_attachment_file,
+                },
+                () =>
+                  confirmRef.current.openConfirm({
+                    confirmFunction: () =>
+                      submitUpdateProfileApi(variables, submitCallback),
+                    description: "Are you sure you want to update the profile?",
+                    setSubmitting,
+                  })
+              )
+      );
+    } else if (therapist_poa_attachment_file && therapist_proofaccredition) {
       getUrlAndUploadFile(
         {
           fileName: therapist_poa_attachment,

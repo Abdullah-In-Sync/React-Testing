@@ -120,7 +120,7 @@ mocksData.push({
         email: "test8@test.com",
         phone_number: "+46514",
         plan: "free",
-        therapist_proofaccredition: 0,
+        therapist_proofaccredition: 1,
         therapist_totexp: "10",
         therapist_status: 1,
         therapist_profaccredition: "student",
@@ -156,6 +156,7 @@ mocksData.push({
         therapist_totexp: "10",
         therapist_poa_attachment: "dummy.pdf",
         therapist_add: "add",
+        therapist_inscover: "dummy.pdf",
       },
     },
   },
@@ -222,7 +223,7 @@ describe("Admin view therapist", () => {
 
     await sut();
     expect(
-      await screen.findByText(/Proof of Accreditation:/i)
+      await screen.findByText(/Attach proof of Accreditation/i)
     ).toBeInTheDocument();
 
     const editProfileBtn = await screen.findByTestId("editProfileBtn");
@@ -235,7 +236,10 @@ describe("Admin view therapist", () => {
     expect(cancelButton).not.toBeInTheDocument();
     fireEvent.click(editProfileBtn);
     fireEvent.click(await screen.findByTestId("toggleAcc-Update"));
-    fireEvent.change(await screen.getByTestId("therapist_poa_attachment"), {
+    fireEvent.change(screen.getByTestId("therapist_poa_attachment"), {
+      target: { files: [file] },
+    });
+    fireEvent.change(screen.getByTestId("therapist_inscover"), {
       target: { files: [file] },
     });
     fireEvent.click(await screen.findByTestId("profileSubmit"));

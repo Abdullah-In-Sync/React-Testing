@@ -60,6 +60,8 @@ const ProfileEditForm: React.FC<ViewProps> = ({
     phone_number = "",
     therapist_poa_attachment,
     therapist_add = "",
+    therapist_inscover = "",
+    accredited_body = "",
   } = therapistData || {};
 
   const initialValues = {
@@ -74,6 +76,9 @@ const ProfileEditForm: React.FC<ViewProps> = ({
     therapist_poa_attachment,
     therapist_poa_attachment_file: undefined,
     therapist_add,
+    therapist_inscover,
+    therapist_inscover_file: undefined,
+    accredited_body,
   };
 
   const commonform = () => {
