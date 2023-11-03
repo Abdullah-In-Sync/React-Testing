@@ -252,7 +252,7 @@ mocksData.push({
   result: {
     data: {
       updateAdminRoleById: {
-        message: "Record has been successfully deleted!",
+        message: "User Role blocked successfully!",
         result: true,
         role_id: "e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9",
         __typename: "adminRoleUpdate",
@@ -303,10 +303,10 @@ describe("Render admin user role list screen", () => {
     });
   });
 
-  it("should delete user role", async () => {
+  it("should block user role", async () => {
     await sut();
     const deleteBtn = await screen.findByTestId(
-      "iconButton_delete_e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9"
+      "iconButton_block_e95a7f5d-e3d3-4d45-bdf6-1e0d062503e9"
     );
     expect(deleteBtn).toBeInTheDocument();
     fireEvent.click(deleteBtn);
@@ -314,7 +314,7 @@ describe("Render admin user role list screen", () => {
     expect(confirmBtn).toBeInTheDocument();
     fireEvent.click(confirmBtn);
     expect(
-      await screen.findByText("User Role deleted successfully!")
+      await screen.findByText("User Role blocked successfully!")
     ).toBeInTheDocument();
   });
 });
