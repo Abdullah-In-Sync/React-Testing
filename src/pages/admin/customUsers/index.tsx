@@ -52,6 +52,7 @@ const CustomUserListPage: NextPage = () => {
   const [formFields, setFormFields] = useState<therapistAddUser>({
     ...defaultFormValue,
   });
+  const [isConfirmDeleteUser, setIsConfirmDeleteUser] = useState(false);
 
   const [addTherapistUser] = useMutation(ADD_THERAPIST_ADD_USER);
   const [editTherapistUser] = useMutation(THERAPIST_EDIT_USER);
@@ -206,8 +207,17 @@ const CustomUserListPage: NextPage = () => {
           custom_user_id: selectedUser,
 
           update: {
-            first_name: formFields.first_name,
-            last_name: formFields.last_name,
+            ...(isConfirmEditUser
+              ? {
+                  first_name: formFields.first_name,
+                  last_name: formFields.last_name,
+                }
+              : {}),
+            ...(isConfirmDeleteUser
+              ? {
+                  status: 0,
+                }
+              : {}),
           },
         },
         onCompleted: (data) => {
@@ -218,6 +228,7 @@ const CustomUserListPage: NextPage = () => {
           /* istanbul ignore next */
           enqueueSnackbar(data?.updateCustomUserById?.message, { variant });
           setIsConfirmEditUser(false);
+          setIsConfirmDeleteUser(false);
           refetch();
         },
       });
@@ -320,15 +331,19 @@ const CustomUserListPage: NextPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleActionButtonClick = (value) => {
     const { _id, pressedIconButton } = value;
+    setSelectedUser(_id);
     if (pressedIconButton == "edit") {
-      setSelectedUser(_id);
       handleOpenEditUserModal();
+    }
+    if (pressedIconButton == "delete") {
+      setIsConfirmDeleteUser(true);
     }
   };
 
   const clearIsConfirmCancel = () => {
     setIsConfirmAddUser(false);
     setIsConfirmEditUser(false);
+    setIsConfirmDeleteUser(false);
   };
 
   const setOrg = (id: string) => {
@@ -388,12 +403,14 @@ const CustomUserListPage: NextPage = () => {
           }}
         />
       </CommonModal>
-      {(isConfirmAddUser || isConfirmEditUser) && (
+      {(isConfirmAddUser || isConfirmEditUser || isConfirmDeleteUser) && (
         <ConfirmationModal
           label={
             isConfirmAddUser
               ? "Are you sure you want to add this user?"
-              : "Are you sure you want to update these user details?"
+              : isConfirmEditUser
+              ? "Are you sure you want to update these user details?"
+              : "Are you sure you want to delete the user?"
           }
           onCancel={clearIsConfirmCancel}
           onConfirm={operationFunction}

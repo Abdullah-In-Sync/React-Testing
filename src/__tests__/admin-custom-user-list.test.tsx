@@ -286,6 +286,28 @@ mocksData.push({
   },
 });
 
+// delete user
+mocksData.push({
+  request: {
+    query: THERAPIST_EDIT_USER,
+    variables: {
+      custom_user_id: "50baaa6a-5cd9-4941-9395-b7152a12b432",
+      update: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateCustomUserById: {
+        message: "User deleted successfully!",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -412,6 +434,27 @@ describe("Render admin custom users list screen", () => {
 
       expect(
         screen.getByText("User updated successfully!")
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("Delete user", async () => {
+    await sut();
+    await waitFor(async () => {
+      expect(screen.getByTestId("addUserRoleButton")).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_delete_50baaa6a-5cd9-4941-9395-b7152a12b432"
+        )
+      );
+
+      expect(
+        screen.queryByText("Are you sure you want to delete the user?")
+      ).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      expect(
+        screen.getByText("User deleted successfully!")
       ).toBeInTheDocument();
     });
   });
