@@ -281,6 +281,27 @@ mocksData.push({
   },
 });
 
+mocksData.push({
+  request: {
+    query: THERAPIST_EDIT_USER,
+    variables: {
+      custom_user_id: "d2f84b2a-845f-4abc-8ab6-aa3107c58514",
+      update: {
+        status: 0,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateCustomUserById: {
+        message: "User deleted successfully!",
+        result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -463,6 +484,32 @@ describe("Therapist user list", () => {
       await waitFor(async () => {
         expect(
           screen.getByText("User tagged successfully")
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  it("Delete user", async () => {
+    await sut();
+
+    await waitFor(async () => {
+      expect(
+        screen.getByTestId(
+          "iconButton_delete_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      ).toBeInTheDocument();
+      fireEvent.click(
+        screen.queryByTestId(
+          "iconButton_delete_d2f84b2a-845f-4abc-8ab6-aa3107c58514"
+        )
+      );
+
+      expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
+      fireEvent.click(screen.queryByTestId("confirmButton"));
+
+      await waitFor(async () => {
+        expect(
+          screen.getByText("User deleted successfully!")
         ).toBeInTheDocument();
       });
     });
