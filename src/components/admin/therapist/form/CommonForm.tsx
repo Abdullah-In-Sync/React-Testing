@@ -24,7 +24,6 @@ const CommonForm: React.FC<ViewProps> = ({
   viewType,
 }) => {
   const { values, isSubmitting, setFieldValue } = formikProps;
-
   const {
     plan,
     therapist_poa_attachment = "No file choosen",
@@ -46,11 +45,9 @@ const CommonForm: React.FC<ViewProps> = ({
     const { target: { files } = {} } = event;
     const fileObj = files && files[0];
     const { fileName } = getUpdatedFileName(fileObj);
-
     if (!fileName) {
       return;
     }
-
     setFieldValue(name, fileName);
     setFieldValue(`${name}_file`, fileObj);
   };
@@ -84,36 +81,36 @@ const CommonForm: React.FC<ViewProps> = ({
       <Form>
         {/* first row */}
         <Box className="fieldsBoxWrapperFirst">
-          <TherapistInputs.therapistIdInput disabled />
           <TherapistInputs.therapistNameInput />
           <TherapistInputs.organizationDropdown
             organizationList={organizationList}
             disabled
           />
-        </Box>
-        {/* second row */}
-        <Box className="fieldsBoxWrapperFirst">
           <TherapistInputs.specializationDropdown
             specialization={specialization}
           />
+        </Box>
+        {/* second row */}
+        <Box className="fieldsBoxWrapperFirst">
           <TherapistInputs.phoneNumberInput disabled />
           <TherapistInputs.emailInput disabled />
+          <TherapistInputs.therapistAddInput />
         </Box>
         {/* third row */}
         <Box className="fieldsBoxWrapperFirst">
-          <TherapistInputs.therapistAddInput />
           <TherapistInputs.totalExpInput />
           <TherapistInputs.professionalAccreditationInput
             professional={professional}
           />
+          <TherapistInputs.accreditedBodyInput />
         </Box>
         {/* fourth row */}
         <Box className="fieldsBoxWrapperFirst">
-          <TherapistInputs.accreditedBodyInput />
           <TherapistInputs.accToggle
             setFieldValue={setFieldValue}
             therapist_proofaccredition={therapist_proofaccredition}
           />
+          <Box />
           <Box />
         </Box>
         {bottomCommonInputs()}
@@ -264,7 +261,6 @@ const CommonForm: React.FC<ViewProps> = ({
         );
     }
   };
-
   return formInput();
 };
 
