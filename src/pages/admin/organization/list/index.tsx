@@ -6,7 +6,6 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import NextLink from "next/link";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SettingsIcon from "@mui/icons-material/Settings";
 
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CreateIcon from "@mui/icons-material/Create";
