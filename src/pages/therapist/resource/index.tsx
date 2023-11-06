@@ -562,17 +562,27 @@ const Resource: NextPage = () => {
 
           <Grid item xs={9}>
             <Box sx={crudButtons}>
+              <AddButton className="mr-3" label="Resource" />
               <AddButton
+                style={{
+                  backgroundColor: "#6EC9DB",
+                }}
                 href="/therapist/formulation"
                 className="mr-3"
                 label="Formulation"
               />
               <AddButton
                 href="/therapist/resource/add"
+                style={{
+                  backgroundColor: "#6EC9DB",
+                }}
                 className="mr-3"
                 label="Add Resource"
               />
               <AddButton
+                style={{
+                  backgroundColor: "#6EC9DB",
+                }}
                 href="/therapist/resource/create"
                 className="mr-3"
                 label="Create Resource"
