@@ -157,6 +157,7 @@ mocksData.push({
         therapist_poa_attachment: "dummy.pdf",
         therapist_add: "add",
         therapist_inscover: "dummy.pdf",
+        accredited_body: "test bosy deup",
       },
     },
   },
@@ -236,6 +237,7 @@ describe("Admin view therapist", () => {
     expect(cancelButton).not.toBeInTheDocument();
     fireEvent.click(editProfileBtn);
     fireEvent.click(await screen.findByTestId("toggleAcc-Update"));
+    fireEvent.click(screen.getByTestId("toggleAcc-Update"));
     fireEvent.change(screen.getByTestId("therapist_poa_attachment"), {
       target: { files: [file] },
     });
