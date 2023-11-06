@@ -173,6 +173,34 @@ mocksData.push({
 
 mocksData.push({
   request: {
+    query: UPDATE_THERAPIST_BY_ID,
+    variables: {
+      user_id: "user_id",
+      update: {
+        therapist_name: "therapistname",
+        therapist_specialization: "cat",
+        therapist_profaccredition: "student",
+        therapist_proofaccredition: 0,
+        therapist_totexp: "10",
+        therapist_poa_attachment: "071248382__patientProfilePic.png",
+        therapist_add: "add",
+        therapist_inscover: "dummy.pdf",
+        accredited_body: "test bosy deup",
+      },
+    },
+  },
+  result: {
+    data: {
+      updateTherapistById: {
+        _id: "therapist_id",
+        user_id: "user_id",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
     query: GET_FILE_UPLOAD_URl,
     variables: {
       fileName: "dummy.pdf",
@@ -255,5 +283,33 @@ describe("Admin view therapist", () => {
     fireEvent.click(changePasswordBtn);
     const oldPasswordInput = await screen.findByTestId("oldPasswordInput");
     expect(oldPasswordInput).toBeInTheDocument();
+  });
+
+  it("should update settings", async () => {
+    jest.spyOn(s3, "getUpdatedFileName").mockReturnValue({
+      fileName: "dummy.pdf",
+    });
+    jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+
+    await sut();
+    expect(
+      await screen.findByText(/Attach proof of Accreditation/i)
+    ).toBeInTheDocument();
+
+    const editProfileBtn = await screen.findByTestId("editProfileBtn");
+
+    fireEvent.click(editProfileBtn);
+    fireEvent.click(await screen.findByTestId("toggleAcc-Update"));
+
+    fireEvent.change(screen.getByTestId("therapist_inscover"), {
+      target: { files: [file] },
+    });
+    fireEvent.click(await screen.findByTestId("profileSubmit"));
+    const confirmButton = await screen.findByTestId("confirmButton");
+    expect(confirmButton).toBeInTheDocument();
+    fireEvent.click(confirmButton);
+    expect(
+      await screen.findByText(/Profile updated successfully!/i)
+    ).toBeInTheDocument();
   });
 });

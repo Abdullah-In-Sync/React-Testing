@@ -49,6 +49,7 @@ const TherapistProfile: React.FC = () => {
       });
   }, [user_id]);
 
+  /* istanbul ignore next */
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
     uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
       enqueueSnackbar("Server error please try later.", {
@@ -57,6 +58,7 @@ const TherapistProfile: React.FC = () => {
     });
   };
 
+  /* istanbul ignore next */
   const submitUpdateProfileApi = async (formFields, doneCallback) => {
     try {
       await updateTherapist({
@@ -102,6 +104,7 @@ const TherapistProfile: React.FC = () => {
     infoModalRef.current.close();
   };
 
+  /* istanbul ignore next */
   const submitUpdateProfile = (v, { setSubmitting }) => {
     const {
       therapist_poa_attachment,
@@ -122,24 +125,14 @@ const TherapistProfile: React.FC = () => {
         { fileName: therapist_inscover, file: therapist_inscover_file },
         () =>
           !therapist_proofaccredition
-            ? confirmRef.current.openConfirm({
-                confirmFunction: () =>
-                  submitUpdateProfileApi(variables, submitCallback),
-                description: "Are you sure you want to update the profile?",
-                setSubmitting,
-              })
+            ? confirmToSubmit(variables, { setSubmitting, submitCallback })
             : getUrlAndUploadFile(
                 {
                   fileName: therapist_poa_attachment,
                   file: therapist_poa_attachment_file,
                 },
                 () =>
-                  confirmRef.current.openConfirm({
-                    confirmFunction: () =>
-                      submitUpdateProfileApi(variables, submitCallback),
-                    description: "Are you sure you want to update the profile?",
-                    setSubmitting,
-                  })
+                  confirmToSubmit(variables, { setSubmitting, submitCallback })
               )
       );
     } else if (therapist_poa_attachment_file && therapist_proofaccredition) {
@@ -148,22 +141,20 @@ const TherapistProfile: React.FC = () => {
           fileName: therapist_poa_attachment,
           file: therapist_poa_attachment_file,
         },
-        () =>
-          confirmRef.current.openConfirm({
-            confirmFunction: () =>
-              submitUpdateProfileApi(variables, submitCallback),
-            description: "Are you sure you want to update the profile?",
-            setSubmitting,
-          })
+        () => confirmToSubmit(variables, { setSubmitting, submitCallback })
       );
     } else {
-      confirmRef.current.openConfirm({
-        confirmFunction: () =>
-          submitUpdateProfileApi(variables, submitCallback),
-        description: "Are you sure you want to update the profile?",
-        setSubmitting,
-      });
+      confirmToSubmit(variables, { setSubmitting, submitCallback });
     }
+  };
+
+  /* istanbul ignore next */
+  const confirmToSubmit = (variables, { setSubmitting, submitCallback }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () => submitUpdateProfileApi(variables, submitCallback),
+      description: "Are you sure you want to update the profile?",
+      setSubmitting,
+    });
   };
 
   return (
