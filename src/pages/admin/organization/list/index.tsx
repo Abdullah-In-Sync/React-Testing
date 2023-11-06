@@ -6,7 +6,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import NextLink from "next/link";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SettingsIcon from "@mui/icons-material/Settings";
+
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CreateIcon from "@mui/icons-material/Create";
 import { GET_ORGANIZATION_LIST } from "../../../../graphql/query/organization";
@@ -95,11 +95,11 @@ const OrganizationList = () => {
             </IconButton>
           </NextLink>
 
-          <NextLink href={"/admin/organization/config/" + value._id} passHref>
+          {/* <NextLink href={"/admin/organization/config/" + value._id} passHref>
             <IconButton size="small" data-testid={"viewIcon_" + value._id}>
               <SettingsIcon />
             </IconButton>
-          </NextLink>
+          </NextLink> */}
 
           <IconButton
             size="small"
