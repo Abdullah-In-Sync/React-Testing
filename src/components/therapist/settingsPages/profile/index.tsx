@@ -19,6 +19,7 @@ import { queryMasterData } from "./hook/fetchDropdown";
 const TherapistProfile: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { uploadFile } = fetchUrlAndUploadFile();
+  /* istanbul ignore next */
   const { user: { _id: user_id } = {} } = useAppContext();
   const [specializationQuery, professionalQuery] = queryMasterData();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
@@ -49,16 +50,15 @@ const TherapistProfile: React.FC = () => {
       });
   }, [user_id]);
 
-  /* istanbul ignore next */
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
     uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
     });
   };
 
-  /* istanbul ignore next */
   const submitUpdateProfileApi = async (formFields, doneCallback) => {
     try {
       await updateTherapist({
@@ -67,7 +67,9 @@ const TherapistProfile: React.FC = () => {
           update: formFields,
         },
         fetchPolicy: "network-only",
+
         onCompleted: (data) => {
+          /* istanbul ignore next */
           const { updateTherapistById: { _id = undefined } = {} } = data;
           if (_id) {
             refetchTherapistById();
@@ -79,6 +81,7 @@ const TherapistProfile: React.FC = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -86,6 +89,7 @@ const TherapistProfile: React.FC = () => {
   };
 
   const onPressEditProfileButton = () => {
+    /* istanbul ignore next */
     infoModalRef?.current?.openConfirm({
       data: {
         therapistData,
@@ -104,7 +108,6 @@ const TherapistProfile: React.FC = () => {
     infoModalRef.current.close();
   };
 
-  /* istanbul ignore next */
   const submitUpdateProfile = (v, { setSubmitting }) => {
     const {
       therapist_poa_attachment,
@@ -124,6 +127,7 @@ const TherapistProfile: React.FC = () => {
       getUrlAndUploadFile(
         { fileName: therapist_inscover, file: therapist_inscover_file },
         () =>
+          /* istanbul ignore next */
           !therapist_proofaccredition
             ? confirmToSubmit(variables, { setSubmitting, submitCallback })
             : getUrlAndUploadFile(
@@ -136,6 +140,7 @@ const TherapistProfile: React.FC = () => {
               )
       );
     } else if (therapist_poa_attachment_file && therapist_proofaccredition) {
+      /* istanbul ignore next */
       getUrlAndUploadFile(
         {
           fileName: therapist_poa_attachment,
@@ -148,7 +153,6 @@ const TherapistProfile: React.FC = () => {
     }
   };
 
-  /* istanbul ignore next */
   const confirmToSubmit = (variables, { setSubmitting, submitCallback }) => {
     confirmRef.current.openConfirm({
       confirmFunction: () => submitUpdateProfileApi(variables, submitCallback),

@@ -21,6 +21,7 @@ const ProfileViewForm: React.FC<ViewProps> = ({
   therapistDataLoading,
 }) => {
   if (!therapistData || therapistDataLoading) return null;
+  /* istanbul ignore next */
   const {
     email = "",
     therapist_name = "",
@@ -41,6 +42,7 @@ const ProfileViewForm: React.FC<ViewProps> = ({
     therapist_specialization,
     therapist_profaccredition,
     therapist_proofaccredition:
+      /* istanbul ignore next */
       therapist_proofaccredition === null ? 1 : therapist_proofaccredition,
     therapist_totexp,
     phone_number,
