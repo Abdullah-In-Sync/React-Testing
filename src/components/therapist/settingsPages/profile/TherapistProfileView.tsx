@@ -100,7 +100,7 @@ const TherapistProfileView: React.FC<ViewProps> = ({
         </Box>
         <InfoModal
           ref={infoModalRef}
-          maxWidth="lg"
+          maxWidth="md"
           className={styles.editFormWrapper}
         >
           <ProfileEditForm />

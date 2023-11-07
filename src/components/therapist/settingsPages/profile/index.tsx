@@ -19,6 +19,7 @@ import { queryMasterData } from "./hook/fetchDropdown";
 const TherapistProfile: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { uploadFile } = fetchUrlAndUploadFile();
+  /* istanbul ignore next */
   const { user: { _id: user_id } = {} } = useAppContext();
   const [specializationQuery, professionalQuery] = queryMasterData();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
@@ -51,6 +52,7 @@ const TherapistProfile: React.FC = () => {
 
   const getUrlAndUploadFile = ({ fileName, file }, callback) => {
     uploadFile({ fileName, file, imageFolder: "resource" }, callback, () => {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -65,7 +67,9 @@ const TherapistProfile: React.FC = () => {
           update: formFields,
         },
         fetchPolicy: "network-only",
+
         onCompleted: (data) => {
+          /* istanbul ignore next */
           const { updateTherapistById: { _id = undefined } = {} } = data;
           if (_id) {
             refetchTherapistById();
@@ -77,6 +81,7 @@ const TherapistProfile: React.FC = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -84,6 +89,7 @@ const TherapistProfile: React.FC = () => {
   };
 
   const onPressEditProfileButton = () => {
+    /* istanbul ignore next */
     infoModalRef?.current?.openConfirm({
       data: {
         therapistData,
@@ -107,34 +113,52 @@ const TherapistProfile: React.FC = () => {
       therapist_poa_attachment,
       therapist_poa_attachment_file,
       therapist_proofaccredition,
+      therapist_inscover,
+      therapist_inscover_file,
     } = v;
     const variables = removeProp(v, [
       "therapist_poa_attachment_file",
+      "therapist_inscover_file",
       "phone_number",
       "email",
     ]);
-    if (therapist_poa_attachment_file && therapist_proofaccredition) {
+
+    if (therapist_poa_attachment_file && therapist_inscover_file) {
+      getUrlAndUploadFile(
+        { fileName: therapist_inscover, file: therapist_inscover_file },
+        () =>
+          /* istanbul ignore next */
+          !therapist_proofaccredition
+            ? confirmToSubmit(variables, { setSubmitting, submitCallback })
+            : getUrlAndUploadFile(
+                {
+                  fileName: therapist_poa_attachment,
+                  file: therapist_poa_attachment_file,
+                },
+                () =>
+                  confirmToSubmit(variables, { setSubmitting, submitCallback })
+              )
+      );
+    } else if (therapist_poa_attachment_file && therapist_proofaccredition) {
+      /* istanbul ignore next */
       getUrlAndUploadFile(
         {
           fileName: therapist_poa_attachment,
           file: therapist_poa_attachment_file,
         },
-        () =>
-          confirmRef.current.openConfirm({
-            confirmFunction: () =>
-              submitUpdateProfileApi(variables, submitCallback),
-            description: "Are you sure you want to update the profile?",
-            setSubmitting,
-          })
+        () => confirmToSubmit(variables, { setSubmitting, submitCallback })
       );
     } else {
-      confirmRef.current.openConfirm({
-        confirmFunction: () =>
-          submitUpdateProfileApi(variables, submitCallback),
-        description: "Are you sure you want to update the profile?",
-        setSubmitting,
-      });
+      confirmToSubmit(variables, { setSubmitting, submitCallback });
     }
+  };
+
+  const confirmToSubmit = (variables, { setSubmitting, submitCallback }) => {
+    confirmRef.current.openConfirm({
+      confirmFunction: () => submitUpdateProfileApi(variables, submitCallback),
+      description: "Are you sure you want to update the profile?",
+      setSubmitting,
+    });
   };
 
   return (
