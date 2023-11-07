@@ -1,12 +1,12 @@
 import { Box, FormControlLabel, Stack } from "@mui/material";
-import { ErrorMessage, Form } from "formik";
+import { Form } from "formik";
 import * as React from "react";
 import { fileOnChange } from "../../../../../utility/helper";
+import TherapistInputs from "../../../../admin/therapist/form/TherapistInputs";
 import CommonButton from "../../../../common/Buttons/CommonButton";
 import FormikSelectDropdown from "../../../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 import { IOSSwitch } from "../../../../common/ToggleButton/IosToggleButton";
-import UploadButtonComponent from "../../../../common/UploadButton/UploadButtonComponent";
 import { useStyles } from "../therapistProfileStyles";
 const ProfileForm: React.FC<any> = ({
   values,
@@ -19,6 +19,7 @@ const ProfileForm: React.FC<any> = ({
   const {
     therapist_proofaccredition,
     therapist_poa_attachment = "No file choosen",
+    therapist_inscover = "No file choosen",
   } = values;
 
   const { specialization = [], professional = [] } = masterData;
@@ -147,37 +148,48 @@ const ProfileForm: React.FC<any> = ({
                 "data-testid": "professionalAccreditation",
               }}
             />
-            {accToggle()}
+            <TherapistInputs.accreditedBodyInput />
           </Box>
+          {saveButtonText && (
+            <Box className="row5 crow">
+              {accToggle()}
+              <Box />
+            </Box>
+          )}
+          {saveButtonText && (
+            <Box className="row6 crow" mb={2}>
+              <Box className="fieldsBoxWrapperFirst">
+                {TherapistInputs.uploadFileInputs({
+                  therapist_proofaccredition,
+                  therapist_poa_attachment,
+                  fileOnChange: onSelectFileChange,
+                  therapist_inscover,
+                })}
+              </Box>
+            </Box>
+          )}
 
-          {Boolean(therapist_proofaccredition) && saveButtonText && (
-            <Box className="chooseFileWrapper">
-              <label className="uploadButtonLabel">
-                Attach proof of Accreditation:
-              </label>
-              <UploadButtonComponent
-                variant="contained"
-                name="therapist_poa_attachment"
-                inputProps={{
-                  "data-testid": "therapist_poa_attachment",
-                }}
-                onChange={(e) =>
-                  onSelectFileChange("therapist_poa_attachment", e)
-                }
-                fileName={therapist_poa_attachment}
-                buttonText="Choose File"
-                hideIcon
-              />
-              <ErrorMessage
-                name={`therapist_poa_attachment_file`}
-                component="div"
-                className="invalid-input-message"
-              />
+          {!saveButtonText && (
+            <Box className="row6 crow" mb={2}>
+              <Box className="fieldsBoxWrapperFirst">
+                {Boolean(therapist_proofaccredition) && (
+                  <Box>
+                    <label className="accLabel">
+                      Attach proof of Accreditation:
+                    </label>
+                    <legend>{therapist_poa_attachment}</legend>
+                  </Box>
+                )}
+                <Box>
+                  <label className="accLabel">Insurance Cover:</label>
+                  <legend>{therapist_inscover}</legend>
+                </Box>
+              </Box>
             </Box>
           )}
         </Box>
         {saveButtonText && (
-          <Box className="row5 crow">
+          <Box className="row7 crow">
             <Box>
               <CommonButton
                 disabled={isSubmitting}
