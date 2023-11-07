@@ -26,6 +26,8 @@ const AccessControlPage: NextPage = () => {
   const [listData, setListData] = useState({ data: [], total: 0 });
   const [isConfirm, setIsConfirm] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState("");
+  const [isConfirmBlock, setIsConfirmBlock] = useState(false);
+  const [toggleStatus, setToggleStatus] = useState();
 
   const [searchKey, setSearchKey] = useState("");
   const [updateByRoleId] = useMutation(ADMIN_UPDATE_USER_ROLE);
@@ -63,6 +65,7 @@ const AccessControlPage: NextPage = () => {
               userRole: a.name,
               organization: a.organization_name,
               accessibility: a.accessibility,
+              status: a.status,
             };
           });
           /* istanbul ignore next */
@@ -77,8 +80,10 @@ const AccessControlPage: NextPage = () => {
     });
 
   const onUpdateUserRoleSubmit = async () => {
+    /* istanbul ignore next */
     setLoader(true);
     try {
+      /* istanbul ignore next */
       await updateByRoleId({
         variables: {
           role_id: selectedRoleId,
@@ -86,12 +91,17 @@ const AccessControlPage: NextPage = () => {
             status: 0,
           },
         },
+        /* istanbul ignore next */
         onCompleted: (data) => {
+          /* istanbul ignore next */
           setIsConfirm(false);
+          /* istanbul ignore next */
           refetch();
+          /* istanbul ignore next */
           enqueueSnackbar(data.message || "User Role deleted successfully!", {
             variant: "success",
           });
+          /* istanbul ignore next */
           setLoader(false);
         },
       });
@@ -189,14 +199,59 @@ const AccessControlPage: NextPage = () => {
     setSelectFilterOptions({ ...temp });
   };
 
+  const onBlockUnblockUser = async () => {
+    setLoader(true);
+    try {
+      await updateByRoleId({
+        variables: {
+          role_id: selectedRoleId,
+          updateRole: {
+            status: toggleStatus,
+          },
+        },
+        onCompleted: (data) => {
+          const { result, message } = data.updateAdminRoleById;
+          /* istanbul ignore next */
+          const variant = result ? "success" : "error";
+          enqueueSnackbar(message, { variant });
+          setIsConfirmBlock(false);
+          refetch();
+          setLoader(false);
+        },
+      });
+    } catch (e) {
+      /* istanbul ignore next */
+      setIsConfirmBlock(false);
+      /* istanbul ignore next */
+      setLoader(false);
+      /* istanbul ignore next */
+      enqueueSnackbar("Server error please try later.", {
+        variant: "error",
+      });
+    }
+  };
+
   /* istanbul ignore next */
   const handleActionButtonClick = (value) => {
     /* istanbul ignore next */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { pressedIconButton, _id } = value;
+    const { pressedIconButton, status, _id } = value;
     if (pressedIconButton == "delete") {
       setIsConfirm(true);
       setSelectedRoleId(_id);
+    }
+    if (pressedIconButton == "block") {
+      const toggleObj = {
+        "1": 0,
+        "0": 1,
+      };
+      setSelectedRoleId(_id);
+      setToggleStatus(toggleObj[status]);
+      if (status == 1) {
+        setIsConfirmBlock(true);
+      } else {
+        onBlockUnblockUser();
+      }
     }
     if (pressedIconButton === "edit")
       router.push(`/admin/userRole/edit/${_id}`);
@@ -229,8 +284,19 @@ const AccessControlPage: NextPage = () => {
         <ConfirmationModal
           label="Are you sure you want to delete this user role ?"
           description="(Note: no HCP will be able to access MyHelp in the future.)"
+          /* istanbul ignore next */
           onCancel={() => setIsConfirm(false)}
           onConfirm={onUpdateUserRoleSubmit}
+          isWarning={true}
+        />
+      )}
+      {isConfirmBlock && (
+        <ConfirmationModal
+          label="Are you sure you want to block the user role?"
+          description="Note: A blocked user role will not be able to log in."
+          /* istanbul ignore next */
+          onCancel={() => setIsConfirmBlock(false)}
+          onConfirm={onBlockUnblockUser}
           isWarning={true}
         />
       )}
