@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import ActionsButtons from "./actionButtons";
+import ActionsButtons from "../safetyPlan/ActionsButtons";
 
 interface Column {
   id: string;
@@ -41,7 +41,7 @@ export const userRoleColumns: readonly Column[] = [
     minWidth: 170,
     align: "center",
     format: (value, buttonClick) => (
-      <ActionsButtons data={value} buttonClick={buttonClick} />
+      <ActionsButtons data={value} buttonClick={buttonClick} view="userRole" />
     ),
   },
 ];
