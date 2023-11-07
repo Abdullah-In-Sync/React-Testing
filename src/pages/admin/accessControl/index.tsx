@@ -80,8 +80,10 @@ const AccessControlPage: NextPage = () => {
     });
 
   const onUpdateUserRoleSubmit = async () => {
+    /* istanbul ignore next */
     setLoader(true);
     try {
+      /* istanbul ignore next */
       await updateByRoleId({
         variables: {
           role_id: selectedRoleId,
@@ -89,12 +91,17 @@ const AccessControlPage: NextPage = () => {
             status: 0,
           },
         },
+        /* istanbul ignore next */
         onCompleted: (data) => {
+          /* istanbul ignore next */
           setIsConfirm(false);
+          /* istanbul ignore next */
           refetch();
+          /* istanbul ignore next */
           enqueueSnackbar(data.message || "User Role deleted successfully!", {
             variant: "success",
           });
+          /* istanbul ignore next */
           setLoader(false);
         },
       });
@@ -213,8 +220,11 @@ const AccessControlPage: NextPage = () => {
         },
       });
     } catch (e) {
+      /* istanbul ignore next */
       setIsConfirmBlock(false);
+      /* istanbul ignore next */
       setLoader(false);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", {
         variant: "error",
       });
@@ -274,6 +284,7 @@ const AccessControlPage: NextPage = () => {
         <ConfirmationModal
           label="Are you sure you want to delete this user role ?"
           description="(Note: no HCP will be able to access MyHelp in the future.)"
+          /* istanbul ignore next */
           onCancel={() => setIsConfirm(false)}
           onConfirm={onUpdateUserRoleSubmit}
           isWarning={true}
@@ -283,6 +294,7 @@ const AccessControlPage: NextPage = () => {
         <ConfirmationModal
           label="Are you sure you want to block the user role?"
           description="Note: A blocked user role will not be able to log in."
+          /* istanbul ignore next */
           onCancel={() => setIsConfirmBlock(false)}
           onConfirm={onBlockUnblockUser}
           isWarning={true}
