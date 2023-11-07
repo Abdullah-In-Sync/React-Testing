@@ -58,7 +58,7 @@ mocksData.push({
   result: {
     data: {
       getAdminModuleList: {
-        modulelist: [
+        admin_modulelist: [
           {
             _id: "moduleId1",
             accessibility: ["admin", "therapist"],
@@ -81,7 +81,77 @@ mocksData.push({
             status: 1,
           },
         ],
-        privileges: [
+        admin_privileges: [
+          {
+            _id: "prev1",
+            name: "Add",
+            status: 1,
+          },
+          {
+            _id: "prev2",
+            name: "View",
+            status: 1,
+          },
+        ],
+        patient_modulelist: [
+          {
+            _id: "moduleId1",
+            accessibility: ["admin", "therapist"],
+            name: "Library",
+            privileges: ["prev1", "prev2"],
+            status: 1,
+          },
+          {
+            _id: "moduleId2",
+            accessibility: ["admin", "therapist", "patient"],
+            name: "Assessment",
+            privileges: ["prev1", "prev2"],
+            status: 1,
+          },
+          {
+            _id: "moduleId3",
+            accessibility: ["admin", "therapist", "patient"],
+            name: "Notes",
+            privileges: ["prev2"],
+            status: 1,
+          },
+        ],
+        patient_privileges: [
+          {
+            _id: "prev1",
+            name: "Add",
+            status: 1,
+          },
+          {
+            _id: "prev2",
+            name: "View",
+            status: 1,
+          },
+        ],
+        therapist_modulelist: [
+          {
+            _id: "moduleId1",
+            accessibility: ["admin", "therapist"],
+            name: "Library",
+            privileges: ["prev1", "prev2"],
+            status: 1,
+          },
+          {
+            _id: "moduleId2",
+            accessibility: ["admin", "therapist", "patient"],
+            name: "Assessment",
+            privileges: ["prev1", "prev2"],
+            status: 1,
+          },
+          {
+            _id: "moduleId3",
+            accessibility: ["admin", "therapist", "patient"],
+            name: "Notes",
+            privileges: ["prev2"],
+            status: 1,
+          },
+        ],
+        therapist_privileges: [
           {
             _id: "prev1",
             name: "Add",
@@ -106,7 +176,8 @@ mocksData.push({
       org_id: "all",
       accessibility: "admin",
       position: "sidebar",
-      privileges: '{"Library":["prev2"],"Assessment":["prev2"],"Notes":[]}',
+      privileges:
+        '{"Add":[],"View":[],"Library":["prev2"],"Assessment":["prev2"]}',
     },
   },
   result: {
@@ -129,7 +200,7 @@ mocksData.push({
       accessibility: "admin",
       position: "sidebar",
       privileges:
-        '{"Library":["prev1","prev2"],"Assessment":["prev2"],"Notes":[]}',
+        '{"Add":[],"View":[],"Library":["prev1","prev2"],"Assessment":["prev2"]}',
     },
   },
   result: {

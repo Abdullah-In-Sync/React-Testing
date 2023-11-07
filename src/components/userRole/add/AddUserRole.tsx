@@ -1,6 +1,6 @@
 import { Formik, FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
-import { GetAdminModuleList } from "../../../graphql/userRole/types";
+import { GetAllModuleList } from "../../../graphql/userRole/types";
 import ConfirmWrapper, { ConfirmElement } from "../../common/ConfirmWrapper";
 import UserRoleForm from "../form/UserRoleForm";
 import * as Yup from "yup";
@@ -21,7 +21,7 @@ interface ViewProps {
   organizationList?: object[];
   onPressCancel?: () => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
-  modulelistData: GetAdminModuleList;
+  modulelistData: GetAllModuleList;
 }
 
 const validationSchema = Yup.object().shape({
@@ -38,17 +38,17 @@ const AddUserRole: React.FC<ViewProps> = ({
   modulelistData,
   organizationList,
 }) => {
-  const { modulelist = [] } = modulelistData || {};
+  // const { modulelist = [] } = modulelistData || {};
   let privileges = {};
 
-  modulelist.forEach((item) => {
+  modulelistData[`${"admin"}_privileges`].forEach((item) => {
     privileges = { ...privileges, ...{ [item.name]: [] } };
   });
 
   const initialValues = {
     name: "",
     org_id: "",
-    accessibility: "",
+    accessibility: "admin",
     position: "",
     privileges,
   };
@@ -64,7 +64,7 @@ const AddUserRole: React.FC<ViewProps> = ({
             formikProps={props}
             onPressCancel={onPressCancel}
             organizationList={organizationList}
-            defaultPrivileges={privileges}
+            defaultPrivileges={true}
           />
         )}
       />

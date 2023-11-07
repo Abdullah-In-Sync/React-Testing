@@ -1,7 +1,7 @@
 import { Formik, FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
 import * as Yup from "yup";
-import { GetAdminModuleList } from "../../../graphql/userRole/types";
+import { GetAllModuleList } from "../../../graphql/userRole/types";
 import ConfirmWrapper, { ConfirmElement } from "../../common/ConfirmWrapper";
 import UserRoleForm from "../form/UserRoleForm";
 
@@ -21,7 +21,7 @@ interface ViewProps {
   organizationList?: object[];
   onPressCancel?: () => void;
   confirmRef?: ForwardedRef<ConfirmElement>;
-  modulelistData: GetAdminModuleList;
+  modulelistData: GetAllModuleList;
   viewData?: any;
 }
 

@@ -1,11 +1,11 @@
 import { Formik } from "formik";
 import React from "react";
-import { GetAdminModuleList } from "../../../graphql/userRole/types";
+import { GetAllModuleList } from "../../../graphql/userRole/types";
 import UserRoleForm from "../form/UserRoleForm";
 
 interface ViewProps {
   organizationList?: object[];
-  modulelistData: GetAdminModuleList;
+  modulelistData: GetAllModuleList;
   viewData?: any;
 }
 

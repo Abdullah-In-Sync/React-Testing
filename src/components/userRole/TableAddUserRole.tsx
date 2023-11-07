@@ -89,7 +89,7 @@ const TableAddUserRole: React.FC<ViewProps> = ({
                               onChange={() => onChangePrivilege(row, item)}
                               name={row.name}
                               value={item._id}
-                              disabled={!row.privileges.includes(item._id)}
+                              // disabled={!row?.privileges?.includes(item._id)}
                             />
                           }
                           label={null}

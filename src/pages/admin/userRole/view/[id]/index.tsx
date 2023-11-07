@@ -10,7 +10,7 @@ import {
   ADMIN_VIEW_ROLE,
   GET_ADMIN_MODULE_LIST,
 } from "../../../../../graphql/userRole/graphql";
-import { ModulesData } from "../../../../../graphql/userRole/types";
+import { ModulesAllData } from "../../../../../graphql/userRole/types";
 
 const AdminAddUserRole: NextPage = () => {
   const router = useRouter();
@@ -24,7 +24,7 @@ const AdminAddUserRole: NextPage = () => {
   } = useQuery(GET_ORGANIZATION_LIST);
 
   const { data: { getAdminModuleList = {} } = {}, loading: loadingModule } =
-    useQuery<ModulesData>(GET_ADMIN_MODULE_LIST, {
+    useQuery<ModulesAllData>(GET_ADMIN_MODULE_LIST, {
       variables: {
         accessibility: "",
       },

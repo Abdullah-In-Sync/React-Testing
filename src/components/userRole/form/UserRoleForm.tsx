@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Form } from "formik";
 import React from "react";
-import { GetAdminModuleList } from "../../../graphql/userRole/types";
+import { GetAllModuleList } from "../../../graphql/userRole/types";
 import { accessibility, navPosition } from "../../../lib/constants";
 import { csvDecode } from "../../../utility/helper";
 import CommonButton from "../../common/Buttons/CommonButton";
@@ -10,7 +10,7 @@ import FormikTextField from "../../common/FormikFields/FormikTextField";
 import TableAddUserRole from "../TableAddUserRole";
 import { useStyles } from "../tableAddUserRoleStyles";
 interface ViewProps {
-  modulesData: GetAdminModuleList;
+  modulesData: GetAllModuleList;
   formikProps?: any;
   onPressCancel?: () => void;
   organizationList?: any;
@@ -30,19 +30,18 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   const styles = useStyles();
   const {
     isSubmitting,
-    values: { org_id, privileges },
+    values: { org_id, privileges, accessibility: accessibilityValue },
     setFieldValue,
   } = formikProps;
 
   const onChangePrivilege = async (row, item) => {
     const module = privileges[row.name] || [];
     const moduleKey = `privileges.${[row.name]}`;
-    const { privileges: privilegesData = [] } = modulesData;
     const index = module.indexOf(item._id);
     const viewText = "View";
-    const viewId = privilegesData.filter((item) => item.name === viewText)[0][
-      "_id"
-    ];
+    const viewId = modulesData[`${accessibilityValue}_privileges`].filter(
+      (item) => item.name === viewText
+    )[0]["_id"];
     if (index <= -1) {
       if (item.name !== viewText && viewId && !module.includes(viewId))
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
@@ -69,7 +68,11 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const {
       target: { name, value },
     } = event;
-    if (defaultPrivileges) setFieldValue("privileges", defaultPrivileges);
+    if (defaultPrivileges)
+      setFieldValue(
+        "privileges",
+        modulesData[`${accessibilityValue}_privileges`]
+      );
 
     setFieldValue(name, value);
   };
@@ -136,7 +139,14 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       </Box>
       <Box>
         <TableAddUserRole
-          modulesData={modulesData}
+          modulesData={{
+            modulelist: accessibilityValue
+              ? modulesData[`${accessibilityValue}_modulelist`]
+              : [],
+            privileges: accessibilityValue
+              ? modulesData[`${accessibilityValue}_privileges`]
+              : [],
+          }}
           onChangePrivilege={onChangePrivilege}
           formikProps={formikProps}
           view={view}
