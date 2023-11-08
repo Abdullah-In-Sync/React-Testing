@@ -18,6 +18,15 @@ interface ViewProps {
   isEdit?: boolean;
   defaultPrivileges?: any;
 }
+
+export const generatedPrivileges = (modulesData, value) => {
+  let privilegesTemp = {}
+  modulesData[`${value}_modulelist`].forEach((item) => {
+    privilegesTemp = { ...privilegesTemp, ...{ [item._id]: [] } };
+  });
+  return privilegesTemp
+}
+
 const AddUserRoleForm: React.FC<ViewProps> = ({
   onPressCancel,
   formikProps,
@@ -35,8 +44,8 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   } = formikProps;
 
   const onChangePrivilege = async (row, item) => {
-    const module = privileges[row.name] || [];
-    const moduleKey = `privileges.${[row.name]}`;
+    const module = privileges[row._id] || [];
+    const moduleKey = `privileges.${[row._id]}`;
     const index = module.indexOf(item._id);
     const viewText = "View";
     const viewId = modulesData[`${accessibilityValue}_privileges`].filter(
@@ -47,7 +56,6 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
       else setFieldValue(moduleKey, [...module, ...[item._id]]);
     } else if (
-      /* istanbul ignore next */
       (item.name === viewText && module.length === 1) ||
       item.name !== viewText
     ) {
@@ -69,12 +77,17 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const {
       target: { name, value },
     } = event;
-    if (defaultPrivileges)
+    alert(value)
+    if (defaultPrivileges){
+      let privilegesTemp = {}
+      modulesData[`${value}_modulelist`].forEach((item) => {
+        privilegesTemp = { ...privilegesTemp, ...{ [item._id]: [] } };
+      });
       setFieldValue(
         "privileges",
-        modulesData[`${accessibilityValue}_privileges`]
+        generatedPrivileges(modulesData, value)
       );
-
+    }
     setFieldValue(name, value);
   };
 

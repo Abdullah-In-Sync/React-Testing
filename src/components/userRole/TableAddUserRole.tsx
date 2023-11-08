@@ -84,7 +84,7 @@ const TableAddUserRole: React.FC<ViewProps> = ({
                           control={
                             <Checkbox
                               checked={
-                                privileges[row.name]?.indexOf(item._id) > -1
+                                privileges[row._id]?.indexOf(item._id) > -1
                               }
                               onChange={() => onChangePrivilege(row, item)}
                               name={row.name}

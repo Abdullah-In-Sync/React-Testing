@@ -182,8 +182,7 @@ mocksData.push({
         org_id: "orgid1",
         name: "testviewname",
         position: "sidebar",
-        privileges:
-          '{"Library":["prev1"],"Assessment":["prev2"],"Notes":["prev1"]}',
+        privileges: '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
       },
     },
   },
