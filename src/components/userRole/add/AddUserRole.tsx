@@ -38,7 +38,6 @@ const AddUserRole: React.FC<ViewProps> = ({
   modulelistData,
   organizationList,
 }) => {
-  // const { modulelist = [] } = modulelistData || {};
   let privileges = {};
 
   modulelistData[`${"admin"}_privileges`].forEach((item) => {

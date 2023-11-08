@@ -43,7 +43,6 @@ const AdminAddUserRole: NextPage = () => {
       ...formFields,
       ...{ privileges: JSON.stringify(privileges) },
     };
-    console.debug({ variables });
     try {
       await addAdminUserRole({
         variables,

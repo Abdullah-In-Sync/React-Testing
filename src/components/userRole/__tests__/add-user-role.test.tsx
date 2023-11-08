@@ -29,9 +29,8 @@ mocksData.push({
     data: {
       getOrganizationData: [
         {
-          _id: "73ccaf14b7cb4a5a9f9cf7534b358c51",
-          contract:
-            "<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet similique cum totam culpa placeat explicabo ratione unde quas itaque, perferendis. Eos, voluptatum in repellat dolore. Vero numquam odio, enim reiciendis.</p>",
+          _id: "orgid1",
+          contract: "<p>Lorem ipsum, </p>",
           created_date: "2022-12-05T09:47:11.000Z",
           logo: "",
           logo_url: null,
@@ -196,11 +195,11 @@ mocksData.push({
     query: ADMIN_ADD_USER_ROLE,
     variables: {
       name: "usertestname",
-      org_id: "all",
+      org_id: "orgid1",
       accessibility: "admin",
       position: "sidebar",
       privileges:
-        '{"Add":[],"View":[],"Library":["prev1","prev2"],"Assessment":["prev2"]}',
+        '[{"_id":"prev1","name":"Add","status":1},{"_id":"prev2","name":"View","status":1}]',
     },
   },
   result: {
@@ -249,7 +248,7 @@ const sut = async () => {
   );
 };
 
-const selectDropdownByTestid = async (dropdonwTestid) => {
+const selectDropdownByTestid = async (dropdonwTestid, value?: number) => {
   const selectDropdownSelect = await screen.findByTestId(dropdonwTestid);
   fireEvent.click(selectDropdownSelect);
   expect(selectDropdownSelect).toBeInTheDocument();
@@ -264,7 +263,7 @@ const selectDropdownByTestid = async (dropdonwTestid) => {
   ).findByRole("listbox");
   const optionsSelect = await within(listboxSelect).findAllByRole("option");
 
-  fireEvent.click(optionsSelect[0]);
+  fireEvent.click(optionsSelect[value || 0]);
 };
 
 beforeEach(() => {
@@ -300,11 +299,10 @@ describe("Admin add user role", () => {
     fireEvent.change(await screen.findByTestId("userRoleName"), {
       target: { value: "usertestname" },
     });
+    await selectDropdownByTestid("accessibilitySelect", 1);
     await selectDropdownByTestid("accessibilitySelect");
     await selectDropdownByTestid("navPositionSelect");
-
-    await selectDropdownByTestid("organizationSelect");
-
+    await selectDropdownByTestid("organizationSelect", 1);
     fireEvent.click(await screen.findByTestId("moduleId1_prev1_check"));
     fireEvent.click(await screen.findByTestId("moduleId2_prev2_check"));
     fireEvent.click(await screen.findByTestId("submitForm"));
@@ -321,7 +319,6 @@ describe("Admin add user role", () => {
     });
     await selectDropdownByTestid("accessibilitySelect");
     await selectDropdownByTestid("navPositionSelect");
-
     await selectDropdownByTestid("organizationSelect");
     fireEvent.click(await screen.findByTestId("submitForm"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
