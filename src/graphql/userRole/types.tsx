@@ -1,6 +1,19 @@
 export interface ModulesData {
   getAdminModuleList: GetAdminModuleList;
 }
+
+export interface ModulesAllData {
+  getAdminModuleList: GetAllModuleList;
+}
+
+export interface GetAllModuleList {
+  admin_modulelist?: ModulelistEntity[] | null;
+  admin_privileges?: PrivilegesEntity[] | null;
+  patient_modulelist?: ModulelistEntity[] | null;
+  patient_privileges?: PrivilegesEntity[] | null;
+  therapist_modulelist?: ModulelistEntity[] | null;
+  therapist_privileges?: PrivilegesEntity[] | null;
+}
 export interface GetAdminModuleList {
   modulelist?: ModulelistEntity[] | null;
   privileges?: PrivilegesEntity[] | null;

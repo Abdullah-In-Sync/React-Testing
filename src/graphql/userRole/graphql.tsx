@@ -35,15 +35,42 @@ export const GET_USER_ROLE_LIST = gql`
 export const GET_ADMIN_MODULE_LIST = gql`
   query GetAdminModuleList($accessibility: String!) {
     getAdminModuleList(accessibility: $accessibility) {
-      modulelist {
+      admin_modulelist {
+        _id
+        accessibility
+        admin_privileges
+        name
+        status
+      }
+      admin_privileges {
         _id
         accessibility
         name
-        privileges
         status
       }
-      privileges {
+      patient_modulelist {
         _id
+        accessibility
+        name
+        patient_privileges
+        status
+      }
+      patient_privileges {
+        _id
+        name
+        accessibility
+        status
+      }
+      therapist_modulelist {
+        _id
+        accessibility
+        name
+        status
+        therapist_privileges
+      }
+      therapist_privileges {
+        _id
+        accessibility
         name
         status
       }
