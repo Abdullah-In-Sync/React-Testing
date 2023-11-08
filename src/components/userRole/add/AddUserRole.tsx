@@ -1,9 +1,9 @@
 import { Formik, FormikProps } from "formik";
-import React, { ForwardedRef, useEffect } from "react";
+import React, { ForwardedRef } from "react";
+import * as Yup from "yup";
 import { GetAllModuleList } from "../../../graphql/userRole/types";
 import ConfirmWrapper, { ConfirmElement } from "../../common/ConfirmWrapper";
 import UserRoleForm, { generatedPrivileges } from "../form/UserRoleForm";
-import * as Yup from "yup";
 
 interface InitialData {
   name: string;
@@ -38,10 +38,7 @@ const AddUserRole: React.FC<ViewProps> = ({
   modulelistData,
   organizationList,
 }) => {
-  let privileges = generatedPrivileges(modulelistData, "admin");
-  // modulelistData[`${"admin"}_modulelist`].forEach((item) => {
-  //   privileges = { ...privileges, ...{ [item._id]: [] } };
-  // });
+  const privileges = generatedPrivileges(modulelistData, "admin");
   const initialValues = {
     name: "",
     org_id: "",
@@ -50,7 +47,7 @@ const AddUserRole: React.FC<ViewProps> = ({
     privileges,
   };
 
-  console.log({initialValues})
+  console.log({ initialValues });
   const commonform = () => {
     return (
       <Formik

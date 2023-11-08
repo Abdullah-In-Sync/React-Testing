@@ -20,12 +20,12 @@ interface ViewProps {
 }
 
 export const generatedPrivileges = (modulesData, value) => {
-  let privilegesTemp = {}
+  let privilegesTemp = {};
   modulesData[`${value}_modulelist`].forEach((item) => {
     privilegesTemp = { ...privilegesTemp, ...{ [item._id]: [] } };
   });
-  return privilegesTemp
-}
+  return privilegesTemp;
+};
 
 const AddUserRoleForm: React.FC<ViewProps> = ({
   onPressCancel,
@@ -77,16 +77,13 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const {
       target: { name, value },
     } = event;
-    alert(value)
-    if (defaultPrivileges){
-      let privilegesTemp = {}
+    alert(value);
+    if (defaultPrivileges) {
+      let privilegesTemp = {};
       modulesData[`${value}_modulelist`].forEach((item) => {
         privilegesTemp = { ...privilegesTemp, ...{ [item._id]: [] } };
       });
-      setFieldValue(
-        "privileges",
-        generatedPrivileges(modulesData, value)
-      );
+      setFieldValue("privileges", generatedPrivileges(modulesData, value));
     }
     setFieldValue(name, value);
   };

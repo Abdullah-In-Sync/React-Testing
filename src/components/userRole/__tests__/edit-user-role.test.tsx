@@ -30,8 +30,7 @@ mocksData.push({
       getOrganizationData: [
         {
           _id: "orgid1",
-          contract:
-            "<p>Lorem ipsum, .</p>",
+          contract: "<p>Lorem ipsum, .</p>",
           created_date: "2022-12-05T09:47:11.000Z",
           logo: "",
           logo_url: null,
@@ -183,7 +182,8 @@ mocksData.push({
         org_id: "orgid1",
         name: "testupdate",
         position: "sidebar",
-        privileges: '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+        privileges:
+          '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
       },
     },
   },
@@ -197,7 +197,8 @@ mocksData.push({
       updateRole: {
         name: "testupdate",
         position: "sidebar",
-        privileges: '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+        privileges:
+          '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
       },
     },
   },
@@ -219,7 +220,8 @@ mocksData.push({
       updateRole: {
         name: "testupdateerror",
         position: "sidebar",
-        privileges: '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+        privileges:
+          '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
       },
     },
   },
@@ -241,7 +243,8 @@ mocksData.push({
       updateRole: {
         name: "servererror",
         position: "sidebar",
-        privileges: '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+        privileges:
+          '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
       },
     },
   },

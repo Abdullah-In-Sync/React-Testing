@@ -171,12 +171,13 @@ mocksData.push({
   request: {
     query: ADMIN_ADD_USER_ROLE,
     variables: {
-      name: 'usertestname',
-      org_id: 'all',
-      accessibility: 'admin',
-      position: 'sidebar',
-      privileges: '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}'
-    }
+      name: "usertestname",
+      org_id: "all",
+      accessibility: "admin",
+      position: "sidebar",
+      privileges:
+        '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+    },
   },
   result: {
     data: {
@@ -193,12 +194,13 @@ mocksData.push({
   request: {
     query: ADMIN_ADD_USER_ROLE,
     variables: {
-      name: 'usertestname',
-      org_id: 'orgid1',
-      accessibility: 'admin',
-      position: 'sidebar',
-      privileges: '{"moduleId1":["prev1","prev2"],"moduleId2":["prev2"],"moduleId3":[]}'
-    }
+      name: "usertestname",
+      org_id: "orgid1",
+      accessibility: "admin",
+      position: "sidebar",
+      privileges:
+        '{"moduleId1":["prev1","prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+    },
   },
   result: {
     data: {
@@ -220,12 +222,12 @@ mocksData.push({
   request: {
     query: ADMIN_ADD_USER_ROLE,
     variables: {
-      name: 'usertestname',
-      org_id: 'all',
-      accessibility: 'admin',
-      position: 'sidebar',
-      privileges: '{"moduleId1":[],"moduleId2":[],"moduleId3":[]}'
-    }
+      name: "usertestname",
+      org_id: "all",
+      accessibility: "admin",
+      position: "sidebar",
+      privileges: '{"moduleId1":[],"moduleId2":[],"moduleId3":[]}',
+    },
   },
   result: {
     data: {
