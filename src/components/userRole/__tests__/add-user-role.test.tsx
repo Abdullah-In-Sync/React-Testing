@@ -176,7 +176,7 @@ mocksData.push({
       accessibility: "admin",
       position: "sidebar",
       privileges:
-        '{"Add":[],"View":[],"Library":["prev2"],"Assessment":["prev2"]}',
+        '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
     },
   },
   result: {
@@ -199,7 +199,7 @@ mocksData.push({
       accessibility: "admin",
       position: "sidebar",
       privileges:
-        '[{"_id":"prev1","name":"Add","status":1},{"_id":"prev2","name":"View","status":1}]',
+        '{"moduleId1":["prev1","prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
     },
   },
   result: {
@@ -226,7 +226,7 @@ mocksData.push({
       org_id: "all",
       accessibility: "admin",
       position: "sidebar",
-      privileges: '{"Library":[],"Assessment":[],"Notes":[]}',
+      privileges: '{"moduleId1":[],"moduleId2":[],"moduleId3":[]}',
     },
   },
   result: {

@@ -183,7 +183,7 @@ mocksData.push({
         name: "testviewname",
         position: "sidebar",
         privileges:
-          '{"Library":["prev1"],"Assessment":["prev2"],"Notes":["prev1"]}',
+          '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
       },
     },
   },
