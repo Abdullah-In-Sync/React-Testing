@@ -77,7 +77,6 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const {
       target: { name, value },
     } = event;
-    alert(value);
     if (defaultPrivileges) {
       let privilegesTemp = {};
       modulesData[`${value}_modulelist`].forEach((item) => {
