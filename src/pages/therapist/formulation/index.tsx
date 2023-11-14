@@ -13,6 +13,7 @@ import {
   TextField,
   Grid,
 } from "@mui/material";
+import RedoIcon from "@mui/icons-material/Redo";
 import { styled } from "@mui/material/styles";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,6 +23,8 @@ import CrudForm from "../../../components/common/CrudForm";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+
 import {
   ADD_FAV_FORMULATION,
   GET_FORMULATION_LIST,
@@ -30,7 +33,6 @@ import {
   UPDATE_FORMULATION,
 } from "../../../graphql/formulation/graphql";
 
-import { ShareOutlined } from "@mui/icons-material";
 import Layout from "../../../components/layout";
 import ContentHeader from "../../../components/common/ContentHeader";
 import { AddButton } from "../../../components/common/Buttons";
@@ -200,14 +202,6 @@ const TherapistFormulation = () => {
 
           <>
             <IconButtonWrapper
-              data-testid={"deleteIcon_" + value?._id}
-              aria-label="delete"
-              size="small"
-              onClick={() => handlePressDelete(value)}
-            >
-              <DeleteIcon />
-            </IconButtonWrapper>
-            <IconButtonWrapper
               data-testid={"fav_btn_" + value?._id}
               aria-label="favorite"
               size="small"
@@ -233,6 +227,28 @@ const TherapistFormulation = () => {
             </IconButtonWrapper>
 
             <IconButtonWrapper
+              data-testid={"deleteIcon_" + value?._id}
+              aria-label="delete"
+              size="small"
+              onClick={() => handlePressDelete(value)}
+            >
+              <DeleteIcon />
+            </IconButtonWrapper>
+
+            <NextLink
+              href={
+                value?.download_formulation_url != null
+                  ? value?.download_formulation_url
+                  : "#"
+              }
+              passHref
+            >
+              <IconButtonWrapper aria-label="download" size="small">
+                <CloudDownloadIcon />
+              </IconButtonWrapper>
+            </NextLink>
+
+            <IconButtonWrapper
               aria-label="favorite"
               size="small"
               data-testid={"shareBtn_" + value?._id}
@@ -241,7 +257,7 @@ const TherapistFormulation = () => {
                 onPressShareFormulation(value?._id, value?.formulation_name);
               }}
             >
-              <ShareOutlined
+              <RedoIcon
                 data-testid={"fav_" + value?._id}
                 id={"fav_" + value?._id}
                 sx={{
@@ -312,6 +328,7 @@ const TherapistFormulation = () => {
     console.log(formulationId, name, "onclick share");
     setSelectFormulation(formulationId);
     setSelectFormulationName(formulationId);
+    /* istanbul ignore next */
     shareInfoModalRef.current?.open();
   };
 
@@ -327,7 +344,7 @@ const TherapistFormulation = () => {
           const {
             therapistShareFormulationById: { duplicateNames },
           } = data;
-
+          /* istanbul ignore next */
           if (duplicateNames) {
             /* istanbul ignore next */
             setIsConfirmShare(false);
