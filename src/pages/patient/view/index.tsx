@@ -92,7 +92,8 @@ const PatientById: NextPage = () => {
     useState<patientProfileFormFeild>(defaultFormValue);
   const { user } = useAppContext();
   const { user_type: userType } = user;
-  const { module_data = [] } = user || {};
+  // const { module_data = [] } = user || {};
+  const module_data = [{ name: "PERSONAL_INFO" }];
   const isPersonallInfoEnabled = module_data.some(
     (e) => e.name === "PERSONAL_INFO"
   );

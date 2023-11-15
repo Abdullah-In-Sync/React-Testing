@@ -7,11 +7,12 @@ import { queryOrgTokenData } from "../../hooks/fetchOrgTokenData";
 import { useAuth } from "../../hooks/useAuth";
 import { homeRoute } from "../../lib/constants";
 import { clearSession } from "../../utility/storage";
+import { getTokenIdDecodedData } from "../../utility/helper";
 
 const LoginPage: NextPage = () => {
   const { login } = useAuth();
   const router = useRouter();
-  const { orgQuery, getTokenQuery } = queryOrgTokenData();
+  const { orgQuery } = queryOrgTokenData();
   const { setUser, setIsAuthenticated } = useAppContext();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -22,34 +23,29 @@ const LoginPage: NextPage = () => {
     setSubmitting,
   }) => {
     const { _id: orgId } = orgQuery || {};
-    getTokenQuery[userType]({
-      fetchPolicy: "cache-and-network",
-      onCompleted: (orgTokenData) => {
-        const { getTokenData: tData = {} } = orgTokenData;
-        const { organization_settings: { _id: tokenOrgId = undefined } = {} } =
-          tData;
-        if (orgId === tokenOrgId || userType === "admin") {
-          setUser({
-            ...tData,
-          });
-          setIsAuthenticated(true);
-          nofify({
-            status: status,
-            message: message,
-          });
-          setSubmitting(false);
-          return router.replace(homeRoute[userType]);
-        } else {
-          clearSession(() => {
-            nofify({
-              status: "error",
-              message: "Not allowed!",
-            });
-          });
-          setSubmitting(false);
-        }
-      },
-    });
+    const tData = getTokenIdDecodedData();
+    const { org_id: tokenOrgId } = tData[userType + "_data"];
+
+    if (orgId === tokenOrgId || userType === "admin") {
+      setUser({
+        ...tData,
+      });
+      setIsAuthenticated(true);
+      nofify({
+        status: status,
+        message: message,
+      });
+      setSubmitting(false);
+      return router.replace(homeRoute[userType]);
+    } else {
+      clearSession(() => {
+        nofify({
+          status: "error",
+          message: "Not allowed!",
+        });
+      });
+      setSubmitting(false);
+    }
   };
 
   const nofify = ({ status, message }) => {
