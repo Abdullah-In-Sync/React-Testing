@@ -142,7 +142,7 @@ const FormBox: React.FC<ViewProps> = ({
               </Grid>
               <Grid item xs={6}>
                 <TextFieldComponent
-                  required={!organizationList ? true : false}
+                  required={true}
                   name="phone"
                   id="phone"
                   label="Phone Number"

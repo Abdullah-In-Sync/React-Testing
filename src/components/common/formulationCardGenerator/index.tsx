@@ -41,10 +41,7 @@ export default function FormulationCardGenerator({
         data?.map((record, index) => {
           return (
             <Grid item xs={4} key={index} data-testid="card">
-              <CardWrapper
-                data-testid={`card-${index}`}
-                onClick={() => onPressCard(record)}
-              >
+              <CardWrapper>
                 <CardHeader
                   action={
                     <>
@@ -58,7 +55,10 @@ export default function FormulationCardGenerator({
                     </>
                   }
                 />
-                <CardContentTitleWrapper>
+                <CardContentTitleWrapper
+                  data-testid={`card-${index}`}
+                  onClick={() => onPressCard(record)}
+                >
                   {
                     /* istanbul ignore next */
                     fields?.map(
