@@ -41,9 +41,11 @@ const sut = async () => {
 
 describe("Nav bar", () => {
   beforeEach(() => {
-    jest
-      .spyOn(store, "getSessionToken")
-      .mockReturnValue({ userToken: "testToken", userType: "patient" });
+    jest.spyOn(store, "getSessionToken").mockReturnValue({
+      userToken: "testToken",
+      userType: "patient",
+      userTokenId: "userTokenid",
+    });
     (Auth.currentAuthenticatedUser as jest.Mock).mockReturnValue({
       user: {},
     });

@@ -16,6 +16,7 @@ import { queryOrgTokenData } from "../hooks/fetchOrgTokenData";
 import theme from "../styles/theme/theme";
 import { clearSession, getSessionToken } from "../utility/storage";
 import { GetOrgByDomain } from "../graphql/org/types";
+import { getTokenIdDecodedData } from "../utility/helper";
 
 type AuthContext = {
   user: any;
@@ -42,7 +43,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(undefined);
   const { userToken, userType } = getSessionToken();
 
-  const { orgQuery, getOrgDomainLoading, getTokenQuery } = queryOrgTokenData();
+  const { orgQuery, getOrgDomainLoading } = queryOrgTokenData();
   const { _id: orgId } = orgQuery || {};
 
   useEffect(() => {
@@ -50,25 +51,20 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   }, [orgId]);
 
   const handleGetToken = () => {
-    getTokenQuery[userType]({
-      onCompleted: (orgTokenData) => {
-        const { getTokenData: tData = {} } = orgTokenData;
-        const { organization_settings: { _id: tokenOrgId = undefined } = {} } =
-          tData;
-        if (orgId === tokenOrgId || userType === "admin") {
-          setUser({
-            ...tData,
-          });
-          setIsAuthenticated(true);
-        } else {
-          setUser(undefined);
-          setIsAuthenticated(false);
-          clearSession(() => {
-            router.replace("/account");
-          });
-        }
-      },
-    });
+    const tData = getTokenIdDecodedData();
+    const { org_id: tokenOrgId } = tData[userType + "_data"];
+    if (orgId === tokenOrgId || userType === "admin") {
+      setUser({
+        ...tData,
+      });
+      setIsAuthenticated(true);
+    } else {
+      setUser(undefined);
+      setIsAuthenticated(false);
+      clearSession(() => {
+        router.replace("/account");
+      });
+    }
   };
 
   return (

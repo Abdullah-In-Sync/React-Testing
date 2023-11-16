@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Amplify, Auth } from "aws-amplify";
 import { clearSession, setSessionToken } from "../utility/storage";
 import { env } from "./../lib/env";
+import { parseJwt } from "../utility/helper";
 const {
   cognito: { region, userPoolId, clientId },
 } = env;
@@ -14,40 +15,64 @@ Amplify.configure({
     userPoolId,
     userPoolWebClientId: clientId,
     mandatorySignIn: false,
-    cookieStorage: {
-      secure: true,
-    },
   },
 });
 
 /* istanbul ignore next */
 export const useAuth = () => {
   const router = useRouter();
+
+  const handleCustomData = (idTokenData, callback) => {
+    const { role_detail } = idTokenData;
+    const roleDetailObj = JSON.parse(role_detail);
+    callback(roleDetailObj["accessibility"]);
+  };
+
+  const storeToken = ({ userData, callback, setSubmitting }) => {
+    setSessionToken(userData, ({ userType }) => {
+      callback({
+        status: "success",
+        data: userData,
+        message: "Login successful!",
+        userType,
+        setSubmitting,
+      });
+    });
+  };
   const login = async (values, { setSubmitting, callback }) => {
     const { username, password } = values;
     try {
       const user = await Auth.signIn(username, password);
+
       const {
         signInUserSession: {
           accessToken: { jwtToken, payload },
+          idToken: { jwtToken: jwtIdToken },
         },
       } = user;
+      const jwtIdTokenDecodeData = parseJwt(jwtIdToken);
+      const userRoles = jwtIdTokenDecodeData["cognito:groups"];
 
       const userData = {
         jwtToken,
-        userType: payload["cognito:groups"][0],
+        jwtIdToken,
         exp: payload["exp"],
       };
-
-      setSessionToken(userData, ({ userType }) => {
-        callback({
-          status: "success",
-          data: userData,
-          message: "Login successful!",
-          userType,
+      if (userRoles.includes("custom")) {
+        handleCustomData(jwtIdTokenDecodeData, (userType) => {
+          storeToken({
+            userData: { ...userData, ...{ userType } },
+            callback,
+            setSubmitting,
+          });
+        });
+      } else {
+        storeToken({
+          userData: { ...userData, ...{ userType: userRoles[0] } },
+          callback,
           setSubmitting,
         });
-      });
+      }
     } catch (error) {
       callback({ status: "error", message: error.message, setSubmitting });
     }

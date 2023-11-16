@@ -184,3 +184,65 @@ export const fileOnChange = async (
 
   callback({ fileName, fileObj });
 };
+
+export function parseJwt(token) {
+  if (token)
+    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+}
+
+export const checkPrivilageAccess = (moduleName, privilege?: any) => {
+  const { userTokenId } = getSessionToken();
+
+  const { role_access } = parseJwt(userTokenId);
+  const roleAccessData = JSON.parse(role_access);
+
+  const objArray = roleAccessData.filter((item) => item.name === moduleName);
+  const objLen = objArray.length;
+  if (objLen === -1) {
+    return false;
+  } else {
+    const obj = objArray[0];
+    const { privileges } = obj;
+    const pi = privileges.findIndex((item) => item.name === privilege);
+    if (pi < 0) return false;
+    else return true;
+  }
+};
+
+export const getTokenIdDecodedData = () => {
+  const { userTokenId } = getSessionToken();
+  const idTokenData = parseJwt(userTokenId);
+  const userType = idTokenData["cognito:groups"][0];
+  if (userType == "custom") {
+    const { role_detail } = idTokenData;
+    const roleDetailObj = JSON.parse(role_detail);
+    const accessibility = roleDetailObj["accessibility"];
+    const accessRoleUserType = accessibility + "_data";
+    const userDataObj = JSON.parse(idTokenData[accessRoleUserType]);
+    const { first_name, last_name } = userDataObj;
+    return {
+      [accessRoleUserType]: {
+        ...userDataObj,
+        ...{
+          [accessibility + "_firstname"]: first_name,
+          [accessibility + "_lastname"]: last_name,
+        },
+      },
+      user_type: accessibility,
+    };
+  } else {
+    const userDataObj = JSON.parse(idTokenData[userType + "_data"]);
+    const { first_name, last_name, org_id } = userDataObj;
+    return {
+      [userType + "_data"]: {
+        ...userDataObj,
+        ...{
+          [userType + "_firstname"]: first_name,
+          [userType + "_lastname"]: last_name,
+          org_id,
+        },
+      },
+      user_type: userType,
+    };
+  }
+};
