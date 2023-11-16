@@ -18,6 +18,7 @@ import { GET_TOKEN_DATA } from "../../../graphql/query/common";
 import { useAppContext } from "../../../contexts/AuthContext";
 import * as getOrgNameFromCurrentUrl from "../../../utility/helper";
 import { GET_ORG_PUBLIC_DATA } from "../../../graphql/org/graphql";
+import * as store from "../../../utility/storage";
 
 jest.mock("../../../contexts/AuthContext");
 
@@ -121,6 +122,11 @@ const sut = async () => {
 
 describe("Login page", () => {
   beforeEach(() => {
+    jest.spyOn(store, "getSessionToken").mockReturnValue({
+      userToken: "testToken",
+      userType: "patient",
+      userTokenId: idCustomJwtToken,
+    });
     (useAppContext as jest.Mock).mockReturnValue({
       setUser: jest.fn,
       setIsAuthenticated: jest.fn,
@@ -252,5 +258,27 @@ describe("Login page", () => {
     expect(
       await screen.findByText(/Username or password incorrect!/i)
     ).toBeInTheDocument();
+  });
+
+  it("should return true when the user has the specified privilege for the given module", () => {
+    const moduleName = "Resource";
+    const privilege = "View";
+    const expected = true;
+    const result = getOrgNameFromCurrentUrl.checkPrivilageAccess(
+      moduleName,
+      privilege
+    );
+    expect(result).toBe(expected);
+  });
+
+  it("should return false when the user does not have the specified privilege for the given module", () => {
+    const moduleName = "Assessment";
+    const privilege = "examplePrivilege";
+    const expected = false;
+    const result = getOrgNameFromCurrentUrl.checkPrivilageAccess(
+      moduleName,
+      privilege
+    );
+    expect(result).toBe(expected);
   });
 });
