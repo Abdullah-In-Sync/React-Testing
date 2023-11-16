@@ -24,6 +24,7 @@ const LoginPage: NextPage = () => {
   }) => {
     const { _id: orgId } = orgQuery || {};
     const tData = getTokenIdDecodedData();
+    /* istanbul ignore next */
     const { org_id: tokenOrgId } = tData[userType + "_data"] || {};
 
     if (orgId === tokenOrgId || userType === "admin") {

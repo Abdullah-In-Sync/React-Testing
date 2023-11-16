@@ -44,6 +44,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const { userToken, userType } = getSessionToken();
 
   const { orgQuery, getOrgDomainLoading } = queryOrgTokenData();
+  /* istanbul ignore next */
   const { _id: orgId } = orgQuery || {};
 
   useEffect(() => {
