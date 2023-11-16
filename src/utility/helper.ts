@@ -232,13 +232,14 @@ export const getTokenIdDecodedData = () => {
     };
   } else {
     const userDataObj = JSON.parse(idTokenData[userType + "_data"]);
-    const { first_name } = userDataObj;
+    const { first_name, last_name, org_id } = userDataObj;
     return {
       [userType + "_data"]: {
         ...userDataObj,
         ...{
           [userType + "_firstname"]: first_name,
-          [userType + "_lastname"]: first_name,
+          [userType + "_lastname"]: last_name,
+          org_id,
         },
       },
       user_type: userType,

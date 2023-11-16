@@ -80,7 +80,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }}
     >
       <ThemeProvider theme={theme(orgQuery)}>
-        {isAuthenticated && children}
+        {!getOrgDomainLoading && children}
       </ThemeProvider>
     </AuthContext.Provider>
   );
