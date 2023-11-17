@@ -88,7 +88,9 @@ const MonitorsList: React.FC<ViewProps> = ({
 
   return (
     <Stack pb={2} className={styles.monitorsList}>
-      {monitors.length > 0 ? monitorsRecords() : infoBox("No data found.")}
+      {monitors !== null && monitors.length > 0
+        ? monitorsRecords()
+        : infoBox("No data found.")}
     </Stack>
   );
 };

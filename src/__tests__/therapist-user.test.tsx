@@ -480,13 +480,11 @@ describe("Therapist user list", () => {
 
       expect(screen.queryByTestId("confirmButton")).toBeInTheDocument();
       fireEvent.click(screen.queryByTestId("confirmButton"));
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("User tagged successfully")
-        ).toBeInTheDocument();
-      });
     });
+
+    expect(
+      await screen.findByText("User tagged successfully")
+    ).toBeInTheDocument();
   });
 
   it("Delete user", async () => {

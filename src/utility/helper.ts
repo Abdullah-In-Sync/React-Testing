@@ -230,6 +230,8 @@ export const getTokenIdDecodedData = () => {
       },
       user_type: accessibility,
     };
+  } else if (userType === "admin") {
+    return { user_type: userType };
   } else {
     const userDataObj = JSON.parse(idTokenData[userType + "_data"]);
     const { first_name, last_name, org_id } = userDataObj;

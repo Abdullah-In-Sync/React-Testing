@@ -44,6 +44,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const { userToken, userType } = getSessionToken();
 
   const { orgQuery, getOrgDomainLoading } = queryOrgTokenData();
+  /* istanbul ignore next */
   const { _id: orgId } = orgQuery || {};
 
   useEffect(() => {
@@ -52,7 +53,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
   const handleGetToken = () => {
     const tData = getTokenIdDecodedData();
-    const { org_id: tokenOrgId } = tData[userType + "_data"];
+    const { org_id: tokenOrgId } = tData[userType + "_data"] || {};
     if (orgId === tokenOrgId || userType === "admin") {
       setUser({
         ...tData,

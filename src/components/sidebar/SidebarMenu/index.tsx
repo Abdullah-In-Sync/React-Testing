@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Box, Button, Collapse, List, ListItem, styled } from "@mui/material";
@@ -8,11 +8,10 @@ import { Box, Button, Collapse, List, ListItem, styled } from "@mui/material";
 import { useAppContext } from "../../../contexts/AuthContext";
 import { SidebarContext } from "../../../contexts/SidebarContext";
 import {
+  btb_actions_patient_routes,
   patient_routes,
   superadmin_routes,
   therapistRoutes,
-  default_patient_routes,
-  btb_actions_patient_routes,
 } from "../../../utility/sideNavItems";
 import { getSessionToken } from "../../../utility/storage";
 
@@ -149,22 +148,13 @@ const SidebarMenu = () => {
   const router = useRouter();
   const currentRoute = router?.pathname;
   const [expanded, setExpanded] = useState({});
-  const [test, setTest] = useState(0);
 
   const { user } = useAppContext();
-
-  useEffect(() => {
-    setTest(
-      user?.user_type == "patient" &&
-        user?.patient_data?.patient_consent &&
-        user?.patient_data?.patient_contract
-    );
-  }, [user]);
 
   /* istanbul ignore next */
   const patientLinks = () => {
     if (location.host.includes("actions")) return btb_actions_patient_routes;
-    else return test ? patient_routes : default_patient_routes;
+    else return patient_routes;
   };
 
   const userRoute = {
