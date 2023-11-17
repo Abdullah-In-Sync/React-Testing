@@ -69,7 +69,7 @@ const TableAddUserRole: React.FC<ViewProps> = ({
                   >
                     <Typography
                       className={
-                        privileges[row.name]?.length > 0 ? "activeModule" : ""
+                        privileges[row._id]?.length > 0 ? "activeModule" : ""
                       }
                     >
                       <span> {row.name} </span>
