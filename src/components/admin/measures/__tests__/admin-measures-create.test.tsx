@@ -13,6 +13,7 @@ import { uniqueString } from "../../../../utility/helper";
 
 jest.mock("../../../../utility/helper", () => ({
   uniqueString: jest.fn(),
+  filterBasedOnPrivilages: () => true,
 }));
 
 jest.mock("next/router", () => ({

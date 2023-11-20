@@ -16,6 +16,7 @@ import { uniqueString } from "../../../../utility/helper";
 
 jest.mock("../../../../utility/helper", () => ({
   uniqueString: jest.fn(),
+  filterBasedOnPrivilages: () => true,
 }));
 
 const pushMock = jest.fn();
