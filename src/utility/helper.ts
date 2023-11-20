@@ -2,6 +2,7 @@
 import moment from "moment";
 import { getSessionToken } from "./storage";
 import { getUpdatedFileName } from "../lib/helpers/s3";
+import TherapyTabs from "../components/patient/therapy/TherapyTabs";
 
 type SessionObject = {
   label: string;
@@ -193,19 +194,23 @@ export function parseJwt(token) {
 export const checkPrivilageAccess = (moduleName, privilege?: any) => {
   const { userTokenId } = getSessionToken();
 
-  const { role_access } = parseJwt(userTokenId);
+  const { role_access } = parseJwt(userTokenId) || {};
+  if (!role_access) return;
   const roleAccessData = JSON.parse(role_access);
-
   const objArray = roleAccessData.filter((item) => item.name === moduleName);
   const objLen = objArray.length;
   if (objLen === -1) {
     return false;
   } else {
     const obj = objArray[0];
-    const { privileges } = obj;
-    const pi = privileges.findIndex((item) => item.name === privilege);
-    if (pi < 0) return false;
-    else return true;
+    const { privileges = [] } = obj || {};
+    if (!privilege && privileges.length > 0) {
+      return true;
+    } else {
+      const pi = privileges.findIndex((item) => item.name === privilege);
+      if (pi < 0) return false;
+      else return true;
+    }
   }
 };
 
@@ -247,4 +252,15 @@ export const getTokenIdDecodedData = () => {
       user_type: userType,
     };
   }
+};
+
+export const filterBasedOnPrivilages = (routeObj) => {
+  const { label } = routeObj;
+  const status = checkPrivilageAccess(label);
+  if (status === undefined || label === "Home") return true;
+  else if (label === "Therapy")
+    return TherapyTabs.some(({ moduleName }) =>
+      checkPrivilageAccess(moduleName)
+    );
+  else return status;
 };
