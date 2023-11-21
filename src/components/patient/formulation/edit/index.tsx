@@ -16,6 +16,7 @@ interface ViewProps {
   arrowTemplatedefaultIsPreview?: boolean;
   defaultUserType?: string;
   onCancel?: () => void;
+  isTrue?: any;
 }
 
 const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
@@ -27,6 +28,7 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
   arrowTemplatedefaultIsPreview,
   defaultUserType,
   onCancel,
+  isTrue,
 }) => {
   const { user: { user_type: userType = "patient" } = {} } = useAppContext();
   const router = useRouter();
@@ -62,6 +64,7 @@ const PatientFormulationTemplateEdit: React.FC<ViewProps> = ({
             ? formulationData?.download_formulation_url
             : undefined
         }
+        isTrue={isTrue}
       >
         {staticTemplate &&
           TemplateDynamic &&

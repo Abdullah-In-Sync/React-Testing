@@ -12,7 +12,7 @@ import {
 } from "../../../graphql/patientFile/graphql";
 import { PatientFileListData } from "../../../graphql/patientFile/type";
 import { fetchUrlAndUploadFile } from "../../../hooks/fetchUrlAndUploadFile";
-import { removeProp } from "../../../utility/helper";
+import { checkPrivilageAccess, removeProp } from "../../../utility/helper";
 import { ConfirmElement } from "../../common/ConfirmWrapper";
 import ContentHeader from "../../common/ContentHeader";
 import { ConfirmInfoElement } from "../../common/CustomModal/InfoModal";
@@ -46,6 +46,7 @@ const FilesPage: NextPage = () => {
     fetchPolicy: "no-cache",
   });
 
+  const isTrue = checkPrivilageAccess("Files", "Download");
   useEffect(() => {
     if (patient_id)
       getPatientFiles({
@@ -237,6 +238,7 @@ const FilesPage: NextPage = () => {
         infoModalRef={infoModalRef}
         pageActionButtonClick={pageActionButtonClick}
         loadingPatientFileData={loadingPatientFileData}
+        isTrue={isTrue}
       />
     </>
   );

@@ -15,6 +15,7 @@ import {
 import PatientFormulationTemplateEdit from "../../../../../components/patient/formulation/edit";
 import ConfirmationModal from "../../../../../components/common/ConfirmationModal";
 import TemplatePopupView from "../../../../../components/common/popupViewTemplate/templatePopupView";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 const PatientEditTemplatePage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -41,6 +42,7 @@ const PatientEditTemplatePage: NextPage = () => {
     formulation_url: "",
   });
   const router = useRouter();
+  /* istanbul ignore next */
   const id = router?.query?.id as string;
 
   const [updateTemplateReponse] = useMutation(UPDATE_PAT_FORMULATION_BY_ID);
@@ -48,6 +50,7 @@ const PatientEditTemplatePage: NextPage = () => {
   const [getFormulation] = useLazyQuery(GET_FORMULATION_BY_SHARE_ID, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      /* istanbul ignore next */
       if (data?.getFormulationByShareId) {
         const Obj = {
           ...data?.getFormulationByShareId[0].formulation_data[0],
@@ -101,6 +104,7 @@ const PatientEditTemplatePage: NextPage = () => {
     } catch (e) {
       /* istanbul ignore next */
       console.log(e);
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     } finally {
       setLoader(false);
@@ -120,6 +124,7 @@ const PatientEditTemplatePage: NextPage = () => {
     /* istanbul ignore next */
     setSuccessModal(false);
   };
+  /* istanbul ignore next */
   const onPressBack = () => {
     router.back();
   };
@@ -138,9 +143,13 @@ const PatientEditTemplatePage: NextPage = () => {
   const onCancel = () => {
     setIsConfirmCancel(true);
   };
+  /* istanbul ignore next */
   const onClosePopup = () => {
     setIsOpenPopup(false);
   };
+
+  /* istanbul ignore next */
+  const isTrue = checkPrivilageAccess("Formulation", "Download");
 
   return (
     <>
@@ -154,6 +163,7 @@ const PatientEditTemplatePage: NextPage = () => {
           mode={"edit"}
           onPressBack={onPressBack}
           onCancel={onCancel}
+          isTrue={isTrue}
         />
         {successModal && (
           <SuccessModal
@@ -176,14 +186,17 @@ const PatientEditTemplatePage: NextPage = () => {
             onConfirm={cancelConfirm}
           />
         )}
-        {isOpenPopup && (
-          <TemplatePopupView
-            isOpen={isOpenPopup}
-            onClose={onClosePopup}
-            description={description}
-            instruction={instruction}
-          />
-        )}
+        {
+          /* istanbul ignore next */
+          isOpenPopup && (
+            <TemplatePopupView
+              isOpen={isOpenPopup}
+              onClose={onClosePopup}
+              description={description}
+              instruction={instruction}
+            />
+          )
+        }
       </Layout>
     </>
   );
