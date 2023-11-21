@@ -15,6 +15,7 @@ import {
 import PatientFormulationTemplateEdit from "../../../../../components/patient/formulation/edit";
 import ConfirmationModal from "../../../../../components/common/ConfirmationModal";
 import TemplatePopupView from "../../../../../components/common/popupViewTemplate/templatePopupView";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 const PatientEditTemplatePage: NextPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -142,6 +143,8 @@ const PatientEditTemplatePage: NextPage = () => {
     setIsOpenPopup(false);
   };
 
+  const isTrue = checkPrivilageAccess("Formulation", "Download");
+
   return (
     <>
       <Layout>
@@ -154,6 +157,7 @@ const PatientEditTemplatePage: NextPage = () => {
           mode={"edit"}
           onPressBack={onPressBack}
           onCancel={onCancel}
+          isTrue={isTrue}
         />
         {successModal && (
           <SuccessModal
