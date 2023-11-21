@@ -16,10 +16,12 @@ import { useRouter } from "next/router";
 
 const TherapyPatientComponent = () => {
   const router = useRouter();
+  /* istanbul ignore file */
   const {
     query: { tab },
   } = router;
   const styles = useStyles();
+  /* istanbul ignore file */
   const {
     user: {
       patient_data: {

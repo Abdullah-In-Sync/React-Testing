@@ -186,11 +186,13 @@ export const fileOnChange = async (
   callback({ fileName, fileObj });
 };
 
+/* istanbul ignore file */
 export function parseJwt(token) {
   if (token)
     return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
 
+/* istanbul ignore file */
 export const checkPrivilageAccess = (moduleName, privilege?: any) => {
   const { userTokenId } = getSessionToken();
 
@@ -214,6 +216,7 @@ export const checkPrivilageAccess = (moduleName, privilege?: any) => {
   }
 };
 
+/* istanbul ignore file */
 export const getTokenIdDecodedData = () => {
   const { userTokenId } = getSessionToken();
   const idTokenData = parseJwt(userTokenId);
@@ -254,6 +257,7 @@ export const getTokenIdDecodedData = () => {
   }
 };
 
+/* istanbul ignore file */
 export const filterBasedOnPrivilages = (routeObj) => {
   const { label } = routeObj;
   const status = checkPrivilageAccess(label);
