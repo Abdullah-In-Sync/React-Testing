@@ -9,9 +9,19 @@ import { useAppContext } from "../../../contexts/AuthContext";
 import TherapyMainComponent from "./Therapy";
 import { useStyles } from "./therapyStyles";
 import moment from "moment";
+import { checkPrivilageAccess } from "../../../utility/helper";
+import TherapyTabs from "./TherapyTabs";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const TherapyPatientComponent = () => {
+  const router = useRouter();
+  /* istanbul ignore file */
+  const {
+    query: { tab },
+  } = router;
   const styles = useStyles();
+  /* istanbul ignore file */
   const {
     user: {
       patient_data: {
@@ -25,13 +35,25 @@ const TherapyPatientComponent = () => {
   const formatedBirthdate = birthdate
     ? moment(birthdate, "MM-DD-YYYY").format("DD-MM-YYYY")
     : undefined;
+  const modifyTabs = TherapyTabs.filter((v) => {
+    const { moduleName } = v;
+    const status = checkPrivilageAccess(moduleName);
+    if (status === undefined) return true;
+    else return status;
+  });
+  useEffect(() => {
+    if (modifyTabs.length > 0 && modifyTabs[0]["value"] && !tab)
+      router.push(
+        `/patient/therapy/?mainTab=therapy&tab=${modifyTabs[0]["value"]}`
+      );
+  }, [modifyTabs[0]["value"], tab]);
 
   /* istanbul ignore next */
   const tabs2 = [
     {
       label: "Therapy",
       value: "therapy",
-      component: <TherapyMainComponent />,
+      component: <TherapyMainComponent tabs={modifyTabs} />,
     },
   ];
 
@@ -67,7 +89,6 @@ const TherapyPatientComponent = () => {
             <TabsGeneratorTherapistPatient
               tabsList={tabs2}
               tabLabel={`/patient/therapy/?mainTab=`}
-              defaultTabs={defaultTabs}
             />
           </Box>
         </Stack>
@@ -76,8 +97,4 @@ const TherapyPatientComponent = () => {
   );
 };
 //mainTab=therapy&tab=safety-plan
-const defaultTabs = {
-  therapy: "&tab=safety-plan",
-};
-
 export default TherapyPatientComponent;

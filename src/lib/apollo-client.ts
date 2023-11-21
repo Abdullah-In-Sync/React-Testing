@@ -8,10 +8,9 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError, ErrorResponse } from "@apollo/client/link/error";
-import Cookies from "js-cookie";
 import Router from "next/router";
 import fetch from "node-fetch";
-import { clearSession } from "../utility/storage";
+import { clearSession, getSessionToken } from "../utility/storage";
 import { env } from "./env";
 import { publicApiNameAccessWithKey, publicPaths } from "./constants";
 import { getIntialPath } from "../utility/helper";
@@ -23,8 +22,9 @@ const httpLink = createHttpLink({
 /* istanbul ignore next */
 const authLink = setContext((apiDetail, { headers }) => {
   const { operationName } = apiDetail;
+  const { userTokenId } = getSessionToken();
   // get the authentication token from local storage if it exists
-  const token = Cookies.get("myhelptoken");
+  const token = userTokenId; //Cookies.get("myhelptoken");
   // return the headers to the context so httpLink can read them
 
   const getAuthHeader = () => {
