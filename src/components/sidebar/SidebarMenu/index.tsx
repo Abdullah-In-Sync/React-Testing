@@ -7,6 +7,7 @@ import { Box, Button, Collapse, List, ListItem, styled } from "@mui/material";
 
 import { useAppContext } from "../../../contexts/AuthContext";
 import { SidebarContext } from "../../../contexts/SidebarContext";
+import { filterBasedOnPrivilages } from "../../../utility/helper";
 import {
   btb_actions_patient_routes,
   patient_routes,
@@ -184,87 +185,89 @@ const SidebarMenu = () => {
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
-              {getRouteByUser().map((val, index) => {
-                if (Array.isArray(val)) {
-                  /* istanbul ignore next */
-                  return (
-                    <>
-                      <ListItem component="div" key={index} sx={listItem}>
-                        <Button
-                          key={index}
-                          data-testid={"menu_" + val[0]?.key}
-                          disableRipple
-                          component="a"
-                          onClick={(e) => handleClick(e, val[0]?.key)}
-                          startIcon={val[0]?.icon}
-                          endIcon={
-                            /* istanbul ignore next */
-                            expanded[val[0]?.key] ? (
-                              <ExpandLess />
-                            ) : (
-                              <ExpandMore />
-                            )
-                          }
-                        >
-                          {val[0]?.label}
-                        </Button>
-                      </ListItem>
-
-                      {val?.slice(1)?.map((item, index) => (
-                        <Collapse
-                          key={index}
-                          in={expanded[val[0]?.key] || false}
-                          timeout="auto"
-                          unmountOnExit
-                        >
-                          <ListItem component="div" key={index} sx={listItem}>
-                            <NextLink key={index} href={item.path} passHref>
-                              <Button
-                                key={index}
-                                data-testid={"menu_" + item.label}
-                                className={
-                                  currentRoute === `${item.path}`
-                                    ? "active"
-                                    : ""
-                                }
-                                disableRipple
-                                component="a"
-                                onClick={closeSidebar}
-                                startIcon={item.icon}
-                              >
-                                {item.label}
-                              </Button>
-                            </NextLink>
-                          </ListItem>
-                        </Collapse>
-                      ))}
-                    </>
-                  );
-                } else {
-                  return (
-                    <>
-                      <ListItem component="div" key={index} sx={listItem}>
-                        <NextLink key={index} href={val.path} passHref>
+              {getRouteByUser()
+                .filter(filterBasedOnPrivilages)
+                .map((val, index) => {
+                  if (Array.isArray(val)) {
+                    /* istanbul ignore next */
+                    return (
+                      <>
+                        <ListItem component="div" key={index} sx={listItem}>
                           <Button
                             key={index}
-                            className={
-                              val.path.indexOf(currentRoute) !== -1
-                                ? "active"
-                                : ""
-                            }
+                            data-testid={"menu_" + val[0]?.key}
                             disableRipple
                             component="a"
-                            onClick={closeSidebar}
-                            startIcon={val.icon}
+                            onClick={(e) => handleClick(e, val[0]?.key)}
+                            startIcon={val[0]?.icon}
+                            endIcon={
+                              /* istanbul ignore next */
+                              expanded[val[0]?.key] ? (
+                                <ExpandLess />
+                              ) : (
+                                <ExpandMore />
+                              )
+                            }
                           >
-                            {val.label}
+                            {val[0]?.label}
                           </Button>
-                        </NextLink>
-                      </ListItem>
-                    </>
-                  );
-                }
-              })}
+                        </ListItem>
+
+                        {val?.slice(1)?.map((item, index) => (
+                          <Collapse
+                            key={index}
+                            in={expanded[val[0]?.key] || false}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <ListItem component="div" key={index} sx={listItem}>
+                              <NextLink key={index} href={item.path} passHref>
+                                <Button
+                                  key={index}
+                                  data-testid={"menu_" + item.label}
+                                  className={
+                                    currentRoute === `${item.path}`
+                                      ? "active"
+                                      : ""
+                                  }
+                                  disableRipple
+                                  component="a"
+                                  onClick={closeSidebar}
+                                  startIcon={item.icon}
+                                >
+                                  {item.label}
+                                </Button>
+                              </NextLink>
+                            </ListItem>
+                          </Collapse>
+                        ))}
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <ListItem component="div" key={index} sx={listItem}>
+                          <NextLink key={index} href={val.path} passHref>
+                            <Button
+                              key={index}
+                              className={
+                                val.path.indexOf(currentRoute) !== -1
+                                  ? "active"
+                                  : ""
+                              }
+                              disableRipple
+                              component="a"
+                              onClick={closeSidebar}
+                              startIcon={val.icon}
+                            >
+                              {val.label}
+                            </Button>
+                          </NextLink>
+                        </ListItem>
+                      </>
+                    );
+                  }
+                })}
             </List>
           </SubMenuWrapper>
         </List>

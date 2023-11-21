@@ -4,6 +4,9 @@ import { useAppContext } from "../../contexts/AuthContext";
 import { MockedProvider } from "@apollo/react-testing";
 import { SnackbarProvider } from "notistack";
 import { GET_PROFILE_DATA } from "../../graphql/query/patient";
+import { filterBasedOnPrivilages } from "../../utility/helper";
+import { idCustomJwtToken } from "../login/__tests__/login.test";
+import * as store from "../../utility/storage";
 jest.mock("../../contexts/AuthContext");
 
 const mocksData = [];
@@ -59,16 +62,21 @@ mocksData.push({
 
 describe("when rendered with a sidebarmenu component", () => {
   beforeEach(() => {
+    jest.spyOn(store, "getSessionToken").mockReturnValue({
+      userToken: "testToken",
+      userType: "patient",
+      userTokenId: idCustomJwtToken,
+    });
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
-        _id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+        _id: "userid1",
+        org_id: "517fa21a82c0464a92aaae90ae0d5c59",
         user_type: "patient",
-        parent_id: "73ddc746-b473-428c-a719-9f6d39bdef81",
-        perm_ids: "9,10,14,21,191,65,66",
-        user_status: "1",
-        created_date: "2021-12-20 16:20:55",
-        updated_date: "2021-12-20 16:20:55",
+        patient_data: {
+          therapist_id: "therapistid1",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+        },
       },
     });
   });
@@ -87,5 +95,21 @@ describe("when rendered with a sidebarmenu component", () => {
   it("should render", async () => {
     await sut();
     expect(screen.getByTestId("sideBar")).toBeInTheDocument();
+  });
+
+  it("should return true when label is Home", () => {
+    const routeObj = {
+      label: "Home",
+    };
+    const result = filterBasedOnPrivilages(routeObj);
+    expect(result).toBe(true);
+  });
+
+  it("should return false when label is invalid", () => {
+    const routeObj = {
+      label: "InvalidLabel",
+    };
+    const result = filterBasedOnPrivilages(routeObj);
+    expect(result).toBe(false);
   });
 });
