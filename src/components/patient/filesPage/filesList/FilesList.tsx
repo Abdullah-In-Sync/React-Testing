@@ -14,6 +14,7 @@ interface ViewProps {
   confirmRef?: any;
   infoModalRef?: any;
   loadingPatientFileData?: boolean;
+  isTrue?: boolean;
 }
 
 const FilesListComponent: React.FC<ViewProps> = ({
@@ -22,6 +23,7 @@ const FilesListComponent: React.FC<ViewProps> = ({
   confirmRef,
   infoModalRef,
   loadingPatientFileData,
+  isTrue,
 }) => {
   const styles = useStyles();
   return (
@@ -33,7 +35,8 @@ const FilesListComponent: React.FC<ViewProps> = ({
             data={{ list: listData }}
             pageActionButtonClick={pageActionButtonClick}
             actionButton={[
-              {
+              /* istanbul ignore next */
+              (isTrue === true || isTrue === undefined) && {
                 id: "download",
                 icon: require("@mui/icons-material/FileDownloadOutlined")
                   .default,

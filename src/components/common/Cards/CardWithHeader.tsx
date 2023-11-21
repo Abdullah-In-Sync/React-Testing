@@ -15,6 +15,7 @@ type propTypes = {
   mode?: string;
   view?: string;
   downloadUrl?: string;
+  isTrue?: any;
 };
 
 const CardWithHeader = (props: propTypes) => {
@@ -29,6 +30,7 @@ const CardWithHeader = (props: propTypes) => {
     mode,
     view,
     downloadUrl,
+    isTrue,
   } = props || {};
   return (
     <div
@@ -66,25 +68,28 @@ const CardWithHeader = (props: propTypes) => {
                   <VisibilityIcon />
                 )}
               </Fab>
-              {downloadUrl && (
-                <Fab
-                  sx={{
-                    position: "absolute",
-                    right: 0,
-                    width: "3em",
-                    height: "3em",
-                    background: "#FFFFFF",
-                  }}
-                  data-testid="downloadIconButton"
-                  href={downloadUrl}
-                >
-                  <Image
-                    src={`/images/downloadIcon.png`}
-                    width="13.33px"
-                    height="13.33px"
-                  />
-                </Fab>
-              )}
+              {
+                /* istanbul ignore next */
+                (isTrue === true || isTrue === undefined) && (
+                  <Fab
+                    sx={{
+                      position: "absolute",
+                      right: 0,
+                      width: "3em",
+                      height: "3em",
+                      background: "#FFFFFF",
+                    }}
+                    data-testid="downloadIconButton"
+                    href={downloadUrl}
+                  >
+                    <Image
+                      src={`/images/downloadIcon.png`}
+                      width="13.33px"
+                      height="13.33px"
+                    />
+                  </Fab>
+                )
+              }
             </>
           )}
           {rightComponent && rightComponent()}

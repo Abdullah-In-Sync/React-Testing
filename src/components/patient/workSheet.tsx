@@ -21,6 +21,7 @@ const TableGenerator = dynamic(
 import { GET_PATIENT_RESOURCE_DATA } from "../../graphql/query/resource";
 import FileUpload from "../common/Dialog/index";
 import { useQuery } from "@apollo/client";
+import { checkPrivilageAccess } from "../../utility/helper";
 
 const WorkSheet = () => {
   // TABLE PROPS
@@ -62,6 +63,8 @@ const WorkSheet = () => {
     if (itemId == id) return true;
     else return false;
   };
+
+  const isTrue = checkPrivilageAccess("Resource", "Download");
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -152,19 +155,22 @@ const WorkSheet = () => {
               </IconButton>
             </Link>
           )}
-          {!checkIsSmart(value) && (
-            <IconButton
-              size="small"
-              data-testid="downloadUrl"
-              href={
-                value.resource_data[0]?.download_resource_url != null
-                  ? value.resource_data[0]?.download_resource_url
-                  : "#"
-              }
-            >
-              <CloudDownloadIcon />
-            </IconButton>
-          )}
+          {
+            /* istanbul ignore next */
+            (isTrue === true || isTrue === undefined) && !checkIsSmart(value) && (
+              <IconButton
+                size="small"
+                data-testid="downloadUrl"
+                href={
+                  value.resource_data[0]?.download_resource_url != null
+                    ? value.resource_data[0]?.download_resource_url
+                    : "#"
+                }
+              >
+                <CloudDownloadIcon />
+              </IconButton>
+            )
+          }
         </>
       ),
     },

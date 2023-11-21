@@ -17,6 +17,7 @@ type Props = React.PropsWithChildren<{
   headerRightComponent?: any;
   view?: string;
   downloadUrl?: string;
+  isTrue?: any;
 }>;
 
 /* istanbul ignore next */
@@ -32,6 +33,7 @@ const BreadCrumbsWithBackButton = ({
   headerRightComponent,
   view,
   downloadUrl,
+  isTrue,
 }: Props) => {
   const styles = useStyles();
 
@@ -82,6 +84,7 @@ const BreadCrumbsWithBackButton = ({
         rightComponent={headerRightComponent}
         view={view}
         downloadUrl={downloadUrl}
+        isTrue={isTrue}
       >
         {children}
       </CardWithHeader>
