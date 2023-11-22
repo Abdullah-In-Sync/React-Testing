@@ -8,7 +8,8 @@ type propTypes = {
 
 const PatientAssessmentList = (props: propTypes) => {
   const styles = useStyles();
-  const assessmentData = props?.patientAssessmentList?.patientAssessmentList;
+  const assessmentData =
+    props?.patientAssessmentList?.patientAssessmentList.data;
 
   return (
     <>

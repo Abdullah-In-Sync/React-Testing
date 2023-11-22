@@ -30,7 +30,7 @@ const PatientAssessment: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Assessment" />
 
-        {patientAssessmentList?.patientAssessmentList?.length ? (
+        {patientAssessmentList?.patientAssessmentList?.data?.length ? (
           <PatientAssessmentList
             patientAssessmentList={patientAssessmentList}
           />

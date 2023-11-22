@@ -44,15 +44,8 @@ export const UPDATE_PATIENT_ASSESSMENT = gql`
       category_id: $category_id
       question: $question
     ) {
-      _id
-      added_by
-      answer
-      category_id
-      created_date
-      patient_id
-      question
-      status
-      updated_date
+      result
+      message
     }
   }
 `;
