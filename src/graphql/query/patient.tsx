@@ -271,22 +271,37 @@ export const GET_PATIENT_MONITOR_ANS_BY_ID = gql`
 export const GET_PATIENT_ASSESSMENT_LIST = gql`
   query MyQuery {
     patientAssessmentList {
-      _id
-      category {
+      data {
         _id
-        assessment_id
+        category {
+          _id
+          assessment_id
+          created_date
+          name
+          patient_id
+          questions {
+            _id
+            added_by
+            answer
+            category_id
+            patient_id
+            created_date
+            question
+            status
+            updated_date
+          }
+          share_status
+          status
+          updated_date
+        }
         created_date
         name
         patient_id
         status
-        share_status
         updated_date
       }
-      created_date
-      name
-      patient_id
-      status
-      updated_date
+      message
+      result
     }
   }
 `;
