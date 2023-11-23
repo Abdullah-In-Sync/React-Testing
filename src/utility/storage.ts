@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { ID_TOKEN_LABEL } from "../lib/constants";
+import { COOKIES_POLICY, ID_TOKEN_LABEL } from "../lib/constants";
 
 const setSecureCookie = (label: string, value: string, options?: object) => {
   Cookies.set(label, value, {
@@ -33,6 +33,8 @@ export const clearSession = (proceedNextCallback) => {
   Object.keys(Cookies.get()).forEach(function (cookieName) {
     Cookies.remove(cookieName);
   });
+  const cookiesPolicy = localStorage.getItem(COOKIES_POLICY);
   localStorage.removeItem(ID_TOKEN_LABEL);
+  localStorage.setItem(COOKIES_POLICY, cookiesPolicy);
   return proceedNextCallback();
 };

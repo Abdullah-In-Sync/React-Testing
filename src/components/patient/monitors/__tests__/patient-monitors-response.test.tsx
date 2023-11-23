@@ -26,20 +26,23 @@ mocksData.push({
   },
   result: {
     data: {
-      patientMonitorList: [
-        {
-          _id: "list-item-1",
-          name: "Check 2",
-        },
-        {
-          _id: "list-item-2",
-          name: "Chech 1",
-        },
-        {
-          _id: "list-item-3",
-          name: "Check 3",
-        },
-      ],
+      patientMonitorList: {
+        status: true,
+        data: [
+          {
+            _id: "list-item-1",
+            name: "Check 2",
+          },
+          {
+            _id: "list-item-2",
+            name: "Chech 1",
+          },
+          {
+            _id: "list-item-3",
+            name: "Check 3",
+          },
+        ],
+      },
     },
   },
 });
@@ -54,22 +57,25 @@ mocksData.push({
   result: {
     data: {
       patientViewMonitor: {
-        name: "Check 2",
-        questions: [
-          {
-            updated_date: "2023-05-24T11:30:37.765Z",
-            status: 1,
-            question_type: "emoji",
-            question_option:
-              '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
-            question: "jjbjb",
-            monitor_id: "5cfff924-a176-43b0-b6c5-9986ff3803cd",
-            created_date: "2023-05-24T11:30:37.765Z",
-            answers_list: [],
-            answer: "",
-            _id: "452d0f12-aa7a-40a2-b844-5a0029df4765",
-          },
-        ],
+        status: true,
+        detail: {
+          name: "Check 2",
+          questions: [
+            {
+              updated_date: "2023-05-24T11:30:37.765Z",
+              status: 1,
+              question_type: "emoji",
+              question_option:
+                '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
+              question: "jjbjb",
+              monitor_id: "5cfff924-a176-43b0-b6c5-9986ff3803cd",
+              created_date: "2023-05-24T11:30:37.765Z",
+              answers_list: [],
+              answer: "",
+              _id: "452d0f12-aa7a-40a2-b844-5a0029df4765",
+            },
+          ],
+        },
       },
     },
   },
@@ -85,92 +91,95 @@ mocksData.push({
   result: {
     data: {
       patientViewMonitor: {
-        _id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
-        created_date: "2023-05-24T11:31:07.074Z",
-        name: "Chech 1",
-        questions: [
-          {
-            question_type: "emoji",
-            question_option:
-              '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
-            question: "jgfh",
-            answers_list: [
-              {
-                _id: "8c6db671-f3f1-4118-a147-88d7024c321d",
-                answer: "",
-                created_date: "2023-05-25T08:09:39.884Z",
-                monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
-                question_id: "09135bf3-1fd2-469c-885c-aaaa197a212a",
-              },
-            ],
-            answer: "",
-            _id: "09135bf3-1fd2-469c-885c-aaaa197a212a",
-          },
-          {
-            question_type: "hours",
-            question_option: '""',
-            question: "Hours type",
-            answers_list: [
-              {
-                _id: "a27796c0-8c10-4c60-bd27-6fd55d290e70",
-                answer: "20",
-                created_date: "2023-05-25T08:09:39.897Z",
-                monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
-                question_id: "d88effbc-e120-4bc4-816b-003a7d4f863a",
-              },
-            ],
-            answer: "20",
-            _id: "d88effbc-e120-4bc4-816b-003a7d4f863a",
-          },
-          {
-            question_type: "list",
-            question_option: '"hgghb],jhghg,jvjvgvvjhg,gfdfxxtdyt"',
-            question: "List type question ",
-            answers_list: [
-              {
-                _id: "0a50be12-9dd6-410e-af5b-43088b6468bc",
-                answer: "",
-                created_date: "2023-05-25T08:09:39.908Z",
-                monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
-                question_id: "aeab669b-14f6-4308-8e0f-75aaec02dfc0",
-              },
-            ],
-            answer: "",
-            _id: "aeab669b-14f6-4308-8e0f-75aaec02dfc0",
-          },
-          {
-            question_type: "list",
-            question_option: '"mnb,jhg,khvb,khjb,mhhjjj,jhvjhv"',
-            question: "List type 1",
-            answers_list: [
-              {
-                _id: "26249db8-0fe8-498a-9756-6c546bd1272f",
-                answer: "",
-                created_date: "2023-05-25T08:09:39.917Z",
-                monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
-                question_id: "e122153a-1bbf-42d5-a0fb-2d9311354a26",
-              },
-            ],
-            answer: "",
-            _id: "e122153a-1bbf-42d5-a0fb-2d9311354a26",
-          },
-          {
-            question_type: "yes_or_no",
-            question_option: '""',
-            question: "Yes no question",
-            answers_list: [
-              {
-                _id: "9d8f7b70-8407-4aa3-b379-9d35f0c2ec8d",
-                answer: "1",
-                created_date: "2023-05-25T08:09:39.928Z",
-                monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
-                question_id: "92ad10f8-f782-4198-8c21-96a2122b07f9",
-              },
-            ],
-            answer: "1",
-            _id: "92ad10f8-f782-4198-8c21-96a2122b07f9",
-          },
-        ],
+        status: true,
+        detail: {
+          _id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
+          created_date: "2023-05-24T11:31:07.074Z",
+          name: "Chech 1",
+          questions: [
+            {
+              question_type: "emoji",
+              question_option:
+                '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
+              question: "jgfh",
+              answers_list: [
+                {
+                  _id: "8c6db671-f3f1-4118-a147-88d7024c321d",
+                  answer: "",
+                  created_date: "2023-05-25T08:09:39.884Z",
+                  monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
+                  question_id: "09135bf3-1fd2-469c-885c-aaaa197a212a",
+                },
+              ],
+              answer: "",
+              _id: "09135bf3-1fd2-469c-885c-aaaa197a212a",
+            },
+            {
+              question_type: "hours",
+              question_option: '""',
+              question: "Hours type",
+              answers_list: [
+                {
+                  _id: "a27796c0-8c10-4c60-bd27-6fd55d290e70",
+                  answer: "20",
+                  created_date: "2023-05-25T08:09:39.897Z",
+                  monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
+                  question_id: "d88effbc-e120-4bc4-816b-003a7d4f863a",
+                },
+              ],
+              answer: "20",
+              _id: "d88effbc-e120-4bc4-816b-003a7d4f863a",
+            },
+            {
+              question_type: "list",
+              question_option: '"hgghb],jhghg,jvjvgvvjhg,gfdfxxtdyt"',
+              question: "List type question ",
+              answers_list: [
+                {
+                  _id: "0a50be12-9dd6-410e-af5b-43088b6468bc",
+                  answer: "",
+                  created_date: "2023-05-25T08:09:39.908Z",
+                  monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
+                  question_id: "aeab669b-14f6-4308-8e0f-75aaec02dfc0",
+                },
+              ],
+              answer: "",
+              _id: "aeab669b-14f6-4308-8e0f-75aaec02dfc0",
+            },
+            {
+              question_type: "list",
+              question_option: '"mnb,jhg,khvb,khjb,mhhjjj,jhvjhv"',
+              question: "List type 1",
+              answers_list: [
+                {
+                  _id: "26249db8-0fe8-498a-9756-6c546bd1272f",
+                  answer: "",
+                  created_date: "2023-05-25T08:09:39.917Z",
+                  monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
+                  question_id: "e122153a-1bbf-42d5-a0fb-2d9311354a26",
+                },
+              ],
+              answer: "",
+              _id: "e122153a-1bbf-42d5-a0fb-2d9311354a26",
+            },
+            {
+              question_type: "yes_or_no",
+              question_option: '""',
+              question: "Yes no question",
+              answers_list: [
+                {
+                  _id: "9d8f7b70-8407-4aa3-b379-9d35f0c2ec8d",
+                  answer: "1",
+                  created_date: "2023-05-25T08:09:39.928Z",
+                  monitor_id: "50381de7-7392-4e11-80ce-5a5b7db5db29",
+                  question_id: "92ad10f8-f782-4198-8c21-96a2122b07f9",
+                },
+              ],
+              answer: "1",
+              _id: "92ad10f8-f782-4198-8c21-96a2122b07f9",
+            },
+          ],
+        },
       },
     },
   },
@@ -186,22 +195,25 @@ mocksData.push({
   result: {
     data: {
       patientViewMonitor: {
-        name: "Check 3",
-        questions: [
-          {
-            updated_date: "2023-05-24T11:30:37.765Z",
-            status: 1,
-            question_type: "emoji",
-            question_option:
-              '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
-            question: "jjbjb",
-            monitor_id: "5cfff924-a176-43b0-b6c5-9986ff3803cd",
-            created_date: "2023-05-24T11:30:37.765Z",
-            answers_list: [],
-            answer: "",
-            _id: "452d0f12-aa7a-40a2-b844-5a0029df4765",
-          },
-        ],
+        status: true,
+        detail: {
+          name: "Check 3",
+          questions: [
+            {
+              updated_date: "2023-05-24T11:30:37.765Z",
+              status: 1,
+              question_type: "emoji",
+              question_option:
+                '[{"code":"1f97a","text":"Very Sad"},{"code":"1f641","text":"Sad"},{"code":"1f642","text":"Fine"},{"code":"1f60a","text":"Happy"},{"code":"1f604","text":"Very Happy"}]',
+              question: "jjbjb",
+              monitor_id: "5cfff924-a176-43b0-b6c5-9986ff3803cd",
+              created_date: "2023-05-24T11:30:37.765Z",
+              answers_list: [],
+              answer: "",
+              _id: "452d0f12-aa7a-40a2-b844-5a0029df4765",
+            },
+          ],
+        },
       },
     },
   },
@@ -219,7 +231,7 @@ mocksData.push({
   result: {
     data: {
       patientSubmitMonitor: {
-        _id: "list-item-2",
+        result: true,
       },
     },
   },
