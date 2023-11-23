@@ -13,6 +13,7 @@ import { UPDATE_PATIENT_ASSESSMENT } from "../../../../graphql/mutation/therapis
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../common/ConfirmationModal";
 import { useRouter } from "next/router";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 type propTypes = {
   patientClinicalAssessmentList: any;
@@ -156,6 +157,14 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
     // setExpanded(false);
   };
 
+  /* istanbul ignore next */
+  const isAssessmentView = checkPrivilageAccess("Assessment", "View");
+  /* istanbul ignore next */
+  const isAssessmentUpdate = checkPrivilageAccess(
+    "Assessment",
+    "Update response"
+  );
+
   return (
     <>
       <Box>
@@ -211,93 +220,106 @@ const PatientClinicalAssessmentList = (props: propTypes) => {
                   }}
                   className={styles.accordianDetails}
                 >
-                  {data2?.questions?.length ? (
-                    data2.questions.map((data, questionIndex) => (
+                  {
+                    /* istanbul ignore next */
+                    (isAssessmentView === true ||
+                      isAssessmentView === undefined) &&
+                    data2?.questions?.length ? (
+                      data2.questions.map((data, questionIndex) => (
+                        <Box
+                          className={styles.accordianDetailsQuestionBorder}
+                          key={data._id}
+                        >
+                          <Box className={styles.accordianDetailsQuestionBox}>
+                            <Typography
+                              className={
+                                styles.accordianDetailsQuestionBoxTypography
+                              }
+                            >
+                              {data.question}
+                            </Typography>
+                          </Box>
+
+                          <Grid item xs={12}>
+                            <TextFieldComponent
+                              disabled={isAssessmentUpdate === false}
+                              required={true}
+                              name="resource_name"
+                              id="resource_name"
+                              placeholder="Write your response here"
+                              value={data?.answer}
+                              onChange={(e) =>
+                                handlePatientInputChange(
+                                  categoryIndex,
+                                  questionIndex,
+                                  e.target.value,
+                                  data._id
+                                )
+                              }
+                              fullWidth={true}
+                              inputProps={{
+                                "data-testid": "resource_name",
+                              }}
+                              variant="outlined"
+                              className="form-control-bg"
+                              size="small"
+                            />
+                          </Grid>
+                        </Box>
+                      ))
+                    ) : (
+                      <Typography>No data found</Typography>
+                    )
+                  }
+
+                  {
+                    /* istanbul ignore next */
+                    (isAssessmentUpdate === true ||
+                      isAssessmentUpdate === undefined) &&
+                    data2?.questions?.length ? (
                       <Box
-                        className={styles.accordianDetailsQuestionBorder}
-                        key={data._id}
+                        className={styles.accordianDetailsSaveCancelButtonBox}
                       >
-                        <Box className={styles.accordianDetailsQuestionBox}>
-                          <Typography
-                            className={
-                              styles.accordianDetailsQuestionBoxTypography
+                        <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                          <Button
+                            type="submit"
+                            className={styles.saveButton}
+                            onClick={() => {
+                              /* istanbul ignore next */
+                              if (questionaries.length) {
+                                setUpdateCatogoryId(data2._id);
+                                setIsConfirm(true);
+                              } else {
+                                enqueueSnackbar(
+                                  "Please answer at least one question",
+                                  {
+                                    variant: "error",
+                                  }
+                                );
+                              }
+                            }}
+                            variant="contained"
+                            data-testid="submitFeedback1"
+                          >
+                            Save
+                          </Button>
+                        </Grid>
+                        <Grid item xs={6} textAlign="center">
+                          <Button
+                            data-testid="cancleFeedbackButton"
+                            variant="contained"
+                            className={styles.cancelButton}
+                            onClick={
+                              /* istanbul ignore next */
+                              cancleFunction
                             }
                           >
-                            {data.question}
-                          </Typography>
-                        </Box>
-
-                        <Grid item xs={12}>
-                          <TextFieldComponent
-                            required={true}
-                            name="resource_name"
-                            id="resource_name"
-                            placeholder="Write your response here"
-                            value={data?.answer}
-                            onChange={(e) =>
-                              handlePatientInputChange(
-                                categoryIndex,
-                                questionIndex,
-                                e.target.value,
-                                data._id
-                              )
-                            }
-                            fullWidth={true}
-                            inputProps={{
-                              "data-testid": "resource_name",
-                            }}
-                            variant="outlined"
-                            className="form-control-bg"
-                            size="small"
-                          />
+                            Cancel
+                          </Button>
                         </Grid>
                       </Box>
-                    ))
-                  ) : (
-                    <Typography>No data found</Typography>
-                  )}
-
-                  {data2?.questions?.length ? (
-                    <Box className={styles.accordianDetailsSaveCancelButtonBox}>
-                      <Grid item xs={6} style={{ paddingRight: "50px" }}>
-                        <Button
-                          type="submit"
-                          className={styles.saveButton}
-                          onClick={() => {
-                            /* istanbul ignore next */
-                            if (questionaries.length) {
-                              setUpdateCatogoryId(data2._id);
-                              setIsConfirm(true);
-                            } else {
-                              enqueueSnackbar(
-                                "Please answer at least one question",
-                                {
-                                  variant: "error",
-                                }
-                              );
-                            }
-                          }}
-                          variant="contained"
-                          data-testid="submitFeedback1"
-                        >
-                          Save
-                        </Button>
-                      </Grid>
-                      <Grid item xs={6} textAlign="center">
-                        <Button
-                          data-testid="cancleFeedbackButton"
-                          variant="contained"
-                          className={styles.cancelButton}
-                          onClick={
-                            /* istanbul ignore next */
-                            cancleFunction
-                          }
-                        >
-                          Cancel
-                        </Button>
-                      </Grid>
-                    </Box>
-                  ) : null}
+                    ) : null
+                  }
                 </AccordionDetails>
               </Box>
             </Accordion>

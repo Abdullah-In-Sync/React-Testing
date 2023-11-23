@@ -30,13 +30,16 @@ const PatientAssessment: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Assessment" />
 
-        {patientAssessmentList?.patientAssessmentList?.length ? (
-          <PatientAssessmentList
-            patientAssessmentList={patientAssessmentList}
-          />
-        ) : (
-          <Typography>No data found</Typography>
-        )}
+        {
+          /* istanbul ignore next */
+          patientAssessmentList?.patientAssessmentList?.data?.length ? (
+            <PatientAssessmentList
+              patientAssessmentList={patientAssessmentList}
+            />
+          ) : (
+            <Typography>No data found</Typography>
+          )
+        }
       </Layout>
     </>
   );
