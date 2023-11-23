@@ -104,15 +104,19 @@ export const ADMIN_DELETE_MONITOR_QUESTION = gql`
 export const GET_PATIENT_MONITOR_LIST = gql`
   query PatientMonitorList {
     patientMonitorList {
-      _id
-      added_by
-      created_date
-      name
-      org_id
-      patient_id
-      therapist_id
-      status
-      updated_date
+      result
+      message
+      data {
+        _id
+        added_by
+        created_date
+        name
+        org_id
+        patient_id
+        status
+        therapist_id
+        updated_date
+      }
     }
   }
 `;
@@ -128,34 +132,38 @@ export const PATIENT_VIEW_MONITOR = gql`
       start_date: $startDate
       end_date: $endDate
     ) {
-      updated_date
-      _id
-      added_by
-      created_date
-      name
-      org_id
-      patient_id
-      share_status
-      status
-      therapist_id
-      questions {
-        updated_date
-        status
-        question_type
-        question_option
-        question
-        monitor_id
+      detail {
+        _id
+        added_by
         created_date
-        answers_list {
+        name
+        org_id
+        patient_id
+        questions {
           _id
           answer
+          answers_list {
+            _id
+            question_id
+            monitor_id
+            created_date
+            answer
+          }
           created_date
           monitor_id
-          question_id
+          question
+          question_option
+          question_type
+          status
+          updated_date
         }
-        answer
-        _id
+        share_status
+        status
+        therapist_id
+        updated_date
       }
+      message
+      result
     }
   }
 `;
@@ -163,7 +171,8 @@ export const PATIENT_VIEW_MONITOR = gql`
 export const PATIENT_SUBMIT_MONITOR = gql`
   mutation PatientSubmitMonitor($monitorId: ID!, $questions: String!) {
     patientSubmitMonitor(monitor_id: $monitorId, questions: $questions) {
-      _id
+      result
+      message
     }
   }
 `;

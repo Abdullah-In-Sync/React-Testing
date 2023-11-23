@@ -49,7 +49,9 @@ export interface MonitorDataEntity {
 }
 
 export interface PatientMonitorListData {
-  patientMonitorList?: PatientMonitorList[] | null;
+  patientMonitorList?: {
+    data?: PatientMonitorList[] | null;
+  };
 }
 export interface PatientMonitorList {
   _id: string;
@@ -64,7 +66,9 @@ export interface PatientMonitorList {
 }
 
 export interface PatientViewMonitorData {
-  patientViewMonitor: PatientViewMonitor;
+  patientViewMonitor?: {
+    detail?: PatientViewMonitor;
+  };
 }
 
 export interface PatientViewMonitor {
