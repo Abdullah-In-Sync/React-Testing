@@ -48,7 +48,10 @@ const PatientMonitorsListPage: NextPage = () => {
 
   const [
     getPatientMonitorList,
-    { data: { patientMonitorList = [] } = {}, loading: monitorsListLoading },
+    {
+      data: { patientMonitorList: { data: patientMonitorList = [] } = {} } = {},
+      loading: monitorsListLoading,
+    },
   ] = useLazyQuery<PatientMonitorListData>(GET_PATIENT_MONITOR_LIST, {
     onCompleted: () => {
       setLoader(false);
@@ -59,7 +62,9 @@ const PatientMonitorsListPage: NextPage = () => {
   const [
     getMonitorData,
     {
-      data: { patientViewMonitor: monitorViewData = undefined } = {},
+      data: {
+        patientViewMonitor: { detail: monitorViewData = undefined } = {},
+      } = {},
       loading: viewMonitorLoading,
     },
   ] = useLazyQuery<PatientViewMonitorData>(PATIENT_VIEW_MONITOR, {
@@ -88,9 +93,9 @@ const PatientMonitorsListPage: NextPage = () => {
         },
         onCompleted: (data) => {
           const {
-            patientSubmitMonitor: { _id },
+            patientSubmitMonitor: { result },
           } = data;
-          if (_id) {
+          if (result) {
             /* istanbul ignore next */
             enqueueSnackbar("Response successfully submitted.", {
               variant: "success",

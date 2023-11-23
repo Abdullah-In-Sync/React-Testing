@@ -23,12 +23,15 @@ mocksData.push({
   },
   result: {
     data: {
-      patientMonitorList: [
-        {
-          _id: "a90330fd-5655-4904-bb7e-60a3db1ea3d5",
-          name: "Final testing",
-        },
-      ],
+      patientMonitorList: {
+        status: true,
+        data: [
+          {
+            _id: "a90330fd-5655-4904-bb7e-60a3db1ea3d5",
+            name: "Final testing",
+          },
+        ],
+      },
     },
   },
 });

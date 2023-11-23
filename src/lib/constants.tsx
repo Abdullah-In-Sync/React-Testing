@@ -165,3 +165,4 @@ export const navPosition = [
 export const phoneRegExp = /^\+[1-9]\d{3,14}$/;
 
 export const ID_TOKEN_LABEL = "myhelptokenid";
+export const COOKIES_POLICY = "Cookies Policy";
