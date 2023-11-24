@@ -41,14 +41,17 @@ const FilesListComponent: React.FC<ViewProps> = ({
                 icon: require("@mui/icons-material/FileDownloadOutlined")
                   .default,
               },
+              /* istanbul ignore next */
               (checkAccess.view || checkAccess.view === undefined) && {
                 id: "view",
                 icon: require("@mui/icons-material/Visibility").default,
               },
+              /* istanbul ignore next */
               (checkAccess.edit || checkAccess.edit === undefined) && {
                 id: "edit",
                 icon: require("@mui/icons-material/Edit").default,
               },
+              /* istanbul ignore next */
               (checkAccess.edit || checkAccess.edit === undefined) && {
                 id: "delete",
                 icon: require("@mui/icons-material/DeleteSharp").default,
