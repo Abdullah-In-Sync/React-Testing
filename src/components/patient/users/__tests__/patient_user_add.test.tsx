@@ -12,6 +12,8 @@ import {
   PATIENT_CUSTOM_USER_LIST,
   UPDATE_CUSTOM_USER,
 } from "../../../../graphql/userRole/graphql";
+import { useAppContext } from "../../../../contexts/AuthContext";
+jest.mock("../../../../contexts/AuthContext");
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -121,6 +123,7 @@ mocksData.push({
       email: "emailtext@test.com",
       phone_no: "+44747847541",
       role_id: "roleaccessbilityid1",
+      org_id: "orgid1",
     },
   },
   result: {
@@ -142,6 +145,7 @@ mocksData.push({
       email: "emailtext@test.com",
       phone_no: "+44747847541",
       role_id: "roleaccessbilityid1",
+      org_id: "orgid1",
     },
   },
   result: {
@@ -283,6 +287,17 @@ const selectFromRoleDropdown = async () => {
 
   fireEvent.click(options[0]);
 };
+
+beforeEach(() => {
+  (useAppContext as jest.Mock).mockReturnValue({
+    isAuthenticated: true,
+    user: {
+      patient_data: {
+        org_id: "orgid1",
+      },
+    },
+  });
+});
 
 describe("Patient user add", () => {
   it("should render admin users list and can new user", async () => {
