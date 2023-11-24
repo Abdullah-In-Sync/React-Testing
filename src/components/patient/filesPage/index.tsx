@@ -45,7 +45,6 @@ const FilesPage: NextPage = () => {
   ] = useLazyQuery<PatientFileListData>(GET_PATIENT_FILE_LIST, {
     fetchPolicy: "no-cache",
   });
-  /* istanbul ignore next */
   const checkAccess = useMemo(() => {
     const download = checkPrivilageAccess("Files", "Download");
     const view = checkPrivilageAccess("Files", "View");
