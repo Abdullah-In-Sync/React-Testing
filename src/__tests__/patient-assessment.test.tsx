@@ -19,18 +19,23 @@ mocksData.push({
   },
   result: {
     data: {
-      patientAssessmentList: [
-        {
-          _id: "ab8f28d9-412d-4789-b48f-59fb860fd4e6",
-          category: null,
-          created_date: "2023-06-20T07:51:32.617Z",
-          name: "All",
-          patient_id: "5aa455d5de8248848b71c8113118e3f5",
-          status: 1,
-          updated_date: "2023-06-20T07:51:32.617Z",
-          __typename: "PatientAssessment",
-        },
-      ],
+      patientAssessmentList: {
+        data: [
+          {
+            _id: "267846d0-32a1-4418-b338-8cceb101d6fa",
+            category: null,
+            created_date: "2023-06-27T14:44:28.383Z",
+            name: "All",
+            patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+            status: 1,
+            updated_date: "2023-06-27T14:44:28.383Z",
+            __typename: "PatientAssessment",
+          },
+        ],
+        message: "success",
+        result: true,
+        __typename: "PatientAssessmentResult",
+      },
     },
   },
 });
