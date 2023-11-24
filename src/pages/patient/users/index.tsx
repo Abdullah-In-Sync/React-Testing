@@ -36,8 +36,8 @@ const PatientUsersListPage: NextPage = () => {
     fetchPolicy: "cache-and-network",
   });
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAppContext();
-  const org_id = user?.organization_settings?._id;
+  const { user: { patient_data: { org_id = undefined } = {} } = {} } =
+    useAppContext();
 
   const [page, setPage] = useState(1);
   const confirmRef = useRef<ConfirmElement>(null);

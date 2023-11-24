@@ -197,7 +197,7 @@ export const checkPrivilageAccess = (moduleName, privilege?: any) => {
   const { userTokenId } = getSessionToken();
 
   const { role_access } = parseJwt(userTokenId) || {};
-  if (!role_access) return;
+  if (!role_access) return true;
   const roleAccessData = JSON.parse(role_access);
   const objArray = roleAccessData.filter((item) => item.name === moduleName);
   const objLen = objArray.length;
@@ -227,13 +227,14 @@ export const getTokenIdDecodedData = () => {
     const accessibility = roleDetailObj["accessibility"];
     const accessRoleUserType = accessibility + "_data";
     const userDataObj = JSON.parse(idTokenData[accessRoleUserType]);
-    const { first_name, last_name } = userDataObj;
+    const { first_name, last_name, org_id } = userDataObj;
     return {
       [accessRoleUserType]: {
         ...userDataObj,
         ...{
           [accessibility + "_firstname"]: first_name,
           [accessibility + "_lastname"]: last_name,
+          org_id,
         },
       },
       user_type: accessibility,
