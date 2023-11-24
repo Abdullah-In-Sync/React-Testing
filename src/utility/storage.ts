@@ -34,7 +34,7 @@ export const clearSession = (proceedNextCallback) => {
     Cookies.remove(cookieName);
   });
   const cookiesPolicy = localStorage.getItem(COOKIES_POLICY);
-  localStorage.removeItem(ID_TOKEN_LABEL);
+  localStorage.clear();
   localStorage.setItem(COOKIES_POLICY, cookiesPolicy);
   return proceedNextCallback();
 };
