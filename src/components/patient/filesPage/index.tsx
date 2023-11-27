@@ -1,7 +1,7 @@
 import { useLazyQuery, useMutation } from "@apollo/client";
 import type { NextPage } from "next";
 import { useSnackbar } from "notistack";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAppContext } from "../../../contexts/AuthContext";
 
 import { Box } from "@mui/material";
@@ -38,15 +38,25 @@ const FilesPage: NextPage = () => {
   const [
     getPatientFiles,
     {
-      data: { getPatientFileList: patientFilesList = undefined } = {},
+      data: { getPatientFileList: { data: patientFilesList = [] } = {} } = {},
       refetch: refetchPatientList,
       loading: loadingPatientFileData,
     },
   ] = useLazyQuery<PatientFileListData>(GET_PATIENT_FILE_LIST, {
     fetchPolicy: "no-cache",
   });
-
-  const isTrue = checkPrivilageAccess("Files", "Download");
+  const checkAccess = useMemo(() => {
+    const download = checkPrivilageAccess("Files", "Download");
+    const view = checkPrivilageAccess("Files", "View");
+    const edit = checkPrivilageAccess("Files", "Update response");
+    const add = checkPrivilageAccess("Files", "Add");
+    return {
+      download,
+      view,
+      edit,
+      add,
+    };
+  }, []);
   useEffect(() => {
     if (patient_id)
       getPatientFiles({
@@ -219,7 +229,6 @@ const FilesPage: NextPage = () => {
     else if (pressedIconButton === "download")
       window.location.href = download_file_url;
   };
-
   return (
     <>
       <Loader visible={loader || loadingPatientFileData} />
@@ -230,7 +239,9 @@ const FilesPage: NextPage = () => {
         className={styles.header}
       >
         <ContentHeader title="Files" />
-        <UploadIconButton onClick={onPressUploadIconBtn} />
+        {(checkAccess.add || checkAccess.add == undefined) && (
+          <UploadIconButton onClick={onPressUploadIconBtn} />
+        )}
       </Box>
       <FilesListComponent
         listData={patientFilesList}
@@ -238,7 +249,7 @@ const FilesPage: NextPage = () => {
         infoModalRef={infoModalRef}
         pageActionButtonClick={pageActionButtonClick}
         loadingPatientFileData={loadingPatientFileData}
-        isTrue={isTrue}
+        checkAccess={checkAccess}
       />
     </>
   );
