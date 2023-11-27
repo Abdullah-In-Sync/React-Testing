@@ -4,6 +4,7 @@ import * as React from "react";
 import CommonButton from "../../common/Buttons/CommonButton";
 import { useStyles } from "./monitorListItemStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 interface ViewProps {
   monitors?: {
@@ -35,20 +36,24 @@ const MonitorsList: React.FC<ViewProps> = ({
               <Typography>{name}</Typography>
             </Box>
             <Box className="cl2">
-              <CommonButton
-                data-testid={`viewResponseButton_${index}`}
-                variant="contained"
-                onClick={() => viewResponseButtonClick(item)}
-              >
-                View Response
-              </CommonButton>
-              <CommonButton
-                data-testid={`completeButton_${index}`}
-                variant="contained"
-                onClick={() => completeButtonClick(item)}
-              >
-                Complete
-              </CommonButton>
+              {checkPrivilageAccess("Monitors", "View") && (
+                <CommonButton
+                  data-testid={`viewResponseButton_${index}`}
+                  variant="contained"
+                  onClick={() => viewResponseButtonClick(item)}
+                >
+                  View Response
+                </CommonButton>
+              )}
+              {checkPrivilageAccess("Monitors", "Update response") && (
+                <CommonButton
+                  data-testid={`completeButton_${index}`}
+                  variant="contained"
+                  onClick={() => completeButtonClick(item)}
+                >
+                  Complete
+                </CommonButton>
+              )}
               {
                 /* istanbul ignore next */
                 userType == "therapist" && (
