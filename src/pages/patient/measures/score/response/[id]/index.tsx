@@ -6,7 +6,6 @@ import Loader from "../../../../../../components/common/Loader";
 import Layout from "../../../../../../components/layout";
 import ViewResponse from "../../../../../../components/patient/measures/ViewResponse/ViewResponse";
 import { PATIENT_VIEW_SCORE } from "../../../../../../graphql/Measure/graphql";
-import { PatientViewScoreData } from "../../../../../../graphql/Measure/types";
 import withAuthentication from "../../../../../../hoc/auth";
 
 const PatientResponsePage: NextPage = () => {
