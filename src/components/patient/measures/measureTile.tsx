@@ -10,6 +10,8 @@ interface MeasureTileProps {
   measure?: PatientMeasureListEntity;
   onClickTest?: (measure: PatientMeasureListEntity) => void;
   onClickScore?: (measure: PatientMeasureListEntity) => void;
+  isTakeTest?: any;
+  isViewScore?: any;
 }
 
 export const MeasureTile: FC<MeasureTileProps> = ({
@@ -17,6 +19,8 @@ export const MeasureTile: FC<MeasureTileProps> = ({
   onClickTest,
   onClickScore,
   sessionObj,
+  isViewScore,
+  isTakeTest,
 }) => {
   const classes = useStyles();
   const { label = "start" } = sessionObj || {};
@@ -32,21 +36,26 @@ export const MeasureTile: FC<MeasureTileProps> = ({
               Current Score: {measure.score}
             </Box>
             <Box>
-              <Button
-                data-testid="view-score-btn"
-                className={"actionButton"}
-                onClick={() => onClickScore(measure)}
-              >
-                View score
-              </Button>
-              <Button
-                className={"actionButton"}
-                style={{ marginLeft: "60px" }}
-                data-testid="take-test-btn"
-                onClick={() => onClickTest(measure)}
-              >
-                Take test
-              </Button>
+              {(isViewScore === true || isViewScore === undefined) && (
+                <Button
+                  data-testid="view-score-btn"
+                  className={"actionButton"}
+                  onClick={() => onClickScore(measure)}
+                >
+                  View score
+                </Button>
+              )}
+
+              {(isTakeTest === true || isTakeTest === undefined) && (
+                <Button
+                  className={"actionButton"}
+                  style={{ marginLeft: "60px" }}
+                  data-testid="take-test-btn"
+                  onClick={() => onClickTest(measure)}
+                >
+                  Take test
+                </Button>
+              )}
             </Box>
           </>
         }
