@@ -169,10 +169,10 @@ export default function ProfileForm(props: propTypes) {
   const [getPatientData, { loading: profileLoading, data: profileData }] =
     useLazyQuery(GET_PROFILE_DATA, {
       onCompleted: (data) => {
-        if (data!.getProfileById) {
-          setFormFields(data.getProfileById);
-          setHealthValue(data.getProfileById?.patient_physical_health);
-          setIlnessValue(data.getProfileById?.patient_illness_ability);
+        if (data!.getProfileById?.data) {
+          setFormFields(data.getProfileById?.data);
+          setHealthValue(data.getProfileById?.data?.patient_physical_health);
+          setIlnessValue(data.getProfileById?.data?.patient_illness_ability);
         }
       },
     });
@@ -1250,7 +1250,7 @@ export default function ProfileForm(props: propTypes) {
                     data-testid="editCancleSubmitButton"
                     variant="contained"
                     onClick={() => {
-                      setFormFields(profileData?.getProfileById);
+                      setFormFields(profileData?.getProfileById?.data);
                       setFormFields(
                         props.therapistProfileData?.getPatientDetailById
                       );

@@ -51,21 +51,21 @@ const PatientEditTemplatePage: NextPage = () => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       /* istanbul ignore next */
-      if (data?.getFormulationByShareId) {
+      if (data?.getFormulationByShareId?.data) {
         const Obj = {
-          ...data?.getFormulationByShareId[0].formulation_data[0],
-          _id: data?.getFormulationByShareId[0]._id,
-          template_response: data?.getFormulationByShareId[0].template_response,
+          ...data?.getFormulationByShareId?.data[0].formulation_data[0],
+          _id: data?.getFormulationByShareId?.data[0]._id,
+          template_response: data?.getFormulationByShareId?.data[0].template_response,
           component_name:
-            data?.getFormulationByShareId[0]?.template_detail?.component_name,
+            data?.getFormulationByShareId?.data[0]?.template_detail?.component_name,
         };
         setFormulationData(Obj);
         setDescription(
-          data?.getFormulationByShareId[0]?.formulation_data[0]
+          data?.getFormulationByShareId?.data[0]?.formulation_data[0]
             ?.formulation_desc
         );
         setInstruction(
-          data?.getFormulationByShareId[0]?.formulation_data[0]
+          data?.getFormulationByShareId?.data[0]?.formulation_data[0]
             ?.formulation_instruction
         );
       }

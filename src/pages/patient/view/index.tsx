@@ -22,6 +22,7 @@ import ProfileForm from "../../../components/common/ProfileForm/profileForm";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
 import dayjs from "dayjs";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const defaultFormValue = {
   _id: "",
@@ -108,8 +109,8 @@ const PatientById: NextPage = () => {
   ] = useLazyQuery(GET_PROFILE_DATA, {
     onCompleted: (data) => {
       /* istanbul ignore next */
-      if (data!.getProfileById) {
-        setFormFields(data.getProfileById);
+      if (data!.getProfileById?.data) {
+        setFormFields(data.getProfileById?.data);
       }
     },
   });
@@ -326,25 +327,26 @@ const PatientById: NextPage = () => {
                 </Box>
               </div>
 
-              {activeTab === "personal-info" && (
-                <div
-                  style={{
-                    marginRight: "10px",
-                  }}
-                >
-                  <IconButtonWrapper
-                    style={{ marginLeft: "auto" }}
-                    aria-label="create"
-                    size="small"
-                    onClick={() => {
-                      setEditable(true);
+              {activeTab === "personal-info" &&
+                checkPrivilageAccess("Profile", "Update response") && (
+                  <div
+                    style={{
+                      marginRight: "10px",
                     }}
-                    data-testid="edit-icon-button"
                   >
-                    <CreateIcon />
-                  </IconButtonWrapper>
-                </div>
-              )}
+                    <IconButtonWrapper
+                      style={{ marginLeft: "auto" }}
+                      aria-label="create"
+                      size="small"
+                      onClick={() => {
+                        setEditable(true);
+                      }}
+                      data-testid="edit-icon-button"
+                    >
+                      <CreateIcon />
+                    </IconButtonWrapper>
+                  </div>
+                )}
             </div>
           </Box>
         )}

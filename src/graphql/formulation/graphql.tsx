@@ -175,16 +175,20 @@ export const GET_PATIENT_SHARED_LIST = gql`
 export const GET_PATIENT_FORMULATION_LIST = gql`
   query getPatientFormulationList {
     getPatientFormulationList {
-      _id
-      created_date
-      formulation_data {
-        formulation_name
-        download_formulation_url
-        formulation_avail_for
-        formulation_img
-        formulation_returnurl
-        formulation_url
+      data {
+        _id
+        created_date
+        formulation_data {
+          formulation_name
+          download_formulation_url
+          formulation_avail_for
+          formulation_img
+          formulation_returnurl
+          formulation_url
+        }
       }
+      message
+      result
     }
   }
 `;
@@ -200,10 +204,8 @@ export const UPDATE_PAT_FORMULATION_BY_ID = gql`
       ptsharresId: $ptsharresId
       updateShareForm: $updateShareForm
     ) {
-      _id
-      formulation_id
-      template_id
-      template_response
+      message
+      result
     }
   }
 `;
@@ -214,32 +216,36 @@ export const GET_FORMULATION_BY_SHARE_ID = gql`
       ptsharresId: $ptsharresId
       patient_id: $patient_id
     ) {
-      _id
-      created_date
-      formulation_data {
-        user_id
-        formulation_url
-        formulation_type
-        formulation_status
-        formulation_returnurl
-        formulation_name
-        formulation_instruction
-        formulation_img
-        formulation_desc
-        formulation_avail_for
-        download_formulation_url
-        template_data
+      data {
+        _id
+        created_date
+        formulation_data {
+          user_id
+          formulation_url
+          formulation_type
+          formulation_status
+          formulation_returnurl
+          formulation_name
+          formulation_instruction
+          formulation_img
+          formulation_desc
+          formulation_avail_for
+          download_formulation_url
+          template_data
+        }
+        template_detail {
+          component_name
+          category
+          name
+        }
+        formulation_id
+        patient_id
+        share_from
+        updated_date
+        template_response
       }
-      template_detail {
-        component_name
-        category
-        name
-      }
-      formulation_id
-      patient_id
-      share_from
-      updated_date
-      template_response
+      result
+      message
     }
   }
 `;
