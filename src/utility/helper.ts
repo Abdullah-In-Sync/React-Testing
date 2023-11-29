@@ -260,7 +260,7 @@ export const getTokenIdDecodedData = () => {
 
 /* istanbul ignore file */
 export const filterBasedOnPrivilages = (routeObj) => {
-  const { label } = routeObj;
+  const { moduleName: label } = routeObj;
   const status = checkPrivilageAccess(label);
   if (status === undefined || label === "Home") return true;
   else if (label === "Therapy")

@@ -24,6 +24,7 @@ type RoutesType =
       icon: JSX.Element;
       showNow?: number;
       type?: string;
+      moduleName?: string;
     }
   | {
       key: number;
@@ -186,6 +187,7 @@ export const patient_routes: RoutesType[] = [
     icon: <HomeIcon />,
     showNow: 1,
     type: "MYHELP_HOME",
+    moduleName: "Home",
   },
   {
     key: 2,
@@ -193,6 +195,7 @@ export const patient_routes: RoutesType[] = [
     path: "/patient/view",
     icon: <PersonIcon />,
     type: "MY_PROFILE",
+    moduleName: "Profile",
   },
   {
     key: 3,
@@ -200,6 +203,7 @@ export const patient_routes: RoutesType[] = [
     path: "/patient/assessment",
     icon: <MedicalInformationOutlinedIcon />,
     type: "APPOINTMENT",
+    moduleName: "Assessment",
   },
   {
     key: 4,
@@ -207,6 +211,7 @@ export const patient_routes: RoutesType[] = [
     path: "/patient/therapy/?mainTab=therapy",
     icon: <SpaOutlined />,
     type: "THERAPY",
+    moduleName: "Therapy",
   },
   {
     key: 4,
@@ -214,6 +219,7 @@ export const patient_routes: RoutesType[] = [
     path: "/patient/files/?mainTab=files",
     icon: <DescriptionOutlinedIcon />,
     type: "FILES",
+    moduleName: "Files",
   },
   {
     key: 5,
@@ -221,6 +227,7 @@ export const patient_routes: RoutesType[] = [
     path: "/patient/users",
     icon: <GroupsIcon />,
     type: "FILES",
+    moduleName: "Users",
   },
 ];
 

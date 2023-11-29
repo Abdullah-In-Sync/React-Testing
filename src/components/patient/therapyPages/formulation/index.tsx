@@ -18,7 +18,7 @@ const PatientFormulation: NextPage = () => {
       fetchPolicy: "cache-and-network",
       onCompleted: (data) => {
         /* istanbul ignore next */
-        let list = data.getPatientFormulationList?.map((f) => ({
+        let list = data.getPatientFormulationList?.data?.map((f) => ({
           ...f,
           ...f.formulation_data[0],
         }));

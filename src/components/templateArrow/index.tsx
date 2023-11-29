@@ -23,6 +23,7 @@ import SideBar from "./sideBar";
 import TextUpdaterNode from "./customNode";
 import { Button, Grid, Switch, Typography } from "@mui/material";
 import Image from "next/image";
+import { checkPrivilageAccess } from "../../utility/helper";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -283,39 +284,43 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
           )}
         </ReactFlowProvider>
       </Box>
-      {mod !== "mobile" && (
-        <Grid container justifyContent={"center"}>
-          <Grid item padding={"63px 0px 94px 0px"}>
-            <Button
-              data-testid="tableTemplateSubmit"
-              variant="contained"
-              type="submit"
-              style={{
-                paddingLeft: "40px",
-                paddingRight: "40px",
-                marginRight: "10px",
-              }}
-              disabled={isEnableBtn}
-              onClick={() => onSubmitHandle(nodes, edges)}
-            >
-              Submit
-            </Button>
-            <Button
-              data-testid="tableTemplateCancel"
-              color="secondary"
-              variant="contained"
-              style={{
-                paddingLeft: "40px",
-                paddingRight: "40px",
-                backgroundColor: "#6BA08E",
-              }}
-              onClick={() => onCancel()}
-            >
-              Cancel
-            </Button>
-          </Grid>
-        </Grid>
-      )}
+      {
+        /* istanbul ignore next */
+        mod !== "mobile" &&
+          checkPrivilageAccess("Formulation", "Update response") && (
+            <Grid container justifyContent={"center"}>
+              <Grid item padding={"63px 0px 94px 0px"}>
+                <Button
+                  data-testid="tableTemplateSubmit"
+                  variant="contained"
+                  type="submit"
+                  style={{
+                    paddingLeft: "40px",
+                    paddingRight: "40px",
+                    marginRight: "10px",
+                  }}
+                  disabled={isEnableBtn}
+                  onClick={() => onSubmitHandle(nodes, edges)}
+                >
+                  Submit
+                </Button>
+                <Button
+                  data-testid="tableTemplateCancel"
+                  color="secondary"
+                  variant="contained"
+                  style={{
+                    paddingLeft: "40px",
+                    paddingRight: "40px",
+                    backgroundColor: "#6BA08E",
+                  }}
+                  onClick={() => onCancel()}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+            </Grid>
+          )
+      }
       {mod == "mobile" && !handleViewBoxClick && (
         <Grid container justifyContent={"center"}>
           <Button

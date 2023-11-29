@@ -99,7 +99,7 @@ describe("when rendered with a sidebarmenu component", () => {
 
   it("should return true when label is Home", () => {
     const routeObj = {
-      label: "Home",
+      moduleName: "Home",
     };
     const result = filterBasedOnPrivilages(routeObj);
     expect(result).toBe(true);
@@ -107,7 +107,7 @@ describe("when rendered with a sidebarmenu component", () => {
 
   it("should return false when label is invalid", () => {
     const routeObj = {
-      label: "InvalidLabel",
+      moduleName: "InvalidLabel",
     };
     const result = filterBasedOnPrivilages(routeObj);
     expect(result).toBe(false);
