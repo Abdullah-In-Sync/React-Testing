@@ -3,7 +3,8 @@ import { gql } from "@apollo/client";
 export const UPDATE_RESOURCE = gql`
   mutation ($ptsharresId: ID!, $update: UpdatePatientResourceInput) {
     updatePatientResourceById(ptsharresId: $ptsharresId, update: $update) {
-      patient_share_filename
+      message
+      result
     }
   }
 `;
@@ -144,8 +145,8 @@ export const CREATE_FORMULATION = gql`
 export const UPDATE_RESOURCE_TEMPLATE_RESPONSE = gql`
   mutation ($ptsharresId: ID!, $update: UpdatePatientResourceInput!) {
     updatePatientResourceById(ptsharresId: $ptsharresId, update: $update) {
-      template_response
-      _id
+      message
+      result
     }
   }
 `;
@@ -161,8 +162,8 @@ export const THERAPIST_UPDATE_RESOURCE_TEMPLATE_RESPONSE = gql`
       patient_id: $patientId
       update: $update
     ) {
-      template_response
-      _id
+      message
+      result
     }
   }
 `;
