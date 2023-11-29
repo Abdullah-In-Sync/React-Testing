@@ -88,9 +88,12 @@ const InfoSheet = () => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.filter(
-            (val) => val?.resource_data[0]?.resource_type === 1
-          )}
+          data={
+            /* istanbul ignore next */
+            resData?.getPatientResourceList?.data?.filter(
+              (val) => val?.resource_data[0]?.resource_type === 1
+            )
+          }
           currentPage={page}
           onPageChange={(page) => {
             /* istanbul ignore next */

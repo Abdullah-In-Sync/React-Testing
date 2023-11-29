@@ -56,7 +56,7 @@ const WorkSheet = () => {
   const checkIsSmart = (item) => {
     // resource_issmartdraw
     const itemId = item?._id;
-    const id = resData?.getPatientResourceList?.find(
+    const id = resData?.getPatientResourceList?.data.find(
       (val) => val?.resource_data[0]?.resource_issmartdraw == "1"
     )?._id;
 
@@ -103,7 +103,7 @@ const WorkSheet = () => {
                 closeFileUploadDialog={closeFileUploadDialog}
                 open={fileUpload}
                 ptshareId={
-                  resData?.getPatientResourceList?.find(
+                  resData?.getPatientResourceList?.data?.find(
                     (val) => val?.resource_data[0]?.resource_type === 2
                   )._id
                 }
@@ -183,7 +183,7 @@ const WorkSheet = () => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.filter(
+          data={resData?.getPatientResourceList?.data?.filter(
             (val) => val?.resource_data[0]?.resource_type === 2
           )}
           currentPage={page}

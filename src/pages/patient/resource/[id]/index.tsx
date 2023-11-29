@@ -223,7 +223,8 @@ const ResourceDetailById: NextPage = () => {
                           closeFileUploadDialog={closeFileUploadDialog}
                           open={fileUpload}
                           ptshareId={
-                            resData?.getPatientResourceList?.find(
+                            /* istanbul ignore next */
+                            resData?.getPatientResourceList?.data?.find(
                               (val) =>
                                 val?.resource_data[0]?.resource_type === 2
                             )._id

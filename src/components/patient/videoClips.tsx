@@ -88,9 +88,12 @@ const VideoClips = () => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.filter(
-            (val) => val?.resource_data[0]?.resource_type === 4
-          )}
+          data={
+            /* istanbul ignore next */
+            resData?.getPatientResourceList?.data?.filter(
+              (val) => val?.resource_data[0]?.resource_type === 4
+            )
+          }
           currentPage={page}
           onPageChange={(page) => {
             /* istanbul ignore next */

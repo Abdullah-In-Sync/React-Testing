@@ -94,18 +94,80 @@ export const GET_RESOURCE_DATA = gql`
 export const GET_PATIENT_RESOURCE_DATA = gql`
   query GetPatientResource {
     getPatientResourceList {
-      _id
-      ptsharres_session
-      created_date
-      patient_share_filename
-      download_patient_filename_url
-      resource_data {
-        resource_name
-        resource_type
-        resource_url
-        download_resource_url
-        resource_issmartdraw
+      data {
+        _id
+        created_date
+        disorder_detail {
+          _id
+          disorder_name
+          created_date
+          disorder_status
+          therapy_id
+          user_id
+          user_type
+        }
+        download_patient_filename_url
+        model_detail {
+          _id
+          disorder_id
+          created_date
+          model_name
+          model_status
+          user_id
+          user_type
+        }
+        patient_id
+        patient_share_filename
+        ptsharres_from
+        ptsharres_session
+        ptsharres_status
+        ptsharres_subfrom
+        resource_data {
+          _id
+          agenda_id
+          category_id
+          created_date
+          disorder_id
+          download_resource_url
+          model_id
+          org_id
+          resource_avail_onlyme
+          resource_avail_therapist
+          resource_desc
+          resource_filename
+          resource_instruction
+          resource_isformualation
+          resource_issmartdraw
+          resource_name
+          resource_returnurl
+          resource_references
+          resource_session_no
+          resource_status
+          resource_type
+          resource_url
+          template_data
+          template_id
+          updated_date
+          user_id
+          user_type
+        }
+        resource_id
+        resource_upload
+        share_from
+        template_detail {
+          _id
+          category
+          component_name
+          created_date
+          name
+          updated_date
+        }
+        template_id
+        template_response
+        updated_date
       }
+      message
+      result
     }
   }
 `;
