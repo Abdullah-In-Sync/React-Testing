@@ -35,9 +35,11 @@ const MeasureScorePage: NextPage = () => {
       <Layout>
         <ContentHeader title="Measures Score" />
         <Loader visible={dataLoading} />
-        {patientViewScoreData?.patientViewScoreList && (
+        {patientViewScoreData?.patientViewScoreList?.data && (
           <MeasureScoreList
-            measureScoreDetail={patientViewScoreData?.patientViewScoreList}
+            measureScoreDetail={
+              patientViewScoreData?.patientViewScoreList?.data
+            }
           />
         )}
       </Layout>

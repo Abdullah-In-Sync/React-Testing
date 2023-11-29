@@ -14,7 +14,7 @@ interface ViewProps {
   confirmRef?: any;
   infoModalRef?: any;
   loadingPatientFileData?: boolean;
-  isTrue?: boolean;
+  checkAccess?: any;
 }
 
 const FilesListComponent: React.FC<ViewProps> = ({
@@ -23,7 +23,7 @@ const FilesListComponent: React.FC<ViewProps> = ({
   confirmRef,
   infoModalRef,
   loadingPatientFileData,
-  isTrue,
+  checkAccess,
 }) => {
   const styles = useStyles();
   return (
@@ -36,20 +36,23 @@ const FilesListComponent: React.FC<ViewProps> = ({
             pageActionButtonClick={pageActionButtonClick}
             actionButton={[
               /* istanbul ignore next */
-              (isTrue === true || isTrue === undefined) && {
+              (checkAccess.download || checkAccess.download === undefined) && {
                 id: "download",
                 icon: require("@mui/icons-material/FileDownloadOutlined")
                   .default,
               },
-              {
+              /* istanbul ignore next */
+              (checkAccess.view || checkAccess.view === undefined) && {
                 id: "view",
                 icon: require("@mui/icons-material/Visibility").default,
               },
-              {
+              /* istanbul ignore next */
+              (checkAccess.edit || checkAccess.edit === undefined) && {
                 id: "edit",
                 icon: require("@mui/icons-material/Edit").default,
               },
-              {
+              /* istanbul ignore next */
+              (checkAccess.edit || checkAccess.edit === undefined) && {
                 id: "delete",
                 icon: require("@mui/icons-material/DeleteSharp").default,
                 checkIsParam: "added_by",
