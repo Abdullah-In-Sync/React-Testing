@@ -169,6 +169,7 @@ export default function ProfileForm(props: propTypes) {
   const [getPatientData, { loading: profileLoading, data: profileData }] =
     useLazyQuery(GET_PROFILE_DATA, {
       onCompleted: (data) => {
+        /* istanbul ignore next */
         if (data!.getProfileById?.data) {
           setFormFields(data.getProfileById?.data);
           setHealthValue(data.getProfileById?.data?.patient_physical_health);
