@@ -150,28 +150,31 @@ mocksData.push({
   },
   result: {
     data: {
-      patientGoalList: [
-        {
-          _id: "3baa11c2-054a-4167-b97b-0b8a9b7fdec3",
-          created_date: "2023-05-09T06:00:38.624Z",
-          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-          ptgoal_achievementdate: "",
-          ptgoal_achievementgoal: "Achivement",
-          ptgoal_audio: "",
-          ptgoal_file: "",
-          ptgoal_mygoal: "Goal",
-          ptgoal_pregoal: "0",
-          ptgoal_status: "1",
-          ptgoal_reviewdate: "",
-          ptgoal_success: "0",
-          ptsession_id: "1",
-          pttherapy_id: "28abbd5cf240405c94ffd35b189c7297",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2023-05-09T06:00:38.624Z",
-          user_type: "patient",
-          __typename: "PatientGoal",
-        },
-      ],
+      patientGoalList: {
+        data: [
+          {
+            _id: "3baa11c2-054a-4167-b97b-0b8a9b7fdec3",
+            created_date: "2023-05-09T06:00:38.624Z",
+            patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+            ptgoal_achievementdate: "",
+            ptgoal_achievementgoal: "Achivement",
+            ptgoal_audio: "",
+            ptgoal_file: "",
+            ptgoal_mygoal: "Goal",
+            ptgoal_pregoal: "0",
+            ptgoal_status: "1",
+            ptgoal_reviewdate: "",
+            ptgoal_success: "0",
+            ptsession_id: "1",
+            pttherapy_id: "28abbd5cf240405c94ffd35b189c7297",
+            therapist_id: "686802e5123a482681a680a673ef7f53",
+            updated_date: "2023-05-09T06:00:38.624Z",
+            user_type: "patient",
+            __typename: "PatientGoal",
+          },
+        ],
+        result: true,
+      },
     },
   },
 });
@@ -195,7 +198,6 @@ mocksData.push({
     data: {
       addUpdateTherapistGoal: {
         result: true,
-        __typename: "result",
       },
     },
   },

@@ -27,6 +27,7 @@ import { useSnackbar } from "notistack";
 import { useStyles } from "../../therapist/patient/therapistGoals/style";
 import { PATIENT_ADD_UPDATE_GOALS } from "../../../graphql/mutation/patient";
 import moment from "moment";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const defaultFormValue = {
   _id: "",
@@ -116,7 +117,7 @@ const Goals = (props: propTypes) => {
     useLazyQuery(GET_PATIENT_GOAL_DATA, {
       onCompleted: (data) => {
         /* istanbul ignore next */
-        setFormFields(data?.patientGoalList);
+        setFormFields(data?.patientGoalList?.data);
       },
     });
 
@@ -380,20 +381,22 @@ const Goals = (props: propTypes) => {
           </FormControl>
         </Box>
 
-        <Box className={styles.addGoalButtonBox}>
-          <Button
-            className={styles.smallButton}
-            data-testid={"addGoalButton"}
-            variant="contained"
-            onClick={addInput}
-            disabled={inputs.length > 0}
-          >
-            Add Goals
-          </Button>
-        </Box>
+        {checkPrivilageAccess("Goals", "Add") && (
+          <Box className={styles.addGoalButtonBox}>
+            <Button
+              className={styles.smallButton}
+              data-testid={"addGoalButton"}
+              variant="contained"
+              onClick={addInput}
+              disabled={inputs.length > 0}
+            >
+              Add Goals
+            </Button>
+          </Box>
+        )}
 
         <Box style={{ paddingBottom: "30px" }}>
-          {goalsData?.patientGoalList?.map((data, index) => (
+          {goalsData?.patientGoalList?.data?.map((data, index) => (
             <Box className={styles.outerBorder} borderRadius={"7px"}>
               <Box key={index}>
                 <Box className={styles.outerBorder} borderRadius={"7px"}>
@@ -533,19 +536,21 @@ const Goals = (props: propTypes) => {
                   </Box>
                 </Box>
               </Box>
-              <Box className={styles.saveUpdateButton}>
-                <Button
-                  className={styles.largeButton}
-                  data-testid="upadteSaveGoalButton"
-                  variant="contained"
-                  onClick={(e) => {
-                    /* istanbul ignore next */
-                    handleSubmit(e, index);
-                  }}
-                >
-                  Save Goals
-                </Button>
-              </Box>
+              {checkPrivilageAccess("Goals", "Update response") && (
+                <Box className={styles.saveUpdateButton}>
+                  <Button
+                    className={styles.largeButton}
+                    data-testid="upadteSaveGoalButton"
+                    variant="contained"
+                    onClick={(e) => {
+                      /* istanbul ignore next */
+                      handleSubmit(e, index);
+                    }}
+                  >
+                    Save Goals
+                  </Button>
+                </Box>
+              )}
             </Box>
           ))}
         </Box>

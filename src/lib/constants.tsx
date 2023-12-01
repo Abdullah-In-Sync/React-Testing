@@ -166,3 +166,58 @@ export const phoneRegExp = /^\+[1-9]\d{3,14}$/;
 
 export const ID_TOKEN_LABEL = "myhelptokenid";
 export const COOKIES_POLICY = "Cookies Policy";
+
+export const moduleList = {
+  Agreement: {
+    name: "Agreement",
+    id: "06d36511-34f4-4ed8-b1e8-475e278c3493",
+  },
+  Files: {
+    name: "Files",
+    id: "f8e19fc6-eb3a-4b30-8672-6ada36b1ccd4",
+  },
+  Relapse: {
+    name: "Relapse",
+    id: "0c5f4f77-8a82-492f-a7e2-a578fd9b1b34",
+  },
+  "Safety Plan": {
+    name: "Safety Plan",
+    id: "1f4858ed-d2aa-4fd9-81eb-e0f761918bd4",
+  },
+  Measures: {
+    name: "Measures",
+    id: "e7b6dcf4-3e2f-417f-8e9e-99b644b38f50",
+  },
+  Monitors: {
+    name: "Monitors",
+    id: "9d901116-3b00-46fa-9851-7ada93ed060c",
+  },
+  Assessment: {
+    name: "Assessment",
+    id: "41ac3473-3857-4361-bd99-0fc1e30d9356",
+  },
+  Goals: {
+    name: "Goals",
+    id: "dbf6e8c0-23db-44a7-a0ea-4ee6144c930c",
+  },
+  Formulation: {
+    name: "Formulation",
+    id: "c71c8b43-693f-4201-81d1-2cf76de05d9c",
+  },
+  Homework: {
+    name: "Homework",
+    id: "1a6668a7-ec04-4904-9730-a14ae4ac1541",
+  },
+  Feedback: {
+    name: "Feedback",
+    id: "a75254ca-e3f3-401a-8e20-bbb50b3d39e3",
+  },
+  Resource: {
+    name: "Resource",
+    id: "3a9a05b2-30c3-4f3a-baec-1be796085544",
+  },
+  Profile: {
+    name: "Profile",
+    id: "339a343f-63c6-426f-8357-f2fc5a25aa20",
+  },
+};
