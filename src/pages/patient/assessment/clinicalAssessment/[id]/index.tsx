@@ -25,7 +25,7 @@ const PatientClinicalAssessment: NextPage = () => {
   });
 
   const assessmentCatogeryData =
-    patientAssessmentCatagoryList?.getAssessmentCategoryWithQues;
+    patientAssessmentCatagoryList?.getAssessmentCategoryWithQues?.data;
 
   /* istanbul ignore next */
   useEffect(() => {
