@@ -1,5 +1,5 @@
 export interface PatientFileListData {
-  getPatientFileList?: GetPatientFileListEntity[] | null;
+  getPatientFileList?: PatientFileRes | null;
 }
 export interface GetPatientFileListEntity {
   _id: string;
@@ -14,4 +14,10 @@ export interface GetPatientFileListEntity {
   status: number;
   title: string;
   updated_date: string;
+}
+
+export interface PatientFileRes {
+  data?: GetPatientFileListEntity[];
+  message: string;
+  result: boolean;
 }

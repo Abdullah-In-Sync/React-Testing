@@ -24,18 +24,22 @@ export const ADD_PATIENT_FILE = gql`
 export const GET_PATIENT_FILE_LIST = gql`
   query GetPatientFileList($patient_id: String!) {
     getPatientFileList(patient_id: $patient_id) {
-      _id
-      added_by
-      created_date
-      description
-      download_file_url
-      file_name
-      file_url
-      patient_id
-      share_status
-      status
-      title
-      updated_date
+      data {
+        _id
+        added_by
+        created_date
+        description
+        download_file_url
+        file_name
+        file_url
+        patient_id
+        share_status
+        status
+        title
+        updated_date
+      }
+      message
+      result
     }
   }
 `;

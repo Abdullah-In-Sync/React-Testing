@@ -60,32 +60,37 @@ export const UPDATE_MEASURE_SCORE_BY_PATIENT = gql`
 export const VIEW_MEASURE_SCORE_BY_PATIENT = gql`
   query patientViewScoreList($measure_id: String!) {
     patientViewScoreList(measure_id: $measure_id) {
-      _id
-      created_date
-      description
-      patient_id
-      score
-      score_date
-      score_id
-      scores_list {
+      data {
         _id
-        added_by
         created_date
-        measure_id
+        added_by
+        description
+        patient_id
         score
+        score_date
+        score_id
+        scores_list {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          status
+          session_no
+          template_data
+          template_id
+        }
         session_no
+        share_status
         status
         template_data
         template_id
+        therapist_id
+        title
+        updated_date
       }
-      session_no
-      share_status
-      status
-      template_data
-      template_id
-      therapist_id
-      title
-      updated_date
+      message
+      result
     }
   }
 `;
@@ -401,32 +406,35 @@ export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
 export const PATIENT_VIEW_MEASURE = gql`
   query PatientViewMeasure($measureId: String!) {
     patientViewMeasure(measure_id: $measureId) {
-      _id
-      description
-      created_date
-      patient_id
-      score
-      score_date
-      score_id
-      scores_list {
+      data {
         _id
         added_by
         created_date
-        measure_id
+        description
+        patient_id
         score
+        score_date
+        score_id
+        scores_list {
+          _id
+          added_by
+          measure_id
+          created_date
+          score
+          session_no
+          status
+          template_data
+          template_id
+        }
         session_no
+        share_status
         status
         template_data
         template_id
+        therapist_id
+        title
+        updated_date
       }
-      session_no
-      share_status
-      status
-      template_data
-      template_id
-      therapist_id
-      title
-      updated_date
     }
   }
 `;
@@ -446,15 +454,19 @@ export const PATIENT_MEASURE_SUBMIT_TEST = gql`
       template_id: $templateId
       session_no: $sessionNo
     ) {
-      _id
-      added_by
-      created_date
-      measure_id
-      score
-      session_no
-      template_data
-      template_id
-      status
+      data {
+        _id
+        added_by
+        created_date
+        measure_id
+        score
+        session_no
+        status
+        template_data
+        template_id
+      }
+      message
+      result
     }
   }
 `;
@@ -462,32 +474,37 @@ export const PATIENT_MEASURE_SUBMIT_TEST = gql`
 export const GET_PAITENT_MEASURES_LIST = gql`
   query PatientMeasureList {
     patientMeasureList {
-      _id
-      created_date
-      description
-      patient_id
-      score
-      score_date
-      score_id
-      session_no
-      scores_list {
+      message
+      result
+      data {
         _id
         added_by
         created_date
-        measure_id
+        description
         score
+        patient_id
+        score_date
+        score_id
+        scores_list {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          session_no
+          status
+          template_data
+          template_id
+        }
         session_no
+        share_status
         status
         template_data
         template_id
+        therapist_id
+        title
+        updated_date
       }
-      share_status
-      status
-      template_data
-      template_id
-      therapist_id
-      title
-      updated_date
     }
   }
 `;
@@ -495,23 +512,27 @@ export const GET_PAITENT_MEASURES_LIST = gql`
 export const PATIENT_VIEW_SCORE = gql`
   query PatientViewScore($scoreId: String!) {
     patientViewScore(score_id: $scoreId) {
-      _id
-      description
-      score
-      score_date
-      score_detail {
-        added_by
+      data {
         _id
-        template_id
-        template_data
-        status
-        session_no
         score
-        measure_id
-        created_date
+        description
+        score_date
+        score_detail {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          session_no
+          status
+          template_data
+          template_id
+        }
+        session_no
+        title
       }
-      session_no
-      title
+      message
+      result
     }
   }
 `;
