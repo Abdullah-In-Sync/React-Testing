@@ -9,12 +9,13 @@ import { GET_PATIENT_RESOURCE_DATA } from "../../../graphql/query/resource";
 import Loader from "../../common/Loader";
 import ContentHeader from "../../common/ContentHeader";
 import dynamic from "next/dynamic";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const TableGenerator = dynamic(import("../../common/TableGenerator"), {
   ssr: false,
 });
 
-const CommonResourceComponent = ({ resourceType, tabName }) => {
+const CommonResourceComponent = ({ resourceType }) => {
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -31,6 +32,8 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
     setLoader(true);
     getPatientResourceData();
   }, []);
+
+  const isViewResource = checkPrivilageAccess("Resource", "View");
 
   const fields = [
     {
@@ -55,21 +58,28 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
       key: "actions",
       columnName: "Actions",
       visible: true,
-      render: (_, value) => (
-        <Link
-          href={{
-            pathname: `/patient/resource/${value._id}`,
-            query: {
-              tabName: tabName,
-            },
-          }}
-          passHref
-        >
-          <IconButton size="small" data-testid={`viewIcon_${value._id}`}>
-            <VisibilityIcon />
-          </IconButton>
-        </Link>
-      ),
+      render: (_, value) => {
+        /* istanbul ignore next */
+        if (isViewResource === true || isViewResource === undefined) {
+          return (
+            <Link
+              href={{
+                pathname: "/patient/resource/" + value._id,
+                query: {
+                  tabName: "info-sheet",
+                },
+              }}
+              passHref
+            >
+              <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+                <VisibilityIcon />
+              </IconButton>
+            </Link>
+          );
+        } else {
+          return null;
+        }
+      },
     },
   ];
 

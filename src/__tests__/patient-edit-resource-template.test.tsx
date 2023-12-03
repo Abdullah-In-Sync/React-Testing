@@ -20,30 +20,32 @@ mocksData.push({
   },
   result: {
     data: {
-      getResourceDetailById: [
-        {
-          created_date: "2022-12-14T09:23:49.062Z",
-          resource_data: [
-            {
-              template_data:
-                '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[]}]}]}',
-              resource_issmartdraw: "1",
-              resource_name: "test name",
-              resource_type: 2,
-              template_id: "63774edbc553fac5d6a9bd74",
-              __typename: "Resource",
+      getResourceDetailById: {
+        data: [
+          {
+            created_date: "2022-12-14T09:23:49.062Z",
+            resource_data: [
+              {
+                template_data:
+                  '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[]}]}]}',
+                resource_issmartdraw: "1",
+                resource_name: "test name",
+                resource_type: 2,
+                template_id: "63774edbc553fac5d6a9bd74",
+                __typename: "Resource",
+              },
+            ],
+            template_detail: {
+              component_name: "TemplateTable",
+              category: "journal",
+              _id: "63774edbc553fac5d6a9bd74",
+              name: "Table Template",
+              __typename: "Templates",
             },
-          ],
-          template_detail: {
-            component_name: "TemplateTable",
-            category: "journal",
-            _id: "63774edbc553fac5d6a9bd74",
-            name: "Table Template",
-            __typename: "Templates",
+            __typename: "Patshareresource",
           },
-          __typename: "Patshareresource",
-        },
-      ],
+        ],
+      },
     },
   },
 });
@@ -77,30 +79,32 @@ mocksData.push({
   },
   result: {
     data: {
-      getResourceDetailById: [
-        {
-          created_date: "2022-12-14T09:23:49.062Z",
-          resource_data: [
-            {
-              template_data:
-                '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
-              resource_issmartdraw: "1",
-              resource_name: "test name",
-              resource_type: 2,
-              template_id: "63774edbc553fac5d6a9bd74",
-              __typename: "Resource",
+      getResourceDetailById: {
+        data: [
+          {
+            created_date: "2022-12-14T09:23:49.062Z",
+            resource_data: [
+              {
+                template_data:
+                  '{"rows":[{"cells":[{"type":"header","title":"your fav actor?","description":"about actor"},{"type":"header","title":"are you veg ?","description":"about food"}]},{"cells":[{"type":"answer","answerType":"text","answerValues":[],"patientAns":"updated_value"},{"type":"header","title":"your fav actor?","description":"about actor"}]}]}',
+                resource_issmartdraw: "1",
+                resource_name: "test name",
+                resource_type: 2,
+                template_id: "63774edbc553fac5d6a9bd74",
+                __typename: "Resource",
+              },
+            ],
+            template_detail: {
+              component_name: "TemplateTable",
+              category: "journal",
+              _id: "63774edbc553fac5d6a9bd74",
+              name: "Table Template",
+              __typename: "Templates",
             },
-          ],
-          template_detail: {
-            component_name: "TemplateTable",
-            category: "journal",
-            _id: "63774edbc553fac5d6a9bd74",
-            name: "Table Template",
-            __typename: "Templates",
+            __typename: "Patshareresource",
           },
-          __typename: "Patshareresource",
-        },
-      ],
+        ],
+      },
     },
   },
 });

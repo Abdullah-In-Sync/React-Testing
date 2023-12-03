@@ -45,8 +45,8 @@ const ResourceDetailById: NextPage = () => {
     onCompleted: (data) => {
       /* istanbul ignore else */
       if (data!.getResourceDetailById) {
-        setPtId(data!.getResourceDetailById[0]._id);
-      } else if (data!.getResourceDetailById == null) {
+        setPtId(data!.getResourceDetailById.data[0]._id);
+      } else if (data!.getResourceDetailById?.data[0] == null) {
         setLoader(false);
       }
     },
@@ -91,7 +91,7 @@ const ResourceDetailById: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Resource Detail" />
         <Box>
-          {patientResourceData?.getResourceDetailById != null ? (
+          {patientResourceData?.getResourceDetailById?.data[0] != null ? (
             <Grid container rowSpacing={2} data-testid="patResourceDetail">
               <Grid item xs={6} data-testid="backButton">
                 <Button
@@ -108,8 +108,8 @@ const ResourceDetailById: NextPage = () => {
                   Back
                 </Button>
 
-                {patientResourceData.getResourceDetailById[0].resource_data[0]
-                  .resource_issmartdraw == "1" && (
+                {patientResourceData.getResourceDetailById.data[0]
+                  .resource_data[0].resource_issmartdraw == "1" && (
                   <NextLink
                     passHref
                     href={{
@@ -147,22 +147,22 @@ const ResourceDetailById: NextPage = () => {
                 >
                   <Typography color="primary.main">
                     {
-                      patientResourceData.getResourceDetailById[0]
-                        .disorder_detail.disorder_name
+                      patientResourceData?.getResourceDetailById?.data[0]
+                        .disorder_detail?.disorder_name
                     }
                   </Typography>
                   ,
                   <Typography color="primary.main">
                     {
-                      patientResourceData.getResourceDetailById[0].model_detail
-                        .model_name
+                      patientResourceData?.getResourceDetailById?.data[0]
+                        .model_detail?.model_name
                     }
                   </Typography>
                   ,
                   <Typography key="3" color="text.primary">
                     {
-                      patientResourceData.getResourceDetailById[0]
-                        .resource_data[0].resource_name
+                      patientResourceData?.getResourceDetailById?.data[0]
+                        ?.resource_data[0].resource_name
                     }
                   </Typography>
                 </Breadcrumbs>
@@ -186,8 +186,8 @@ const ResourceDetailById: NextPage = () => {
                 md={12}
               >
                 {
-                  patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_name
+                  patientResourceData.getResourceDetailById.data[0]
+                    .resource_data[0].resource_name
                 }
               </Grid>
               <Grid
@@ -210,9 +210,9 @@ const ResourceDetailById: NextPage = () => {
                   xs={12}
                   md={12}
                 >
-                  {patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_type == 2 &&
-                    patientResourceData.getResourceDetailById[0]
+                  {patientResourceData.getResourceDetailById.data[0]
+                    .resource_data[0].resource_type == 2 &&
+                    patientResourceData.getResourceDetailById.data[0]
                       .resource_data[0].resource_issmartdraw != "1" && (
                       <IconButton
                         size="small"
@@ -233,21 +233,21 @@ const ResourceDetailById: NextPage = () => {
                         <FileUploadIcon />
                       </IconButton>
                     )}
-                  {patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_issmartdraw != "1" && (
+                  {patientResourceData.getResourceDetailById.data[0]
+                    .resource_data[0].resource_issmartdraw != "1" && (
                     <IconButton
                       size="medium"
                       data-testid="shareViewUrl"
                       href={
-                        patientResourceData.getResourceDetailById[0]
+                        patientResourceData.getResourceDetailById.data[0]
                           .patient_share_filename != null
-                          ? patientResourceData.getResourceDetailById[0]
+                          ? patientResourceData.getResourceDetailById.data[0]
                               .patient_share_filename
                           : "#"
                       }
                       sx={{
                         color:
-                          patientResourceData.getResourceDetailById[0]
+                          patientResourceData.getResourceDetailById.data[0]
                             ?.patient_share_filename != null
                             ? "primary.main"
                             : "",
@@ -257,16 +257,16 @@ const ResourceDetailById: NextPage = () => {
                     </IconButton>
                   )}
 
-                  {patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_issmartdraw != "1" && (
+                  {patientResourceData.getResourceDetailById.data[0]
+                    .resource_data[0].resource_issmartdraw != "1" && (
                     <IconButton
                       size="medium"
                       data-testid="viewUrl"
                       target="_blank"
                       href={
-                        patientResourceData.getResourceDetailById[0]
+                        patientResourceData.getResourceDetailById.data[0]
                           .resource_data[0].resource_url != null
-                          ? patientResourceData.getResourceDetailById[0]
+                          ? patientResourceData.getResourceDetailById.data[0]
                               .resource_data[0].resource_url
                           : "#"
                       }
@@ -274,15 +274,15 @@ const ResourceDetailById: NextPage = () => {
                       <VisibilityIcon />
                     </IconButton>
                   )}
-                  {patientResourceData.getResourceDetailById[0].resource_data[0]
-                    .resource_issmartdraw != "1" && (
+                  {patientResourceData.getResourceDetailById.data[0]
+                    .resource_data[0].resource_issmartdraw != "1" && (
                     <IconButton
                       size="medium"
                       data-testid="downloadUrl"
                       href={
-                        patientResourceData.getResourceDetailById[0]
+                        patientResourceData.getResourceDetailById.data[0]
                           .resource_data[0].download_resource_url != null
-                          ? patientResourceData.getResourceDetailById[0]
+                          ? patientResourceData.getResourceDetailById.data[0]
                               .resource_data[0].download_resource_url
                           : "#"
                       }
@@ -294,21 +294,21 @@ const ResourceDetailById: NextPage = () => {
                 <ResourceDetail
                   title="Description"
                   description={
-                    patientResourceData.getResourceDetailById[0]
+                    patientResourceData.getResourceDetailById.data[0]
                       .resource_data[0].resource_desc
                   }
                 />
                 <ResourceDetail
                   title="Instructions"
                   description={
-                    patientResourceData.getResourceDetailById[0]
+                    patientResourceData.getResourceDetailById.data[0]
                       .resource_data[0].resource_instruction
                   }
                 />
                 <ResourceDetail
                   title="References"
                   description={
-                    patientResourceData.getResourceDetailById[0]
+                    patientResourceData.getResourceDetailById.data[0]
                       .resource_data[0].resource_references
                   }
                 />

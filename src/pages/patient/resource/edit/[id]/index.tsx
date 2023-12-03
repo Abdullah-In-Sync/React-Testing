@@ -39,7 +39,7 @@ const PatientEditTemplatePage: NextPage = () => {
       onCompleted: (data) => {
         /* istanbul ignore else */
         if (data!.getResourceDetailById) {
-          const resourceDetail = data!.getResourceDetailById[0];
+          const resourceDetail = data!.getResourceDetailById.data[0];
           if (resourceDetail) {
             /* istanbul ignore else */
             setTemplateDetail(resourceDetail?.template_detail);

@@ -171,6 +171,8 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     }
   };
 
+  const isEditResource = checkPrivilageAccess("Resource", "Update response");
+
   const icons = [
     {
       componentName: "cropSquareIcon",
@@ -286,7 +288,8 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
       </Box>
       {
         /* istanbul ignore next */
-        mod !== "mobile" &&
+        (isEditResource === true || isEditResource === undefined) &&
+          mod !== "mobile" &&
           checkPrivilageAccess("Formulation", "Update response") && (
             <Grid container justifyContent={"center"}>
               <Grid item padding={"63px 0px 94px 0px"}>
