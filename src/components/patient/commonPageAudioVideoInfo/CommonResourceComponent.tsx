@@ -15,7 +15,7 @@ const TableGenerator = dynamic(import("../../common/TableGenerator"), {
   ssr: false,
 });
 
-const CommonResourceComponent = ({ resourceType }) => {
+const CommonResourceComponent = ({ resourceType, tabName }) => {
   const [page, setPage] = useState<number>(0);
   const [loader, setLoader] = useState<boolean>(false);
 
@@ -64,14 +64,14 @@ const CommonResourceComponent = ({ resourceType }) => {
           return (
             <Link
               href={{
-                pathname: "/patient/resource/" + value._id,
+                pathname: `/patient/resource/${value._id}`,
                 query: {
-                  tabName: "info-sheet",
+                  tabName: tabName,
                 },
               }}
               passHref
             >
-              <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+              <IconButton size="small" data-testid={`viewIcon_${value._id}`}>
                 <VisibilityIcon />
               </IconButton>
             </Link>
