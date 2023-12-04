@@ -33,24 +33,27 @@ mocksData.push({
   result: {
     data: {
       patientViewMeasure: {
-        _id: "9776be15-4e15-4573-9c45-9868dad0e50a",
-        description: "",
-        created_date: "2023-04-27T17:18:06.070Z",
-        patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-        score: 3,
-        score_date: "2023-04-28T09:23:42.485Z",
-        score_id: "7cc1eb5e-f319-4033-b04b-45f697e9de51",
-        scores_list: null,
-        session_no: "Session 1",
-        share_status: 1,
-        status: 1,
-        template_data:
-          '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[{"id":"lgze1k8e","question":"test","answer":0},{"id":"lgze1oqo","question":"test2","answer":0},{"id":"lgze1rsp","question":"test3","answer":0}],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional.","totalScore":0}',
-        template_id: "format1",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        title: "format21",
-        updated_date: "2023-04-28T09:23:42.485Z",
-        __typename: "TherapistMeasures",
+        data: {
+          _id: "9776be15-4e15-4573-9c45-9868dad0e50a",
+          description: "",
+          created_date: "2023-04-27T17:18:06.070Z",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          score: 3,
+          score_date: "2023-04-28T09:23:42.485Z",
+          score_id: "7cc1eb5e-f319-4033-b04b-45f697e9de51",
+          scores_list: null,
+          session_no: "Session 1",
+          share_status: 1,
+          status: 1,
+          template_data:
+            '{"intro":"People\'s problems sometimes affect their ability to do certain day-to-day tasks in their lives.  To rate your problems look at each section and determine on the scale provided how much your problem impairs your ability to carry out the activity. This assessment is not intended to be a diagnosis. If you are concerned about your results in any way, please speak with a qualified health professional.","scores":[{"value":"Strongly disagree","label":"0"},{"value":"Disagree","label":"1"},{"value":"Slightly disagree","label":"2"},{"value":"Not Agree","label":"3"},{"value":"Neutral","label":"4"},{"value":"Agree","label":"5"},{"value":"Somewhat agree","label":"6"},{"value":"Slightly agree","label":"7"},{"value":"Strongly agree","label":"8"}],"questions":[{"id":"lgze1k8e","question":"test","answer":0},{"id":"lgze1oqo","question":"test2","answer":0},{"id":"lgze1rsp","question":"test3","answer":0}],"description":"The  maximum  score  of  the  WSAS  is  40,  lower  scores  are  better.  Privacy  -  please  note  -  this  form  does not  transmit  any  information  about  you  or  your  assessment  scores.  If  you  wish  to  keep  your  results, either  print  this  document  or  save  this  file  locally  to  your  computer.  If  you  click ‘save’ before closing, your results will be saved in this document. These results are intended as a guide to your health and are presented  for  educational  purposes  only.  They  are  not  intended  to  be  a  clinical  diagnosis.  If  you  are concerned in any way about your health, please consult with a qualified health professional.","totalScore":0}',
+          template_id: "format1",
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          title: "format21",
+          updated_date: "2023-04-28T09:23:42.485Z",
+          __typename: "TherapistMeasures",
+        },
+        __typename: "patientViewResult",
       },
     },
   },
@@ -71,7 +74,9 @@ mocksData.push({
   result: {
     data: {
       patientMeasureSubmitTest: {
-        _id: "180a65ac-a777-4e82-b13e-5cea79e62608",
+        data: {
+          _id: "180a65ac-a777-4e82-b13e-5cea79e62608",
+        },
       },
     },
   },
@@ -87,24 +92,27 @@ mocksData.push({
   result: {
     data: {
       patientViewMeasure: {
-        _id: "b8423205-7a90-4cd6-8324-65f8372880be",
-        description: "",
-        created_date: "2023-04-27T11:26:41.522Z",
-        patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
-        score: 1,
-        score_date: "2023-04-28T09:35:10.154Z",
-        score_id: "a42dacc2-69b0-4f01-b0e7-d8c8e83df001",
-        scores_list: null,
-        session_no: "start",
-        share_status: 1,
-        status: 1,
-        template_data:
-          '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lgz1fu2u","col1":"tst","col2":"0","col3":"1","col4":"2","col5":"3","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
-        template_id: "format2",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        title: "some2",
-        updated_date: "2023-04-28T09:35:10.154Z",
-        __typename: "TherapistMeasures",
+        data: {
+          _id: "b8423205-7a90-4cd6-8324-65f8372880be",
+          description: "",
+          created_date: "2023-04-27T11:26:41.522Z",
+          patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          score: 1,
+          score_date: "2023-04-28T09:35:10.154Z",
+          score_id: "a42dacc2-69b0-4f01-b0e7-d8c8e83df001",
+          scores_list: null,
+          session_no: "start",
+          share_status: 1,
+          status: 1,
+          template_data:
+            '{"questions":{"headerRow":[{"id":"col1","label":"Over the last 2 weeks how often have you been bothered by the following problems?"},{"id":"col2","label":"Not at all"},{"id":"col3","label":"Several days"},{"id":"col4","label":"More than half days"},{"id":"col5","label":"Nearly every day"}],"bodyRows":[{"id":"lgz1fu2u","col1":"tst","col2":"0","col3":"1","col4":"2","col5":"3","answer":""}],"footerRows":[{"col1":"Column Total","col2":"","col3":"","col4":"","col5":""},{"col1":"Total Score","colAvg":""}]},"optionsQuestions":[{"type":"radio","question":"If you checked of any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?","labels":[{"option":"Not difcult at all","answer":false},{"option":"Somewhat difficult","answer":false},{"option":"Very difficult","answer":false},{"option":"Extremely difficult","answer":false}]},{"type":"text","question":"This is calculated by assigning scores of 0, 1, 2, and 3, to the response categories of \\"not at all\\", \\"several days\\", \\"more than half the days\\", and \\"nearly every day\\" respectively. GAD-7 total score for the seven items ranges from 0 to 21.","labels":[{"option":"Scores represent: 0-5 mild","answer":""},{"option":"6-10 moderate","answer":""},{"option":"11-15 moderately severe anxiety","answer":""},{"option":"15-21 severe anxiety.","answer":""}]}],"totalScore":0}',
+          template_id: "format2",
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          title: "some2",
+          updated_date: "2023-04-28T09:35:10.154Z",
+          __typename: "TherapistMeasures",
+        },
+        __typename: "patientViewResult",
       },
     },
   },
@@ -125,7 +133,9 @@ mocksData.push({
   result: {
     data: {
       patientMeasureSubmitTest: {
-        _id: "180a65ac-a777-4e82-b13e-5cea79e62608",
+        data: {
+          _id: "180a65ac-a777-4e82-b13e-5cea79e62608",
+        },
       },
     },
   },

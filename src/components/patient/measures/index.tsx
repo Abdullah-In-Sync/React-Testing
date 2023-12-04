@@ -8,6 +8,7 @@ import {
   PatientMeasureListEntity,
 } from "../../../graphql/Measure/types";
 import {
+  checkPrivilageAccess,
   getSessionOptions,
   getfiterObject,
   isAfter,
@@ -21,6 +22,9 @@ const MeasureList: FC = () => {
   const [errorModal, setErrorModal] = useState(false);
   const [testErrorModal, setTestErrorModal] = useState(false);
   const sessionOptions = getSessionOptions();
+
+  const isViewScore = checkPrivilageAccess("Assessment", "View");
+  const isTakeTest = checkPrivilageAccess("Assessment", "Update response");
 
   const { data: { patientMeasureList = null } = {}, loading } =
     useQuery<PatientListMeasureData>(GET_PAITENT_MEASURES_LIST, {
@@ -45,12 +49,14 @@ const MeasureList: FC = () => {
   return (
     <>
       <Loader visible={loading} />
-      {(patientMeasureList || []).map((measure) => (
+      {(patientMeasureList?.data || [])?.map((measure) => (
         <MeasureTile
           measure={measure}
           onClickScore={onClickScore}
           onClickTest={onClickTest}
           sessionObj={getfiterObject(sessionOptions, measure?.session_no)}
+          isViewScore={isViewScore}
+          isTakeTest={isTakeTest}
         />
       ))}
       {errorModal && (

@@ -317,33 +317,37 @@ export const GET_PATIENT_ASSESSMENT_LIST = gql`
 export const GET_PATIENT_ASSESSMENT_CATOGARY_LIST_BY_ASSESSMENT_ID = gql`
   query getAssessmentCategoryWithQues($assessment_id: String!) {
     getAssessmentCategoryWithQues(assessment_id: $assessment_id) {
-      _id
-      category {
+      data {
         _id
-        assessment_id
-        created_date
-        name
-        patient_id
-        questions {
+        category {
           _id
-          added_by
-          answer
-          category_id
+          assessment_id
+          name
           created_date
           patient_id
-          question
+          questions {
+            _id
+            answer
+            added_by
+            category_id
+            created_date
+            patient_id
+            question
+            status
+            updated_date
+          }
+          share_status
           status
           updated_date
         }
-        share_status
+        created_date
+        name
+        patient_id
         status
         updated_date
       }
-      created_date
-      name
-      patient_id
-      status
-      updated_date
+      message
+      result
     }
   }
 `;

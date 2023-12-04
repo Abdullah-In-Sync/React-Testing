@@ -241,7 +241,7 @@ export interface TherapistViewMeasuresData {
 }
 
 export interface PatientViewMeasuresData {
-  patientViewMeasure: PatientViewMeasure;
+  patientViewMeasure: { data: PatientViewMeasure };
 }
 export interface PatientViewMeasure {
   _id: string;
@@ -280,7 +280,7 @@ export interface PatientMeasureSubmitTest {
 }
 
 export interface PatientListMeasureData {
-  patientMeasureList?: PatientMeasureListEntity[] | null;
+  patientMeasureList?: { data: PatientMeasureListEntity[] | null };
 }
 
 export interface PatientMeasureListEntity {

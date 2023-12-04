@@ -109,7 +109,7 @@ const MeasureTestPage: NextPage = () => {
           <Loader visible={loadingMeasureData || loader} />
           <TakeTest
             backButtonClick={handleBackButton}
-            measureData={measureData}
+            measureData={measureData.data}
             onPressCancel={onPressCancel}
             submitForm={submitForm}
             confirmRef={confirmRef}
