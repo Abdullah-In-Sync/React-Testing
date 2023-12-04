@@ -124,23 +124,26 @@ export const GET_PATIENT_FEEDBACKLIST_DATA_NEW = gql`
 export const GET_PATIENT_GOAL_DATA = gql`
   query patientGoalList($pttherapy_id: String!) {
     patientGoalList(pttherapy_id: $pttherapy_id) {
-      _id
-      created_date
-      patient_id
-      ptgoal_achievementdate
-      ptgoal_achievementgoal
-      ptgoal_audio
-      ptgoal_file
-      ptgoal_mygoal
-      ptgoal_pregoal
-      ptgoal_reviewdate
-      ptgoal_status
-      ptgoal_success
-      ptsession_id
-      pttherapy_id
-      therapist_id
-      updated_date
-      user_type
+      result
+      data {
+        _id
+        created_date
+        patient_id
+        ptgoal_achievementdate
+        ptgoal_achievementgoal
+        ptgoal_audio
+        ptgoal_file
+        ptgoal_mygoal
+        ptgoal_pregoal
+        ptgoal_reviewdate
+        ptgoal_status
+        ptgoal_success
+        ptsession_id
+        pttherapy_id
+        therapist_id
+        updated_date
+        user_type
+      }
     }
   }
 `;

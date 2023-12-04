@@ -55,7 +55,7 @@ export default [
     label: "Relapse Plan",
     value: "relapse-plan",
     component: <Relapse />,
-    moduleName: "Relapse Plan",
+    moduleName: "Relapse",
   },
 
   {
