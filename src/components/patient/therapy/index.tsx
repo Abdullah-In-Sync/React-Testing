@@ -46,7 +46,7 @@ const TherapyPatientComponent = () => {
       router.push(
         `/patient/therapy/?mainTab=therapy&tab=${modifyTabs[0]["value"]}`
       );
-  }, [modifyTabs[0]["value"], tab]);
+  }, [modifyTabs?.[0]?.["value"], tab]);
 
   /* istanbul ignore next */
   const tabs2 = [

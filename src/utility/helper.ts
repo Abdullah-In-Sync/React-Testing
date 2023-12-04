@@ -3,6 +3,7 @@ import moment from "moment";
 import { getSessionToken } from "./storage";
 import { getUpdatedFileName } from "../lib/helpers/s3";
 import TherapyTabs from "../components/patient/therapy/TherapyTabs";
+import { moduleList } from "../lib/constants";
 
 type SessionObject = {
   label: string;
@@ -197,9 +198,11 @@ export const checkPrivilageAccess = (moduleName, privilege?: any) => {
   const { userTokenId } = getSessionToken();
 
   const { role_access } = parseJwt(userTokenId) || {};
-  if (!role_access) return true;
+  if (!role_access || !moduleName) return true;
+  const moduleObj = moduleList[moduleName];
+  if (!moduleObj) return false;
   const roleAccessData = JSON.parse(role_access);
-  const objArray = roleAccessData.filter((item) => item.name === moduleName);
+  const objArray = roleAccessData.filter((item) => item._id === moduleObj.id);
   const objLen = objArray.length;
   if (objLen === -1) {
     return false;
