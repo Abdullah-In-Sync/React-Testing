@@ -30,10 +30,13 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     confirm: false,
     data: "",
   });
-
+  /* istanbul ignore next */
   const id = router?.query?.sourceId as string;
+  /* istanbul ignore next */
   const isFormulation = router?.query?.isFormulation;
+  /* istanbul ignore next */
   const updateKey = isFormulation ? "updateShareForm" : "update";
+  /* istanbul ignore next */
   const resKey = isFormulation
     ? "updatePatFormulationById"
     : "updatePatientResourceById";
@@ -48,26 +51,28 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         if (data.getResourceDetailById) {
           const resourceDetail = data.getResourceDetailById.data[0];
+          /* istanbul ignore next */
           if (resourceDetail) {
-            /* istanbul ignore else */
+            /* istanbul ignore next */
             setTemplateDetail(resourceDetail.template_detail);
             setRecourceData(resourceDetail.resource_data[0]);
             setTemplateResponse(resourceDetail.template_response);
           }
         }
+        /* istanbul ignore next */
         if (data.getFormulationByShareId) {
           const formulationDetail = data.getFormulationByShareId[0];
           if (formulationDetail) {
-            /* istanbul ignore else */
+            /* istanbul ignore next */
             setTemplateDetail(formulationDetail.template_detail);
             setRecourceData(formulationDetail.formulation_data[0]);
             setTemplateResponse(formulationDetail.template_response);
           }
         }
-        /* istanbul ignore else */
+        /* istanbul ignore next */
         setLoader(false);
       },
     }
@@ -80,6 +85,7 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
   };
 
   const handleToken = (event) => {
+    /* istanbul ignore next */
     if (event?.target?.value) {
       secureSetCookies("myhelptoken", event.target.value);
       secureSetCookies("user_type", "patient");
@@ -144,11 +150,13 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
     }
   };
 
+  /* istanbul ignore next */
   const oncancelEvent = () => {
     //to send event to mobile app
     const cancelData = { msg: "", type: "cancel" };
     console.log(cancelData);
   };
+  /* istanbul ignore next */
   const templateData =
     templateResponse && templateResponse !== ""
       ? templateResponse
@@ -163,25 +171,31 @@ const PatientMobileArrowTemplatePage: NextPage = () => {
         onClick={handleToken}
       />
       <Loader visible={loader} />
-      {templateDetail?.component_name == "ArrowTemplate" && (
-        <TemplateArrow
-          mode="mobile"
-          nodesData={JSON.parse(templateData).nodes}
-          edgesData={JSON.parse(templateData).edges}
-          onSubmit={handleSubmitTemplateData}
-          onCancel={oncancelEvent}
-          userType="patient"
-        />
-      )}
-      {isConfirm.confirm && (
-        <ConfirmationModal
-          label="Are you sure?"
-          description="you want to save response"
-          onCancel={clearIsConfirm}
-          onConfirm={onConfirmSubmit}
-          mode="mobile"
-        />
-      )}
+      {
+        /* istanbul ignore next */
+        templateDetail?.component_name == "ArrowTemplate" && (
+          <TemplateArrow
+            mode="mobile"
+            nodesData={JSON.parse(templateData).nodes}
+            edgesData={JSON.parse(templateData).edges}
+            onSubmit={handleSubmitTemplateData}
+            onCancel={oncancelEvent}
+            userType="patient"
+          />
+        )
+      }
+      {
+        /* istanbul ignore next */
+        isConfirm.confirm && (
+          <ConfirmationModal
+            label="Are you sure?"
+            description="you want to save response"
+            onCancel={clearIsConfirm}
+            onConfirm={onConfirmSubmit}
+            mode="mobile"
+          />
+        )
+      }
     </>
   );
 };

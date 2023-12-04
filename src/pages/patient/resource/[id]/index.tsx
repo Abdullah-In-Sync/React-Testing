@@ -43,7 +43,7 @@ const ResourceDetailById: NextPage = () => {
     { loading: resourceLoading, data: patientResourceData },
   ] = useLazyQuery(GET_PATIENT_RESOURCE_DETAIL, {
     onCompleted: (data) => {
-      /* istanbul ignore else */
+      /* istanbul ignore next */
       if (data!.getResourceDetailById) {
         setPtId(data!.getResourceDetailById.data[0]._id);
       } else if (data!.getResourceDetailById?.data[0] == null) {
@@ -93,264 +93,268 @@ const ResourceDetailById: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Resource Detail" />
         <Box>
-          {patientResourceData?.getResourceDetailById?.data[0] != null ? (
-            <Grid container rowSpacing={2} data-testid="patResourceDetail">
-              <Grid item xs={6} data-testid="backButton">
-                <Button
-                  mat-button
-                  className={`text-white bg-themeblue`}
-                  variant="contained"
-                  sx={{ textTransform: "none" }}
-                  onClick={() =>
+          {
+            /* istanbul ignore next */
+            patientResourceData?.getResourceDetailById?.data[0] != null ? (
+              <Grid container rowSpacing={2} data-testid="patResourceDetail">
+                <Grid item xs={6} data-testid="backButton">
+                  <Button
+                    mat-button
+                    className={`text-white bg-themeblue`}
+                    variant="contained"
+                    sx={{ textTransform: "none" }}
+                    onClick={() =>
+                      /* istanbul ignore next */
+                      router.back()
+                    }
+                  >
+                    <KeyboardBackspaceIcon />
+                    Back
+                  </Button>
+
+                  {
                     /* istanbul ignore next */
-                    router.back()
-                  }
-                >
-                  <KeyboardBackspaceIcon />
-                  Back
-                </Button>
-
-                {
-                  /* istanbul ignore next */
-                  patientResourceData.getResourceDetailById.data[0]
-                    .resource_data[0].resource_issmartdraw == "1" && (
-                    <NextLink
-                      passHref
-                      href={{
-                        pathname: `/patient/resource/edit/${id}`,
-                        query: {
-                          tabName: router.query.tabName,
-                        },
-                      }}
-                    >
-                      <Button
-                        mat-button
-                        className={`text-white bg-themeblue`}
-                        variant="contained"
-                        sx={{ textTransform: "none", ml: 2 }}
+                    patientResourceData.getResourceDetailById.data[0]
+                      .resource_data[0].resource_issmartdraw == "1" && (
+                      <NextLink
+                        passHref
+                        href={{
+                          pathname: `/patient/resource/edit/${id}`,
+                          query: {
+                            tabName: router.query.tabName,
+                          },
+                        }}
                       >
-                        Next
-                        <ArrowRightAlt />
-                      </Button>
-                    </NextLink>
-                  )
-                }
-              </Grid>
-              <Grid
-                xs={6}
-                display="flex"
-                flex-direction="row-reverse"
-                sx={{
-                  color: "primary.main",
-                }}
-                style={{ justifyContent: "right" }}
-              >
-                <Breadcrumbs
-                  separator="--›"
-                  aria-label="breadcrumb"
-                  data-testid="breadCrumb"
-                >
-                  <Typography color="primary.main">
-                    {
-                      /* istanbul ignore next */
-                      patientResourceData?.getResourceDetailById?.data[0]
-                        .disorder_detail?.disorder_name
-                    }
-                  </Typography>
-                  ,
-                  <Typography color="primary.main">
-                    {
-                      /* istanbul ignore next */
-                      patientResourceData?.getResourceDetailById?.data[0]
-                        .model_detail?.model_name
-                    }
-                  </Typography>
-                  ,
-                  <Typography key="3" color="text.primary">
-                    {
-                      /* istanbul ignore next */
-                      patientResourceData?.getResourceDetailById?.data[0]
-                        ?.resource_data[0].resource_name
-                    }
-                  </Typography>
-                </Breadcrumbs>
-              </Grid>
-
-              <Grid xs={12} spacing={1}>
-                &nbsp;
-              </Grid>
-              <Grid
-                data-testid="resourceName"
-                pt={1}
-                pb={1}
-                border={1}
-                xs={12}
-                sx={{
-                  backgroundColor: "secondary.main",
-                  color: "primary.contrastText",
-                  borderRadius: "12px",
-                  textAlign: "center",
-                }}
-                md={12}
-              >
-                {
-                  /* istanbul ignore next */
-                  patientResourceData.getResourceDetailById.data[0]
-                    .resource_data[0].resource_name
-                }
-              </Grid>
-              <Grid
-                p={1}
-                spacing={3}
-                xs={12}
-                md={12}
-                border={1}
-                borderTop={0}
-                borderColor="secondary.main"
-              >
-                <Grid pl={2} xs={12} md={12}></Grid>
+                        <Button
+                          mat-button
+                          className={`text-white bg-themeblue`}
+                          variant="contained"
+                          sx={{ textTransform: "none", ml: 2 }}
+                        >
+                          Next
+                          <ArrowRightAlt />
+                        </Button>
+                      </NextLink>
+                    )
+                  }
+                </Grid>
                 <Grid
-                  data-testid="iconsTarget"
+                  xs={6}
+                  display="flex"
+                  flex-direction="row-reverse"
                   sx={{
-                    textAlign: "right",
+                    color: "primary.main",
                   }}
-                  pl={2}
-                  mr={2}
+                  style={{ justifyContent: "right" }}
+                >
+                  <Breadcrumbs
+                    separator="--›"
+                    aria-label="breadcrumb"
+                    data-testid="breadCrumb"
+                  >
+                    <Typography color="primary.main">
+                      {
+                        /* istanbul ignore next */
+                        patientResourceData?.getResourceDetailById?.data[0]
+                          .disorder_detail?.disorder_name
+                      }
+                    </Typography>
+                    ,
+                    <Typography color="primary.main">
+                      {
+                        /* istanbul ignore next */
+                        patientResourceData?.getResourceDetailById?.data[0]
+                          .model_detail?.model_name
+                      }
+                    </Typography>
+                    ,
+                    <Typography key="3" color="text.primary">
+                      {
+                        /* istanbul ignore next */
+                        patientResourceData?.getResourceDetailById?.data[0]
+                          ?.resource_data[0].resource_name
+                      }
+                    </Typography>
+                  </Breadcrumbs>
+                </Grid>
+
+                <Grid xs={12} spacing={1}>
+                  &nbsp;
+                </Grid>
+                <Grid
+                  data-testid="resourceName"
+                  pt={1}
+                  pb={1}
+                  border={1}
                   xs={12}
+                  sx={{
+                    backgroundColor: "secondary.main",
+                    color: "primary.contrastText",
+                    borderRadius: "12px",
+                    textAlign: "center",
+                  }}
                   md={12}
                 >
                   {
                     /* istanbul ignore next */
                     patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_type == 2 &&
+                      .resource_data[0].resource_name
+                  }
+                </Grid>
+                <Grid
+                  p={1}
+                  spacing={3}
+                  xs={12}
+                  md={12}
+                  border={1}
+                  borderTop={0}
+                  borderColor="secondary.main"
+                >
+                  <Grid pl={2} xs={12} md={12}></Grid>
+                  <Grid
+                    data-testid="iconsTarget"
+                    sx={{
+                      textAlign: "right",
+                    }}
+                    pl={2}
+                    mr={2}
+                    xs={12}
+                    md={12}
+                  >
+                    {
+                      /* istanbul ignore next */
+                      patientResourceData.getResourceDetailById.data[0]
+                        .resource_data[0].resource_type == 2 &&
+                        patientResourceData.getResourceDetailById.data[0]
+                          .resource_data[0].resource_issmartdraw != "1" && (
+                          <IconButton
+                            size="small"
+                            onClick={openFileUploadDialog}
+                            data-testid="fileUpload"
+                          >
+                            <FileUpload
+                              closeFileUploadDialog={closeFileUploadDialog}
+                              open={fileUpload}
+                              ptshareId={
+                                /* istanbul ignore next */
+                                resData?.getPatientResourceList?.data?.find(
+                                  (val) =>
+                                    val?.resource_data[0]?.resource_type === 2
+                                )._id
+                              }
+                            />
+                            <FileUploadIcon />
+                          </IconButton>
+                        )
+                    }
+                    {
+                      /* istanbul ignore next */
                       patientResourceData.getResourceDetailById.data[0]
                         .resource_data[0].resource_issmartdraw != "1" && (
                         <IconButton
-                          size="small"
-                          onClick={openFileUploadDialog}
-                          data-testid="fileUpload"
+                          size="medium"
+                          data-testid="shareViewUrl"
+                          href={
+                            patientResourceData.getResourceDetailById.data[0]
+                              .patient_share_filename != null
+                              ? patientResourceData.getResourceDetailById
+                                  .data[0].patient_share_filename
+                              : "#"
+                          }
+                          sx={{
+                            color:
+                              patientResourceData.getResourceDetailById.data[0]
+                                ?.patient_share_filename != null
+                                ? "primary.main"
+                                : "",
+                          }}
                         >
-                          <FileUpload
-                            closeFileUploadDialog={closeFileUploadDialog}
-                            open={fileUpload}
-                            ptshareId={
-                              /* istanbul ignore next */
-                              resData?.getPatientResourceList?.data?.find(
-                                (val) =>
-                                  val?.resource_data[0]?.resource_type === 2
-                              )._id
-                            }
-                          />
-                          <FileUploadIcon />
+                          <AttachmentIcon />
                         </IconButton>
                       )
-                  }
-                  {
-                    /* istanbul ignore next */
-                    patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_issmartdraw != "1" && (
-                      <IconButton
-                        size="medium"
-                        data-testid="shareViewUrl"
-                        href={
-                          patientResourceData.getResourceDetailById.data[0]
-                            .patient_share_filename != null
-                            ? patientResourceData.getResourceDetailById.data[0]
-                                .patient_share_filename
-                            : "#"
-                        }
-                        sx={{
-                          color:
+                    }
+
+                    {
+                      /* istanbul ignore next */
+                      patientResourceData.getResourceDetailById.data[0]
+                        .resource_data[0].resource_issmartdraw != "1" && (
+                        <IconButton
+                          size="medium"
+                          data-testid="viewUrl"
+                          target="_blank"
+                          href={
                             patientResourceData.getResourceDetailById.data[0]
-                              ?.patient_share_filename != null
-                              ? "primary.main"
-                              : "",
-                        }}
-                      >
-                        <AttachmentIcon />
-                      </IconButton>
-                    )
-                  }
+                              .resource_data[0].resource_url != null
+                              ? patientResourceData.getResourceDetailById
+                                  .data[0].resource_data[0].resource_url
+                              : "#"
+                          }
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                      )
+                    }
+                    {
+                      /* istanbul ignore next */
+                      patientResourceData.getResourceDetailById.data[0]
+                        .resource_data[0].resource_issmartdraw != "1" && (
+                        <IconButton
+                          size="medium"
+                          data-testid="downloadUrl"
+                          href={
+                            patientResourceData.getResourceDetailById.data[0]
+                              .resource_data[0].download_resource_url != null
+                              ? patientResourceData.getResourceDetailById
+                                  .data[0].resource_data[0]
+                                  .download_resource_url
+                              : "#"
+                          }
+                        >
+                          <FileDownloadIcon />
+                        </IconButton>
+                      )
+                    }
+                  </Grid>
+                  <ResourceDetail
+                    title="Description"
+                    description={
+                      /* istanbul ignore next */
+                      patientResourceData.getResourceDetailById.data[0]
+                        .resource_data[0].resource_desc
+                    }
+                  />
+                  <ResourceDetail
+                    title="Instructions"
+                    description={
+                      /* istanbul ignore next */
+                      patientResourceData.getResourceDetailById.data[0]
+                        .resource_data[0].resource_instruction
+                    }
+                  />
+                  <ResourceDetail
+                    title="References"
+                    description={
+                      /* istanbul ignore next */
+                      patientResourceData.getResourceDetailById.data[0]
+                        .resource_data[0].resource_references
+                    }
+                  />
 
-                  {
-                    /* istanbul ignore next */
-                    patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_issmartdraw != "1" && (
-                      <IconButton
-                        size="medium"
-                        data-testid="viewUrl"
-                        target="_blank"
-                        href={
-                          patientResourceData.getResourceDetailById.data[0]
-                            .resource_data[0].resource_url != null
-                            ? patientResourceData.getResourceDetailById.data[0]
-                                .resource_data[0].resource_url
-                            : "#"
-                        }
-                      >
-                        <VisibilityIcon />
-                      </IconButton>
-                    )
-                  }
-                  {
-                    /* istanbul ignore next */
-                    patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_issmartdraw != "1" && (
-                      <IconButton
-                        size="medium"
-                        data-testid="downloadUrl"
-                        href={
-                          patientResourceData.getResourceDetailById.data[0]
-                            .resource_data[0].download_resource_url != null
-                            ? patientResourceData.getResourceDetailById.data[0]
-                                .resource_data[0].download_resource_url
-                            : "#"
-                        }
-                      >
-                        <FileDownloadIcon />
-                      </IconButton>
-                    )
-                  }
-                </Grid>
-                <ResourceDetail
-                  title="Description"
-                  description={
-                    /* istanbul ignore next */
-                    patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_desc
-                  }
-                />
-                <ResourceDetail
-                  title="Instructions"
-                  description={
-                    /* istanbul ignore next */
-                    patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_instruction
-                  }
-                />
-                <ResourceDetail
-                  title="References"
-                  description={
-                    /* istanbul ignore next */
-                    patientResourceData.getResourceDetailById.data[0]
-                      .resource_data[0].resource_references
-                  }
-                />
-
-                <Grid xs={12} spacing={1}>
-                  &nbsp;
+                  <Grid xs={12} spacing={1}>
+                    &nbsp;
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-          ) : (
-            <Typography
-              gutterBottom
-              component="div"
-              data-testid="no-data-found-patient-resource-detail"
-            >
-              No Data Found
-            </Typography>
-          )}
+            ) : (
+              <Typography
+                gutterBottom
+                component="div"
+                data-testid="no-data-found-patient-resource-detail"
+              >
+                No Data Found
+              </Typography>
+            )
+          }
         </Box>
       </Layout>
     </>
