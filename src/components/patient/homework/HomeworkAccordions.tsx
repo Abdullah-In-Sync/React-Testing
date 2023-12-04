@@ -18,11 +18,13 @@ import * as homeworkListTypes from "./types";
 
 import * as Yup from "yup";
 import ResponseTextArea from "./ResponseTextArea";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
   homeworkList,
   handleSubmit,
 }) => {
+  const isUpdate = checkPrivilageAccess("Homework", "Update response");
   const router = useRouter();
   const styles = useStyles();
   const validationSchema = Yup.object().shape({
@@ -85,11 +87,11 @@ const HomeWorkAccordions: React.FC<homeworkListTypes.HomeworkListProps> = ({
                   rows="6"
                   id={`therapy_response_${index + 1}`}
                   placeholder="Please type response here"
-                  disabled={completeStatus}
+                  disabled={!isUpdate || completeStatus}
                 />
               </div>
             </div>
-            {completeStatus != 1 && (
+            {isUpdate && completeStatus != 1 && (
               <div className={styles.saveButtonWrapper}>
                 <Button
                   disabled={isSubmitting}
