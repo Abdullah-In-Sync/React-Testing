@@ -293,19 +293,23 @@ export const UPDATE_SAFETY_PLAN_QUESTION_DATA = gql`
 export const UPDATE_PATIENT_HOMEWORK_BY_ID = gql`
   mutation ($ptHomeworkId: ID!, $update: UpdateHomeworkInput!) {
     updatePatientHomeworkById(update: $update, ptHomeworkId: $ptHomeworkId) {
-      therapy_id
-      ptsession_id
-      therapist_id
-      patient_id
-      pthomewrk_task
-      pthomewrk_status
-      pthomewrk_date
-      pthomewrk_resp
-      therapist_resp
-      resource_id
-      ptshareres_id
-      complete_status
-      created_date
+      data {
+        therapy_id
+        ptsession_id
+        therapist_id
+        patient_id
+        pthomewrk_task
+        pthomewrk_status
+        pthomewrk_date
+        pthomewrk_resp
+        therapist_resp
+        resource_id
+        ptshareres_id
+        complete_status
+        created_date
+      }
+      result
+      message
     }
   }
 `;
