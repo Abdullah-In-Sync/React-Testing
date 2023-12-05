@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Link from "next/link";
@@ -35,6 +34,7 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
 
   const isViewResource = checkPrivilageAccess("Resource", "View");
 
+  /* istanbul ignore next */
   const fields = [
     {
       key: "created_date",
@@ -90,9 +90,12 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.data?.filter(
-            (val) => val?.resource_data[0]?.resource_type === resourceType
-          )}
+          data={
+            /* istanbul ignore next */
+            resData?.getPatientResourceList?.data?.filter(
+              (val) => val?.resource_data[0]?.resource_type === resourceType
+            )
+          }
           currentPage={page}
           onPageChange={(page) => setPage(page)}
           loader={loader}
