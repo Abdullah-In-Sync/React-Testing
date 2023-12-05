@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Link from "next/link";
@@ -9,6 +8,7 @@ import { GET_PATIENT_RESOURCE_DATA } from "../../../graphql/query/resource";
 import Loader from "../../common/Loader";
 import ContentHeader from "../../common/ContentHeader";
 import dynamic from "next/dynamic";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const TableGenerator = dynamic(import("../../common/TableGenerator"), {
   ssr: false,
@@ -32,6 +32,9 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
     getPatientResourceData();
   }, []);
 
+  const isViewResource = checkPrivilageAccess("Resource", "View");
+
+  /* istanbul ignore next */
   const fields = [
     {
       key: "created_date",
@@ -55,21 +58,28 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
       key: "actions",
       columnName: "Actions",
       visible: true,
-      render: (_, value) => (
-        <Link
-          href={{
-            pathname: `/patient/resource/${value._id}`,
-            query: {
-              tabName: tabName,
-            },
-          }}
-          passHref
-        >
-          <IconButton size="small" data-testid={`viewIcon_${value._id}`}>
-            <VisibilityIcon />
-          </IconButton>
-        </Link>
-      ),
+      render: (_, value) => {
+        /* istanbul ignore next */
+        if (isViewResource === true || isViewResource === undefined) {
+          return (
+            <Link
+              href={{
+                pathname: `/patient/resource/${value._id}`,
+                query: {
+                  tabName: tabName,
+                },
+              }}
+              passHref
+            >
+              <IconButton size="small" data-testid={`viewIcon_${value._id}`}>
+                <VisibilityIcon />
+              </IconButton>
+            </Link>
+          );
+        } else {
+          return null;
+        }
+      },
     },
   ];
 
@@ -80,9 +90,12 @@ const CommonResourceComponent = ({ resourceType, tabName }) => {
       <Box>
         <TableGenerator
           fields={fields}
-          data={resData?.getPatientResourceList?.data?.filter(
-            (val) => val?.resource_data[0]?.resource_type === resourceType
-          )}
+          data={
+            /* istanbul ignore next */
+            resData?.getPatientResourceList?.data?.filter(
+              (val) => val?.resource_data[0]?.resource_type === resourceType
+            )
+          }
           currentPage={page}
           onPageChange={(page) => setPage(page)}
           loader={loader}

@@ -310,49 +310,80 @@ export const GET_PATIENT_HOME_DATA = gql`
 export const GET_PATIENT_RESOURCE_DETAIL = gql`
   query getResourceDetailById($ptsharresId: String!) {
     getResourceDetailById(ptsharresId: $ptsharresId) {
-      _id
-      ptsharres_session
-      ptsharres_status
-      created_date
-      ptsharres_from
-      ptsharres_subfrom
-      share_from
-      resource_upload
-      patient_share_filename
-      download_patient_filename_url
-      patient_id
-      resource_id
-      resource_data {
-        resource_name
-        resource_type
-        resource_desc
-        resource_instruction
-        resource_references
-        resource_filename
-        resource_url
-        download_resource_url
-        resource_issmartdraw
-        template_data
-      }
-      disorder_detail {
-        _id
-        disorder_name
-      }
-      model_detail {
-        _id
-        model_name
-      }
-      template_detail {
-        component_name
+      data {
         _id
         created_date
-        name
+        disorder_detail {
+          _id
+          created_date
+          disorder_name
+          disorder_status
+          therapy_id
+          user_id
+          user_type
+        }
+        download_patient_filename_url
+        model_detail {
+          _id
+          disorder_id
+          created_date
+          model_name
+          model_status
+          user_id
+          user_type
+        }
+        patient_id
+        patient_share_filename
+        ptsharres_from
+        ptsharres_session
+        ptsharres_status
+        ptsharres_subfrom
+        resource_data {
+          _id
+          agenda_id
+          category_id
+          created_date
+          disorder_id
+          download_resource_url
+          model_id
+          org_id
+          resource_avail_onlyme
+          resource_avail_therapist
+          resource_desc
+          resource_filename
+          resource_instruction
+          resource_isformualation
+          resource_issmartdraw
+          resource_name
+          resource_references
+          resource_returnurl
+          resource_session_no
+          resource_status
+          resource_type
+          resource_url
+          template_data
+          template_id
+          updated_date
+          user_id
+          user_type
+        }
+        resource_id
+        resource_upload
+        share_from
+        template_detail {
+          _id
+          category
+          component_name
+          created_date
+          name
+          updated_date
+        }
+        template_id
+        template_response
         updated_date
-        category
       }
-      template_id
-      template_response
-      updated_date
+      message
+      result
     }
   }
 `;
@@ -360,21 +391,80 @@ export const GET_PATIENT_RESOURCE_DETAIL = gql`
 export const GET_PATIENT_RESOURCE_TEMPLATE = gql`
   query getResourceDetailById($ptsharresId: String!) {
     getResourceDetailById(ptsharresId: $ptsharresId) {
-      created_date
-      resource_data {
-        template_data
-        resource_issmartdraw
-        resource_name
-        resource_type
-        template_id
-      }
-      template_detail {
-        component_name
-        category
+      data {
         _id
-        name
+        created_date
+        disorder_detail {
+          _id
+          created_date
+          disorder_name
+          disorder_status
+          therapy_id
+          user_id
+          user_type
+        }
+        download_patient_filename_url
+        model_detail {
+          _id
+          disorder_id
+          created_date
+          model_name
+          model_status
+          user_id
+          user_type
+        }
+        patient_id
+        patient_share_filename
+        ptsharres_from
+        ptsharres_session
+        ptsharres_status
+        ptsharres_subfrom
+        resource_data {
+          _id
+          agenda_id
+          category_id
+          created_date
+          disorder_id
+          download_resource_url
+          model_id
+          org_id
+          resource_avail_onlyme
+          resource_avail_therapist
+          resource_desc
+          resource_filename
+          resource_instruction
+          resource_isformualation
+          resource_issmartdraw
+          resource_name
+          resource_references
+          resource_returnurl
+          resource_session_no
+          resource_status
+          resource_type
+          resource_url
+          template_data
+          template_id
+          updated_date
+          user_id
+          user_type
+        }
+        resource_id
+        resource_upload
+        share_from
+        template_detail {
+          _id
+          category
+          component_name
+          created_date
+          name
+          updated_date
+        }
+        template_id
+        template_response
+        updated_date
       }
-      template_response
+      message
+      result
     }
   }
 `;

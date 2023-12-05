@@ -65,6 +65,8 @@ const WorkSheet = () => {
   };
 
   const isTrue = checkPrivilageAccess("Resource", "Download");
+  const isViewResource = checkPrivilageAccess("Resource", "View");
+  const isEditResource = checkPrivilageAccess("Resource", "Update response");
 
   //**  TABLE DATA COLUMNS **//
   /* istanbul ignore next */
@@ -127,34 +129,48 @@ const WorkSheet = () => {
               <AttachFileIcon />
             </IconButton>
           )}
-          <Link
-            href={{
-              pathname: "/patient/resource/" + value._id,
-              query: {
-                tabName: "work-sheet",
-              },
-            }}
-            passHref
-          >
-            <IconButton size="small" data-testid={"viewIcon_" + value._id}>
-              <VisibilityIcon />
-            </IconButton>
-          </Link>
-          {checkIsSmart(value) && (
-            <Link
-              href={{
-                pathname: "/patient/resource/edit/" + value._id,
-                query: {
-                  from: "/patient/resource/?tabName=work-sheet",
-                },
-              }}
-              passHref
-            >
-              <IconButton size="small" data-testid={`editIcon_` + value._id}>
-                <CreateIcon />
-              </IconButton>
-            </Link>
-          )}
+
+          {
+            /* istanbul ignore next */
+            (isViewResource === true || isViewResource === undefined) && (
+              <Link
+                href={{
+                  pathname: "/patient/resource/" + value._id,
+                  query: {
+                    tabName: "work-sheet",
+                  },
+                }}
+                passHref
+              >
+                <IconButton size="small" data-testid={"viewIcon_" + value._id}>
+                  <VisibilityIcon />
+                </IconButton>
+              </Link>
+            )
+          }
+
+          {
+            /* istanbul ignore next */
+            (isEditResource === true || isEditResource === undefined) &&
+              checkIsSmart(value) && (
+                <Link
+                  href={{
+                    pathname: "/patient/resource/edit/" + value._id,
+                    query: {
+                      from: "/patient/resource/?tabName=work-sheet",
+                    },
+                  }}
+                  passHref
+                >
+                  <IconButton
+                    size="small"
+                    data-testid={`editIcon_` + value._id}
+                  >
+                    <CreateIcon />
+                  </IconButton>
+                </Link>
+              )
+          }
           {
             /* istanbul ignore next */
             (isTrue === true || isTrue === undefined) && !checkIsSmart(value) && (
