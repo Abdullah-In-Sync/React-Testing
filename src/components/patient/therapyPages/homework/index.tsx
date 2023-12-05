@@ -30,7 +30,9 @@ const Homework: NextPage = () => {
   const [
     getPatientHomeworkList,
     {
-      data: { getHomeworksByPatientId: homeworkList = undefined } = {},
+      data: {
+        getHomeworksByPatientId: { data: homeworkList = undefined } = {},
+      } = {},
       loading: loadingHomeworkList,
     },
   ] = useLazyQuery(GET_PATIENT_HOMEWORK_LIST, {
@@ -77,9 +79,9 @@ const Homework: NextPage = () => {
             pthomewrk_resp: response,
           },
         },
-        onCompleted: () => {
-          /* istanbul ignore else */
-          setSuccessModal(true);
+        onCompleted: (data) => {
+          const { result } = data;
+          if (result) setSuccessModal(true);
         },
       });
     } catch (e) {

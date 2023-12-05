@@ -24,7 +24,7 @@ import {
   superadmin_routes,
   therapistRoutes,
 } from "../../utility/navItems";
-import { getSessionToken } from "../../utility/storage";
+import { clearSession, getSessionToken } from "../../utility/storage";
 import ChangePassword from "../changePassword/ChangePassword";
 import { ConfirmInfoElement } from "../common/CustomModal/InfoModal";
 import { useRouter } from "next/router";
@@ -75,8 +75,10 @@ const NavBar = () => {
         })
       );
     else if (label == "expired") {
-      enqueueSnackbar("session expired, please login again!", {
-        variant: "error",
+      clearSession(() => {
+        return enqueueSnackbar("session expired, please login again!", {
+          variant: "error",
+        });
       });
       return router.replace("/account");
     } else if (label === "changePassword") return onPressChangePassword();
