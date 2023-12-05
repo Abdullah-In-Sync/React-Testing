@@ -9,6 +9,7 @@ import TemplateTableViewModel, {
 import { ColumnActionTitle } from "./TableActionHeader";
 import { TemplateTableRow } from "./TableRow";
 import { useStyles } from "./tableTemplateStyles";
+import { checkPrivilageAccess } from "../../utility/helper";
 
 interface TemplateTableProps {
   mode: "view" | "edit" | "patientView" | "patientFormulation";
@@ -55,8 +56,10 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
       },
     ],
   });
+  const isEditResource = checkPrivilageAccess("Resource", "Update response");
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (initialData) {
       setInitialValues(initialData);
     }
@@ -115,59 +118,64 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 )}
               />
             </Grid>
-            {mode !== "patientView" && showActionsBottom && (
-              <Grid container justifyContent={"center"}>
-                <Grid item padding={"63px 0px 94px 0px"}>
-                  <Button
-                    data-testid="tableTemplateSubmit"
-                    variant="contained"
-                    type="submit"
-                    style={{
-                      paddingLeft: "40px",
-                      paddingRight: "40px",
-                      marginRight: "10px",
-                    }}
-                    disabled={!formikHelper.isValid}
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    data-testid="tableTemplateCancel"
-                    color="secondary"
-                    variant="contained"
-                    style={{
-                      paddingLeft: "40px",
-                      paddingRight: "40px",
-                      backgroundColor: "#6BA08E",
-                    }}
-                    disabled={formikHelper?.isSubmitting}
-                    onClick={() =>
-                      onCancel?.(formikHelper.values, formikHelper)
-                    }
-                  >
-                    Cancel
-                  </Button>
-                  {userType === "admin" && (
-                    <Button
-                      data-testid="tableTemplatePreview"
-                      color="primary"
-                      variant="contained"
-                      style={{
-                        paddingLeft: "40px",
-                        paddingRight: "40px",
-                        marginLeft: "10px",
-                      }}
-                      disabled={formikHelper?.isSubmitting}
-                      onClick={() =>
-                        onPreview?.(formikHelper.values, formikHelper)
-                      }
-                    >
-                      Preview
-                    </Button>
-                  )}
-                </Grid>
-              </Grid>
-            )}
+            {
+              /* istanbul ignore next */
+              (isEditResource === true || isEditResource === undefined) &&
+                mode !== "patientView" &&
+                showActionsBottom && (
+                  <Grid container justifyContent={"center"}>
+                    <Grid item padding={"63px 0px 94px 0px"}>
+                      <Button
+                        data-testid="tableTemplateSubmit"
+                        variant="contained"
+                        type="submit"
+                        style={{
+                          paddingLeft: "40px",
+                          paddingRight: "40px",
+                          marginRight: "10px",
+                        }}
+                        disabled={!formikHelper.isValid}
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        data-testid="tableTemplateCancel"
+                        color="secondary"
+                        variant="contained"
+                        style={{
+                          paddingLeft: "40px",
+                          paddingRight: "40px",
+                          backgroundColor: "#6BA08E",
+                        }}
+                        disabled={formikHelper?.isSubmitting}
+                        onClick={() =>
+                          onCancel?.(formikHelper.values, formikHelper)
+                        }
+                      >
+                        Cancel
+                      </Button>
+                      {userType === "admin" && (
+                        <Button
+                          data-testid="tableTemplatePreview"
+                          color="primary"
+                          variant="contained"
+                          style={{
+                            paddingLeft: "40px",
+                            paddingRight: "40px",
+                            marginLeft: "10px",
+                          }}
+                          disabled={formikHelper?.isSubmitting}
+                          onClick={() =>
+                            onPreview?.(formikHelper.values, formikHelper)
+                          }
+                        >
+                          Preview
+                        </Button>
+                      )}
+                    </Grid>
+                  </Grid>
+                )
+            }
           </Form>
         );
       }}

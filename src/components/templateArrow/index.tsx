@@ -286,6 +286,7 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
       </Box>
       {
         /* istanbul ignore next */
+
         mod !== "mobile" &&
           checkPrivilageAccess("Formulation", "Update response") && (
             <Grid container justifyContent={"center"}>
