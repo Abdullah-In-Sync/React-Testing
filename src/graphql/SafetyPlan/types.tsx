@@ -94,5 +94,5 @@ export interface QuestionsEntity {
 }
 
 export interface GetPatientSafetyPlansRes {
-  getPatientSafetyPlans: ViewSafetyPlanById[];
+  getPatientSafetyPlans: { data: ViewSafetyPlanById[] };
 }

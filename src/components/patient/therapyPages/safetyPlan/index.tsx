@@ -27,13 +27,18 @@ const PatientById: NextPage = () => {
         variables: {
           quesData: JSON.stringify(data),
         },
-        onCompleted: () => {
-          setLoader(false);
-          callback?.();
-          /* istanbul ignore next */
-          enqueueSnackbar("Your response has been submitted successfully.", {
-            variant: "success",
-          });
+        onCompleted: (data) => {
+          const {
+            answerSafetyPlanByPatientId: { result },
+          } = data;
+          if (result) {
+            setLoader(false);
+            callback?.();
+            /* istanbul ignore next */
+            enqueueSnackbar("Your response has been submitted successfully.", {
+              variant: "success",
+            });
+          }
         },
       });
     } catch (e) {

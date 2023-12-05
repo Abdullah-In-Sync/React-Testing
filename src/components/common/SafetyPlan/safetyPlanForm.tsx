@@ -5,6 +5,7 @@ import { ViewSafetyPlanById } from "../../../graphql/SafetyPlan/types";
 import { SafetyPlanQuestion } from "./safetyPlanQuestion";
 import { useStyles } from "./safetyPlanStyle";
 import * as yup from "yup";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 type Props = {
   safetyPlan: ViewSafetyPlanById;
@@ -18,6 +19,7 @@ export const SafetyPlanForm: FC<Props> = ({
   onCancel,
 }) => {
   const classis = useStyles();
+  const isSafetyPlan = checkPrivilageAccess("Safety Plan", "Update response");
 
   return (
     <Formik<ViewSafetyPlanById>
@@ -36,7 +38,7 @@ export const SafetyPlanForm: FC<Props> = ({
       })}
     >
       {(formikHelper) => (
-        <Form>
+        <Form className={`${isSafetyPlan || "disbledFields"}`}>
           <FieldArray
             name="questions"
             render={() => (
@@ -74,37 +76,39 @@ export const SafetyPlanForm: FC<Props> = ({
                     formikHelper={formikHelper}
                   />
                 ))}
-                <Box
-                  marginTop={"32px"}
-                  display="flex"
-                  justifyContent={"center"}
-                >
-                  {formikHelper?.values?.questions?.length > 0 && (
+                {isSafetyPlan && (
+                  <Box
+                    marginTop={"32px"}
+                    display="flex"
+                    justifyContent={"center"}
+                  >
+                    {formikHelper?.values?.questions?.length > 0 && (
+                      <Button
+                        data-testid="submit-form"
+                        variant="contained"
+                        type="submit"
+                        style={{
+                          padding: "5px 20px 5px 20px",
+                        }}
+                        // disabled={!formikHelper.isValid}
+                      >
+                        Submit
+                      </Button>
+                    )}
                     <Button
-                      data-testid="submit-form"
+                      data-testid="cancel-form"
+                      color="secondary"
                       variant="contained"
-                      type="submit"
                       style={{
+                        margin: "0px 27px 0px 27px",
                         padding: "5px 20px 5px 20px",
                       }}
-                      // disabled={!formikHelper.isValid}
+                      onClick={() => onCancel?.(formikHelper)}
                     >
-                      Submit
+                      Cancel
                     </Button>
-                  )}
-                  <Button
-                    data-testid="cancel-form"
-                    color="secondary"
-                    variant="contained"
-                    style={{
-                      margin: "0px 27px 0px 27px",
-                      padding: "5px 20px 5px 20px",
-                    }}
-                    onClick={() => onCancel?.(formikHelper)}
-                  >
-                    Cancel
-                  </Button>
-                </Box>
+                  </Box>
+                )}
               </Box>
             )}
           />

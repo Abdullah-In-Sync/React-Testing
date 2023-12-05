@@ -62,7 +62,7 @@ const SafetyPlan = (props: propTypes) => {
   };
   return (
     <>
-      {safetyPlanData?.getPatientSafetyPlans?.map((s) => (
+      {safetyPlanData?.getPatientSafetyPlans?.data?.map((s) => (
         <Accordion
           key={s._id}
           title={s.name}
@@ -78,7 +78,7 @@ const SafetyPlan = (props: propTypes) => {
           }}
         />
       ))}
-      {!loading && !safetyPlanData?.getPatientSafetyPlans?.length && (
+      {!loading && !safetyPlanData?.getPatientSafetyPlans?.data?.length && (
         <Box marginTop={"10px"}>No data found</Box>
       )}
       <SureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
