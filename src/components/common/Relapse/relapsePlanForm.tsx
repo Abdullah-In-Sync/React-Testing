@@ -10,12 +10,14 @@ type Props = {
   relapsePlan: GetPatientRelapsePlan;
   onSubmit: (relapsePlan: GetPatientRelapsePlan) => void;
   onCancel?: (formikHelper: FormikProps<GetPatientRelapsePlan>) => void;
+  isEditRelapse?: any;
 };
 
 export const RelapsePlanForm: FC<Props> = ({
   relapsePlan,
   onSubmit,
   onCancel,
+  isEditRelapse,
 }) => {
   const classis = useStyles();
 
@@ -79,33 +81,34 @@ export const RelapsePlanForm: FC<Props> = ({
                   display="flex"
                   justifyContent={"center"}
                 >
-                  {formikHelper?.values?.questions?.length > 0 && (
-                    <Box>
-                      <Button
-                        data-testid="submit-form"
-                        variant="contained"
-                        type="submit"
-                        style={{
-                          padding: "5px 20px 5px 20px",
-                        }}
-                        // disabled={!formikHelper.isValid}
-                      >
-                        Submit
-                      </Button>
-                      <Button
-                        data-testid="cancel-form"
-                        color="secondary"
-                        variant="contained"
-                        style={{
-                          margin: "0px 27px 0px 27px",
-                          padding: "5px 20px 5px 20px",
-                        }}
-                        onClick={() => onCancel?.(formikHelper)}
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  )}
+                  {(isEditRelapse === true || isEditRelapse === undefined) &&
+                    formikHelper?.values?.questions?.length > 0 && (
+                      <Box>
+                        <Button
+                          data-testid="submit-form"
+                          variant="contained"
+                          type="submit"
+                          style={{
+                            padding: "5px 20px 5px 20px",
+                          }}
+                          // disabled={!formikHelper.isValid}
+                        >
+                          Submit
+                        </Button>
+                        <Button
+                          data-testid="cancel-form"
+                          color="secondary"
+                          variant="contained"
+                          style={{
+                            margin: "0px 27px 0px 27px",
+                            padding: "5px 20px 5px 20px",
+                          }}
+                          onClick={() => onCancel?.(formikHelper)}
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                    )}
                 </Box>
               </Box>
             )}
