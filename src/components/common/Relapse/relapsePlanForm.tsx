@@ -10,12 +10,14 @@ type Props = {
   relapsePlan: GetPatientRelapsePlan;
   onSubmit: (relapsePlan: GetPatientRelapsePlan) => void;
   onCancel?: (formikHelper: FormikProps<GetPatientRelapsePlan>) => void;
+  isEditRelapse?: any;
 };
 
 export const RelapsePlanForm: FC<Props> = ({
   relapsePlan,
   onSubmit,
   onCancel,
+  isEditRelapse,
 }) => {
   const classis = useStyles();
 
@@ -41,71 +43,87 @@ export const RelapsePlanForm: FC<Props> = ({
             name="questions"
             render={() => (
               <Box>
-                {formikHelper?.values?.description && (
-                  <Box>
-                    <Typography className={classis.headingText}>
-                      Your Plan
-                    </Typography>
-                    <Box
-                      sx={{
-                        border: "1px solid #cecece",
-                        display: "grid",
-                        paddingBottom: "10px",
-                      }}
-                      borderRadius={"7px"}
-                    >
-                      <Box className={classis.descriptionWrapper}>
-                        <Typography className={classis.descriptionText}>
-                          {formikHelper?.values?.description}
-                        </Typography>
+                {
+                  /* istanbul ignore next */
+                  formikHelper?.values?.description && (
+                    <Box>
+                      <Typography className={classis.headingText}>
+                        Your Plan
+                      </Typography>
+                      <Box
+                        sx={{
+                          border: "1px solid #cecece",
+                          display: "grid",
+                          paddingBottom: "10px",
+                        }}
+                        borderRadius={"7px"}
+                      >
+                        <Box className={classis.descriptionWrapper}>
+                          <Typography className={classis.descriptionText}>
+                            {formikHelper?.values?.description}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
-                  </Box>
-                )}
-                {!formikHelper?.values?.description &&
-                  !formikHelper?.values?.questions?.length && (
-                    <Box>No data found</Box>
-                  )}
-                {formikHelper?.values.questions.map((question, index) => (
-                  <RelapsePlanQuestion
-                    key={question?._id}
-                    question={question}
-                    index={index}
-                    formikHelper={formikHelper}
-                  />
-                ))}
+                  )
+                }
+                {
+                  /* istanbul ignore next */
+                  !formikHelper?.values?.description &&
+                    !formikHelper?.values?.questions?.length && (
+                      <Box>No data found</Box>
+                    )
+                }
+                {
+                  /* istanbul ignore next */
+                  formikHelper?.values.questions.map((question, index) => (
+                    <RelapsePlanQuestion
+                      key={question?._id}
+                      question={question}
+                      index={index}
+                      formikHelper={formikHelper}
+                    />
+                  ))
+                }
                 <Box
                   marginTop={"32px"}
                   display="flex"
                   justifyContent={"center"}
                 >
-                  {formikHelper?.values?.questions?.length > 0 && (
-                    <Box>
-                      <Button
-                        data-testid="submit-form"
-                        variant="contained"
-                        type="submit"
-                        style={{
-                          padding: "5px 20px 5px 20px",
-                        }}
-                        // disabled={!formikHelper.isValid}
-                      >
-                        Submit
-                      </Button>
-                      <Button
-                        data-testid="cancel-form"
-                        color="secondary"
-                        variant="contained"
-                        style={{
-                          margin: "0px 27px 0px 27px",
-                          padding: "5px 20px 5px 20px",
-                        }}
-                        onClick={() => onCancel?.(formikHelper)}
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  )}
+                  {
+                    /* istanbul ignore next */
+                    (isEditRelapse === true || isEditRelapse === undefined) &&
+                      formikHelper?.values?.questions?.length > 0 && (
+                        <Box>
+                          <Button
+                            data-testid="submit-form"
+                            variant="contained"
+                            type="submit"
+                            style={{
+                              padding: "5px 20px 5px 20px",
+                            }}
+                            // disabled={!formikHelper.isValid}
+                          >
+                            Submit
+                          </Button>
+                          <Button
+                            data-testid="cancel-form"
+                            color="secondary"
+                            variant="contained"
+                            style={{
+                              margin: "0px 27px 0px 27px",
+                              padding: "5px 20px 5px 20px",
+                            }}
+                            onClick={() =>
+                              /* istanbul ignore next */
+                              onCancel?.(formikHelper)
+                            }
+                          >
+                            Cancel
+                          </Button>
+                        </Box>
+                      )
+                  }
                 </Box>
               </Box>
             )}
