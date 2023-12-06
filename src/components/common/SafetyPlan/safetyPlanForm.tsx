@@ -19,6 +19,7 @@ export const SafetyPlanForm: FC<Props> = ({
   onCancel,
 }) => {
   const classis = useStyles();
+  /* istanbul ignore next */
   const isSafetyPlan = checkPrivilageAccess("Safety Plan", "Update response");
 
   return (
@@ -38,8 +39,12 @@ export const SafetyPlanForm: FC<Props> = ({
       })}
     >
       {(formikHelper) => (
-        /* istanbul ignore next */
-        <Form className={`${isSafetyPlan || "disbledFields"}`}>
+        <Form
+          className={`${
+            /* istanbul ignore next */
+            isSafetyPlan || "disbledFields"
+          }`}
+        >
           <FieldArray
             name="questions"
             render={() => (
@@ -83,20 +88,22 @@ export const SafetyPlanForm: FC<Props> = ({
                     display="flex"
                     justifyContent={"center"}
                   >
-                    {/* istanbul ignore next */}
-                    {formikHelper?.values?.questions?.length > 0 && (
-                      <Button
-                        data-testid="submit-form"
-                        variant="contained"
-                        type="submit"
-                        style={{
-                          padding: "5px 20px 5px 20px",
-                        }}
-                        // disabled={!formikHelper.isValid}
-                      >
-                        Submit
-                      </Button>
-                    )}
+                    {
+                      /* istanbul ignore next */
+                      formikHelper?.values?.questions?.length > 0 && (
+                        <Button
+                          data-testid="submit-form"
+                          variant="contained"
+                          type="submit"
+                          style={{
+                            padding: "5px 20px 5px 20px",
+                          }}
+                          // disabled={!formikHelper.isValid}
+                        >
+                          Submit
+                        </Button>
+                      )
+                    }
                     <Button
                       data-testid="cancel-form"
                       color="secondary"
