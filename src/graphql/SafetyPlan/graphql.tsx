@@ -527,20 +527,23 @@ export const UPDATE_FEEDBACK = gql`
 export const GET_PATIENT_SAFETY_PlANS = gql`
   query getPatientSafetyPlans {
     getPatientSafetyPlans {
-      name
-      description
-      questions {
+      data {
+        name
+        description
+        questions {
+          _id
+          patient_answer
+          patient_id
+          safety_ques
+          safety_ques_type
+          safety_ques_status
+          safety_additional_details
+          safety_ques_typeoption
+        }
         _id
-        patient_answer
-        patient_id
-        safety_ques
-        safety_ques_type
-        safety_ques_status
-        safety_additional_details
-        safety_ques_typeoption
+        share_status
       }
-      _id
-      share_status
+      result
     }
   }
 `;
@@ -548,7 +551,11 @@ export const GET_PATIENT_SAFETY_PlANS = gql`
 export const ANSWER_SAFETY_PLAN_BY_PATIENT_ID = gql`
   mutation answerSafetyPlanByPatientId($quesData: String!) {
     answerSafetyPlanByPatientId(quesData: $quesData) {
-      _id
+      data {
+        _id
+      }
+      result
+      message
     }
   }
 `;
