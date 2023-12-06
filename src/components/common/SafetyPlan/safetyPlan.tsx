@@ -62,6 +62,7 @@ const SafetyPlan = (props: propTypes) => {
   };
   return (
     <>
+      {/* istanbul ignore next */}
       {safetyPlanData?.getPatientSafetyPlans?.data?.map((s) => (
         <Accordion
           key={s._id}

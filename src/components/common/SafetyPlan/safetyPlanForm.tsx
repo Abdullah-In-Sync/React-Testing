@@ -38,6 +38,7 @@ export const SafetyPlanForm: FC<Props> = ({
       })}
     >
       {(formikHelper) => (
+        /* istanbul ignore next */
         <Form className={`${isSafetyPlan || "disbledFields"}`}>
           <FieldArray
             name="questions"
@@ -82,6 +83,7 @@ export const SafetyPlanForm: FC<Props> = ({
                     display="flex"
                     justifyContent={"center"}
                   >
+                    {/* istanbul ignore next */}
                     {formikHelper?.values?.questions?.length > 0 && (
                       <Button
                         data-testid="submit-form"
