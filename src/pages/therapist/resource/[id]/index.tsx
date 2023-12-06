@@ -1,14 +1,7 @@
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {
-  Box,
-  Breadcrumbs,
-  Button,
-  Grid,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, IconButton, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import type { NextPage } from "next";
@@ -93,36 +86,6 @@ const ResourceById: NextPage = () => {
                     Back
                   </Button>
                 </NextLink>
-              </Grid>
-              <Grid
-                xs={6}
-                display="flex"
-                flex-direction="row-reverse"
-                sx={{
-                  color: "primary.main",
-                }}
-                style={{ justifyContent: "right" }}
-              >
-                <Breadcrumbs
-                  separator="--›"
-                  aria-label="breadcrumb"
-                  data-testid="breadCrumb"
-                >
-                  <Typography color="primary.main">
-                    {
-                      resourceData.getResourceById[0].disorder_detail
-                        .disorder_name
-                    }
-                  </Typography>
-                  ,
-                  <Typography color="primary.main">
-                    {resourceData.getResourceById[0].model_detail.model_name}
-                  </Typography>
-                  ,
-                  <Typography key="3" color="text.primary">
-                    {resourceData.getResourceById[0].resource_name}
-                  </Typography>
-                </Breadcrumbs>
               </Grid>
 
               <Grid xs={12} spacing={1}>
