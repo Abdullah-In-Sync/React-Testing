@@ -3,14 +3,12 @@ import { useLazyQuery } from "@apollo/client";
 import { Accordion } from "../Accordion";
 import { Box, Button, Typography } from "@mui/material";
 import { GET_PATIENT_RELAPSE_PLANS } from "../../../graphql/Relapse/graphql";
-import {
-  GetPatientRelapsePlan,
-  GetPatientRelapsePlansRes,
-} from "../../../graphql/Relapse/types";
+import { GetPatientRelapsePlan } from "../../../graphql/Relapse/types";
 import { RelapsePlanForm } from "./relapsePlanForm";
 import SureModal from "../../admin/resource/SureModal";
 import ConfirmationModal from "../ConfirmationModal";
 import { useSnackbar } from "notistack";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 type propTypes = {
   onSubmit?: (safetyPlan: GetPatientRelapsePlan, callback: any) => void;
@@ -27,7 +25,7 @@ const RelapsePlan = (props: propTypes) => {
 
   //Queries
   const [getPatientRelapsePlans, { data: relapsePlanData, loading }] =
-    useLazyQuery<GetPatientRelapsePlansRes>(GET_PATIENT_RELAPSE_PLANS, {
+    useLazyQuery(GET_PATIENT_RELAPSE_PLANS, {
       onCompleted: () => {
         props.setLoader(false);
       },
@@ -62,25 +60,31 @@ const RelapsePlan = (props: propTypes) => {
     setIsConfirm(false);
   };
 
+  const isViewRelapse = checkPrivilageAccess("Relapse", "View");
+  const isEditRelapse = checkPrivilageAccess("Relapse", "Update response");
+
   return (
     <>
-      {relapsePlanData?.getPatientRelapsePlans?.map((s) => (
+      {relapsePlanData?.getPatientRelapsePlans?.data.map((s) => (
         <Accordion
           key={s._id}
           title={s.name}
           detail={(toggleAccordion) => {
             onToggle = toggleAccordion;
             return (
-              <RelapsePlanForm
-                relapsePlan={s}
-                onSubmit={handleSubmit}
-                onCancel={cancelFunction}
-              />
+              (isViewRelapse === true || isViewRelapse === undefined) && (
+                <RelapsePlanForm
+                  relapsePlan={s}
+                  onSubmit={handleSubmit}
+                  onCancel={cancelFunction}
+                  isEditRelapse={isEditRelapse}
+                />
+              )
             );
           }}
         />
       ))}
-      {!loading && !relapsePlanData?.getPatientRelapsePlans?.length && (
+      {!loading && !relapsePlanData?.getPatientRelapsePlans?.data.length && (
         <Box marginTop={"10px"}>No data found</Box>
       )}
       <SureModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
