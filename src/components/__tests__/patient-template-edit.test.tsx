@@ -73,7 +73,6 @@ const arrowSut = () => {
 };
 
 describe("When render a patient template edit", () => {
-
   it("should load dynamic template", async () => {
     await sut();
     const dynamicTemplate = screen.getAllByTestId("row-0");
