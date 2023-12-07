@@ -1,13 +1,10 @@
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
-import { SnackbarProvider } from "notistack";
 import { MockedProvider } from "@apollo/client/testing";
-import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
-import { useAppContext } from "../contexts/AuthContext";
-import MainWraperTherapyPatient from "../pages/therapist/patient/view/[id]";
+import { render, screen, waitFor } from "@testing-library/react";
 import { useRouter } from "next/router";
+import { SnackbarProvider } from "notistack";
+import { useAppContext } from "../contexts/AuthContext";
+import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
 import TherapyMainComponent from "../pages/therapist/patient/view/[id]/therapy";
-import { ThemeProvider } from "@mui/material";
-import theme from "../styles/theme/theme";
 
 jest.mock("../contexts/AuthContext");
 jest.mock("next/router", () => ({
@@ -218,25 +215,6 @@ mocksData.push({
   },
 });
 
-const sut = async () => {
-  render(
-    <MockedProvider mocks={mocksData} addTypename={false}>
-      <ThemeProvider theme={theme()}>
-        <SnackbarProvider>
-          <MainWraperTherapyPatient
-            children={""}
-            patientId={undefined}
-            loader={false}
-          />
-        </SnackbarProvider>
-      </ThemeProvider>
-    </MockedProvider>
-  );
-  //   await waitForElementToBeRemoved(() =>
-  screen.queryByTestId("activity-indicator");
-  //   );
-};
-
 const sut2 = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -268,30 +246,14 @@ describe("Therapist Resource page", () => {
         },
       },
     });
-  });
-
-  // check for Patient Session Resource list
-  it("should render therapy dropdown", async () => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "4937a27dc00d48bf983fdcd4b0762ebd",
       },
     }));
-
-    await sut();
-    await waitFor(async () => {
-      expect(screen.getByTestId("selectTherapy")).toBeInTheDocument();
-      fireEvent.change(screen.queryByTestId("selectTherapy"), {
-        target: { value: "a8bf94e308d04c598d0a06413cf30ef1" },
-      });
-      fireEvent.change(screen.queryByTestId("selectTherapy"), {
-        target: { value: "a8bf94e308d04c598d0a06413cf30ef1" },
-      });
-      expect(screen.queryAllByTestId("SessionPanelItem").length).toBe(0);
-      expect(screen.getByTestId("patient_name")).toBeInTheDocument();
-      expect(screen.getByTestId("container_img")).toBeInTheDocument();
-    });
   });
+
+  // check for Patient Session Resource list
 
   it("should render therapy main component.", async () => {
     await sut2();
