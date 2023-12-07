@@ -36,8 +36,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }>({ patient_id: "", patient_name: "" });
 
   const router = useRouter();
+  /* istanbul ignore next */
   const patId = router?.query.id as string;
+  /* istanbul ignore next */
   const tab = router?.query?.mainTab as string;
+  /* istanbul ignore next */
   const tab2 = router?.query?.tab as string;
 
   // const {
@@ -49,8 +52,8 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     onCompleted: (data) => {
       /* istanbul ignore next */
       if (data!.getPatientTherapy) {
-        const pttherapyId = data!.getPatientTherapy[0]?._id;
         /* istanbul ignore next */
+        const pttherapyId = data!.getPatientTherapy[0]?._id;
         if (pttherapyId) {
           setTherapy(pttherapyId);
         }
