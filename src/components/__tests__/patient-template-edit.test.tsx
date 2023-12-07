@@ -73,11 +73,6 @@ const arrowSut = () => {
 };
 
 describe("When render a patient template edit", () => {
-  it("Should display name text in card header and breadcrum", async () => {
-    await sut();
-    expect(screen.getAllByText(/test name/i)).toHaveLength(2);
-  });
-
   it("should load dynamic template", async () => {
     await sut();
     const dynamicTemplate = screen.getAllByTestId("row-0");

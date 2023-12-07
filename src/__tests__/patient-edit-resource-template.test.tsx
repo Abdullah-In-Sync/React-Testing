@@ -152,9 +152,6 @@ describe("Patient view template page", () => {
       ...mockRouter,
     }));
     await sut();
-    waitFor(async () => {
-      expect(screen.getAllByText(/test name/i)).toHaveLength(2);
-    });
     const tableTemplateSubmitButton = await screen.findByTestId(
       "tableTemplateSubmit"
     );

@@ -6,14 +6,7 @@ import Layout from "../../../../components/layout";
 import Loader from "../../../../components/common/Loader";
 import ContentHeader from "../../../../components/common/ContentHeader";
 import ResourceDetail from "../../../../components/common/ResourceDetail";
-import {
-  Button,
-  Grid,
-  Box,
-  IconButton,
-  Breadcrumbs,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, Box, IconButton, Typography } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import ArrowRightAlt from "@mui/icons-material/ArrowRightAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -137,45 +130,6 @@ const ResourceDetailById: NextPage = () => {
                       </NextLink>
                     )
                   }
-                </Grid>
-                <Grid
-                  xs={6}
-                  display="flex"
-                  flex-direction="row-reverse"
-                  sx={{
-                    color: "primary.main",
-                  }}
-                  style={{ justifyContent: "right" }}
-                >
-                  <Breadcrumbs
-                    separator="--›"
-                    aria-label="breadcrumb"
-                    data-testid="breadCrumb"
-                  >
-                    <Typography color="primary.main">
-                      {
-                        /* istanbul ignore next */
-                        patientResourceData?.getResourceDetailById?.data[0]
-                          .disorder_detail?.disorder_name
-                      }
-                    </Typography>
-                    ,
-                    <Typography color="primary.main">
-                      {
-                        /* istanbul ignore next */
-                        patientResourceData?.getResourceDetailById?.data[0]
-                          .model_detail?.model_name
-                      }
-                    </Typography>
-                    ,
-                    <Typography key="3" color="text.primary">
-                      {
-                        /* istanbul ignore next */
-                        patientResourceData?.getResourceDetailById?.data[0]
-                          ?.resource_data[0].resource_name
-                      }
-                    </Typography>
-                  </Breadcrumbs>
                 </Grid>
 
                 <Grid xs={12} spacing={1}>

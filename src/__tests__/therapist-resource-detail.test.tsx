@@ -218,7 +218,6 @@ describe("Render therapist resource detail page", () => {
     expect(screen.queryByText("Description")).toBeInTheDocument();
     expect(screen.queryByText("Instructions")).toBeInTheDocument();
     expect(screen.queryByText("References")).toBeInTheDocument();
-    expect(screen.queryByTestId("breadCrumb")).toBeInTheDocument();
     expect(screen.queryByTestId("backButton")).toBeInTheDocument();
     expect(screen.queryByTestId("iconsTarget")).toBeInTheDocument();
     expect(screen.queryByTestId("resourceName")).toBeInTheDocument();

@@ -94,19 +94,14 @@ describe("Therapist patient resource detail page", () => {
       ...mockRouter,
     }));
     await sut();
-
-    expect(await screen.findAllByText(/test name/i)).toHaveLength(2);
-
     const backButton = screen.getByTestId("backButton");
     expect(backButton).toBeInTheDocument();
     fireEvent.click(backButton);
     expect(mockRouter.back).toHaveBeenCalled();
 
-    const nextButton = screen.getByTestId("nextButton");
+    const nextButton = await screen.findByTestId("nextButton");
     expect(nextButton).toBeInTheDocument();
     fireEvent.click(nextButton);
     expect(mockRouter.push).toHaveBeenCalled();
-
-    //
   });
 });
