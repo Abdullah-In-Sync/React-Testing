@@ -37,9 +37,9 @@ export default function TherapisTherapyList(props: propTypes) {
   /* istanbul ignore next */
   const patId = router?.query?.id as string;
   /* istanbul ignore next */
-  const {
-    user: { therapist_data: { org_id: orgId = "" } = {} },
-  } = useAppContext();
+  const { user } = useAppContext();
+  /* istanbul ignore next */
+  const orgId = user?.therapist_data?.org_id;
   const [loader, setLoader] = useState<boolean>(true);
   const [selectedDisorderId, setSelectedDisorderId] = useState("");
   const [selectedModelId, setSelectedModelId] = useState("");
@@ -61,6 +61,7 @@ export default function TherapisTherapyList(props: propTypes) {
   const [getPatientSessionData, { data: patientSessionData }] = useLazyQuery(
     GET_PATIENTSESSION_DATA,
     {
+      fetchPolicy: "cache-and-network",
       onCompleted: () => {
         setLoader(false);
       },
