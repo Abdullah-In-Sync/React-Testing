@@ -5,6 +5,9 @@ import { SnackbarProvider } from "notistack";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
 import TherapyMainComponent from "../pages/therapist/patient/view/[id]/therapy";
+import { ThemeProvider } from "@mui/styles";
+import theme from "../styles/theme/theme";
+import MainWraperTherapyPatient from "../pages/therapist/patient/view/[id]";
 
 jest.mock("../contexts/AuthContext");
 jest.mock("next/router", () => ({
@@ -215,6 +218,25 @@ mocksData.push({
   },
 });
 
+const sut = async () => {
+  render(
+    <MockedProvider mocks={mocksData} addTypename={false}>
+      <ThemeProvider theme={theme()}>
+        <SnackbarProvider>
+          <MainWraperTherapyPatient
+            children={""}
+            patientId={undefined}
+            loader={false}
+          />
+        </SnackbarProvider>
+      </ThemeProvider>
+    </MockedProvider>
+  );
+  //   await waitForElementToBeRemoved(() =>
+  screen.queryByTestId("activity-indicator");
+  //   );
+};
+
 const sut2 = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -254,6 +276,11 @@ describe("Therapist Resource page", () => {
   });
 
   // check for Patient Session Resource list
+
+  it("should render therapy main component.", async () => {
+    await sut();
+    expect(await screen.findByTestId("patient_name")).toBeInTheDocument();
+  });
 
   it("should render therapy main component.", async () => {
     await sut2();

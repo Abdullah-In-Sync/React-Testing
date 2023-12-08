@@ -36,11 +36,8 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }>({ patient_id: "", patient_name: "" });
 
   const router = useRouter();
-  /* istanbul ignore next */
   const patId = router?.query.id as string;
-  /* istanbul ignore next */
   const tab = router?.query?.mainTab as string;
-  /* istanbul ignore next */
   const tab2 = router?.query?.tab as string;
 
   // const {
