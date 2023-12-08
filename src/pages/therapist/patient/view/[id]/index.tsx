@@ -1,30 +1,21 @@
 import { useLazyQuery } from "@apollo/client";
-import {
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Theme,
-  Typography,
-} from "@mui/material";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import InputLabel from "@mui/material/InputLabel";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Loader from "../../../../../components/common/Loader";
 import Layout from "../../../../../components/layout";
 import { GET_PATIENTTHERAPY_DATA } from "../../../../../graphql/query/common";
 
-import { useTheme } from "@mui/styles";
 import { useRouter } from "next/router";
 import TabsGeneratorTherapistPatient from "../../../../../components/common/TabsGenerator/TabsGeneratorTherapistPatient";
 import TherapistPatientAssessment from "../../../../../components/therapist/patient/Assessment";
 import TherapisTherapyList from "../../../therapy";
+import TherapistFilesList from "./files";
 import TherapistNotesList from "./notes";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
-import TherapistFilesList from "./files";
 
 interface Props {
   children: React.ReactNode;
@@ -36,7 +27,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   patientId,
   loader: pLoader,
 }) => {
-  const theme = useTheme() as Theme;
   const [therapy, setTherapy] = useState<string>("pt_therapy_id");
   const [loader, setLoader] = useState<boolean>(pLoader);
 
@@ -55,23 +45,20 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   // } = router;
 
   /* istanbul ignore next */
-  const [getPatientTherapyData, { data: patientTherapryData }] = useLazyQuery(
-    GET_PATIENTTHERAPY_DATA,
-    {
-      onCompleted: (data) => {
+  const [getPatientTherapyData] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
+    onCompleted: (data) => {
+      /* istanbul ignore next */
+      if (data!.getPatientTherapy) {
         /* istanbul ignore next */
-        if (data!.getPatientTherapy) {
-          const pttherapyId = data!.getPatientTherapy[0]?._id;
-          /* istanbul ignore next */
-          if (pttherapyId) {
-            setTherapy(pttherapyId);
-          }
+        const pttherapyId = data!.getPatientTherapy[0]?._id;
+        if (pttherapyId) {
+          setTherapy(pttherapyId);
         }
-        /* istanbul ignore next */
-        setLoader(false);
-      },
-    }
-  );
+      }
+      /* istanbul ignore next */
+      setLoader(false);
+    },
+  });
 
   /* istanbul ignore next */
   const setDefaultStateExcludingLoader = () => {
@@ -93,11 +80,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       variables: { patientId: patId },
     });
   }, [patientId]);
-
-  const onTherapyChange = (event: SelectChangeEvent) => {
-    /* istanbul ignore next */
-    setTherapy(event.target.value);
-  };
 
   /* istanbul ignore next */
   const tabs2 = [
@@ -161,67 +143,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
               >
                 {patientData.patient_name}
               </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                "& .MuiOutlinedInput-root": {
-                  height: 38,
-                },
-                "& .MuiOutlinedInput-root.Mui-focused": {
-                  "& > fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                },
-                "& .MuiOutlinedInput-root:hover": {
-                  "& > fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                },
-              }}
-            >
-              <FormControl
-                sx={{ mt: 3, minWidth: 120, maxWidth: "100%" }}
-                size="small"
-              >
-                <InputLabel id="lblSelectTherapy" style={{ color: "#fff" }}>
-                  Select Therapy
-                </InputLabel>
-                <Select
-                  labelId="lblSelectTherapy"
-                  id="selectTherapy"
-                  inputProps={{ "data-testid": "selectTherapy" }}
-                  value={therapy}
-                  autoWidth
-                  label="Select Therapy"
-                  onChange={onTherapyChange}
-                  sx={{
-                    ".MuiSelect-icon": {
-                      color: "white",
-                    },
-                    ".MuiSelect-outlined": {
-                      color: "white",
-                    },
-                  }}
-                >
-                  {patientTherapryData &&
-                    patientTherapryData.getPatientTherapy &&
-                    patientTherapryData.getPatientTherapy.map((v: any) => {
-                      /* istanbul ignore next */
-                      return (
-                        /* istanbul ignore next */
-                        <MenuItem key={"therapy" + v._id} value={v._id}>
-                          {v.therapy_detail.therapy_name}/
-                          {v.disorder_detail.disorder_name}/
-                          {v.model_detail.model_name}
-                        </MenuItem>
-                      );
-                    })}
-                </Select>
-              </FormControl>
             </Grid>
           </Grid>
         </Box>
