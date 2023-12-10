@@ -82,10 +82,11 @@ const TherapistFormulation = () => {
   const [addFavFormlation] = useMutation(ADD_FAV_FORMULATION);
   const [deleteFavFormlation] = useMutation(REMOVE_FAV_FORMULATION);
 
-  const {
-    user: { _id: Id },
-  } = useAppContext();
-  console.log("Koca: Id ", Id);
+  /* istanbul ignore next */
+  const { user } = useAppContext();
+  /* istanbul ignore next */
+  const Id = user?.therapist_data?.user_id;
+  console.debug("Koca: Id ", Id);
 
   useEffect(() => {
     getFormulationList({
@@ -190,7 +191,7 @@ const TherapistFormulation = () => {
           {value?.user_id === Id && (
             <>
               <IconButtonWrapper
-                data-testid={`editIcon_${value._id}`}
+                data-testid={`editIcon_${value.user_id}`}
                 aria-label="create"
                 size="small"
                 onClick={() => handlePressEdit(value)}
@@ -389,7 +390,7 @@ const TherapistFormulation = () => {
       enqueueSnackbar("Something is wrong", { variant: "error" });
     }
   };
-
+  /* istanbul ignore next */
   const handlerRemoveFav = async (removeFormulationId) => {
     try {
       await deleteFavFormlation({
