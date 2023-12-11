@@ -362,6 +362,7 @@ function HomeworkDetails(props: propTypes) {
         },
         onCompleted: () => {
           setCompleteResourceAssignedModal(true);
+          setInputs([]);
         },
       });
     } catch (e) {
