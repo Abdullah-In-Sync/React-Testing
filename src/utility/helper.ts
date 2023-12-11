@@ -265,10 +265,18 @@ export const getTokenIdDecodedData = () => {
 export const filterBasedOnPrivilages = (routeObj) => {
   const { moduleName: label } = routeObj;
   const status = checkPrivilageAccess(label);
-  if (status === undefined || label === "Home") return true;
+  if (status === undefined || label === "default") return true;
   else if (label === "Therapy")
     return TherapyTabs.some(({ moduleName }) =>
       checkPrivilageAccess(moduleName)
     );
   else return status;
 };
+
+export const modifyTabsData = (tabs) =>
+  tabs.filter((v) => {
+    const { moduleName } = v;
+    const status = checkPrivilageAccess(moduleName);
+    if (status === undefined) return true;
+    else return status;
+  });

@@ -16,6 +16,7 @@ import TherapistFilesList from "./files";
 import TherapistNotesList from "./notes";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
+import { modifyTabsData } from "../../../../../utility/helper";
 
 interface Props {
   children: React.ReactNode;
@@ -87,28 +88,35 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       label: "Personal Info",
       value: "personal-info",
       component: <TherapyPersonalInfoTabs />,
+      moduleName: "Personal Info",
     },
     {
       label: "Assessment",
       value: "assessment",
       component: <TherapistPatientAssessment />,
+      moduleName: "Assessment",
     },
     {
       label: "Therapy",
       value: "therapy",
       component: <TherapyMainComponent setTherapy={therapy} />,
+      moduleName: "Therapy",
     },
     {
       label: "Notes",
       value: "notes",
       component: <TherapistNotesList setTherapy={therapy} />,
+      moduleName: "Notes",
     },
     {
       label: "Files",
       value: "files",
       component: <TherapistFilesList />,
+      moduleName: "Files",
     },
   ];
+
+  const modifyTabs = modifyTabsData(tabs2);
 
   return (
     <>
@@ -149,7 +157,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
         <Box>
           <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
             <TabsGeneratorTherapistPatient
-              tabsList={tabs2}
+              tabsList={modifyTabs}
               tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
               defaultTabs={defaultTabs}
             />
