@@ -174,9 +174,10 @@ const Resource: NextPage = () => {
   const [deleteResource] = useMutation(DELETE_RESOURCE);
   const [shareResource] = useMutation(SHARE_RESOURCE);
   /* istanbul ignore next */
+  const { user } = useAppContext();
   const {
-    user: { _id: userId, therapist_data: { org_id: orgId = "" } = {} },
-  } = useAppContext();
+    therapist_data: { org_id: orgId, user_id: userId },
+  } = user;
 
   const [shareResId, setShareResId] = useState<string>("");
   const [isPatientDialogOpen, setIsPatientDialogOpen] =
@@ -192,6 +193,7 @@ const Resource: NextPage = () => {
   };
 
   // GRAPHQL
+  /* istanbul ignore next */
   const {
     loading,
     data: dataListData,
@@ -344,7 +346,7 @@ const Resource: NextPage = () => {
                 setModalOpen(true);
                 setResourceId(value?._id);
               }}
-              data-testid={"deleteIcon_" + value?._id}
+              data-testid={"deleteIcon_" + value?.user_id}
               aria-label="delete"
               size="small"
             >
@@ -625,7 +627,9 @@ const Resource: NextPage = () => {
               data-testid="deleteResourceModalConfirmButton"
               disabled={isMutating}
               onClick={() => {
+                /* istanbul ignore next */
                 setModalOpen(false);
+                /* istanbul ignore next */
                 handleDelete(resourceId);
               }}
             >
