@@ -131,6 +131,7 @@ export const therapistRoutes: RoutesType[] = [
     label: "Home",
     path: "/therapist/dashboard",
     icon: <HomeIcon />,
+    moduleName: "default",
   },
   {
     key: 2,
@@ -138,25 +139,28 @@ export const therapistRoutes: RoutesType[] = [
     // path: Link + "/therapist/patient/list",
     path: "/therapist/patientlist",
     icon: <GroupsIcon />,
+    moduleName: "default",
   },
   {
     key: 4,
     label: "Library",
     path: "/therapist/resource",
     icon: <LibraryBooksIcon />,
+    moduleName: "Library",
   },
   {
     key: 5,
     label: "Settings",
     path: "/therapist/settings/?mainTab=profile",
     icon: <SettingsIcon />,
+    moduleName: "Settings",
   },
   {
     key: 6,
     label: "Users",
-
     path: "/therapist/userList",
     icon: <GroupsIcon />,
+    moduleName: "Users",
   },
 ];
 
@@ -187,7 +191,7 @@ export const patient_routes: RoutesType[] = [
     icon: <HomeIcon />,
     showNow: 1,
     type: "MYHELP_HOME",
-    moduleName: "Home",
+    moduleName: "default",
   },
   {
     key: 2,
