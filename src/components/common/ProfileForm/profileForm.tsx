@@ -1252,9 +1252,6 @@ export default function ProfileForm(props: propTypes) {
                     variant="contained"
                     onClick={() => {
                       setFormFields(profileData?.getProfileById?.data);
-                      setFormFields(
-                        props.therapistProfileData?.getPatientDetailById
-                      );
                       props.setEditable(false);
                     }}
                     style={{
