@@ -220,4 +220,24 @@ export const moduleList = {
     name: "Profile",
     id: "339a343f-63c6-426f-8357-f2fc5a25aa20",
   },
+  Library: {
+    name: "Library",
+    id: "52743f48-7e87-44ee-b473-e8fa880c447d",
+  },
+  Resources: {
+    name: "Resources",
+    id: "3a9a05b2-30c3-4f3a-baec-1be796085544",
+  },
+  "Personal Info": {
+    name: "Personal Info",
+    id: "8367b791-1398-4c94-b3fa-91d75ab61716",
+  },
+  Therapy: {
+    name: "Therapy",
+    id: "36abaa03-7151-44c7-b687-e80ae7bc0e55",
+  },
+  Notes: {
+    name: "Notes",
+    id: "e72e9adf-9320-4563-8b00-47bfbfe0c7da",
+  },
 };
