@@ -254,7 +254,7 @@ mocksData.push({
   result: {
     data: {
       therapistUpdateAssessmentCat: {
-        _id: "6429593c-6525-4b5c-88f2-004c419d8975",
+        result: true,
       },
     },
   },
