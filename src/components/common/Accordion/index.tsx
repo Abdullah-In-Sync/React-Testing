@@ -13,6 +13,7 @@ type Props = {
   index?: number;
   handleToggleContent?: (v) => void;
   defaultIsOpen?: boolean;
+  isExpandDisabled?: boolean;
 };
 
 export const Accordion: FC<Props> = ({
@@ -23,6 +24,7 @@ export const Accordion: FC<Props> = ({
   index = "",
   handleToggleContent,
   defaultIsOpen = false,
+  isExpandDisabled = false,
 }) => {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(defaultIsOpen);
@@ -62,19 +64,20 @@ export const Accordion: FC<Props> = ({
           {typeof actionButtons === "function"
             ? actionButtons(toggleContent)
             : actionButtons}
-          {!isOpen ? (
-            <AddIcon
-              data-testid={`toggleContent${index}`}
-              className={classes.iconButton}
-              onClick={toggleContent}
-            />
-          ) : (
-            <RemoveIcon
-              data-testid={`toggleContent${index}`}
-              className={classes.iconButton}
-              onClick={toggleContent}
-            />
-          )}
+          {!isExpandDisabled &&
+            (!isOpen ? (
+              <AddIcon
+                data-testid={`toggleContent${index}`}
+                className={classes.iconButton}
+                onClick={toggleContent}
+              />
+            ) : (
+              <RemoveIcon
+                data-testid={`toggleContent${index}`}
+                className={classes.iconButton}
+                onClick={toggleContent}
+              />
+            ))}
         </Box>
       </Box>
       {isOpen && (

@@ -110,7 +110,7 @@ const AssessmentListPage: NextPage = () => {
     getAdminAssessmentList,
     {
       loading: loadingMonitorList,
-      data: { adminAssessmentList: { data: listData = {} } = {} } = {},
+      data: { adminAssessmentList: listData = {} } = {},
       refetch,
     },
   ] = useLazyQuery(GET_ADMIN_ASSESSMENT_LIST, {

@@ -42,46 +42,44 @@ const ClinicalAssessment: React.FC<ClinicalAssessmentProps> = ({
   const { name } = categoryListData;
 
   return (
-    <>
-      <Stack className={styles.clinicalAssessmentWrapper}>
-        <Stack className="row1">
-          <Box className="col1">
-            {name && <ContentHeader title={name} />}
-            <CommonButton
-              data-testid="baackBtn"
-              variant="contained"
-              onClick={onPressBack}
-              size="small"
-            >
-              Back
-            </CommonButton>
-          </Box>
-          <Box className="col2">
-            <CommonButton
-              data-testid="summaryViewBtn"
-              variant="contained"
-              // onClick={onPressSummaryView(assessmentId)}
-              onClick={onPressSummaryView}
-              // href={`/patient/assessment/clinicalAssessment`}
-              size="small"
-            >
-              Summary View
-            </CommonButton>
-          </Box>
-        </Stack>
-        <Stack className="row2">
-          <ClinicalAssessmentList
-            handleToggleContent={onToggleQuestionAccordion}
-            categoryListData={categoryListData}
-            actionButtonClick={actionButtonClick}
-            therapistViewAssessmentLoading={therapistViewAssessmentLoading}
-            onSubmitAssessmentResponse={onSubmitAssessmentResponse}
-            confirmRef={confirmRef}
-            handleDeleteQuestion={handleDeleteQuestion}
-          />
-        </Stack>
+    <Stack className={styles.clinicalAssessmentWrapper}>
+      <Stack className="row1">
+        <Box className="col1">
+          {name && <ContentHeader title={name} />}
+          <CommonButton
+            data-testid="baackBtn"
+            variant="contained"
+            onClick={onPressBack}
+            size="small"
+          >
+            Back
+          </CommonButton>
+        </Box>
+        <Box className="col2">
+          <CommonButton
+            data-testid="summaryViewBtn"
+            variant="contained"
+            // onClick={onPressSummaryView(assessmentId)}
+            onClick={onPressSummaryView}
+            // href={`/patient/assessment/clinicalAssessment`}
+            size="small"
+          >
+            Summary View
+          </CommonButton>
+        </Box>
       </Stack>
-    </>
+      <Stack className="row2">
+        <ClinicalAssessmentList
+          handleToggleContent={onToggleQuestionAccordion}
+          categoryListData={categoryListData}
+          actionButtonClick={actionButtonClick}
+          therapistViewAssessmentLoading={therapistViewAssessmentLoading}
+          onSubmitAssessmentResponse={onSubmitAssessmentResponse}
+          confirmRef={confirmRef}
+          handleDeleteQuestion={handleDeleteQuestion}
+        />
+      </Stack>
+    </Stack>
   );
 };
 

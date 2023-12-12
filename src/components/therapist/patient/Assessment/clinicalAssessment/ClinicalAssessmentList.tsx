@@ -5,6 +5,7 @@ import { MesageTextDisplay } from "../../../../common/MessageTextDisplay/Message
 import ActionsButtons from "./ActionsButtons";
 import { ClinicalAssessmentProps } from "./ClinicalAssessment";
 import UpdateQuestionResponse from "./updateQuestionResponse/UpdateQuestionResponse";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   actionButtonClick,
@@ -16,6 +17,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   onSubmitAssessmentResponse,
 }) => {
   const { category: categories = [] } = categoryListData;
+  const isEdit = checkPrivilageAccess("Assessment", "Edit");
   const accordion = ({ title, item, i }) => {
     const { assessmentQuestionsViewData } = item;
     return (
@@ -38,6 +40,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />
         }
+        isExpandDisabled={!isEdit}
       />
     );
   };

@@ -2,7 +2,11 @@ import { Box, Stack } from "@mui/material";
 import { Formik, FormikProps } from "formik";
 import React, { ForwardedRef } from "react";
 import { GetRisksListEntity } from "../../../../../graphql/assessment/types";
-import { csvDecode, stringToInt } from "../../../../../utility/helper";
+import {
+  checkPrivilageAccess,
+  csvDecode,
+  stringToInt,
+} from "../../../../../utility/helper";
 import { ConfirmElement } from "../../../../common/ConfirmWrapper";
 import OverallAssessmentForm from "./OverallAssessmentForm";
 import TherapistPatientAssessmentList from "./TherapistPatientAssessmentList";
@@ -24,6 +28,7 @@ const TherapistPatientOverallAssessment: React.FC<
   onClickAddAssessment,
   handleClickAssement,
 }) => {
+  const isAdd = checkPrivilageAccess("Assessment", "Add");
   const styles = useStyles();
   const modifyRisk = risk
     ? risksListData
@@ -70,18 +75,20 @@ const TherapistPatientOverallAssessment: React.FC<
         <Box>
           <ContentHeader title="Assessment" />
         </Box>
-        <Box>
-          <CommonButton
-            className=""
-            data-testid="addAssessmentButton"
-            variant="contained"
-            onClick={onClickAddAssessment}
-            size="small"
-            style={{ textTransform: "none" }}
-          >
-            Add Assessment
-          </CommonButton>
-        </Box>
+        {isAdd && (
+          <Box>
+            <CommonButton
+              className=""
+              data-testid="addAssessmentButton"
+              variant="contained"
+              onClick={onClickAddAssessment}
+              size="small"
+              style={{ textTransform: "none" }}
+            >
+              Add Assessment
+            </CommonButton>
+          </Box>
+        )}
       </Stack>
       {risk != undefined && (
         <>

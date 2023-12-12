@@ -6,6 +6,7 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import FormikTextField from "../../../../../common/FormikFields/FormikTextField";
 import { useStyles } from "../../patientAssessmentStyles";
+import { checkPrivilageAccess } from "../../../../../../utility/helper";
 
 type Props = React.PropsWithChildren<{
   formikProps: FormikProps<{
@@ -24,6 +25,7 @@ const AddCategoryQuestion = ({
   categoryId,
 }: Props) => {
   const styles = useStyles();
+  const isDelete = checkPrivilageAccess("Assessment", "Delete");
 
   const { values, setFieldValue } = formikProps;
 
@@ -69,7 +71,7 @@ const AddCategoryQuestion = ({
       <Card key={`questionCard_${i}`} className={`questionCard`}>
         <CardContent>
           <Box className="deleteButtonWrapper">
-            {deleteButton({ i, questionId })}
+            {isDelete && deleteButton({ i, questionId })}
           </Box>
           <Box key={i} className={`questionBoxWrapper`}>
             <Box className="quesBox">
