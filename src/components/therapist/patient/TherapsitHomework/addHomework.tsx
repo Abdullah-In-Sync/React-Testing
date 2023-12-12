@@ -362,6 +362,8 @@ function HomeworkDetails(props: propTypes) {
         },
         onCompleted: () => {
           setCompleteResourceAssignedModal(true);
+          /* istanbul ignore next */
+          setInputs([]);
         },
       });
     } catch (e) {
