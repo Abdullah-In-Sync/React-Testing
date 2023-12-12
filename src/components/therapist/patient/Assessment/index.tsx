@@ -52,7 +52,9 @@ const TherapistPatientAssessmentList: React.FC = () => {
   const [
     getTherapistViewAssessment,
     {
-      data: { therapistviewAssessment: assessmentViewData = undefined } = {},
+      data: {
+        therapistviewAssessment: { data: assessmentViewData = undefined } = {},
+      } = {},
       loading: therapistViewAssessmentLoading,
       refetch: refetchGetTherapistViewAssessment,
     },
@@ -61,7 +63,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
       const { therapistviewAssessment } = data;
       setLoader(false);
       setInitialFetchCategoriesList(false);
-      setAssessmentCategory(therapistviewAssessment);
+      setAssessmentCategory(therapistviewAssessment?.data);
     },
     fetchPolicy: "cache-and-network",
   });
@@ -89,10 +91,12 @@ const TherapistPatientAssessmentList: React.FC = () => {
     {
       data: {
         therapistGetPatientAssessment: {
-          list: assessmentListData = [],
-          overall_assesment_text: overallAssesmentText = undefined,
-          risk = undefined,
-          therapies = [],
+          data: {
+            list: assessmentListData = [],
+            overall_assesment_text: overallAssesmentText = undefined,
+            risk = undefined,
+            therapies = [],
+          } = {},
         } = {},
       } = {},
       loading: assessmentListLoading,
@@ -209,8 +213,10 @@ const TherapistPatientAssessmentList: React.FC = () => {
       await updateTherapitAssessmentCategory({
         variables: formFields,
         onCompleted: (data) => {
-          const { therapistUpdateAssessmentCat } = data;
-          if (therapistUpdateAssessmentCat) {
+          const {
+            therapistUpdateAssessmentCat: { result },
+          } = data;
+          if (result) {
             /* istanbul ignore next */
             refetchGetTherapistViewAssessment();
             /* istanbul ignore next */
@@ -238,8 +244,10 @@ const TherapistPatientAssessmentList: React.FC = () => {
       await updateAssessmentQuestion({
         variables: formFields,
         onCompleted: (data) => {
-          const { therapistUpdateAssessmentQs } = data;
-          if (therapistUpdateAssessmentQs) {
+          const {
+            therapistUpdateAssessmentQs: { result },
+          } = data;
+          if (result) {
             /* istanbul ignore next */
             enqueueSnackbar("Question deleted successfully.", {
               variant: "success",
@@ -270,8 +278,10 @@ const TherapistPatientAssessmentList: React.FC = () => {
           quesData: JSON.stringify(response),
         },
         onCompleted: (data) => {
-          const { therapistAssessmentSubmitAns } = data;
-          if (therapistAssessmentSubmitAns) {
+          const {
+            therapistAssessmentSubmitAns: { result },
+          } = data;
+          if (result) {
             /* istanbul ignore next */
             enqueueSnackbar("Response submitted successfully.", {
               variant: "success",
@@ -360,9 +370,13 @@ const TherapistPatientAssessmentList: React.FC = () => {
         variables: { patientId, categoryId },
         onCompleted: (data) => {
           /* istanbul ignore next */
-          const { therapistviewAssessmentQs } = data;
+          const {
+            therapistviewAssessmentQs: {
+              data: therapistviewAssessmentQsData,
+            } = {},
+          } = data;
           t.category[i]["assessmentQuestionsViewData"] =
-            therapistviewAssessmentQs;
+            therapistviewAssessmentQsData;
           setAssessmentCategory({ ...assessmentCategory, ...t });
           setLoader(false);
         },

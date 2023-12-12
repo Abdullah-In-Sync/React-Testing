@@ -15,13 +15,16 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
   const { risks: initRiskValues } = values;
   const styles = useStyles();
 
-  const initialRisksOptions = risksListData.map((item) => {
-    const obj = {
-      label: item.name,
-      value: item._id,
-    };
-    return obj;
-  });
+  const initialRisksOptions =
+    risksListData === null
+      ? []
+      : risksListData.map((item) => {
+          const obj = {
+            label: item.name,
+            value: item._id,
+          };
+          return obj;
+        });
 
   const handleChangeRisks = (_, v) => {
     setFieldValue(`risks`, v);

@@ -48,7 +48,7 @@ const FormAdminAssessmentBox: React.FC<ViewProps> = ({
                 inputProps={{ "data-testid": "name" }}
                 options={
                   (organizationList &&
-                    organizationList.getAdminAssessmentList) ||
+                    organizationList.getAdminAssessmentList?.data) ||
                   []
                 }
                 mappingKeys={["_id", "name"]}

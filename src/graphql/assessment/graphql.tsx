@@ -283,16 +283,19 @@ export const THERAPIST_SUBMIT_ASSESSMENT = gql`
 export const THERAPIST_GET_PATIENT_ASSESSMENT = gql`
   query TherapistGetPatientAssessment($patientId: String!) {
     therapistGetPatientAssessment(patient_id: $patientId) {
-      risk
-      overall_assesment_text
-      list {
-        name
-        _id
-      }
-      therapies {
-        _id
-        pttherapy_session
-        pttherapy_status
+      result
+      data {
+        risk
+        overall_assesment_text
+        list {
+          name
+          _id
+        }
+        therapies {
+          _id
+          pttherapy_session
+          pttherapy_status
+        }
       }
     }
   }
@@ -304,16 +307,19 @@ export const THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW = gql`
       patient_id: $patient_id
       assessment_id: $assessment_id
     ) {
-      _id
-      added_by
-      answer
-      category_name
-      category_id
-      created_date
-      patient_id
-      question
-      status
-      updated_date
+      result
+      data {
+        _id
+        added_by
+        answer
+        category_name
+        category_id
+        created_date
+        patient_id
+        question
+        status
+        updated_date
+      }
     }
   }
 `;
@@ -331,13 +337,17 @@ export const GET_ORGANISATION_SHARED_LIST = gql`
 export const THERAPIST_ADD_ASSESSMENT_DROPDOWN_LIST = gql`
   query getAdminAssessmentList {
     getAdminAssessmentList {
-      _id
-      name
-      organization_name
-      org_id
-      created_date
-      status
-      updated_date
+      message
+      result
+      data {
+        _id
+        name
+        organization_name
+        org_id
+        created_date
+        status
+        updated_date
+      }
     }
   }
 `;
@@ -360,21 +370,24 @@ export const THERAPIST_ADD_ASSESSMENT = gql`
 export const THERAPIST_VIEW_ASSESSMENT = gql`
   query TherapistviewAssessment($assessmentId: ID!) {
     therapistviewAssessment(assessment_id: $assessmentId) {
-      _id
-      created_date
-      name
-      patient_id
-      status
-      updated_date
-      category {
+      result
+      data {
         _id
-        assessment_id
         created_date
         name
         patient_id
-        share_status
         status
         updated_date
+        category {
+          _id
+          assessment_id
+          created_date
+          name
+          patient_id
+          share_status
+          status
+          updated_date
+        }
       }
     }
   }
@@ -391,7 +404,7 @@ export const THERAPIST_UPDATE_ASSESSMENT_CATEGORY = gql`
       updateCat: $updateCat
       patient_id: $patientId
     ) {
-      _id
+      result
     }
   }
 `;
@@ -402,14 +415,17 @@ export const THERAPIST_VIEW_ASSESSMENT_QUESTION = gql`
       category_id: $categoryId
       patient_id: $patientId
     ) {
-      _id
-      added_by
-      answer
-      category_id
-      created_date
-      patient_id
-      question
-      status
+      result
+      data {
+        _id
+        added_by
+        answer
+        category_id
+        created_date
+        patient_id
+        question
+        status
+      }
     }
   }
 `;
@@ -425,7 +441,7 @@ export const THERAPIST_ASSESSMENT_SUBMIT_ANSWER = gql`
       patient_id: $patientId
       quesData: $quesData
     ) {
-      _id
+      result
     }
   }
 `;
@@ -443,7 +459,8 @@ export const THERAPIST_UPDATE_ASSESSMENT_QUESTION = gql`
       patient_id: $patientId
       question_id: $questionId
     ) {
-      _id
+      message
+      result
     }
   }
 `;

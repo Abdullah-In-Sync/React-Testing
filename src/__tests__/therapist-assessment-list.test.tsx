@@ -23,18 +23,20 @@ mocksData.push({
   },
   result: {
     data: {
-      getAdminAssessmentList: [
-        {
-          _id: "d5f6c50e-5617-4613-bfc4-c85c973b8966",
-          name: "Assessment name",
-          organization_name: null,
-          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-          created_date: "2023-06-16T11:58:45.035Z",
-          status: 1,
-          updated_date: "2023-06-16T11:58:45.035Z",
-          __typename: "AdminAssessment",
-        },
-      ],
+      getAdminAssessmentList: {
+        data: [
+          {
+            _id: "d5f6c50e-5617-4613-bfc4-c85c973b8966",
+            name: "Assessment name",
+            organization_name: null,
+            org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+            created_date: "2023-06-16T11:58:45.035Z",
+            status: 1,
+            updated_date: "2023-06-16T11:58:45.035Z",
+            __typename: "AdminAssessment",
+          },
+        ],
+      },
     },
   },
 });
