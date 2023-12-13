@@ -24,7 +24,9 @@ export interface AdminAssessmentViewQsEntity {
 }
 
 export interface TherapistGetPatientAssessmentData {
-  therapistGetPatientAssessment: TherapistGetPatientAssessment | undefined;
+  therapistGetPatientAssessment: {
+    data: TherapistGetPatientAssessment | undefined;
+  };
 }
 
 export interface TherapistGetPatientAssessment {
@@ -69,7 +71,7 @@ export interface GetOrganisationSharedList {
 }
 
 export interface TherapistviewAssessmentData {
-  therapistviewAssessment: TherapistviewAssessment;
+  therapistviewAssessment: { data: TherapistviewAssessment };
 }
 export interface TherapistviewAssessment {
   _id: string;
@@ -89,7 +91,9 @@ export interface CategoryEntity {
 }
 
 export interface TherapistViewAssessmentQuestionsData {
-  therapistviewAssessmentQs?: TherapistviewAssessmentQsEntity[] | null;
+  therapistviewAssessmentQs?: {
+    data: TherapistviewAssessmentQsEntity[] | null;
+  };
 }
 export interface TherapistviewAssessmentQsEntity {
   _id: string;

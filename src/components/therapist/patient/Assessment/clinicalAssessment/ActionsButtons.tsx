@@ -1,17 +1,20 @@
 import { Box } from "@mui/material";
 import * as React from "react";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 interface ViewProps {
   data: any;
   buttonClick: (value) => void;
 }
 
+const isShare = checkPrivilageAccess("Assessment", "Share");
+
 const iconButtonsData = [
   {
     id: "share",
     icon: require("@mui/icons-material/Share").default,
   },
-];
+].filter(() => isShare);
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick = null }) => {
   const { _id, share_status } = data;

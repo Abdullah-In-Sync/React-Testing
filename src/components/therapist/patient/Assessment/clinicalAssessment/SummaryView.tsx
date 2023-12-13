@@ -17,7 +17,7 @@ export default function SummaryView(props: propTypes) {
 
   /* istanbul ignore next */
   const summaryData =
-    props?.therapistAssessmentSummaryViewData?.assessmentSummaryView;
+    props?.therapistAssessmentSummaryViewData?.assessmentSummaryView?.data;
 
   return (
     <Box>

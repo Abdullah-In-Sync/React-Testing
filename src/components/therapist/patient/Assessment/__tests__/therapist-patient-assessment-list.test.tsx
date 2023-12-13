@@ -55,23 +55,25 @@ mocksData.push({
   result: {
     data: {
       therapistGetPatientAssessment: {
-        risk: "6474a3be19ef06b681dfbf92",
-        overall_assesment_text: "some",
-        list: [
-          {
-            _id: "assessment-id-1",
-            name: "patient assessment",
-            patient_id: "patient-id",
-          },
-        ],
-        therapies: [
-          {
-            _id: "d53615c3-53f0-4d83-86a5-76d2a1cc65c5",
-            pttherapy_session: "35",
-            pttherapy_status: 1,
-            __typename: "PatientTherapy",
-          },
-        ],
+        data: {
+          risk: "6474a3be19ef06b681dfbf92",
+          overall_assesment_text: "some",
+          list: [
+            {
+              _id: "assessment-id-1",
+              name: "patient assessment",
+              patient_id: "patient-id",
+            },
+          ],
+          therapies: [
+            {
+              _id: "d53615c3-53f0-4d83-86a5-76d2a1cc65c5",
+              pttherapy_session: "35",
+              pttherapy_status: 1,
+              __typename: "PatientTherapy",
+            },
+          ],
+        },
       },
     },
   },
@@ -84,31 +86,33 @@ mocksData.push({
   },
   result: {
     data: {
-      assessmentSummaryView: [
-        {
-          _id: "75b111fa-0305-4a46-8795-da17daa19730",
-          added_by: "patient",
-          answer: "First 123",
-          category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
-          created_date: "2023-06-03T06:19:31.729Z",
-          patient_id: "5aa455d5de8248848b71c8113118e3f5",
-          question: "updated question",
-          status: 1,
-          updated_date: "2023-06-28T08:23:07.469Z",
-        },
-        {
-          _id: "e0ba3356-0853-4dd0-909d-c196718f85eb",
-          added_by: "patient",
-          answer: "Second 123",
-          category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
-          created_date: "2023-06-19T06:51:31.682Z",
-          patient_id: "5aa455d5de8248848b71c8113118e3f5",
-          question:
-            "how are u brotherfgh  sdfgsgh ssssssssssssssssssssssssssss",
-          status: 1,
-          updated_date: "2023-06-28T08:23:07.476Z",
-        },
-      ],
+      assessmentSummaryView: {
+        data: [
+          {
+            _id: "75b111fa-0305-4a46-8795-da17daa19730",
+            added_by: "patient",
+            answer: "First 123",
+            category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
+            created_date: "2023-06-03T06:19:31.729Z",
+            patient_id: "5aa455d5de8248848b71c8113118e3f5",
+            question: "updated question",
+            status: 1,
+            updated_date: "2023-06-28T08:23:07.469Z",
+          },
+          {
+            _id: "e0ba3356-0853-4dd0-909d-c196718f85eb",
+            added_by: "patient",
+            answer: "Second 123",
+            category_id: "cd9cd52d-15cf-4364-ad16-1ea751713431",
+            created_date: "2023-06-19T06:51:31.682Z",
+            patient_id: "5aa455d5de8248848b71c8113118e3f5",
+            question:
+              "how are u brotherfgh  sdfgsgh ssssssssssssssssssssssssssss",
+            status: 1,
+            updated_date: "2023-06-28T08:23:07.476Z",
+          },
+        ],
+      },
     },
   },
 });
@@ -123,24 +127,27 @@ mocksData.push({
   result: {
     data: {
       therapistviewAssessment: {
-        _id: "57450002-c884-4c4a-9b32-4c536135231d",
-        name: "test assessment",
-        category: [
-          {
-            _id: "cat1",
-            assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
-            name: "update category",
-            share_status: 1,
-            status: 1,
-          },
-          {
-            _id: "cat2",
-            assessment_id: "assement2",
-            name: "new cat name",
-            share_status: 1,
-            status: 1,
-          },
-        ],
+        result: true,
+        data: {
+          _id: "57450002-c884-4c4a-9b32-4c536135231d",
+          name: "test assessment",
+          category: [
+            {
+              _id: "cat1",
+              assessment_id: "57450002-c884-4c4a-9b32-4c536135231d",
+              name: "update category",
+              share_status: 1,
+              status: 1,
+            },
+            {
+              _id: "cat2",
+              assessment_id: "assement2",
+              name: "new cat name",
+              share_status: 1,
+              status: 1,
+            },
+          ],
+        },
       },
     },
   },
@@ -156,15 +163,17 @@ mocksData.push({
   },
   result: {
     data: {
-      therapistviewAssessmentQs: [
-        {
-          _id: "ques1",
-          added_by: "therapist",
-          answer: "tets some",
-          question: "1. How are you?",
-          category_id: "cat1",
-        },
-      ],
+      therapistviewAssessmentQs: {
+        data: [
+          {
+            _id: "ques1",
+            added_by: "therapist",
+            answer: "tets some",
+            question: "1. How are you?",
+            category_id: "cat1",
+          },
+        ],
+      },
     },
   },
 });
@@ -179,15 +188,17 @@ mocksData.push({
   },
   result: {
     data: {
-      therapistviewAssessmentQs: [
-        {
-          _id: "que1cat2",
-          added_by: "therapist",
-          answer: "",
-          question: "1. new ques?",
-          category_id: "cat2",
-        },
-      ],
+      therapistviewAssessmentQs: {
+        data: [
+          {
+            _id: "que1cat2",
+            added_by: "therapist",
+            answer: "",
+            question: "1. new ques?",
+            category_id: "cat2",
+          },
+        ],
+      },
     },
   },
 });
@@ -203,12 +214,9 @@ mocksData.push({
   },
   result: {
     data: {
-      therapistAssessmentSubmitAns: [
-        {
-          _id: "65169f1a-a68f-4c48-96d6-c2c5fe89e208",
-          __typename: "patientAssessmentQs",
-        },
-      ],
+      therapistAssessmentSubmitAns: {
+        result: true,
+      },
     },
   },
 });
@@ -246,7 +254,7 @@ mocksData.push({
   result: {
     data: {
       therapistUpdateAssessmentCat: {
-        _id: "6429593c-6525-4b5c-88f2-004c419d8975",
+        result: true,
       },
     },
   },
@@ -264,11 +272,9 @@ mocksData.push({
   },
   result: {
     data: {
-      therapistUpdateAssessmentQs: [
-        {
-          _id: "d3766254-a609-44f1-ad72-c0af8af33d56",
-        },
-      ],
+      therapistUpdateAssessmentQs: {
+        result: true,
+      },
     },
   },
 });
