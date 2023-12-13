@@ -2,6 +2,7 @@ import React from "react";
 import CommonTable from "../../common/CommonTable";
 import SearchFilter from "../../common/searchFilter";
 import therapistData from "./data";
+import { checkUserType } from "../../../utility/helper";
 
 interface ViewProps {
   listData?: any;
@@ -33,13 +34,15 @@ const TherapistPatientListComponent: React.FC<ViewProps> = ({
   onChangeSearchInput,
   onPressSideButton,
 }) => {
+  const { userType } = checkUserType();
+  const isCustom = userType === "custom";
   return (
     <>
       <SearchFilter
         searchInputValue={searchInputValue}
         onChangeSearchInput={onChangeSearchInput}
         sideButtonLabel={"Add Patient"}
-        onPressSideButton={onPressSideButton}
+        onPressSideButton={!isCustom && onPressSideButton}
       />
 
       <CommonTable
@@ -55,7 +58,7 @@ const TherapistPatientListComponent: React.FC<ViewProps> = ({
           //   id: "edit",
           //   icon: require("@mui/icons-material/Edit").default,
           // },
-          {
+          !isCustom && {
             id: "delete",
             icon: require("@mui/icons-material/DeleteSharp").default,
           },

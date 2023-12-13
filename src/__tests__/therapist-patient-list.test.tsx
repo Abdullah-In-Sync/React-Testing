@@ -9,6 +9,7 @@ import {
   THERAPIST_ADD_PATIENT,
   THERAPIST_DELETE_PATIENT,
 } from "../graphql/mutation";
+import * as helper from "../utility/helper";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -95,6 +96,12 @@ const sut = async () => {
 };
 
 describe("Therapist patient list page", () => {
+  beforeEach(() => {
+    jest.spyOn(helper, "checkUserType").mockReturnValue({
+      userType: "Therapist",
+      idTokenData: undefined,
+    });
+  });
   it("should render list", async () => {
     await sut();
     expect(await screen.findByText(/feedback patient/i)).toBeInTheDocument();

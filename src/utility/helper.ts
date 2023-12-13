@@ -219,11 +219,16 @@ export const checkPrivilageAccess = (moduleName, privilege?: any) => {
   }
 };
 
-/* istanbul ignore file */
-export const getTokenIdDecodedData = () => {
+export const checkUserType = () => {
   const { userTokenId } = getSessionToken();
   const idTokenData = parseJwt(userTokenId);
   const userType = idTokenData["cognito:groups"][0];
+  return { userType, idTokenData };
+};
+
+/* istanbul ignore file */
+export const getTokenIdDecodedData = () => {
+  const { userType, idTokenData } = checkUserType();
   if (userType == "custom") {
     const { role_detail } = idTokenData;
     const roleDetailObj = JSON.parse(role_detail);
