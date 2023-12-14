@@ -17,12 +17,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   Typography,
-  InputLabel,
   Radio,
   FormControlLabel,
   RadioGroup,
@@ -105,15 +100,6 @@ const Feedback: NextPage = () => {
     },
   });
 
-  const setDefaultStateExcludingLoader = () => {
-    /* istanbul ignore next */
-    setFeedbackType(null);
-    /* istanbul ignore next */
-    setSessionNo(null);
-    /* istanbul ignore next */
-    setSessionPanelExpanded(false);
-  };
-
   useEffect(() => {
     setLoader(true);
     getPatientTherapyData({ variables: {} });
@@ -156,13 +142,6 @@ const Feedback: NextPage = () => {
     patientTherapryData,
     patientSessionData,
   ]);
-
-  /* istanbul ignore next */
-  const onTherapyChange = (event: SelectChangeEvent) => {
-    setLoader(true);
-    setDefaultStateExcludingLoader();
-    setTherapy(event.target.value);
-  };
 
   /* istanbul ignore next */
   const handleSessionPanelChange =
@@ -306,30 +285,6 @@ const Feedback: NextPage = () => {
       <Loader visible={loader} />
       <ContentHeader title="Feedback" />
       <Box style={{ textAlign: "right" }} data-testid="123456">
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
-          <Select
-            labelId="lblSelectTherapy"
-            id="selectTherapy"
-            inputProps={{ "data-testid": "selectTherapy" }}
-            value={therapy}
-            autoWidth
-            label="Select Therapy"
-            onChange={onTherapyChange}
-          >
-            {patientTherapryData &&
-              patientTherapryData.getPatientTherapy &&
-              patientTherapryData.getPatientTherapy.map((v: any) => {
-                return (
-                  <MenuItem key={"therapy" + v._id} value={v._id}>
-                    {v.therapy_detail.therapy_name}/
-                    {v.disorder_detail.disorder_name}/
-                    {v.model_detail.model_name}
-                  </MenuItem>
-                );
-              })}
-          </Select>
-        </FormControl>
         <Snackbar
           key="1"
           open={open}

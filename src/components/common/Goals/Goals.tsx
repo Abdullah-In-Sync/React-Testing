@@ -4,10 +4,6 @@ import {
   FormControl,
   Grid,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   Typography,
   styled,
 } from "@mui/material";
@@ -142,14 +138,6 @@ const Goals = (props: propTypes) => {
     if (goalSuccess == "4") {
       return 100;
     }
-  };
-
-  /* istanbul ignore next */
-  const onTherapyChange = (event: SelectChangeEvent) => {
-    /* istanbul ignore else */
-    props.setLoader(true);
-    /* istanbul ignore next */
-    setTherapy(event.target.value);
   };
 
   useEffect(() => {
@@ -351,36 +339,6 @@ const Goals = (props: propTypes) => {
   return (
     <>
       <>
-        <Box style={{ textAlign: "right", paddingBottom: "10px" }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="lblSelectTherapy">Select Therapy</InputLabel>
-            <Select
-              labelId="lblSelectTherapy"
-              id="selectTherapy"
-              inputProps={{ "data-testid": "selectTherapy" }}
-              value={therapy}
-              autoWidth
-              label="Select Therapy"
-              onChange={onTherapyChange}
-            >
-              {
-                /* istanbul ignore next */
-                patientTherapryData &&
-                  patientTherapryData?.getPatientTherapy &&
-                  patientTherapryData?.getPatientTherapy.map((v: any) => {
-                    return (
-                      <MenuItem key={"therapy" + v._id} value={v._id}>
-                        {v.therapy_detail.therapy_name}/
-                        {v.disorder_detail.disorder_name}/
-                        {v.model_detail.model_name}
-                      </MenuItem>
-                    );
-                  })
-              }
-            </Select>
-          </FormControl>
-        </Box>
-
         {checkPrivilageAccess("Goals", "Add") && (
           <Box className={styles.addGoalButtonBox}>
             <Button
