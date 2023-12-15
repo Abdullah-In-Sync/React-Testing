@@ -194,9 +194,7 @@ const TherapistPatientListPage: NextPage = () => {
       setModalOpen(true);
     }
     if (pressedIconButton == "view")
-      router.push(
-        `/therapist/patient/view/${value._id}/?mainTab=personal-info&tab=details`
-      );
+      router.push(`/therapist/patient/view/${value._id}`);
 
     // if (pressedIconButton == "edit") {
     //   router.push(
