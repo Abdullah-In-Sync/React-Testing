@@ -118,6 +118,14 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   const modifyTabs = modifyTabsData(tabs2);
 
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (modifyTabs.length > 0 && modifyTabs[0]["value"] && !tab)
+      router.push(
+        `/therapist/patient/view/${patId}/?mainTab=${modifyTabs[0]["value"]}&tab=details`
+      );
+  }, [/* istanbul ignore next */ modifyTabs?.[0]?.["value"], tab]);
+
   return (
     <>
       <Layout>
@@ -159,7 +167,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
             <TabsGeneratorTherapistPatient
               tabsList={modifyTabs}
               tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
-              defaultTabs={defaultTabs}
             />
             {tab === "therapy" && !tab2 && (
               <TherapisTherapyList setTherapy={therapy} />
@@ -169,11 +176,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       </Layout>
     </>
   );
-};
-
-const defaultTabs = {
-  // therapy: "&tab=safety-plan",
-  "personal-info": "&tab=details",
 };
 
 export default MainWraperTherapyPatient;

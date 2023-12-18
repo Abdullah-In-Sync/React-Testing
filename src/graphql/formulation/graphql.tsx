@@ -253,28 +253,30 @@ export const GET_FORMULATION_BY_SHARE_ID = gql`
 export const GET_PAT_FORMULATION_LIST = gql`
   query getPatFormulationList($patientId: String!) {
     getPatFormulationList(patientId: $patientId) {
-      _id
-      created_date
-      formulation_data {
+      data {
         _id
-        formulation_name
-        download_formulation_url
-        formulation_avail_for
-        formulation_img
-        formulation_returnurl
-        formulation_url
-      }
-      template_detail {
-        _id
-        category
-        component_name
         created_date
-        name
+        formulation_data {
+          _id
+          formulation_name
+          download_formulation_url
+          formulation_avail_for
+          formulation_img
+          formulation_returnurl
+          formulation_url
+        }
+        template_detail {
+          _id
+          category
+          component_name
+          created_date
+          name
+          updated_date
+        }
+        template_id
+        template_response
         updated_date
       }
-      template_id
-      template_response
-      updated_date
     }
   }
 `;

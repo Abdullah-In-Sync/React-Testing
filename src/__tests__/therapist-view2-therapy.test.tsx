@@ -272,6 +272,7 @@ describe("Therapist Resource page", () => {
       query: {
         id: "4937a27dc00d48bf983fdcd4b0762ebd",
       },
+      push: jest.fn(),
     }));
   });
 

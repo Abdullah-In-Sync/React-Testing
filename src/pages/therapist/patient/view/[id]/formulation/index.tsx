@@ -12,8 +12,10 @@ import {
 import { useSnackbar } from "notistack";
 import ConfirmationModal from "../../../../../../components/common/ConfirmationModal";
 import { useRouter } from "next/router";
+import { checkPrivilageAccess } from "../../../../../../utility/helper";
 
 const TherapistPatientFormulation: NextPage = () => {
+  const isDelete = checkPrivilageAccess("Formulation", "Delete");
   const { enqueueSnackbar } = useSnackbar();
   const [loader, setLoader] = useState<boolean>(false);
   const [formulationList, setFormulationList] = useState([]);
@@ -30,7 +32,7 @@ const TherapistPatientFormulation: NextPage = () => {
     fetchPolicy: "cache-and-network",
     onCompleted: (data) => {
       /* istanbul ignore next */
-      let list = data.getPatFormulationList?.map((f) => ({
+      let list = data.getPatFormulationList?.data?.map((f) => ({
         ...f,
         formulationId: f.formulation_data[0]._id,
         formulation_name: f.formulation_data[0].formulation_name,
@@ -114,7 +116,8 @@ const TherapistPatientFormulation: NextPage = () => {
       icon: require("@mui/icons-material/Visibility").default,
       styles: { background: "#ffffff" },
     },
-    {
+    /* istanbul ignore next */
+    isDelete && {
       id: "delete",
       icon: require("@mui/icons-material/DeleteSharp").default,
     },
