@@ -47,7 +47,7 @@ const FormBox: React.FC<ViewProps> = ({
                 inputProps={{ "data-testid": "name" }}
                 options={
                   (therapistSafetyPlanList &&
-                    therapistSafetyPlanList.getTherapistSafetyPlanList) ||
+                    therapistSafetyPlanList.getTherapistSafetyPlanList?.data) ||
                   []
                 }
                 mappingKeys={["_id", "name"]}
