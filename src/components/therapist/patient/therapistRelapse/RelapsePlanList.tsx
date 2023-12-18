@@ -37,8 +37,8 @@ const TherapistRelapseList = (safetyPlanList) => {
       >
         {safetyPlanList &&
           /* istanbul ignore next */
-          safetyPlanList?.safetyPlanList?.[key]?.data &&
-          safetyPlanList?.safetyPlanList?.[key]?.data.map((v, k) => {
+          safetyPlanList?.safetyPlanList?.[key] &&
+          safetyPlanList?.safetyPlanList?.[key].map((v, k) => {
             const checkIsEditable = isEditable(v);
             const p = k + 1;
             const panelName = "panel" + p;
