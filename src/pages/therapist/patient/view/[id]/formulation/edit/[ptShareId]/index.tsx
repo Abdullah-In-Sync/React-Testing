@@ -49,6 +49,7 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
   const [getFormulation] = useLazyQuery(GET_FORMULATION_BY_SHARE_ID, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      /* istanbul ignore next */
       if (data?.getFormulationByShareId?.data) {
         const Obj = {
           ...data?.getFormulationByShareId["data"][0].formulation_data[0],

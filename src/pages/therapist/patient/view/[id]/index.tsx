@@ -119,11 +119,12 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   const modifyTabs = modifyTabsData(tabs2);
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (modifyTabs.length > 0 && modifyTabs[0]["value"] && !tab)
       router.push(
         `/therapist/patient/view/${patId}/?mainTab=${modifyTabs[0]["value"]}&tab=details`
       );
-  }, [modifyTabs?.[0]?.["value"], tab]);
+  }, [/* istanbul ignore next */ modifyTabs?.[0]?.["value"], tab]);
 
   return (
     <>

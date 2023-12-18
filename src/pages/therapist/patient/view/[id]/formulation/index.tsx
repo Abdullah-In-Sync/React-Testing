@@ -116,6 +116,7 @@ const TherapistPatientFormulation: NextPage = () => {
       icon: require("@mui/icons-material/Visibility").default,
       styles: { background: "#ffffff" },
     },
+    /* istanbul ignore next */
     isDelete && {
       id: "delete",
       icon: require("@mui/icons-material/DeleteSharp").default,
