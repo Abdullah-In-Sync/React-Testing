@@ -18,22 +18,24 @@ const PatientEditTemplatePage: NextPage = () => {
     THERAPIST_UPDATE_RESOURCE_TEMPLATE_RESPONSE
   );
   const router = useRouter();
-
+  /* istanbul ignore next */
   const { patientId, resourceId } = router.query || {};
 
-  const [getPatientResourceDetail, { data: { getPatResourceById = [] } = {} }] =
-    useLazyQuery(GET_PATH_RESOURCE_BY_ID, {
-      onCompleted: () => {
-        setLoader(false);
-      },
-    });
+  const [
+    getPatientResourceDetail,
+    { data: { getPatResourceById: { data = [] } = {} } = {} },
+  ] = useLazyQuery(GET_PATH_RESOURCE_BY_ID, {
+    onCompleted: () => {
+      setLoader(false);
+    },
+  });
 
   const {
     template_detail: templateDetail,
     resource_data = [],
     template_response: templateResponse,
     _id: ptsharresId,
-  } = getPatResourceById[0] || {};
+  } = data[0] || {};
   const resourceData: ResourceDataInterface = resource_data[0];
 
   const handleSubmitTemplateData = async (value) => {
@@ -58,6 +60,7 @@ const PatientEditTemplatePage: NextPage = () => {
           variant: "success",
         });
     } catch {
+      /* istanbul ignore next */
       enqueueSnackbar("Server error please try later.", { variant: "error" });
     } finally {
       setLoader(false);
