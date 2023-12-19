@@ -35,7 +35,7 @@ const ResourceList: React.FC<ViewProps> = ({
         Resources
       </Typography>
       <TableContainer className="tableContainer">
-        {patientResourceList.length > 0 ? (
+        {patientResourceList?.length > 0 ? (
           <Table stickyHeader aria-label="sticky table">
             <TableHead className={styles.root}>
               <TableRow>
