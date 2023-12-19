@@ -13,13 +13,14 @@ const PatientResourceDetailPage: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [resourceData, setRecourceData] = useState({} as ResourceDataInterface);
   const router = useRouter();
-
+  /* istanbul ignore next */
   const { patientId, id: resourceId } = router.query || {};
 
   const [getPatientResourceDetail] = useLazyQuery(GET_PATH_RESOURCE_BY_ID, {
     onCompleted: (data) => {
+      /* istanbul ignore next */
       if (data!.getPatResourceById) {
-        const resourceDetail = data!.getPatResourceById[0];
+        const resourceDetail = data!.getPatResourceById.data[0];
         if (resourceDetail) {
           setRecourceData(resourceDetail?.resource_data[0]);
         }

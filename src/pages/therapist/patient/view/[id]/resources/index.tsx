@@ -84,7 +84,7 @@ const PatientEditTemplatePage2: NextPage = () => {
       <Loader visible={loader} />
       {patientId && (
         <Patients
-          patientResourceList={getPatResourceList}
+          patientResourceList={getPatResourceList.data}
           buttonClick={handleIconButtonClick}
         />
       )}
