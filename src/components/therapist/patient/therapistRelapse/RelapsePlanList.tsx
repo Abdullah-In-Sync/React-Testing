@@ -25,9 +25,10 @@ const TherapistRelapseList = (safetyPlanList) => {
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
-  const key = isSafetyPlan
-    ? "getSafetyPlanListByPatientId"
-    : "getRelapsePlanListByPatientId";
+  /* istanbul ignore next */
+  const keyData = isSafetyPlan
+    ? safetyPlanList?.safetyPlanList?.["getSafetyPlanListByPatientId"]["data"]
+    : safetyPlanList?.safetyPlanList?.["getRelapsePlanListByPatientId"];
 
   return (
     <>
@@ -37,8 +38,8 @@ const TherapistRelapseList = (safetyPlanList) => {
       >
         {safetyPlanList &&
           /* istanbul ignore next */
-          safetyPlanList?.safetyPlanList?.[key] &&
-          safetyPlanList?.safetyPlanList?.[key].map((v, k) => {
+          keyData &&
+          keyData.map((v, k) => {
             const checkIsEditable = isEditable(v);
             const p = k + 1;
             const panelName = "panel" + p;
