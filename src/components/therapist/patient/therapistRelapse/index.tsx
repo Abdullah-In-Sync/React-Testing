@@ -74,6 +74,7 @@ const TherapistRelapsePlanComponent: React.FC<ViewProps> = ({
         onChangeFilterDropdown={onChangeFilterDropdown}
         onPressCreatePlan={onPressCreatePlan}
         onPressAddPlan={onPressAddPlan}
+        isSafetyPlan={isSafetyPlan}
       />
       <TherapistRelapseList
         submitQustionForm={submitQustionForm}
