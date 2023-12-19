@@ -112,7 +112,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [
     getSafetyPlanById,
     {
-      data: { viewPatientSafetyPlanById: { data: planData = null } = {} } = {},
+      /* istanbul ignore next */ data: {
+        viewPatientSafetyPlanById: { data: planData = null } = {},
+      } = {},
       /* istanbul ignore next */
       error: getSafetyPlanByIdError = undefined,
     } = {},

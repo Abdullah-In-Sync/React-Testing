@@ -392,6 +392,7 @@ export const ADD_THERAPIST_SAFETY_PLAN = gql`
   mutation addTherapistSafetyPlan($patientId: String!, $planId: String!) {
     addTherapistSafetyPlan(patientId: $patientId, planId: $planId) {
       result
+      message
     }
   }
 `;
