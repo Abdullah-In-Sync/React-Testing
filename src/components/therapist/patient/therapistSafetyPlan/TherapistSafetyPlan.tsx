@@ -32,7 +32,7 @@ const TherapistSafetyPlanList = (safetyPlanList) => {
       >
         {safetyPlanList &&
           safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId &&
-          safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId.map(
+          /* istanbul ignore next */ safetyPlanList?.safetyPlanList?.getSafetyPlanListByPatientId?.data?.map(
             (v, k) => {
               const checkIsEditable = isEditable(v);
               const p = k + 1;

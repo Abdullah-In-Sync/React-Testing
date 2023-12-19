@@ -250,7 +250,11 @@ export const getTokenIdDecodedData = () => {
   } else if (userType === "admin") {
     return { user_type: userType };
   } else {
-    const userDataObj = JSON.parse(idTokenData[userType + "_data"]);
+    const userTypeData = idTokenData[userType + "_data"];
+    const userDataObj =
+      !userTypeData || userTypeData === null || userTypeData.trim() === ""
+        ? {}
+        : JSON.parse(userTypeData);
     const { first_name, last_name, org_id } = userDataObj;
     return {
       [userType + "_data"]: {

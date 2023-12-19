@@ -112,7 +112,9 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   const [
     getSafetyPlanById,
     {
-      data: { viewPatientSafetyPlanById: planData = null } = {},
+      /* istanbul ignore next */ data: {
+        viewPatientSafetyPlanById: { data: planData = null } = {},
+      } = {},
       /* istanbul ignore next */
       error: getSafetyPlanByIdError = undefined,
     } = {},
@@ -165,18 +167,11 @@ const TherapistSafetyPlanIndex: NextPage = () => {
       createTherapistSafetyPlan({
         variables,
         fetchPolicy: "network-only",
-        onCompleted: async (data) => {
-          /* istanbul ignore next */
-          const {
-            createTherapistSafetyPlan: { _id },
-          } = data;
-
+        onCompleted: async () => {
           enqueueSnackbar("Plan has been created successfully!", {
             variant: "success",
           });
           handleCloseCreatePlanModal();
-
-          await handleAddIconButton(0, _id);
           /* istanbul ignore next */
           getSafetyPlanList({
             variables: { patientId: patId },

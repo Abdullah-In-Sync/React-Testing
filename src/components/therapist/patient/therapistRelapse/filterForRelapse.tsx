@@ -4,6 +4,7 @@ import SearchInput from "../../../common/SearchInput";
 import SingleSelectComponent from "../../../common/SelectBox/SingleSelect/SingleSelectComponent";
 import { useStyles } from "../../../admin/safetyPlan/safetyPlanStyles";
 import { planTypesFilter as planTypes } from "../../../../lib/constants";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 interface ViewProps {
   searchInputValue?: string;
@@ -13,6 +14,7 @@ interface ViewProps {
   onPressAddPlan?: () => void;
   onChangeFilterDropdown?: (e) => void;
   selectFilterOptions?: any;
+  isSafetyPlan?: boolean;
 }
 
 const FilterForRelapseTherapist: React.FC<ViewProps> = ({
@@ -23,8 +25,15 @@ const FilterForRelapseTherapist: React.FC<ViewProps> = ({
   onChangeFilterDropdown,
   onPressCreatePlan,
   onPressAddPlan,
+  isSafetyPlan,
 }) => {
   const styles = useStyles();
+  const isPlanCreate =
+    (isSafetyPlan && checkPrivilageAccess("Safety Plan", "Create")) ||
+    (!isSafetyPlan && checkPrivilageAccess("Relapse", "Create"));
+  const isPlanAdd =
+    (isSafetyPlan && checkPrivilageAccess("Safety Plan", "Add")) ||
+    (!isSafetyPlan && checkPrivilageAccess("Relapse", "Add"));
   const iconButtons = () => {
     return (
       <Stack>
@@ -58,27 +67,31 @@ const FilterForRelapseTherapist: React.FC<ViewProps> = ({
               justifyContent: "space-evenly",
             }}
           >
-            <Box style={{ paddingRight: "20px" }}>
-              <Button
-                data-testid="createPlanButton"
-                variant="contained"
-                onClick={onPressCreatePlan}
-                style={{ textTransform: "none" }}
-              >
-                Create Plan
-              </Button>
-            </Box>
+            {isPlanCreate && (
+              <Box style={{ paddingRight: "20px" }}>
+                <Button
+                  data-testid="createPlanButton"
+                  variant="contained"
+                  onClick={onPressCreatePlan}
+                  style={{ textTransform: "none" }}
+                >
+                  Create Plan
+                </Button>
+              </Box>
+            )}
 
-            <Box>
-              <Button
-                data-testid="addPlanButton"
-                variant="contained"
-                style={{ paddingRight: "20px", textTransform: "none" }}
-                onClick={onPressAddPlan}
-              >
-                Add Plan
-              </Button>
-            </Box>
+            {isPlanAdd && (
+              <Box>
+                <Button
+                  data-testid="addPlanButton"
+                  variant="contained"
+                  style={{ paddingRight: "20px", textTransform: "none" }}
+                  onClick={onPressAddPlan}
+                >
+                  Add Plan
+                </Button>
+              </Box>
+            )}
           </Box>
         </Stack>
       </Stack>
@@ -89,3 +102,5 @@ const FilterForRelapseTherapist: React.FC<ViewProps> = ({
 };
 
 export default FilterForRelapseTherapist;
+
+// checkPrivilageAccess("Safety Plan", "Create")

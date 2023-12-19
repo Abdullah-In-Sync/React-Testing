@@ -14,10 +14,20 @@ import {
 } from "@mui/material";
 import { useStyles } from "../therapistSafetyPlan/viewResponse/viewResponseStyles";
 import ViewResponse from "./viewResponse/ViewResponse";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 const TherapistRelapseList = (safetyPlanList) => {
   const { accordionOpen, handleAddIconButton, isSafetyPlan } =
     safetyPlanList || {};
+  const isPlanShare =
+    (isSafetyPlan && checkPrivilageAccess("Safety Plan", "Share")) ||
+    (!isSafetyPlan && checkPrivilageAccess("Relapse", "Share"));
+  const isPlanDelete =
+    (isSafetyPlan && checkPrivilageAccess("Safety Plan", "Delete")) ||
+    (!isSafetyPlan && checkPrivilageAccess("Relapse", "Delete"));
+  const isPlanEdit =
+    (isSafetyPlan && checkPrivilageAccess("Safety Plan", "Edit")) ||
+    (!isSafetyPlan && checkPrivilageAccess("Relapse", "Edit"));
   const styles = useStyles();
 
   const isEditable = (v) => {
@@ -25,9 +35,10 @@ const TherapistRelapseList = (safetyPlanList) => {
     if (plan_type !== "fixed" || plan_owner === "therapist") return true;
     else return false;
   };
-  const key = isSafetyPlan
-    ? "getSafetyPlanListByPatientId"
-    : "getRelapsePlanListByPatientId";
+  /* istanbul ignore next */
+  const keyData = isSafetyPlan
+    ? safetyPlanList?.safetyPlanList?.["getSafetyPlanListByPatientId"]["data"]
+    : safetyPlanList?.safetyPlanList?.["getRelapsePlanListByPatientId"];
 
   return (
     <>
@@ -37,8 +48,8 @@ const TherapistRelapseList = (safetyPlanList) => {
       >
         {safetyPlanList &&
           /* istanbul ignore next */
-          safetyPlanList?.safetyPlanList?.[key] &&
-          safetyPlanList?.safetyPlanList?.[key].map((v, k) => {
+          keyData &&
+          keyData.map((v, k) => {
             const checkIsEditable = isEditable(v);
             const p = k + 1;
             const panelName = "panel" + p;
@@ -109,7 +120,7 @@ const TherapistRelapseList = (safetyPlanList) => {
                         }}
                         className="icon-container"
                       >
-                        {checkIsEditable && (
+                        {checkIsEditable && isPlanEdit && (
                           <IconButton
                             size="small"
                             data-testid={`button-edit-icon_${k}`}
@@ -126,31 +137,35 @@ const TherapistRelapseList = (safetyPlanList) => {
                           </IconButton>
                         )}
 
-                        <IconButton
-                          size="small"
-                          data-testid={`button-delete-icon_${k}`}
-                          style={{
-                            backgroundColor: "#fff",
-                            width: "unset",
-                            marginRight: "10px",
-                          }}
-                          onClick={() => safetyPlanList.onPressDeletePlan(v)}
-                        >
-                          <DeleteIcon style={{ fontSize: "15px" }} />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          className={`${v.share_status ? "active" : ""}`}
-                          data-testid={`button-share-icon_${k}`}
-                          style={{
-                            backgroundColor: "#fff",
-                            width: "unset",
-                            marginRight: "10px",
-                          }}
-                          onClick={() => safetyPlanList.onPressSharePlan(v)}
-                        >
-                          <ShareIcon style={{ fontSize: "15px" }} />
-                        </IconButton>
+                        {isPlanDelete && (
+                          <IconButton
+                            size="small"
+                            data-testid={`button-delete-icon_${k}`}
+                            style={{
+                              backgroundColor: "#fff",
+                              width: "unset",
+                              marginRight: "10px",
+                            }}
+                            onClick={() => safetyPlanList.onPressDeletePlan(v)}
+                          >
+                            <DeleteIcon style={{ fontSize: "15px" }} />
+                          </IconButton>
+                        )}
+                        {isPlanShare && (
+                          <IconButton
+                            size="small"
+                            className={`${v.share_status ? "active" : ""}`}
+                            data-testid={`button-share-icon_${k}`}
+                            style={{
+                              backgroundColor: "#fff",
+                              width: "unset",
+                              marginRight: "10px",
+                            }}
+                            onClick={() => safetyPlanList.onPressSharePlan(v)}
+                          >
+                            <ShareIcon style={{ fontSize: "15px" }} />
+                          </IconButton>
+                        )}
                       </Box>
                     </>
                   </AccordionSummary>
