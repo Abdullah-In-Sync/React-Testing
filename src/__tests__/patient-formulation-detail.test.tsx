@@ -9,7 +9,6 @@ import {
 } from "../graphql/formulation/graphql";
 import PatientEditTemplatePage from "../pages/patient/formulation/edit/[id]";
 import theme from "../styles/theme/theme";
-import * as store from "../utility/storage";
 const useRouter = jest.spyOn(require("next/router"), "useRouter");
 
 jest.mock("next/router", () => ({
@@ -159,9 +158,6 @@ mocksData.push({
   },
 });
 
-const idCustomJwtToken =
-  "eyJraWQiOiJsXC9BY3BKVlJ6VGFmM1U0akhlUm8rUWZVZmlLbE9hSUphT3hjS0htNk9Rbz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJmMWU0MWJhYy1jYmEyLTQ3YWMtYmJkYy0xOTE2MjRhMWUzNjgiLCJjb2duaXRvOmdyb3VwcyI6WyJjdXN0b20iXSwicm9sZV9kZXRhaWwiOiJ7XCJfaWRcIjpcIjFhNWQxN2ViLWZlNWUtNDFiNi1iZmU3LWJkYjAxNzZmYzdkMlwiLFwibmFtZVwiOlwidGVzdGFjY2Vzc3Rva2VuX3JvbGVcIixcIm9yZ19pZFwiOlwiNTE3ZmEyMWE4MmMwNDY0YTkyYWFhZTkwYWUwZDVjNTlcIixcImFjY2Vzc2liaWxpdHlcIjpcInBhdGllbnRcIixcInBvc2l0aW9uXCI6XCJzaWRlYmFyXCIsXCJzdGF0dXNcIjoxLFwiY3JlYXRlZF9kYXRlXCI6XCIyMDIzLTExLTEwVDA4OjAxOjM5LjYwNlpcIixcInVwZGF0ZWRfZGF0ZVwiOlwiMjAyMy0xMS0yOFQxOToyNzo0Ni45NTRaXCJ9IiwiY3VzdG9tOmZpcnN0bmFtZSI6IkNwYXRpZW50IiwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LXdlc3QtMS5hbWF6b25hd3MuY29tXC9ldS13ZXN0LTFfeWRGRldGRHdHIiwiYXV0aF90aW1lIjoxNzAxMTk5Njg3LCJjdXN0b206bGFzdG5hbWUiOiJDbGFzdG5hbWUiLCJleHAiOjE3MDEyMDMyODcsImlhdCI6MTcwMTE5OTY4NywianRpIjoiMzM5ZDgzOTMtYmRlMS00MWUzLTgxYTYtODM3ZmRmMjBkYjQ2IiwiZW1haWwiOiJwaXl1c2guc2luZ2grMTBAbXloZWxwLmNvLnVrIiwidGhlcmFwaXN0X2RhdGEiOiIiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjp0cnVlLCJjb2duaXRvOnVzZXJuYW1lIjoiZjFlNDFiYWMtY2JhMi00N2FjLWJiZGMtMTkxNjI0YTFlMzY4Iiwib3JpZ2luX2p0aSI6IjQ1ODI5Mjk1LTU1NGUtNGY2NS1iNWNlLTJmOTY0M2VhYzIyMyIsInJvbGVfYWNjZXNzIjoiW3tcIl9pZFwiOlwiMDZkMzY1MTEtMzRmNC00ZWQ4LWIxZTgtNDc1ZTI3OGMzNDkzXCIsXCJuYW1lXCI6XCJBZ3JlZW1lbnRcIixcInByaXZpbGVnZXNcIjpbe1wiX2lkXCI6XCI1YjljNTQ1Yi1hYzBhLTQ5YTQtOGU5NC0xZDM4Yjg3NTdkOTVcIixcIm5hbWVcIjpcIlZpZXdcIn1dfSx7XCJfaWRcIjpcImY4ZTE5ZmM2LWViM2EtNGIzMC04NjcyLTZhZGEzNmIxY2NkNFwiLFwibmFtZVwiOlwiRmlsZXNcIixcInByaXZpbGVnZXNcIjpbe1wiX2lkXCI6XCJmNzc2NmNmYi1lYTM4LTRjOTEtYjkzYS1hYWQ1ODk1NjY4NjlcIixcIm5hbWVcIjpcIkRvd25sb2FkXCJ9LHtcIl9pZFwiOlwiNWI5YzU0NWItYWMwYS00OWE0LThlOTQtMWQzOGI4NzU3ZDk1XCIsXCJuYW1lXCI6XCJWaWV3XCJ9XX0se1wiX2lkXCI6XCIwYzVmNGY3Ny04YTgyLTQ5MmYtYTdlMi1hNTc4ZmQ5YjFiMzRcIixcIm5hbWVcIjpcIlJlbGFwc2VcIixcInByaXZpbGVnZXNcIjpbe1wiX2lkXCI6XCI1YjljNTQ1Yi1hYzBhLTQ5YTQtOGU5NC0xZDM4Yjg3NTdkOTVcIixcIm5hbWVcIjpcIlZpZXdcIn0se1wiX2lkXCI6XCI3NmI5YzQ1NC0zZDYwLTRhOWYtYjliYy1lNTc4ODE5NjVmOTRcIixcIm5hbWVcIjpcIkFkZFwifV19LHtcIl9pZFwiOlwiMWY0ODU4ZWQtZDJhYS00ZmQ5LTgxZWItZTBmNzYxOTE4YmQ0XCIsXCJuYW1lXCI6XCJTYWZldHkgUGxhblwiLFwicHJpdmlsZWdlc1wiOlt7XCJfaWRcIjpcIjc2YjljNDU0LTNkNjAtNGE5Zi1iOWJjLWU1Nzg4MTk2NWY5NFwiLFwibmFtZVwiOlwiQWRkXCJ9LHtcIl9pZFwiOlwiNWI5YzU0NWItYWMwYS00OWE0LThlOTQtMWQzOGI4NzU3ZDk1XCIsXCJuYW1lXCI6XCJWaWV3XCJ9XX0se1wiX2lkXCI6XCJlN2I2ZGNmNC0zZTJmLTQxN2YtOGU5ZS05OWI2NDRiMzhmNTBcIixcIm5hbWVcIjpcIk1lYXN1cmVzXCIsXCJwcml2aWxlZ2VzXCI6W3tcIl9pZFwiOlwiNzZiOWM0NTQtM2Q2MC00YTlmLWI5YmMtZTU3ODgxOTY1Zjk0XCIsXCJuYW1lXCI6XCJBZGRcIn0se1wiX2lkXCI6XCI1YjljNTQ1Yi1hYzBhLTQ5YTQtOGU5NC0xZDM4Yjg3NTdkOTVcIixcIm5hbWVcIjpcIlZpZXdcIn1dfSx7XCJfaWRcIjpcIjlkOTAxMTE2LTNiMDAtNDZmYS05ODUxLTdhZGE5M2VkMDYwY1wiLFwibmFtZVwiOlwiTW9uaXRvcnNcIixcInByaXZpbGVnZXNcIjpbXX0se1wiX2lkXCI6XCI0MWFjMzQ3My0zODU3LTQzNjEtYmQ5OS0wZmMxZTMwZDkzNTZcIixcIm5hbWVcIjpcIkFzc2Vzc21lbnRcIixcInByaXZpbGVnZXNcIjpbe1wiX2lkXCI6XCI1YjljNTQ1Yi1hYzBhLTQ5YTQtOGU5NC0xZDM4Yjg3NTdkOTVcIixcIm5hbWVcIjpcIlZpZXdcIn0se1wiX2lkXCI6XCJiYjQzZTBmZC0wZGFhLTQ2ODktODIwMC1hZDY3MDc5N2MyNjlcIixcIm5hbWVcIjpcIlVwZGF0ZSByZXNwb25zZVwifV19LHtcIl9pZFwiOlwiZGJmNmU4YzAtMjNkYi00NGE3LWEwZWEtNGVlNjE0NGM5MzBjXCIsXCJuYW1lXCI6XCJHb2Fsc1wiLFwicHJpdmlsZWdlc1wiOltdfSx7XCJfaWRcIjpcImM3MWM4YjQzLTY5M2YtNDIwMS04MWQxLTJjZjc2ZGUwNWQ5Y1wiLFwibmFtZVwiOlwiRm9ybXVsYXRpb25cIixcInByaXZpbGVnZXNcIjpbe1wiX2lkXCI6XCI1YjljNTQ1Yi1hYzBhLTQ5YTQtOGU5NC0xZDM4Yjg3NTdkOTVcIixcIm5hbWVcIjpcIlZpZXdcIn0se1wiX2lkXCI6XCJiYjQzZTBmZC0wZGFhLTQ2ODktODIwMC1hZDY3MDc5N2MyNjlcIixcIm5hbWVcIjpcIlVwZGF0ZSByZXNwb25zZVwifSx7XCJfaWRcIjpcIjc2YjljNDU0LTNkNjAtNGE5Zi1iOWJjLWU1Nzg4MTk2NWY5NFwiLFwibmFtZVwiOlwiQWRkXCJ9LHtcIl9pZFwiOlwiN2Q1MDkzYjktMzU5Zi00NTQyLThhMWYtZjgwNDAyMjgzNzcwXCIsXCJuYW1lXCI6XCJTaGFyZVwifSx7XCJfaWRcIjpcImY3NzY2Y2ZiLWVhMzgtNGM5MS1iOTNhLWFhZDU4OTU2Njg2OVwiLFwibmFtZVwiOlwiRG93bmxvYWRcIn1dfSx7XCJfaWRcIjpcIjFhNjY2OGE3LWVjMDQtNDkwNC05NzMwLWExNGFlNGFjMTU0MVwiLFwibmFtZVwiOlwiSG9tZXdvcmtcIixcInByaXZpbGVnZXNcIjpbe1wiX2lkXCI6XCI3NmI5YzQ1NC0zZDYwLTRhOWYtYjliYy1lNTc4ODE5NjVmOTRcIixcIm5hbWVcIjpcIkFkZFwifSx7XCJfaWRcIjpcIjViOWM1NDViLWFjMGEtNDlhNC04ZTk0LTFkMzhiODc1N2Q5NVwiLFwibmFtZVwiOlwiVmlld1wifV19LHtcIl9pZFwiOlwiYTc1MjU0Y2EtZTNmMy00MDFhLThlMjAtYmJiNTBiM2QzOWUzXCIsXCJuYW1lXCI6XCJGZWVkYmFja1wiLFwicHJpdmlsZWdlc1wiOltdfSx7XCJfaWRcIjpcIjNhOWEwNWIyLTMwYzMtNGYzYS1iYWVjLTFiZTc5NjA4NTU0NFwiLFwibmFtZVwiOlwiUmVzb3VyY2VcIixcInByaXZpbGVnZXNcIjpbXX0se1wiX2lkXCI6XCIzMzlhMzQzZi02M2M2LTQyNmYtODM1Ny1mMmZjNWEyNWFhMjBcIixcIm5hbWVcIjpcIlByb2ZpbGVcIixcInByaXZpbGVnZXNcIjpbXX1dIiwiYXVkIjoicXBubDNuYTU0Z3NlZmR2ZG91bTFzNTF0aiIsImV2ZW50X2lkIjoiZWRjMzNkZGYtYWYzNy00ZGMxLWJhNTItOTMyNThiMWY5N2E1IiwidG9rZW5fdXNlIjoiaWQiLCJuYW1lIjoiQ3BhdGllbnQgQ2xhc3RuYW1lIiwicGhvbmVfbnVtYmVyIjoiKzQ0MTQ1MTQ1MTQiLCJwYXRpZW50X2RhdGEiOiJ7XCJfaWRcIjpcImFkNThhMGFlLTVmOWQtNGVmOS04YTAyLWUwNTRjMDI3Mzg5NVwiLFwibmFtZVwiOlwicHBhdGllbnVwZGF0ZSBwbG5cIixcImZpcnN0X25hbWVcIjpcInBwYXRpZW51cGRhdGVcIixcImxhc3RfbmFtZVwiOlwicGxuXCIsXCJvcmdfaWRcIjpcIjUxN2ZhMjFhODJjMDQ2NGE5MmFhYWU5MGFlMGQ1YzU5XCIsXCJ0aGVyYXBpc3RfaWRcIjpcIjZmZmRiYTFlLTRhZTEtNGU4MC1hYTAzLWU4NGQyMmQ2ZGZhM1wifSIsImZhbWlseV9uYW1lIjoiOTMxZWQyMGQtOTQyMy00ZWRlLTliYjktMzZmMzRiNDhjYzRiIn0.E7DhjjRNnpf83Vf2OoTN6Krwm60xBtxlFWUJ37Z3BFbfU0fuCgQ9xJc00Hpk9MJuJtXtcjhtnsX2ad1BsQvDAk5JF4OPE2mCfxV58SGSx9BUnSa1F5dLrKiqhCqsVjFsZVrZQN3mzqIrUzg6fOUOxPIlOkohyAM5jI6qbfEc0pJ6xWEaaJEyXKnT6mBsHvrREV4whV59KDySn29kUZcv5xA15QbrdKun4UXOc2BS6Pxov-ZrWKmqjp025ISZJAa9jpGBQooTHjouJZA62asuBM-u_GaJo1Tu-K_CTDTE2WBQI1hLZkn_GsbrJIYMmgckoL2B84Z6ZfcPdoUp_2GJ4g";
-
 const sut = async () => {
   render(
     <MockedProvider mocks={mocksData} addTypename={false}>
@@ -178,12 +174,6 @@ const sut = async () => {
 
 describe("Formulation detail page", () => {
   beforeEach(() => {
-    jest.spyOn(store, "getSessionToken").mockReturnValue({
-      userToken: "testToken",
-      userType: "patient",
-      userTokenId: idCustomJwtToken,
-    });
-
     (useAppContext as jest.Mock).mockReturnValue({
       isAuthenticated: true,
       user: {
@@ -200,17 +190,17 @@ describe("Formulation detail page", () => {
       },
     });
   });
-  // it("formulation doc", async () => {
-  //   useRouter.mockImplementation(() => ({
-  //     query: {
-  //       id: "46cb932a4c6346268ec4c13009cdd1b6",
-  //     },
-  //   }));
-  //   await sut();
-  //   await waitFor(() => {
-  //     expect(screen.getByTestId("downloadIconButton")).toBeInTheDocument();
-  //   });
-  // });
+  it("formulation doc", async () => {
+    useRouter.mockImplementation(() => ({
+      query: {
+        id: "46cb932a4c6346268ec4c13009cdd1b6",
+      },
+    }));
+    await sut();
+    await waitFor(() => {
+      expect(screen.getByTestId("downloadIconButton")).toBeInTheDocument();
+    });
+  });
 
   it(" submit template formulation", async () => {
     useRouter.mockImplementation(() => ({
