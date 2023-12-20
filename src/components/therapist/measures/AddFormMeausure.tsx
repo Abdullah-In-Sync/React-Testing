@@ -17,7 +17,7 @@ const MeasuresFormAdd: React.FC<ViewProps> = ({
   const styles = useStyles();
   const [planId, setPlanId] = useState("");
   const therapistGetAdminMeasures =
-    therapistSafetyPlanList?.therapistGetAdminMeasures || [];
+    therapistSafetyPlanList?.therapistGetAdminMeasures?.data || [];
   const set2 = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {

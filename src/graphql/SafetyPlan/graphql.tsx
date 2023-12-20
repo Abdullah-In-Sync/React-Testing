@@ -299,16 +299,18 @@ export const GET_THERAPIST_MY_MONITOR_VIEW = gql`
 export const GET_THERAPIST_MEASURES_PLAN_LIST = gql`
   query MyQuery {
     therapistGetAdminMeasures {
-      _id
-      created_date
-      description
-      org_id
-      organization_name
-      status
-      template_data
-      template_id
-      title
-      updated_date
+      data {
+        _id
+        created_date
+        description
+        org_id
+        organization_name
+        status
+        template_data
+        template_id
+        title
+        updated_date
+      }
     }
   }
 `;
