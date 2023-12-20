@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import CardContent from "@mui/material/CardContent";
 
@@ -51,7 +51,7 @@ const ResourcePopup: React.FC<ViewProps> = ({
   assigneHomeworkResources,
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [selectResourceId, setSelectResourceId] = useState(0);
+  const [selectedCheckboxIndex, setSelectedCheckboxIndex] = useState(-1);
 
   const handleClearInput = () => {
     setSearchValue("");
@@ -62,9 +62,17 @@ const ResourcePopup: React.FC<ViewProps> = ({
     onSearchData(event.target.value);
   };
 
-  const setCheckBox = (data) => {
-    setSelectResourceId(data._id);
+  const setCheckBox = (index) => {
+    setSelectedCheckboxIndex(index);
   };
+
+  // Reset the selectedCheckboxIndex when the modal is opened
+  useEffect(() => {
+    if (openResourceModal) {
+      setSelectedCheckboxIndex(-1);
+    }
+  }, [openResourceModal]);
+
   return (
     <Box>
       <Modal
@@ -205,7 +213,8 @@ const ResourcePopup: React.FC<ViewProps> = ({
                         }}
                         data-testid={`resource_checkbox${index}`}
                         control={<Radio />}
-                        onChange={() => setCheckBox(data)}
+                        onChange={() => setCheckBox(index)}
+                        checked={index === selectedCheckboxIndex}
                         label={""}
                       />
                       <CardContentWrapper>
@@ -275,7 +284,11 @@ const ResourcePopup: React.FC<ViewProps> = ({
                 style={{
                   backgroundColor: "#6BA08E",
                 }}
-                onClick={() => assigneHomeworkResources(selectResourceId)}
+                onClick={() =>
+                  assigneHomeworkResources(
+                    popupData?.getPopupResourceList[selectedCheckboxIndex]?._id
+                  )
+                }
               >
                 Assign Resource
               </Button>
