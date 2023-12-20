@@ -552,9 +552,11 @@ export const GET_TEMPLATE_DETAIL = gql`
 export const GET_PATIENT_LIST = gql`
   query therapistPatientList {
     therapistPatientList {
-      _id
-      patient_firstname
-      patient_lastname
+      data {
+        _id
+        patient_firstname
+        patient_lastname
+      }
     }
   }
 `;

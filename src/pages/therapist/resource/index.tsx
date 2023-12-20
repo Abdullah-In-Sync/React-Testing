@@ -683,7 +683,7 @@ const Resource: NextPage = () => {
                     return <em>Select Patient to share</em>;
                   }
                   /* istanbul ignore next */
-                  return patientList?.therapistPatientList
+                  return patientList?.therapistPatientList.data
                     .filter((name) => selected.includes(name._id))
                     .map(
                       (record) =>
@@ -697,7 +697,7 @@ const Resource: NextPage = () => {
                   "data-testid": "selectPatient",
                 }}
               >
-                {patientList?.therapistPatientList.map((val) => (
+                {patientList?.therapistPatientList.data.map((val) => (
                   <MenuItem key={val._id} value={val._id}>
                     {val.patient_firstname + " " + val.patient_lastname}
                   </MenuItem>
