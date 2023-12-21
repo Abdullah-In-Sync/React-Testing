@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import * as React from "react";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 interface ViewProps {
   data: any;
@@ -23,10 +24,20 @@ const iconButtonsData = [
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
   const { _id, added_by } = data;
+  // checkPrivilageAccess("Goals", "Add")
+  const isEdit = checkPrivilageAccess("Measures", "Edit");
+  const isDelete = checkPrivilageAccess("Measures", "Delete");
+  const isShare = checkPrivilageAccess("Measures", "Share");
   const iconButtons = () => {
     return iconButtonsData.map((item, i) => {
       const { id, icon: Icon } = item;
-      if (added_by !== "therapist" && id === "edit") return null;
+      if (
+        (id === "edit" && isEdit && added_by !== "therapist") ||
+        (id === "delete" && !isDelete) ||
+        (id === "share" && !isShare)
+      )
+        return null;
+
       return (
         <Box
           key={`iconButton_${_id}_${i}`}

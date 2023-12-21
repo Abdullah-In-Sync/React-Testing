@@ -5,7 +5,7 @@ import { TherapistListMeasuresEntity } from "../../../../graphql/Measure/types";
 import { Accordion } from "../../../common/Accordion";
 import CommonButton from "../../../common/Buttons/CommonButton";
 import ActionsButtons from "./ActionsButtons";
-import { isAfter } from "../../../../utility/helper";
+import { checkPrivilageAccess, isAfter } from "../../../../utility/helper";
 
 type ViewProps = {
   listData: TherapistListMeasuresEntity[];
@@ -17,6 +17,7 @@ const MeasuresList: React.FC<ViewProps> = ({
   listData = [],
   actionButtonClick,
 }) => {
+  const isEdit = checkPrivilageAccess("Measures", "Edit");
   const { enqueueSnackbar } = useSnackbar();
 
   /* istanbul ignore next */
@@ -53,17 +54,19 @@ const MeasuresList: React.FC<ViewProps> = ({
           >
             View Scores
           </CommonButton>
-          <CommonButton
-            variant="contained"
-            className="scoreButton"
-            data-testid={`takeTest${i}`}
-            onClick={() =>
-              /* istanbul ignore next */
-              handleTakeTest(item)
-            }
-          >
-            Take Test
-          </CommonButton>
+          {isEdit && (
+            <CommonButton
+              variant="contained"
+              className="scoreButton"
+              data-testid={`takeTest${i}`}
+              onClick={() =>
+                /* istanbul ignore next */
+                handleTakeTest(item)
+              }
+            >
+              Take Test
+            </CommonButton>
+          )}
         </Box>
       </Box>
     );

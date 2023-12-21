@@ -33,8 +33,8 @@ function RouteGuard({ children }) {
     };
   }, [router.asPath.split("?")[0].split("/")[1]]);
 
-  function authCheck(url) {
-    const { userToken, userType } = getSessionToken();
+  async function authCheck(url) {
+    const { userToken, userType } = await getSessionToken();
     const allowed = [userType, ...allowedPaths];
     const path = url.split("?")[0];
     const initialPath = path.split("/")[1];
