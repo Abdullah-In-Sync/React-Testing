@@ -24,7 +24,6 @@ const iconButtonsData = [
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
   const { _id, added_by } = data;
-  // checkPrivilageAccess("Goals", "Add")
   const isEdit = checkPrivilageAccess("Measures", "Edit");
   const isDelete = checkPrivilageAccess("Measures", "Delete");
   const isShare = checkPrivilageAccess("Measures", "Share");
@@ -32,7 +31,7 @@ const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
     return iconButtonsData.map((item, i) => {
       const { id, icon: Icon } = item;
       if (
-        (id === "edit" && isEdit && added_by !== "therapist") ||
+        (id === "edit" && !isEdit && added_by !== "therapist") ||
         (id === "delete" && !isDelete) ||
         (id === "share" && !isShare)
       )
