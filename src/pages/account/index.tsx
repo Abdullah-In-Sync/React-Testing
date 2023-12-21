@@ -68,7 +68,6 @@ const LoginPage: NextPage = () => {
         message,
       });
     }
-
     handleAuthLoginRedirection({ userType, status, message, setSubmitting });
   };
 
