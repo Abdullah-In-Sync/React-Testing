@@ -202,6 +202,9 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
     delete editStyle.border;
     delete editStyle.padding;
   }
+
+  const isEditResource = checkPrivilageAccess("Resource", "Edit");
+
   return (
     <>
       <Box style={editStyle}>
@@ -286,9 +289,10 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
       </Box>
       {
         /* istanbul ignore next */
-
         mod !== "mobile" &&
-          checkPrivilageAccess("Formulation", "Update response") && (
+          checkPrivilageAccess("Formulation", "Update response") &&
+          /* istanbul ignore next */
+          (isEditResource === true || isEditResource === undefined) && (
             <Grid container justifyContent={"center"}>
               <Grid item padding={"63px 0px 94px 0px"}>
                 <Button
@@ -316,12 +320,13 @@ const TemplateArrow: React.FC<TemplateArrowProps> = ({
                   }}
                   onClick={() => onCancel()}
                 >
-                  Cancelfrefrf
+                  Cancel
                 </Button>
               </Grid>
             </Grid>
           )
       }
+
       {mod == "mobile" && !handleViewBoxClick && (
         <Grid container justifyContent={"center"}>
           <Button

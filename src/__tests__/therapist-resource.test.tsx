@@ -147,18 +147,20 @@ const buildMocks = (): {
     },
     result: {
       data: {
-        therapistPatientList: [
-          {
-            _id: "patient-1",
-            first_name: "test 1",
-            last_name: "last 2",
-          },
-          {
-            _id: "patient-2",
-            first_name: "test 2",
-            last_name: "last 2",
-          },
-        ],
+        therapistPatientList: {
+          data: [
+            {
+              _id: "patient-1",
+              first_name: "test 1",
+              last_name: "last 2",
+            },
+            {
+              _id: "patient-2",
+              first_name: "test 2",
+              last_name: "last 2",
+            },
+          ],
+        },
       },
     },
   });
