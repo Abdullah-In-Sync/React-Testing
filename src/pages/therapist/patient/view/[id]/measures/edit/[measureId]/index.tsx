@@ -41,7 +41,7 @@ const CreateMeasures: NextPage = () => {
     getTherapistMeasure,
     {
       loading: loadingMeasureData,
-      data: { therapistViewMeasure: measureData = null } = {},
+      data: { therapistViewMeasure: { data: measureData = null } = {} } = {},
     },
   ] = useLazyQuery<TherapistViewMeasuresData>(THERAPIST_VIEW_MEASURE, {
     fetchPolicy: "cache-and-network",

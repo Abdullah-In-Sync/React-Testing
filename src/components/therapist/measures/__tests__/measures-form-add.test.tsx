@@ -28,7 +28,7 @@ describe("MeasuresFormAdd component", () => {
   it("renders without crashing", () => {
     const onPressSubmit = jest.fn();
     const therapistSafetyPlanList = {
-      therapistGetAdminMeasures: null,
+      therapistGetAdminMeasures: { data: null },
     };
     const onChangePlanId = jest.fn();
 
@@ -38,10 +38,12 @@ describe("MeasuresFormAdd component", () => {
   it("calls onChangePlanId with the correct value when input changes", () => {
     const onPressSubmit = jest.fn();
     const therapistSafetyPlanList = {
-      therapistGetAdminMeasures: [
-        { _id: "1", title: "Measure 1" },
-        { _id: "2", title: "Measure 2" },
-      ],
+      therapistGetAdminMeasures: {
+        data: [
+          { _id: "1", title: "Measure 1" },
+          { _id: "2", title: "Measure 2" },
+        ],
+      },
     };
     const onChangePlanId = jest.fn();
     const { getByTestId } = sut(
@@ -58,7 +60,7 @@ describe("MeasuresFormAdd component", () => {
   it("calls onPressSubmit when the 'Add' button is clicked", () => {
     const onPressSubmit = jest.fn();
     const therapistSafetyPlanList = {
-      therapistGetAdminMeasures: [{ _id: "1", title: "Measure 1" }],
+      therapistGetAdminMeasures: { data: [{ _id: "1", title: "Measure 1" }] },
     };
     const onChangePlanId = jest.fn();
 

@@ -102,7 +102,7 @@ const Measures: React.FC = () => {
     getTherapistMeasuresList,
     {
       loading: loadingMeasuresList,
-      data: { therapistListMeasures: listData = [] } = {},
+      data: { therapistListMeasures: { data: listData = [] } = {} } = {},
       refetch,
     },
   ] = useLazyQuery<TherapistMeasuresData>(GET_THERAPIST_MEASURES_LIST, {
@@ -133,7 +133,9 @@ const Measures: React.FC = () => {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore next */
-        const { therapistViewScoreList = {} } = data || {};
+        const {
+          therapistViewScoreList: { data: therapistViewScoreList = {} } = {},
+        } = data || {};
         setAccodionViewScore(therapistViewScoreList);
       },
     }

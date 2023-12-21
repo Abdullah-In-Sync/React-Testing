@@ -178,7 +178,7 @@ export interface TherapistMeasures {
   data: TherapistMeasuresData;
 }
 export interface TherapistMeasuresData {
-  therapistListMeasures?: TherapistListMeasuresEntity[] | null;
+  therapistListMeasures?: { data: TherapistListMeasuresEntity[] | null };
 }
 export interface TherapistListMeasuresEntity {
   _id: string;
@@ -237,7 +237,7 @@ export interface TherapistViewMeasures {
   data: TherapistViewMeasuresData;
 }
 export interface TherapistViewMeasuresData {
-  therapistViewMeasure: TherapistListMeasuresEntity;
+  therapistViewMeasure: { data: TherapistListMeasuresEntity };
 }
 
 export interface PatientViewMeasuresData {

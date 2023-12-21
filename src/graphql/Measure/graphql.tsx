@@ -233,6 +233,7 @@ export const THERAPIST_CREATE_MEASURES = gql`
         name
       }
       result
+      message
     }
   }
 `;
@@ -240,30 +241,37 @@ export const THERAPIST_CREATE_MEASURES = gql`
 export const GET_THERAPIST_MEASURES_LIST = gql`
   query TherapistListMeasures($patientId: String!) {
     therapistListMeasures(patient_id: $patientId) {
-      _id
-      created_date
-      description
-      patient_id
-      score
-      score_date
-      scores_list {
+      data {
         _id
         added_by
         created_date
-        measure_id
+        description
+        patient_id
         score
+        score_date
+        score_id
+        scores_list {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          session_no
+          status
+          template_id
+          template_data
+        }
+        session_no
+        share_status
         status
         template_data
         template_id
+        therapist_id
+        title
+        updated_date
       }
-      share_status
-      status
-      template_data
-      template_id
-      therapist_id
-      title
-      updated_date
-      added_by
+      message
+      result
     }
   }
 `;
@@ -274,7 +282,7 @@ export const UPDATE_THERAPIST_MEASURE = gql`
     $update: UpdateTherapistMeasureInput = {}
   ) {
     updateTherapistMeasure(measure_id: $measure_id, update: $update) {
-      _id
+      result
     }
   }
 `;
@@ -282,32 +290,34 @@ export const UPDATE_THERAPIST_MEASURE = gql`
 export const GET_THERAPIST_MEASURES_SCORE_LIST = gql`
   query therapistViewScoreList($measure_id: String!) {
     therapistViewScoreList(measure_id: $measure_id) {
-      _id
-      created_date
-      description
-      patient_id
-      score
-      score_date
-      score_id
-      scores_list {
+      data {
         _id
-        added_by
         created_date
-        measure_id
+        description
+        patient_id
         score
+        score_date
+        score_id
+        scores_list {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          session_no
+          status
+          template_data
+          template_id
+        }
         session_no
+        share_status
         status
         template_data
         template_id
+        therapist_id
+        title
+        updated_date
       }
-      session_no
-      share_status
-      status
-      template_data
-      template_id
-      therapist_id
-      title
-      updated_date
     }
   }
 `;
@@ -315,29 +325,31 @@ export const GET_THERAPIST_MEASURES_SCORE_LIST = gql`
 export const THERAPIST_VIEW_MEASURE = gql`
   query TherapistViewMeasure($measureId: String!) {
     therapistViewMeasure(measure_id: $measureId) {
-      _id
-      created_date
-      description
-      patient_id
-      score
-      score_date
-      scores_list {
+      data {
         _id
-        added_by
         created_date
-        measure_id
+        description
+        patient_id
         score
+        score_date
+        scores_list {
+          _id
+          added_by
+          created_date
+          measure_id
+          score
+          status
+          template_data
+          template_id
+        }
+        share_status
         status
         template_data
         template_id
+        therapist_id
+        title
+        updated_date
       }
-      share_status
-      status
-      template_data
-      template_id
-      therapist_id
-      title
-      updated_date
     }
   }
 `;
@@ -348,29 +360,7 @@ export const THERAPIST_UPDATE_MEASURE = gql`
     $update: UpdateTherapistMeasureInput
   ) {
     updateTherapistMeasure(measure_id: $measureId, update: $update) {
-      _id
-      created_date
-      description
-      patient_id
-      score
-      score_date
-      scores_list {
-        template_id
-        template_data
-        status
-        score
-        measure_id
-        created_date
-        added_by
-        _id
-      }
-      updated_date
-      title
-      therapist_id
-      template_id
-      template_data
-      status
-      share_status
+      result
     }
   }
 `;
@@ -390,15 +380,7 @@ export const THERAPIST_MEASURE_SUBMIT_TEST = gql`
       template_id: $templateId
       session_no: $sessionNo
     ) {
-      _id
-      added_by
-      created_date
-      measure_id
-      score
-      session_no
-      template_data
-      template_id
-      status
+      result
     }
   }
 `;

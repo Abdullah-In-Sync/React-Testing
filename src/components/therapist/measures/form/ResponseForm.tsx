@@ -35,7 +35,7 @@ const ResponseForm: React.FC<ViewProps> = ({
 
   /* istanbul ignore next */
   const handleChangeSession = (_, v) => {
-    setFieldValue(`sessionNo`, v.value);
+    if (v && v !== null) setFieldValue(`sessionNo`, v.value);
   };
 
   /* istanbul ignore next */
