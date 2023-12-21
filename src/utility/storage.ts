@@ -9,22 +9,23 @@ const setSecureCookie = (label: string, value: string, options?: object) => {
   });
 };
 
-export const setSessionToken = async (data, callback) => {
+export const setSessionToken = (data, callback) => {
   const { jwtToken, jwtIdToken, userType, exp } = data;
   const expires = new Date(exp * 1000);
   const cookiesPolicy = localStorage.getItem(COOKIES_POLICY);
   localStorage.clear();
   localStorage.setItem(COOKIES_POLICY, cookiesPolicy);
   localStorage.setItem(ID_TOKEN_LABEL, jwtIdToken);
-  await setSecureCookie("myhelptoken", await jwtToken, {
+  setSecureCookie("myhelptoken", jwtToken, {
     expires,
   });
-  await setSecureCookie("user_type", await userType, { expires });
+  setSecureCookie("user_type", userType, { expires });
   return callback(data);
 };
 
 export const getSessionToken = () => {
   const { myhelptoken: userToken, user_type: userType } = Cookies.get() || {};
+  console.log("userToken", userToken);
   if (typeof window !== "undefined") {
     const userTokenId = localStorage.getItem(ID_TOKEN_LABEL);
     return { userToken, userType, userTokenId };

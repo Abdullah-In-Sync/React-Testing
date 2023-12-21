@@ -9,6 +9,7 @@ import TakeTest from "./TakeTest/TakeTest";
 import { CommonFormProps, ModalRefs } from "./form/types";
 import ViewScore from "./list/ViewScore";
 import ViewResponse from "./ViewResponse/ViewResponse";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 type ViewProps = {
   listData: TherapistListMeasuresEntity[];
@@ -39,6 +40,8 @@ const MeasuresContent: React.FC<ViewProps> = ({
   viewResponseBackClick,
 }) => {
   const styles = useStyles();
+  const isCreate = checkPrivilageAccess("Measures", "Create");
+  const isAdd = checkPrivilageAccess("Measures", "Add");
 
   const topHeader = () => {
     return (
@@ -47,20 +50,24 @@ const MeasuresContent: React.FC<ViewProps> = ({
           <Typography variant="subtitle1">Measures</Typography>
         </Box>
         <Box className="topHeaderSecondSection">
-          <CommonButton
-            variant="contained"
-            onClick={onClickCreateMeasure}
-            data-testid="addQuestionButton"
-          >
-            Create Measure
-          </CommonButton>
-          <CommonButton
-            variant="contained"
-            onClick={onPressAddPlan}
-            data-testid="addMeasureButton"
-          >
-            Add Measure
-          </CommonButton>
+          {isCreate && (
+            <CommonButton
+              variant="contained"
+              onClick={onClickCreateMeasure}
+              data-testid="addQuestionButton"
+            >
+              Create Measure
+            </CommonButton>
+          )}
+          {isAdd && (
+            <CommonButton
+              variant="contained"
+              onClick={onPressAddPlan}
+              data-testid="addMeasureButton"
+            >
+              Add Measure
+            </CommonButton>
+          )}
         </Box>
       </Box>
     );
