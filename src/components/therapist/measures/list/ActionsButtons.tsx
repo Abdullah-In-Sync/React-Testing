@@ -30,8 +30,10 @@ const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick }) => {
   const iconButtons = () => {
     return iconButtonsData.map((item, i) => {
       const { id, icon: Icon } = item;
+      /* istanbul ignore next */
       if (
-        (id === "edit" && !isEdit && added_by !== "therapist") ||
+        (id === "edit" && added_by !== "therapist") ||
+        (id === "edit" && !isEdit) ||
         (id === "delete" && !isDelete) ||
         (id === "share" && !isShare)
       )

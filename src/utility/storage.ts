@@ -25,7 +25,6 @@ export const setSessionToken = (data, callback) => {
 
 export const getSessionToken = () => {
   const { myhelptoken: userToken, user_type: userType } = Cookies.get() || {};
-  console.log("userToken", userToken);
   if (typeof window !== "undefined") {
     const userTokenId = localStorage.getItem(ID_TOKEN_LABEL);
     return { userToken, userType, userTokenId };
