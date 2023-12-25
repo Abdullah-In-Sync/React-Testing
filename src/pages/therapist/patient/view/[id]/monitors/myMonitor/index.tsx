@@ -164,9 +164,9 @@ const TherapyMyMonitorList: any = () => {
         {
           /* istanbul ignore next */
           !loader &&
-          monitorListData?.therapistMyMonitorList &&
-          monitorListData?.therapistMyMonitorList.length > 0
-            ? monitorListData?.therapistMyMonitorList.map((v) => {
+          monitorListData?.therapistMyMonitorList.data &&
+          monitorListData?.therapistMyMonitorList.data.length > 0
+            ? monitorListData?.therapistMyMonitorList.data.map((v) => {
                 return (
                   <Accordion
                     key={`according-${v.name}`}
@@ -243,7 +243,7 @@ const TherapyMyMonitorList: any = () => {
       >
         <SharePlanForm
           onPressSubmit={() => setIsConfirmShareTask(true)}
-          therapistSafetyPlanList={monitorSharePatientListData}
+          therapistSafetyPlanList={monitorSharePatientListData?.data}
           receivePlanId={receivePatientIds}
         />
       </CommonModal>

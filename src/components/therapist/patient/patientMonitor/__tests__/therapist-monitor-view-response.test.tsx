@@ -30,20 +30,22 @@ mocksData.push({
   },
   result: {
     data: {
-      therapistMonitorList: [
-        {
-          _id: "list-item-1",
-          name: "Check 2",
-        },
-        {
-          _id: "list-item-2",
-          name: "Chech 1",
-        },
-        {
-          _id: "list-item-3",
-          name: "Check 3",
-        },
-      ],
+      therapistMonitorList: {
+        data: [
+          {
+            _id: "list-item-1",
+            name: "Check 2",
+          },
+          {
+            _id: "list-item-2",
+            name: "Chech 1",
+          },
+          {
+            _id: "list-item-3",
+            name: "Check 3",
+          },
+        ],
+      },
     },
   },
 });

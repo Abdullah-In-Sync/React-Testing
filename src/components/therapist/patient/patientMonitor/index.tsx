@@ -12,10 +12,6 @@ import {
   THERAPIST_SUBMIT_MONITOR,
   THERAPIST_VIEW_MONITOR,
 } from "../../../../graphql/Monitor/graphql";
-import {
-  TherapistMonitorListData,
-  TherapistViewMonitorData,
-} from "../../../../graphql/Monitor/types";
 import { formatDate } from "../../../../utility/helper";
 import ConfirmWrapper, { ConfirmElement } from "../../../common/ConfirmWrapper";
 import { ConfirmInfoElement } from "../../../common/CustomModal/InfoModal";
@@ -49,6 +45,7 @@ const TherapyPatientMonitorList: any = () => {
   const [selectedMonitor, setSelectedMonitor] = useState();
 
   const [getTherapistAdminMonitorList] = useLazyQuery(
+    // This is pending
     THERAPIST_ADMIN_MONITOR_LIST,
     {
       fetchPolicy: "cache-and-network",
@@ -74,27 +71,23 @@ const TherapyPatientMonitorList: any = () => {
   const [
     getTherapistPatientMonitorList,
     {
-      data: { therapistMonitorList = [] } = {},
+      // data: { therapistMonitorList = [] } = {},
+      data: { therapistMonitorList: { data = [] } = {} } = {},
+
       loading: monitorsListLoading,
       refetch: therapistPatientMonitorListRefetch,
     },
-  ] = useLazyQuery<TherapistMonitorListData>(
-    GET_THERAPIST_PATIENT_MONITOR_LIST,
-    {
-      fetchPolicy: "cache-and-network",
-      onCompleted: () => {
-        setLoader(false);
-      },
-    }
-  );
+  ] = useLazyQuery(GET_THERAPIST_PATIENT_MONITOR_LIST, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: () => {
+      setLoader(false);
+    },
+  });
 
   const [
     getMonitorData,
-    {
-      data: { therapistViewMonitor: monitorViewData = undefined } = {},
-      loading: viewMonitorLoading,
-    },
-  ] = useLazyQuery<TherapistViewMonitorData>(THERAPIST_VIEW_MONITOR, {
+    { data: monitorViewData, loading: viewMonitorLoading },
+  ] = useLazyQuery(THERAPIST_VIEW_MONITOR, {
     onCompleted: () => {
       setLoader(false);
     },
@@ -119,20 +112,21 @@ const TherapyPatientMonitorList: any = () => {
           patientId,
           questions: JSON.stringify(modifyQuestions),
         },
-        onCompleted: (data) => {
-          const {
-            therapistSubmitMonitor: { _id },
-          } = data;
-          if (_id) {
-            /* istanbul ignore next */
-            enqueueSnackbar("Response successfully submitted.", {
-              variant: "success",
-            });
-            /* istanbul ignore next */
-            backPress();
-            /* istanbul ignore next */
-            doneCallback();
-          }
+        onCompleted: () => {
+          // const {
+          //   therapistSubmitMonitor: { message },
+          // } = data;
+          // if (message) {
+
+          /* istanbul ignore next */
+          enqueueSnackbar("Response successfully submitted.", {
+            variant: "success",
+          });
+          /* istanbul ignore next */
+          backPress();
+          /* istanbul ignore next */
+          doneCallback();
+          // }
           /* istanbul ignore next */
           setLoader(false);
         },
@@ -248,13 +242,13 @@ const TherapyPatientMonitorList: any = () => {
   };
 
   const nextPress = () => {
-    const currentMonitorIndex = therapistMonitorList.findIndex(
+    const currentMonitorIndex = data.findIndex(
       (item) => item._id === monitorId
     );
     if (currentMonitorIndex > -1) {
       const nextMonitorIndex = currentMonitorIndex + 1;
-      if (therapistMonitorList.length > nextMonitorIndex) {
-        const nextMonitor = therapistMonitorList[nextMonitorIndex];
+      if (data.length > nextMonitorIndex) {
+        const nextMonitor = data[nextMonitorIndex];
         router.push(
           `${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor&view=complete&monitorId=${nextMonitor._id}`
         );
@@ -314,7 +308,7 @@ const TherapyPatientMonitorList: any = () => {
         return (
           <ConfirmWrapper ref={confirmRef}>
             <MonitorCompleteView
-              monitorData={monitorViewData}
+              monitorData={monitorViewData?.therapistViewMonitor?.data}
               nextPress={nextPress}
               backPress={backPress}
               onSubmit={handleSubmit}
@@ -325,7 +319,7 @@ const TherapyPatientMonitorList: any = () => {
       case "viewResponse":
         return (
           <MonitorViewResponse
-            monitorData={monitorViewData}
+            monitorData={monitorViewData?.therapistViewMonitor?.data}
             /* istanbul ignore next */
             initialDate={(startDate || initialDate) as string}
             handleRangeGoButton={handleRangeGoButton}
@@ -343,7 +337,7 @@ const TherapyPatientMonitorList: any = () => {
                 onClickMonitor={onClickMonitor}
               >
                 <MonitorsComponent
-                  monitoringList={therapistMonitorList}
+                  monitoringList={data}
                   viewResponseButtonClick={viewResponseButtonClick}
                   completeButtonClick={completeButtonClick}
                   /* istanbul ignore next */
