@@ -34,7 +34,8 @@ export default function ViewMyMonitor(props: propTypes) {
     fetchData();
   }, [props.monitorId]);
 
-  const myMonitorQuestion = myMonitorView?.viewMonitorById[0]?.monitor_question;
+  const myMonitorQuestion =
+    myMonitorView?.viewMonitorById.data[0]?.monitor_question;
 
   return (
     <>

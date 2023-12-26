@@ -61,7 +61,8 @@ export const DELETE_HOMEWORK_TASK = gql`
 export const DELETE_THERAPIST_MY_MONITOR = gql`
   mutation ($monitor_id: String!) {
     deleteTherapistMonitor(monitor_id: $monitor_id) {
-      deleted
+      message
+      result
     }
   }
 `;
