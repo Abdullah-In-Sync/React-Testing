@@ -32,7 +32,7 @@ export default function TherapyMainComponent({ modifyTabs }) {
 
   const activeTabs = {
     feedback: "&subTab1=therapist-feedback",
-    monitor: "&subTab1=my-monitor",
+    monitor: "&subTab1=patient-monitor",
   };
   return (
     <Box>
