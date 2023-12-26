@@ -222,7 +222,7 @@ export const checkPrivilageAccess = (moduleName, privilege?: any) => {
 export const checkUserType = () => {
   const { userTokenId } = getSessionToken();
   const idTokenData = parseJwt(userTokenId);
-  const userType = idTokenData["cognito:groups"][0];
+  const userType = idTokenData ? idTokenData["cognito:groups"][0] : undefined;
   return { userType, idTokenData };
 };
 
@@ -285,6 +285,7 @@ export const filterBasedOnPrivilages = (routeObj) => {
 export const modifyTabsData = (tabs) =>
   tabs.filter((v) => {
     const { moduleName } = v;
+    if (moduleName === "default") return true;
     const status = checkPrivilageAccess(moduleName);
     if (status === undefined) return true;
     else return status;

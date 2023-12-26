@@ -16,7 +16,19 @@ import TherapistFilesList from "./files";
 import TherapistNotesList from "./notes";
 import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
-import { modifyTabsData } from "../../../../../utility/helper";
+import {
+  checkPrivilageAccess,
+  modifyTabsData,
+} from "../../../../../utility/helper";
+import TherapistSafetyPlanIndex from "./safetyPlan";
+import TherapistPatientFormulation from "./formulation";
+import TherapyPatientGoalsIndex from "./goals";
+import TherapyPatientHomeworkIndex from "./homework";
+import Measures from "../../../../../components/therapist/measures";
+import TherapistMonotorTabs from "./monitors/therapistMonitorTabs";
+import PatientEditTemplatePage2 from "./resources";
+import TherapistFeedbackTabs from "../../../feedback/FeedbackTabs";
+import TherapistRelapseIndex from "./relapse";
 
 interface Props {
   children: React.ReactNode;
@@ -39,11 +51,6 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   const router = useRouter();
   const patId = router?.query.id as string;
   const tab = router?.query?.mainTab as string;
-  const tab2 = router?.query?.tab as string;
-
-  // const {
-  //   query: { id },
-  // } = router;
 
   /* istanbul ignore next */
   const [getPatientTherapyData] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
@@ -82,49 +89,113 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     });
   }, [patientId]);
 
+  const tabs = [
+    {
+      label: "Safety Plan",
+      value: "safety-plan",
+      component: <TherapistSafetyPlanIndex />,
+      moduleName: "Safety Plan",
+    },
+    {
+      label: "Formulation",
+      value: "formulation",
+      component: <TherapistPatientFormulation />,
+      moduleName: "Formulation",
+    },
+    {
+      label: "Goals",
+      value: "goals",
+      component: <TherapyPatientGoalsIndex setTherapy={setTherapy} />,
+      moduleName: "Goals",
+    },
+    {
+      label: "Homework",
+      value: "homework",
+      component: <TherapyPatientHomeworkIndex setTherapy={setTherapy} />,
+      moduleName: "Homework",
+    },
+    {
+      label: "Measures",
+      value: "measures",
+      component: <Measures />,
+      moduleName: "Measures",
+    },
+
+    {
+      label: "Monitors",
+      value: "monitor",
+      component: <TherapistMonotorTabs />,
+      moduleName: "Monitors",
+    },
+    {
+      label: "Resources",
+      value: "resources",
+      component: <PatientEditTemplatePage2 />,
+      moduleName: "Resources",
+    },
+    {
+      label: "Relapse",
+      value: "relapse",
+      component: <TherapistRelapseIndex />,
+      moduleName: "Relapse",
+    },
+    {
+      label: "Feedback",
+      value: "feedback",
+      component: <TherapistFeedbackTabs setTherapy={setTherapy} />,
+      moduleName: "Feedback",
+    },
+  ];
+  const modifyTabs2 = modifyTabsData(tabs);
+
   /* istanbul ignore next */
-  const tabs2 = [
+  const tabs1 = [
     {
       label: "Personal Info",
       value: "personal-info",
       component: <TherapyPersonalInfoTabs />,
       moduleName: "Personal Info",
+      subTab: "&tab=details",
     },
     {
       label: "Assessment",
       value: "assessment",
       component: <TherapistPatientAssessment />,
       moduleName: "Assessment",
+      subTab: "",
     },
-    {
+    (modifyTabs2.length > 0 || checkPrivilageAccess("Therapy", "View")) && {
       label: "Therapy",
       value: "therapy",
-      component: <TherapyMainComponent setTherapy={therapy} />,
-      moduleName: "Therapy",
+      component: <TherapyMainComponent modifyTabs={modifyTabs2} />,
+      moduleName: "default",
+      subTab: modifyTabs2[0]["value"],
     },
     {
       label: "Notes",
       value: "notes",
       component: <TherapistNotesList setTherapy={therapy} />,
       moduleName: "Notes",
+      subTab: "",
     },
     {
       label: "Files",
       value: "files",
       component: <TherapistFilesList />,
       moduleName: "Files",
+      subTab: "",
     },
   ];
 
-  const modifyTabs = modifyTabsData(tabs2);
+  const modifyTabs = modifyTabsData(tabs1);
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (modifyTabs.length > 0 && modifyTabs[0]["value"] && !tab)
+    if ((modifyTabs.length > 0 && tab === modifyTabs[0]["value"]) || !tab)
       router.push(
-        `/therapist/patient/view/${patId}/?mainTab=${modifyTabs[0]["value"]}&tab=details`
+        `/therapist/patient/view/${patId}/?mainTab=${modifyTabs[0]["value"]}${modifyTabs[0]["subTab"]}`
       );
-  }, [/* istanbul ignore next */ modifyTabs?.[0]?.["value"], tab]);
+  }, [/* istanbul ignore next */ tab]);
 
   return (
     <>
@@ -168,7 +239,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
               tabsList={modifyTabs}
               tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
             />
-            {tab === "therapy" && !tab2 && (
+            {tab === "therapy" && !tabs1 && (
               <TherapisTherapyList setTherapy={therapy} />
             )}
           </Box>

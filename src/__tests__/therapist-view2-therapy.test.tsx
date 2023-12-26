@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import { useAppContext } from "../contexts/AuthContext";
 import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
-import TherapyMainComponent from "../pages/therapist/patient/view/[id]/therapy";
 import { ThemeProvider } from "@mui/styles";
 import theme from "../styles/theme/theme";
 import MainWraperTherapyPatient from "../pages/therapist/patient/view/[id]";
@@ -13,6 +12,8 @@ jest.mock("../contexts/AuthContext");
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
+
+const pushMock = jest.fn();
 // mocks
 const mocksData = [];
 
@@ -237,19 +238,6 @@ const sut = async () => {
   //   );
 };
 
-const sut2 = async () => {
-  render(
-    <MockedProvider mocks={mocksData} addTypename={false}>
-      <SnackbarProvider>
-        <TherapyMainComponent setTherapy={""} />
-      </SnackbarProvider>
-    </MockedProvider>
-  );
-  //   await waitForElementToBeRemoved(() =>
-  screen.queryByTestId("activity-indicator");
-  //   );
-};
-
 describe("Therapist Resource page", () => {
   beforeEach(() => {
     (useAppContext as jest.Mock).mockReturnValue({
@@ -284,7 +272,15 @@ describe("Therapist Resource page", () => {
   });
 
   it("should render therapy main component.", async () => {
-    await sut2();
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "4937a27dc00d48bf983fdcd4b0762ebd",
+        mainTab: "therapy",
+      },
+      push: pushMock,
+    });
+
+    await sut();
     await waitFor(async () => {
       expect(screen.getByTestId("patientViewTherapyTab")).toBeInTheDocument();
     });
