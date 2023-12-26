@@ -51,6 +51,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   const router = useRouter();
   const patId = router?.query.id as string;
   const tab = router?.query?.mainTab as string;
+  const tab2 = router?.query?.tab as string;
 
   /* istanbul ignore next */
   const [getPatientTherapyData] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
@@ -239,7 +240,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
               tabsList={modifyTabs}
               tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
             />
-            {tab === "therapy" && !tabs1 && (
+            {tab === "therapy" && !tab2 && (
               <TherapisTherapyList setTherapy={therapy} />
             )}
           </Box>
