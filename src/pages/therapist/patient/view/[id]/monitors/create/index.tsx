@@ -47,7 +47,7 @@ const TherapistCreateMonitor: NextPage = () => {
           questions: JSON.stringify(modifyQuestions),
         },
         onCompleted: (data) => {
-          if (data.therapistCreateMonitor.status === true) {
+          if (data.therapistCreateMonitor.status === null) {
             enqueueSnackbar("Monitor created successfully", {
               variant: "success",
             });

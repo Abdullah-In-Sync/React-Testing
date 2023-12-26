@@ -45,7 +45,6 @@ const TherapyPatientMonitorList: any = () => {
   const [selectedMonitor, setSelectedMonitor] = useState();
 
   const [getTherapistAdminMonitorList] = useLazyQuery(
-    // This is pending
     THERAPIST_ADMIN_MONITOR_LIST,
     {
       fetchPolicy: "cache-and-network",
@@ -55,7 +54,7 @@ const TherapyPatientMonitorList: any = () => {
         const { getAdminMonitorList = [] } = data;
         /* istanbul ignore next */
         modalRefAddMonitor?.current?.openConfirm({
-          data: getAdminMonitorList,
+          data: getAdminMonitorList.data,
         });
         setLoader(false);
       },
