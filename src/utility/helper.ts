@@ -222,7 +222,7 @@ export const checkPrivilageAccess = (moduleName, privilege?: any) => {
 export const checkUserType = () => {
   const { userTokenId } = getSessionToken();
   const idTokenData = parseJwt(userTokenId);
-  const userType = idTokenData["cognito:groups"][0];
+  const userType = idTokenData ? idTokenData["cognito:groups"][0] : undefined;
   return { userType, idTokenData };
 };
 
