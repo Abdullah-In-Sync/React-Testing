@@ -28,18 +28,20 @@ mocksData.push({
   },
   result: {
     data: {
-      therapistMyMonitorList: [
-        {
-          _id: "ce3b10f2-e867-4606-a9ab-634af57e280d",
-          created_date: "2023-05-16T08:32:21.097Z",
-          name: "Therapist Create Monitor",
-          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-          status: 1,
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2023-05-16T08:32:21.097Z",
-          __typename: "TherapistMonitors",
-        },
-      ],
+      therapistMyMonitorList: {
+        data: [
+          {
+            _id: "ce3b10f2-e867-4606-a9ab-634af57e280d",
+            created_date: "2023-05-16T08:32:21.097Z",
+            name: "Therapist Create Monitor",
+            org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+            status: 1,
+            therapist_id: "686802e5123a482681a680a673ef7f53",
+            updated_date: "2023-05-16T08:32:21.097Z",
+            __typename: "TherapistMonitors",
+          },
+        ],
+      },
     },
   },
 });
@@ -52,31 +54,33 @@ mocksData.push({
   },
   result: {
     data: {
-      viewMonitorById: [
-        {
-          _id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
-          created_date: "2023-05-24T08:30:38.333Z",
-          monitor_question: [
-            {
-              _id: "4c951016-4d73-4be8-817b-4ddd7e30d2c5",
-              created_date: "2023-05-24T08:30:38.345Z",
-              monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
-              question: "Question type 1",
-              question_option: "a,b,c,d",
-              question_type: "list",
-              status: 1,
-              updated_date: "2023-05-24T08:30:38.345Z",
-              __typename: "TherapistMonitorsQues",
-            },
-          ],
-          name: "vjj",
-          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-          status: 1,
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          updated_date: "2023-05-24T08:30:38.333Z",
-          __typename: "TherapistViewMonitors",
-        },
-      ],
+      viewMonitorById: {
+        data: [
+          {
+            _id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
+            created_date: "2023-05-24T08:30:38.333Z",
+            monitor_question: [
+              {
+                _id: "4c951016-4d73-4be8-817b-4ddd7e30d2c5",
+                created_date: "2023-05-24T08:30:38.345Z",
+                monitor_id: "e99e67c5-4d3a-41d1-a586-d71242d47c20",
+                question: "Question type 1",
+                question_option: "a,b,c,d",
+                question_type: "list",
+                status: 1,
+                updated_date: "2023-05-24T08:30:38.345Z",
+                __typename: "TherapistMonitorsQues",
+              },
+            ],
+            name: "vjj",
+            org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+            status: 1,
+            therapist_id: "686802e5123a482681a680a673ef7f53",
+            updated_date: "2023-05-24T08:30:38.333Z",
+            __typename: "TherapistViewMonitors",
+          },
+        ],
+      },
     },
   },
 });
@@ -103,14 +107,16 @@ mocksData.push({
   },
   result: {
     data: {
-      patientListForMonitor: [
-        {
-          _id: "003de6cefb794d90ad1fecc00b9e8da9",
-          moniter_detail: null,
-          patient_firstname: "patient name",
-          patient_lastname: "last",
-        },
-      ],
+      patientListForMonitor: {
+        data: [
+          {
+            _id: "003de6cefb794d90ad1fecc00b9e8da9",
+            moniter_detail: null,
+            patient_firstname: "patient name",
+            patient_lastname: "last",
+          },
+        ],
+      },
     },
   },
 });

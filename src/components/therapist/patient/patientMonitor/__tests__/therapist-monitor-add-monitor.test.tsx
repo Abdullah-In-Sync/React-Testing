@@ -30,23 +30,25 @@ mocksData.push({
   },
   result: {
     data: {
-      getAdminMonitorList: [
-        {
-          status: 1,
-          organization_name: null,
-          org_id: "org1",
-          name: "test org1",
-          created_date: "2023-06-02T08:08:36.056Z",
-          _id: "list-item-1",
-        },
-        {
-          status: 1,
-          organization_name: null,
-          org_id: "org2",
-          name: "test org2",
-          _id: "list-item-2",
-        },
-      ],
+      getAdminMonitorList: {
+        data: [
+          {
+            status: 1,
+            organization_name: null,
+            org_id: "org1",
+            name: "test org1",
+            created_date: "2023-06-02T08:08:36.056Z",
+            _id: "list-item-1",
+          },
+          {
+            status: 1,
+            organization_name: null,
+            org_id: "org2",
+            name: "test org2",
+            _id: "list-item-2",
+          },
+        ],
+      },
     },
   },
 });

@@ -238,8 +238,31 @@ export const GET_THERAPIST_SAFETY_PLAN_LIST = gql`
 export const GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST = gql`
   query patientListForMonitor($monitor_id: String!) {
     patientListForMonitor(monitor_id: $monitor_id) {
-      _id
-      moniter_detail {
+      data {
+        _id
+        moniter_detail {
+          _id
+          added_by
+          created_date
+          name
+          org_id
+          patient_id
+          status
+          therapist_id
+          updated_date
+        }
+        patient_firstname
+        patient_lastname
+      }
+    }
+  }
+`;
+
+//Shubham
+export const GET_THERAPIST_PATIENT_MONITOR_LIST = gql`
+  query therapistMonitorList($patient_id: String!) {
+    therapistMonitorList(patient_id: $patient_id) {
+      data {
         _id
         added_by
         created_date
@@ -250,24 +273,6 @@ export const GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST = gql`
         therapist_id
         updated_date
       }
-      patient_firstname
-      patient_lastname
-    }
-  }
-`;
-
-export const GET_THERAPIST_PATIENT_MONITOR_LIST = gql`
-  query therapistMonitorList($patient_id: String!) {
-    therapistMonitorList(patient_id: $patient_id) {
-      _id
-      added_by
-      created_date
-      name
-      org_id
-      patient_id
-      status
-      therapist_id
-      updated_date
     }
   }
 `;
@@ -275,23 +280,25 @@ export const GET_THERAPIST_PATIENT_MONITOR_LIST = gql`
 export const GET_THERAPIST_MY_MONITOR_VIEW = gql`
   query viewMonitorById($monitor_id: String!) {
     viewMonitorById(monitor_id: $monitor_id) {
-      _id
-      created_date
-      monitor_question {
+      data {
         _id
         created_date
-        monitor_id
-        question
-        question_option
-        question_type
+        monitor_question {
+          _id
+          created_date
+          monitor_id
+          question
+          question_option
+          question_type
+          status
+          updated_date
+        }
+        name
+        org_id
         status
+        therapist_id
         updated_date
       }
-      name
-      org_id
-      status
-      therapist_id
-      updated_date
     }
   }
 `;

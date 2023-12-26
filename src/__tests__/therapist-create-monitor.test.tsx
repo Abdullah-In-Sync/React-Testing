@@ -32,7 +32,7 @@ mocksData.push({
     data: {
       therapistCreateMonitor: {
         message: "",
-        status: true,
+        status: null,
         __typename: "TherapistMonitorResult",
       },
     },
