@@ -56,8 +56,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   /* istanbul ignore next */
   const tab2 = router?.query?.tab as string;
   /* istanbul ignore next */
-  const isCustomTherapy =
-    userType === "custom" && checkPrivilageAccess("Therapy", "View");
+  const isCustomTherapy = checkPrivilageAccess("Therapy", "View");
   /* istanbul ignore next */
   const isTherapy = isCustomTherapy && tab === "therapy";
 
@@ -179,7 +178,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       component: <TherapyMainComponent modifyTabs={modifyTabs2} />,
       moduleName: "default",
       subTab:
-        modifyTabs2IsEmpty && !isCustomTherapy
+        modifyTabs2IsEmpty && userType === "custom" && !isCustomTherapy
           ? `&tab=${modifyTabs2[0]["value"]}`
           : "",
     },
@@ -258,9 +257,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
             tabsList={modifyTabs}
             tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
           />
-          {isTherapy && tab === "therapy" && !tab2 && (
-            <TherapisTherapyList setTherapy={therapy} />
-          )}
+          {isTherapy && !tab2 && <TherapisTherapyList setTherapy={therapy} />}
         </Box>
       </Box>
     </Layout>

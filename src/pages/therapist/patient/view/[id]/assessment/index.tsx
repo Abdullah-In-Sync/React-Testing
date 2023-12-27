@@ -102,31 +102,6 @@ const TherapistAssessmentMain: React.FC<any> = ({
 
   return (
     <>
-      {/* <Box
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          paddingBottom: "10px",
-          paddingTop: "10px",
-        }}
-      >
-        <Button
-          style={{
-            paddingLeft: "20px",
-            paddingRight: "20px",
-            backgroundColor: "#6EC9DB",
-            color: "white",
-            textTransform: "none",
-          }}
-          data-testid={"addAssessmentButton"}
-          variant="contained"
-          onClick={handleOpenCreateAssessmentModal}
-        >
-          Add Assessment
-        </Button>
-      </Box> */}
-
       <CommonModal
         ref={modalRefAddAssessment}
         headerTitleText="Add Assessment"
