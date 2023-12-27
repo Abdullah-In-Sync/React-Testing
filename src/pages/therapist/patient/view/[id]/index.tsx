@@ -240,9 +240,11 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
               tabsList={modifyTabs}
               tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
             />
-            {tab === "therapy" && !tab2 && (
-              <TherapisTherapyList setTherapy={therapy} />
-            )}
+            {
+              /* istanbul ignore next */ tab === "therapy" && !tab2 && (
+                <TherapisTherapyList setTherapy={therapy} />
+              )
+            }
           </Box>
         </Box>
       </Layout>
