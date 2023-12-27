@@ -199,56 +199,55 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   }, [/* istanbul ignore next */ tab]);
 
   return (
-    <>
-      <Layout>
-        <Loader visible={loader} />
-        <Box
-          sx={{ flexGrow: 1 }}
-          p={5}
-          borderRadius="7px"
-          className="bg-themegreen"
-        >
-          <Grid container spacing={2}>
-            <Grid
-              item
-              xs={2}
-              sx={{ textAlign: "center" }}
-              data-testid="container_img"
-            >
-              <Image
-                alt="Therapist"
-                src="/images/user.png"
-                width="100"
-                height="100"
-                style={{ borderRadius: "50%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Typography
-                variant="h4"
-                className="text-white tit"
-                data-testid="patient_name"
-              >
-                {patientData.patient_name}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box>
-          <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
-            <TabsGeneratorTherapistPatient
-              tabsList={modifyTabs}
-              tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
+    <Layout>
+      <Loader visible={loader} />
+      <Box
+        sx={{ flexGrow: 1 }}
+        p={5}
+        borderRadius="7px"
+        className="bg-themegreen"
+      >
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={2}
+            sx={{ textAlign: "center" }}
+            data-testid="container_img"
+          >
+            <Image
+              alt="Therapist"
+              src="/images/user.png"
+              width="100"
+              height="100"
+              style={{ borderRadius: "50%" }}
             />
-            {
-              /* istanbul ignore next */ tab === "therapy" && !tab2 && (
-                <TherapisTherapyList setTherapy={therapy} />
-              )
-            }
-          </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography
+              variant="h4"
+              className="text-white tit"
+              data-testid="patient_name"
+            >
+              {patientData.patient_name}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box>
+        <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
+          <TabsGeneratorTherapistPatient
+            tabsList={modifyTabs}
+            tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
+          />
+          {
+            /* istanbul ignore next */
+            tab === "therapy" && !tab2 && (
+              <TherapisTherapyList setTherapy={therapy} />
+            )
+          }
         </Box>
-      </Layout>
-    </>
+      </Box>
+    </Layout>
   );
 };
 
