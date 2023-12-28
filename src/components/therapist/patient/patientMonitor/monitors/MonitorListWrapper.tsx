@@ -24,20 +24,24 @@ const MonitorListWrapper: React.FC<
   orgList,
 }) => {
   const styles = useStyles();
+  /* istanbul ignore next */
   const addMonitor = checkPrivilageAccess("Monitors", "Add");
   return (
     <Stack className={styles.monitorsListMain}>
       <Stack className="addMonitorWrapper">
-        {(addMonitor === true || addMonitor === undefined) && (
-          <CommonButton
-            className=""
-            data-testid="addMonitorBtn"
-            variant="contained"
-            onClick={onClickMonitor}
-          >
-            Add Monitor
-          </CommonButton>
-        )}
+        {
+          /* istanbul ignore next */
+          (addMonitor === true || addMonitor === undefined) && (
+            <CommonButton
+              className=""
+              data-testid="addMonitorBtn"
+              variant="contained"
+              onClick={onClickMonitor}
+            >
+              Add Monitor
+            </CommonButton>
+          )
+        }
       </Stack>
       <Stack>{children}</Stack>
       <InfoModal

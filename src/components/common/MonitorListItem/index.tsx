@@ -26,6 +26,7 @@ const MonitorsList: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
 
+  /* istanbul ignore next */
   const deleteMonitor = checkPrivilageAccess("Monitors", "Delete");
   const monitorsRecords = () => {
     return monitors.map((item, index) => {

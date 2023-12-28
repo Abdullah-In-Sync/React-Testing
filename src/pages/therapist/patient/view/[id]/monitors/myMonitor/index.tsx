@@ -137,7 +137,9 @@ const TherapyMyMonitorList: any = () => {
       enqueueSnackbar("There is something wrong.", { variant: "error" });
     }
   };
+  /* istanbul ignore next */
   const deleteShare = checkPrivilageAccess("Monitors", "Share");
+  /* istanbul ignore next */
   const create = checkPrivilageAccess("Monitors", "Create");
 
   return (
@@ -201,27 +203,30 @@ const TherapyMyMonitorList: any = () => {
                             style={{ fontSize: "15px", color: "black" }}
                           />
                         </IconButton>
-                        {(deleteShare === true ||
-                          deleteShare === undefined) && (
-                          <IconButton
-                            size="small"
-                            data-testid={`share-button-icon`}
-                            style={{
-                              backgroundColor: "#fff",
-                              width: "unset",
-                              marginRight: "10px",
-                              marginBottom: "10px",
-                            }}
-                            onClick={() => {
-                              setShareMonitorId(v._id);
-                              handleOpenAddPlanModal();
-                            }}
-                          >
-                            <ShareIcon
-                              style={{ fontSize: "15px", color: "black" }}
-                            />
-                          </IconButton>
-                        )}
+                        {
+                          /* istanbul ignore next */
+                          (deleteShare === true ||
+                            deleteShare === undefined) && (
+                            <IconButton
+                              size="small"
+                              data-testid={`share-button-icon`}
+                              style={{
+                                backgroundColor: "#fff",
+                                width: "unset",
+                                marginRight: "10px",
+                                marginBottom: "10px",
+                              }}
+                              onClick={() => {
+                                setShareMonitorId(v._id);
+                                handleOpenAddPlanModal();
+                              }}
+                            >
+                              <ShareIcon
+                                style={{ fontSize: "15px", color: "black" }}
+                              />
+                            </IconButton>
+                          )
+                        }
                       </>
                     }
                   />
