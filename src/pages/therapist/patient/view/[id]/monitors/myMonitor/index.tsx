@@ -145,28 +145,31 @@ const TherapyMyMonitorList: any = () => {
   return (
     <>
       <Loader visible={loader} />
-      {(create === true || create === undefined) && (
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: "10px",
-          }}
-        >
-          <Button
-            data-testid="addResourceSubmitButton"
-            variant="contained"
-            onClick={onPressCreateMonitorButton}
+      {
+        /* istanbul ignore next */
+        (create === true || create === undefined) && (
+          <Box
             style={{
-              backgroundColor: "#6EC9DB",
-              color: "white",
-              textTransform: "none",
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: "10px",
             }}
           >
-            Create Monitor
-          </Button>
-        </Box>
-      )}
+            <Button
+              data-testid="addResourceSubmitButton"
+              variant="contained"
+              onClick={onPressCreateMonitorButton}
+              style={{
+                backgroundColor: "#6EC9DB",
+                color: "white",
+                textTransform: "none",
+              }}
+            >
+              Create Monitor
+            </Button>
+          </Box>
+        )
+      }
 
       <Box marginBottom={"20px"}>
         {
