@@ -50,7 +50,9 @@ export interface QuestionsEntity {
 }
 
 export interface TherapistGetAdminRelapseListData {
-  therapistGetAdminRelapseList?: TherapistGetAdminRelapseListEntity[] | null;
+  therapistGetAdminRelapseList?: {
+    data: TherapistGetAdminRelapseListEntity[] | null;
+  };
 }
 
 export interface TherapistGetAdminRelapseListEntity {

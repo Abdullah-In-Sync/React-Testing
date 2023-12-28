@@ -175,7 +175,9 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     (modifyTabs2IsEmpty || isCustomTherapy) && {
       label: "Therapy",
       value: "therapy",
-      component: <TherapyMainComponent modifyTabs={modifyTabs2} />,
+      component: modifyTabs2IsEmpty && (
+        <TherapyMainComponent modifyTabs={modifyTabs2} />
+      ),
       moduleName: "default",
       subTab:
         modifyTabs2IsEmpty && userType === "custom" && !isCustomTherapy
@@ -210,7 +212,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (mainTab.length > 0 && !isTherapy && modifyTabs2IsEmpty && !tab2)
+    if (mainTab.length > 0 && !isTherapy && !tab2)
       router.push(
         `/therapist/patient/view/${patId}/?mainTab=${tab}${mainTab[0]["subTab"]}`
       );

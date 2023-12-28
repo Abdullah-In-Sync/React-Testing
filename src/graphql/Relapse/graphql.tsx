@@ -77,17 +77,19 @@ export const ADD_THERAPIST_RELAPSE_PLAN = gql`
 export const THERAPIST_GET_ADMIN_RELAPSE_LIST = gql`
   query therapistGetAdminRelapseList($orgId: String!) {
     therapistGetAdminRelapseList(orgId: $orgId) {
-      _id
-      created_date
-      description
-      name
-      org_id
-      organization_name
-      plan_type
-      status
-      updated_date
-      user_id
-      user_type
+      data {
+        _id
+        created_date
+        description
+        name
+        org_id
+        organization_name
+        plan_type
+        status
+        updated_date
+        user_id
+        user_type
+      }
     }
   }
 `;
@@ -98,7 +100,8 @@ export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
     $updatePlan: UpdatePatientRelapsePlanInput
   ) {
     updateTherapistRelapsePlan(planId: $planId, updatePlan: $updatePlan) {
-      _id
+      result
+      message
     }
   }
 `;
@@ -106,7 +109,8 @@ export const UPDATE_THERAPIST_RELAPSE_PLAN = gql`
 export const DELETE_THERAPIST_RELAPSE_PLAN = gql`
   mutation ($planId: ID!, $updatePlan: UpdatePatientRelapsePlanInput!) {
     updateTherapistRelapsePlan(planId: $planId, updatePlan: $updatePlan) {
-      share_status
+      result
+      message
     }
   }
 `;
@@ -139,17 +143,19 @@ export const ADMIN_DELETE_RELAPSE_PLAN_QS = gql`
 export const THERAPIST_VIEW_PATIENT_RELAPSE = gql`
   query therapistViewPatientRelapse($planId: String!, $patientId: String!) {
     therapistViewPatientRelapse(planId: $planId, patientId: $patientId) {
-      _id
-      patient_answer
-      created_date
-      patient_id
-      relapse_additional_details
-      plan_id
-      relapse_ques
-      relapse_ques_status
-      relapse_ques_type
-      relapse_ques_typeoption
-      updated_date
+      data {
+        _id
+        patient_answer
+        created_date
+        patient_id
+        relapse_additional_details
+        plan_id
+        relapse_ques
+        relapse_ques_status
+        relapse_ques_type
+        relapse_ques_typeoption
+        updated_date
+      }
     }
   }
 `;
@@ -165,10 +171,8 @@ export const THERAPIST_CREATE_RELAPSE_QUES = gql`
       patientId: $patientId
       questions: $questions
     ) {
-      relapse_additional_details
-      relapse_ques_typeoption
-      patient_answer
-      updated_date
+      result
+      message
     }
   }
 `;

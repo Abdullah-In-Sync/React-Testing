@@ -116,7 +116,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     getAdminRelapseList,
     {
       loading: relapseDropdownListloading,
-      data: { therapistGetAdminRelapseList: relapsePlanList = [] } = {},
+      data: {
+        therapistGetAdminRelapseList: { data: relapsePlanList = [] } = {},
+      } = {},
     },
   ] = useLazyQuery<TherapistGetAdminRelapseListData>(
     THERAPIST_GET_ADMIN_RELAPSE_LIST,
@@ -296,7 +298,7 @@ const TherapistRelapsePlanIndex: NextPage = () => {
     if (!currentSafetyPlan || currentSafetyPlan.name !== formFields.planName) {
       console.log("INSIDE IF CONDITION");
       isDuplicate = (
-        listData?.getRelapsePlanListByPatientId as Array<{ name: string }>
+        listData?.getRelapsePlanListByPatientId?.data as Array<{ name: string }>
       )?.some((item) => item.name === formFields.planName);
     }
 
@@ -372,7 +374,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
   const [
     getRelapsePlanById,
     {
-      data: { therapistViewPatientRelapse: planData = null } = {},
+      data: {
+        therapistViewPatientRelapse: { data: planData = null } = {},
+      } = {},
       refetch: refetchRelapsePlan = null,
     } = {},
   ] = useLazyQuery(THERAPIST_VIEW_PATIENT_RELAPSE, {
@@ -406,11 +410,16 @@ const TherapistRelapsePlanIndex: NextPage = () => {
       await updateRelapseRelapsePlanQuestions({
         variables: { ...variables, ...modifyQuestions },
         fetchPolicy: "network-only",
-        onCompleted: () => {
-          setSuccessModal({
-            description: "Your question has been updated successfully.",
-          });
-          refetchRelapsePlan();
+        onCompleted: (data) => {
+          const {
+            therapistCreateRelapseQues: { result },
+          } = data;
+          if (result) {
+            setSuccessModal({
+              description: "Your question has been updated successfully.",
+            });
+            refetchRelapsePlan();
+          }
         },
       });
     } catch (e) {
@@ -536,7 +545,10 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         <ContentHeader title="Relapse" />
         <Box style={{ paddingTop: "10px" }}>
           <TherapistRelapsePlanComponent
-            safetyPlanList={listData}
+            safetyPlanList={{
+              getRelapsePlanListByPatientId:
+                listData?.getRelapsePlanListByPatientId?.data,
+            }}
             searchInputValue={searchInputValue}
             onChangeSearchInput={onChangeSearchInput}
             selectFilterOptions={selectFilterOptions}
