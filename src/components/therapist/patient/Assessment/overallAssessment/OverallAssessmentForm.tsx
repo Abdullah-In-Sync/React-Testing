@@ -6,11 +6,13 @@ import CommonButton from "../../../../common/Buttons/CommonButton";
 import FormikTextField from "../../../../common/FormikFields/FormikTextField";
 import { useStyles } from "../patientAssessmentStyles";
 import { TherapistPatientAssessmentProps } from "./OverallAssessment";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
   formikProps,
   risksListData = [],
 }) => {
+  const isAssessmentEdit = checkPrivilageAccess("Assessment", "Edit");
   const { values, isSubmitting, setFieldValue } = formikProps;
   const { risks: initRiskValues } = values;
   const styles = useStyles();
@@ -48,6 +50,7 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
                 size="small"
                 multiline
                 rows="3"
+                disabled={!isAssessmentEdit}
               />
             </Box>
           </Box>
@@ -65,6 +68,7 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
                   multiple={true}
                   defaultValue={initRiskValues}
                   classes={{ paper: "disableClickSelected" }}
+                  disabled={!isAssessmentEdit}
                 />
               )}
             </Box>
@@ -86,20 +90,23 @@ const OverallAssessmentForm: React.FC<TherapistPatientAssessmentProps> = ({
                 InputProps={{
                   inputProps: { "data-testid": "pttherapySession" },
                 }}
+                disabled={!isAssessmentEdit}
               />
             </Box>
           </Box>
 
-          <Box className="formRow4">
-            <CommonButton
-              type="submit"
-              data-testid="submitForm"
-              variant="contained"
-              disabled={isSubmitting}
-            >
-              Save
-            </CommonButton>
-          </Box>
+          {isAssessmentEdit && (
+            <Box className="formRow4">
+              <CommonButton
+                type="submit"
+                data-testid="submitForm"
+                variant="contained"
+                disabled={isSubmitting}
+              >
+                Save
+              </CommonButton>
+            </Box>
+          )}
         </Form>
       </>
     </Stack>
