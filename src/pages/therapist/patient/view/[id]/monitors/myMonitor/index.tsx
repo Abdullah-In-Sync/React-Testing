@@ -20,6 +20,7 @@ import {
 import { GET_THERAPIST_MONITOR_SHARE_PATIENT_LIST } from "../../../../../../../graphql/SafetyPlan/graphql";
 import SharePlanForm from "../../../../../../../components/therapist/patient/monitor/share/SharePlanForm";
 import ViewMyMonitor from "../../../../../../../components/therapist/patient/monitor/viewMyMonitor";
+import { checkPrivilageAccess } from "../../../../../../../utility/helper";
 
 const TherapyMyMonitorList: any = () => {
   const router = useRouter();
@@ -136,29 +137,34 @@ const TherapyMyMonitorList: any = () => {
       enqueueSnackbar("There is something wrong.", { variant: "error" });
     }
   };
+  const deleteShare = checkPrivilageAccess("Monitors", "Share");
+  const create = checkPrivilageAccess("Monitors", "Create");
+
   return (
     <>
       <Loader visible={loader} />
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "10px",
-        }}
-      >
-        <Button
-          data-testid="addResourceSubmitButton"
-          variant="contained"
-          onClick={onPressCreateMonitorButton}
+      {(create === true || create === undefined) && (
+        <Box
           style={{
-            backgroundColor: "#6EC9DB",
-            color: "white",
-            textTransform: "none",
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: "10px",
           }}
         >
-          Create Monitor
-        </Button>
-      </Box>
+          <Button
+            data-testid="addResourceSubmitButton"
+            variant="contained"
+            onClick={onPressCreateMonitorButton}
+            style={{
+              backgroundColor: "#6EC9DB",
+              color: "white",
+              textTransform: "none",
+            }}
+          >
+            Create Monitor
+          </Button>
+        </Box>
+      )}
 
       <Box marginBottom={"20px"}>
         {
@@ -195,24 +201,27 @@ const TherapyMyMonitorList: any = () => {
                             style={{ fontSize: "15px", color: "black" }}
                           />
                         </IconButton>
-                        <IconButton
-                          size="small"
-                          data-testid={`share-button-icon`}
-                          style={{
-                            backgroundColor: "#fff",
-                            width: "unset",
-                            marginRight: "10px",
-                            marginBottom: "10px",
-                          }}
-                          onClick={() => {
-                            setShareMonitorId(v._id);
-                            handleOpenAddPlanModal();
-                          }}
-                        >
-                          <ShareIcon
-                            style={{ fontSize: "15px", color: "black" }}
-                          />
-                        </IconButton>
+                        {(deleteShare === true ||
+                          deleteShare === undefined) && (
+                          <IconButton
+                            size="small"
+                            data-testid={`share-button-icon`}
+                            style={{
+                              backgroundColor: "#fff",
+                              width: "unset",
+                              marginRight: "10px",
+                              marginBottom: "10px",
+                            }}
+                            onClick={() => {
+                              setShareMonitorId(v._id);
+                              handleOpenAddPlanModal();
+                            }}
+                          >
+                            <ShareIcon
+                              style={{ fontSize: "15px", color: "black" }}
+                            />
+                          </IconButton>
+                        )}
                       </>
                     }
                   />

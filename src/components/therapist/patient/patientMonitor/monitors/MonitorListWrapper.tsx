@@ -6,6 +6,7 @@ import { useStyles } from "../patientMonitorStyles";
 import TherapistAddMonitor, {
   TherapistAddMonitorViewProps,
 } from "./AddMonitor";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 type ViewProps = React.PropsWithChildren<{
   onClickMonitor?: () => void;
@@ -23,17 +24,20 @@ const MonitorListWrapper: React.FC<
   orgList,
 }) => {
   const styles = useStyles();
+  const addMonitor = checkPrivilageAccess("Monitors", "Add");
   return (
     <Stack className={styles.monitorsListMain}>
       <Stack className="addMonitorWrapper">
-        <CommonButton
-          className=""
-          data-testid="addMonitorBtn"
-          variant="contained"
-          onClick={onClickMonitor}
-        >
-          Add Monitor
-        </CommonButton>
+        {(addMonitor === true || addMonitor === undefined) && (
+          <CommonButton
+            className=""
+            data-testid="addMonitorBtn"
+            variant="contained"
+            onClick={onClickMonitor}
+          >
+            Add Monitor
+          </CommonButton>
+        )}
       </Stack>
       <Stack>{children}</Stack>
       <InfoModal
