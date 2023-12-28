@@ -233,9 +233,6 @@ const sut = async () => {
       </ThemeProvider>
     </MockedProvider>
   );
-  //   await waitForElementToBeRemoved(() =>
-  screen.queryByTestId("activity-indicator");
-  //   );
 };
 
 describe("Therapist Resource page", () => {
