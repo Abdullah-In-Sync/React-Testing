@@ -189,29 +189,31 @@ export const GET_RELAPSE_LIST_FOR_THERAPIST = gql`
       planType: $planType
       searchText: $searchText
     ) {
-      _id
-      created_date
-      description
-      name
-      patient_id
-      plan_owner
-      plan_type
-      questions {
+      data {
         _id
         created_date
-        patient_answer
+        description
+        name
         patient_id
-        plan_id
-        relapse_additional_details
-        relapse_ques
-        relapse_ques_status
-        relapse_ques_type
-        relapse_ques_typeoption
+        plan_owner
+        plan_type
+        questions {
+          _id
+          created_date
+          patient_answer
+          patient_id
+          plan_id
+          relapse_additional_details
+          relapse_ques
+          relapse_ques_status
+          relapse_ques_type
+          relapse_ques_typeoption
+          updated_date
+        }
+        share_status
+        therapist_id
         updated_date
       }
-      share_status
-      therapist_id
-      updated_date
     }
   }
 `;

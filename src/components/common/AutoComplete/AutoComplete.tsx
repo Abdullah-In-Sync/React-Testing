@@ -14,6 +14,7 @@ type Props = React.PropsWithChildren<{
   freeSolo?: boolean;
   isOptionEqualToValue?: any;
   classes?: object;
+  disabled?: boolean;
 }>;
 
 const CommonAutocomplete: React.FC<Props> = ({
@@ -24,25 +25,16 @@ const CommonAutocomplete: React.FC<Props> = ({
   defaultValue,
   ...rest
 }) => {
-  // const [inputValue, setInputValue] = React.useState("");
-  // const [options, setOptions] = React.useState(initialOptions);
-
-  // const handleChange = (e, value) => {
-  //   setInputValue(value);
-  // }
-
   return (
     <Autocomplete
       fullWidth
       componentName={name}
       options={initialOptions}
-      // noOptionsText="Enter to create a new option"
       onChange={handleSelect}
       defaultValue={defaultValue}
       getOptionLabel={(option) => {
         return option.label;
       }}
-      // onInputChange={handleChange}
       {...rest}
       renderInput={(params) => (
         <Field
@@ -52,15 +44,6 @@ const CommonAutocomplete: React.FC<Props> = ({
           component={TextField}
           label={label}
           variant="outlined"
-
-          // onKeyDown={(e) => {
-          //   if (
-          //     e.key === "Enter" &&
-          //     options.findIndex((o) => o.value === inputValue) === -1
-          //   ) {
-          //     setOptions((o) => o.concat({ value: inputValue, label: inputValue }));
-          //   }
-          // }}
         />
       )}
     />

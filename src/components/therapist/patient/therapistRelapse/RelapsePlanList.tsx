@@ -32,7 +32,8 @@ const TherapistRelapseList = (safetyPlanList) => {
 
   const isEditable = (v) => {
     const { plan_owner, plan_type } = v;
-    if (plan_type !== "fixed" || plan_owner === "therapist") return true;
+    if ((isPlanEdit && plan_type !== "fixed") || plan_owner === "therapist")
+      return true;
     else return false;
   };
   /* istanbul ignore next */
