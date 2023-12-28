@@ -18,6 +18,7 @@ import TherapyPersonalInfoTabs from "./personalInfo/personalInfoTabs";
 import TherapyMainComponent from "./therapy";
 import {
   checkPrivilageAccess,
+  checkUserType,
   modifyTabsData,
 } from "../../../../../utility/helper";
 import TherapistSafetyPlanIndex from "./safetyPlan";
@@ -42,6 +43,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 }) => {
   const [therapy, setTherapy] = useState<string>("pt_therapy_id");
   const [loader, setLoader] = useState<boolean>(pLoader);
+  const { userType } = checkUserType();
 
   const [patientData, setPatientData] = useState<{
     patient_id: string;
@@ -51,6 +53,12 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   const router = useRouter();
   const patId = router?.query.id as string;
   const tab = router?.query?.mainTab as string;
+  /* istanbul ignore next */
+  const tab2 = router?.query?.tab as string;
+  /* istanbul ignore next */
+  const isCustomTherapy = checkPrivilageAccess("Therapy", "View");
+  /* istanbul ignore next */
+  const isTherapy = isCustomTherapy && tab === "therapy";
 
   /* istanbul ignore next */
   const [getPatientTherapyData] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
@@ -147,7 +155,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     },
   ];
   const modifyTabs2 = modifyTabsData(tabs);
-
+  const modifyTabs2IsEmpty = modifyTabs2.length > 0;
   /* istanbul ignore next */
   const tabs1 = [
     {
@@ -164,12 +172,15 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
       moduleName: "Assessment",
       subTab: "",
     },
-    (modifyTabs2.length > 0 || checkPrivilageAccess("Therapy", "View")) && {
+    (modifyTabs2IsEmpty || isCustomTherapy) && {
       label: "Therapy",
       value: "therapy",
       component: <TherapyMainComponent modifyTabs={modifyTabs2} />,
       moduleName: "default",
-      subTab: modifyTabs2[0]["value"],
+      subTab:
+        modifyTabs2IsEmpty && userType === "custom" && !isCustomTherapy
+          ? `&tab=${modifyTabs2[0]["value"]}`
+          : "",
     },
     {
       label: "Notes",
@@ -187,65 +198,69 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     },
   ];
 
-  const modifyTabs = modifyTabsData(tabs1);
-
+  const modifyTabs = modifyTabsData(tabs1) || [];
+  const mainTab = modifyTabs.filter((item) => item.value === tab);
   useEffect(() => {
     /* istanbul ignore next */
-    if ((modifyTabs.length > 0 && tab === modifyTabs[0]["value"]) || !tab)
+    if (modifyTabs.length > 0 && !tab)
       router.push(
         `/therapist/patient/view/${patId}/?mainTab=${modifyTabs[0]["value"]}${modifyTabs[0]["subTab"]}`
       );
-  }, [/* istanbul ignore next */ tab]);
+  }, [tab]);
+
+  useEffect(() => {
+    /* istanbul ignore next */
+    if (mainTab.length > 0 && !isTherapy && modifyTabs2IsEmpty && !tab2)
+      router.push(
+        `/therapist/patient/view/${patId}/?mainTab=${tab}${mainTab[0]["subTab"]}`
+      );
+  }, [tab, tab2]);
 
   return (
-    <>
-      <Layout>
-        <Loader visible={loader} />
-        <Box
-          sx={{ flexGrow: 1 }}
-          p={5}
-          borderRadius="7px"
-          className="bg-themegreen"
-        >
-          <Grid container spacing={2}>
-            <Grid
-              item
-              xs={2}
-              sx={{ textAlign: "center" }}
-              data-testid="container_img"
-            >
-              <Image
-                alt="Therapist"
-                src="/images/user.png"
-                width="100"
-                height="100"
-                style={{ borderRadius: "50%" }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Typography
-                variant="h4"
-                className="text-white tit"
-                data-testid="patient_name"
-              >
-                {patientData.patient_name}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box>
-          <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
-            <TabsGeneratorTherapistPatient
-              tabsList={modifyTabs}
-              tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
+    <Layout>
+      <Loader visible={loader} />
+      <Box
+        sx={{ flexGrow: 1 }}
+        p={5}
+        borderRadius="7px"
+        className="bg-themegreen"
+      >
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={2}
+            sx={{ textAlign: "center" }}
+            data-testid="container_img"
+          >
+            <Image
+              alt="Therapist"
+              src="/images/user.png"
+              width="100"
+              height="100"
+              style={{ borderRadius: "50%" }}
             />
-            {tab === "therapy" && !tabs1 && (
-              <TherapisTherapyList setTherapy={therapy} />
-            )}
-          </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography
+              variant="h4"
+              className="text-white tit"
+              data-testid="patient_name"
+            >
+              {patientData.patient_name}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
+      <Box>
+        <Box data-testid="patientViewMenu" style={{ paddingTop: "20px" }}>
+          <TabsGeneratorTherapistPatient
+            tabsList={modifyTabs}
+            tabLabel={`/therapist/patient/view/${patId}/?mainTab=`}
+          />
+          {isTherapy && !tab2 && <TherapisTherapyList setTherapy={therapy} />}
         </Box>
-      </Layout>
-    </>
+      </Box>
+    </Layout>
   );
 };
 

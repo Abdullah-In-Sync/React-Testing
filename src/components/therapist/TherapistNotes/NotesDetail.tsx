@@ -529,10 +529,10 @@ function NotesDetail(props: propTypes) {
     );
   };
 
-  /* istanbul ignore next */
   const handleViewMoreMonitor = () => {
+    /* istanbul ignore next */
     router.push(
-      `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=monitor&subTab1=my-monitor`
+      `/therapist/patient/view/${patientId}/?mainTab=therapy&tab=monitor&subTab1=patient-monitor`
     );
   };
 
