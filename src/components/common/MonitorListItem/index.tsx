@@ -26,6 +26,8 @@ const MonitorsList: React.FC<ViewProps> = ({
 }) => {
   const styles = useStyles();
 
+  /* istanbul ignore next */
+  const deleteMonitor = checkPrivilageAccess("Monitors", "Delete");
   const monitorsRecords = () => {
     return monitors.map((item, index) => {
       const { name, _id } = item;
@@ -45,7 +47,7 @@ const MonitorsList: React.FC<ViewProps> = ({
                   View Response
                 </CommonButton>
               )}
-              {checkPrivilageAccess("Monitors", "Update response") && (
+              {checkPrivilageAccess("Monitors", "View") && (
                 <CommonButton
                   data-testid={`completeButton_${index}`}
                   variant="contained"
@@ -56,25 +58,28 @@ const MonitorsList: React.FC<ViewProps> = ({
               )}
               {
                 /* istanbul ignore next */
-                userType == "therapist" && (
-                  <IconButton
-                    size="small"
-                    data-testid={`button-delete-icon_${_id}`}
-                    style={{
-                      backgroundColor: "#fff",
-                      width: "32px",
-                      height: "32px",
-                      marginRight: "10px",
-                      marginLeft: "10px",
-                    }}
-                    onClick={() => {
-                      /* istanbul ignore next */
-                      onClickDelete(_id);
-                    }}
-                  >
-                    <DeleteIcon style={{ fontSize: "18px", color: "black" }} />
-                  </IconButton>
-                )
+                (deleteMonitor === true || deleteMonitor === undefined) &&
+                  userType == "therapist" && (
+                    <IconButton
+                      size="small"
+                      data-testid={`button-delete-icon_${_id}`}
+                      style={{
+                        backgroundColor: "#fff",
+                        width: "32px",
+                        height: "32px",
+                        marginRight: "10px",
+                        marginLeft: "10px",
+                      }}
+                      onClick={() => {
+                        /* istanbul ignore next */
+                        onClickDelete(_id);
+                      }}
+                    >
+                      <DeleteIcon
+                        style={{ fontSize: "18px", color: "black" }}
+                      />
+                    </IconButton>
+                  )
               }
             </Box>
           </Box>
