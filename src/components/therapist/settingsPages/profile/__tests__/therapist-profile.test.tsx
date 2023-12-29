@@ -237,8 +237,8 @@ beforeEach(() => {
   (useAppContext as jest.Mock).mockReturnValue({
     isAuthenticated: true,
     user: {
-      _id: "user_id",
       user_type: "therapist",
+      therapist_data: { user_id: "user_id" },
     },
   });
 });

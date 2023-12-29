@@ -20,7 +20,7 @@ const TherapistProfile: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { uploadFile } = fetchUrlAndUploadFile();
   /* istanbul ignore next */
-  const { user: { _id: user_id } = {} } = useAppContext();
+  const { user: { therapist_data: { user_id } } = {} } = useAppContext();
   const [specializationQuery, professionalQuery] = queryMasterData();
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const confirmRef = useRef<ConfirmElement>(null);

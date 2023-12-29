@@ -9,6 +9,7 @@ interface ViewProps {
   setPlanId?: any;
   therapistSafetyPlanList?: any;
   receivePlanId: any;
+  data: any;
 }
 
 export const safetyPlanValidationSchema = Yup.object().shape({
@@ -22,10 +23,16 @@ const SharePlanForm: React.FC<ViewProps> = ({
   setPlanId,
   therapistSafetyPlanList,
   receivePlanId,
+  ...rest
 }) => {
+  const {
+    data: { shareMonitorId },
+  } = rest;
+  console.log("rest", rest);
   const initialValues = {
     planDesc: "",
     planName: "",
+    shareMonitorId,
   };
 
   const onChangePlanId = (value) => {
