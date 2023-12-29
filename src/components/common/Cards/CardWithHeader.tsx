@@ -43,15 +43,15 @@ const CardWithHeader = (props: propTypes) => {
           <Typography noWrap component="div" className="headerText">
             {label}
           </Typography>
-          {onClickView && (
-            <>
+
+          <Box position={"absolute"} right={0}>
+            {onClickView && (
               <Fab
                 aria-label="add"
                 sx={{
-                  position: "absolute",
-                  right: downloadUrl ? 50 : 0,
                   width: "3em",
                   height: "3em",
+                  marginRight: 1,
                 }}
                 data-testid="eyeIconButton"
                 onClick={onClickView}
@@ -68,30 +68,29 @@ const CardWithHeader = (props: propTypes) => {
                   <VisibilityIcon />
                 )}
               </Fab>
-              {
-                /* istanbul ignore next */
-                (isTrue === true || isTrue === undefined) && (
-                  <Fab
-                    sx={{
-                      position: "absolute",
-                      right: 0,
-                      width: "3em",
-                      height: "3em",
-                      background: "#FFFFFF",
-                    }}
-                    data-testid="downloadIconButton"
-                    href={downloadUrl}
-                  >
-                    <Image
-                      src={`/images/downloadIcon.png`}
-                      width="13.33px"
-                      height="13.33px"
-                    />
-                  </Fab>
-                )
-              }
-            </>
-          )}
+            )}
+            {
+              /* istanbul ignore next */
+              downloadUrl && (isTrue === true || isTrue === undefined) && (
+                <Fab
+                  sx={{
+                    width: "3em",
+                    height: "3em",
+                    background: "#FFFFFF",
+                  }}
+                  data-testid="downloadIconButton"
+                  href={downloadUrl}
+                >
+                  <Image
+                    src={`/images/downloadIcon.png`}
+                    width="13.33px"
+                    height="13.33px"
+                  />
+                </Fab>
+              )
+            }
+          </Box>
+
           {rightComponent && rightComponent()}
         </Toolbar>
       </AppBar>
