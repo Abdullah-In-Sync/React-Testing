@@ -382,6 +382,7 @@ export const CREATE_THERAPIST_RELAPSE_PLAN = gql`
       planName: $planName
       planDesc: $planDesc
     ) {
+      result
       data {
         _id
       }

@@ -380,8 +380,10 @@ mocksData.push({
   result: {
     data: {
       therapistCreateRelapsePlan: {
+        data: {
+          _id: "beebad4-4e88-404a-ac8b-8797a300d250",
+        },
         result: true,
-        __typename: "result",
       },
     },
   },
