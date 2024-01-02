@@ -267,7 +267,9 @@ const TherapistRelapsePlanIndex: NextPage = () => {
         fetchPolicy: "network-only",
         onCompleted: (data) => {
           const {
-            therapistCreateRelapsePlan: { _id },
+            therapistCreateRelapsePlan: {
+              data: { _id },
+            },
           } = data;
           refetch();
           handleAddIconButton(0, _id);

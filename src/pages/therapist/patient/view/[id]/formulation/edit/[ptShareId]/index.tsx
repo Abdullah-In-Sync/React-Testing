@@ -110,11 +110,9 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
     }
   };
 
+  /* istanbul ignore next */
   const handleViewOpen = () => {
-    /* istanbul ignore next */
-    if (description || instruction) {
-      setIsOpenPopup(true);
-    }
+    setIsOpenPopup(true);
   };
 
   const handleSuccessOk = () => {
@@ -144,7 +142,6 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
   const onClosePopup = () => {
     setIsOpenPopup(false);
   };
-
   return (
     <>
       <Layout>
@@ -153,7 +150,7 @@ const TherapistPatientEditTemplatePage: NextPage = () => {
         <PatientFormulationTemplateEdit
           formulationData={formulationData}
           onSubmit={handleSubmitTemplateData}
-          onClickView={handleViewOpen}
+          onClickView={/* istanbul ignore next */(description || instruction) && handleViewOpen}
           mode={"edit"}
           onPressBack={onPressBack}
           onCancel={onCancel}
