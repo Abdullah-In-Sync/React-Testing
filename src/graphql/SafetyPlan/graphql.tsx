@@ -382,7 +382,9 @@ export const CREATE_THERAPIST_RELAPSE_PLAN = gql`
       planName: $planName
       planDesc: $planDesc
     ) {
-      _id
+      data {
+        _id
+      }
     }
   }
 `;
