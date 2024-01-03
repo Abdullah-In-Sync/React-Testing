@@ -15,6 +15,9 @@ Amplify.configure({
     userPoolId,
     userPoolWebClientId: clientId,
     mandatorySignIn: false,
+    cookieStorage: {
+      secure: true,
+    },
   },
 });
 
