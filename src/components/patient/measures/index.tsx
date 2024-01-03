@@ -23,8 +23,8 @@ const MeasureList: FC = () => {
   const [testErrorModal, setTestErrorModal] = useState(false);
   const sessionOptions = getSessionOptions();
 
-  const isViewScore = checkPrivilageAccess("Assessment", "View");
-  const isTakeTest = checkPrivilageAccess("Assessment", "Update response");
+  const isViewScore = checkPrivilageAccess("Measures", "View");
+  const isTakeTest = checkPrivilageAccess("Measures", "Update response");
 
   const { data: { patientMeasureList = null } = {}, loading } =
     useQuery<PatientListMeasureData>(GET_PAITENT_MEASURES_LIST, {
