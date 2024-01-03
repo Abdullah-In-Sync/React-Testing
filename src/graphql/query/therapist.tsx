@@ -288,23 +288,25 @@ export const GET_POPUP_RESOURCE_LIST_DATA = gql`
 export const GET_THERAPIST_GOALS_DATA = gql`
   query getTherapistGoalList($patient_id: String!, $pttherapy_id: String!) {
     getTherapistGoalList(patient_id: $patient_id, pttherapy_id: $pttherapy_id) {
-      _id
-      created_date
-      patient_id
-      ptgoal_achievementdate
-      ptgoal_achievementgoal
-      ptgoal_audio
-      ptgoal_file
-      ptgoal_mygoal
-      ptgoal_pregoal
-      ptgoal_reviewdate
-      ptgoal_status
-      ptgoal_success
-      ptsession_id
-      therapist_id
-      pttherapy_id
-      updated_date
-      user_type
+      data {
+        _id
+        created_date
+        patient_id
+        ptgoal_achievementdate
+        ptgoal_achievementgoal
+        ptgoal_audio
+        ptgoal_file
+        ptgoal_mygoal
+        ptgoal_pregoal
+        ptgoal_reviewdate
+        ptgoal_status
+        ptgoal_success
+        ptsession_id
+        therapist_id
+        pttherapy_id
+        updated_date
+        user_type
+      }
     }
   }
 `;

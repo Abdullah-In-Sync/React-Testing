@@ -28,6 +28,7 @@ import ConfirmationModal from "../../../common/ConfirmationModal";
 import { useSnackbar } from "notistack";
 import { GET_THERAPIST_GOALS_DATA } from "../../../../graphql/query/therapist";
 import { useStyles } from "./style";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 type propTypes = {
   setTherapy?: any;
@@ -78,6 +79,9 @@ export default function TherapistGoal(props: propTypes) {
   const styles = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const patientId = sessionStorage.getItem("patient_id");
+  const isAdd = checkPrivilageAccess("Goals", "Add");
+  const isEdit = checkPrivilageAccess("Goals", "Edit");
+  const isDelete = checkPrivilageAccess("Goals", "Delete");
 
   /* istanbul ignore next */
   const [formFields, setFormFields] =
@@ -105,7 +109,7 @@ export default function TherapistGoal(props: propTypes) {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         /* istanbul ignore next */
-        setFormFields(data?.getTherapistGoalList);
+        setFormFields(data?.getTherapistGoalList?.data);
       },
     }
   );
@@ -388,35 +392,39 @@ export default function TherapistGoal(props: propTypes) {
 
   return (
     <Box>
-      <Box className={styles.addGoalButtonBox}>
-        <Button
-          className={styles.smallButton}
-          data-testid={"addGoalButton"}
-          variant="contained"
-          onClick={addInput}
-          disabled={inputs.length > 0}
-        >
-          Add Goals
-        </Button>
-      </Box>
+      {isAdd && (
+        <Box className={styles.addGoalButtonBox}>
+          <Button
+            className={styles.smallButton}
+            data-testid={"addGoalButton"}
+            variant="contained"
+            onClick={addInput}
+            disabled={inputs.length > 0}
+          >
+            Add Goals
+          </Button>
+        </Box>
+      )}
       <Box style={{ paddingBottom: "30px" }}>
-        {goalsData?.getTherapistGoalList?.map((data, index) => (
+        {goalsData?.getTherapistGoalList?.data?.map((data, index) => (
           <Box className={styles.outerBorder} borderRadius={"7px"}>
             <Box key={index}>
-              <Box className={styles.deleteButton}>
-                <IconButtonWrapper
-                  aria-label="create"
-                  size="small"
-                  style={{ backgroundColor: "#6EC9DB" }}
-                  data-testid={`updateDelectIcon${index}`}
-                  onClick={() => {
-                    setDeleteGoalId(data._id);
-                    setIsConfirmDeleteGoal(true);
-                  }}
-                >
-                  <DeleteIcon style={{ color: "white" }} />
-                </IconButtonWrapper>
-              </Box>
+              {isDelete && (
+                <Box className={styles.deleteButton}>
+                  <IconButtonWrapper
+                    aria-label="create"
+                    size="small"
+                    style={{ backgroundColor: "#6EC9DB" }}
+                    data-testid={`updateDelectIcon${index}`}
+                    onClick={() => {
+                      setDeleteGoalId(data._id);
+                      setIsConfirmDeleteGoal(true);
+                    }}
+                  >
+                    <DeleteIcon style={{ color: "white" }} />
+                  </IconButtonWrapper>
+                </Box>
+              )}
               <Box className={styles.outerBorder} borderRadius={"7px"}>
                 <Typography
                   className={styles.textStyle}
@@ -443,9 +451,14 @@ export default function TherapistGoal(props: propTypes) {
                   }}
                   fullWidth={true}
                   className="form-control-bg"
+                  disabled={!isEdit}
                 />
 
-                <Box className={styles.datePicker}>
+                <Box
+                  className={`${styles.datePicker} ${
+                    !isEdit && "disabledElement"
+                  }`}
+                >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Stack spacing={1}>
                       <DatePicker
@@ -495,9 +508,14 @@ export default function TherapistGoal(props: propTypes) {
                     inputProps={{ "data-testid": "ptgoal_achievementgoal" }}
                     fullWidth={true}
                     className="form-control-bg"
+                    disabled={!isEdit}
                   />
                 </Grid>
-                <Box className={styles.datePicker}>
+                <Box
+                  className={`${styles.datePicker} ${
+                    !isEdit && "disabledElement"
+                  }`}
+                >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Stack spacing={1}>
                       <DatePicker
@@ -549,176 +567,180 @@ export default function TherapistGoal(props: propTypes) {
                     step={25}
                     marks={marks}
                     valueLabelDisplay="off"
+                    disabled={!isEdit}
                   />
                 </Box>
               </Box>
             </Box>
-            <Box className={styles.saveUpdateButton}>
-              <Button
-                className={styles.largeButton}
-                data-testid="upadteSaveGoalButton"
-                variant="contained"
-                onClick={(e) => {
-                  /* istanbul ignore next */
-                  handleSubmit(e, index);
-                }}
-              >
-                Save Goals
-              </Button>
-            </Box>
+            {isEdit && (
+              <Box className={styles.saveUpdateButton}>
+                <Button
+                  className={styles.largeButton}
+                  data-testid="upadteSaveGoalButton"
+                  variant="contained"
+                  onClick={(e) => {
+                    /* istanbul ignore next */
+                    handleSubmit(e, index);
+                  }}
+                >
+                  Save Goals
+                </Button>
+              </Box>
+            )}
           </Box>
         ))}
       </Box>
 
       <Box style={{ paddingBottom: "30px" }}>
-        {inputs.map((input, index) => (
-          <Box className={styles.outerBorder} borderRadius={"7px"}>
-            <Box key={index}>
-              <Box className={styles.deleteButton}>
-                <IconButtonWrapper
-                  aria-label="create"
-                  size="small"
-                  style={{ backgroundColor: "#6EC9DB" }}
-                >
-                  <DeleteIcon
-                    style={{ color: "white" }}
-                    onClick={() =>
-                      /* istanbul ignore next */
-                      deleteInput(index)
-                    }
-                  />
-                </IconButtonWrapper>
-              </Box>
-              <Box className={styles.outerBorder} borderRadius={"7px"}>
-                <Typography
-                  className={styles.textStyle}
-                  data-testid="safety_ques"
-                >
-                  Goal (Added by therapist)
-                </Typography>
-
-                <TextFieldComponent
-                  name="resource_references"
-                  id="references"
-                  value={goalInput}
-                  multiline
-                  rows={4}
-                  onChange={(e) => updateGoalInput(e.target.value)}
-                  inputProps={{
-                    "data-testid": `addGoalTextInput${index}`,
-                  }}
-                  fullWidth={true}
-                  className="form-control-bg"
-                />
-
-                <Box className={styles.datePicker}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Stack spacing={1}>
-                      <DatePicker
-                        disableFuture
-                        inputFormat="MM-DD-YYYY"
-                        data-testid="StartDateBox"
-                        disabled={false}
-                        label="Goal Date"
-                        openTo="year"
-                        views={["year", "month", "day"]}
-                        value={goalDate}
-                        onChange={goalChangeDate}
-                        renderInput={(params) => <TextField {...params} />}
-                        className="form-control-bg"
-                      />
-                    </Stack>
-                  </LocalizationProvider>
+        {isAdd &&
+          inputs.map((_, index) => (
+            <Box className={styles.outerBorder} borderRadius={"7px"}>
+              <Box key={index}>
+                <Box className={styles.deleteButton}>
+                  <IconButtonWrapper
+                    aria-label="create"
+                    size="small"
+                    style={{ backgroundColor: "#6EC9DB" }}
+                  >
+                    <DeleteIcon
+                      style={{ color: "white" }}
+                      onClick={() =>
+                        /* istanbul ignore next */
+                        deleteInput(index)
+                      }
+                    />
+                  </IconButtonWrapper>
                 </Box>
-              </Box>
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
+                  >
+                    Goal (Added by therapist)
+                  </Typography>
 
-              <Box className={styles.outerBorder} borderRadius={"7px"}>
-                <Typography
-                  className={styles.textStyle}
-                  data-testid="safety_ques"
-                >
-                  Achievement of Goals
-                </Typography>
-
-                <Grid item xs={12}>
                   <TextFieldComponent
                     name="resource_references"
                     id="references"
-                    value={patientInputs}
-                    placeholder={"Write somenthing about achievement"}
+                    value={goalInput}
                     multiline
                     rows={4}
-                    onChange={(e) =>
-                      handlePatientInputChange(index, e.target.value)
-                    }
+                    onChange={(e) => updateGoalInput(e.target.value)}
                     inputProps={{
-                      "data-testid": `addAchievementTextInput${index}`,
+                      "data-testid": `addGoalTextInput${index}`,
                     }}
                     fullWidth={true}
                     className="form-control-bg"
                   />
-                </Grid>
-                <Box className={styles.datePicker}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Stack spacing={1}>
-                      <DatePicker
-                        disableFuture
-                        inputFormat="MM-DD-YYYY"
-                        label="Achievement Date"
-                        openTo="year"
-                        views={["year", "month", "day"]}
-                        value={achivDate}
-                        onChange={achivChangeDate}
-                        renderInput={(params) => <TextField {...params} />}
-                        className="form-control-bg"
-                      />
-                    </Stack>
-                  </LocalizationProvider>
-                </Box>
-              </Box>
 
-              <Box className={styles.outerBorder} borderRadius={"7px"}>
-                <Typography
-                  className={styles.textStyle}
-                  data-testid="safety_ques"
-                >
-                  Success of Goal achievement
-                </Typography>
-                <Box className={styles.sliderBox} borderRadius={"7px"}>
-                  <Slider
-                    data-testid="ptgoal_success"
-                    onChange={(event) =>
-                      /* istanbul ignore next */
-                      goalAddSlider(event)
-                    }
-                    step={25}
-                    marks={marks}
-                    valueLabelDisplay="off"
-                  />
+                  <Box className={styles.datePicker}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Stack spacing={1}>
+                        <DatePicker
+                          disableFuture
+                          inputFormat="MM-DD-YYYY"
+                          data-testid="StartDateBox"
+                          disabled={false}
+                          label="Goal Date"
+                          openTo="year"
+                          views={["year", "month", "day"]}
+                          value={goalDate}
+                          onChange={goalChangeDate}
+                          renderInput={(params) => <TextField {...params} />}
+                          className="form-control-bg"
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
+                  >
+                    Achievement of Goals
+                  </Typography>
+
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="resource_references"
+                      id="references"
+                      value={patientInputs}
+                      placeholder={"Write somenthing about achievement"}
+                      multiline
+                      rows={4}
+                      onChange={(e) =>
+                        handlePatientInputChange(index, e.target.value)
+                      }
+                      inputProps={{
+                        "data-testid": `addAchievementTextInput${index}`,
+                      }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
+                  </Grid>
+                  <Box className={styles.datePicker}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <Stack spacing={1}>
+                        <DatePicker
+                          disableFuture
+                          inputFormat="MM-DD-YYYY"
+                          label="Achievement Date"
+                          openTo="year"
+                          views={["year", "month", "day"]}
+                          value={achivDate}
+                          onChange={achivChangeDate}
+                          renderInput={(params) => <TextField {...params} />}
+                          className="form-control-bg"
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </Box>
+                </Box>
+
+                <Box className={styles.outerBorder} borderRadius={"7px"}>
+                  <Typography
+                    className={styles.textStyle}
+                    data-testid="safety_ques"
+                  >
+                    Success of Goal achievement
+                  </Typography>
+                  <Box className={styles.sliderBox} borderRadius={"7px"}>
+                    <Slider
+                      data-testid="ptgoal_success"
+                      onChange={(event) =>
+                        /* istanbul ignore next */
+                        goalAddSlider(event)
+                      }
+                      step={25}
+                      marks={marks}
+                      valueLabelDisplay="off"
+                    />
+                  </Box>
                 </Box>
               </Box>
+              <Box className={styles.saveUpdateButton}>
+                <Button
+                  className={styles.largeButton}
+                  data-testid="addGoalSubmitButton"
+                  variant="contained"
+                  onClick={() => {
+                    /* istanbul ignore next */
+                    if (goalInput.length) {
+                      setIsAddGoals(true);
+                    } else {
+                      enqueueSnackbar("Goal input cannot be blank", {
+                        variant: "error",
+                      });
+                    }
+                  }}
+                >
+                  Save Goals
+                </Button>
+              </Box>
             </Box>
-            <Box className={styles.saveUpdateButton}>
-              <Button
-                className={styles.largeButton}
-                data-testid="addGoalSubmitButton"
-                variant="contained"
-                onClick={() => {
-                  /* istanbul ignore next */
-                  if (goalInput.length) {
-                    setIsAddGoals(true);
-                  } else {
-                    enqueueSnackbar("Goal input cannot be blank", {
-                      variant: "error",
-                    });
-                  }
-                }}
-              >
-                Save Goals
-              </Button>
-            </Box>
-          </Box>
-        ))}
+          ))}
       </Box>
       {isConfirmAddGoals && (
         <ConfirmationModal
