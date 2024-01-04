@@ -440,16 +440,18 @@ export const GET_PATIENT_AGENDA_DETAILS = gql`
 export const GET_PATIENT_AGENDA_DETAILS_LIST = gql`
   query getPatientAgendaList($patient_id: String!, $session: Int!) {
     getPatientAgendaList(patient_id: $patient_id, session: $session) {
-      _id
-      type
-      agenda_id
-      agenda_name
-      display_order
-      resource_id
-      ptsharres_id
-      share_status
-      created_date
-      updated_date
+      data {
+        _id
+        type
+        agenda_id
+        agenda_name
+        display_order
+        resource_id
+        ptsharres_id
+        share_status
+        created_date
+        updated_date
+      }
     }
   }
 `;

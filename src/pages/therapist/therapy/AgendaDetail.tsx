@@ -26,6 +26,7 @@ import AddAgendaItemForm from "./AddAgendaItem";
 import ResourcePopup from "../../../components/therapist/patient/TherapsitHomework/resourcePopup";
 import { GET_POPUP_RESOURCE_LIST_DATA } from "../../../graphql/query/therapist";
 import { useAppContext } from "../../../contexts/AuthContext";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 type propTypes = {
   sessionNo?: any;
@@ -42,6 +43,9 @@ const IconButtonWrapper = styled(IconButton)(
 export default function AgendaDetailAccordian(props: propTypes) {
   const { user } = useAppContext();
   const router = useRouter();
+  const isAgendaDelete = checkPrivilageAccess("Therapy", "Delete");
+  const isAgendaAdd = checkPrivilageAccess("Therapy", "Add");
+  const isAgendaShare = checkPrivilageAccess("Therapy", "Share");
   /* istanbul ignore next */
   const orgId = user?.therapist_data?.org_id;
   const sessionNo = props.sessionNo;
@@ -207,8 +211,8 @@ export default function AgendaDetailAccordian(props: propTypes) {
       key: "actions",
       columnName: "Delete",
       visible: true,
-      render: (_, value) => (
-        <>
+      render: (_, value) =>
+        isAgendaDelete && (
           <IconButtonWrapper
             size="small"
             onClick={() => {
@@ -219,8 +223,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
           >
             <DeleteIcon />
           </IconButtonWrapper>
-        </>
-      ),
+        ),
     },
 
     {
@@ -249,31 +252,33 @@ export default function AgendaDetailAccordian(props: propTypes) {
             />
           </IconButtonWrapper>
 
-          <IconButtonWrapper
-            disabled={value.share_status == 1}
-            size="small"
-            onClick={() => {
-              if (value.resource_id) {
-                setShareModalOpen(true);
-                setDeleteAgendaId(value._id);
-                setPtShareId(value.ptsharres_id);
-              } else {
-                enqueueSnackbar(
-                  "Please assign resource first in order to share with the patient",
-                  {
-                    variant: "error",
-                  }
-                );
-              }
-            }}
-          >
-            <ShareIcon
-              style={{
-                color: value.share_status == 1 ? "#6EC9DB" : undefined,
+          {isAgendaShare && (
+            <IconButtonWrapper
+              disabled={value.share_status == 1}
+              size="small"
+              onClick={() => {
+                if (value.resource_id) {
+                  setShareModalOpen(true);
+                  setDeleteAgendaId(value._id);
+                  setPtShareId(value.ptsharres_id);
+                } else {
+                  enqueueSnackbar(
+                    "Please assign resource first in order to share with the patient",
+                    {
+                      variant: "error",
+                    }
+                  );
+                }
               }}
-              data-testid={`share-agenda-button${value._id}`}
-            />
-          </IconButtonWrapper>
+            >
+              <ShareIcon
+                style={{
+                  color: value.share_status == 1 ? "#6EC9DB" : undefined,
+                }}
+                data-testid={`share-agenda-button${value._id}`}
+              />
+            </IconButtonWrapper>
+          )}
         </>
       ),
     },
@@ -306,16 +311,24 @@ export default function AgendaDetailAccordian(props: propTypes) {
           session: props.sessionNo,
         },
         onCompleted: (data) => {
+          /* istanbul ignore next */
+          const {
+            addPatientAgendaItem: { message, result },
+          } = data;
           setIsConfirmAddAgendaTask(false);
           handleCloseAddAgendaItemModal();
 
-          /* istanbul ignore next */
-          if (data.addPatientAgendaItem.message === null) {
+          if (result) {
             enqueueSnackbar("Agenda item added successfully!", {
               variant: "success",
             });
+          } else if (!result && message && message !== null) {
+            enqueueSnackbar(message, {
+              variant: "error",
+            });
           } else {
-            enqueueSnackbar(`This agenda item already exists`, {
+            /* istanbul ignore next */
+            enqueueSnackbar(``, {
               variant: "error",
             });
           }
@@ -423,7 +436,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
       >
         <TableGenerator
           fields={fields}
-          data={agendaDetailList?.getPatientAgendaList}
+          data={agendaDetailList?.getPatientAgendaList?.data}
           loader={loader}
           backendPagination={false}
           selectedRecords={[]}
@@ -432,17 +445,19 @@ export default function AgendaDetailAccordian(props: propTypes) {
         />
       </Box>
       <Box style={{ display: "flex", justifyContent: "space-between" }}>
-        <Box style={{ flex: 1 }}>
-          <Box style={{ marginLeft: "10px" }}>
-            <Button
-              data-testid="addAgendaItemButton"
-              variant="contained"
-              onClick={handleOpenAddAgendaItemModal}
-            >
-              Add Agenda Item
-            </Button>
+        {isAgendaAdd && (
+          <Box style={{ flex: 1 }}>
+            <Box style={{ marginLeft: "10px" }}>
+              <Button
+                data-testid="addAgendaItemButton"
+                variant="contained"
+                onClick={handleOpenAddAgendaItemModal}
+              >
+                Add Agenda Item
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        )}
 
         <Box style={{ marginLeft: "10px" }}>
           <Button
