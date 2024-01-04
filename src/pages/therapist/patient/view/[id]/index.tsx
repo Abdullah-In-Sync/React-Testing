@@ -113,13 +113,13 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     {
       label: "Goals",
       value: "goals",
-      component: <TherapyPatientGoalsIndex setTherapy={setTherapy} />,
+      component: <TherapyPatientGoalsIndex setTherapy={therapy} />,
       moduleName: "Goals",
     },
     {
       label: "Homework",
       value: "homework",
-      component: <TherapyPatientHomeworkIndex setTherapy={setTherapy} />,
+      component: <TherapyPatientHomeworkIndex setTherapy={therapy} />,
       moduleName: "Homework",
     },
     {
