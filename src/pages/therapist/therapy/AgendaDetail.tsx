@@ -306,16 +306,24 @@ export default function AgendaDetailAccordian(props: propTypes) {
           session: props.sessionNo,
         },
         onCompleted: (data) => {
+          /* istanbul ignore next */
+          const {
+            addPatientAgendaItem: { message, result },
+          } = data;
           setIsConfirmAddAgendaTask(false);
           handleCloseAddAgendaItemModal();
 
-          /* istanbul ignore next */
-          if (data.addPatientAgendaItem.message === null) {
+          if (result) {
             enqueueSnackbar("Agenda item added successfully!", {
               variant: "success",
             });
+          } else if (!result && message && message !== null) {
+            enqueueSnackbar(message, {
+              variant: "error",
+            });
           } else {
-            enqueueSnackbar(`This agenda item already exists`, {
+            /* istanbul ignore next */
+            enqueueSnackbar(``, {
               variant: "error",
             });
           }
@@ -423,7 +431,7 @@ export default function AgendaDetailAccordian(props: propTypes) {
       >
         <TableGenerator
           fields={fields}
-          data={agendaDetailList?.getPatientAgendaList}
+          data={agendaDetailList?.getPatientAgendaList?.data}
           loader={loader}
           backendPagination={false}
           selectedRecords={[]}

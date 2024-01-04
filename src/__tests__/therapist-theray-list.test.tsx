@@ -139,35 +139,37 @@ mocks.push({
   },
   result: {
     data: {
-      getPatientAgendaList: [
-        {
-          _id: "68c1c055-d2a8-4d02-8977-7af0e9446335",
-          type: "agenda",
-          agenda_id: "c68d0dca482f452f96c8cf6f24428d5a",
-          agenda_name: "Agenda to beat blues ",
-          display_order: 0,
-          resource_id: "",
-          ptsharres_id: "",
-          share_status: 0,
-          created_date: "2023-07-31T08:23:05.181Z",
-          updated_date: "2023-07-31T08:23:05.181Z",
-          __typename: "PatientAgenda",
-        },
+      getPatientAgendaList: {
+        data: [
+          {
+            _id: "68c1c055-d2a8-4d02-8977-7af0e9446335",
+            type: "agenda",
+            agenda_id: "c68d0dca482f452f96c8cf6f24428d5a",
+            agenda_name: "Agenda to beat blues ",
+            display_order: 0,
+            resource_id: "",
+            ptsharres_id: "",
+            share_status: 0,
+            created_date: "2023-07-31T08:23:05.181Z",
+            updated_date: "2023-07-31T08:23:05.181Z",
+            __typename: "PatientAgenda",
+          },
 
-        {
-          _id: "8977-7af0e9446335",
-          type: "agenda",
-          agenda_id: "cf6f24428d5a",
-          agenda_name: "Agendas",
-          display_order: 2,
-          resource_id: "cdfdfvdfv-vkldmvm",
-          ptsharres_id: "",
-          share_status: 0,
-          created_date: "2023-09-26T06:38:11.869Z",
-          updated_date: "2023-09-26T08:21:01.761Z",
-          __typename: "PatientAgenda",
-        },
-      ],
+          {
+            _id: "8977-7af0e9446335",
+            type: "agenda",
+            agenda_id: "cf6f24428d5a",
+            agenda_name: "Agendas",
+            display_order: 2,
+            resource_id: "cdfdfvdfv-vkldmvm",
+            ptsharres_id: "",
+            share_status: 0,
+            created_date: "2023-09-26T06:38:11.869Z",
+            updated_date: "2023-09-26T08:21:01.761Z",
+            __typename: "PatientAgenda",
+          },
+        ],
+      },
     },
   },
 });
@@ -205,6 +207,27 @@ mocks.push({
       addPatientAgendaItem: {
         message: null,
         result: true,
+        __typename: "result",
+      },
+    },
+  },
+});
+
+mocks.push({
+  request: {
+    query: THERAPIST_ADD_ITEM_AGENDA,
+    variables: {
+      patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
+      display_order: 1,
+      agenda_name: "already exist",
+      session: 1,
+    },
+  },
+  result: {
+    data: {
+      addPatientAgendaItem: {
+        message: "This agenda item is already exists",
+        result: false,
         __typename: "result",
       },
     },
@@ -488,46 +511,63 @@ describe("Therapist client feedback list", () => {
 
   test("Add agenda item", async () => {
     await sut();
-    await waitFor(async () => {
-      await sut();
-      const list = await screen.findAllByTestId("list-tile");
+    const list = await screen.findAllByTestId("list-tile");
+    const firstAccordion = list[0];
+    await fireEvent.click(
+      within(firstAccordion).queryByTestId("toggleContent")
+    );
 
-      const firstAccordion = list[0];
+    expect(
+      await screen.findByTestId("addAgendaItemButton")
+    ).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("addAgendaItemButton"));
+    expect(await screen.findByTestId("display_order")).toBeInTheDocument();
+    expect(await screen.findByTestId("agenda_name")).toBeInTheDocument();
 
-      await fireEvent.click(
-        within(firstAccordion).queryByTestId("toggleContent")
-      );
-
-      await waitFor(async () => {
-        expect(screen.getByTestId("addAgendaItemButton")).toBeInTheDocument();
-        fireEvent.click(screen.queryByTestId("addAgendaItemButton"));
-      });
-
-      await waitFor(async () => {
-        expect(screen.getByTestId("display_order")).toBeInTheDocument();
-        expect(screen.getByTestId("agenda_name")).toBeInTheDocument();
-
-        fireEvent.change(screen.queryByTestId("display_order"), {
-          target: { value: 1 },
-        });
-        fireEvent.change(screen.queryByTestId("agenda_name"), {
-          target: { value: "My name is agenda" },
-        });
-
-        fireEvent.click(screen.queryByTestId("addSubmitForm"));
-      });
-
-      await waitFor(async () => {
-        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
-        fireEvent.click(screen.queryByTestId("confirmButton"));
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Agenda item added successfully!")
-        ).toBeInTheDocument();
-      });
+    fireEvent.change(await screen.findByTestId("display_order"), {
+      target: { value: 1 },
     });
+    fireEvent.change(await screen.findByTestId("agenda_name"), {
+      target: { value: "My name is agenda" },
+    });
+
+    fireEvent.click(await screen.findByTestId("addSubmitForm"));
+    expect(await screen.findByTestId("confirmButton")).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+
+    expect(
+      await screen.findByText("Agenda item added successfully!")
+    ).toBeInTheDocument();
+  });
+
+  test("Add agenda fails due to existing", async () => {
+    await sut();
+    const list = await screen.findAllByTestId("list-tile");
+    const firstAccordion = list[0];
+    await fireEvent.click(
+      within(firstAccordion).queryByTestId("toggleContent")
+    );
+    expect(
+      await screen.findByTestId("addAgendaItemButton")
+    ).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("addAgendaItemButton"));
+    expect(await screen.findByTestId("display_order")).toBeInTheDocument();
+    expect(await screen.findByTestId("agenda_name")).toBeInTheDocument();
+
+    fireEvent.change(await screen.findByTestId("display_order"), {
+      target: { value: 1 },
+    });
+    fireEvent.change(await screen.findByTestId("agenda_name"), {
+      target: { value: "already exist" },
+    });
+
+    fireEvent.click(await screen.findByTestId("addSubmitForm"));
+    expect(await screen.findByTestId("confirmButton")).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+
+    expect(
+      await screen.findByText("This agenda item is already exists")
+    ).toBeInTheDocument();
   });
 
   it("Get resource popup and assign resource.", async () => {
