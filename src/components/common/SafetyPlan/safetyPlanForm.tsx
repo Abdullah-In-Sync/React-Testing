@@ -20,7 +20,10 @@ export const SafetyPlanForm: FC<Props> = ({
 }) => {
   const classis = useStyles();
   /* istanbul ignore next */
-  const isSafetyPlan = checkPrivilageAccess("Safety Plan", "Update response");
+  const isSafetyPlanUpdate = checkPrivilageAccess(
+    "Safety Plan",
+    "Update response"
+  );
 
   return (
     <Formik<ViewSafetyPlanById>
@@ -42,7 +45,7 @@ export const SafetyPlanForm: FC<Props> = ({
         <Form
           className={`${
             /* istanbul ignore next */
-            isSafetyPlan || "disbledFields"
+            isSafetyPlanUpdate || "disbledFields"
           }`}
         >
           <FieldArray
@@ -82,7 +85,7 @@ export const SafetyPlanForm: FC<Props> = ({
                     formikHelper={formikHelper}
                   />
                 ))}
-                {isSafetyPlan && (
+                {isSafetyPlanUpdate && (
                   <Box
                     marginTop={"32px"}
                     display="flex"

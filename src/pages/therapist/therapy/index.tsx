@@ -25,12 +25,14 @@ import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { SuccessModal } from "../../../components/common/SuccessModal";
 
 import AgendaDetailAccordian from "./AgendaDetail";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 type propTypes = {
   setTherapy: any;
 };
 
 export default function TherapisTherapyList(props: propTypes) {
+  const isAgendaAdd = checkPrivilageAccess("Therapy", "Add");
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const modalRefAddAgenda = useRef<ModalElement>(null);
@@ -163,34 +165,40 @@ export default function TherapisTherapyList(props: propTypes) {
     setCompleteAgendaAddModal(false);
     refetch();
   };
+  console.log(
+    "patientSessionData?.getPatientSessionList",
+    patientSessionData?.getPatientSessionList
+  );
   return (
     <>
       <Box>
         <Loader visible={loader} />
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Box style={{ flex: 1 }}>
-            <ContentHeader title="Therapy" />
-          </Box>
+        {isAgendaAdd && (
+          <Box style={{ display: "flex", justifyContent: "space-between" }}>
+            <Box style={{ flex: 1 }}>
+              <ContentHeader title="Therapy" />
+            </Box>
 
-          {/* {agendaDetails?.getPatientAgendaDetail?.result !== true && ( */}
-          <Box style={{ marginLeft: "10px" }}>
-            <Button
-              data-testid="addAgendaButton"
-              variant="contained"
-              onClick={
-                /* istanbul ignore next */
-                handleOpenAddAgendaModal
-              }
-              disabled={
-                /* istanbul ignore next */
-                agendaDetails?.getPatientAgendaDetail?.result == true
-              }
-            >
-              Add Agenda
-            </Button>
+            {/* {agendaDetails?.getPatientAgendaDetail?.result !== true && ( */}
+            <Box style={{ marginLeft: "10px" }}>
+              <Button
+                data-testid="addAgendaButton"
+                variant="contained"
+                onClick={
+                  /* istanbul ignore next */
+                  handleOpenAddAgendaModal
+                }
+                disabled={
+                  /* istanbul ignore next */
+                  agendaDetails?.getPatientAgendaDetail?.result == true
+                }
+              >
+                Add Agenda
+              </Button>
+            </Box>
+            {/* )} */}
           </Box>
-          {/* )} */}
-        </Box>
+        )}
 
         <Box marginBottom={"20px"}>
           {

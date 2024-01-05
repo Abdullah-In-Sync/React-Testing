@@ -45,78 +45,44 @@ export const GET_PATIENTTHERAPY_DATA = gql`
   }
 `;
 
-export const GET_PATIENTFEEDBACKLIST_DATA = gql`
-  query GetPatientFeedbackList(
-    $feedbackType: String!
-    $sessionNo: Int!
-    $pttherapyId: String!
-  ) {
-    getPatientFeedbackList(
-      feedbackType: $feedbackType
-      sessionNo: $sessionNo
-      pttherapyId: $pttherapyId
-    ) {
-      _id
-      user_id
-      org_id
-      session_no
-      feedback_type
-      question
-      answer_type
-      answer_options
-      status
-      created_date
-      updated_date
-      feedback_ans {
-        _id
-        answer
-        created_date
-        patient_id
-        question_id
-        status
-        therapist_id
-        updated_date
-      }
-    }
-  }
-`;
-
 export const GET_PATIENT_FEEDBACKLIST_DATA_NEW = gql`
   query patientGetFeedbackList($session: String!, $pttherapyId: String!) {
     patientGetFeedbackList(session: $session, pttherapyId: $pttherapyId) {
-      _id
-      created_date
-      description
-      feedback_type
-      name
-      org_id
-      questions {
+      data {
         _id
-        answer {
+        created_date
+        description
+        feedback_type
+        name
+        org_id
+        questions {
           _id
-          answer
+          answer {
+            _id
+            answer
+            created_date
+            patient_id
+            pttherapy_id
+            question_id
+            status
+            therapist_id
+            updated_date
+          }
+          answer_options
+          answer_type
           created_date
-          patient_id
-          pttherapy_id
-          question_id
+          feedback_id
+          question
           status
-          therapist_id
           updated_date
         }
-        answer_options
-        answer_type
-        created_date
-        feedback_id
-        question
+        session_no
         status
         updated_date
+        user_id
+        user_type
+        visibility
       }
-      session_no
-      status
-      updated_date
-      user_id
-      user_type
-      visibility
     }
   }
 `;
