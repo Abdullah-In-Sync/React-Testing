@@ -28,8 +28,10 @@ import { ViewSafetyPlanById } from "../../../../../../graphql/SafetyPlan/types";
 import AddPlanForm from "../../../../../../components/therapist/patient/therapistSafetyPlan/create/AddSafetyPlan";
 import { useAppContext } from "../../../../../../contexts/AuthContext";
 import TherapistRelapsePlanComponent from "../../../../../../components/therapist/patient/therapistRelapse";
+import { checkPrivilageAccess } from "../../../../../../utility/helper";
 
 const TherapistSafetyPlanIndex: NextPage = () => {
+  const isSafetyPlanAdd = checkPrivilageAccess("Safety Plan", "Add");
   const router = useRouter();
   /* istanbul ignore next */
   const { user } = useAppContext();
@@ -89,13 +91,15 @@ const TherapistSafetyPlanIndex: NextPage = () => {
   });
 
   useEffect(() => {
-    getSafetyPlanList({
-      variables: { patientId: patId },
-    });
+    if (patId)
+      getSafetyPlanList({
+        variables: { patientId: patId },
+      });
 
-    getSafetyTherapistPlanList({
-      variables: { orgId: orgId },
-    });
+    if (isSafetyPlanAdd && orgId)
+      getSafetyTherapistPlanList({
+        variables: { orgId: orgId },
+      });
   }, []);
 
   const [

@@ -37,46 +37,6 @@ export const DELETE_FEEDBACK = gql`
   }
 `;
 
-// updateFeedbackQuestionById(feedbackId: ID! ,update: UpdateFeedbackInput): FeedbackQuestion
-export const POST_PATIENT_FEEDBACK = gql`
-  mutation (
-    $feedQuesAnsData: String!
-    $sessionNo: Int!
-    $feedbackType: String!
-    $pttherapyId: String!
-  ) {
-    postPatientFeedback(
-      feedQuesAnsData: $feedQuesAnsData
-      sessionNo: $sessionNo
-      feedbackType: $feedbackType
-      pttherapyId: $pttherapyId
-    ) {
-      _id
-      user_id
-      org_id
-      session_no
-      feedback_type
-      question
-      answer_type
-      status
-      created_date
-      updated_date
-      answer_options
-      feedback_ans {
-        _id
-        answer
-        created_date
-        patient_id
-        question_id
-        pttherapy_id
-        status
-        therapist_id
-        updated_date
-      }
-    }
-  }
-`;
-
 export const POST_PATIENT_FEEDBACK_NEW = gql`
   mutation (
     $feedQuesAnsData: String!
@@ -88,40 +48,7 @@ export const POST_PATIENT_FEEDBACK_NEW = gql`
       session: $session
       pttherapyId: $pttherapyId
     ) {
-      questions {
-        answer {
-          _id
-          answer
-          created_date
-          patient_id
-          pttherapy_id
-          question_id
-          status
-          therapist_id
-          updated_date
-        }
-        _id
-        answer_options
-        answer_type
-        created_date
-        feedback_id
-        question
-        status
-        updated_date
-      }
-      _id
-      created_date
-      description
-      feedback_type
-      name
-      org_id
-      organization_name
-      session_no
-      status
-      updated_date
-      user_id
-      user_type
-      visibility
+      result
     }
   }
 `;

@@ -37,8 +37,10 @@ import TextFieldComponent from "../../../common/TextField/TextFieldComponent";
 import { SuccessModal } from "../../../common/SuccessModal";
 import SureModal from "../../../admin/resource/SureModal";
 import ConfirmationModal from "../../../common/ConfirmationModal";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 const Feedback: NextPage = () => {
+  const isEditFeedback = checkPrivilageAccess("Feedback", "Update response");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [confirmSubmission, setConfirmSubmission] = useState<boolean>(false);
   const [successModal, setSuccessModal] = useState<boolean>(false);
@@ -93,12 +95,15 @@ const Feedback: NextPage = () => {
 
   const [
     getPatientFeedbackListDataNew,
-    { loading, data: patientNewFeedbackData },
-  ] = useLazyQuery(GET_PATIENT_FEEDBACKLIST_DATA_NEW, {
-    onCompleted: (data) => {
-      console.log("list: data ", JSON.stringify(data));
+    {
+      loading,
+      data: {
+        patientGetFeedbackList: {
+          data: patientNewFeedbackData = undefined,
+        } = {},
+      } = {},
     },
-  });
+  ] = useLazyQuery(GET_PATIENT_FEEDBACKLIST_DATA_NEW);
 
   useEffect(() => {
     setLoader(true);
@@ -107,19 +112,21 @@ const Feedback: NextPage = () => {
 
   useEffect(() => {
     setLoader(true);
-    getPatientSessionData({
-      variables: { pttherapyId: therapy },
-    });
+    if (therapy)
+      getPatientSessionData({
+        variables: { pttherapyId: therapy },
+      });
   }, [therapy]);
 
   useEffect(() => {
     setLoader(true);
-    getPatientFeedbackListDataNew({
-      variables: {
-        session: sessionNo,
-        pttherapyId: therapy,
-      },
-    });
+    if (sessionNo && therapy)
+      getPatientFeedbackListDataNew({
+        variables: {
+          session: sessionNo,
+          pttherapyId: therapy,
+        },
+      });
   }, [sessionNo]);
 
   useEffect(() => {
@@ -211,9 +218,11 @@ const Feedback: NextPage = () => {
         session: sessionNo,
         pttherapyId: therapy,
       },
-      onCompleted: () => {
-        /* istanbul ignore next */
-        setSuccessModal(true);
+      onCompleted: (data) => {
+        const {
+          answerFeedbackByPatient: { result },
+        } = data;
+        if (result) setSuccessModal(true);
         // window.location.reload();
       },
     });
@@ -231,8 +240,8 @@ const Feedback: NextPage = () => {
 
   /* istanbul ignore next */
   const questionnaireList =
-    patientNewFeedbackData?.patientGetFeedbackList?.length > 0
-      ? patientNewFeedbackData?.patientGetFeedbackList[0]?.questions
+    patientNewFeedbackData?.length > 0
+      ? patientNewFeedbackData[0]?.questions
       : [];
 
   const handleOk = () => {
@@ -371,12 +380,10 @@ const Feedback: NextPage = () => {
             </Box>
           ) : (
             <AccordionDetails>
-              {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                ?.description &&
+              {!patientNewFeedbackData?.[0]?.description &&
                 !questionnaireList.length && <Box>Data Not Available</Box>}
 
-              {patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                ?.description && (
+              {patientNewFeedbackData?.[0]?.description && (
                 <>
                   <Box>
                     <Typography style={{ fontWeight: "bold" }}>
@@ -395,10 +402,7 @@ const Feedback: NextPage = () => {
                   >
                     <Grid>
                       <Typography>
-                        {
-                          patientNewFeedbackData?.patientGetFeedbackList[0]
-                            ?.description
-                        }
+                        {patientNewFeedbackData?.[0]?.description}
                       </Typography>
                     </Grid>
                   </Box>
@@ -501,7 +505,7 @@ const Feedback: NextPage = () => {
               })}
               {
                 /* istanbul ignore next */
-                questionnaireList?.length > 0 && (
+                isEditFeedback && questionnaireList?.length > 0 && (
                   <Box
                     sx={{
                       display: "flex",
@@ -629,14 +633,12 @@ const Feedback: NextPage = () => {
                     </Box>
                   ) : (
                     <AccordionDetails>
-                      {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                        ?.description &&
+                      {!patientNewFeedbackData?.[0]?.description &&
                         !questionnaireList.length && (
                           <Box>Data Not Available</Box>
                         )}
 
-                      {patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                        ?.description && (
+                      {patientNewFeedbackData?.[0]?.description && (
                         <>
                           <Box>
                             <Typography style={{ fontWeight: "bold" }}>
@@ -658,8 +660,7 @@ const Feedback: NextPage = () => {
                               <Typography>
                                 {patientNewFeedbackData &&
                                   /* istanbul ignore next */
-                                  patientNewFeedbackData
-                                    ?.patientGetFeedbackList[0]?.description}
+                                  patientNewFeedbackData[0]?.description}
                               </Typography>
                             </Grid>
                           </Box>
@@ -891,12 +892,10 @@ const Feedback: NextPage = () => {
             </Box>
           ) : (
             <AccordionDetails>
-              {!patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                ?.description &&
+              {!patientNewFeedbackData?.[0]?.description &&
                 !questionnaireList.length && <Box>Data Not Available</Box>}
 
-              {patientNewFeedbackData?.patientGetFeedbackList?.[0]
-                ?.description && (
+              {patientNewFeedbackData?.[0]?.description && (
                 <>
                   <Box>
                     <Typography style={{ fontWeight: "bold" }}>
@@ -915,10 +914,7 @@ const Feedback: NextPage = () => {
                   >
                     <Grid>
                       <Typography>
-                        {
-                          patientNewFeedbackData?.patientGetFeedbackList[0]
-                            ?.description
-                        }
+                        {patientNewFeedbackData?.[0]?.description}
                       </Typography>
                     </Grid>
                   </Box>
