@@ -7,8 +7,6 @@ interface ViewProps {
   buttonClick: (value) => void;
 }
 
-const isShare = checkPrivilageAccess("Assessment", "Share");
-
 const iconButtonsData = [
   {
     id: "share",
@@ -17,6 +15,7 @@ const iconButtonsData = [
 ];
 
 const ActionsButtons: React.FC<ViewProps> = ({ data, buttonClick = null }) => {
+  const isShare = checkPrivilageAccess("Assessment", "Share");
   const { _id, share_status } = data;
   const iconButtons = () => {
     return iconButtonsData
