@@ -35,8 +35,8 @@ import {
 import { useSnackbar } from "notistack";
 import {
   GET_POPUP_RESOURCE_LIST_DATA,
-  GET_THERAPIST_HOMEWORK,
-  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+  GET_THERAPIST_HOMEWORK_NOTE,
+  GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA,
   GET_THERAPIST_NOTES_DATA,
 } from "../../../graphql/query/therapist";
 import ConfirmBoxModal from "../../common/ConfirmBoxModal";
@@ -117,7 +117,7 @@ function NotesDetail(props: propTypes) {
   const [
     getTherapistHomeworkData2,
     { data: therapistHomeworkDataData2, refetch },
-  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
+  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       /* istanbul ignore next */
@@ -137,12 +137,12 @@ function NotesDetail(props: propTypes) {
   );
 
   const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
-    useLazyQuery(GET_THERAPIST_HOMEWORK, {
+    useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE, {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
         const last_homework_list =
           /* istanbul ignore next */
-          data?.therapistViewPatientHomework?.last_homework_list;
+          data?.therapistViewPatientHomework?.data.last_homework_list;
         /* istanbul ignore next */
         const ids = last_homework_list?.map((item) => item._id);
         setCompleteHomeWorkId(ids);
@@ -171,23 +171,24 @@ function NotesDetail(props: propTypes) {
 
   const patientMeasureTable =
     /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.patientmeasure;
+    therapistNotesData?.getPatientNotesData?.data.patientmeasure;
 
   const patientMonitorTable =
     /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.patientmonitor;
+    therapistNotesData?.getPatientNotesData?.data.patientmonitor;
 
   const lastHomeworkList =
-    therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
+    therapistHomeworkDataData?.therapistViewPatientHomework?.data
+      .last_homework_list;
 
   const previousSessionTaskData =
-    therapistHomeworkDataData2?.getPatientHomeworkData;
+    therapistHomeworkDataData2?.getPatientHomeworkData.data;
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (therapistNotesData?.getPatientNotesData?.patientnotes.length) {
+    if (therapistNotesData?.getPatientNotesData?.data.patientnotes.length) {
       const preFilledData =
-        therapistNotesData?.getPatientNotesData?.patientnotes[0];
+        therapistNotesData?.getPatientNotesData?.data.patientnotes[0];
 
       setRiskInputsBox(preFilledData.patnotes_risk_comment);
 
@@ -198,7 +199,7 @@ function NotesDetail(props: propTypes) {
       setNoteUpdateId(preFilledData._id);
     }
     /* istanbul ignore next */
-  }, [therapistNotesData?.getPatientNotesData?.patientnotes]);
+  }, [therapistNotesData?.getPatientNotesData?.data.patientnotes]);
 
   useEffect(() => {
     getiskData();
