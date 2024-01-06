@@ -28,8 +28,8 @@ import {
 import { useSnackbar } from "notistack";
 import {
   GET_POPUP_RESOURCE_LIST_DATA,
-  GET_THERAPIST_HOMEWORK,
-  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+  GET_THERAPIST_HOMEWORK_NOTE,
+  GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA,
 } from "../../../../graphql/query/therapist";
 import ConfirmBoxModal from "../../../common/ConfirmBoxModal";
 import { ModalElement } from "../../../common/CustomModal/CommonModal";
@@ -102,7 +102,7 @@ function HomeworkDetails(props: propTypes) {
   const [
     getTherapistHomeworkData2,
     { data: therapistHomeworkDataData2, refetch },
-  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
+  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       /* istanbul ignore next */
@@ -111,12 +111,12 @@ function HomeworkDetails(props: propTypes) {
   });
 
   const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
-    useLazyQuery(GET_THERAPIST_HOMEWORK, {
+    useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE, {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         const last_homework_list =
-          /* istanbul ignore next */
-          data?.therapistViewPatientHomework?.last_homework_list;
+          data?.therapistViewPatientHomework?.data?.last_homework_list;
         /* istanbul ignore next */
         const ids = last_homework_list?.map((item) => item._id);
         setCompleteHomeWorkId(ids);
@@ -143,11 +143,14 @@ function HomeworkDetails(props: propTypes) {
     }
   );
 
+  /* istanbul ignore next */
   const lastHomeworkList =
-    therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
+    therapistHomeworkDataData?.therapistViewPatientHomework?.data
+      ?.last_homework_list;
 
+  /* istanbul ignore next */
   const previousSessionTaskData =
-    therapistHomeworkDataData2?.getPatientHomeworkData;
+    therapistHomeworkDataData2?.getPatientHomeworkData?.data;
 
   useEffect(() => {
     getTherapistHomeworkData2({

@@ -12,8 +12,8 @@ import { GET_PATIENTSESSION_DATA } from "../graphql/query/patient";
 import TherapyPatientHomeworkIndex from "../pages/therapist/patient/view/[id]/homework";
 import {
   GET_POPUP_RESOURCE_LIST_DATA,
-  GET_THERAPIST_HOMEWORK,
-  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+  GET_THERAPIST_HOMEWORK_NOTE,
+  GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA,
 } from "../graphql/query/therapist";
 import {
   ADD_HOMEWORK,
@@ -150,7 +150,7 @@ mocks.push({
 
 mocks.push({
   request: {
-    query: GET_THERAPIST_HOMEWORK,
+    query: GET_THERAPIST_HOMEWORK_NOTE,
     variables: {
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       ptsession_id: "da790381eeb14b5db6d75886ffbb807c",
@@ -161,35 +161,37 @@ mocks.push({
   result: {
     data: {
       therapistViewPatientHomework: {
-        homework_detail: [],
-        last_homework_count: [
-          {
-            _id: "fc1197672b334ac3b142a3d0d46e97f5",
-            count: 1,
-            __typename: "lastHomeworkCount",
-          },
-        ],
-        last_homework_list: [
-          {
-            _id: "fcce9721-531f-4473-8d5e-2331e9385042",
-            complete_status: 0,
-            created_date: "2023-04-09T14:56:57.154Z",
-            patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
-            pthomewrk_date: "2023-04-09T14:56:57.154Z",
-            pthomewrk_resp: "",
-            pthomewrk_status: 1,
-            pthomewrk_task: "Task 1",
-            ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
-            ptsharres_id: "",
-            resource_detail: null,
-            resource_id: "",
-            therapist_id: "686802e5123a482681a680a673ef7f53",
-            therapist_resp: "",
-            therapy_id: "199ca7dc71fe47649fc93e5255843f81",
-            __typename: "homeworkList",
-          },
-        ],
-        __typename: "therapistViewPatientHomework",
+        data: {
+          homework_detail: [],
+          last_homework_count: [
+            {
+              _id: "fc1197672b334ac3b142a3d0d46e97f5",
+              count: 1,
+              __typename: "lastHomeworkCount",
+            },
+          ],
+          last_homework_list: [
+            {
+              _id: "fcce9721-531f-4473-8d5e-2331e9385042",
+              complete_status: 0,
+              created_date: "2023-04-09T14:56:57.154Z",
+              patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
+              pthomewrk_date: "2023-04-09T14:56:57.154Z",
+              pthomewrk_resp: "",
+              pthomewrk_status: 1,
+              pthomewrk_task: "Task 1",
+              ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
+              ptsharres_id: "",
+              resource_detail: null,
+              resource_id: "",
+              therapist_id: "686802e5123a482681a680a673ef7f53",
+              therapist_resp: "",
+              therapy_id: "199ca7dc71fe47649fc93e5255843f81",
+              __typename: "homeworkList",
+            },
+          ],
+          __typename: "therapistViewPatientHomework",
+        },
       },
     },
   },
@@ -197,7 +199,7 @@ mocks.push({
 
 mocks.push({
   request: {
-    query: GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+    query: GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA,
     variables: {
       patient_id: "4937a27dc00d48bf983fdcd4b0762ebd",
       ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
@@ -206,25 +208,27 @@ mocks.push({
   },
   result: {
     data: {
-      getPatientHomeworkData: [
-        {
-          __typename: "Homework",
-          _id: "aa075490-2d11-4293-b18a-a6a3d93a83b4",
-          complete_status: "0",
-          created_date: "2023-04-11T06:13:09.780Z",
-          patient_id: "c318269da3024855b2c74876eb57d296",
-          pthomewrk_date: "2023-04-11T11:25:55.988Z",
-          pthomewrk_resp: "Res P 2",
-          pthomewrk_status: 1,
-          pthomewrk_task: "Task 1 updated already exist1",
-          ptsession_id: "d7102f5b7e6249bbbdb46e6b9e6285e5",
-          ptshareres_id: "",
-          resource_id: "",
-          therapist_id: "686802e5123a482681a680a673ef7f53",
-          therapist_resp: "Res P 2",
-          therapy_id: "1c8dfc275db54c9e8bbb4fe4db17e9fc",
-        },
-      ],
+      getPatientHomeworkData: {
+        data: [
+          {
+            __typename: "Homework",
+            _id: "aa075490-2d11-4293-b18a-a6a3d93a83b4",
+            complete_status: "0",
+            created_date: "2023-04-11T06:13:09.780Z",
+            patient_id: "c318269da3024855b2c74876eb57d296",
+            pthomewrk_date: "2023-04-11T11:25:55.988Z",
+            pthomewrk_resp: "Res P 2",
+            pthomewrk_status: 1,
+            pthomewrk_task: "Task 1 updated already exist1",
+            ptsession_id: "d7102f5b7e6249bbbdb46e6b9e6285e5",
+            ptshareres_id: "",
+            resource_id: "",
+            therapist_id: "686802e5123a482681a680a673ef7f53",
+            therapist_resp: "Res P 2",
+            therapy_id: "1c8dfc275db54c9e8bbb4fe4db17e9fc",
+          },
+        ],
+      },
     },
   },
 });
