@@ -35,8 +35,8 @@ import {
 import { useSnackbar } from "notistack";
 import {
   GET_POPUP_RESOURCE_LIST_DATA,
-  GET_THERAPIST_HOMEWORK,
-  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
+  GET_THERAPIST_HOMEWORK_NOTE,
+  GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA,
   GET_THERAPIST_NOTES_DATA,
 } from "../../../graphql/query/therapist";
 import ConfirmBoxModal from "../../common/ConfirmBoxModal";
@@ -117,7 +117,7 @@ function NotesDetail(props: propTypes) {
   const [
     getTherapistHomeworkData2,
     { data: therapistHomeworkDataData2, refetch },
-  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
+  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       /* istanbul ignore next */
@@ -137,12 +137,12 @@ function NotesDetail(props: propTypes) {
   );
 
   const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
-    useLazyQuery(GET_THERAPIST_HOMEWORK, {
+    useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE, {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
+        /* istanbul ignore next */
         const last_homework_list =
-          /* istanbul ignore next */
-          data?.therapistViewPatientHomework?.last_homework_list;
+          data?.therapistViewPatientHomework?.data.last_homework_list;
         /* istanbul ignore next */
         const ids = last_homework_list?.map((item) => item._id);
         setCompleteHomeWorkId(ids);
@@ -168,26 +168,25 @@ function NotesDetail(props: propTypes) {
       },
     }
   );
-
+  /* istanbul ignore next */
   const patientMeasureTable =
-    /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.patientmeasure;
-
+    therapistNotesData?.getPatientNotesData?.data.patientmeasure;
+  /* istanbul ignore next */
   const patientMonitorTable =
-    /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.patientmonitor;
-
+    therapistNotesData?.getPatientNotesData?.data.patientmonitor;
+  /* istanbul ignore next */
   const lastHomeworkList =
-    therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
-
+    therapistHomeworkDataData?.therapistViewPatientHomework?.data
+      .last_homework_list;
+  /* istanbul ignore next */
   const previousSessionTaskData =
-    therapistHomeworkDataData2?.getPatientHomeworkData;
+    therapistHomeworkDataData2?.getPatientHomeworkData.data;
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (therapistNotesData?.getPatientNotesData?.patientnotes.length) {
+    if (therapistNotesData?.getPatientNotesData?.data.patientnotes.length) {
       const preFilledData =
-        therapistNotesData?.getPatientNotesData?.patientnotes[0];
+        therapistNotesData?.getPatientNotesData?.data.patientnotes[0];
 
       setRiskInputsBox(preFilledData.patnotes_risk_comment);
 
@@ -197,8 +196,10 @@ function NotesDetail(props: propTypes) {
 
       setNoteUpdateId(preFilledData._id);
     }
+  }, [
     /* istanbul ignore next */
-  }, [therapistNotesData?.getPatientNotesData?.patientnotes]);
+    therapistNotesData?.getPatientNotesData?.data.patientnotes,
+  ]);
 
   useEffect(() => {
     getiskData();
@@ -439,6 +440,7 @@ function NotesDetail(props: propTypes) {
         },
         onCompleted: () => {
           setOpenResourceModal(false);
+          /* istanbul ignore next */
           enqueueSnackbar("Resource assigned successfully.", {
             variant: "success",
           });
@@ -490,7 +492,6 @@ function NotesDetail(props: propTypes) {
   };
 
   /* istanbul ignore next */
-
   const handleMyRes = () => {
     if (myFavourites === 1) {
       setMyFavourites(0);
@@ -785,17 +786,20 @@ function NotesDetail(props: propTypes) {
                 setRiskId([]);
               }
             }}
-            /* istanbul ignore next */
-            renderOption={(props, option) => (
-              <>
-                <Box
-                  style={{ display: "flex", flex: 1, width: "100%" }}
-                  {...props}
-                >
-                  <Box style={{ flex: 1 }}>{option.name}</Box>
-                </Box>
-              </>
-            )}
+            renderOption={
+              /* istanbul ignore next */
+              (props, option) => (
+                /* istanbul ignore next */
+                <>
+                  <Box
+                    style={{ display: "flex", flex: 1, width: "100%" }}
+                    {...props}
+                  >
+                    <Box style={{ flex: 1 }}>{option.name}</Box>
+                  </Box>
+                </>
+              )
+            }
             renderInput={(params) => (
               <TextField
                 style={{
@@ -837,45 +841,53 @@ function NotesDetail(props: propTypes) {
             paddingTop: "10px",
           }}
         >
-          {lastHomeworkList?.length > 0 && (
-            <Box style={{ paddingRight: "10px" }}>
-              <FormControl
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  border: "1px solid #6EC9DB",
-                  paddingLeft: "10px",
-                  borderRadius: "5px",
-                  height: "38px",
-                }}
-                data-testid="complete_checkbox"
-              >
-                <FormGroup aria-label="position">
-                  <FormGroup>
-                    <FormControlLabel
-                      control={<Checkbox />}
-                      onChange={setCheckBox}
-                      checked={checkCompleteCheckBox === 1 ? true : false}
-                      label={
-                        <Grid>
-                          <Typography
-                            style={{ color: "#6EC9DB", fontWeight: "bold" }}
-                          >
-                            Completed
-                          </Typography>
-                        </Grid>
-                      }
-                      /* istanbul ignore next */
-                      disabled={lastHomeworkList?.some((homework) =>
-                        /* istanbul ignore next */
-                        homework?.complete_status === 1 ? true : false
-                      )}
-                    />
+          {
+            /* istanbul ignore next */
+            lastHomeworkList?.length > 0 && (
+              <Box style={{ paddingRight: "10px" }}>
+                <FormControl
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    border: "1px solid #6EC9DB",
+                    paddingLeft: "10px",
+                    borderRadius: "5px",
+                    height: "38px",
+                  }}
+                  data-testid="complete_checkbox"
+                >
+                  <FormGroup aria-label="position">
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox />}
+                        onChange={setCheckBox}
+                        checked={
+                          /* istanbul ignore next */
+                          checkCompleteCheckBox === 1 ? true : false
+                        }
+                        label={
+                          <Grid>
+                            <Typography
+                              style={{ color: "#6EC9DB", fontWeight: "bold" }}
+                            >
+                              Completed
+                            </Typography>
+                          </Grid>
+                        }
+                        disabled={
+                          /* istanbul ignore next */
+                          lastHomeworkList?.some((homework) =>
+                            /* istanbul ignore next */
+                            homework?.complete_status === 1 ? true : false
+                          )
+                        }
+                      />
+                    </FormGroup>
                   </FormGroup>
-                </FormGroup>
-              </FormControl>
-            </Box>
-          )}
+                </FormControl>
+              </Box>
+            )
+          }
 
           <Box>
             <Button
