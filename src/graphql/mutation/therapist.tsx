@@ -53,7 +53,8 @@ export const UPDATE_PATIENT_ASSESSMENT = gql`
 export const DELETE_HOMEWORK_TASK = gql`
   mutation ($patient_id: String!, $pthomework_id: String!) {
     deleteHomeworkTask(patient_id: $patient_id, pthomework_id: $pthomework_id) {
-      deleted
+      message
+      result
     }
   }
 `;
@@ -115,7 +116,8 @@ export const ASSIGN_RESOURCE_HOMEWORK = gql`
       restype: $restype
       resource_id: $resource_id
     ) {
-      _id
+      message
+      result
     }
   }
 `;
