@@ -30,17 +30,16 @@ const TherapistPatientOverallAssessment: React.FC<
 }) => {
   const isAdd = checkPrivilageAccess("Assessment", "Add");
   const styles = useStyles();
-  const modifyRisk =
-    risk && risksListData !== null
-      ? risksListData
-          .filter((item) => csvDecode(risk).includes(item._id))
-          .map((item) => {
-            return {
-              label: item.name,
-              value: item._id,
-            };
-          })
-      : [];
+  const modifyRisk = risk
+    ? risksListData
+        .filter((item) => csvDecode(risk).includes(item._id))
+        .map((item) => {
+          return {
+            label: item.name,
+            value: item._id,
+          };
+        })
+    : [];
 
   const initialValues = {
     overallAssesmentText,
