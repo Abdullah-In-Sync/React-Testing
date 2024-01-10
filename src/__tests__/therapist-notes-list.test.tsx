@@ -282,35 +282,37 @@ mocks.push({
   result: {
     data: {
       therapistViewPatientHomework: {
-        homework_detail: [],
-        last_homework_count: [
-          {
-            _id: "fc1197672b334ac3b142a3d0d46e97f5",
-            count: 1,
-            __typename: "lastHomeworkCount",
-          },
-        ],
-        last_homework_list: [
-          {
-            _id: "fcce9721-531f-4473-8d5e-2331e9385042",
-            complete_status: 0,
-            created_date: "2023-04-09T14:56:57.154Z",
-            patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
-            pthomewrk_date: "2023-04-09T14:56:57.154Z",
-            pthomewrk_resp: "",
-            pthomewrk_status: 1,
-            pthomewrk_task: "Task 1",
-            ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
-            ptsharres_id: "",
-            resource_detail: null,
-            resource_id: "",
-            therapist_id: "686802e5123a482681a680a673ef7f53",
-            therapist_resp: "",
-            therapy_id: "199ca7dc71fe47649fc93e5255843f81",
-            __typename: "homeworkList",
-          },
-        ],
-        __typename: "therapistViewPatientHomework",
+        data: {
+          homework_detail: [],
+          last_homework_count: [
+            {
+              _id: "fc1197672b334ac3b142a3d0d46e97f5",
+              count: 1,
+              __typename: "lastHomeworkCount",
+            },
+          ],
+          last_homework_list: [
+            {
+              _id: "fcce9721-531f-4473-8d5e-2331e9385042",
+              complete_status: 0,
+              created_date: "2023-04-09T14:56:57.154Z",
+              patient_id: "0d4fa8280a3a4a67988bc4a5647dde1f",
+              pthomewrk_date: "2023-04-09T14:56:57.154Z",
+              pthomewrk_resp: "",
+              pthomewrk_status: 1,
+              pthomewrk_task: "Task 1",
+              ptsession_id: "fc1197672b334ac3b142a3d0d46e97f5",
+              ptsharres_id: "",
+              resource_detail: null,
+              resource_id: "",
+              therapist_id: "686802e5123a482681a680a673ef7f53",
+              therapist_resp: "",
+              therapy_id: "199ca7dc71fe47649fc93e5255843f81",
+              __typename: "homeworkList",
+            },
+          ],
+          __typename: "therapistViewPatientHomework",
+        },
       },
     },
   },

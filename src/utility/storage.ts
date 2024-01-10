@@ -10,16 +10,14 @@ const setSecureCookie = (label: string, value: string, options?: object) => {
 };
 
 export const setSessionToken = (data, callback) => {
-  const { jwtToken, jwtIdToken, userType, exp } = data;
-  const expires = new Date(exp * 1000);
+  const { jwtToken, jwtIdToken, userType } = data;
+  // const expires = new Date(exp * 1000);
   // const cookiesPolicy = localStorage.getItem(COOKIES_POLICY);
   // localStorage.clear();
   // localStorage.setItem(COOKIES_POLICY, cookiesPolicy);
   localStorage.setItem(ID_TOKEN_LABEL, jwtIdToken);
-  setSecureCookie("myhelptoken", jwtToken, {
-    expires,
-  });
-  setSecureCookie("user_type", userType, { expires });
+  setSecureCookie("myhelptoken", jwtToken);
+  setSecureCookie("user_type", userType);
   return callback(data);
 };
 

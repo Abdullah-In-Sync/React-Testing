@@ -37,12 +37,13 @@ export default function TherapistNotesList(props: propTypes) {
   );
 
   useEffect(() => {
-    getPatientSessionData({
-      variables: {
-        pttherapyId: props.setTherapy,
-        patientId: sessionStorage.getItem("patient_id"),
-      },
-    });
+    if (props.setTherapy)
+      getPatientSessionData({
+        variables: {
+          pttherapyId: props.setTherapy,
+          patientId: sessionStorage.getItem("patient_id"),
+        },
+      });
   }, [props.setTherapy]);
 
   const cancelConfirm = () => {
