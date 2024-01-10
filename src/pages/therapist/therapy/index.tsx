@@ -97,9 +97,10 @@ export default function TherapisTherapyList(props: propTypes) {
     }
   );
   useEffect(() => {
-    getDisorderByOrgId({
-      variables: { orgId: orgId },
-    });
+    if (orgId)
+      getDisorderByOrgId({
+        variables: { orgId: orgId },
+      });
 
     if (selectedDisorderId.length) {
       getModelByDisorderId({
@@ -109,12 +110,13 @@ export default function TherapisTherapyList(props: propTypes) {
   }, [orgId, selectedDisorderId]);
 
   useEffect(() => {
-    getPatientSessionData({
-      variables: {
-        pttherapyId: props.setTherapy,
-        patientId: sessionStorage.getItem("patient_id"),
-      },
-    });
+    if (props.setTherapy)
+      getPatientSessionData({
+        variables: {
+          pttherapyId: props.setTherapy,
+          patientId: sessionStorage.getItem("patient_id"),
+        },
+      });
 
     getPatientAgendaDetails({
       variables: {
@@ -165,10 +167,6 @@ export default function TherapisTherapyList(props: propTypes) {
     setCompleteAgendaAddModal(false);
     refetch();
   };
-  console.log(
-    "patientSessionData?.getPatientSessionList",
-    patientSessionData?.getPatientSessionList
-  );
   return (
     <>
       <Box>

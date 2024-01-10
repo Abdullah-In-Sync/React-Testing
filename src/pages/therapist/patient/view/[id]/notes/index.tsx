@@ -37,12 +37,13 @@ export default function TherapistNotesList(props: propTypes) {
   );
 
   useEffect(() => {
-    getPatientSessionData({
-      variables: {
-        pttherapyId: props.setTherapy,
-        patientId: sessionStorage.getItem("patient_id"),
-      },
-    });
+    if (props.setTherapy)
+      getPatientSessionData({
+        variables: {
+          pttherapyId: props.setTherapy,
+          patientId: sessionStorage.getItem("patient_id"),
+        },
+      });
   }, [props.setTherapy]);
 
   const cancelConfirm = () => {
@@ -80,9 +81,10 @@ export default function TherapistNotesList(props: propTypes) {
           !loader &&
           patientSessionData?.getPatientSessionList &&
           patientSessionData?.getPatientSessionList.length > 0
-            ? patientSessionData?.getPatientSessionList.map((v) => {
+            ? patientSessionData?.getPatientSessionList.map((v, i) => {
                 return (
                   <Accordion
+                    index={i}
                     key={`according-${v.ptsession_no}`}
                     title={`Session ${v.ptsession_no}`}
                     marginBottom={"20px !important"}

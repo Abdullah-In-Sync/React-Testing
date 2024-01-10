@@ -41,7 +41,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
   patientId,
   loader: pLoader,
 }) => {
-  const [therapy, setTherapy] = useState<string>("pt_therapy_id");
+  const [therapy, setTherapy] = useState<string>();
   const [loader, setLoader] = useState<boolean>(pLoader);
   const { userType } = checkUserType();
 
@@ -62,6 +62,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   /* istanbul ignore next */
   const [getPatientTherapyData] = useLazyQuery(GET_PATIENTTHERAPY_DATA, {
+    fetchPolicy: "cache-and-network",
     onCompleted: (data) => {
       /* istanbul ignore next */
       if (data!.getPatientTherapy) {
@@ -91,11 +92,13 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
 
   useEffect(() => {
     /* istanbul ignore next */
-    setLoader(true);
-    getPatientTherapyData({
-      variables: { patientId: patId },
-    });
-  }, [patientId]);
+    if (patId) {
+      setLoader(true);
+      getPatientTherapyData({
+        variables: { patientId: patId },
+      });
+    }
+  }, [tab]);
 
   const tabs = [
     {
@@ -150,7 +153,7 @@ const MainWraperTherapyPatient: React.FC<Props> = ({
     {
       label: "Feedback",
       value: "feedback",
-      component: <TherapistFeedbackTabs setTherapy={setTherapy} />,
+      component: <TherapistFeedbackTabs setTherapy={therapy} />,
       moduleName: "Feedback",
     },
   ];

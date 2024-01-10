@@ -35,8 +35,8 @@ import {
 import { useSnackbar } from "notistack";
 import {
   GET_POPUP_RESOURCE_LIST_DATA,
-  GET_THERAPIST_HOMEWORK_NOTE,
-  GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA,
+  GET_THERAPIST_HOMEWORK,
+  GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA,
   GET_THERAPIST_NOTES_DATA,
 } from "../../../graphql/query/therapist";
 import ConfirmBoxModal from "../../common/ConfirmBoxModal";
@@ -48,6 +48,7 @@ import { GET_RISKS_LIST } from "../../../graphql/assessment/graphql";
 import { Box } from "@material-ui/core";
 import Emoji from "../../common/Emoji";
 import { useRouter } from "next/router";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -65,6 +66,9 @@ type propTypes = {
 };
 
 function NotesDetail(props: propTypes) {
+  const isNotesAdd = checkPrivilageAccess("Notes", "Add");
+  const isNotesEdit = checkPrivilageAccess("Notes", "Edit");
+  const isNotesDelete = checkPrivilageAccess("Notes", "Delete");
   const { user } = useAppContext();
   const styles = useStyles();
   const router = useRouter();
@@ -117,7 +121,7 @@ function NotesDetail(props: propTypes) {
   const [
     getTherapistHomeworkData2,
     { data: therapistHomeworkDataData2, refetch },
-  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE_OLD_SESSION_DATA, {
+  ] = useLazyQuery(GET_THERAPIST_HOMEWORK_OLD_SESSION_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       /* istanbul ignore next */
@@ -137,12 +141,12 @@ function NotesDetail(props: propTypes) {
   );
 
   const [getTherapistHomeworkData, { data: therapistHomeworkDataData }] =
-    useLazyQuery(GET_THERAPIST_HOMEWORK_NOTE, {
+    useLazyQuery(GET_THERAPIST_HOMEWORK, {
       fetchPolicy: "network-only",
       onCompleted: (data) => {
-        /* istanbul ignore next */
         const last_homework_list =
-          data?.therapistViewPatientHomework?.data.last_homework_list;
+          /* istanbul ignore next */
+          data?.therapistViewPatientHomework?.last_homework_list?.data;
         /* istanbul ignore next */
         const ids = last_homework_list?.map((item) => item._id);
         setCompleteHomeWorkId(ids);
@@ -168,25 +172,27 @@ function NotesDetail(props: propTypes) {
       },
     }
   );
-  /* istanbul ignore next */
+
   const patientMeasureTable =
-    therapistNotesData?.getPatientNotesData?.data.patientmeasure;
-  /* istanbul ignore next */
+    /* istanbul ignore next */
+    therapistNotesData?.getPatientNotesData?.patientmeasure;
+
   const patientMonitorTable =
-    therapistNotesData?.getPatientNotesData?.data.patientmonitor;
-  /* istanbul ignore next */
+    /* istanbul ignore next */
+    therapistNotesData?.getPatientNotesData?.data?.patientmonitor;
+
   const lastHomeworkList =
     therapistHomeworkDataData?.therapistViewPatientHomework?.data
-      .last_homework_list;
-  /* istanbul ignore next */
+      ?.last_homework_list;
+
   const previousSessionTaskData =
-    therapistHomeworkDataData2?.getPatientHomeworkData.data;
+    therapistHomeworkDataData2?.getPatientHomeworkData?.data;
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (therapistNotesData?.getPatientNotesData?.data.patientnotes.length) {
+    if (therapistNotesData?.data?.getPatientNotesData?.patientnotes.length) {
       const preFilledData =
-        therapistNotesData?.getPatientNotesData?.data.patientnotes[0];
+        therapistNotesData?.data?.getPatientNotesData?.patientnotes[0];
 
       setRiskInputsBox(preFilledData.patnotes_risk_comment);
 
@@ -196,10 +202,8 @@ function NotesDetail(props: propTypes) {
 
       setNoteUpdateId(preFilledData._id);
     }
-  }, [
     /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.data.patientnotes,
-  ]);
+  }, [therapistNotesData?.data?.getPatientNotesData?.patientnotes]);
 
   useEffect(() => {
     getiskData();
@@ -440,7 +444,6 @@ function NotesDetail(props: propTypes) {
         },
         onCompleted: () => {
           setOpenResourceModal(false);
-          /* istanbul ignore next */
           enqueueSnackbar("Resource assigned successfully.", {
             variant: "success",
           });
@@ -492,6 +495,7 @@ function NotesDetail(props: propTypes) {
   };
 
   /* istanbul ignore next */
+
   const handleMyRes = () => {
     if (myFavourites === 1) {
       setMyFavourites(0);
@@ -760,6 +764,7 @@ function NotesDetail(props: propTypes) {
             Risk
           </Typography>
           <Autocomplete
+            disabled={!isNotesEdit}
             multiple
             fullWidth={true}
             data-testid="relapsePlanDropdown"
@@ -786,20 +791,17 @@ function NotesDetail(props: propTypes) {
                 setRiskId([]);
               }
             }}
-            renderOption={
-              /* istanbul ignore next */
-              (props, option) => (
-                /* istanbul ignore next */
-                <>
-                  <Box
-                    style={{ display: "flex", flex: 1, width: "100%" }}
-                    {...props}
-                  >
-                    <Box style={{ flex: 1 }}>{option.name}</Box>
-                  </Box>
-                </>
-              )
-            }
+            /* istanbul ignore next */
+            renderOption={(props, option) => (
+              <>
+                <Box
+                  style={{ display: "flex", flex: 1, width: "100%" }}
+                  {...props}
+                >
+                  <Box style={{ flex: 1 }}>{option.name}</Box>
+                </Box>
+              </>
+            )}
             renderInput={(params) => (
               <TextField
                 style={{
@@ -814,6 +816,7 @@ function NotesDetail(props: propTypes) {
 
           <Grid item xs={12} pt={1}>
             <TextFieldComponent
+              disabled={!isNotesEdit}
               style={{
                 backgroundColor: "white",
               }}
@@ -841,68 +844,62 @@ function NotesDetail(props: propTypes) {
             paddingTop: "10px",
           }}
         >
-          {
-            /* istanbul ignore next */
-            lastHomeworkList?.length > 0 && (
-              <Box style={{ paddingRight: "10px" }}>
-                <FormControl
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    border: "1px solid #6EC9DB",
-                    paddingLeft: "10px",
-                    borderRadius: "5px",
-                    height: "38px",
-                  }}
-                  data-testid="complete_checkbox"
-                >
-                  <FormGroup aria-label="position">
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox />}
-                        onChange={setCheckBox}
-                        checked={
-                          /* istanbul ignore next */
-                          checkCompleteCheckBox === 1 ? true : false
-                        }
-                        label={
-                          <Grid>
-                            <Typography
-                              style={{ color: "#6EC9DB", fontWeight: "bold" }}
-                            >
-                              Completed
-                            </Typography>
-                          </Grid>
-                        }
-                        disabled={
-                          /* istanbul ignore next */
-                          lastHomeworkList?.some((homework) =>
-                            /* istanbul ignore next */
-                            homework?.complete_status === 1 ? true : false
-                          )
-                        }
-                      />
-                    </FormGroup>
+          {lastHomeworkList?.length > 0 && (
+            <Box style={{ paddingRight: "10px" }}>
+              <FormControl
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  border: "1px solid #6EC9DB",
+                  paddingLeft: "10px",
+                  borderRadius: "5px",
+                  height: "38px",
+                }}
+                data-testid="complete_checkbox"
+              >
+                <FormGroup aria-label="position">
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox />}
+                      onChange={setCheckBox}
+                      checked={checkCompleteCheckBox === 1 ? true : false}
+                      label={
+                        <Grid>
+                          <Typography
+                            style={{ color: "#6EC9DB", fontWeight: "bold" }}
+                          >
+                            Completed
+                          </Typography>
+                        </Grid>
+                      }
+                      /* istanbul ignore next */
+                      disabled={lastHomeworkList?.some((homework) =>
+                        /* istanbul ignore next */
+                        homework?.complete_status === 1 ? true : false
+                      )}
+                    />
                   </FormGroup>
-                </FormControl>
-              </Box>
-            )
-          }
+                </FormGroup>
+              </FormControl>
+            </Box>
+          )}
 
-          <Box>
-            <Button
-              onClick={handleCreateInput}
-              data-testid={`add_homework_button`}
-              variant="outlined"
-              style={{
-                color: "#6EC9DB",
-                fontWeight: "bold",
-                border: "1px solid #6EC9DB",
-              }}
-            >
-              Add Homework
-            </Button>
-          </Box>
+          {isNotesAdd && (
+            <Box>
+              <Button
+                onClick={handleCreateInput}
+                data-testid={`add_homework_button`}
+                variant="outlined"
+                style={{
+                  color: "#6EC9DB",
+                  fontWeight: "bold",
+                  border: "1px solid #6EC9DB",
+                }}
+              >
+                Add Homework
+              </Button>
+            </Box>
+          )}
         </Box>
 
         {lastHomeworkList?.length > 0 && (
@@ -1141,45 +1138,49 @@ function NotesDetail(props: propTypes) {
                         </Typography>
                       </Link>
 
-                      <Button
-                        onClick={() => {
-                          /* istanbul ignore next */
-                          addResourceFunction();
-                          /* istanbul ignore next */
-                          setPtHomeworkId(data._id);
-                          /* istanbul ignore next */
-                          setPtShareId(data.ptshareres_id);
-                        }}
-                        data-testid={`addNewQuestion_${index}`}
-                        variant="outlined"
-                        startIcon={<AttachFileIcon />}
-                      >
-                        Add Resource
-                      </Button>
-
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          paddingBottom: "5px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        <IconButtonWrapper
-                          aria-label="create"
-                          size="small"
-                          style={{ backgroundColor: "#6EC9DB" }}
+                      {isNotesEdit && (
+                        <Button
+                          onClick={() => {
+                            /* istanbul ignore next */
+                            addResourceFunction();
+                            /* istanbul ignore next */
+                            setPtHomeworkId(data._id);
+                            /* istanbul ignore next */
+                            setPtShareId(data.ptshareres_id);
+                          }}
+                          data-testid={`addNewQuestion_${index}`}
+                          variant="outlined"
+                          startIcon={<AttachFileIcon />}
                         >
-                          <DeleteIcon
-                            style={{ color: "white" }}
-                            data-testid={`button-delete-icon${index}`}
-                            onClick={() => {
-                              setIsConfirmDeleteTask(true);
-                              setDeleteTaskId(data._id);
-                            }}
-                          />
-                        </IconButtonWrapper>
-                      </Box>
+                          Add Resource
+                        </Button>
+                      )}
+
+                      {isNotesDelete && (
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            paddingBottom: "5px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          <IconButtonWrapper
+                            aria-label="create"
+                            size="small"
+                            style={{ backgroundColor: "#6EC9DB" }}
+                          >
+                            <DeleteIcon
+                              style={{ color: "white" }}
+                              data-testid={`button-delete-icon${index}`}
+                              onClick={() => {
+                                setIsConfirmDeleteTask(true);
+                                setDeleteTaskId(data._id);
+                              }}
+                            />
+                          </IconButtonWrapper>
+                        </Box>
+                      )}
                     </Box>
                   </Box>
                 </Box>
@@ -1244,37 +1245,41 @@ function NotesDetail(props: propTypes) {
                       paddingTop: "10px",
                     }}
                   >
-                    <Button
-                      onClick={() => setOpenResourceModal(true)}
-                      data-testid={`addResource2_${index}`}
-                      variant="outlined"
-                      startIcon={<AttachFileIcon />}
-                    >
-                      Add Resource
-                    </Button>
-
-                    <Box
-                      style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        paddingBottom: "5px",
-                        paddingLeft: "5px",
-                      }}
-                    >
-                      <IconButtonWrapper
-                        aria-label="create"
-                        size="small"
-                        style={{ backgroundColor: "#6EC9DB" }}
+                    {isNotesEdit && (
+                      <Button
+                        onClick={() => setOpenResourceModal(true)}
+                        data-testid={`addResource2_${index}`}
+                        variant="outlined"
+                        startIcon={<AttachFileIcon />}
                       >
-                        <DeleteIcon
-                          style={{ color: "white" }}
-                          onClick={() =>
-                            /* istanbul ignore next */
-                            handleDeleteInput(index)
-                          }
-                        />
-                      </IconButtonWrapper>
-                    </Box>
+                        Add Resource
+                      </Button>
+                    )}
+
+                    {isNotesDelete && (
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          paddingBottom: "5px",
+                          paddingLeft: "5px",
+                        }}
+                      >
+                        <IconButtonWrapper
+                          aria-label="create"
+                          size="small"
+                          style={{ backgroundColor: "#6EC9DB" }}
+                        >
+                          <DeleteIcon
+                            style={{ color: "white" }}
+                            onClick={() =>
+                              /* istanbul ignore next */
+                              handleDeleteInput(index)
+                            }
+                          />
+                        </IconButtonWrapper>
+                      </Box>
+                    )}
                   </Box>
                 </Box>
               </div>
@@ -1297,6 +1302,7 @@ function NotesDetail(props: propTypes) {
           </Typography>
           <Grid item xs={12} pt={1}>
             <TextFieldComponent
+              disabled={!isNotesEdit}
               style={{
                 backgroundColor: "white",
               }}
@@ -1320,47 +1326,49 @@ function NotesDetail(props: propTypes) {
         {/* {inputs.length > 0 ||
         previousSessionTaskData?.length ||
         lastHomeworkList?.length ? ( */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            p: 1,
-            m: 1,
-            bgcolor: "background.paper",
-            borderRadius: 1,
-            paddingTop: "50px",
-          }}
-        >
-          <Grid item xs={6} style={{ paddingRight: "50px" }}>
-            <Button
-              data-testid="editTemplateSubmitButton"
-              variant="contained"
-              // type="submit"
-              onClick={(e) => {
-                /* istanbul ignore next */
-                handleSubmit(e);
-                setIsConfirm(true);
-              }}
-              style={{ paddingLeft: "50px", paddingRight: "50px" }}
-            >
-              Save
-            </Button>
-          </Grid>
-          <Grid item xs={6} textAlign="center">
-            <Button
-              data-testid="editTemplateCancelButton"
-              variant="contained"
-              style={{
-                paddingLeft: "40px",
-                paddingRight: "40px",
-                backgroundColor: "#6BA08E",
-              }}
-              onClick={() => props.onCancel(props.toggleAccordion)}
-            >
-              Cancel
-            </Button>
-          </Grid>
-        </Box>
+        {isNotesEdit && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              p: 1,
+              m: 1,
+              bgcolor: "background.paper",
+              borderRadius: 1,
+              paddingTop: "50px",
+            }}
+          >
+            <Grid item xs={6} style={{ paddingRight: "50px" }}>
+              <Button
+                data-testid="editTemplateSubmitButton"
+                variant="contained"
+                // type="submit"
+                onClick={(e) => {
+                  /* istanbul ignore next */
+                  handleSubmit(e);
+                  setIsConfirm(true);
+                }}
+                style={{ paddingLeft: "50px", paddingRight: "50px" }}
+              >
+                Save
+              </Button>
+            </Grid>
+            <Grid item xs={6} textAlign="center">
+              <Button
+                data-testid="editTemplateCancelButton"
+                variant="contained"
+                style={{
+                  paddingLeft: "40px",
+                  paddingRight: "40px",
+                  backgroundColor: "#6BA08E",
+                }}
+                onClick={() => props.onCancel(props.toggleAccordion)}
+              >
+                Cancel
+              </Button>
+            </Grid>
+          </Box>
+        )}
         {/* ) : null} */}
 
         {isConfirm && (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Box,
@@ -22,28 +22,30 @@ import TextFieldComponent from "../../../components/common/TextField/TextFieldCo
 import { useSnackbar } from "notistack";
 import { POST_THERAPIST_FEEDBACK_NEW } from "../../../graphql/mutation";
 import AddIcon from "@mui/icons-material/Add";
-import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { GET_THERAPIST_FEEDBACKLIST_DATA_NEW } from "../../../graphql/Feedback/graphql";
 import RemoveIcon from "@mui/icons-material/Remove";
+import ConfirmWrapper, {
+  ConfirmElement,
+} from "../../../components/common/ConfirmWrapper";
 
 const TherapyPatientFeedback: any = (props) => {
+  const confirmRef = useRef<ConfirmElement>(null);
   const [successModal, setSuccessModal] = useState<boolean>(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<any>([]);
-  const [loader, setLoader] = useState<boolean>(false);
   const [sessionPanelExpanded, setSessionPanelExpanded] = useState<
     string | false
   >(false);
   const [feedbackType, setFeedbackType] = useState<string>("");
-  const [sessionNo, setSessionNo] = useState(null);
   const [patientData, setPatientData] = useState<{
     patient_id: string;
     patient_name: string;
   }>({ patient_id: "", patient_name: "" });
   const { enqueueSnackbar } = useSnackbar();
   // Update Mutation
-  const [postTherapistFeedbackNew] = useMutation(POST_THERAPIST_FEEDBACK_NEW);
-  const [isConfirm, setIsConfirm] = useState(false);
+  const [
+    postTherapistFeedbackNew,
+    { loading: postTherapistFeedbackNewLoading },
+  ] = useMutation(POST_THERAPIST_FEEDBACK_NEW);
 
   // Session Queries
   const [
@@ -54,7 +56,6 @@ const TherapyPatientFeedback: any = (props) => {
       /* istanbul ignore else */
       if (data!.getPatientSessionList) {
         setFeedbackType("therapist");
-        setSessionNo("1");
       }
     },
   });
@@ -63,14 +64,11 @@ const TherapyPatientFeedback: any = (props) => {
     getTherapistFeedbackListNewData,
     { loading, data: therapistFeedbackNewData },
   ] = useLazyQuery(GET_THERAPIST_FEEDBACKLIST_DATA_NEW, {
-    onCompleted: () => {
-      setFormValues([]);
-    },
+    fetchPolicy: "cache-and-network",
   });
 
   const setDefaultStateExcludingLoader = () => {
     setFeedbackType("therapist");
-    setSessionNo("1");
     setPatientData({
       patient_id: sessionStorage.getItem("patient_id"),
       patient_name: sessionStorage.getItem("patient_name"),
@@ -79,15 +77,14 @@ const TherapyPatientFeedback: any = (props) => {
   };
 
   useEffect(() => {
-    setLoader(true);
     setDefaultStateExcludingLoader();
   }, []);
 
   // PatientSessionData
   useEffect(() => {
     /* istanbul ignore next */
-    if (patientData.patient_id?.length > 0) {
-      setLoader(true);
+    if (props.setTherapy && patientData.patient_id) {
+      // if(props.setTherapy && patientData.patient_id)
       getPatientSessionData({
         variables: {
           pttherapyId: props.setTherapy,
@@ -97,39 +94,25 @@ const TherapyPatientFeedback: any = (props) => {
     }
   }, [props.setTherapy, patientData.patient_id]);
 
-  useEffect(() => {
-    /* istanbul ignore next */
-    if (patientData.patient_id.length > 0) {
-      setLoader(true);
-      getTherapistFeedbackListNewData({
-        variables: {
-          sessionNo: sessionNo,
-          feedbackType: feedbackType,
-          pttherapyId: props.setTherapy,
-        },
-      });
-    }
-  }, [sessionNo]);
-
-  useEffect(() => {
-    /* istanbul ignore next */
-    if (
-      !sessionLoading &&
-      patientData &&
-      sessionNo &&
-      feedbackType &&
-      patientSessionData
-    ) {
-      /* istanbul ignore next */
-      setLoader(false);
-    }
-  }, [patientData, sessionNo, feedbackType, patientSessionData]);
+  const handleOpenAccordion = (v) => {
+    const { ptsession_no } = v;
+    setFormValues([]);
+    getTherapistFeedbackListNewData({
+      variables: {
+        sessionNo: ptsession_no,
+        feedbackType: feedbackType,
+        pttherapyId: props.setTherapy,
+      },
+    });
+  };
 
   const handleSessionPanelChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    (panel: string, accordionValue) =>
+    (event: React.SyntheticEvent, isExpanded: boolean) => {
       setSessionPanelExpanded(
         /* istanbul ignore else */ isExpanded ? panel : false
       );
+      handleOpenAccordion(accordionValue);
     };
 
   const handleOk = () => {
@@ -180,17 +163,11 @@ const TherapyPatientFeedback: any = (props) => {
   const cancelConfirm = () => {
     /* istanbul ignore next */
     setFormValues([]);
-    /* istanbul ignore next */
-    setIsConfirm(false);
+    setSessionPanelExpanded(false);
     /* istanbul ignore next */
     enqueueSnackbar("Feedback cancel successfully", {
       variant: "success",
     });
-  };
-
-  const clearIsConfirmCancel = () => {
-    /* istanbul ignore next */
-    setIsConfirm(false);
   };
 
   const handleTextChange = (questionId: any, newAnswer: any) => {
@@ -214,11 +191,12 @@ const TherapyPatientFeedback: any = (props) => {
     setFormValues(tempSubmitData);
   };
 
-  const handleAdd = () => {
+  const handleAdd = (v) => {
+    const { ptsession_no } = v;
     postTherapistFeedbackNew({
       variables: {
         feedQuesAnsData: JSON.stringify(formValues),
-        sessionNo: sessionNo,
+        sessionNo: ptsession_no,
         pttherapyId: props.setTherapy,
         patientId: patientData.patient_id,
       },
@@ -226,11 +204,12 @@ const TherapyPatientFeedback: any = (props) => {
         /* istanbul ignore next */
         setSuccessModal(true);
         setFormValues([]);
+        confirmRef.current.close();
       },
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, v) => {
     e.preventDefault();
     /* istanbul ignore next */
     if (formValues.length !== questionnaireList.length) {
@@ -238,19 +217,28 @@ const TherapyPatientFeedback: any = (props) => {
         variant: "error",
       });
     } else {
-      setModalOpen(true);
+      confirmRef.current.openConfirm({
+        confirmFunction: () => {
+          handleAdd(v);
+        },
+        description: "Are you sure you want to submit the feedback?",
+      });
     }
   };
 
   const cancleFunction = () => {
     /* istanbul ignore next */
-    if (formValues.length) {
-      setIsConfirm(true);
-    }
+    confirmRef.current.openConfirm({
+      confirmFunction: () => {
+        cancelConfirm();
+        confirmRef.current.close();
+      },
+      description: "Are you sure you want to cancel the feedback?",
+    });
   };
   return (
     <>
-      <Loader visible={loader} />
+      <Loader visible={sessionLoading || postTherapistFeedbackNewLoading} />
 
       <Box style={{ paddingBottom: "30px" }}>
         <Box>
@@ -262,11 +250,9 @@ const TherapyPatientFeedback: any = (props) => {
               borderRight: "1px solid #cecece",
             }}
             expanded={sessionPanelExpanded === "before_therapy"}
-            onChange={handleSessionPanelChange("before_therapy")}
-            onClick={() => {
-              /* istanbul ignore next */
-              setSessionNo("before_therapy");
-            }}
+            onChange={handleSessionPanelChange("before_therapy", {
+              ptsession_no: "before_therapy",
+            })}
             data-testid="SessionPanelItem"
           >
             <AccordionSummary
@@ -463,7 +449,9 @@ const TherapyPatientFeedback: any = (props) => {
                               )}
                               onClick={(e) => {
                                 /* istanbul ignore next */
-                                handleSubmit(e);
+                                handleSubmit(e, {
+                                  ptsession_no: "before_therapy",
+                                });
                               }}
                               variant="contained"
                               data-testid="submitFeedback1"
@@ -513,7 +501,7 @@ const TherapyPatientFeedback: any = (props) => {
                 <form
                   key={p}
                   onSubmit={(values) => {
-                    handleSubmit(values);
+                    handleSubmit(values, v);
                   }}
                   data-testid="feedbackForm"
                 >
@@ -525,10 +513,7 @@ const TherapyPatientFeedback: any = (props) => {
                       borderRight: "1px solid #cecece",
                     }}
                     expanded={sessionPanelExpanded === panelName}
-                    onChange={handleSessionPanelChange(panelName)}
-                    onClick={() => {
-                      setSessionNo(p);
-                    }}
+                    onChange={handleSessionPanelChange(panelName, v)}
                     key={v._id}
                     data-testid="SessionPanelItem"
                   >
@@ -650,6 +635,9 @@ const TherapyPatientFeedback: any = (props) => {
                                                 key={ak}
                                               >
                                                 <FormControlLabel
+                                                  defaultChecked={
+                                                    fv.answer?.answer === av
+                                                  }
                                                   disabled={!!fv.answer?.answer}
                                                   sx={{
                                                     fontSize: "15px",
@@ -741,7 +729,7 @@ const TherapyPatientFeedback: any = (props) => {
                                       {
                                         /* istanbul ignore next */
                                       }
-                                      handleSubmit(e);
+                                      handleSubmit(e, v);
                                     }}
                                     variant="contained"
                                     data-testid="submitFeedback1"
@@ -800,11 +788,9 @@ const TherapyPatientFeedback: any = (props) => {
               borderRight: "1px solid #cecece",
             }}
             expanded={sessionPanelExpanded === "after_therapy"}
-            onChange={handleSessionPanelChange("after_therapy")}
-            onClick={() => {
-              /* istanbul ignore next */
-              setSessionNo("after_therapy");
-            }}
+            onChange={handleSessionPanelChange("after_therapy", {
+              ptsession_no: "after_therapy",
+            })}
             data-testid="SessionPanelItem"
           >
             <AccordionSummary
@@ -991,7 +977,7 @@ const TherapyPatientFeedback: any = (props) => {
                           )}
                           onClick={(e) => {
                             /* istanbul ignore next */
-                            handleSubmit(e);
+                            handleSubmit(e, { ptsession_no: "after_therapy" });
                           }}
                           variant="contained"
                           data-testid="submitFeedback1"
@@ -1035,26 +1021,7 @@ const TherapyPatientFeedback: any = (props) => {
         </Box>
       </Box>
       <>
-        {modalOpen && (
-          <ConfirmationModal
-            label="Are you sure you want to submit the feedback?"
-            onCancel={() => {
-              /* istanbul ignore next */
-              setModalOpen(false);
-            }}
-            onConfirm={() => {
-              setModalOpen(false);
-              handleAdd();
-            }}
-          />
-        )}
-        {isConfirm && (
-          <ConfirmationModal
-            label="Are you sure you want to cancel the feedback?"
-            onCancel={clearIsConfirmCancel}
-            onConfirm={cancelConfirm}
-          />
-        )}
+        <ConfirmWrapper ref={confirmRef} />
         {successModal && (
           <SuccessModal
             isOpen={successModal}
