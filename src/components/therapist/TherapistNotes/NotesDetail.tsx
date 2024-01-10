@@ -182,7 +182,8 @@ function NotesDetail(props: propTypes) {
     therapistNotesData?.getPatientNotesData?.data?.patientmonitor;
 
   const lastHomeworkList =
-    therapistHomeworkDataData?.therapistViewPatientHomework?.last_homework_list;
+    therapistHomeworkDataData?.therapistViewPatientHomework?.data
+      ?.last_homework_list;
 
   const previousSessionTaskData =
     therapistHomeworkDataData2?.getPatientHomeworkData?.data;

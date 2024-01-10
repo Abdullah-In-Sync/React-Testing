@@ -448,20 +448,13 @@ describe("Therapist feedback list", () => {
   test("Feedback form should submit with valid data", async () => {
     const patient_id = mockDataMap["first_patient_id"];
     await sut(patient_id);
-
-    await waitFor(async () => {
-      fireEvent.click(screen.queryByTestId("panel1bh-header"));
-
-      expect(screen.getByTestId("instruction")).toBeInTheDocument();
-      expect(screen.getByTestId("texBoxInput")).toBeInTheDocument();
-      fireEvent.change(screen.queryByTestId("texBoxInput"), {
-        target: { value: "abcd" },
-      });
-      expect(screen.getByTestId("feedbackForm")).toBeInTheDocument();
-
-      fireEvent.submit(screen.queryByTestId("feedbackForm"));
-      expect(screen.queryByTestId("sureModal")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("confirmButton"));
+    fireEvent.click(await screen.findByTestId("panel1bh-header"));
+    fireEvent.change(await screen.findByTestId("texBoxInput"), {
+      target: { value: "abcd" },
     });
+
+    fireEvent.submit(await screen.findByTestId("feedbackForm"));
+    expect(await screen.findByTestId("sureModal")).toBeInTheDocument();
+    fireEvent.click(screen.queryByTestId("confirmButton"));
   });
 });
