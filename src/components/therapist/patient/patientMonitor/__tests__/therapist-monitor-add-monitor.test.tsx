@@ -65,7 +65,7 @@ mocksData.push({
     data: {
       therapistAddMonitor: {
         message: "",
-        status: true,
+        result: true,
       },
     },
   },
@@ -83,7 +83,7 @@ mocksData.push({
     data: {
       therapistAddMonitor: {
         message: "Monitor already added",
-        status: false,
+        result: false,
       },
     },
   },

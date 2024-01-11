@@ -281,8 +281,8 @@ export const THERAPIST_ADMIN_MONITOR_LIST = gql`
 export const THERAPIST_ADD_MONITOR = gql`
   mutation TherapistAddMonitor($monitorId: String!, $patientId: String!) {
     therapistAddMonitor(monitor_id: $monitorId, patient_id: $patientId) {
+      result
       message
-      status
     }
   }
 `;
