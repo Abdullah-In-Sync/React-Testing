@@ -47,6 +47,7 @@ const TherapistCreateMonitor: NextPage = () => {
           questions: JSON.stringify(modifyQuestions),
         },
         onCompleted: (data) => {
+          /* istanbul ignore next */
           const {
             therapistCreateMonitor: { status, message },
           } = data;

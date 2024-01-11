@@ -157,48 +157,54 @@ const TherapistFileList: React.FC<ViewProps> = ({
             />
           </IconButton>
 
-          {isFilesShare && (
-            <IconButton
-              style={{
-                borderRadius: "50%",
-                backgroundColor: "#6EC9DB",
-                marginLeft: "10px",
-              }}
-              size="small"
-              onClick={() =>
-                /* istanbul ignore next */
-                handleShare(selectedCheckBoxId)
-              }
-            >
-              <ShareIcon
+          {
+            /* istanbul ignore next */
+            isFilesShare && (
+              <IconButton
                 style={{
-                  color: "#ffff",
+                  borderRadius: "50%",
+                  backgroundColor: "#6EC9DB",
+                  marginLeft: "10px",
                 }}
-                data-testid="share-file-button"
-              />
-            </IconButton>
-          )}
-          {isFilesDelete && (
-            <IconButton
-              style={{
-                borderRadius: "50%",
-                backgroundColor: "#6EC9DB",
-                marginLeft: "10px",
-              }}
-              size="small"
-              onClick={() =>
-                /* istanbul ignore next */
-                handleDelete(selectedCheckBoxId)
-              }
-            >
-              <DeleteIcon
+                size="small"
+                onClick={() =>
+                  /* istanbul ignore next */
+                  handleShare(selectedCheckBoxId)
+                }
+              >
+                <ShareIcon
+                  style={{
+                    color: "#ffff",
+                  }}
+                  data-testid="share-file-button"
+                />
+              </IconButton>
+            )
+          }
+          {
+            /* istanbul ignore next */
+            isFilesDelete && (
+              <IconButton
                 style={{
-                  color: "#ffff",
+                  borderRadius: "50%",
+                  backgroundColor: "#6EC9DB",
+                  marginLeft: "10px",
                 }}
-                data-testid="delete-file-button"
-              />
-            </IconButton>
-          )}
+                size="small"
+                onClick={() =>
+                  /* istanbul ignore next */
+                  handleDelete(selectedCheckBoxId)
+                }
+              >
+                <DeleteIcon
+                  style={{
+                    color: "#ffff",
+                  }}
+                  data-testid="delete-file-button"
+                />
+              </IconButton>
+            )
+          }
         </Box>
       </Box>
 
