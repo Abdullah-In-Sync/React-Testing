@@ -56,7 +56,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
       },
     ],
   });
-  const isEditResource = checkPrivilageAccess("Resource", "Update response");
+  const isEditResource = checkPrivilageAccess("Resource", "Edit");
 
   useEffect(() => {
     /* istanbul ignore next */
