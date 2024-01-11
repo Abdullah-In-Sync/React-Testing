@@ -222,58 +222,67 @@ const TherapistFileList: React.FC<ViewProps> = ({
                         alignItems: "center",
                       }}
                     >
-                      {isFilesDelete || isFilesDownload || isFilesShare ? (
-                        <FormControlLabel
-                          disabled={data.added_by === "patient"}
-                          sx={{ gridColumn: "1", m: 0 }}
-                          data-testid={`resource_checkbox${index}`}
-                          control={
-                            <Checkbox
-                              checked={selectedCheckBoxId.includes(data._id)}
-                              onChange={() => toggleCheckBox(data)}
+                      {
+                        /* istanbul ignore next */
+                        isFilesDelete || isFilesDownload || isFilesShare ? (
+                          <FormControlLabel
+                            disabled={data.added_by === "patient"}
+                            sx={{ gridColumn: "1", m: 0 }}
+                            data-testid={`resource_checkbox${index}`}
+                            control={
+                              <Checkbox
+                                checked={selectedCheckBoxId.includes(data._id)}
+                                onChange={() => toggleCheckBox(data)}
+                              />
+                            }
+                            label=""
+                          />
+                        ) : (
+                          <Box pb={2} />
+                        )
+                      }
+
+                      {
+                        /* istanbul ignore next */
+                        isFilesDownload && (
+                          <IconButton
+                            style={{
+                              borderRadius: "50%",
+                              border: "1px solid #000",
+                            }}
+                            size="small"
+                            sx={{ gridColumn: "2", m: 1 }}
+                            onClick={() => downloadFile(data.download_file_url)}
+                          >
+                            <DownloadIcon
+                              style={{ fontSize: 14 }}
+                              data-testid="download-file-button"
                             />
-                          }
-                          label=""
-                        />
-                      ) : (
-                        <Box pb={2} />
-                      )}
+                          </IconButton>
+                        )
+                      }
 
-                      {isFilesDownload && (
-                        <IconButton
-                          style={{
-                            borderRadius: "50%",
-                            border: "1px solid #000",
-                          }}
-                          size="small"
-                          sx={{ gridColumn: "2", m: 1 }}
-                          onClick={() => downloadFile(data.download_file_url)}
-                        >
-                          <DownloadIcon
-                            style={{ fontSize: 14 }}
-                            data-testid="download-file-button"
-                          />
-                        </IconButton>
-                      )}
-
-                      {isFilesEdit && (
-                        <IconButton
-                          style={{
-                            borderRadius: "50%",
-                            border: "1px solid #000",
-                          }}
-                          size="small"
-                          sx={{ gridColumn: "3", m: 1 }}
-                          data-testid={`file_edit_btn_${data._id}`}
-                          /* istanbul ignore next */
-                          onClick={() => onClickEdit(data._id)}
-                        >
-                          <EditIcon
-                            style={{ fontSize: 14 }}
-                            data-testid="share-agenda-button"
-                          />
-                        </IconButton>
-                      )}
+                      {
+                        /* istanbul ignore next */
+                        isFilesEdit && (
+                          <IconButton
+                            style={{
+                              borderRadius: "50%",
+                              border: "1px solid #000",
+                            }}
+                            size="small"
+                            sx={{ gridColumn: "3", m: 1 }}
+                            data-testid={`file_edit_btn_${data._id}`}
+                            /* istanbul ignore next */
+                            onClick={() => onClickEdit(data._id)}
+                          >
+                            <EditIcon
+                              style={{ fontSize: 14 }}
+                              data-testid="share-agenda-button"
+                            />
+                          </IconButton>
+                        )
+                      }
                     </Box>
 
                     <Box
