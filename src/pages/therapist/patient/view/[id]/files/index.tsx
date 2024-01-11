@@ -225,11 +225,11 @@ export default function TherapistFilesList() {
   /* istanbul ignore next */
   const onClickEdit = (id) => {
     /* istanbul ignore next */
-    const index = fileListData?.getPatientFileListByTherapist?.findIndex(
+    const index = fileListData?.getPatientFileListByTherapist?.data?.findIndex(
       (f) => f._id == id
     );
     /* istanbul ignore next */
-    setInitialValue(fileListData?.getPatientFileListByTherapist[index]);
+    setInitialValue(fileListData?.getPatientFileListByTherapist?.data[index]);
     /* istanbul ignore next */
     handleOpenUpdateFileModal();
   };
@@ -265,7 +265,6 @@ export default function TherapistFilesList() {
       });
     }
   };
-
   return (
     <>
       <Loader visible={loader} />

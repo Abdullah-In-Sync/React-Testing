@@ -117,15 +117,20 @@ const TherapyMyMonitorList: any = () => {
           monitor_id: shareMonitorId,
           patient_id: isSetSharedPatientIds,
         },
-        onCompleted: () => {
+        onCompleted: (data) => {
           /* istanbul ignore next */
-          setIsConfirmShareTask(false);
-          enqueueSnackbar("Monitor shared successfully", {
-            variant: "success",
-          });
-          getTherapistMonitorSharePatientList({
-            variables: { monitor_id: shareMonitorId },
-          });
+          const {
+            shareTherapistMonitor: { status },
+          } = data;
+          if (status) {
+            setIsConfirmShareTask(false);
+            enqueueSnackbar("Monitor shared successfully", {
+              variant: "success",
+            });
+            getTherapistMonitorSharePatientList({
+              variables: { monitor_id: shareMonitorId },
+            });
+          }
         },
       });
       /* istanbul ignore next */
