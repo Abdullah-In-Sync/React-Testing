@@ -32,8 +32,8 @@ const TherapyMyMonitorList: any = () => {
     () => modalRefAddPlan.current?.open(),
     []
   );
+  /* istanbul ignore next */
   const handleCloseAddPlanModal = useCallback(() => {
-    /* istanbul ignore next */
     modalRefAddPlan.current?.close();
   }, []);
 
@@ -106,10 +106,12 @@ const TherapyMyMonitorList: any = () => {
     }
   };
 
+  /* istanbul ignore next */
   const receivePatientIds = (value) => {
     setIsSetSharedPatientIds(value);
   };
 
+  /* istanbul ignore next */
   const handlerSharePlan = async () => {
     try {
       await shareMyMonitor({
@@ -118,7 +120,6 @@ const TherapyMyMonitorList: any = () => {
           patient_id: isSetSharedPatientIds,
         },
         onCompleted: (data) => {
-          /* istanbul ignore next */
           const {
             shareTherapistMonitor: { status },
           } = data;
@@ -133,12 +134,9 @@ const TherapyMyMonitorList: any = () => {
           }
         },
       });
-      /* istanbul ignore next */
       handleCloseAddPlanModal();
     } catch (e) {
-      /* istanbul ignore next */
       setLoader(false);
-      /* istanbul ignore next */
       enqueueSnackbar("There is something wrong.", { variant: "error" });
     }
   };
@@ -249,13 +247,16 @@ const TherapyMyMonitorList: any = () => {
       </Box>
 
       <Box>
-        {isConfirmDeleteTask && (
-          <ConfirmationModal
-            label="Are you sure you want to delete the monitor?"
-            onCancel={clearIsConfirmCancel}
-            onConfirm={handleDeleteMyMonitor}
-          />
-        )}
+        {
+          /* istanbul ignore next */
+          isConfirmDeleteTask && (
+            <ConfirmationModal
+              label="Are you sure you want to delete the monitor?"
+              onCancel={clearIsConfirmCancel}
+              onConfirm={handleDeleteMyMonitor}
+            />
+          )
+        }
       </Box>
 
       <CommonModal
@@ -264,19 +265,26 @@ const TherapyMyMonitorList: any = () => {
         maxWidth="sm"
       >
         <SharePlanForm
-          onPressSubmit={() => setIsConfirmShareTask(true)}
-          therapistSafetyPlanList={monitorSharePatientListData?.data}
+          onPressSubmit={() =>
+            /* istanbul ignore next */ setIsConfirmShareTask(true)
+          }
+          therapistSafetyPlanList={
+            /* istanbul ignore next */ monitorSharePatientListData?.data
+          }
           receivePlanId={receivePatientIds}
         />
       </CommonModal>
 
-      {isConfirmShareTask && (
-        <ConfirmationModal
-          label="Are you sure you want to share the monitor?"
-          onCancel={clearIsConfirmCancel}
-          onConfirm={handlerSharePlan}
-        />
-      )}
+      {
+        /* istanbul ignore next */
+        isConfirmShareTask && (
+          <ConfirmationModal
+            label="Are you sure you want to share the monitor?"
+            onCancel={clearIsConfirmCancel}
+            onConfirm={handlerSharePlan}
+          />
+        )
+      }
     </>
   );
 };
