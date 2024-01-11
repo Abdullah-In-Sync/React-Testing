@@ -144,9 +144,9 @@ const TherapyPatientMonitorList: any = () => {
         variables: { ...formFields, ...{ patientId } },
         onCompleted: (data) => {
           const {
-            therapistAddMonitor: { status, message },
+            therapistAddMonitor: { result, message },
           } = data;
-          if (status) {
+          if (result) {
             /* istanbul ignore next */
             enqueueSnackbar("Monitor successfully added.", {
               variant: "success",
