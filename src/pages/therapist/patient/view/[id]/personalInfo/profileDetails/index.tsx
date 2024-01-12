@@ -10,6 +10,7 @@ import { UPDATE_PROFILE_DATA_FROM_THERAPIST } from "../../../../../../../graphql
 import { useSnackbar } from "notistack";
 import Loader from "../../../../../../../components/common/Loader";
 import { useRouter } from "next/router";
+import { checkPrivilageAccess } from "../../../../../../../utility/helper";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -20,6 +21,7 @@ const IconButtonWrapper = styled(IconButton)(
 );
 
 export default function TherapistProfileDetails() {
+  const isProfileEdit = checkPrivilageAccess("Personal Info", "Edit");
   const router = useRouter();
   const patientId = router?.query?.id as string;
 
@@ -114,7 +116,7 @@ export default function TherapistProfileDetails() {
           },
           onCompleted: (data) => {
             console.log("Complete data: ", data);
-            if (data && data.updatePatientProfileById) {
+            if (data && data.updatePatientProfileById.result) {
               enqueueSnackbar("Patient details saved successfully", {
                 variant: "success",
               });
@@ -142,45 +144,47 @@ export default function TherapistProfileDetails() {
     <>
       <Loader visible={loader} />
       <Box>
-        <Box
-          style={{
-            marginRight: "10px",
-            paddingTop: "10px",
-          }}
-        >
-          {editable ? (
-            <Box
-              sx={{
-                backgroundColor: "#689C8B",
-                borderRadius: "10px 10px 0 0",
-                paddingBottom: "13px",
-              }}
-            >
-              <div
-                style={{
-                  padding: "14px 0 0 30px",
+        {isProfileEdit && (
+          <Box
+            style={{
+              marginRight: "10px",
+              paddingTop: "10px",
+            }}
+          >
+            {editable ? (
+              <Box
+                sx={{
+                  backgroundColor: "#689C8B",
+                  borderRadius: "10px 10px 0 0",
+                  paddingBottom: "13px",
                 }}
               >
-                <Typography sx={{ color: "white", fontWeight: "bold" }}>
-                  Edit Personal Info
-                </Typography>
-              </div>
-            </Box>
-          ) : (
-            <Box style={{ display: "flex", justifyContent: "flex-end" }}>
-              <IconButtonWrapper
-                aria-label="create"
-                size="small"
-                onClick={() => {
-                  setEditable(true);
-                }}
-                data-testid="edit-icon-button"
-              >
-                <CreateIcon style={{ color: "#ffff" }} />
-              </IconButtonWrapper>
-            </Box>
-          )}
-        </Box>
+                <div
+                  style={{
+                    padding: "14px 0 0 30px",
+                  }}
+                >
+                  <Typography sx={{ color: "white", fontWeight: "bold" }}>
+                    Edit Personal Info
+                  </Typography>
+                </div>
+              </Box>
+            ) : (
+              <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+                <IconButtonWrapper
+                  aria-label="create"
+                  size="small"
+                  onClick={() => {
+                    setEditable(true);
+                  }}
+                  data-testid="edit-icon-button"
+                >
+                  <CreateIcon style={{ color: "#ffff" }} />
+                </IconButtonWrapper>
+              </Box>
+            )}
+          </Box>
+        )}
         <ProfileForm
           therapistProfileData={therapistProfileData}
           onSubmit={editFormHandler}

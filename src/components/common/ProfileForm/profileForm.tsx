@@ -179,22 +179,24 @@ export default function ProfileForm(props: propTypes) {
     });
 
   useEffect(() => {
-    if (props.therapistProfileData?.getPatientDetailById) {
-      setFormFields(props.therapistProfileData?.getPatientDetailById);
+    if (props.therapistProfileData?.getPatientDetailById?.data) {
+      setFormFields(props.therapistProfileData?.getPatientDetailById.data);
       setHealthValue(
-        props.therapistProfileData?.getPatientDetailById.patient_physical_health
+        props.therapistProfileData?.getPatientDetailById.data
+          .patient_physical_health
       );
       setIlnessValue(
-        props.therapistProfileData?.getPatientDetailById.patient_illness_ability
+        props.therapistProfileData?.getPatientDetailById.data
+          .patient_illness_ability
       );
       const birthdate =
-        props.therapistProfileData?.getPatientDetailById.birthdate;
+        props.therapistProfileData?.getPatientDetailById.data.birthdate;
       if (birthdate) {
         const birthdateDayjs = dayjs(birthdate, "DD-MM-YYYY");
         setStartDateValue(birthdateDayjs);
       }
     }
-  }, [props.therapistProfileData?.getPatientDetailById]);
+  }, [props.therapistProfileData?.getPatientDetailById?.data]);
   useEffect(() => {
     props.setLoader(true);
     getPatientData();
