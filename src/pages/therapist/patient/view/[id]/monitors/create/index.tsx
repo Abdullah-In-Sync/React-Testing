@@ -47,13 +47,17 @@ const TherapistCreateMonitor: NextPage = () => {
           questions: JSON.stringify(modifyQuestions),
         },
         onCompleted: (data) => {
-          if (data.therapistCreateMonitor.status === null) {
+          /* istanbul ignore next */
+          const {
+            therapistCreateMonitor: { status, message },
+          } = data;
+          if (status) {
             enqueueSnackbar("Monitor created successfully", {
               variant: "success",
             });
             router.back();
           } else {
-            enqueueSnackbar(`This monitor's name already exists`, {
+            enqueueSnackbar(message, {
               variant: "error",
             });
           }

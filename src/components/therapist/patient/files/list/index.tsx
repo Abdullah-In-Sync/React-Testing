@@ -19,6 +19,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import ContentHeader from "../../../../common/ContentHeader";
+import { checkPrivilageAccess } from "../../../../../utility/helper";
 
 interface ViewProps {
   fileListData?: any;
@@ -39,6 +40,10 @@ const TherapistFileList: React.FC<ViewProps> = ({
   onClickEdit,
   // onSelectedCheckboxes,
 }) => {
+  const isFilesDelete = checkPrivilageAccess("Files", "Delete");
+  const isFilesDownload = checkPrivilageAccess("Files", "Download");
+  const isFilesShare = checkPrivilageAccess("Files", "Share");
+  const isFilesEdit = checkPrivilageAccess("Files", "Edit");
   const [searchValue, setSearchValue] = useState("");
   const [selectedCheckBoxId, setSelectedCheckBox] = useState<string[]>([]);
 
@@ -152,44 +157,54 @@ const TherapistFileList: React.FC<ViewProps> = ({
             />
           </IconButton>
 
-          <IconButton
-            style={{
-              borderRadius: "50%",
-              backgroundColor: "#6EC9DB",
-              marginLeft: "10px",
-            }}
-            size="small"
-            onClick={() =>
-              /* istanbul ignore next */
-              handleShare(selectedCheckBoxId)
-            }
-          >
-            <ShareIcon
-              style={{
-                color: "#ffff",
-              }}
-              data-testid="share-file-button"
-            />
-          </IconButton>
-          <IconButton
-            style={{
-              borderRadius: "50%",
-              backgroundColor: "#6EC9DB",
-              marginLeft: "10px",
-            }}
-            size="small"
-            onClick={() =>
-              /* istanbul ignore next */
-              handleDelete(selectedCheckBoxId)
-            }
-          >
-            <DeleteIcon
-              style={{
-                color: "#ffff",
-              }}
-              data-testid="delete-file-button"
-            />
-          </IconButton>
+          {
+            /* istanbul ignore next */
+            isFilesShare && (
+              <IconButton
+                style={{
+                  borderRadius: "50%",
+                  backgroundColor: "#6EC9DB",
+                  marginLeft: "10px",
+                }}
+                size="small"
+                onClick={() =>
+                  /* istanbul ignore next */
+                  handleShare(selectedCheckBoxId)
+                }
+              >
+                <ShareIcon
+                  style={{
+                    color: "#ffff",
+                  }}
+                  data-testid="share-file-button"
+                />
+              </IconButton>
+            )
+          }
+          {
+            /* istanbul ignore next */
+            isFilesDelete && (
+              <IconButton
+                style={{
+                  borderRadius: "50%",
+                  backgroundColor: "#6EC9DB",
+                  marginLeft: "10px",
+                }}
+                size="small"
+                onClick={() =>
+                  /* istanbul ignore next */
+                  handleDelete(selectedCheckBoxId)
+                }
+              >
+                <DeleteIcon
+                  style={{
+                    color: "#ffff",
+                  }}
+                  data-testid="delete-file-button"
+                />
+              </IconButton>
+            )
+          }
         </Box>
       </Box>
 
@@ -197,122 +212,149 @@ const TherapistFileList: React.FC<ViewProps> = ({
         <Grid container spacing={3}>
           {
             /* istanbul ignore next */
-            fileListData?.getPatientFileListByTherapist?.map((data, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
-                  sx={{
-                    border: "1px solid #cecece",
-                    borderRadius: "3px",
-                  }}
-                >
-                  <Box
+            fileListData?.getPatientFileListByTherapist?.data?.map(
+              (data, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Card
                     sx={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr auto auto",
-                      alignItems: "center",
-                    }}
-                  >
-                    <FormControlLabel
-                      disabled={data.added_by === "patient"}
-                      sx={{ gridColumn: "1", m: 0 }}
-                      data-testid={`resource_checkbox${index}`}
-                      control={
-                        <Checkbox
-                          checked={selectedCheckBoxId.includes(data._id)}
-                          onChange={() => toggleCheckBox(data)}
-                        />
-                      }
-                      label=""
-                    />
-
-                    <IconButton
-                      style={{ borderRadius: "50%", border: "1px solid #000" }}
-                      size="small"
-                      sx={{ gridColumn: "2", m: 1 }}
-                      onClick={() => downloadFile(data.download_file_url)}
-                    >
-                      <DownloadIcon
-                        style={{ fontSize: 14 }}
-                        data-testid="download-file-button"
-                      />
-                    </IconButton>
-
-                    <IconButton
-                      style={{ borderRadius: "50%", border: "1px solid #000" }}
-                      size="small"
-                      sx={{ gridColumn: "3", m: 1 }}
-                      data-testid={`file_edit_btn_${data._id}`}
-                      /* istanbul ignore next */
-                      onClick={() => onClickEdit(data._id)}
-                    >
-                      <EditIcon
-                        style={{ fontSize: 14 }}
-                        data-testid="share-agenda-button"
-                      />
-                    </IconButton>
-                  </Box>
-
-                  <Box
-                    style={{
-                      paddingLeft: "15px",
-                      paddingRight: "15px",
-                      paddingBottom: "10px",
+                      border: "1px solid #cecece",
+                      borderRadius: "3px",
                     }}
                   >
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        bgcolor:
-                          data.share_status === 0 ? "#6EC9DB" : "#7EBCA7",
-                        borderRadius: "3px 3px 3px 3px",
-                        paddingBottom: "13px",
-                        cursor: "pointer",
+                        display: "grid",
+                        gridTemplateColumns: "1fr auto auto",
+                        alignItems: "center",
                       }}
-                      /* istanbul ignore next */
-                      onClick={() => openInNewTab(data.file_url)}
                     >
-                      <Tooltip title={data.title} arrow={true}>
-                        <Typography
-                          data-testid={`reource_description${index}`}
-                          sx={{ color: "white", paddingTop: "10px" }}
-                        >
-                          {data.title.length > 20
-                            ? `${data.title.substring(0, 20)}...`
-                            : data.title}
-                        </Typography>
+                      {
+                        /* istanbul ignore next */
+                        isFilesDelete || isFilesDownload || isFilesShare ? (
+                          <FormControlLabel
+                            disabled={data.added_by === "patient"}
+                            sx={{ gridColumn: "1", m: 0 }}
+                            data-testid={`resource_checkbox${index}`}
+                            control={
+                              <Checkbox
+                                checked={selectedCheckBoxId.includes(data._id)}
+                                onChange={() => toggleCheckBox(data)}
+                              />
+                            }
+                            label=""
+                          />
+                        ) : (
+                          <Box pb={2} />
+                        )
+                      }
+
+                      {
+                        /* istanbul ignore next */
+                        isFilesDownload && (
+                          <IconButton
+                            style={{
+                              borderRadius: "50%",
+                              border: "1px solid #000",
+                            }}
+                            size="small"
+                            sx={{ gridColumn: "2", m: 1 }}
+                            onClick={() => downloadFile(data.download_file_url)}
+                          >
+                            <DownloadIcon
+                              style={{ fontSize: 14 }}
+                              data-testid="download-file-button"
+                            />
+                          </IconButton>
+                        )
+                      }
+
+                      {
+                        /* istanbul ignore next */
+                        isFilesEdit && (
+                          <IconButton
+                            style={{
+                              borderRadius: "50%",
+                              border: "1px solid #000",
+                            }}
+                            size="small"
+                            sx={{ gridColumn: "3", m: 1 }}
+                            data-testid={`file_edit_btn_${data._id}`}
+                            /* istanbul ignore next */
+                            onClick={() => onClickEdit(data._id)}
+                          >
+                            <EditIcon
+                              style={{ fontSize: 14 }}
+                              data-testid="share-agenda-button"
+                            />
+                          </IconButton>
+                        )
+                      }
+                    </Box>
+
+                    <Box
+                      style={{
+                        paddingLeft: "15px",
+                        paddingRight: "15px",
+                        paddingBottom: "10px",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          bgcolor:
+                            data.share_status === 0 ? "#6EC9DB" : "#7EBCA7",
+                          borderRadius: "3px 3px 3px 3px",
+                          paddingBottom: "13px",
+                          cursor: "pointer",
+                        }}
+                        /* istanbul ignore next */
+                        onClick={() =>
+                          isFilesDownload && openInNewTab(data.file_url)
+                        }
+                      >
+                        <Tooltip title={data.title} arrow={true}>
+                          <Typography
+                            data-testid={`reource_description${index}`}
+                            sx={{ color: "white", paddingTop: "10px" }}
+                          >
+                            {data.title.length > 20
+                              ? `${data.title.substring(0, 20)}...`
+                              : data.title}
+                          </Typography>
+                        </Tooltip>
+                      </Box>
+                      <Tooltip title={data?.description} arrow>
+                        <Box>
+                          <Typography style={{ fontSize: "14px" }}>
+                            File uploaded on: {data.updated_date.slice(0, 10)}
+                          </Typography>
+
+                          <Typography>Added by: {data.added_by}</Typography>
+                          <Typography
+                            variant="body2"
+                            color="#30373E"
+                            sx={{
+                              pt: 1,
+                              height: "200px",
+                            }}
+                          >
+                            {
+                              /* istanbul ignore next */
+                              data.description
+                                ? data.description.length > 250
+                                  ? `${data.description.substring(0, 250)}...`
+                                  : data.description
+                                : "No description"
+                            }
+                          </Typography>
+                        </Box>
                       </Tooltip>
                     </Box>
-                    <Tooltip title={data?.description} arrow>
-                      <Box>
-                        <Typography style={{ fontSize: "14px" }}>
-                          File uploaded on: {data.updated_date.slice(0, 10)}
-                        </Typography>
-
-                        <Typography>Added by: {data.added_by}</Typography>
-                        <Typography
-                          variant="body2"
-                          color="#30373E"
-                          sx={{
-                            pt: 1,
-                            height: "200px",
-                          }}
-                        >
-                          {
-                            /* istanbul ignore next */
-                            data.description
-                              ? data.description.length > 250
-                                ? `${data.description.substring(0, 250)}...`
-                                : data.description
-                              : "No description"
-                          }
-                        </Typography>
-                      </Box>
-                    </Tooltip>
-                  </Box>
-                </Card>
-              </Grid>
-            ))
+                  </Card>
+                </Grid>
+              )
+            )
           }
         </Grid>
       </Box>

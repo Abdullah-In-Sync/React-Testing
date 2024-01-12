@@ -307,18 +307,20 @@ export const GET_THERAPIST_FILE_LIST = gql`
       patient_id: $patient_id
       search_text: $search_text
     ) {
-      _id
-      added_by
-      created_date
-      description
-      download_file_url
-      file_name
-      file_url
-      patient_id
-      share_status
-      status
-      title
-      updated_date
+      data {
+        _id
+        added_by
+        created_date
+        description
+        download_file_url
+        file_name
+        file_url
+        patient_id
+        share_status
+        status
+        title
+        updated_date
+      }
     }
   }
 `;
