@@ -23,6 +23,7 @@ const IconButtonWrapper = styled(IconButton)(
 export default function TherapistProfileDetails() {
   const isProfileEdit = checkPrivilageAccess("Personal Info", "Edit");
   const router = useRouter();
+  /* istanbul ignore next */
   const patientId = router?.query?.id as string;
 
   // const patientId = sessionStorage.getItem("patient_id");
@@ -115,7 +116,6 @@ export default function TherapistProfileDetails() {
             },
           },
           onCompleted: (data) => {
-            console.log("Complete data: ", data);
             if (data && data.updatePatientProfileById.result) {
               enqueueSnackbar("Patient details saved successfully", {
                 variant: "success",
