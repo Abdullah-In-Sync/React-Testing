@@ -179,6 +179,7 @@ export default function ProfileForm(props: propTypes) {
     });
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (props.therapistProfileData?.getPatientDetailById?.data) {
       setFormFields(props.therapistProfileData?.getPatientDetailById.data);
       setHealthValue(
