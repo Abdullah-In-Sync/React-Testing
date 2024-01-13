@@ -87,10 +87,10 @@ const TherapistProfileAgreement = () => {
             ...{
               ...oldValues,
               ...{
-                patient_agree: data?.getPatientDetailById?.patient_consent,
+                patient_agree: data?.getPatientDetailById.data?.patient_consent,
               },
             },
-            ...data.getPatientDetailById,
+            ...data.getPatientDetailById.data,
           };
         });
       }
@@ -196,7 +196,7 @@ const TherapistProfileAgreement = () => {
                             }}
                             checked={formFields.patient_agree}
                             disabled={
-                              profileData?.getPatientDetailById
+                              profileData?.getPatientDetailById.data
                                 ?.patient_consent === 1
                                 ? true
                                 : false
@@ -230,7 +230,7 @@ const TherapistProfileAgreement = () => {
                               formFields?.patient_consent
                             }
                             disabled={
-                              profileData?.getPatientDetailById
+                              profileData?.getPatientDetailById.data
                                 ?.patient_consent === 1
                                 ? true
                                 : false
@@ -241,7 +241,7 @@ const TherapistProfileAgreement = () => {
                             value="1"
                             name="patient_contract"
                             disabled={
-                              profileData?.getPatientDetailById
+                              profileData?.getPatientDetailById.data
                                 ?.patient_contract === 1
                                 ? true
                                 : false

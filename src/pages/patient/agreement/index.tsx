@@ -93,9 +93,11 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
             return {
               ...{
                 ...oldValues,
-                ...{ patient_agree: data?.getProfileById?.patient_consent },
+                ...{
+                  patient_agree: data?.getProfileById?.data?.patient_consent,
+                },
               },
-              ...data.getProfileById,
+              ...data.getProfileById?.data,
             };
           });
         }
@@ -282,7 +284,8 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                             }}
                             checked={formFields.patient_agree}
                             disabled={
-                              profileData?.getProfileById?.patient_consent === 1
+                              profileData?.getProfileById?.data
+                                ?.patient_consent === 1
                                 ? true
                                 : false
                             }
@@ -316,7 +319,8 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                               formFields?.patient_consent
                             }
                             disabled={
-                              profileData?.getProfileById?.patient_consent === 1
+                              profileData?.getProfileById?.data
+                                ?.patient_consent === 1
                                 ? true
                                 : false
                             }
@@ -327,8 +331,8 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
                             name="patient_contract"
                             onChange={setCheckBox}
                             disabled={
-                              profileData?.getProfileById?.patient_contract ===
-                              1
+                              profileData?.getProfileById?.data
+                                ?.patient_contract === 1
                                 ? true
                                 : false
                             }
@@ -373,8 +377,8 @@ const Agreement = ({ isPersonallInfoEnabled }) => {
               </div>
               {
                 /* istanbul ignore next */
-                profileData?.getProfileById?.patient_consent ||
-                profileData?.getProfileById?.patient_contract === 1 ? (
+                profileData?.getProfileById?.data?.patient_consent ||
+                profileData?.getProfileById?.data?.patient_contract === 1 ? (
                   ""
                 ) : (
                   <Box

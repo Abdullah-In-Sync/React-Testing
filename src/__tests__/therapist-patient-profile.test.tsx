@@ -72,57 +72,59 @@ mocksData.push({
   result: {
     data: {
       getPatientDetailById: {
-        _id: "4937a27dc00d48bf983fdcd4b0762ebd",
-        addressline1: "Bareilly Noida",
-        addressline2: "Bareilly Noida",
-        birthdate: "12-01-2005",
-        city: "Bareilly",
-        created_date: "2022-03-02T09:17:12.000Z",
-        email: "grpse2013@gmail.com",
-        family_name: "686802e5123a482681a680a673ef7f53",
-        home_no: "7",
-        hos_id: "611f662e3a6c1c3ffb3edc65",
-        kin_addressline1: "Bareilly Noida 1",
-        kin_addressline2: "Bareilly Noida",
-        kin_city: "Bareilly Noida",
-        kin_contact_no: "9718288422",
-        kin_email_address: "kin1@gmail.com",
-        kin_name: "GRP kin 1",
-        kin_postal: "1234568",
-        kin_relationship: "Sibling",
-        nhsno: "686578",
-        org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-        patient_availability:
-          '[{"Day":1,"from":"09:00","to":"17:00","avail":"0"},{"Day":2,"from":"09:00","to":"17:00","avail":"0"},{"Day":3,"from":"09:00","to":"17:00","avail":"0"},{"Day":4,"from":"09:00","to":"17:00","avail":"0"},{"Day":5,"from":"09:00","to":"17:00","avail":"0"},{"Day":6,"from":"09:00","to":"17:00","avail":"0"},{"Day":7,"from":"09:00","to":"17:00","avail":"0"}]',
-        patient_consent: 1,
-        patient_contract: 1,
-        patient_education: "no_equal_qualification",
-        patient_employment: "self_employee",
-        patient_ethnic_group: "black_british",
-        patient_firstname: "GRP",
-        patient_gender: "male",
-        patient_gpaddress: "GP Address Line 1",
-        patient_gpaddressline2: "Gp Address Line 2",
-        patient_gpcity: "GP city",
-        patient_gpcontactno: "9999999999",
-        patient_gpemailaddress: "gp@gmail.com",
-        patient_gpname: "GRP1",
-        patient_gppostalcode: "988989",
-        patient_gpsurgeryname: "Surgery Name1",
-        patient_illness_ability: "1",
-        patient_lang: "English",
-        patient_lastname: "Tech",
-        patient_marrital: "Single",
-        patient_no: "PN00017",
-        patient_physical_health: "1",
-        patient_sexuality: "lesbian",
-        patient_status: 1,
-        phone_number: "+449718288411",
-        postal_code: "2345678",
-        religion: "no_religion",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        user_id: "5fec711d-e093-4c3e-b69f-336d3fa139bb",
-        __typename: "Patient",
+        data: {
+          _id: "4937a27dc00d48bf983fdcd4b0762ebd",
+          addressline1: "Bareilly Noida",
+          addressline2: "Bareilly Noida",
+          birthdate: "12-01-2005",
+          city: "Bareilly",
+          created_date: "2022-03-02T09:17:12.000Z",
+          email: "grpse2013@gmail.com",
+          family_name: "686802e5123a482681a680a673ef7f53",
+          home_no: "7",
+          hos_id: "611f662e3a6c1c3ffb3edc65",
+          kin_addressline1: "Bareilly Noida 1",
+          kin_addressline2: "Bareilly Noida",
+          kin_city: "Bareilly Noida",
+          kin_contact_no: "9718288422",
+          kin_email_address: "kin1@gmail.com",
+          kin_name: "GRP kin 1",
+          kin_postal: "1234568",
+          kin_relationship: "Sibling",
+          nhsno: "686578",
+          org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+          patient_availability:
+            '[{"Day":1,"from":"09:00","to":"17:00","avail":"0"},{"Day":2,"from":"09:00","to":"17:00","avail":"0"},{"Day":3,"from":"09:00","to":"17:00","avail":"0"},{"Day":4,"from":"09:00","to":"17:00","avail":"0"},{"Day":5,"from":"09:00","to":"17:00","avail":"0"},{"Day":6,"from":"09:00","to":"17:00","avail":"0"},{"Day":7,"from":"09:00","to":"17:00","avail":"0"}]',
+          patient_consent: 1,
+          patient_contract: 1,
+          patient_education: "no_equal_qualification",
+          patient_employment: "self_employee",
+          patient_ethnic_group: "black_british",
+          patient_firstname: "GRP",
+          patient_gender: "male",
+          patient_gpaddress: "GP Address Line 1",
+          patient_gpaddressline2: "Gp Address Line 2",
+          patient_gpcity: "GP city",
+          patient_gpcontactno: "9999999999",
+          patient_gpemailaddress: "gp@gmail.com",
+          patient_gpname: "GRP1",
+          patient_gppostalcode: "988989",
+          patient_gpsurgeryname: "Surgery Name1",
+          patient_illness_ability: "1",
+          patient_lang: "English",
+          patient_lastname: "Tech",
+          patient_marrital: "Single",
+          patient_no: "PN00017",
+          patient_physical_health: "1",
+          patient_sexuality: "lesbian",
+          patient_status: 1,
+          phone_number: "+449718288411",
+          postal_code: "2345678",
+          religion: "no_religion",
+          therapist_id: "686802e5123a482681a680a673ef7f53",
+          user_id: "5fec711d-e093-4c3e-b69f-336d3fa139bb",
+          __typename: "Patient",
+        },
       },
     },
   },
@@ -177,56 +179,7 @@ mocksData.push({
   result: {
     data: {
       updatePatientProfileById: {
-        _id: "9620ebf9279946678d4c5d64bdb973ed",
-        addressline1: "Siddharth Nagar Uttar Pradesh",
-        addressline2: null,
-        birthdate: "05-06-2015",
-        city: "Siddharth Nagar",
-        created_date: "2022-01-26 09:12:05",
-        email: "mongo@gmail.com",
-        family_name: "686802e5123a482681a680a673ef7f53",
-        home_no: "12",
-        hos_id: "611f662e3a6c1c3ffb3edc65",
-        kin_addressline1: "Siddharth Nagar Uttar Pradesh",
-        kin_addressline2: "csaaa",
-        kin_city: "Siddharth Nagar",
-        kin_contact_no: "8989898989",
-        kin_email_address: "srivastav.golu.ss@gmail.com",
-        kin_postal: "272193",
-        kin_relationship: "Sibling",
-        nhsno: "NHS NO 1",
-        org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-        patient_availability:
-          '[{"Day":1,"from":"09:00","to":"17:00","avail":"0"},{"Day":2,"from":"09:00","to":"17:00","avail":"0"},{"Day":3,"from":"09:00","to":"17:00","avail":"0"},{"Day":4,"from":"09:00","to":"17:00","avail":"1"},{"Day":5,"from":"09:00","to":"17:00","avail":"0"},{"Day":6,"from":"09:00","to":"17:00","avail":"0"},{"Day":7,"from":"09:00","to":"17:00","avail":"0"}]',
-        patient_consent: 1,
-        patient_contract: 1,
-        patient_education: "post_graduate",
-        user_id: "61afe9bc-ccae-41de-9dd8-cef84de4370d",
-        therapist_id: "686802e5123a482681a680a673ef7f53",
-        postal_code: "272193",
-        religion: "muslim",
-        phone_number: "+4443434343444",
-        patient_status: 1,
-        patient_sexuality: "bisexual",
-        patient_physical_health: "1",
-        patient_no: "PN00009",
-        patient_marrital: "Married",
-        patient_lastname: "Srivastav",
-        patient_lang: "English",
-        patient_illness_ability: "1",
-        patient_gpsurgeryname: "Surgery Name",
-        patient_gppostalcode: "272193",
-        patient_gpname: "GP Name",
-        patient_gpemailaddress: "srivastav.golu.ss@gmail.com",
-        patient_gpcontactno: "08299090930",
-        patient_gpcity: "Siddharth Nagar",
-        patient_gpaddressline2: "aadsad",
-        patient_gpaddress: "Siddharth Nagar Uttar Pradesh",
-        patient_gender: "prefer_not_say",
-        patient_firstname: "Shubham123",
-        patient_ethnic_group: "white",
-        patient_employment: "employee",
-        __typename: "Patient",
+        result: true,
       },
     },
   },
@@ -266,27 +219,22 @@ describe("Patient profile page", () => {
 
   it("update profile data", async () => {
     await sut();
-    await waitFor(async () => {
-      expect(screen.getByTestId("edit-icon-button")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("edit-icon-button"));
+    expect(await screen.findByTestId("edit-icon-button")).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("edit-icon-button"));
 
-      fireEvent.change(screen.queryByTestId("patient_firstname"), {
-        target: { value: "first_name" },
-      });
-
-      fireEvent.change(screen.queryByTestId("patient_gender"), {
-        target: { value: "Male" },
-      });
-
-      await waitFor(async () => {
-        fireEvent.submit(screen.queryByTestId("patient-profile-form"));
-      });
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Patient details saved successfully")
-        ).toBeInTheDocument();
-      });
+    fireEvent.change(await screen.findByTestId("patient_firstname"), {
+      target: { value: "first_name" },
     });
+
+    fireEvent.change(await screen.findByTestId("patient_gender"), {
+      target: { value: "Male" },
+    });
+
+    fireEvent.submit(await screen.findByTestId("patient-profile-form"));
+
+    expect(
+      await screen.findByText("Patient details saved successfully")
+    ).toBeInTheDocument();
   });
   it("should render complete patient form", async () => {
     await sut();
