@@ -70,9 +70,13 @@ const TherapyMyMonitorList: any = () => {
 
   useEffect(() => {
     getTherapistMonitorList();
-    getTherapistMonitorSharePatientList({
-      variables: { monitor_id: shareMonitorId },
-    });
+  }, []);
+
+  useEffect(() => {
+    if (shareMonitorId)
+      getTherapistMonitorSharePatientList({
+        variables: { monitor_id: shareMonitorId },
+      });
   }, [shareMonitorId]);
 
   /* istanbul ignore next */
@@ -121,9 +125,9 @@ const TherapyMyMonitorList: any = () => {
         },
         onCompleted: (data) => {
           const {
-            shareTherapistMonitor: { status },
+            shareTherapistMonitor: { result },
           } = data;
-          if (status) {
+          if (result) {
             setIsConfirmShareTask(false);
             enqueueSnackbar("Monitor shared successfully", {
               variant: "success",
@@ -268,9 +272,7 @@ const TherapyMyMonitorList: any = () => {
           onPressSubmit={() =>
             /* istanbul ignore next */ setIsConfirmShareTask(true)
           }
-          therapistSafetyPlanList={
-            /* istanbul ignore next */ monitorSharePatientListData?.data
-          }
+          therapistSafetyPlanList={monitorSharePatientListData}
           receivePlanId={receivePatientIds}
         />
       </CommonModal>

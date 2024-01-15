@@ -5,8 +5,14 @@ import CommonButton from "../../../../../common/Buttons/CommonButton";
 import { useStyles } from "../../patientAssessmentStyles";
 import AddCategoryQuestion from "./AssessmentQuestion";
 const UpdateQuestionResponseForm: React.FC<any> = (formikProps) => {
-  const { isSubmitting, onCancel, values, handleDeleteQuestion, categoryId } =
-    formikProps;
+  const {
+    isSubmitting,
+    onCancel,
+    values,
+    handleDeleteQuestion,
+    categoryId,
+    isAssessmentEdit,
+  } = formikProps;
   const styles = useStyles();
   const { questions } = values;
   return (
@@ -17,10 +23,11 @@ const UpdateQuestionResponseForm: React.FC<any> = (formikProps) => {
             formikProps={formikProps}
             handleDeleteQuestion={handleDeleteQuestion}
             categoryId={categoryId}
+            isEdit={!isAssessmentEdit}
           />
         </Box>
 
-        {questions.length > 0 && (
+        {isAssessmentEdit && questions.length > 0 && (
           <Box className="row3 crow">
             <CommonButton
               disabled={isSubmitting}

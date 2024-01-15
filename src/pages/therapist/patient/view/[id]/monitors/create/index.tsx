@@ -49,14 +49,14 @@ const TherapistCreateMonitor: NextPage = () => {
         onCompleted: (data) => {
           /* istanbul ignore next */
           const {
-            therapistCreateMonitor: { status, message },
+            therapistCreateMonitor: { result, message },
           } = data;
-          if (status) {
+          if (result) {
             enqueueSnackbar("Monitor created successfully", {
               variant: "success",
             });
             router.back();
-          } else {
+          } else if (!result) {
             enqueueSnackbar(message, {
               variant: "error",
             });
