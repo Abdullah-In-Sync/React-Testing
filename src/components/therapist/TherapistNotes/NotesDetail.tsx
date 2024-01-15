@@ -459,7 +459,17 @@ function NotesDetail(props: propTypes) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setIsConfirm(true);
+    const hasEmptyString = inputs.some((value) => value === "");
+    /* istanbul ignore next */
+    if (hasEmptyString) {
+      enqueueSnackbar("Task cannot be saved util there is text input.", {
+        variant: "error",
+      });
+    } else {
+      /* istanbul ignore next */
+      setIsConfirm(true);
+    }
+
     /* istanbul ignore next */
     if (!isConfirm) return;
   };
@@ -1346,7 +1356,7 @@ function NotesDetail(props: propTypes) {
                 onClick={(e) => {
                   /* istanbul ignore next */
                   handleSubmit(e);
-                  setIsConfirm(true);
+                  // setIsConfirm(true);
                 }}
                 style={{ paddingLeft: "50px", paddingRight: "50px" }}
               >
