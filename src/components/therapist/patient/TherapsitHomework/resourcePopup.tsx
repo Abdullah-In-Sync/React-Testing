@@ -208,7 +208,7 @@ const ResourcePopup: React.FC<ViewProps> = ({
 
           <Box sx={{ padding: "20px" }}>
             <Grid container spacing={3}>
-              {popupData?.getPopupResourceList?.map((data, index) => (
+              {popupData?.getPopupResourceList?.data?.map((data, index) => (
                 <Grid item xs={4} sm={6} md={4} key={index}>
                   <CardWrapper>
                     <Card>
@@ -297,7 +297,8 @@ const ResourcePopup: React.FC<ViewProps> = ({
                 onClick={() =>
                   /* istanbul ignore next */
                   assigneHomeworkResources(
-                    popupData?.getPopupResourceList[selectedCheckboxIndex]?._id
+                    popupData?.getPopupResourceList.data[selectedCheckboxIndex]
+                      ?._id
                   )
                 }
               >
