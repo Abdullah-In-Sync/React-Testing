@@ -250,7 +250,7 @@ jobs:
           node-version: "14.x"
 
       - name: Download coverage report results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.0.0-beta.3
         with:
           path: src/coverage/
 
