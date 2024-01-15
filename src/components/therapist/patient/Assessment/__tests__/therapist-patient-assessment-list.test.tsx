@@ -234,7 +234,8 @@ mocksData.push({
   result: {
     data: {
       therapistSubmitAssessment: {
-        risk: "6474a3be19ef06b681dfbf92",
+        result: true,
+        message: "",
       },
     },
   },

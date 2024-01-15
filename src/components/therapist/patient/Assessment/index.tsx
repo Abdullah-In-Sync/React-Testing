@@ -185,18 +185,20 @@ const TherapistPatientAssessmentList: React.FC = () => {
           ...{ patientId },
         },
         onCompleted: (data) => {
-          const { therapistSubmitAssessment } = data;
-          if (therapistSubmitAssessment) {
-            /* istanbul ignore next */
+          const {
+            therapistSubmitAssessment: { result, message },
+          } = data;
+          if (result) {
             enqueueSnackbar("Overall assessment submitted successfully.", {
               variant: "success",
             });
-            /* istanbul ignore next */
             reFetchAssessmentList();
-            /* istanbul ignore next */
             doneCallback();
+          } else if (!result) {
+            enqueueSnackbar(message, {
+              variant: "error",
+            });
           }
-          /* istanbul ignore next */
           setLoader(false);
         },
       });
