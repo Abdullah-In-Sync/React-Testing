@@ -264,7 +264,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./src/coverage/lcov.info
           flags: unit-tests
-          fail_ci_if_error: false
+          fail_ci_if_error: true
 
       # - name: SonarCloud Scan
       #   uses: sonarsource/sonarcloud-github-action@master
