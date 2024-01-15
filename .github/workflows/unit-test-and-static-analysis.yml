@@ -250,7 +250,7 @@ jobs:
           node-version: "14.x"
 
       - name: Download coverage report results
-        uses: actions/download-artifact@v4.0.0-beta.3
+        uses: actions/download-artifact@v3
         with:
           path: src/coverage/
 
@@ -259,7 +259,7 @@ jobs:
         working-directory: src
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4.0.0-beta.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./src/coverage/lcov.info
