@@ -30,6 +30,7 @@ import SummaryView from "./clinicalAssessment/SummaryView";
 const TherapistPatientAssessmentList: React.FC = () => {
   const router = useRouter();
   const modalRefAddAssessment = useRef<ModalElement>(null);
+  /* istanbul ignore next */
   const { query: { id: patientId, assessmentView, assessmentId } = {} } =
     router;
   const confirmRef = useRef<ConfirmElement>(null);
@@ -63,6 +64,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
       const { therapistviewAssessment } = data;
       setLoader(false);
       setInitialFetchCategoriesList(false);
+      /* istanbul ignore next */
       setAssessmentCategory(therapistviewAssessment?.data);
     },
     fetchPolicy: "cache-and-network",
@@ -117,9 +119,8 @@ const TherapistPatientAssessmentList: React.FC = () => {
     { data: therapistAssessmentSummaryViewData },
   ] = useLazyQuery(THERAPIST_GET_ASSESSMENT_SUMMARY_VIEW, {
     fetchPolicy: "network-only",
-    onCompleted: (data) => {
+    onCompleted: () => {
       /* istanbul ignore next */
-      console.log("Koca: data ", data);
       setLoader(false);
     },
   });

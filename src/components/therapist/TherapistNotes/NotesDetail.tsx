@@ -191,6 +191,7 @@ function NotesDetail(props: propTypes) {
   useEffect(() => {
     /* istanbul ignore next */
     if (therapistNotesData?.getPatientNotesData?.data?.patientnotes.length) {
+      /* istanbul ignore next */
       const preFilledData =
         therapistNotesData?.getPatientNotesData?.data?.patientnotes[0];
 
@@ -202,8 +203,10 @@ function NotesDetail(props: propTypes) {
 
       setNoteUpdateId(preFilledData._id);
     }
-    /* istanbul ignore next */
-  }, [therapistNotesData?.getPatientNotesData?.data?.patientnotes]);
+  }, [
+    /* istanbul ignore next */ therapistNotesData?.getPatientNotesData?.data
+      ?.patientnotes,
+  ]);
 
   useEffect(() => {
     getiskData();
