@@ -173,9 +173,9 @@ function NotesDetail(props: propTypes) {
     }
   );
 
+  /* istanbul ignore next */
   const patientMeasureTable =
-    /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.patientmeasure;
+    therapistNotesData?.getPatientNotesData?.data?.patientmeasure;
 
   const patientMonitorTable =
     /* istanbul ignore next */

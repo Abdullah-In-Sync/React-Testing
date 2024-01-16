@@ -35,11 +35,6 @@ const TherapistCreateMonitor: NextPage = () => {
         question_option: modifiedQuestionOption,
       };
     });
-
-    console.debug("Create variable", {
-      name,
-      questions: JSON.stringify(modifyQuestions),
-    });
     try {
       await createMonitor({
         variables: {
