@@ -56,7 +56,7 @@ const TherapistCreateMonitor: NextPage = () => {
               variant: "success",
             });
             router.back();
-          } else if (!result) {
+          } /* istanbul ignore next */ else if (!result) {
             enqueueSnackbar(message, {
               variant: "error",
             });

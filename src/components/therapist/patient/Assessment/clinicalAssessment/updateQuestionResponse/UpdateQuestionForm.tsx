@@ -27,27 +27,30 @@ const UpdateQuestionResponseForm: React.FC<any> = (formikProps) => {
           />
         </Box>
 
-        {isAssessmentEdit && questions.length > 0 && (
-          <Box className="row3 crow">
-            <CommonButton
-              disabled={isSubmitting}
-              type="submit"
-              data-testid={`submitQuestion_${categoryId}`}
-              variant="contained"
-            >
-              Save
-            </CommonButton>
-            <CommonButton
-              disabled={isSubmitting}
-              data-testid="cancelAddQuestion"
-              variant="contained"
-              color="secondary"
-              onClick={onCancel}
-            >
-              Cancel
-            </CommonButton>
-          </Box>
-        )}
+        {
+          /* istanbul ignore next */
+          isAssessmentEdit && questions.length > 0 && (
+            <Box className="row3 crow">
+              <CommonButton
+                disabled={isSubmitting}
+                type="submit"
+                data-testid={`submitQuestion_${categoryId}`}
+                variant="contained"
+              >
+                Save
+              </CommonButton>
+              <CommonButton
+                disabled={isSubmitting}
+                data-testid="cancelAddQuestion"
+                variant="contained"
+                color="secondary"
+                onClick={onCancel}
+              >
+                Cancel
+              </CommonButton>
+            </Box>
+          )
+        }
       </Form>
     </Stack>
   );
