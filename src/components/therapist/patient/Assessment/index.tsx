@@ -195,7 +195,7 @@ const TherapistPatientAssessmentList: React.FC = () => {
             });
             reFetchAssessmentList();
             doneCallback();
-          } /* istanbul ignore next */ else if (!result) {
+          } else if (!result) {
             enqueueSnackbar(message, {
               variant: "error",
             });
