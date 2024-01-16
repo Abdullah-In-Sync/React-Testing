@@ -17,12 +17,14 @@ type Props = React.PropsWithChildren<{
   }>;
   handleDeleteQuestion?: (v) => void;
   categoryId?: string;
+  isEdit?: boolean;
 }>;
 
 const AddCategoryQuestion = ({
   formikProps,
   handleDeleteQuestion,
   categoryId,
+  isEdit,
 }: Props) => {
   const styles = useStyles();
   const isDelete = checkPrivilageAccess("Assessment", "Delete");
@@ -89,6 +91,7 @@ const AddCategoryQuestion = ({
                 variant="outlined"
                 multiline
                 rows="2"
+                disabled={isEdit}
               />
             </Box>
           </Box>

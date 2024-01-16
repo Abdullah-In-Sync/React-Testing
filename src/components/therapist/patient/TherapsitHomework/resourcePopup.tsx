@@ -208,68 +208,77 @@ const ResourcePopup: React.FC<ViewProps> = ({
 
           <Box sx={{ padding: "20px" }}>
             <Grid container spacing={3}>
-              {popupData?.getPopupResourceList?.map((data, index) => (
-                <Grid item xs={4} sm={6} md={4} key={index}>
-                  <CardWrapper>
-                    <Card>
-                      <FormControlLabel
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                          justifyContent: "flex-end",
-                        }}
-                        data-testid={`resource_checkbox${index}`}
-                        control={<Radio />}
-                        onChange={() => setCheckBox(index)}
-                        checked={index === selectedCheckboxIndex}
-                        label={""}
-                      />
-                      <CardContentWrapper>
-                        <Box>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              bgcolor: "#6EC9DB",
-                              borderRadius: "3px 3px 3px 3px",
-                              paddingBottom: "13px",
-                            }}
-                          >
-                            <Tooltip title={data.resource_name} arrow>
+              {
+                /* istanbul ignore next */
+                popupData?.getPopupResourceList?.data?.map((data, index) => (
+                  <Grid item xs={4} sm={6} md={4} key={index}>
+                    <CardWrapper>
+                      <Card>
+                        <FormControlLabel
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "flex-end",
+                          }}
+                          data-testid={`resource_checkbox${index}`}
+                          control={<Radio />}
+                          onChange={() => setCheckBox(index)}
+                          checked={index === selectedCheckboxIndex}
+                          label={""}
+                        />
+                        <CardContentWrapper>
+                          <Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                bgcolor: "#6EC9DB",
+                                borderRadius: "3px 3px 3px 3px",
+                                paddingBottom: "13px",
+                              }}
+                            >
+                              <Tooltip title={data.resource_name} arrow>
+                                <Typography
+                                  data-testid={`reource_description${index}`}
+                                  sx={{ color: "white", paddingTop: "10px" }}
+                                >
+                                  {data.resource_name.length > 20
+                                    ? `${data.resource_name.substring(
+                                        0,
+                                        20
+                                      )}...`
+                                    : data.resource_name}
+                                </Typography>
+                              </Tooltip>
+                            </Box>
+                            <Tooltip title={data.resource_desc} arrow>
                               <Typography
-                                data-testid={`reource_description${index}`}
-                                sx={{ color: "white", paddingTop: "10px" }}
+                                variant="body2"
+                                className={`text-ellipsis`}
+                                color="text.secondary"
+                                mt={1}
+                                sx={{
+                                  height: "97px",
+                                }}
                               >
-                                {data.resource_name.length > 20
-                                  ? `${data.resource_name.substring(0, 20)}...`
-                                  : data.resource_name}
+                                {
+                                  /* istanbul ignore next */
+                                  data.resource_desc.length > 250
+                                    ? `${data.resource_desc.substring(
+                                        0,
+                                        250
+                                      )}...`
+                                    : data.resource_desc
+                                }
                               </Typography>
                             </Tooltip>
                           </Box>
-                          <Tooltip title={data.resource_desc} arrow>
-                            <Typography
-                              variant="body2"
-                              className={`text-ellipsis`}
-                              color="text.secondary"
-                              mt={1}
-                              sx={{
-                                height: "97px",
-                              }}
-                            >
-                              {
-                                /* istanbul ignore next */
-                                data.resource_desc.length > 250
-                                  ? `${data.resource_desc.substring(0, 250)}...`
-                                  : data.resource_desc
-                              }
-                            </Typography>
-                          </Tooltip>
-                        </Box>
-                      </CardContentWrapper>
-                    </Card>
-                  </CardWrapper>
-                </Grid>
-              ))}
+                        </CardContentWrapper>
+                      </Card>
+                    </CardWrapper>
+                  </Grid>
+                ))
+              }
             </Grid>
           </Box>
           <div
@@ -297,7 +306,8 @@ const ResourcePopup: React.FC<ViewProps> = ({
                 onClick={() =>
                   /* istanbul ignore next */
                   assigneHomeworkResources(
-                    popupData?.getPopupResourceList[selectedCheckboxIndex]?._id
+                    popupData?.getPopupResourceList.data[selectedCheckboxIndex]
+                      ?._id
                   )
                 }
               >

@@ -17,7 +17,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
   onSubmitAssessmentResponse,
 }) => {
   const { category: categories = [] } = categoryListData;
-  const isEdit = checkPrivilageAccess("Assessment", "Edit");
+  const isAssessmentEdit = checkPrivilageAccess("Assessment", "Edit");
   const accordion = ({ title, item, i }) => {
     const { assessmentQuestionsViewData } = item;
     return (
@@ -29,6 +29,7 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
             assessmentQuestionsViewData={assessmentQuestionsViewData}
             confirmRef={confirmRef}
             handleDeleteQuestion={handleDeleteQuestion}
+            isAssessmentEdit={isAssessmentEdit}
           />
         }
         handleToggleContent={(callback) =>
@@ -40,7 +41,6 @@ const ClinicalAssessmentList: React.FC<ClinicalAssessmentProps> = ({
         actionButtons={
           <ActionsButtons data={item} buttonClick={actionButtonClick} />
         }
-        isExpandDisabled={!isEdit}
       />
     );
   };

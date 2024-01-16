@@ -133,8 +133,7 @@ mocksData.push({
     data: {
       shareTherapistMonitor: {
         message: "Monitor Shared Successfully",
-        status: true,
-        __typename: "TherapistMonitorResult",
+        result: true,
       },
     },
   },

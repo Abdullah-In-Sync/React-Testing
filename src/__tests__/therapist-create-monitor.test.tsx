@@ -32,8 +32,7 @@ mocksData.push({
     data: {
       therapistCreateMonitor: {
         message: "",
-        status: true,
-        __typename: "TherapistMonitorResult",
+        result: true,
       },
     },
   },

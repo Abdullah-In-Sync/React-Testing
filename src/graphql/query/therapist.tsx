@@ -255,38 +255,40 @@ export const GET_POPUP_RESOURCE_LIST_DATA = gql`
       searchText: $searchText
       therapyId: $therapyId
     ) {
-      _id
-      agenda_id
-      category_id
-      created_date
-      disorder_id
-      download_resource_url
-      fav_res_detail {
+      data {
         _id
+        agenda_id
+        category_id
         created_date
-        resfav_status
-        resource_id
+        disorder_id
+        download_resource_url
+        fav_res_detail {
+          _id
+          created_date
+          resfav_status
+          resource_id
+          user_id
+          user_type
+        }
+        model_id
+        org_id
+        resource_avail_onlyme
+        resource_avail_therapist
+        resource_desc
+        resource_instruction
+        resource_isformualation
+        resource_issmartdraw
+        resource_name
+        resource_references
+        resource_returnurl
+        resource_session_no
+        resource_status
+        resource_type
+        resource_url
+        updated_date
         user_id
         user_type
       }
-      model_id
-      org_id
-      resource_avail_onlyme
-      resource_avail_therapist
-      resource_desc
-      resource_instruction
-      resource_isformualation
-      resource_issmartdraw
-      resource_name
-      resource_references
-      resource_returnurl
-      resource_session_no
-      resource_status
-      resource_type
-      resource_url
-      updated_date
-      user_id
-      user_type
     }
   }
 `;

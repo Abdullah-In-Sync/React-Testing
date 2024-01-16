@@ -190,9 +190,10 @@ function NotesDetail(props: propTypes) {
 
   useEffect(() => {
     /* istanbul ignore next */
-    if (therapistNotesData?.data?.getPatientNotesData?.patientnotes.length) {
+    if (therapistNotesData?.getPatientNotesData?.data?.patientnotes.length) {
+      /* istanbul ignore next */
       const preFilledData =
-        therapistNotesData?.data?.getPatientNotesData?.patientnotes[0];
+        therapistNotesData?.getPatientNotesData?.data?.patientnotes[0];
 
       setRiskInputsBox(preFilledData.patnotes_risk_comment);
 
@@ -202,8 +203,10 @@ function NotesDetail(props: propTypes) {
 
       setNoteUpdateId(preFilledData._id);
     }
-    /* istanbul ignore next */
-  }, [therapistNotesData?.data?.getPatientNotesData?.patientnotes]);
+  }, [
+    /* istanbul ignore next */ therapistNotesData?.getPatientNotesData?.data
+      ?.patientnotes,
+  ]);
 
   useEffect(() => {
     getiskData();

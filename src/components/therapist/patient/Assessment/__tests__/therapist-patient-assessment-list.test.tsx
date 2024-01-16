@@ -226,6 +226,26 @@ mocksData.push({
     query: THERAPIST_SUBMIT_ASSESSMENT,
     variables: {
       overallAssesmentText: "some",
+      pttherapySession: "40",
+      risk: "6474a3be19ef06b681dfbf92",
+      patientId: "patient-id",
+    },
+  },
+  result: {
+    data: {
+      therapistSubmitAssessment: {
+        result: false,
+        message: "Not allowed!",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_SUBMIT_ASSESSMENT,
+    variables: {
+      overallAssesmentText: "some",
       pttherapySession: "38",
       risk: "6474a3be19ef06b681dfbf92",
       patientId: "patient-id",
@@ -234,7 +254,8 @@ mocksData.push({
   result: {
     data: {
       therapistSubmitAssessment: {
-        risk: "6474a3be19ef06b681dfbf92",
+        result: true,
+        message: "",
       },
     },
   },
@@ -341,6 +362,30 @@ describe("Therapist patient add assessment", () => {
     expect(pushMock).toHaveBeenCalledWith(
       "/therapist/patient/view/patient-id/?mainTab=assessment&assessmentView=clinical-assessment&assessmentId=assessment-id-1"
     );
+
+    // expect(screen.queryByTestId("summaryViewBtn")).toBeInTheDocument();
+  });
+
+  it("should render failed message on submit of assessment form", async () => {
+    (useRouter as jest.Mock).mockReturnValue({
+      query: {
+        id: "patient-id",
+      },
+      push: pushMock,
+    });
+    await sut();
+    expect(await screen.findByText(/patient assessment/i)).toBeInTheDocument();
+    fireEvent.change(await screen.findByTestId("pttherapySession"), {
+      target: { value: "40" },
+    });
+    const submitAssessmentForm = await screen.findByTestId("submitForm");
+    fireEvent.click(submitAssessmentForm);
+
+    const confirmButton = await screen.findByRole("button", {
+      name: "Confirm",
+    });
+    fireEvent.click(confirmButton);
+    expect(await screen.findByText(/Not allowed!/i)).toBeInTheDocument();
 
     // expect(screen.queryByTestId("summaryViewBtn")).toBeInTheDocument();
   });

@@ -18,6 +18,7 @@ interface ViewProps {
   confirmRef?: any;
   toggleContent?: any;
   handleDeleteQuestion?: (v) => void;
+  isAssessmentEdit?: boolean;
 }
 
 const UpdateQuestionResponse: React.FC<ViewProps> = (vprops) => {
@@ -27,8 +28,8 @@ const UpdateQuestionResponse: React.FC<ViewProps> = (vprops) => {
     confirmRef,
     toggleContent,
     handleDeleteQuestion,
+    isAssessmentEdit,
   } = vprops;
-  console.log("categoryData", categoryData);
   const { assessmentQuestionsViewData: questions = [], _id: categoryId } =
     categoryData;
 
@@ -68,6 +69,7 @@ const UpdateQuestionResponse: React.FC<ViewProps> = (vprops) => {
             onCancel={handleOnCancel}
             handleDeleteQuestion={handleDeleteQuestion}
             categoryId={categoryId}
+            isAssessmentEdit={isAssessmentEdit}
           />
         )}
       />

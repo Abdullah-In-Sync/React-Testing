@@ -27,7 +27,7 @@ const FormShareBox: React.FC<ViewProps> = ({
   const [planId, setPlanId] = useState<string[]>([]);
   /* istanbul ignore next */
   const patientListForMonitor =
-    therapistSafetyPlanList?.patientListForMonitor || [];
+    therapistSafetyPlanList?.patientListForMonitor?.data || [];
   const formBox = () => {
     return (
       <Stack className={styles.formWrapper}>

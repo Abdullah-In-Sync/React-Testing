@@ -271,11 +271,8 @@ export const THERAPIST_SUBMIT_ASSESSMENT = gql`
       pttherapy_session: $pttherapySession
       risk: $risk
     ) {
-      overall_assesment_text
-      risk
-      therapies {
-        _id
-      }
+      result
+      message
     }
   }
 `;
