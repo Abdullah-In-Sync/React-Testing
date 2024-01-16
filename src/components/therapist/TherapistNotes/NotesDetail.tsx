@@ -175,7 +175,7 @@ function NotesDetail(props: propTypes) {
 
   const patientMeasureTable =
     /* istanbul ignore next */
-    therapistNotesData?.getPatientNotesData?.patientmeasure;
+    therapistNotesData?.getPatientNotesData?.data?.patientmeasure;
 
   const patientMonitorTable =
     /* istanbul ignore next */
