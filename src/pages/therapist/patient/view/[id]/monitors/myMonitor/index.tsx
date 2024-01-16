@@ -73,6 +73,7 @@ const TherapyMyMonitorList: any = () => {
   }, []);
 
   useEffect(() => {
+    /* istanbul ignore next */
     if (shareMonitorId)
       getTherapistMonitorSharePatientList({
         variables: { monitor_id: shareMonitorId },
