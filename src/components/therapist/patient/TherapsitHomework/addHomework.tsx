@@ -36,6 +36,7 @@ import { ModalElement } from "../../../common/CustomModal/CommonModal";
 import { useAppContext } from "../../../../contexts/AuthContext";
 import ResourcePopup from "./resourcePopup";
 import { useStyles } from "../../../common/AddQuestionsBox/addQuestionsBoxStyles";
+import { checkPrivilageAccess } from "../../../../utility/helper";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -53,6 +54,9 @@ type propTypes = {
 };
 
 function HomeworkDetails(props: propTypes) {
+  const isHomeworkAdd = checkPrivilageAccess("Homework", "Add");
+  const isHomeworkDelete = checkPrivilageAccess("Homework", "Delete");
+  const isHomeworkEdit = checkPrivilageAccess("Homework", "Edit");
   const { user } = useAppContext();
   const styles = useStyles();
   /* istanbul ignore next */
@@ -512,20 +516,22 @@ function HomeworkDetails(props: propTypes) {
             </Box>
           )}
 
-          <Box>
-            <Button
-              onClick={handleCreateInput}
-              data-testid={`add_homework_button`}
-              variant="outlined"
-              style={{
-                color: "#6EC9DB",
-                fontWeight: "bold",
-                border: "1px solid #6EC9DB",
-              }}
-            >
-              Add Homework
-            </Button>
-          </Box>
+          {isHomeworkAdd && (
+            <Box>
+              <Button
+                onClick={handleCreateInput}
+                data-testid={`add_homework_button`}
+                variant="outlined"
+                style={{
+                  color: "#6EC9DB",
+                  fontWeight: "bold",
+                  border: "1px solid #6EC9DB",
+                }}
+              >
+                Add Homework
+              </Button>
+            </Box>
+          )}
         </Box>
 
         {
@@ -763,45 +769,49 @@ function HomeworkDetails(props: propTypes) {
                         </Typography>
                       </Link>
 
-                      <Button
-                        onClick={() => {
-                          /* istanbul ignore next */
-                          addResourceFunction();
-                          /* istanbul ignore next */
-                          setPtHomeworkId(data._id);
-                          /* istanbul ignore next */
-                          setPtShareId(data.ptshareres_id);
-                        }}
-                        data-testid={`addNewQuestion_${index}`}
-                        variant="outlined"
-                        startIcon={<AttachFileIcon />}
-                      >
-                        Add Resource
-                      </Button>
-
-                      <Box
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          paddingBottom: "5px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        <IconButtonWrapper
-                          aria-label="create"
-                          size="small"
-                          style={{ backgroundColor: "#6EC9DB" }}
+                      {isHomeworkAdd && (
+                        <Button
+                          onClick={() => {
+                            /* istanbul ignore next */
+                            addResourceFunction();
+                            /* istanbul ignore next */
+                            setPtHomeworkId(data._id);
+                            /* istanbul ignore next */
+                            setPtShareId(data.ptshareres_id);
+                          }}
+                          data-testid={`addNewQuestion_${index}`}
+                          variant="outlined"
+                          startIcon={<AttachFileIcon />}
                         >
-                          <DeleteIcon
-                            style={{ color: "white" }}
-                            data-testid={`button-delete-icon${index}`}
-                            onClick={() => {
-                              setIsConfirmDeleteTask(true);
-                              setDeleteTaskId(data._id);
-                            }}
-                          />
-                        </IconButtonWrapper>
-                      </Box>
+                          Add Resource
+                        </Button>
+                      )}
+
+                      {isHomeworkDelete && (
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            paddingBottom: "5px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          <IconButtonWrapper
+                            aria-label="create"
+                            size="small"
+                            style={{ backgroundColor: "#6EC9DB" }}
+                          >
+                            <DeleteIcon
+                              style={{ color: "white" }}
+                              data-testid={`button-delete-icon${index}`}
+                              onClick={() => {
+                                setIsConfirmDeleteTask(true);
+                                setDeleteTaskId(data._id);
+                              }}
+                            />
+                          </IconButtonWrapper>
+                        </Box>
+                      )}
                     </Box>
                   </Box>
                 </Box>
@@ -866,14 +876,16 @@ function HomeworkDetails(props: propTypes) {
                       paddingTop: "10px",
                     }}
                   >
-                    <Button
-                      onClick={() => setOpenResourceModal(true)}
-                      data-testid={`addResource2_${index}`}
-                      variant="outlined"
-                      startIcon={<AttachFileIcon />}
-                    >
-                      Add Resource
-                    </Button>
+                    {isHomeworkAdd && (
+                      <Button
+                        onClick={() => setOpenResourceModal(true)}
+                        data-testid={`addResource2_${index}`}
+                        variant="outlined"
+                        startIcon={<AttachFileIcon />}
+                      >
+                        Add Resource
+                      </Button>
+                    )}
 
                     <Box
                       style={{
@@ -903,8 +915,8 @@ function HomeworkDetails(props: propTypes) {
         )}
 
         {inputs.length > 0 ||
-        previousSessionTaskData?.length ||
-        lastHomeworkList?.length ? (
+        ((previousSessionTaskData?.length || lastHomeworkList?.length) &&
+          isHomeworkEdit) ? (
           <Box
             sx={{
               display: "flex",
