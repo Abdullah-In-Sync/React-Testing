@@ -34,6 +34,7 @@ export const ADD_HOMEWORK = gql`
       pttherapy_id: $pttherapy_id
     ) {
       result
+      message
     }
   }
 `;

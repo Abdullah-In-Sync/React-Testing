@@ -146,7 +146,7 @@ function NotesDetail(props: propTypes) {
       onCompleted: (data) => {
         const last_homework_list =
           /* istanbul ignore next */
-          data?.therapistViewPatientHomework?.last_homework_list?.data;
+          data?.therapistViewPatientHomework?.data?.last_homework_list;
         /* istanbul ignore next */
         const ids = last_homework_list?.map((item) => item._id);
         setCompleteHomeWorkId(ids);
