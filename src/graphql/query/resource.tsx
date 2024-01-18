@@ -72,21 +72,23 @@ export const GET_RESOURCE_DATA = gql`
       searchText: $searchText
       orgId: $orgId
     ) {
-      _id
-      fav_res_detail {
+      data {
         _id
-        created_date
-        resfav_status
-        resource_id
+        fav_res_detail {
+          _id
+          created_date
+          resfav_status
+          resource_id
+          user_id
+          user_type
+        }
+        resource_desc
+        resource_name
+        download_resource_url
+        resource_url
         user_id
         user_type
       }
-      resource_desc
-      resource_name
-      download_resource_url
-      resource_url
-      user_id
-      user_type
     }
   }
 `;

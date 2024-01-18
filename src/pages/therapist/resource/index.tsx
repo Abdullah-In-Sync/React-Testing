@@ -50,6 +50,7 @@ import Tooltip from "@mui/material/Tooltip";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
+import { checkPrivilageAccess, checkUserType } from "../../../utility/helper";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -145,7 +146,7 @@ interface ResourceList {
 }
 
 interface ResourceListData {
-  getResourceList: ResourceList[];
+  getResourceList: { data: ResourceList[] };
 }
 
 interface ResourceListVars {
@@ -160,6 +161,13 @@ interface ResourceListVars {
 }
 
 const Resource: NextPage = () => {
+  const isLibraryAdd = checkPrivilageAccess("Library", "Add");
+  const isLibraryCreate = checkPrivilageAccess("Library", "Create");
+  const isLibraryEdit = checkPrivilageAccess("Library", "Edit");
+  const isLibraryDelete = checkPrivilageAccess("Library", "Delete");
+  const isLibraryDownload = checkPrivilageAccess("Library", "Download");
+  const isLibraryShare = checkPrivilageAccess("Library", "Share");
+  const { userType } = checkUserType();
   // COMPONENT STATE
   const [modelData, setModelData] = useState<any>([]);
   const [filterValue, setFilterValue] = useState<any>({});
@@ -175,6 +183,7 @@ const Resource: NextPage = () => {
   const [shareResource] = useMutation(SHARE_RESOURCE);
   /* istanbul ignore next */
   const { user } = useAppContext();
+  console.log("user------", user);
   const {
     therapist_data: { org_id: orgId, user_id: userId },
   } = user;
@@ -241,7 +250,7 @@ const Resource: NextPage = () => {
 
     if (!loading && dataListData) {
       /* istanbul ignore next */
-      setDataList(dataListData?.getResourceList);
+      setDataList(dataListData?.getResourceList?.data);
     }
   }, [dataListData]);
 
@@ -312,35 +321,37 @@ const Resource: NextPage = () => {
       visible: true,
       render: (_, value) => (
         <>
-          {value?.user_id == userId && (
+          {isLibraryEdit && value?.user_id == userId && (
             <IconButtonWrapper aria-label="create" size="small">
               <NextLink href={"/therapist/resource/edit/" + value._id} passHref>
                 <CreateIcon />
               </NextLink>
             </IconButtonWrapper>
           )}
-          <IconButtonWrapper aria-label="favorite" size="small">
-            <FavoriteBorderIcon
-              data-testid={"fav_" + value?._id}
-              id={"fav_" + value?._id}
-              onClick={() =>
-                addFavour(
-                  value?._id,
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
-                    ? value?.fav_res_detail[0]._id
-                    : ""
-                )
-              }
-              sx={{
-                color:
-                  value?.fav_res_detail && value?.fav_res_detail.length > 0
-                    ? "red"
-                    : "",
-              }}
-            />
-          </IconButtonWrapper>
-
-          {value?.user_id == userId && (
+          {userType !== "custom" && (
+            <IconButtonWrapper aria-label="favorite" size="small">
+              <FavoriteBorderIcon
+                data-testid={"fav_" + value?._id}
+                id={"fav_" + value?._id}
+                onClick={() =>
+                  addFavour(
+                    value?._id,
+                    value?.fav_res_detail && value?.fav_res_detail.length > 0
+                      ? value?.fav_res_detail[0]._id
+                      : ""
+                  )
+                }
+                sx={{
+                  color:
+                    value?.fav_res_detail && value?.fav_res_detail.length > 0
+                      ? "red"
+                      : "",
+                }}
+              />
+            </IconButtonWrapper>
+          )}
+          {console.log("user-----------", value?.user_id, userId)}
+          {isLibraryDelete && value?.user_id == userId && (
             <IconButtonWrapper
               onClick={() => {
                 setModalOpen(true);
@@ -353,30 +364,34 @@ const Resource: NextPage = () => {
               <DeleteIcon />
             </IconButtonWrapper>
           )}
-          <NextLink
-            href={
-              value?.download_resource_url != null
-                ? value?.download_resource_url
-                : "#"
-            }
-            passHref
-          >
-            <IconButtonWrapper aria-label="download" size="small">
-              <CloudDownloadIcon />
-            </IconButtonWrapper>
-          </NextLink>
+          {isLibraryDownload && (
+            <NextLink
+              href={
+                value?.download_resource_url != null
+                  ? value?.download_resource_url
+                  : "#"
+              }
+              passHref
+            >
+              <IconButtonWrapper aria-label="download" size="small">
+                <CloudDownloadIcon />
+              </IconButtonWrapper>
+            </NextLink>
+          )}
 
-          <IconButtonWrapper
-            aria-label="share"
-            size="small"
-            data-testid={"shareIcon_" + value?._id}
-            onClick={() => {
-              setIsPatientDialogOpen(true);
-              setShareResId(value?._id);
-            }}
-          >
-            <RedoIcon />
-          </IconButtonWrapper>
+          {isLibraryShare && (
+            <IconButtonWrapper
+              aria-label="share"
+              size="small"
+              data-testid={"shareIcon_" + value?._id}
+              onClick={() => {
+                setIsPatientDialogOpen(true);
+                setShareResId(value?._id);
+              }}
+            >
+              <RedoIcon />
+            </IconButtonWrapper>
+          )}
         </>
       ),
     },
@@ -573,22 +588,26 @@ const Resource: NextPage = () => {
                 className="mr-3"
                 label="Formulation"
               />
-              <AddButton
-                href="/therapist/resource/add"
-                style={{
-                  backgroundColor: "#6EC9DB",
-                }}
-                className="mr-3"
-                label="Add Resource"
-              />
-              <AddButton
-                style={{
-                  backgroundColor: "#6EC9DB",
-                }}
-                href="/therapist/resource/create"
-                className="mr-3"
-                label="Create Resource"
-              />
+              {isLibraryAdd && (
+                <AddButton
+                  href="/therapist/resource/add"
+                  style={{
+                    backgroundColor: "#6EC9DB",
+                  }}
+                  className="mr-3"
+                  label="Add Resource"
+                />
+              )}
+              {isLibraryCreate && (
+                <AddButton
+                  style={{
+                    backgroundColor: "#6EC9DB",
+                  }}
+                  href="/therapist/resource/create"
+                  className="mr-3"
+                  label="Create Resource"
+                />
+              )}
             </Box>
           </Grid>
         </Grid>
