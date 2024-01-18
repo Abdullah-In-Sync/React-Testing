@@ -116,7 +116,7 @@ interface ResourceList {
 }
 
 interface ResourceListData {
-  getResourceList: ResourceList[];
+  getResourceList: { data: ResourceList[] };
 }
 
 interface ResourceListVars {
@@ -219,7 +219,7 @@ const Resource: NextPage = () => {
     /* istanbul ignore next */
     if (!loading && dataListData) {
       /* istanbul ignore next */
-      setDataList(dataListData?.getResourceList);
+      setDataList(dataListData?.getResourceList?.data);
     }
   }, [dataListData]);
 

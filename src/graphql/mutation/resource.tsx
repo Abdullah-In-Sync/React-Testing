@@ -219,7 +219,8 @@ export const ADD_FAVOURITE = gql`
 export const DELETE_RESOURCE = gql`
   mutation ($resourceId: String!) {
     deleteResource(resourceId: $resourceId) {
-      deleted
+      message
+      result
     }
   }
 `;

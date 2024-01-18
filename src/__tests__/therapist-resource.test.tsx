@@ -63,63 +63,65 @@ const buildMocks = (): {
     },
     result: {
       data: {
-        getResourceList: [
-          {
-            _id: "test",
-            fav_res_detail: [
-              {
-                _id: "test",
-              },
-            ],
-            resource_desc: "Therapist Description",
-            resource_name: "Therapist Resource",
-            user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
-            resource_status: 1,
-            user_type: "admin",
-            org_id: "myhelp",
-          },
-          {
-            _id: "2bdc0af9-27f0-4faf-9eef-178bf0675120",
-            fav_res_detail: [
-              {
-                _id: "85abc570-edcc-4fb0-ae4f-122356686668",
-                created_date: "2023-11-30T05:39:14.555Z",
-                resfav_status: "1",
-                resource_id: "2bdc0af9-27f0-4faf-9eef-178bf0675120",
-                user_id: "user_id",
-                user_type: "therapist",
-                __typename: "FavResourceData",
-              },
-            ],
-            resource_desc: "hellloooooooooo",
-            resource_name: "19th july testing ",
-            download_resource_url: null,
-            resource_url: "",
-            user_id: "user_id",
-            user_type: "therapist",
-            __typename: "AdminResourceData",
-          },
-          {
-            _id: "abfd4ef5-66f2-463c-be2e-86fe8fa449b2",
-            fav_res_detail: [],
-            resource_desc: "Resource Description",
-            resource_name: "Resource Name",
-            user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-            resource_status: 1,
-            user_type: "admin",
-            org_id: "myhelp",
-          },
-          {
-            _id: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
-            fav_res_detail: [],
-            resource_desc: "",
-            resource_name: "test",
-            user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-            resource_status: 1,
-            user_type: "admin",
-            org_id: "myhelp",
-          },
-        ],
+        getResourceList: {
+          data: [
+            {
+              _id: "test",
+              fav_res_detail: [
+                {
+                  _id: "test",
+                },
+              ],
+              resource_desc: "Therapist Description",
+              resource_name: "Therapist Resource",
+              user_id: "dbdd2446-093c-4ec4-abc9-df275634a817",
+              resource_status: 1,
+              user_type: "admin",
+              org_id: "myhelp",
+            },
+            {
+              _id: "2bdc0af9-27f0-4faf-9eef-178bf0675120",
+              fav_res_detail: [
+                {
+                  _id: "85abc570-edcc-4fb0-ae4f-122356686668",
+                  created_date: "2023-11-30T05:39:14.555Z",
+                  resfav_status: "1",
+                  resource_id: "2bdc0af9-27f0-4faf-9eef-178bf0675120",
+                  user_id: "user_id",
+                  user_type: "therapist",
+                  __typename: "FavResourceData",
+                },
+              ],
+              resource_desc: "hellloooooooooo",
+              resource_name: "19th july testing ",
+              download_resource_url: null,
+              resource_url: "",
+              user_id: "user_id",
+              user_type: "therapist",
+              __typename: "AdminResourceData",
+            },
+            {
+              _id: "abfd4ef5-66f2-463c-be2e-86fe8fa449b2",
+              fav_res_detail: [],
+              resource_desc: "Resource Description",
+              resource_name: "Resource Name",
+              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+              resource_status: 1,
+              user_type: "admin",
+              org_id: "myhelp",
+            },
+            {
+              _id: "ba3dd2f3-1fc2-45bb-bf4b-60889c530d54",
+              fav_res_detail: [],
+              resource_desc: "",
+              resource_name: "test",
+              user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+              resource_status: 1,
+              user_type: "admin",
+              org_id: "myhelp",
+            },
+          ],
+        },
       },
     },
   });
@@ -176,7 +178,7 @@ const buildMocks = (): {
     result: {
       data: {
         deleteResource: {
-          deleted: true,
+          result: true,
         },
       },
     },
