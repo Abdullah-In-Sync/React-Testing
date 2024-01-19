@@ -241,3 +241,14 @@ export const moduleList = {
     id: "e72e9adf-9320-4563-8b00-47bfbfe0c7da",
   },
 };
+
+export const defaultModuleCheck = {
+  "e72e9adf-9320-4563-8b00-47bfbfe0c7da": {
+    name: "Notes",
+    data: [
+      "1a6668a7-ec04-4904-9730-a14ae4ac1541",
+      "e7b6dcf4-3e2f-417f-8e9e-99b644b38f50",
+      "9d901116-3b00-46fa-9851-7ada93ed060c",
+    ],
+  },
+};

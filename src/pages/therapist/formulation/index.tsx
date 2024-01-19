@@ -105,7 +105,7 @@ const TherapistFormulation = () => {
   ] = useLazyQuery(GET_FORMULATION_LIST, {
     fetchPolicy: "cache-and-network",
     onCompleted: (data) => {
-      setDataList(data.getFormulationList);
+      setDataList(data.getFormulationList.data);
       /* istanbul ignore next */
     },
     onError: () => {

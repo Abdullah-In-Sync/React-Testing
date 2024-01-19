@@ -2,13 +2,18 @@ import { Box } from "@mui/material";
 import { Form } from "formik";
 import React from "react";
 import { GetAllModuleList } from "../../../graphql/userRole/types";
-import { accessibility, navPosition } from "../../../lib/constants";
+import {
+  accessibility,
+  defaultModuleCheck,
+  navPosition,
+} from "../../../lib/constants";
 import { csvDecode } from "../../../utility/helper";
 import CommonButton from "../../common/Buttons/CommonButton";
 import FormikSelectDropdown from "../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../common/FormikFields/FormikTextField";
 import TableAddUserRole from "../TableAddUserRole";
 import { useStyles } from "../tableAddUserRoleStyles";
+import { useSnackbar } from "notistack";
 interface ViewProps {
   modulesData: GetAllModuleList;
   formikProps?: any;
@@ -36,6 +41,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   isEdit,
   defaultPrivileges,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const styles = useStyles();
   const {
     isSubmitting,
@@ -52,13 +58,35 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       (item) => item.name === viewText
     )[0]["_id"];
     if (index <= -1) {
-      if (item.name !== viewText && viewId && !module.includes(viewId))
+      if (viewId !== item._id && viewId && !module.includes(viewId))
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
       else setFieldValue(moduleKey, [...module, ...[item._id]]);
+
+      const defaultModuleObjByModuleId = defaultModuleCheck[row._id];
+      if (defaultModuleObjByModuleId)
+        defaultModuleObjByModuleId.data.forEach((v) => {
+          if (!privileges[v].includes(viewId))
+            setFieldValue(`privileges.${[v]}`, [viewId]);
+        });
     } else if (
-      (item.name === viewText && module.length === 1) ||
-      item.name !== viewText
+      (viewId === item._id && module.length === 1) ||
+      viewId !== item._id
     ) {
+      const tempDefaultModuleKeys = Object.keys(defaultModuleCheck);
+      const indexMainCheckBox = tempDefaultModuleKeys.findIndex(
+        (v) =>
+          viewId === item._id &&
+          privileges[v].includes(item._id) &&
+          defaultModuleCheck[v]["data"].includes(row._id)
+      );
+      if (indexMainCheckBox > -1) {
+        const moduleName =
+          defaultModuleCheck[tempDefaultModuleKeys[indexMainCheckBox]]["name"];
+        enqueueSnackbar(`Please uncheck ${moduleName}`, {
+          variant: "error",
+        });
+        return;
+      }
       module.splice(index, 1);
       setFieldValue(moduleKey, module);
     }
