@@ -65,7 +65,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       const defaultModuleObjByModuleId = defaultModuleCheck[row._id];
       if (defaultModuleObjByModuleId)
         defaultModuleObjByModuleId.data.forEach((v) => {
-          if (!privileges[v].includes(viewId))
+          if (privileges[v] && !privileges[v].includes(viewId))
             setFieldValue(`privileges.${[v]}`, [viewId]);
         });
     } else if (
@@ -76,6 +76,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       const indexMainCheckBox = tempDefaultModuleKeys.findIndex(
         (v) =>
           viewId === item._id &&
+          privileges[v] &&
           privileges[v].includes(item._id) &&
           defaultModuleCheck[v]["data"].includes(row._id)
       );
