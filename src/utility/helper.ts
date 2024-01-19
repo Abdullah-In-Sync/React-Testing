@@ -285,7 +285,9 @@ export const filterBasedOnPrivilages = (routeObj) => {
 export const modifyTabsData = (tabs) =>
   tabs.filter((v) => {
     const { moduleName } = v;
-    if (moduleName === "default") return true;
+    if (!moduleName) return false;
+    else if (moduleName === "default") return true;
+
     const status = checkPrivilageAccess(moduleName);
     if (status === undefined) return true;
     else return status;
