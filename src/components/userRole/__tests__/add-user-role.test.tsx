@@ -91,6 +91,11 @@ mocksData.push({
             name: "View",
             status: 1,
           },
+          {
+            _id: "prev3",
+            name: "Edit",
+            status: 1,
+          },
         ],
         patient_modulelist: [
           {
@@ -126,6 +131,11 @@ mocksData.push({
             name: "View",
             status: 1,
           },
+          {
+            _id: "prev3",
+            name: "Edit",
+            status: 1,
+          },
         ],
         therapist_modulelist: [
           {
@@ -159,6 +169,11 @@ mocksData.push({
           {
             _id: "prev2",
             name: "View",
+            status: 1,
+          },
+          {
+            _id: "prev3",
+            name: "Edit",
             status: 1,
           },
         ],
