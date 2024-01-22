@@ -53,44 +53,75 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const module = privileges[row._id] || [];
     const moduleKey = `privileges.${[row._id]}`;
     const index = module.indexOf(item._id);
-    const viewText = "View";
     const viewId = modulesData[`${accessibilityValue}_privileges`].filter(
-      (item) => item.name === viewText
+      (item) => item.name === "View"
+    )[0]["_id"];
+    const editId = modulesData[`${accessibilityValue}_privileges`].filter(
+      (item) => item.name === "Edit"
     )[0]["_id"];
     if (index <= -1) {
       if (viewId !== item._id && viewId && !module.includes(viewId))
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
       else setFieldValue(moduleKey, [...module, ...[item._id]]);
 
-      const defaultModuleObjByModuleId = defaultModuleCheck[row._id];
-      if (defaultModuleObjByModuleId)
-        defaultModuleObjByModuleId.data.forEach((v) => {
-          if (privileges[v] && !privileges[v].includes(viewId))
-            setFieldValue(`privileges.${[v]}`, [viewId]);
-        });
+      defaultModuleChecked({ viewId, editId, item, row, module });
     } else if (
       (viewId === item._id && module.length === 1) ||
       viewId !== item._id
     ) {
-      const tempDefaultModuleKeys = Object.keys(defaultModuleCheck);
-      const indexMainCheckBox = tempDefaultModuleKeys.findIndex(
-        (v) =>
-          viewId === item._id &&
-          privileges[v] &&
-          privileges[v].includes(item._id) &&
-          defaultModuleCheck[v]["data"].includes(row._id)
-      );
-      if (indexMainCheckBox > -1) {
-        const moduleName =
-          defaultModuleCheck[tempDefaultModuleKeys[indexMainCheckBox]]["name"];
-        enqueueSnackbar(`Please uncheck ${moduleName}`, {
-          variant: "error",
-        });
-        return;
-      }
+      if (!validationCheck({ viewId, editId, item, row })) return;
+
       module.splice(index, 1);
       setFieldValue(moduleKey, module);
     }
+  };
+
+  const defaultModuleChecked = (obj) => {
+    const { viewId, editId, item, row, module } = obj;
+    const defaultModuleObjByModuleId = defaultModuleCheck[row._id];
+    if (defaultModuleObjByModuleId)
+      defaultModuleObjByModuleId.data.forEach((v) => {
+        if (
+          viewId === item._id &&
+          privileges[v] &&
+          !privileges[v].includes(viewId)
+        ) {
+          setFieldValue(`privileges.${[v]}`, [...module, ...[viewId]]);
+        } else if (
+          editId === item._id &&
+          privileges[v] &&
+          !privileges[v].includes(editId)
+        ) {
+          if (!privileges[v].includes(viewId))
+            setFieldValue(`privileges.${[v]}`, [
+              ...module,
+              ...[editId, viewId],
+            ]);
+          else if (privileges[v].includes(viewId))
+            setFieldValue(`privileges.${[v]}`, [...module, ...[editId]]);
+        }
+      });
+  };
+
+  const validationCheck = (obj) => {
+    const { viewId, editId, item, row } = obj;
+    const tempDefaultModuleKeys = Object.keys(defaultModuleCheck);
+    const indexMainCheckBox = tempDefaultModuleKeys.findIndex(
+      (v) =>
+        (editId === item._id || viewId === item._id) &&
+        privileges[v] &&
+        privileges[v].includes(item._id) &&
+        defaultModuleCheck[v]["data"].includes(row._id)
+    );
+    if (indexMainCheckBox > -1) {
+      const moduleName =
+        defaultModuleCheck[tempDefaultModuleKeys[indexMainCheckBox]]["name"];
+      enqueueSnackbar(`Please uncheck ${moduleName}`, {
+        variant: "error",
+      });
+      return false;
+    }
+    return true;
   };
 
   const handleOrgChange = (event) => {
