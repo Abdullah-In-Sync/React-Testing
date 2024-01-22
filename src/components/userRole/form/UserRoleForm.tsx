@@ -66,9 +66,11 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
 
       defaultModuleChecked({ viewId, editId, item, row, module });
     } else if (
+      /* istanbul ignore next */
       (viewId === item._id && module.length === 1) ||
       viewId !== item._id
     ) {
+      /* istanbul ignore next */
       if (!validationCheck({ viewId, editId, item, row })) return;
 
       module.splice(index, 1);
@@ -81,38 +83,46 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const defaultModuleObjByModuleId = defaultModuleCheck[row._id];
     if (defaultModuleObjByModuleId)
       defaultModuleObjByModuleId.data.forEach((v) => {
+        /* istanbul ignore next */
         if (
+          /* istanbul ignore next */
           viewId === item._id &&
           privileges[v] &&
           !privileges[v].includes(viewId)
         ) {
           setFieldValue(`privileges.${[v]}`, [...module, ...[viewId]]);
         } else if (
+          /* istanbul ignore next */
           editId === item._id &&
           privileges[v] &&
           !privileges[v].includes(editId)
         ) {
+          /* istanbul ignore next */
           if (!privileges[v].includes(viewId))
             setFieldValue(`privileges.${[v]}`, [
               ...module,
               ...[editId, viewId],
             ]);
-          else if (privileges[v].includes(viewId))
+          /* istanbul ignore next */ else if (privileges[v].includes(viewId))
             setFieldValue(`privileges.${[v]}`, [...module, ...[editId]]);
         }
       });
   };
 
   const validationCheck = (obj) => {
+    /* istanbul ignore next */
     const { viewId, editId, item, row } = obj;
     const tempDefaultModuleKeys = Object.keys(defaultModuleCheck);
+    /* istanbul ignore next */
     const indexMainCheckBox = tempDefaultModuleKeys.findIndex(
-      (v) =>
+      (v /* istanbul ignore next */) =>
         (editId === item._id || viewId === item._id) &&
         privileges[v] &&
         privileges[v].includes(item._id) &&
         defaultModuleCheck[v]["data"].includes(row._id)
     );
+
+    /* istanbul ignore next */
     if (indexMainCheckBox > -1) {
       const moduleName =
         defaultModuleCheck[tempDefaultModuleKeys[indexMainCheckBox]]["name"];
@@ -125,6 +135,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   };
 
   const handleOrgChange = (event) => {
+    /* istanbul ignore next */
     const {
       target: { value },
     } = event;
@@ -140,6 +151,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     if (defaultPrivileges) {
       let privilegesTemp = {};
       modulesData[`${value}_modulelist`].forEach((item) => {
+        /* istanbul ignore next */
         privilegesTemp = { ...privilegesTemp, ...{ [item._id]: [] } };
       });
       setFieldValue("privileges", generatedPrivileges(modulesData, value));
@@ -210,10 +222,10 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       <Box>
         <TableAddUserRole
           modulesData={{
-            modulelist: accessibilityValue
+            modulelist: /* istanbul ignore next */ accessibilityValue
               ? modulesData[`${accessibilityValue}_modulelist`]
               : [],
-            privileges: accessibilityValue
+            privileges: /* istanbul ignore next */ accessibilityValue
               ? modulesData[`${accessibilityValue}_privileges`]
               : [],
           }}

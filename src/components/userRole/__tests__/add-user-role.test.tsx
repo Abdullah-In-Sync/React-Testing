@@ -66,14 +66,14 @@ mocksData.push({
             status: 1,
           },
           {
-            _id: "moduleId2",
+            _id: "1a6668a7-ec04-4904-9730-a14ae4ac1541",
             accessibility: ["admin", "therapist", "patient"],
             name: "Assessment",
             privileges: ["prev1", "prev2"],
             status: 1,
           },
           {
-            _id: "moduleId3",
+            _id: "e72e9adf-9320-4563-8b00-47bfbfe0c7da",
             accessibility: ["admin", "therapist", "patient"],
             name: "Notes",
             privileges: ["prev2"],
@@ -106,14 +106,14 @@ mocksData.push({
             status: 1,
           },
           {
-            _id: "moduleId2",
+            _id: "1a6668a7-ec04-4904-9730-a14ae4ac1541",
             accessibility: ["admin", "therapist", "patient"],
             name: "Assessment",
             privileges: ["prev1", "prev2"],
             status: 1,
           },
           {
-            _id: "moduleId3",
+            _id: "e72e9adf-9320-4563-8b00-47bfbfe0c7da",
             accessibility: ["admin", "therapist", "patient"],
             name: "Notes",
             privileges: ["prev2"],
@@ -146,14 +146,14 @@ mocksData.push({
             status: 1,
           },
           {
-            _id: "moduleId2",
+            _id: "1a6668a7-ec04-4904-9730-a14ae4ac1541",
             accessibility: ["admin", "therapist", "patient"],
             name: "Assessment",
             privileges: ["prev1", "prev2"],
             status: 1,
           },
           {
-            _id: "moduleId3",
+            _id: "e72e9adf-9320-4563-8b00-47bfbfe0c7da",
             accessibility: ["admin", "therapist", "patient"],
             name: "Notes",
             privileges: ["prev2"],
@@ -191,7 +191,7 @@ mocksData.push({
       accessibility: "admin",
       position: "sidebar",
       privileges:
-        '{"moduleId1":["prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+        '{"moduleId1":["prev2"],"1a6668a7-ec04-4904-9730-a14ae4ac1541":["prev3","prev2"],"e72e9adf-9320-4563-8b00-47bfbfe0c7da":["prev3","prev2"]}',
     },
   },
   result: {
@@ -214,7 +214,7 @@ mocksData.push({
       accessibility: "admin",
       position: "sidebar",
       privileges:
-        '{"moduleId1":["prev1","prev2"],"moduleId2":["prev2"],"moduleId3":[]}',
+        '{"moduleId1":["prev1","prev2"],"1a6668a7-ec04-4904-9730-a14ae4ac1541":["prev2"],"e72e9adf-9320-4563-8b00-47bfbfe0c7da":[]}',
     },
   },
   result: {
@@ -241,7 +241,8 @@ mocksData.push({
       org_id: "all",
       accessibility: "admin",
       position: "sidebar",
-      privileges: '{"moduleId1":[],"moduleId2":[],"moduleId3":[]}',
+      privileges:
+        '{"moduleId1":[],"1a6668a7-ec04-4904-9730-a14ae4ac1541":[],"e72e9adf-9320-4563-8b00-47bfbfe0c7da":[]}',
     },
   },
   result: {
@@ -298,10 +299,13 @@ describe("Admin add user role", () => {
     await selectDropdownByTestid("navPositionSelect");
 
     await selectDropdownByTestid("organizationSelect");
-
     fireEvent.click(await screen.findByTestId("moduleId1_prev1_check"));
-    fireEvent.click(await screen.findByTestId("moduleId2_prev2_check"));
     fireEvent.click(await screen.findByTestId("moduleId1_prev1_check"));
+    fireEvent.click(
+      await screen.findByTestId(
+        "e72e9adf-9320-4563-8b00-47bfbfe0c7da_prev3_check"
+      )
+    );
     fireEvent.click(await screen.findByTestId("submitForm"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
@@ -319,7 +323,11 @@ describe("Admin add user role", () => {
     await selectDropdownByTestid("navPositionSelect");
     await selectDropdownByTestid("organizationSelect", 1);
     fireEvent.click(await screen.findByTestId("moduleId1_prev1_check"));
-    fireEvent.click(await screen.findByTestId("moduleId2_prev2_check"));
+    fireEvent.click(
+      await screen.findByTestId(
+        "1a6668a7-ec04-4904-9730-a14ae4ac1541_prev2_check"
+      )
+    );
     fireEvent.click(await screen.findByTestId("submitForm"));
     fireEvent.click(await screen.findByTestId("confirmButton"));
     expect(
