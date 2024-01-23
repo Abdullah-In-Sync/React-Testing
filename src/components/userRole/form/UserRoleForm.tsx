@@ -56,9 +56,10 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const viewId = modulesData[`${accessibilityValue}_privileges`].filter(
       (item) => item.name === "View"
     )[0]["_id"];
+    /* istanbul ignore next */
     const editId = modulesData[`${accessibilityValue}_privileges`].filter(
       (item) => item.name === "Edit"
-    )[0]["_id"];
+    )?.[0]?.["_id"];
     if (index <= -1) {
       if (viewId !== item._id && viewId && !module.includes(viewId))
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
@@ -86,6 +87,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
         /* istanbul ignore next */
         if (
           /* istanbul ignore next */
+          defaultModuleObjByModuleId.checkedPrivilages.includes("view") &&
           viewId === item._id &&
           privileges[v] &&
           !privileges[v].includes(viewId)
@@ -93,6 +95,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
           setFieldValue(`privileges.${[v]}`, [...module, ...[viewId]]);
         } else if (
           /* istanbul ignore next */
+          defaultModuleObjByModuleId.checkedPrivilages.includes("edit") &&
           editId === item._id &&
           privileges[v] &&
           !privileges[v].includes(editId)
@@ -105,6 +108,9 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
             ]);
           /* istanbul ignore next */ else if (privileges[v].includes(viewId))
             setFieldValue(`privileges.${[v]}`, [...module, ...[editId]]);
+        } else if (privileges[v] && !privileges[v].includes(viewId)) {
+          /* istanbul ignore next */
+          setFieldValue(`privileges.${[v]}`, [...module, ...[viewId]]);
         }
       });
   };

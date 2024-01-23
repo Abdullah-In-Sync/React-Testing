@@ -594,10 +594,8 @@ export const UPDATE_THERAPIST_SAFETY_PLAN_QUESTION = gql`
       patientId: $patientId
       questions: $questions
     ) {
-      safety_additional_details
-      safety_ques_typeoption
-      patient_answer
-      updated_date
+      result
+      message
     }
   }
 `;
