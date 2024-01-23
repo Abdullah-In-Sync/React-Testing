@@ -30,7 +30,7 @@ export interface GetFormulation {
 }
 
 export interface GetFormulationList {
-  getFormulationList: GetFormulation[];
+  getFormulationList: { data: GetFormulation[] };
 }
 
 export interface FormulationData {

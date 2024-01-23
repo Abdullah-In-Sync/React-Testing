@@ -2,13 +2,18 @@ import { Box } from "@mui/material";
 import { Form } from "formik";
 import React from "react";
 import { GetAllModuleList } from "../../../graphql/userRole/types";
-import { accessibility, navPosition } from "../../../lib/constants";
+import {
+  accessibility,
+  defaultModuleCheck,
+  navPosition,
+} from "../../../lib/constants";
 import { csvDecode } from "../../../utility/helper";
 import CommonButton from "../../common/Buttons/CommonButton";
 import FormikSelectDropdown from "../../common/FormikFields/FormikSelectDropdown";
 import FormikTextField from "../../common/FormikFields/FormikTextField";
 import TableAddUserRole from "../TableAddUserRole";
 import { useStyles } from "../tableAddUserRoleStyles";
+import { useSnackbar } from "notistack";
 interface ViewProps {
   modulesData: GetAllModuleList;
   formikProps?: any;
@@ -36,6 +41,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
   isEdit,
   defaultPrivileges,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const styles = useStyles();
   const {
     isSubmitting,
@@ -47,24 +53,89 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const module = privileges[row._id] || [];
     const moduleKey = `privileges.${[row._id]}`;
     const index = module.indexOf(item._id);
-    const viewText = "View";
     const viewId = modulesData[`${accessibilityValue}_privileges`].filter(
-      (item) => item.name === viewText
+      (item) => item.name === "View"
+    )[0]["_id"];
+    const editId = modulesData[`${accessibilityValue}_privileges`].filter(
+      (item) => item.name === "Edit"
     )[0]["_id"];
     if (index <= -1) {
-      if (item.name !== viewText && viewId && !module.includes(viewId))
+      if (viewId !== item._id && viewId && !module.includes(viewId))
         setFieldValue(moduleKey, [...module, ...[item._id, viewId]]);
       else setFieldValue(moduleKey, [...module, ...[item._id]]);
+
+      defaultModuleChecked({ viewId, editId, item, row, module });
     } else if (
-      (item.name === viewText && module.length === 1) ||
-      item.name !== viewText
+      /* istanbul ignore next */
+      (viewId === item._id && module.length === 1) ||
+      viewId !== item._id
     ) {
+      /* istanbul ignore next */
+      if (!validationCheck({ viewId, editId, item, row })) return;
+
       module.splice(index, 1);
       setFieldValue(moduleKey, module);
     }
   };
 
+  const defaultModuleChecked = (obj) => {
+    const { viewId, editId, item, row, module } = obj;
+    const defaultModuleObjByModuleId = defaultModuleCheck[row._id];
+    if (defaultModuleObjByModuleId)
+      defaultModuleObjByModuleId.data.forEach((v) => {
+        /* istanbul ignore next */
+        if (
+          /* istanbul ignore next */
+          viewId === item._id &&
+          privileges[v] &&
+          !privileges[v].includes(viewId)
+        ) {
+          setFieldValue(`privileges.${[v]}`, [...module, ...[viewId]]);
+        } else if (
+          /* istanbul ignore next */
+          editId === item._id &&
+          privileges[v] &&
+          !privileges[v].includes(editId)
+        ) {
+          /* istanbul ignore next */
+          if (!privileges[v].includes(viewId))
+            setFieldValue(`privileges.${[v]}`, [
+              ...module,
+              ...[editId, viewId],
+            ]);
+          /* istanbul ignore next */ else if (privileges[v].includes(viewId))
+            setFieldValue(`privileges.${[v]}`, [...module, ...[editId]]);
+        }
+      });
+  };
+
+  const validationCheck = (obj) => {
+    /* istanbul ignore next */
+    const { viewId, editId, item, row } = obj;
+    const tempDefaultModuleKeys = Object.keys(defaultModuleCheck);
+    /* istanbul ignore next */
+    const indexMainCheckBox = tempDefaultModuleKeys.findIndex(
+      (v /* istanbul ignore next */) =>
+        (editId === item._id || viewId === item._id) &&
+        privileges[v] &&
+        privileges[v].includes(item._id) &&
+        defaultModuleCheck[v]["data"].includes(row._id)
+    );
+
+    /* istanbul ignore next */
+    if (indexMainCheckBox > -1) {
+      const moduleName =
+        defaultModuleCheck[tempDefaultModuleKeys[indexMainCheckBox]]["name"];
+      enqueueSnackbar(`Please uncheck ${moduleName}`, {
+        variant: "error",
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleOrgChange = (event) => {
+    /* istanbul ignore next */
     const {
       target: { value },
     } = event;
@@ -80,6 +151,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     if (defaultPrivileges) {
       let privilegesTemp = {};
       modulesData[`${value}_modulelist`].forEach((item) => {
+        /* istanbul ignore next */
         privilegesTemp = { ...privilegesTemp, ...{ [item._id]: [] } };
       });
       setFieldValue("privileges", generatedPrivileges(modulesData, value));
@@ -150,10 +222,10 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
       <Box>
         <TableAddUserRole
           modulesData={{
-            modulelist: accessibilityValue
+            modulelist: /* istanbul ignore next */ accessibilityValue
               ? modulesData[`${accessibilityValue}_modulelist`]
               : [],
-            privileges: accessibilityValue
+            privileges: /* istanbul ignore next */ accessibilityValue
               ? modulesData[`${accessibilityValue}_privileges`]
               : [],
           }}

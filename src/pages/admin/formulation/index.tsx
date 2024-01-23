@@ -90,7 +90,7 @@ const Formulation = () => {
     {
       fetchPolicy: "cache-and-network",
       onCompleted: (data) => {
-        setDataList(data.getFormulationList);
+        setDataList(data.getFormulationList.data);
         /* istanbul ignore next */
       },
       onError: () => {
