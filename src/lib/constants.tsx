@@ -250,5 +250,11 @@ export const defaultModuleCheck = {
       "e7b6dcf4-3e2f-417f-8e9e-99b644b38f50",
       "9d901116-3b00-46fa-9851-7ada93ed060c",
     ],
+    checkedPrivilages: ["view", "edit"],
+  },
+  "06d36511-34f4-4ed8-b1e8-475e278c3493": {
+    name: "Agreement",
+    data: ["8367b791-1398-4c94-b3fa-91d75ab61716"],
+    checkedPrivilages: ["view"],
   },
 };
