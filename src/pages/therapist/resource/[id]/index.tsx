@@ -71,7 +71,7 @@ const ResourceById: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Resource Detail" />
         <Box>
-          {resourceData?.getResourceById != null ? (
+          {resourceData?.getResourceById?.data != null ? (
             <Grid
               container
               rowSpacing={2}
