@@ -196,16 +196,14 @@ const TherapistFormulation = () => {
       render: (_, value) => (
         <>
           {isLibraryEdit && value?.user_id === Id && (
-            <>
-              <IconButtonWrapper
-                data-testid={`editIcon_${value.user_id}`}
-                aria-label="create"
-                size="small"
-                onClick={() => handlePressEdit(value)}
-              >
-                <CreateIcon />
-              </IconButtonWrapper>
-            </>
+            <IconButtonWrapper
+              data-testid={`editIcon_${value.user_id}`}
+              aria-label="create"
+              size="small"
+              onClick={() => handlePressEdit(value)}
+            >
+              <CreateIcon />
+            </IconButtonWrapper>
           )}
 
           <>
