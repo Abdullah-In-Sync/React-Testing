@@ -34,7 +34,7 @@ export interface GetFormulationList {
 }
 
 export interface FormulationData {
-  getFormulationById: GetFormulationById;
+  getFormulationById: { data: GetFormulationById };
 }
 export interface GetFormulationById {
   fav_for_detail?: null;

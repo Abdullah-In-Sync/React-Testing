@@ -140,7 +140,7 @@ export default function EditFormFormulation(props: propTypes) {
     });
 
     // add resource data to the state to prefilled value
-    const data = resourceData?.getFormulationById;
+    const data = resourceData?.getFormulationById?.data;
     if (data) {
       setFormFields(data);
     }
@@ -309,12 +309,13 @@ export default function EditFormFormulation(props: propTypes) {
                 <Link
                   data-testid="edit-upload-file"
                   href={
-                    resourceData?.getFormulationById?.download_formulation_url
+                    resourceData?.getFormulationById?.data
+                      ?.download_formulation_url
                   }
                   underline="none"
                   target="_blank"
                 >
-                  {resourceData?.getFormulationById?.formulation_img}
+                  {resourceData?.getFormulationById?.data?.formulation_img}
                 </Link>
               </Grid>
 

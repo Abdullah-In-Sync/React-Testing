@@ -35,7 +35,11 @@ const EditFormulationPage: NextPage = () => {
 
   const [
     getFormulation,
-    { data: { getFormulationById: formulationData = undefined } = {} },
+    {
+      data: {
+        getFormulationById: { data: formulationData = undefined } = {},
+      } = {},
+    },
   ] = useLazyQuery<FormulationData>(GET_FORMULATION_BY_ID, {
     fetchPolicy: "cache-and-network",
     onCompleted: () => {

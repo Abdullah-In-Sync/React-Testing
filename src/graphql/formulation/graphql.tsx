@@ -56,26 +56,28 @@ export const REMOVE_FAV_FORMULATION = gql`
 export const GET_FORMULATION_BY_ID = gql`
   query GetFormulationById($formulation_id: String!) {
     getFormulationById(formulation_id: $formulation_id) {
-      fav_for_detail {
-        _id
-        forfav_status
-        formulation_id
+      data {
+        fav_for_detail {
+          _id
+          forfav_status
+          formulation_id
+          user_id
+        }
+        formulation_avail_for
+        formulation_desc
+        formulation_img
+        formulation_instruction
+        formulation_name
+        formulation_status
+        formulation_type
+        formulation_url
+        org_id
+        template_data
+        template_id
         user_id
+        _id
+        download_formulation_url
       }
-      formulation_avail_for
-      formulation_desc
-      formulation_img
-      formulation_instruction
-      formulation_name
-      formulation_status
-      formulation_type
-      formulation_url
-      org_id
-      template_data
-      template_id
-      user_id
-      _id
-      download_formulation_url
     }
   }
 `;
