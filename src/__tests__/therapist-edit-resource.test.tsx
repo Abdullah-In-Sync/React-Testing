@@ -92,31 +92,33 @@ mocksData.push({
   },
   result: {
     data: {
-      getResourceById: [
-        {
-          _id: "750a6993f61d4e58917e31e1244711f5",
-          resource_name: "test name",
-          resource_desc: "test desc",
-          resource_instruction: "test instruct",
-          resource_references: "test reference",
-          resource_url: "http://google.com",
-          download_resource_url: "http://google.com",
-          resource_type: 2,
-          category_id: "category-id",
-          agenda_id: "agenda-id",
-          disorder_detail: {
-            _id: "disorder-id",
-            disorder_name: "test disorder",
+      getResourceById: {
+        data: [
+          {
+            _id: "750a6993f61d4e58917e31e1244711f5",
+            resource_name: "test name",
+            resource_desc: "test desc",
+            resource_instruction: "test instruct",
+            resource_references: "test reference",
+            resource_url: "http://google.com",
+            download_resource_url: "http://google.com",
+            resource_type: 2,
+            category_id: "category-id",
+            agenda_id: "agenda-id",
+            disorder_detail: {
+              _id: "disorder-id",
+              disorder_name: "test disorder",
+            },
+            model_detail: {
+              _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+              model_name: "test mddel",
+            },
+            resource_avail_onlyme: "0",
+            resource_avail_therapist: "1",
+            resource_filename: "sample.pdf",
           },
-          model_detail: {
-            _id: "4e110b3e7faa47c9be82540fe8e78fb0",
-            model_name: "test mddel",
-          },
-          resource_avail_onlyme: "0",
-          resource_avail_therapist: "1",
-          resource_filename: "sample.pdf",
-        },
-      ],
+        ],
+      },
     },
   },
 });
@@ -129,41 +131,43 @@ mocksData.push({
   },
   result: {
     data: {
-      getResourceById: [
-        {
-          _id: "750a6993f61d4e58917e31e1244711f5",
-          resource_name: "test name",
-          resource_desc: "test desc",
-          resource_instruction: "test instruct",
-          resource_references: "test reference",
-          resource_url: "http://google.com",
-          download_resource_url: "http://google.com",
-          resource_type: 2,
-          category_id: "category-id",
-          agenda_id: "agenda-id",
-          disorder_detail: {
-            _id: "disorder-id",
-            disorder_name: "test disorder",
+      getResourceById: {
+        data: [
+          {
+            _id: "750a6993f61d4e58917e31e1244711f5",
+            resource_name: "test name",
+            resource_desc: "test desc",
+            resource_instruction: "test instruct",
+            resource_references: "test reference",
+            resource_url: "http://google.com",
+            download_resource_url: "http://google.com",
+            resource_type: 2,
+            category_id: "category-id",
+            agenda_id: "agenda-id",
+            disorder_detail: {
+              _id: "disorder-id",
+              disorder_name: "test disorder",
+            },
+            model_detail: {
+              _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+              model_name: "test mddel",
+            },
+            resource_avail_onlyme: "0",
+            resource_avail_therapist: "1",
+            resource_filename: "sample.pdf",
+            resource_issmartdraw: "1",
+            template_detail: {
+              component_name: "TemplateTable",
+              name: "Test Template",
+              _id: "750a6993f61d4e58917e31e1244711f6",
+            },
+            template_id: "750a6993f61d4e58917e31e1244711f6",
+            org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
+            template_data:
+              '{"rows":[{"cells":[{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""}]}]}',
           },
-          model_detail: {
-            _id: "4e110b3e7faa47c9be82540fe8e78fb0",
-            model_name: "test mddel",
-          },
-          resource_avail_onlyme: "0",
-          resource_avail_therapist: "1",
-          resource_filename: "sample.pdf",
-          resource_issmartdraw: "1",
-          template_detail: {
-            component_name: "TemplateTable",
-            name: "Test Template",
-            _id: "750a6993f61d4e58917e31e1244711f6",
-          },
-          template_id: "750a6993f61d4e58917e31e1244711f6",
-          org_id: "e7b5b7c0568b4eacad6f05f11d9c4884",
-          template_data:
-            '{"rows":[{"cells":[{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""},{"type":""}]}]}',
-        },
-      ],
+        ],
+      },
     },
   },
 });

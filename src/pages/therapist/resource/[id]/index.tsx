@@ -28,9 +28,9 @@ const ResourceById: NextPage = () => {
     useLazyQuery(GET_RESOURCE_DETAIL, {
       onCompleted: (data) => {
         /* istanbul ignore else */
-        if (data!.getResourceById) {
-          setResId(data!.getResourceById[0]._id);
-        } else if (data!.getResourceById == null) {
+        if (data!.getResourceById?.data) {
+          setResId(data!.getResourceById["data"][0]._id);
+        } else if (data!.getResourceById.data == null) {
           setLoader(false);
         }
       },
@@ -52,13 +52,17 @@ const ResourceById: NextPage = () => {
 
   const onViewTemplate = () => {
     sessionStorage.setItem(
-      resourceData?.getResourceById[0]?._id,
+      resourceData?.getResourceById["data"][0]?._id,
       JSON.stringify({
-        data: JSON.parse(resourceData?.getResourceById[0]?.template_data),
-        name: resourceData?.getResourceById[0].resource_name,
+        data: JSON.parse(
+          resourceData?.getResourceById["data"][0]?.template_data
+        ),
+        name: resourceData?.getResourceById["data"][0].resource_name,
       })
     );
-    router.push(`/template/preview/${resourceData?.getResourceById[0]?._id}`);
+    router.push(
+      `/template/preview/${resourceData?.getResourceById["data"][0]?._id}`
+    );
   };
 
   return (
@@ -110,11 +114,11 @@ const ResourceById: NextPage = () => {
               >
                 <Box flex={1}>
                   <Typography>
-                    {resourceData.getResourceById[0].resource_name}
+                    {resourceData.getResourceById["data"][0].resource_name}
                   </Typography>
                 </Box>
-                {resourceData.getResourceById[0]?.resource_issmartdraw ==
-                  "1" && (
+                {resourceData.getResourceById["data"][0]
+                  ?.resource_issmartdraw == "1" && (
                   <Box marginLeft={"auto"} className={classes.ellipseDiv}>
                     <IconButton
                       size="medium"
@@ -137,8 +141,8 @@ const ResourceById: NextPage = () => {
                 borderColor="secondary.main"
               >
                 <Grid pl={2} xs={12} md={12}></Grid>
-                {resourceData.getResourceById[0]?.resource_issmartdraw !=
-                  "1" && (
+                {resourceData.getResourceById["data"][0]
+                  ?.resource_issmartdraw != "1" && (
                   <Grid
                     data-testid="iconsTarget"
                     sx={{
@@ -155,8 +159,9 @@ const ResourceById: NextPage = () => {
                       data-testid="viewUrl"
                       target="_blank"
                       href={
-                        resourceData.getResourceById[0].resource_url != null
-                          ? resourceData.getResourceById[0].resource_url
+                        resourceData.getResourceById["data"][0].resource_url !=
+                        null
+                          ? resourceData.getResourceById["data"][0].resource_url
                           : "#"
                       }
                     >
@@ -167,9 +172,9 @@ const ResourceById: NextPage = () => {
                       size="medium"
                       data-testid="downloadUrl"
                       href={
-                        resourceData.getResourceById[0].download_resource_url !=
-                        null
-                          ? resourceData.getResourceById[0]
+                        resourceData.getResourceById["data"][0]
+                          .download_resource_url != null
+                          ? resourceData.getResourceById["data"][0]
                               .download_resource_url
                           : "#"
                       }
@@ -180,18 +185,20 @@ const ResourceById: NextPage = () => {
                 )}
                 <ResourceDetail
                   title="Description"
-                  description={resourceData.getResourceById[0].resource_desc}
+                  description={
+                    resourceData.getResourceById["data"][0].resource_desc
+                  }
                 />
                 <ResourceDetail
                   title="Instructions"
                   description={
-                    resourceData.getResourceById[0].resource_instruction
+                    resourceData.getResourceById["data"][0].resource_instruction
                   }
                 />
                 <ResourceDetail
                   title="References"
                   description={
-                    resourceData.getResourceById[0].resource_references
+                    resourceData.getResourceById["data"][0].resource_references
                   }
                 />
 

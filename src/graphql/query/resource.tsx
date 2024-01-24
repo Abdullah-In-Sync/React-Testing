@@ -474,34 +474,36 @@ export const GET_PATIENT_RESOURCE_TEMPLATE = gql`
 export const GET_RESOURCE_DETAIL = gql`
   query getResourceById($resourceId: String!) {
     getResourceById(resourceId: $resourceId) {
-      _id
-      agenda_id
-      org_id
-      resource_avail_onlyme
-      resource_avail_therapist
-      category_id
-      resource_name
-      resource_type
-      resource_desc
-      resource_instruction
-      resource_references
-      resource_filename
-      resource_url
-      download_resource_url
-      resource_issmartdraw
-      template_id
-      template_data
-      disorder_detail {
+      data {
         _id
-        disorder_name
-      }
-      model_detail {
-        _id
-        model_name
-      }
-      template_detail {
-        component_name
-        name
+        agenda_id
+        org_id
+        resource_avail_onlyme
+        resource_avail_therapist
+        category_id
+        resource_name
+        resource_type
+        resource_desc
+        resource_instruction
+        resource_references
+        resource_filename
+        resource_url
+        download_resource_url
+        resource_issmartdraw
+        template_id
+        template_data
+        disorder_detail {
+          _id
+          disorder_name
+        }
+        model_detail {
+          _id
+          model_name
+        }
+        template_detail {
+          component_name
+          name
+        }
       }
     }
   }

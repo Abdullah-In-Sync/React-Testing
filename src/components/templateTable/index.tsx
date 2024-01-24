@@ -104,7 +104,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                         ))}
                       </Grid>
                     )}
-                    {formikHelper?.values?.rows.map((row, rowIndex) => (
+                    {formikHelper?.values?.rows?.map((row, rowIndex) => (
                       <TemplateTableRow
                         key={rowIndex}
                         rowData={row}

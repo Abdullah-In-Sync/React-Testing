@@ -182,9 +182,9 @@ export default function EditForm(props: propTypes) {
   ] = useLazyQuery(GET_RESOURCE_DETAIL, {
     onCompleted: (data) => {
       /* istanbul ignore next */
-      if (data!.getResourceById) {
-        setResId(data!.getResourceById[0]?._id);
-      } else if (data!.getResourceById == null) {
+      if (data!.getResourceById?.data) {
+        setResId(data!.getResourceById["data"][0]?._id);
+      } else if (data!.getResourceById?.data == null) {
         setLoader(false);
       }
     },
@@ -270,11 +270,11 @@ export default function EditForm(props: propTypes) {
 
   const onPreview = (values) => {
     sessionStorage.setItem(
-      resourceData?.getResourceById[0]?._id,
+      resourceData?.getResourceById["data"][0]?._id,
       JSON.stringify({ data: values, name: formFields.resource_name })
     );
     window.open(
-      `/template/preview/${resourceData?.getResourceById[0]?._id}`,
+      `/template/preview/${resourceData?.getResourceById["data"][0]?._id}`,
       "_blank"
     );
   };
@@ -289,13 +289,13 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     if (!resourceLoading && resourceData) {
       setLoader(false);
-      if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
+      if (resourceData?.getResourceById["data"][0]?.resource_issmartdraw == 1) {
         setSelectedComponentType({
-          info: resourceData?.getResourceById[0]?.template_detail,
-          type: resourceData?.getResourceById[0]?.template_detail
+          info: resourceData?.getResourceById["data"][0]?.template_detail,
+          type: resourceData?.getResourceById["data"][0]?.template_detail
             ?.component_name,
           initialData: JSON.parse(
-            resourceData?.getResourceById[0]?.template_data
+            resourceData?.getResourceById["data"][0]?.template_data
           ),
         });
       }
@@ -314,7 +314,7 @@ export default function EditForm(props: propTypes) {
 
   // add resource data to the state
   useEffect(() => {
-    const data = resourceData?.getResourceById[0];
+    const data = resourceData?.getResourceById["data"][0];
     /* istanbul ignore next */
     if (data) {
       setFormFields(data);
@@ -325,7 +325,7 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const orgId =
       formFields.org_id === undefined
-        ? resourceData?.getResourceById[0]?.org_id
+        ? resourceData?.getResourceById["data"][0]?.org_id
         : formFields.org_id;
     /* istanbul ignore next */
     if (orgId) {
@@ -346,7 +346,7 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const disorderId =
       formFields.disorder_id === undefined
-        ? resourceData?.getResourceById[0]?.disorder_detail._id
+        ? resourceData?.getResourceById["data"][0]?.disorder_detail._id
         : formFields.disorder_id;
     /* istanbul ignore next */
     if (disorderId) {
@@ -365,11 +365,11 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const disorderId =
       formFields.disorder_id === undefined
-        ? resourceData?.getResourceById[0]?.disorder_detail._id
+        ? resourceData?.getResourceById["data"][0]?.disorder_detail._id
         : formFields.disorder_id;
     const modelId =
       formFields.model_id === undefined
-        ? resourceData?.getResourceById[0]?.model_detail._id
+        ? resourceData?.getResourceById["data"][0]?.model_detail._id
         : formFields.model_id;
     /* istanbul ignore next */
     if (disorderId && modelId) {
@@ -393,11 +393,11 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const categoryId =
       formFields.category_id === undefined
-        ? resourceData?.getResourceById[0]?.category_id._id
+        ? resourceData?.getResourceById["data"][0]?.category_id._id
         : formFields.category_id;
     const modelId =
       formFields.model_id === undefined
-        ? resourceData?.getResourceById[0]?.model_detail._id
+        ? resourceData?.getResourceById["data"][0]?.model_detail._id
         : formFields.model_id;
     /* istanbul ignore next */
     if (modelId && categoryId) {
@@ -468,7 +468,7 @@ export default function EditForm(props: propTypes) {
       return;
     }
 
-    if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
+    if (resourceData?.getResourceById["data"][0]?.resource_issmartdraw == 1) {
       setTemplateModal(true);
     } else {
       setModalOpen(true);
@@ -703,23 +703,28 @@ export default function EditForm(props: propTypes) {
                   className="form-control-bg"
                 />
               </Grid>
-              {resourceData?.getResourceById != null &&
-              resourceData?.getResourceById[0]?.resource_issmartdraw != 1 ? (
+              {resourceData?.getResourceById?.data != null &&
+              resourceData?.getResourceById["data"][0]?.resource_issmartdraw !=
+                1 ? (
                 <Grid item xs={7}>
                   Upload Resource :{" "}
                   <Link
                     data-testid="edit-upload-file"
-                    href={resourceData?.getResourceById[0].resource_url}
+                    href={resourceData?.getResourceById["data"][0].resource_url}
                     underline="none"
                     target="_blank"
                   >
-                    {resourceData?.getResourceById[0]?.resource_filename}
+                    {
+                      resourceData?.getResourceById["data"][0]
+                        ?.resource_filename
+                    }
                   </Link>
                 </Grid>
               ) : (
                 ""
               )}
-              {resourceData?.getResourceById[0]?.resource_issmartdraw != 1 && (
+              {resourceData?.getResourceById["data"][0]?.resource_issmartdraw !=
+                1 && (
                 <Grid item xs={7}>
                   <Box display="flex" alignItems="center">
                     <UploadButtonComponent
@@ -820,7 +825,8 @@ export default function EditForm(props: propTypes) {
                 </Button>
               </Box>
             </SureModal>
-            {resourceData?.getResourceById[0]?.resource_issmartdraw != 1 && (
+            {resourceData?.getResourceById["data"][0]?.resource_issmartdraw !=
+              1 && (
               <Grid container spacing={2} marginBottom={5}>
                 <Grid item xs={12} textAlign="center">
                   <Button
@@ -833,7 +839,8 @@ export default function EditForm(props: propTypes) {
                 </Grid>
               </Grid>
             )}
-            {resourceData?.getResourceById[0]?.resource_issmartdraw == 1 && (
+            {resourceData?.getResourceById["data"][0]?.resource_issmartdraw ==
+              1 && (
               <Grid container spacing={2} marginBottom={5}>
                 <Grid item xs={12} textAlign="center">
                   <AddButton
