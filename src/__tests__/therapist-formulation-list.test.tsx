@@ -191,7 +191,7 @@ const buildMocks = (): {
     result: {
       data: {
         updateFormulationById: {
-          _id: "d1b60faa-c8aa-4258-ada0-cfdf18402b7b",
+          result: true,
         },
       },
     },

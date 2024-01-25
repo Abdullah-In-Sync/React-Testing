@@ -58,5 +58,5 @@ export interface UpdateFormulationData {
   updateFormulationById: UpdateFormulationById;
 }
 export interface UpdateFormulationById {
-  _id: string;
+  result: boolean;
 }

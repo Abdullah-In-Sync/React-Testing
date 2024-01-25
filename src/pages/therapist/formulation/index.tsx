@@ -134,8 +134,10 @@ const TherapistFormulation = () => {
       await updateFormulation({
         variables,
         onCompleted: (data) => {
-          const { updateFormulationById } = data;
-          if (updateFormulationById) {
+          const {
+            updateFormulationById: { result },
+          } = data;
+          if (result) {
             refetchFormulationList();
             enqueueSnackbar("Formulation deleted successfully.", {
               variant: "success",

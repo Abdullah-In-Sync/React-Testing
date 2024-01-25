@@ -88,8 +88,10 @@ const EditFormulationPage: NextPage = () => {
       await updateFormulation({
         variables,
         onCompleted: (data) => {
-          const { updateFormulationById } = data;
-          if (updateFormulationById) {
+          const {
+            updateFormulationById: { result },
+          } = data;
+          if (result) {
             enqueueSnackbar("Formulation updated successfully.", {
               variant: "success",
             });

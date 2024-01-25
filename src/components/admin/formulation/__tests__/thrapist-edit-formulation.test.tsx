@@ -74,7 +74,7 @@ mocksData.push({
   result: {
     data: {
       updateFormulationById: {
-        _id: "formulation-id-1",
+        result: true,
       },
     },
   },

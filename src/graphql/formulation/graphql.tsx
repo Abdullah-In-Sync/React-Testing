@@ -91,7 +91,7 @@ export const UPDATE_FORMULATION = gql`
       formulation_id: $formulation_id
       updateFormulation: $updateFormulation
     ) {
-      _id
+      result
     }
   }
 `;

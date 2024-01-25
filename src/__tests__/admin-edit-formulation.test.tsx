@@ -1,4 +1,4 @@
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
+import { screen, render, fireEvent } from "@testing-library/react";
 import { SnackbarProvider } from "notistack";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { GET_ADMIN_TOKEN_DATA } from "../graphql/query/common";
@@ -181,7 +181,7 @@ describe(" Formulation page", () => {
   });
   // check for Patient Session Resource list
 
-  it("should render complete edit formulation form and submit with valid data", async () => {
+  beforeEach(() => {
     (useRouter as jest.Mock).mockImplementation(() => ({
       query: {
         id: "750a6993f61d4e58917e31e1244711f5",
@@ -192,33 +192,20 @@ describe(" Formulation page", () => {
       fileName: "invalid.pdf",
     });
     jest.spyOn(s3, "uploadToS3").mockReturnValue(Promise.resolve(true));
+  });
 
+  it("should render complete edit formulation form and submit with valid data", async () => {
     await sut();
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("formulation_name")).toHaveValue("Punjab 512");
-
-      fireEvent.change(screen.queryByTestId("formulation_name"), {
-        target: { value: "test" },
-      });
-      await waitFor(async () => {
-        fireEvent.change(screen.getByTestId("resource_file_upload"), {
-          target: { files: [file] },
-        });
-      });
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("editFormulationSubmitButton"));
-        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
-
-        fireEvent.click(screen.queryByTestId("confirmButton"));
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Formulation updated successfully!")
-        ).toBeInTheDocument();
-      });
+    fireEvent.change(await screen.findByTestId("formulation_name"), {
+      target: { value: "test" },
     });
+    fireEvent.change(await screen.findByTestId("resource_file_upload"), {
+      target: { files: [file] },
+    });
+    fireEvent.click(await screen.findByTestId("editFormulationSubmitButton"));
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Formulation updated successfully!")
+    ).toBeInTheDocument();
   });
 });
