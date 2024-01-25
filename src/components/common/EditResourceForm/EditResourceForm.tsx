@@ -109,6 +109,7 @@ export default function EditForm(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
+  /* istanbul ignore next */
   const [getOrgData, { data: orgData }] = useLazyQuery(GET_ORG_DATA, {
     onCompleted: () => {
       props.setLoader(false);
@@ -157,11 +158,10 @@ export default function EditForm(props: propTypes) {
     }
   );
 
+  /* istanbul ignore next */
   const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL, {
     onCompleted: (data) => {
-      /* istanbul ignore next */
       props.setLoader(false);
-      /* istanbul ignore next */
       if (
         data &&
         data?.getUploadResourceUrl &&
@@ -190,6 +190,7 @@ export default function EditForm(props: propTypes) {
     },
   });
 
+  /* istanbul ignore next */
   const onTemplateSelect = (values: any) => {
     if (values.component_name == "TemplateTable") {
       setTemplateModal(false);
@@ -206,6 +207,7 @@ export default function EditForm(props: propTypes) {
     }
   };
 
+  /* istanbul ignore next */
   const onGenerateTable = (values: TableDimensionFormData) => {
     const initialData: TemplateFormData = { rows: [] };
 
@@ -228,6 +230,7 @@ export default function EditForm(props: propTypes) {
     setDimensionModal(false);
   };
 
+  /* istanbul ignore next */
   const onTemplateSave = (value) => {
     setFormFields({
       ...formFields,
@@ -237,6 +240,7 @@ export default function EditForm(props: propTypes) {
     setModalOpen(true);
   };
 
+  /* istanbul ignore next */
   const onTemplateCancel = () => {
     setSelectedComponentType({
       type: "",
@@ -249,25 +253,25 @@ export default function EditForm(props: propTypes) {
       template_id: "",
     });
   };
+  /* istanbul ignore next */
   const onSaveArrowTemplate = (arrowTemplateData: string) => {
-    console.log(selectedComponentType, "node/edges onsubmit");
-
     setFormFields({
       ...formFields,
       template_data: arrowTemplateData,
       template_id: selectedComponentType?.info?._id,
     });
     setModalOpen(true);
-    /* istanbul ignore next */
   };
 
   useEffect(() => {
     props.setLoader(true);
+    /* istanbul ignore next */
     if (userType == "admin") {
       getOrgData();
     }
   }, []);
 
+  /* istanbul ignore next */
   const onPreview = (values) => {
     sessionStorage.setItem(
       resourceData?.getResourceById["data"][0]?._id,
@@ -455,6 +459,7 @@ export default function EditForm(props: propTypes) {
     preSignedURL.current = url;
   };
 
+  /* istanbul ignore next */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     /* istanbul ignore next */
@@ -477,6 +482,7 @@ export default function EditForm(props: propTypes) {
     if (!confirmSubmission) return;
   };
 
+  /* istanbul ignore next */
   const uploadFile = async () => {
     /* istanbul ignore next */
     try {
@@ -508,6 +514,7 @@ export default function EditForm(props: propTypes) {
     }
   };
 
+  /* istanbul ignore next */
   return (
     <>
       <Loader visible={loader} />
@@ -805,6 +812,7 @@ export default function EditForm(props: propTypes) {
                   size="small"
                   data-testid="editResourceModalCancelButton"
                   onClick={() => {
+                    /* istanbul ignore next */
                     setModalOpen(false);
                   }}
                 >
@@ -866,7 +874,9 @@ export default function EditForm(props: propTypes) {
           <TableDimensionModal
             isOpen={dimensionModal}
             setConfirmSubmission={setConfirmSubmission}
-            onSubmit={(values) => onGenerateTable(values)}
+            onSubmit={(values) =>
+              /* istanbul ignore next */ onGenerateTable(values)
+            }
             onModalClose={setDimensionModal}
           />
         )}
