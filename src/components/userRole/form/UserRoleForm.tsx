@@ -55,7 +55,7 @@ const AddUserRoleForm: React.FC<ViewProps> = ({
     const index = module.indexOf(item._id);
     const viewId = modulesData[`${accessibilityValue}_privileges`].filter(
       (item) => item.name === "View"
-    )[0]["_id"];
+    )?.[0]?.["_id"];
     /* istanbul ignore next */
     const editId = modulesData[`${accessibilityValue}_privileges`].filter(
       (item) => item.name === "Edit"
