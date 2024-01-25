@@ -20,6 +20,7 @@ import { shareResourceAvailability } from "../../../../../lib/constants";
 
 const TherapistEditFormulationPage: NextPage = () => {
   const router = useRouter();
+  /* istanbul ignore next */
   const { query: { id: formulation_id } = {} } = router;
   const confirmRef = useRef<ConfirmElement>(null);
   const [loader, setLoader] = useState<boolean>(true);

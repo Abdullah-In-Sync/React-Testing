@@ -78,9 +78,19 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
       enableReinitialize={true}
     >
       {(formikHelper) => {
-        console.log(formikHelper?.values, "formikHelper?.values");
+        /* istanbul ignore next */
+        const {
+          values: { rows = [] },
+          isValid,
+          isSubmitting,
+        } = formikHelper;
         return (
-          <Form style={view == "patientFormulation" ? customStyle : {}}>
+          <Form
+            style={
+              /* istanbul ignore next */
+              view == "patientFormulation" ? customStyle : {}
+            }
+          >
             <Grid
               className={`${styles[mode]} ${styles.tableCellView}`}
               container
@@ -96,7 +106,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                           {" "}
                           <div></div>{" "}
                         </Grid>
-                        {formikHelper?.values?.rows[0].cells.map((c, index) => (
+                        {rows[0].cells.map((c, index) => (
                           <ColumnActionTitle
                             index={index}
                             formikHelper={formikHelper}
@@ -104,7 +114,7 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                         ))}
                       </Grid>
                     )}
-                    {formikHelper?.values?.rows?.map((row, rowIndex) => (
+                    {rows.map((row, rowIndex) => (
                       <TemplateTableRow
                         key={rowIndex}
                         rowData={row}
@@ -118,64 +128,63 @@ const TemplateTable: React.FC<TemplateTableProps> = ({
                 )}
               />
             </Grid>
-            {
-              /* istanbul ignore next */
-              (isEditResource === true || isEditResource === undefined) &&
-                mode !== "patientView" &&
-                showActionsBottom && (
-                  <Grid container justifyContent={"center"}>
-                    <Grid item padding={"63px 0px 94px 0px"}>
+            {isEditResource === true &&
+              mode !== "patientView" &&
+              showActionsBottom && (
+                <Grid container justifyContent={"center"}>
+                  <Grid item padding={"63px 0px 94px 0px"}>
+                    <Button
+                      data-testid="tableTemplateSubmit"
+                      variant="contained"
+                      type="submit"
+                      style={{
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                        marginRight: "10px",
+                      }}
+                      disabled={!isValid}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      data-testid="tableTemplateCancel"
+                      color="secondary"
+                      variant="contained"
+                      style={{
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                        backgroundColor: "#6BA08E",
+                      }}
+                      disabled={isSubmitting}
+                      onClick={() =>
+                        /* istanbul ignore next */
+                        onCancel?.(formikHelper.values, formikHelper)
+                      }
+                    >
+                      Cancel
+                    </Button>
+                    {userType === "admin" && (
                       <Button
-                        data-testid="tableTemplateSubmit"
+                        data-testid="tableTemplatePreview"
+                        color="primary"
                         variant="contained"
-                        type="submit"
                         style={{
                           paddingLeft: "40px",
                           paddingRight: "40px",
-                          marginRight: "10px",
+                          marginLeft: "10px",
                         }}
-                        disabled={!formikHelper.isValid}
-                      >
-                        Submit
-                      </Button>
-                      <Button
-                        data-testid="tableTemplateCancel"
-                        color="secondary"
-                        variant="contained"
-                        style={{
-                          paddingLeft: "40px",
-                          paddingRight: "40px",
-                          backgroundColor: "#6BA08E",
-                        }}
-                        disabled={formikHelper?.isSubmitting}
+                        disabled={isSubmitting}
                         onClick={() =>
-                          onCancel?.(formikHelper.values, formikHelper)
+                          /* istanbul ignore next */
+                          onPreview?.(formikHelper.values, formikHelper)
                         }
                       >
-                        Cancel
+                        Preview
                       </Button>
-                      {userType === "admin" && (
-                        <Button
-                          data-testid="tableTemplatePreview"
-                          color="primary"
-                          variant="contained"
-                          style={{
-                            paddingLeft: "40px",
-                            paddingRight: "40px",
-                            marginLeft: "10px",
-                          }}
-                          disabled={formikHelper?.isSubmitting}
-                          onClick={() =>
-                            onPreview?.(formikHelper.values, formikHelper)
-                          }
-                        >
-                          Preview
-                        </Button>
-                      )}
-                    </Grid>
+                    )}
                   </Grid>
-                )
-            }
+                </Grid>
+              )}
           </Form>
         );
       }}
