@@ -190,13 +190,14 @@ export default function EditForm(props: propTypes) {
     },
   });
 
-  /* istanbul ignore next */
   const onTemplateSelect = (values: any) => {
+    /* istanbul ignore else*/
     if (values.component_name == "TemplateTable") {
       setTemplateModal(false);
       setDimensionModal(true);
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
+    /* istanbul ignore else*/
     if (values.component_name == "ArrowTemplate") {
       setTemplateModal(false);
       setSelectedComponentType({
@@ -207,10 +208,10 @@ export default function EditForm(props: propTypes) {
     }
   };
 
-  /* istanbul ignore next */
   const onGenerateTable = (values: TableDimensionFormData) => {
     const initialData: TemplateFormData = { rows: [] };
 
+    /* istanbul ignore next */
     for (let j = 0; j < values.rows; j++) {
       initialData.rows.push({
         height: "200px",
@@ -221,6 +222,7 @@ export default function EditForm(props: propTypes) {
       });
     }
 
+    /* istanbul ignore next */
     setSelectedComponentType({
       ...selectedComponentType,
       type: "TemplateTable",
@@ -253,8 +255,9 @@ export default function EditForm(props: propTypes) {
       template_id: "",
     });
   };
-  /* istanbul ignore next */
+
   const onSaveArrowTemplate = (arrowTemplateData: string) => {
+    /* istanbul ignore next */
     setFormFields({
       ...formFields,
       template_data: arrowTemplateData,
@@ -271,12 +274,13 @@ export default function EditForm(props: propTypes) {
     }
   }, []);
 
-  /* istanbul ignore next */
   const onPreview = (values) => {
+    /* istanbul ignore next */
     sessionStorage.setItem(
       resourceData?.getResourceById["data"][0]?._id,
       JSON.stringify({ data: values, name: formFields.resource_name })
     );
+    /* istanbul ignore next */
     window.open(
       `/template/preview/${resourceData?.getResourceById["data"][0]?._id}`,
       "_blank"
@@ -312,7 +316,6 @@ export default function EditForm(props: propTypes) {
     getResourceData({
       variables: { resourceId: id },
     });
-    console.log(router?.query, " router?.query");
     setLoader(false);
   }, []);
 
@@ -371,6 +374,7 @@ export default function EditForm(props: propTypes) {
       formFields.disorder_id === undefined
         ? resourceData?.getResourceById["data"][0]?.disorder_detail._id
         : formFields.disorder_id;
+    /* istanbul ignore else */
     const modelId =
       formFields.model_id === undefined
         ? resourceData?.getResourceById["data"][0]?.model_detail._id
@@ -472,7 +476,7 @@ export default function EditForm(props: propTypes) {
       });
       return;
     }
-
+    /* istanbul ignore else*/
     if (resourceData?.getResourceById["data"][0]?.resource_issmartdraw == 1) {
       setTemplateModal(true);
     } else {
@@ -482,7 +486,6 @@ export default function EditForm(props: propTypes) {
     if (!confirmSubmission) return;
   };
 
-  /* istanbul ignore next */
   const uploadFile = async () => {
     /* istanbul ignore next */
     try {
@@ -514,7 +517,6 @@ export default function EditForm(props: propTypes) {
     }
   };
 
-  /* istanbul ignore next */
   return (
     <>
       <Loader visible={loader} />

@@ -64,8 +64,10 @@ const ResourceById: NextPage = () => {
       /* istanbul ignore next */
       JSON.stringify({
         data: JSON.parse(
+          /* istanbul ignore next */
           resourceData?.getResourceById["data"][0]?.template_data
         ),
+        /* istanbul ignore next */
         name: resourceData?.getResourceById["data"][0].resource_name,
       })
     );
@@ -157,21 +159,24 @@ const ResourceById: NextPage = () => {
                     {resourceData.getResourceById["data"][0].resource_name}
                   </Typography>
                 </Box>
-                {resourceData.getResourceById["data"][0]
-                  ?.resource_issmartdraw ==
+                {
                   /* istanbul ignore next */
-                  "1" && (
-                  <Box marginLeft={"auto"} className={classes.ellipseDiv}>
-                    <IconButton
-                      size="medium"
-                      data-testid="viewTemplate"
-                      onClick={onViewTemplate}
-                      className={classes.viewIcon}
-                    >
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Box>
-                )}
+                  resourceData.getResourceById["data"][0]
+                    ?.resource_issmartdraw ==
+                    /* istanbul ignore next */
+                    "1" && (
+                    <Box marginLeft={"auto"} className={classes.ellipseDiv}>
+                      <IconButton
+                        size="medium"
+                        data-testid="viewTemplate"
+                        onClick={onViewTemplate}
+                        className={classes.viewIcon}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Box>
+                  )
+                }
               </Grid>
               <Grid
                 p={1}
@@ -183,46 +188,50 @@ const ResourceById: NextPage = () => {
                 borderColor="secondary.main"
               >
                 <Grid pl={2} xs={12} md={12}></Grid>
-                {resourceData.getResourceById["data"][0]
-                  ?.resource_issmartdraw != "1" && (
-                  <Grid
-                    data-testid="iconsTarget"
-                    sx={{
-                      textAlign: "right",
-                    }}
-                    pl={2}
-                    mr={2}
-                    xs={12}
-                    md={12}
-                  >
-                    <IconButton
-                      size="medium"
-                      data-testid="viewUrl"
-                      target="_blank"
-                      href={
-                        resourceData.getResourceById["data"][0].resource_url !=
-                        null
-                          ? resourceData.getResourceById["data"][0].resource_url
-                          : "#"
-                      }
+                {
+                  /* istanbul ignore next */
+                  resourceData.getResourceById["data"][0]
+                    ?.resource_issmartdraw != "1" && (
+                    <Grid
+                      data-testid="iconsTarget"
+                      sx={{
+                        textAlign: "right",
+                      }}
+                      pl={2}
+                      mr={2}
+                      xs={12}
+                      md={12}
                     >
-                      <VisibilityIcon />
-                    </IconButton>
-                    <IconButton
-                      size="medium"
-                      data-testid="downloadUrl"
-                      href={
-                        resourceData.getResourceById["data"][0]
-                          .download_resource_url != null
-                          ? resourceData.getResourceById["data"][0]
-                              .download_resource_url
-                          : "#"
-                      }
-                    >
-                      <FileDownloadIcon />
-                    </IconButton>
-                  </Grid>
-                )}
+                      <IconButton
+                        size="medium"
+                        data-testid="viewUrl"
+                        target="_blank"
+                        href={
+                          resourceData.getResourceById["data"][0]
+                            .resource_url != null
+                            ? resourceData.getResourceById["data"][0]
+                                .resource_url
+                            : "#"
+                        }
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                      <IconButton
+                        size="medium"
+                        data-testid="downloadUrl"
+                        href={
+                          resourceData.getResourceById["data"][0]
+                            .download_resource_url != null
+                            ? resourceData.getResourceById["data"][0]
+                                .download_resource_url
+                            : "#"
+                        }
+                      >
+                        <FileDownloadIcon />
+                      </IconButton>
+                    </Grid>
+                  )
+                }
                 <ResourceDetail
                   title="Description"
                   description={

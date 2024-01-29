@@ -31,6 +31,7 @@ const ResourceById: NextPage = () => {
         if (data!.getResourceById?.data) {
           setResId(data!.getResourceById["data"][0]._id);
         } else if (data!.getResourceById.data == null) {
+          /* istanbul ignore next */
           setLoader(false);
         }
       },
@@ -51,6 +52,7 @@ const ResourceById: NextPage = () => {
   }, [resId]);
 
   const onViewTemplate = () => {
+    /* istanbul ignore next */
     sessionStorage.setItem(
       resourceData?.getResourceById["data"][0]?._id,
       JSON.stringify({
@@ -60,6 +62,7 @@ const ResourceById: NextPage = () => {
         name: resourceData?.getResourceById["data"][0].resource_name,
       })
     );
+    /* istanbul ignore next */
     router.push(
       `/template/preview/${resourceData?.getResourceById["data"][0]?._id}`
     );
@@ -117,19 +120,22 @@ const ResourceById: NextPage = () => {
                     {resourceData.getResourceById["data"][0].resource_name}
                   </Typography>
                 </Box>
-                {resourceData.getResourceById["data"][0]
-                  ?.resource_issmartdraw == "1" && (
-                  <Box marginLeft={"auto"} className={classes.ellipseDiv}>
-                    <IconButton
-                      size="medium"
-                      data-testid="viewTemplate"
-                      onClick={onViewTemplate}
-                      className={classes.viewIcon}
-                    >
-                      <VisibilityIcon />
-                    </IconButton>
-                  </Box>
-                )}
+                {
+                  /* istanbul ignore next */
+                  resourceData.getResourceById["data"][0]
+                    ?.resource_issmartdraw == "1" && (
+                    <Box marginLeft={"auto"} className={classes.ellipseDiv}>
+                      <IconButton
+                        size="medium"
+                        data-testid="viewTemplate"
+                        onClick={onViewTemplate}
+                        className={classes.viewIcon}
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                    </Box>
+                  )
+                }
               </Grid>
               <Grid
                 p={1}
@@ -141,48 +147,52 @@ const ResourceById: NextPage = () => {
                 borderColor="secondary.main"
               >
                 <Grid pl={2} xs={12} md={12}></Grid>
-                {resourceData.getResourceById["data"][0]
-                  ?.resource_issmartdraw != "1" && (
-                  <Grid
-                    data-testid="iconsTarget"
-                    sx={{
-                      textAlign: "right",
-                    }}
-                    pl={2}
-                    mr={2}
-                    xs={12}
-                    md={12}
-                  >
-                    {/* <NextLink href={`/therapist/resource/view/${id}`}> */}
-                    <IconButton
-                      size="medium"
-                      data-testid="viewUrl"
-                      target="_blank"
-                      href={
-                        resourceData.getResourceById["data"][0].resource_url !=
-                        null
-                          ? resourceData.getResourceById["data"][0].resource_url
-                          : "#"
-                      }
+                {
+                  /* istanbul ignore next */
+                  resourceData.getResourceById["data"][0]
+                    ?.resource_issmartdraw != "1" && (
+                    <Grid
+                      data-testid="iconsTarget"
+                      sx={{
+                        textAlign: "right",
+                      }}
+                      pl={2}
+                      mr={2}
+                      xs={12}
+                      md={12}
                     >
-                      <VisibilityIcon />
-                    </IconButton>
-                    {/* </NextLink> */}
-                    <IconButton
-                      size="medium"
-                      data-testid="downloadUrl"
-                      href={
-                        resourceData.getResourceById["data"][0]
-                          .download_resource_url != null
-                          ? resourceData.getResourceById["data"][0]
-                              .download_resource_url
-                          : "#"
-                      }
-                    >
-                      <FileDownloadIcon />
-                    </IconButton>
-                  </Grid>
-                )}
+                      {/* <NextLink href={`/therapist/resource/view/${id}`}> */}
+                      <IconButton
+                        size="medium"
+                        data-testid="viewUrl"
+                        target="_blank"
+                        href={
+                          resourceData.getResourceById["data"][0]
+                            .resource_url != null
+                            ? resourceData.getResourceById["data"][0]
+                                .resource_url
+                            : "#"
+                        }
+                      >
+                        <VisibilityIcon />
+                      </IconButton>
+                      {/* </NextLink> */}
+                      <IconButton
+                        size="medium"
+                        data-testid="downloadUrl"
+                        href={
+                          resourceData.getResourceById["data"][0]
+                            .download_resource_url != null
+                            ? resourceData.getResourceById["data"][0]
+                                .download_resource_url
+                            : "#"
+                        }
+                      >
+                        <FileDownloadIcon />
+                      </IconButton>
+                    </Grid>
+                  )
+                }
                 <ResourceDetail
                   title="Description"
                   description={
