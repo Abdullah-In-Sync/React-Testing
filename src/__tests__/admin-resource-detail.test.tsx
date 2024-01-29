@@ -53,25 +53,27 @@ const buildMocks = (): {
       },
       result: {
         data: {
-          getResourceById: [
-            {
-              _id: "750a6993f61d4e58917e31e1244711f5",
-              resource_name: "test name",
-              resource_desc: "test desc",
-              resource_instruction: "test instruct",
-              resource_references: "test reference",
-              resource_url: "http://google.com",
-              download_resource_url: "http://google.com",
-              disorder_detail: {
-                _id: "467925dfc1d34c9e9eecd3cd915588d9",
-                disorder_name: "test disorder",
+          getResourceById: {
+            data: [
+              {
+                _id: "750a6993f61d4e58917e31e1244711f5",
+                resource_name: "test name",
+                resource_desc: "test desc",
+                resource_instruction: "test instruct",
+                resource_references: "test reference",
+                resource_url: "http://google.com",
+                download_resource_url: "http://google.com",
+                disorder_detail: {
+                  _id: "467925dfc1d34c9e9eecd3cd915588d9",
+                  disorder_name: "test disorder",
+                },
+                model_detail: {
+                  _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+                  model_name: "test mddel",
+                },
               },
-              model_detail: {
-                _id: "4e110b3e7faa47c9be82540fe8e78fb0",
-                model_name: "test mddel",
-              },
-            },
-          ],
+            ],
+          },
         },
       },
     },
@@ -82,44 +84,46 @@ const buildMocks = (): {
       },
       result: {
         data: {
-          getResourceById: [
-            {
-              _id: "e2114714-18dc-4c91-83e0-7cbd5c98c33e",
-              agenda_id: "",
-              org_id: "517fa21a82c0464a92aaae90ae0d5c59",
-              resource_avail_onlyme: "0",
-              resource_avail_therapist: "1",
-              category_id: "",
-              resource_name: "Testing Template view",
-              resource_type: 1,
-              resource_desc: "a",
-              resource_instruction: "",
-              resource_references: "",
-              resource_filename: "",
-              resource_url: "",
-              download_resource_url: null,
-              resource_issmartdraw: "1",
-              template_id: "63774edbc553fac5d6a9bd74",
-              template_data:
-                '{"rows":[{"cells":[{"type":"answer","answerType":"text","answerValues":[]},{"type":"answer","answerType":"text","answerValues":[]}]},{"cells":[{"type":"header","title":"Jo margi dal lo"},{"type":"header","title":"Jo timhe accha lage"}]}]}',
-              disorder_detail: {
-                _id: "4af58b3923074fd2bd111708e0145e2a",
-                disorder_name: "28th amar disorder",
-                __typename: "Disorder",
+          getResourceById: {
+            data: [
+              {
+                _id: "e2114714-18dc-4c91-83e0-7cbd5c98c33e",
+                agenda_id: "",
+                org_id: "517fa21a82c0464a92aaae90ae0d5c59",
+                resource_avail_onlyme: "0",
+                resource_avail_therapist: "1",
+                category_id: "",
+                resource_name: "Testing Template view",
+                resource_type: 1,
+                resource_desc: "a",
+                resource_instruction: "",
+                resource_references: "",
+                resource_filename: "",
+                resource_url: "",
+                download_resource_url: null,
+                resource_issmartdraw: "1",
+                template_id: "63774edbc553fac5d6a9bd74",
+                template_data:
+                  '{"rows":[{"cells":[{"type":"answer","answerType":"text","answerValues":[]},{"type":"answer","answerType":"text","answerValues":[]}]},{"cells":[{"type":"header","title":"Jo margi dal lo"},{"type":"header","title":"Jo timhe accha lage"}]}]}',
+                disorder_detail: {
+                  _id: "4af58b3923074fd2bd111708e0145e2a",
+                  disorder_name: "28th amar disorder",
+                  __typename: "Disorder",
+                },
+                model_detail: {
+                  _id: "bd0d22a6c2a44124a524699c74e5909c",
+                  model_name: "28th amar model",
+                  __typename: "DisorderModel",
+                },
+                template_detail: {
+                  component_name: "TemplateTable",
+                  name: "Table Template",
+                  __typename: "Templates",
+                },
+                __typename: "ResourceDetail",
               },
-              model_detail: {
-                _id: "bd0d22a6c2a44124a524699c74e5909c",
-                model_name: "28th amar model",
-                __typename: "DisorderModel",
-              },
-              template_detail: {
-                component_name: "TemplateTable",
-                name: "Table Template",
-                __typename: "Templates",
-              },
-              __typename: "ResourceDetail",
-            },
-          ],
+            ],
+          },
         },
       },
     },
@@ -130,7 +134,7 @@ const buildMocks = (): {
       },
       result: {
         data: {
-          getResourceById: null,
+          getResourceById: { data: null },
         },
       },
     },
@@ -141,25 +145,27 @@ const buildMocks = (): {
       },
       result: {
         data: {
-          getResourceById: [
-            {
-              _id: "750a6993f61d4e58917e31e1244711f4",
-              resource_name: "test name",
-              resource_desc: "test desc",
-              resource_instruction: "test instruct",
-              resource_references: "test reference",
-              resource_url: null,
-              download_resource_url: null,
-              disorder_detail: {
-                _id: "467925dfc1d34c9e9eecd3cd915588d9",
-                disorder_name: "test disorder",
+          getResourceById: {
+            data: [
+              {
+                _id: "750a6993f61d4e58917e31e1244711f4",
+                resource_name: "test name",
+                resource_desc: "test desc",
+                resource_instruction: "test instruct",
+                resource_references: "test reference",
+                resource_url: null,
+                download_resource_url: null,
+                disorder_detail: {
+                  _id: "467925dfc1d34c9e9eecd3cd915588d9",
+                  disorder_name: "test disorder",
+                },
+                model_detail: {
+                  _id: "4e110b3e7faa47c9be82540fe8e78fb0",
+                  model_name: "test mddel",
+                },
               },
-              model_detail: {
-                _id: "4e110b3e7faa47c9be82540fe8e78fb0",
-                model_name: "test mddel",
-              },
-            },
-          ],
+            ],
+          },
         },
       },
     }

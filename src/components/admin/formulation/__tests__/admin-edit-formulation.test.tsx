@@ -46,23 +46,25 @@ mocksData.push({
   result: {
     data: {
       getFormulationById: {
-        fav_for_detail: null,
-        formulation_avail_for: "[2]",
-        formulation_desc: "desc test",
-        formulation_img: "",
-        formulation_instruction: "instruction test",
-        formulation_name: "001dfg 6thJune formula",
-        formulation_status: 1,
-        formulation_type: 1,
-        formulation_url: null,
-        org_id: "org-id-1",
-        template_data:
-          '{"rows":[{"height":"200px","cells":[{"type":"header","width":"600px","title":"cvbn"},{"type":"answer","width":"600px","answerType":"text","answerValues":[]}]},{"height":"200px","cells":[{"type":"","width":"600px"},{"type":"","width":"600px"}]}]}',
-        template_id: "63774edbc553fac5d6a9bd74",
-        user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
-        _id: "formulation-id-1",
-        download_formulation_url: null,
-        __typename: "AdminFormulationData",
+        data: {
+          fav_for_detail: null,
+          formulation_avail_for: "[2]",
+          formulation_desc: "desc test",
+          formulation_img: "",
+          formulation_instruction: "instruction test",
+          formulation_name: "001dfg 6thJune formula",
+          formulation_status: 1,
+          formulation_type: 1,
+          formulation_url: null,
+          org_id: "org-id-1",
+          template_data:
+            '{"rows":[{"height":"200px","cells":[{"type":"header","width":"600px","title":"cvbn"},{"type":"answer","width":"600px","answerType":"text","answerValues":[]}]},{"height":"200px","cells":[{"type":"","width":"600px"},{"type":"","width":"600px"}]}]}',
+          template_id: "63774edbc553fac5d6a9bd74",
+          user_id: "9ea296b4-4a19-49b6-9699-c1e2bd6fc946",
+          _id: "formulation-id-1",
+          download_formulation_url: null,
+          __typename: "AdminFormulationData",
+        },
       },
     },
   },
@@ -89,7 +91,7 @@ mocksData.push({
   result: {
     data: {
       updateFormulationById: {
-        _id: "formulation-id-1",
+        result: true,
       },
     },
   },

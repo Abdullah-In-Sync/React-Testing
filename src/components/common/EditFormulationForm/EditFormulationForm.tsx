@@ -115,14 +115,8 @@ export default function EditFormFormulation(props: propTypes) {
   });
 
   //FOR PREFILLED INPUT
-  const [getFormulationData, { data: resourceData }] = useLazyQuery(
-    GET_FORMULATION_BY_ID,
-    {
-      onCompleted: (data) => {
-        console.log("Koca: data ", data);
-        setLoader(false);
-      },
-    }
+  const [getFormulationData, { data: resourceData, loading }] = useLazyQuery(
+    GET_FORMULATION_BY_ID
   );
 
   useEffect(() => {
@@ -137,15 +131,12 @@ export default function EditFormFormulation(props: propTypes) {
     setLoader(true);
     getFormulationData({
       variables: { formulation_id: id },
+      onCompleted: (data) => {
+        setFormFields(data?.getFormulationById?.data);
+        setLoader(false);
+      },
     });
-
-    // add resource data to the state to prefilled value
-    const data = resourceData?.getFormulationById;
-    if (data) {
-      setFormFields(data);
-    }
-    setLoader(false);
-  }, [resourceData]);
+  }, []);
 
   /* istanbul ignore next */
   const set2 = (
@@ -231,159 +222,173 @@ export default function EditFormFormulation(props: propTypes) {
         borderRadius="7px"
       >
         <>
-          <form onSubmit={handleSubmit} data-testid="formulation-edit-form">
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={4}>
-                <TextFieldComponent
-                  required={true}
-                  name="formulation_name"
-                  id="formulation_name"
-                  label="Name"
-                  value={formFields?.formulation_name}
-                  onChange={set2}
-                  fullWidth={true}
-                  inputProps={{ "data-testid": "formulation_name" }}
-                  variant="outlined"
-                  className="form-control-bg"
-                  size="small"
-                />
-              </Grid>
+          {
+            /* istanbul ignore next */
+            !loading && (
+              <form onSubmit={handleSubmit} data-testid="formulation-edit-form">
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={4}>
+                    <TextFieldComponent
+                      required={true}
+                      name="formulation_name"
+                      id="formulation_name"
+                      label="Name"
+                      value={formFields?.formulation_name}
+                      onChange={set2}
+                      fullWidth={true}
+                      inputProps={{ "data-testid": "formulation_name" }}
+                      variant="outlined"
+                      className="form-control-bg"
+                      size="small"
+                    />
+                  </Grid>
 
-              <Grid item xs={4}>
-                <SingleSelectComponent
-                  fullWidth={true}
-                  required={true}
-                  id="resourceOrgSelect"
-                  labelId="resourceOrg"
-                  name="org_id"
-                  value={formFields?.org_id}
-                  label="Select Organization"
-                  onChange={set2}
-                  inputProps={{ "data-testid": "org_id" }}
-                  options={(orgData && orgData?.getOrganizationData) || []}
-                  mappingKeys={["_id", "name"]}
-                  size="small"
-                  className="form-control-bg"
-                  disabled={true}
-                />
-              </Grid>
-            </Grid>
+                  <Grid item xs={4}>
+                    <SingleSelectComponent
+                      fullWidth={true}
+                      required={true}
+                      id="resourceOrgSelect"
+                      labelId="resourceOrg"
+                      name="org_id"
+                      value={formFields?.org_id}
+                      label="Select Organization"
+                      onChange={set2}
+                      inputProps={{ "data-testid": "org_id" }}
+                      options={(orgData && orgData?.getOrganizationData) || []}
+                      mappingKeys={["_id", "name"]}
+                      size="small"
+                      className="form-control-bg"
+                      disabled={true}
+                    />
+                  </Grid>
+                </Grid>
 
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={12}>
-                <TextFieldComponent
-                  name="formulation_desc"
-                  id="descrption"
-                  label="Description"
-                  value={formFields?.formulation_desc}
-                  multiline
-                  rows={4}
-                  onChange={set2}
-                  inputProps={{ "data-testid": "formulation_desc" }}
-                  fullWidth={true}
-                  className="form-control-bg"
-                />
-              </Grid>
-            </Grid>
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="formulation_desc"
+                      id="descrption"
+                      label="Description"
+                      value={
+                        /* istanbul ignore next */
+                        formFields?.formulation_desc
+                      }
+                      multiline
+                      rows={4}
+                      onChange={set2}
+                      inputProps={{ "data-testid": "formulation_desc" }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
+                  </Grid>
+                </Grid>
 
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={12}>
-                <TextFieldComponent
-                  name="formulation_instruction"
-                  id="instructions"
-                  label="Instructions"
-                  value={formFields?.formulation_instruction}
-                  multiline
-                  rows={4}
-                  onChange={set2}
-                  inputProps={{ "data-testid": "formulation_instruction" }}
-                  fullWidth={true}
-                  className="form-control-bg"
-                />
-              </Grid>
-            </Grid>
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={12}>
+                    <TextFieldComponent
+                      name="formulation_instruction"
+                      id="instructions"
+                      label="Instructions"
+                      value={
+                        /* istanbul ignore next */
+                        formFields?.formulation_instruction
+                      }
+                      multiline
+                      rows={4}
+                      onChange={set2}
+                      inputProps={{ "data-testid": "formulation_instruction" }}
+                      fullWidth={true}
+                      className="form-control-bg"
+                    />
+                  </Grid>
+                </Grid>
 
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={7}>
-                Upload Resource :
-                <Link
-                  data-testid="edit-upload-file"
-                  href={
-                    resourceData?.getFormulationById?.download_formulation_url
-                  }
-                  underline="none"
-                  target="_blank"
-                >
-                  {resourceData?.getFormulationById?.formulation_img}
-                </Link>
-              </Grid>
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={7}>
+                    Upload Resource :
+                    <Link
+                      data-testid="edit-upload-file"
+                      href={
+                        resourceData?.getFormulationById?.data
+                          ?.download_formulation_url
+                      }
+                      underline="none"
+                      target="_blank"
+                    >
+                      {resourceData?.getFormulationById?.data?.formulation_img}
+                    </Link>
+                  </Grid>
 
-              <Grid item xs={7}>
-                <Box display="flex" alignItems="center">
-                  <UploadButtonComponent
-                    variant="contained"
-                    name="RESOURCE_FILENAME"
-                    inputProps={{ "data-testid": "resource_file_upload" }}
-                    onChange={fileOnChange}
-                    fileName={selectedFile?.name}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={12}>
-                <Box>
-                  <FormLabel required={true} sx={{ mr: 1 }}>
-                    Select the Availability of Resource:
-                  </FormLabel>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        // disabled={true}
-                        checked={
-                          /* istanbul ignore next */
-                          formFields.formulation_avail_for?.includes(1) || false
-                        }
-                        name="allTherapists"
-                        value={1}
-                        onChange={handleCheckboxChange}
+                  <Grid item xs={7}>
+                    <Box display="flex" alignItems="center">
+                      <UploadButtonComponent
+                        variant="contained"
+                        name="RESOURCE_FILENAME"
+                        inputProps={{ "data-testid": "resource_file_upload" }}
+                        onChange={fileOnChange}
+                        fileName={selectedFile?.name}
                       />
-                    }
-                    label="All Therapists"
-                  />
-                  <FormControlLabel
-                    data-testid="resource_avail_onlyme"
-                    control={
-                      <Checkbox
-                        // disabled={true}
-                        checked={
-                          /* istanbul ignore next */
-                          formFields.formulation_avail_for?.includes(2) || false
-                        }
-                        name="onlyMe"
-                        onChange={handleCheckboxChange}
-                        value={2}
-                      />
-                    }
-                    label="Only me"
-                  />
-                </Box>
-              </Grid>
-            </Grid>
+                    </Box>
+                  </Grid>
+                </Grid>
 
-            <Grid container spacing={2} marginBottom={5}>
-              <Grid item xs={12} textAlign="center">
-                <Button
-                  data-testid="editFormulationSubmitButton"
-                  variant="contained"
-                  type="submit"
-                >
-                  Save
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={12}>
+                    <Box>
+                      <FormLabel required={true} sx={{ mr: 1 }}>
+                        Select the Availability of Resource:
+                      </FormLabel>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            // disabled={true}
+                            checked={
+                              /* istanbul ignore next */
+                              formFields.formulation_avail_for?.includes(1) ||
+                              false
+                            }
+                            name="allTherapists"
+                            value={1}
+                            onChange={handleCheckboxChange}
+                          />
+                        }
+                        label="All Therapists"
+                      />
+                      <FormControlLabel
+                        data-testid="resource_avail_onlyme"
+                        control={
+                          <Checkbox
+                            // disabled={true}
+                            checked={
+                              /* istanbul ignore next */
+                              formFields.formulation_avail_for?.includes(2) ||
+                              false
+                            }
+                            name="onlyMe"
+                            onChange={handleCheckboxChange}
+                            value={2}
+                          />
+                        }
+                        label="Only me"
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2} marginBottom={5}>
+                  <Grid item xs={12} textAlign="center">
+                    <Button
+                      data-testid="editFormulationSubmitButton"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Save
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            )
+          }
         </>
       </Box>
       {isConfirm && (

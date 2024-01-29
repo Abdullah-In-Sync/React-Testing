@@ -50,7 +50,7 @@ import Tooltip from "@mui/material/Tooltip";
 import NextLink from "next/link";
 import withAuthentication from "../../../hoc/auth";
 import { useAppContext } from "../../../contexts/AuthContext";
-import { checkPrivilageAccess, checkUserType } from "../../../utility/helper";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 // COMPONENT STYLES
 const crudButtons = {
@@ -167,7 +167,6 @@ const Resource: NextPage = () => {
   const isLibraryDelete = checkPrivilageAccess("Library", "Delete");
   const isLibraryDownload = checkPrivilageAccess("Library", "Download");
   const isLibraryShare = checkPrivilageAccess("Library", "Share");
-  const { userType } = checkUserType();
   // COMPONENT STATE
   const [modelData, setModelData] = useState<any>([]);
   const [filterValue, setFilterValue] = useState<any>({});
@@ -328,29 +327,26 @@ const Resource: NextPage = () => {
               </NextLink>
             </IconButtonWrapper>
           )}
-          {userType !== "custom" && (
-            <IconButtonWrapper aria-label="favorite" size="small">
-              <FavoriteBorderIcon
-                data-testid={"fav_" + value?._id}
-                id={"fav_" + value?._id}
-                onClick={() =>
-                  addFavour(
-                    value?._id,
-                    value?.fav_res_detail && value?.fav_res_detail.length > 0
-                      ? value?.fav_res_detail[0]._id
-                      : ""
-                  )
-                }
-                sx={{
-                  color:
-                    value?.fav_res_detail && value?.fav_res_detail.length > 0
-                      ? "red"
-                      : "",
-                }}
-              />
-            </IconButtonWrapper>
-          )}
-          {console.log("user-----------", value?.user_id, userId)}
+          <IconButtonWrapper aria-label="favorite" size="small">
+            <FavoriteBorderIcon
+              data-testid={"fav_" + value?._id}
+              id={"fav_" + value?._id}
+              onClick={() =>
+                addFavour(
+                  value?._id,
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
+                    ? value?.fav_res_detail[0]._id
+                    : ""
+                )
+              }
+              sx={{
+                color:
+                  value?.fav_res_detail && value?.fav_res_detail.length > 0
+                    ? "red"
+                    : "",
+              }}
+            />
+          </IconButtonWrapper>
           {isLibraryDelete && value?.user_id == userId && (
             <IconButtonWrapper
               onClick={() => {

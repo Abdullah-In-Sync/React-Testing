@@ -45,6 +45,7 @@ import { useSnackbar } from "notistack";
 import ShareAssessmentForm from "../../../components/admin/assessement/shareAssessment/ShareAssessmentForm";
 import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { ModalElement } from "../../../components/common/CustomModal/CommonModal";
+import { checkPrivilageAccess } from "../../../utility/helper";
 
 const IconButtonWrapper = styled(IconButton)(
   () => `
@@ -61,6 +62,12 @@ const crudButtons = {
 };
 
 const TherapistFormulation = () => {
+  const isLibraryAdd = checkPrivilageAccess("Library", "Add");
+  const isLibraryCreate = checkPrivilageAccess("Library", "Create");
+  const isLibraryEdit = checkPrivilageAccess("Library", "Edit");
+  const isLibraryDelete = checkPrivilageAccess("Library", "Delete");
+  const isLibraryDownload = checkPrivilageAccess("Library", "Download");
+  const isLibraryShare = checkPrivilageAccess("Library", "Share");
   const router = useRouter();
   const [loader, setLoader] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -127,8 +134,10 @@ const TherapistFormulation = () => {
       await updateFormulation({
         variables,
         onCompleted: (data) => {
-          const { updateFormulationById } = data;
-          if (updateFormulationById) {
+          const {
+            updateFormulationById: { result },
+          } = data;
+          if (result) {
             refetchFormulationList();
             enqueueSnackbar("Formulation deleted successfully.", {
               variant: "success",
@@ -188,17 +197,15 @@ const TherapistFormulation = () => {
       visible: true,
       render: (_, value) => (
         <>
-          {value?.user_id === Id && (
-            <>
-              <IconButtonWrapper
-                data-testid={`editIcon_${value.user_id}`}
-                aria-label="create"
-                size="small"
-                onClick={() => handlePressEdit(value)}
-              >
-                <CreateIcon />
-              </IconButtonWrapper>
-            </>
+          {isLibraryEdit && value?.user_id === Id && (
+            <IconButtonWrapper
+              data-testid={`editIcon_${value.user_id}`}
+              aria-label="create"
+              size="small"
+              onClick={() => handlePressEdit(value)}
+            >
+              <CreateIcon />
+            </IconButtonWrapper>
           )}
 
           <>
@@ -227,48 +234,54 @@ const TherapistFormulation = () => {
               />
             </IconButtonWrapper>
 
-            <IconButtonWrapper
-              data-testid={"deleteIcon_" + value?._id}
-              aria-label="delete"
-              size="small"
-              onClick={() => handlePressDelete(value)}
-            >
-              <DeleteIcon />
-            </IconButtonWrapper>
-
-            <NextLink
-              href={
-                value?.download_formulation_url != null
-                  ? value?.download_formulation_url
-                  : "#"
-              }
-              passHref
-            >
-              <IconButtonWrapper aria-label="download" size="small">
-                <CloudDownloadIcon />
+            {isLibraryDelete && (
+              <IconButtonWrapper
+                data-testid={"deleteIcon_" + value?._id}
+                aria-label="delete"
+                size="small"
+                onClick={() => handlePressDelete(value)}
+              >
+                <DeleteIcon />
               </IconButtonWrapper>
-            </NextLink>
+            )}
 
-            <IconButtonWrapper
-              aria-label="favorite"
-              size="small"
-              data-testid={"shareBtn_" + value?._id}
-              onClick={(e) => {
-                e.stopPropagation();
-                onPressShareFormulation(value?._id, value?.formulation_name);
-              }}
-            >
-              <RedoIcon
-                data-testid={"fav_" + value?._id}
-                id={"fav_" + value?._id}
-                sx={{
-                  color:
-                    value?.fav_res_detail && value?.fav_res_detail.length > 0
-                      ? "red"
-                      : "",
+            {isLibraryDownload && (
+              <NextLink
+                href={
+                  value?.download_formulation_url != null
+                    ? value?.download_formulation_url
+                    : "#"
+                }
+                passHref
+              >
+                <IconButtonWrapper aria-label="download" size="small">
+                  <CloudDownloadIcon />
+                </IconButtonWrapper>
+              </NextLink>
+            )}
+
+            {isLibraryShare && (
+              <IconButtonWrapper
+                aria-label="favorite"
+                size="small"
+                data-testid={"shareBtn_" + value?._id}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPressShareFormulation(value?._id, value?.formulation_name);
                 }}
-              />
-            </IconButtonWrapper>
+              >
+                <RedoIcon
+                  data-testid={"fav_" + value?._id}
+                  id={"fav_" + value?._id}
+                  sx={{
+                    color:
+                      value?.fav_res_detail && value?.fav_res_detail.length > 0
+                        ? "red"
+                        : "",
+                  }}
+                />
+              </IconButtonWrapper>
+            )}
           </>
         </>
       ),
@@ -440,22 +453,26 @@ const TherapistFormulation = () => {
               className="mr-3"
               label="Formulation"
             />
-            <AddButton
-              style={{
-                backgroundColor: "#6EC9DB",
-              }}
-              href="/therapist/resource/add"
-              className="mr-3"
-              label="Add Resource"
-            />
-            <AddButton
-              style={{
-                backgroundColor: "#6EC9DB",
-              }}
-              href="/therapist/resource/create"
-              className="mr-3"
-              label="Create Resource"
-            />
+            {isLibraryAdd && (
+              <AddButton
+                style={{
+                  backgroundColor: "#6EC9DB",
+                }}
+                href="/therapist/resource/add"
+                className="mr-3"
+                label="Add Resource"
+              />
+            )}
+            {isLibraryCreate && (
+              <AddButton
+                style={{
+                  backgroundColor: "#6EC9DB",
+                }}
+                href="/therapist/resource/create"
+                className="mr-3"
+                label="Create Resource"
+              />
+            )}
           </Box>
         </Grid>
 

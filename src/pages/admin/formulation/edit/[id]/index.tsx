@@ -35,7 +35,11 @@ const EditFormulationPage: NextPage = () => {
 
   const [
     getFormulation,
-    { data: { getFormulationById: formulationData = undefined } = {} },
+    {
+      data: {
+        getFormulationById: { data: formulationData = undefined } = {},
+      } = {},
+    },
   ] = useLazyQuery<FormulationData>(GET_FORMULATION_BY_ID, {
     fetchPolicy: "cache-and-network",
     onCompleted: () => {
@@ -84,8 +88,10 @@ const EditFormulationPage: NextPage = () => {
       await updateFormulation({
         variables,
         onCompleted: (data) => {
-          const { updateFormulationById } = data;
-          if (updateFormulationById) {
+          const {
+            updateFormulationById: { result },
+          } = data;
+          if (result) {
             enqueueSnackbar("Formulation updated successfully.", {
               variant: "success",
             });

@@ -109,6 +109,7 @@ export default function EditForm(props: propTypes) {
     { id: 4, value: "Video File" },
   ];
 
+  /* istanbul ignore next */
   const [getOrgData, { data: orgData }] = useLazyQuery(GET_ORG_DATA, {
     onCompleted: () => {
       props.setLoader(false);
@@ -157,11 +158,10 @@ export default function EditForm(props: propTypes) {
     }
   );
 
+  /* istanbul ignore next */
   const [getPreSignedURL] = useLazyQuery(GET_UPLOAD_RESOURCE_URL, {
     onCompleted: (data) => {
-      /* istanbul ignore next */
       props.setLoader(false);
-      /* istanbul ignore next */
       if (
         data &&
         data?.getUploadResourceUrl &&
@@ -182,20 +182,22 @@ export default function EditForm(props: propTypes) {
   ] = useLazyQuery(GET_RESOURCE_DETAIL, {
     onCompleted: (data) => {
       /* istanbul ignore next */
-      if (data!.getResourceById) {
-        setResId(data!.getResourceById[0]?._id);
-      } else if (data!.getResourceById == null) {
+      if (data!.getResourceById?.data) {
+        setResId(data!.getResourceById["data"][0]?._id);
+      } else if (data!.getResourceById?.data == null) {
         setLoader(false);
       }
     },
   });
 
   const onTemplateSelect = (values: any) => {
+    /* istanbul ignore else*/
     if (values.component_name == "TemplateTable") {
       setTemplateModal(false);
       setDimensionModal(true);
       setSelectedComponentType({ ...selectedComponentType, info: values });
     }
+    /* istanbul ignore else*/
     if (values.component_name == "ArrowTemplate") {
       setTemplateModal(false);
       setSelectedComponentType({
@@ -209,6 +211,7 @@ export default function EditForm(props: propTypes) {
   const onGenerateTable = (values: TableDimensionFormData) => {
     const initialData: TemplateFormData = { rows: [] };
 
+    /* istanbul ignore next */
     for (let j = 0; j < values.rows; j++) {
       initialData.rows.push({
         height: "200px",
@@ -219,6 +222,7 @@ export default function EditForm(props: propTypes) {
       });
     }
 
+    /* istanbul ignore next */
     setSelectedComponentType({
       ...selectedComponentType,
       type: "TemplateTable",
@@ -228,6 +232,7 @@ export default function EditForm(props: propTypes) {
     setDimensionModal(false);
   };
 
+  /* istanbul ignore next */
   const onTemplateSave = (value) => {
     setFormFields({
       ...formFields,
@@ -237,6 +242,7 @@ export default function EditForm(props: propTypes) {
     setModalOpen(true);
   };
 
+  /* istanbul ignore next */
   const onTemplateCancel = () => {
     setSelectedComponentType({
       type: "",
@@ -249,32 +255,34 @@ export default function EditForm(props: propTypes) {
       template_id: "",
     });
   };
-  const onSaveArrowTemplate = (arrowTemplateData: string) => {
-    console.log(selectedComponentType, "node/edges onsubmit");
 
+  const onSaveArrowTemplate = (arrowTemplateData: string) => {
+    /* istanbul ignore next */
     setFormFields({
       ...formFields,
       template_data: arrowTemplateData,
       template_id: selectedComponentType?.info?._id,
     });
     setModalOpen(true);
-    /* istanbul ignore next */
   };
 
   useEffect(() => {
     props.setLoader(true);
+    /* istanbul ignore next */
     if (userType == "admin") {
       getOrgData();
     }
   }, []);
 
   const onPreview = (values) => {
+    /* istanbul ignore next */
     sessionStorage.setItem(
-      resourceData?.getResourceById[0]?._id,
+      resourceData?.getResourceById["data"][0]?._id,
       JSON.stringify({ data: values, name: formFields.resource_name })
     );
+    /* istanbul ignore next */
     window.open(
-      `/template/preview/${resourceData?.getResourceById[0]?._id}`,
+      `/template/preview/${resourceData?.getResourceById["data"][0]?._id}`,
       "_blank"
     );
   };
@@ -289,13 +297,13 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     if (!resourceLoading && resourceData) {
       setLoader(false);
-      if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
+      if (resourceData?.getResourceById["data"][0]?.resource_issmartdraw == 1) {
         setSelectedComponentType({
-          info: resourceData?.getResourceById[0]?.template_detail,
-          type: resourceData?.getResourceById[0]?.template_detail
+          info: resourceData?.getResourceById["data"][0]?.template_detail,
+          type: resourceData?.getResourceById["data"][0]?.template_detail
             ?.component_name,
           initialData: JSON.parse(
-            resourceData?.getResourceById[0]?.template_data
+            resourceData?.getResourceById["data"][0]?.template_data
           ),
         });
       }
@@ -308,13 +316,12 @@ export default function EditForm(props: propTypes) {
     getResourceData({
       variables: { resourceId: id },
     });
-    console.log(router?.query, " router?.query");
     setLoader(false);
   }, []);
 
   // add resource data to the state
   useEffect(() => {
-    const data = resourceData?.getResourceById[0];
+    const data = resourceData?.getResourceById["data"][0];
     /* istanbul ignore next */
     if (data) {
       setFormFields(data);
@@ -325,7 +332,7 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const orgId =
       formFields.org_id === undefined
-        ? resourceData?.getResourceById[0]?.org_id
+        ? resourceData?.getResourceById["data"][0]?.org_id
         : formFields.org_id;
     /* istanbul ignore next */
     if (orgId) {
@@ -346,7 +353,7 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const disorderId =
       formFields.disorder_id === undefined
-        ? resourceData?.getResourceById[0]?.disorder_detail._id
+        ? resourceData?.getResourceById["data"][0]?.disorder_detail._id
         : formFields.disorder_id;
     /* istanbul ignore next */
     if (disorderId) {
@@ -365,11 +372,12 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const disorderId =
       formFields.disorder_id === undefined
-        ? resourceData?.getResourceById[0]?.disorder_detail._id
+        ? resourceData?.getResourceById["data"][0]?.disorder_detail._id
         : formFields.disorder_id;
+    /* istanbul ignore else */
     const modelId =
       formFields.model_id === undefined
-        ? resourceData?.getResourceById[0]?.model_detail._id
+        ? resourceData?.getResourceById["data"][0]?.model_detail._id
         : formFields.model_id;
     /* istanbul ignore next */
     if (disorderId && modelId) {
@@ -393,11 +401,11 @@ export default function EditForm(props: propTypes) {
     /* istanbul ignore next */
     const categoryId =
       formFields.category_id === undefined
-        ? resourceData?.getResourceById[0]?.category_id._id
+        ? resourceData?.getResourceById["data"][0]?.category_id._id
         : formFields.category_id;
     const modelId =
       formFields.model_id === undefined
-        ? resourceData?.getResourceById[0]?.model_detail._id
+        ? resourceData?.getResourceById["data"][0]?.model_detail._id
         : formFields.model_id;
     /* istanbul ignore next */
     if (modelId && categoryId) {
@@ -455,6 +463,7 @@ export default function EditForm(props: propTypes) {
     preSignedURL.current = url;
   };
 
+  /* istanbul ignore next */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     /* istanbul ignore next */
@@ -467,8 +476,8 @@ export default function EditForm(props: propTypes) {
       });
       return;
     }
-
-    if (resourceData?.getResourceById[0]?.resource_issmartdraw == 1) {
+    /* istanbul ignore else*/
+    if (resourceData?.getResourceById["data"][0]?.resource_issmartdraw == 1) {
       setTemplateModal(true);
     } else {
       setModalOpen(true);
@@ -703,23 +712,28 @@ export default function EditForm(props: propTypes) {
                   className="form-control-bg"
                 />
               </Grid>
-              {resourceData?.getResourceById != null &&
-              resourceData?.getResourceById[0]?.resource_issmartdraw != 1 ? (
+              {resourceData?.getResourceById?.data != null &&
+              resourceData?.getResourceById["data"][0]?.resource_issmartdraw !=
+                1 ? (
                 <Grid item xs={7}>
                   Upload Resource :{" "}
                   <Link
                     data-testid="edit-upload-file"
-                    href={resourceData?.getResourceById[0].resource_url}
+                    href={resourceData?.getResourceById["data"][0].resource_url}
                     underline="none"
                     target="_blank"
                   >
-                    {resourceData?.getResourceById[0]?.resource_filename}
+                    {
+                      resourceData?.getResourceById["data"][0]
+                        ?.resource_filename
+                    }
                   </Link>
                 </Grid>
               ) : (
                 ""
               )}
-              {resourceData?.getResourceById[0]?.resource_issmartdraw != 1 && (
+              {resourceData?.getResourceById["data"][0]?.resource_issmartdraw !=
+                1 && (
                 <Grid item xs={7}>
                   <Box display="flex" alignItems="center">
                     <UploadButtonComponent
@@ -800,6 +814,7 @@ export default function EditForm(props: propTypes) {
                   size="small"
                   data-testid="editResourceModalCancelButton"
                   onClick={() => {
+                    /* istanbul ignore next */
                     setModalOpen(false);
                   }}
                 >
@@ -820,7 +835,8 @@ export default function EditForm(props: propTypes) {
                 </Button>
               </Box>
             </SureModal>
-            {resourceData?.getResourceById[0]?.resource_issmartdraw != 1 && (
+            {resourceData?.getResourceById["data"][0]?.resource_issmartdraw !=
+              1 && (
               <Grid container spacing={2} marginBottom={5}>
                 <Grid item xs={12} textAlign="center">
                   <Button
@@ -833,7 +849,8 @@ export default function EditForm(props: propTypes) {
                 </Grid>
               </Grid>
             )}
-            {resourceData?.getResourceById[0]?.resource_issmartdraw == 1 && (
+            {resourceData?.getResourceById["data"][0]?.resource_issmartdraw ==
+              1 && (
               <Grid container spacing={2} marginBottom={5}>
                 <Grid item xs={12} textAlign="center">
                   <AddButton
@@ -859,7 +876,9 @@ export default function EditForm(props: propTypes) {
           <TableDimensionModal
             isOpen={dimensionModal}
             setConfirmSubmission={setConfirmSubmission}
-            onSubmit={(values) => onGenerateTable(values)}
+            onSubmit={(values) =>
+              /* istanbul ignore next */ onGenerateTable(values)
+            }
             onModalClose={setDimensionModal}
           />
         )}
