@@ -32,6 +32,7 @@ module.exports = {
     "!<rootDir>/node_modules/",
     "!<rootDir>/.storybook/",
     "!<rootDir>/out/",
+    "!<rootDir>/graphql/",
   ],
   coveragePathIgnorePatterns: [
     "_app.tsx",
