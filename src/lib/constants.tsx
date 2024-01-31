@@ -240,6 +240,18 @@ export const moduleList = {
     name: "Notes",
     id: "e72e9adf-9320-4563-8b00-47bfbfe0c7da",
   },
+  Therapies: {
+    name: "Therapies",
+    id: "384d53d9-fa25-4314-b6de-0f259a4cff22",
+  },
+  Therapist: {
+    name: "Therapist",
+    id: "b007de6a-9000-4bd2-bf9f-1e5955d208d4",
+  },
+  Agenda: {
+    name: "Agenda",
+    id: "88ce8f37-6ad4-466b-b02b-d031a9a2694c",
+  },
 };
 
 export const defaultModuleCheck = {
