@@ -1,6 +1,6 @@
 import { MockedProvider } from "@apollo/client/testing";
 import { ThemeProvider } from "@mui/styles";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { useRouter } from "next/router";
 import { SnackbarProvider } from "notistack";
 import { GET_PATH_RESOURCE_LIST } from "../graphql/query/resource";
@@ -9,6 +9,7 @@ import { GET_PATIENTTHERAPY_DATA } from "../graphql/query/common";
 import theme from "../styles/theme/theme";
 import ResourceList from "../pages/therapist/patient/view/[id]/resources";
 import { DELETE_RESOURCE_BY_ID } from "../graphql/mutation/patient";
+import { THERAPIST_SHARE_RESOURCE } from "../graphql/resources/graphql";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -225,7 +226,29 @@ mocksData.push({
     query: DELETE_RESOURCE_BY_ID,
     variables: { ptsharresId: "ce465fdd296b46afac0192630c0ee34a" },
   },
-  result: {},
+  result: {
+    data: {
+      deleteShareResource: {
+        result: true,
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: THERAPIST_SHARE_RESOURCE,
+    variables: {
+      ptsharresId: "ce465fdd296b46afac0192630c0ee34a",
+    },
+  },
+  result: {
+    data: {
+      therapistSharePatientResource: {
+        result: true,
+      },
+    },
+  },
 });
 const sut = async () => {
   render(
@@ -240,6 +263,31 @@ const sut = async () => {
 };
 
 describe("Therapist patient resource list page", () => {
+  it("should share therapist patient", async () => {
+    (useRouter as jest.Mock).mockClear();
+    const mockRouter = {
+      back: jest.fn(),
+      push: jest.fn(),
+    };
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      query: {
+        id: "d0f32c9e662745d5b60b8165eb8bdb55",
+      },
+      ...mockRouter,
+    }));
+    await sut();
+    const shareButton = await screen.findByTestId(
+      "iconButton_share_ce465fdd296b46afac0192630c0ee34a"
+    );
+    expect(shareButton).toBeInTheDocument();
+    fireEvent.click(shareButton);
+    expect(await screen.findByTestId("confirmButton")).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Resource has been shared successfully!")
+    ).toBeInTheDocument();
+  });
+
   it("should render therapist patient resource detail", async () => {
     (useRouter as jest.Mock).mockClear();
     const mockRouter = {
@@ -254,23 +302,18 @@ describe("Therapist patient resource list page", () => {
     }));
     await sut();
 
-    await waitFor(async () => {
-      const viewButton = await screen.findByTestId(
-        "iconButton_view_ce465fdd296b46afac0192630c0ee34a"
-      );
-      expect(viewButton).toBeInTheDocument();
-      fireEvent.click(viewButton);
-      expect(mockRouter.push).toHaveBeenCalled();
+    const viewButton = await screen.findByTestId(
+      "iconButton_view_ce465fdd296b46afac0192630c0ee34a"
+    );
+    fireEvent.click(viewButton);
+    expect(mockRouter.push).toHaveBeenCalled();
 
-      const attachmentButton = await screen.findByTestId(
-        "iconButton_attachment_ce465fdd296b46afac0192630c0ee34a"
-      );
-      expect(attachmentButton).toBeInTheDocument();
-      fireEvent.click(attachmentButton);
-      expect(mockRouter.push).toHaveBeenCalled();
-    });
-
-    //
+    const attachmentButton = await screen.findByTestId(
+      "iconButton_attachment_ce465fdd296b46afac0192630c0ee34a"
+    );
+    expect(attachmentButton).toBeInTheDocument();
+    fireEvent.click(attachmentButton);
+    expect(mockRouter.push).toHaveBeenCalled();
   });
 
   it("should delete therapist patient", async () => {
@@ -286,30 +329,14 @@ describe("Therapist patient resource list page", () => {
       ...mockRouter,
     }));
     await sut();
-
-    waitFor(async () => {
-      const viewButton = await screen.findByTestId(
-        "iconButton_delete_ce465fdd296b46afac0192630c0ee34a"
-      );
-      expect(viewButton).toBeInTheDocument();
-      fireEvent.click(viewButton);
-      await waitFor(() =>
-        expect(screen.queryByTestId("confirmButton")).toBeInTheDocument()
-      );
-
-      await waitFor(async () => {
-        fireEvent.click(screen.queryByTestId("confirmButton"));
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Resource Deleted Successful")
-        ).toBeInTheDocument();
-      });
-
-      await waitFor(() =>
-        expect(screen.queryByText("Resource Name")).toBeInTheDocument()
-      );
-    });
+    const viewButton = await screen.findByTestId(
+      "iconButton_delete_ce465fdd296b46afac0192630c0ee34a"
+    );
+    expect(viewButton).toBeInTheDocument();
+    fireEvent.click(viewButton);
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Resource deleted Successfully.")
+    ).toBeInTheDocument();
   });
 });
