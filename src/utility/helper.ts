@@ -3,7 +3,7 @@ import moment from "moment";
 import { getSessionToken } from "./storage";
 import { getUpdatedFileName } from "../lib/helpers/s3";
 import TherapyTabs from "../components/patient/therapy/TherapyTabs";
-import { moduleList } from "../lib/constants";
+import { IS_ADMIN, moduleList } from "../lib/constants";
 
 type SessionObject = {
   label: string;
@@ -194,11 +194,10 @@ export function parseJwt(token) {
 }
 
 /* istanbul ignore file */
-export const checkPrivilageAccess = (moduleName, privilege?: any) => {
-  const { userTokenId } = getSessionToken();
-
+export const checkPrivilageAccess = (moduleName, privilege?: any, isUserTypeConditionCheck?: any) => {
+  const { userTokenId, userType } = getSessionToken();
   const { role_access } = parseJwt(userTokenId) || {};
-  if (!role_access || !moduleName) return true;
+  if ((userType===IS_ADMIN && !isUserTypeConditionCheck) || !role_access || !moduleName) return true;
   const moduleObj = moduleList[moduleName];
   if (!moduleObj) return false;
   const roleAccessData = JSON.parse(role_access);
@@ -273,11 +272,11 @@ export const getTokenIdDecodedData = () => {
 /* istanbul ignore file */
 export const filterBasedOnPrivilages = (routeObj) => {
   const { moduleName: label } = routeObj;
-  const status = checkPrivilageAccess(label);
+  const status = checkPrivilageAccess(label, undefined, true);
   if (status === undefined || label === "default") return true;
   else if (label === "Therapy")
     return TherapyTabs.some(({ moduleName }) =>
-      checkPrivilageAccess(moduleName)
+      checkPrivilageAccess(moduleName, undefined, true)
     );
   else return status;
 };
