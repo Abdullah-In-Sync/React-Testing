@@ -71,16 +71,16 @@ const DisorderPage: NextPage = () => {
     },
   });
 
-  const [
-    getAdminTherapyList,
-    { data: { adminTherapyList: { data: therapyListData = [] } = {} } = {} },
-  ] = useLazyQuery<AdminTherapyData>(GET_ADMIN_THERAPY_LIST, {
-    fetchPolicy: "cache-and-network",
-    onCompleted: () => {
-      /* istanbul ignore next */
-      setLoader(false);
-    },
-  });
+  const [getAdminTherapyList, { data: { adminTherapyList = undefined } = {} }] =
+    useLazyQuery<AdminTherapyData>(GET_ADMIN_THERAPY_LIST, {
+      fetchPolicy: "cache-and-network",
+      onCompleted: () => {
+        /* istanbul ignore next */
+        setLoader(false);
+      },
+    });
+
+  const { data: therapyListData } = adminTherapyList || {};
 
   /* istanbul ignore next */
   const onPageChange = (event?: any, newPage?: number) => {
@@ -182,7 +182,7 @@ const DisorderPage: NextPage = () => {
   const onPressSideButton = () => {
     infoModalRef.current.openConfirm({
       data: {
-        therapyListData,
+        therapyListData: therapyListData || [],
         onSubmit: submitAddDisorderForm,
         headerTitleText: "Add Disorder",
         organizationList,
@@ -243,7 +243,7 @@ const DisorderPage: NextPage = () => {
         data: {
           value: { disorder_name, therapy_id, org_id },
           disorder_id,
-          therapyListData,
+          therapyListData: therapyListData || [],
           saveButtonText: "Update",
           onSubmit: (v, formikProps) =>
             submitUpdateDisorderForm(v, { ...formikProps, disorder_id }),
@@ -270,7 +270,7 @@ const DisorderPage: NextPage = () => {
         loadingDisorderList={loadingDisorderList}
         pageActionButtonClick={handleTableActions}
         onPressSideButton={onPressSideButton}
-        therapyListData={therapyListData}
+        therapyListData={therapyListData || []}
         infoModalRef={infoModalRef}
         confirmRef={confirmRef}
       />

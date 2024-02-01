@@ -72,7 +72,7 @@ const TherapiesListPage: NextPage = () => {
     getAdminTherapiesList,
     {
       loading: loadingTherapiesList,
-      data: { adminTherapyList: listData = {} } = {},
+      data: { adminTherapyList = undefined } = {},
       refetch,
     },
   ] = useLazyQuery(GET_ADMIN_THERAPIES_LIST, {
@@ -254,7 +254,7 @@ const TherapiesListPage: NextPage = () => {
       <Loader visible={loader} />
       <ContentHeader title="Therapy" />
       <TherapiesComponent
-        monitorList={listData}
+        monitorList={adminTherapyList || {}}
         onPageChange={onPageChange}
         onSelectPageDropdown={onSelectPageDropdown}
         tableCurentPage={tableCurentPage}
@@ -268,7 +268,6 @@ const TherapiesListPage: NextPage = () => {
         pageActionButtonClick={handleActionButtonClick}
         onPressSideButton={handleOpenAddTherapyModal}
       />
-
       <CommonModal
         ref={modalRefAddPlan}
         headerTitleText={"Add Therapy"}

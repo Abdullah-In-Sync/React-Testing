@@ -183,11 +183,12 @@ const CustomUserListPage: NextPage = () => {
     }
   };
   useEffect(() => {
-    getCustomUserById({
-      variables: {
-        custom_user_id: selectedUser,
-      },
-    });
+    if (selectedUser)
+      getCustomUserById({
+        variables: {
+          custom_user_id: selectedUser,
+        },
+      });
   }, [selectedUser]);
   const [getCustomUserById, { data: prefilledData }] = useLazyQuery(
     GET_USER_DATA_BY_ID,

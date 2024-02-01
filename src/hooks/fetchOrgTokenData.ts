@@ -18,6 +18,7 @@ export const queryOrgTokenData = () => {
     variables: {
       name: orgName,
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const [therapist] = useLazyQuery(tokenValidationQuery["therapist"]);

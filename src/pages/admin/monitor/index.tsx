@@ -67,7 +67,7 @@ const MonitorListPage: NextPage = () => {
     getAdminMonitorList,
     {
       loading: loadingMonitorList,
-      data: { adminMonitorList: listData = {} } = {},
+      data: { adminMonitorList = undefined } = {},
     },
   ] = useLazyQuery(GET_ADMIN_MONITOR_LIST, {
     fetchPolicy: "cache-and-network",
@@ -201,7 +201,7 @@ const MonitorListPage: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Monitor" />
         <MonitorComponent
-          monitorList={listData}
+          monitorList={adminMonitorList || {}}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}
