@@ -194,10 +194,19 @@ export function parseJwt(token) {
 }
 
 /* istanbul ignore file */
-export const checkPrivilageAccess = (moduleName, privilege?: any, isUserTypeConditionCheck?: any) => {
+export const checkPrivilageAccess = (
+  moduleName,
+  privilege?: any,
+  isUserTypeConditionCheck?: any
+) => {
   const { userTokenId, userType } = getSessionToken();
   const { role_access } = parseJwt(userTokenId) || {};
-  if ((userType===IS_ADMIN && !isUserTypeConditionCheck) || !role_access || !moduleName) return true;
+  if (
+    (userType === IS_ADMIN && !isUserTypeConditionCheck) ||
+    !role_access ||
+    !moduleName
+  )
+    return true;
   const moduleObj = moduleList[moduleName];
   if (!moduleObj) return false;
   const roleAccessData = JSON.parse(role_access);
