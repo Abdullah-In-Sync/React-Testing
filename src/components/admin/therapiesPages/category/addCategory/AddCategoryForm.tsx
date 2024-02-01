@@ -9,13 +9,13 @@ const AddDisorderForm: React.FC<any> = ({
   values,
   isSubmitting,
   saveButtonText,
-  organizationList = [],
-  disorderListData = {},
-  modelListData = {},
+  organizationList,
+  disorderListData,
+  modelListData,
 }) => {
   const { org_id, disorder_id } = values;
-  const { data: disorderData = [] } = disorderListData;
-  const { data: modelData = [] } = modelListData;
+  const { data: disorderData = [] } = disorderListData || {};
+  const { data: modelData = [] } = modelListData || {};
 
   const modifyDisorderData = disorderData.filter((item) => {
     const { organization_settings } = item;
@@ -43,7 +43,7 @@ const AddDisorderForm: React.FC<any> = ({
               labelId="orgSelect"
               name="org_id"
               label="Select Organisation*"
-              options={organizationList}
+              options={organizationList || []}
               mappingKeys={["_id", "name"]}
               size="small"
               className="form-control-bg"
