@@ -66,7 +66,7 @@ const MeasuresListPage: NextPage = () => {
     getAdminMeasuresList,
     {
       loading: loadingMeasuresList,
-      data: { adminMeasuresList: listData = {} } = {},
+      data: { adminMeasuresList = undefined } = {},
     },
   ] = useLazyQuery(GET_ADMIN_MEASURES_LIST, {
     fetchPolicy: "cache-and-network",
@@ -235,7 +235,7 @@ const MeasuresListPage: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Measures" />
         <MeasuresComponent
-          measuresList={listData}
+          measuresList={adminMeasuresList || {}}
           onPageChange={onPageChange}
           onSelectPageDropdown={onSelectPageDropdown}
           tableCurentPage={tableCurentPage}

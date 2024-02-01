@@ -33,14 +33,14 @@ const TherapistListPage: NextPage = () => {
     getAdminTherapistList,
     {
       loading: loadingTherapistList,
-      data: {
-        getTherapistList: { therapistlist: listData = [], total = "" } = {},
-      } = {},
+      data: { getTherapistList = undefined } = {},
       refetch: refetchTherapistList,
     },
   ] = useLazyQuery<TherapistListData>(GET_ADMIN_THERAPIST_LIST, {
     fetchPolicy: "cache-and-network",
   });
+
+  const { therapistlist: listData = [], total = "" } = getTherapistList || {};
 
   useEffect(() => {
     getAdminTherapistList({
@@ -198,7 +198,7 @@ const TherapistListPage: NextPage = () => {
         <Loader visible={loader} />
         <ContentHeader title="Therapist" />
         <TherapistListComponent
-          listData={listData}
+          listData={listData || []}
           onSelectPageDropdown={onSelectPageDropdown}
           onPageChange={onPageChange}
           totalData={total}
