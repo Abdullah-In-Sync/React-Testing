@@ -82,10 +82,10 @@ export const superadmin_routes: RoutesType[] = [
   },
   {
     key: 7,
-    label: "Assesment",
+    label: "Assessment",
     path: "/admin/assessment",
     icon: <MedicalInformationOutlinedIcon />,
-    moduleName: "Assesment",
+    moduleName: "Assessment",
   },
   {
     key: 8,

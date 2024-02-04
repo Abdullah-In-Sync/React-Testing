@@ -28,6 +28,8 @@ import EditAssessmentForm from "../../../components/admin/assessement/editAssess
 import ShareAssessmentForm from "../../../components/admin/assessement/shareAssessment/ShareAssessmentForm";
 import { useRouter } from "next/router";
 import { addAdminAssessment } from "../../../utility/types/resource_types";
+import { checkUserType } from "../../../utility/helper";
+import { CUSTOM } from "../../../lib/constants";
 
 const defaultFormValue = {
   name: "",
@@ -63,6 +65,9 @@ const AssessmentListPage: NextPage = () => {
   const [formFields, setFormFields] = useState<addAdminAssessment>({
     ...defaultFormValue,
   });
+
+  const { userType } = checkUserType();
+  const isAdminAssesmentCheck = userType !== CUSTOM;
   // Mutation
   const [createAssessment] = useMutation(ADMIN_CREATE_ASSESSMENT);
   const [deleteAndEditAssessment] = useMutation(
@@ -92,12 +97,12 @@ const AssessmentListPage: NextPage = () => {
   }, [editDeleteAssessmentId]);
 
   useEffect(() => {
-    getOrgList();
+    if (isAdminAssesmentCheck) getOrgList();
   }, []);
 
   const [
     getOrgList,
-    { data: { getOrganizationData: organizationList = [] } = {} },
+    { data: { getOrganizationData: organizationList = undefined } = {} },
   ] = useLazyQuery(GET_ORGANIZATION_LIST, {
     fetchPolicy: "cache-and-network",
     onCompleted: () => {
@@ -203,15 +208,15 @@ const AssessmentListPage: NextPage = () => {
 
   /* istanbul ignore next */
   const handleCreateAssessment = async () => {
+    const variables = isAdminAssesmentCheck
+      ? { name: formFields.name }
+      : { name: formFields.name, org_id: formFields.org_id };
     try {
       await createAssessment({
-        variables: {
-          name: formFields.name,
-          org_id: formFields.org_id,
-        },
+        variables,
         onCompleted: (data) => {
           const {
-            adminCreateAssessment: { duplicateNames },
+            adminCreateAssessment: { duplicateNames, result },
           } = data;
 
           if (duplicateNames) {
@@ -226,7 +231,7 @@ const AssessmentListPage: NextPage = () => {
                   "This assessment already exists in the following organisation!",
               },
             });
-          } else {
+          } else if (result) {
             handleCloseCreateAssessmentModal();
             setIsConfirmShareTask(false);
             refetch();

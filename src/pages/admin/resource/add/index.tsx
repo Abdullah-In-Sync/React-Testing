@@ -49,7 +49,7 @@ const Index = () => {
         },
         onCompleted: (data) => {
           const {
-            createResource: { duplicateNames },
+            createResource: { duplicateNames, result },
           } = data;
           /* istanbul ignore next */
           if (duplicateNames != null) {
@@ -60,7 +60,7 @@ const Index = () => {
                   "This Resource already exists in the following organisations! ",
               },
             });
-          } else {
+          } else if (result) {
             /* istanbul ignore next */
             enqueueSnackbar("Resource added successfully", {
               variant: "success",

@@ -106,7 +106,7 @@ export const ADMIN_DELETE_THERAPY = gql`
 `;
 
 export const ADMIN_CREATE_ASSESSMENT = gql`
-  mutation adminCreateAssessment($org_id: String!, $name: String!) {
+  mutation adminCreateAssessment($org_id: String, $name: String!) {
     adminCreateAssessment(org_id: $org_id, name: $name) {
       duplicateNames {
         _id
