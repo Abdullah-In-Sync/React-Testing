@@ -20,6 +20,7 @@ import {
 import theme from "../styles/theme/theme";
 import AssessmentListPage from "../pages/admin/assessment";
 import { GET_ORGANIZATION_LIST } from "../graphql/query/organization";
+import * as helper from "../utility/helper";
 
 jest.mock("next/router", () => ({
   __esModule: true,
@@ -144,6 +145,24 @@ mocksData.push({
     variables: {
       name: "Namelkmsllvslm",
       org_id: "2301536c4d674b3598814174d8f19593",
+    },
+  },
+  result: {
+    data: {
+      adminCreateAssessment: {
+        duplicateNames: null,
+        result: true,
+        __typename: "adminResult",
+      },
+    },
+  },
+});
+
+mocksData.push({
+  request: {
+    query: ADMIN_CREATE_ASSESSMENT,
+    variables: {
+      name: "customadmincreate",
     },
   },
   result: {
@@ -314,6 +333,10 @@ describe("Admin Assessment list", () => {
     });
   });
   it("Creat assessment", async () => {
+    jest.spyOn(helper, "checkUserType").mockReturnValue({
+      userType: "admin",
+      idTokenData: undefined,
+    });
     await sut();
     fireEvent.click(await screen.findByTestId("createPlanButton"));
     fireEvent.change(await screen.getByTestId("assessment_name"), {
@@ -402,5 +425,26 @@ describe("Admin Assessment list", () => {
         screen.getByText("Assessment shared successfully!")
       ).toBeInTheDocument();
     });
+  });
+
+  it("Custom admin create assessment", async () => {
+    jest.spyOn(helper, "checkUserType").mockReturnValue({
+      userType: "custom",
+      idTokenData: undefined,
+    });
+    await sut();
+    fireEvent.click(await screen.findByTestId("createPlanButton"));
+    fireEvent.change(await screen.getByTestId("assessment_name"), {
+      target: { value: "customadmincreate" },
+    });
+
+    fireEvent.click(await screen.findByTestId("addSubmitForm"));
+    expect(
+      await screen.findByText("Are you sure you want to create the assessment?")
+    ).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Assessment created successfully!")
+    ).toBeInTheDocument();
   });
 });

@@ -67,7 +67,7 @@ const AssessmentListPage: NextPage = () => {
   });
 
   const { userType } = checkUserType();
-  const isAdminAssesmentCheck = userType !== CUSTOM;
+  const isAdminAssesmentCheck = userType === CUSTOM;
   // Mutation
   const [createAssessment] = useMutation(ADMIN_CREATE_ASSESSMENT);
   const [deleteAndEditAssessment] = useMutation(
@@ -97,7 +97,7 @@ const AssessmentListPage: NextPage = () => {
   }, [editDeleteAssessmentId]);
 
   useEffect(() => {
-    if (isAdminAssesmentCheck) getOrgList();
+    if (!isAdminAssesmentCheck) getOrgList();
   }, []);
 
   const [
@@ -208,7 +208,7 @@ const AssessmentListPage: NextPage = () => {
 
   /* istanbul ignore next */
   const handleCreateAssessment = async () => {
-    const variables = !isAdminAssesmentCheck
+    const variables = isAdminAssesmentCheck
       ? { name: formFields.name }
       : { name: formFields.name, org_id: formFields.org_id };
     try {
@@ -218,7 +218,6 @@ const AssessmentListPage: NextPage = () => {
           const {
             adminCreateAssessment: { duplicateNames, result },
           } = data;
-
           if (duplicateNames) {
             /* istanbul ignore next */
             setIsConfirmShareTask(false);
