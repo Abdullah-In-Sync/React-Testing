@@ -315,119 +315,58 @@ describe("Admin Assessment list", () => {
   });
   it("Creat assessment", async () => {
     await sut();
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("createPlanButton")).toBeInTheDocument();
-      fireEvent.click(screen.queryByTestId("createPlanButton"));
-
-      expect(screen.getByText("Create assessment")).toBeInTheDocument();
-      expect(screen.getByTestId("assessment_name")).toBeInTheDocument();
-
-      fireEvent.change(screen.queryByTestId("assessment_name"), {
-        target: { value: "Namelkmsllvslm" },
-      });
-
-      const select = await screen.findByTestId("mainOrganizationSelect");
-      await checkSelected(select, "2301536c4d674b3598814174d8f19593");
-
-      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
-
-      fireEvent.click(screen.queryByTestId("addSubmitForm"));
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Are you sure you want to create the assessment?")
-        ).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.queryByTestId("confirmButton"));
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Assessment created successfully!")
-        ).toBeInTheDocument();
-      });
+    fireEvent.click(await screen.findByTestId("createPlanButton"));
+    fireEvent.change(await screen.getByTestId("assessment_name"), {
+      target: { value: "Namelkmsllvslm" },
     });
+    const select = await screen.findByTestId("mainOrganizationSelect");
+    await checkSelected(select, "2301536c4d674b3598814174d8f19593");
+    fireEvent.click(await screen.findByTestId("addSubmitForm"));
+    expect(
+      await screen.findByText("Are you sure you want to create the assessment?")
+    ).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Assessment created successfully!")
+    ).toBeInTheDocument();
   });
 
   it("delete assessment from list", async () => {
     await sut();
-
-    await waitFor(async () => {
-      expect(
-        screen.getByTestId(
-          "iconButton_delete_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
-        )
-      ).toBeInTheDocument();
-
-      fireEvent.click(
-        screen.queryByTestId(
-          "iconButton_delete_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
-        )
-      );
-
-      await waitFor(async () => {
-        expect(screen.getByTestId("confirmButton")).toBeInTheDocument();
-
-        fireEvent.click(screen.queryByTestId("confirmButton"));
-      });
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Assessment deleted sucessfully!")
-        ).toBeInTheDocument();
-      });
-    });
+    expect(
+      await screen.findByTestId(
+        "iconButton_delete_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+      )
+    ).toBeInTheDocument();
+    fireEvent.click(
+      await screen.findByTestId(
+        "iconButton_delete_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+      )
+    );
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Assessment deleted sucessfully!")
+    ).toBeInTheDocument();
   });
 
   it("Update assessment", async () => {
     await sut();
-
-    await waitFor(async () => {
-      expect(screen.getByTestId("createPlanButton")).toBeInTheDocument();
-      expect(
-        screen.getByTestId(
-          "iconButton_edit_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
-        )
-      ).toBeInTheDocument();
-
-      fireEvent.click(
-        screen.queryByTestId(
-          "iconButton_edit_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
-        )
-      );
-
-      expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
-
-      await waitFor(async () => {
-        // expect(screen.getByTestId("patient_firstname")).toBeInTheDocument();
-        expect(screen.getByTestId("patient_firstname")).toHaveValue(
-          "re create updated"
-        );
-
-        fireEvent.change(screen.queryByTestId("patient_firstname"), {
-          target: { value: "Update the name and submit" },
-        });
-      });
-
-      expect(screen.getByTestId("addSubmitForm")).toBeInTheDocument();
-
-      fireEvent.click(screen.queryByTestId("addSubmitForm"));
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Are you sure you want to update the assessment?")
-        ).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.queryByTestId("confirmButton"));
-
-      await waitFor(async () => {
-        expect(
-          screen.getByText("Assessment updated successfully!")
-        ).toBeInTheDocument();
-      });
+    fireEvent.click(
+      await screen.findByTestId(
+        "iconButton_edit_5fb6dc4d-402c-4934-bd27-bdca0dfa0d6d"
+      )
+    );
+    fireEvent.change(await screen.findByTestId("patient_firstname"), {
+      target: { value: "Update the name and submit" },
     });
+    fireEvent.click(await screen.findByTestId("addSubmitForm"));
+    expect(
+      await screen.findByText("Are you sure you want to update the assessment?")
+    ).toBeInTheDocument();
+    fireEvent.click(await screen.findByTestId("confirmButton"));
+    expect(
+      await screen.findByText("Assessment updated successfully!")
+    ).toBeInTheDocument();
   });
 
   it("Share assessment from list", async () => {

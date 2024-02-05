@@ -208,7 +208,7 @@ const AssessmentListPage: NextPage = () => {
 
   /* istanbul ignore next */
   const handleCreateAssessment = async () => {
-    const variables = isAdminAssesmentCheck
+    const variables = !isAdminAssesmentCheck
       ? { name: formFields.name }
       : { name: formFields.name, org_id: formFields.org_id };
     try {
