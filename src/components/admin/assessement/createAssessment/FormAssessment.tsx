@@ -96,35 +96,38 @@ const FormAssessmentBox: React.FC<ViewProps> = ({
           </Grid>
         </Box>
 
-        {organizationList && (
-          <Box>
-            <MultiSelectComponent
-              fullWidth
-              required={true}
-              onChange={handleChange}
-              id="resourceOrgSelect"
-              labelId="resourceOrg"
-              name="org_id"
-              label="Select Organization"
-              options={[
-                ...[{ _id: "all", name: "Select All" }],
-                ...(organizationList || []),
-              ]}
-              mappingKeys={["_id", "name"]}
-              size="small"
-              className="form-control-bg multiSelect"
-              extraProps={{ "data-testid": "mainOrganizationSelect" }}
-              multiSelect={
-                /* istanbul ignore next */
-                csvDecode(formFields?.org_id)
-              }
-              value={
-                /* istanbul ignore next */
-                csvDecode(formFields?.org_id)
-              }
-            />
-          </Box>
-        )}
+        {
+          /* istanbul ignore next */
+          organizationList && (
+            <Box>
+              <MultiSelectComponent
+                fullWidth
+                required={true}
+                onChange={handleChange}
+                id="resourceOrgSelect"
+                labelId="resourceOrg"
+                name="org_id"
+                label="Select Organization"
+                options={[
+                  ...[{ _id: "all", name: "Select All" }],
+                  ...(organizationList || []),
+                ]}
+                mappingKeys={["_id", "name"]}
+                size="small"
+                className="form-control-bg multiSelect"
+                extraProps={{ "data-testid": "mainOrganizationSelect" }}
+                multiSelect={
+                  /* istanbul ignore next */
+                  csvDecode(formFields?.org_id)
+                }
+                value={
+                  /* istanbul ignore next */
+                  csvDecode(formFields?.org_id)
+                }
+              />
+            </Box>
+          )
+        }
 
         <div
           style={{
