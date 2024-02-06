@@ -3,7 +3,7 @@ import moment from "moment";
 import { getSessionToken } from "./storage";
 import { getUpdatedFileName } from "../lib/helpers/s3";
 import TherapyTabs from "../components/patient/therapy/TherapyTabs";
-import { IS_ADMIN, moduleList } from "../lib/constants";
+import { CUSTOM, IS_ADMIN, moduleList } from "../lib/constants";
 
 type SessionObject = {
   label: string;
@@ -200,11 +200,14 @@ export const checkPrivilageAccess = (
   isUserTypeConditionCheck?: any
 ) => {
   const { userTokenId, userType } = getSessionToken();
+  const { userType: roleUserType } = checkUserType();
   const { role_access } = parseJwt(userTokenId) || {};
   if (
-    (userType === IS_ADMIN && !isUserTypeConditionCheck) ||
-    !role_access ||
-    !moduleName
+    (userType === IS_ADMIN &&
+      roleUserType === CUSTOM &&
+      !isUserTypeConditionCheck) ||
+    !moduleName ||
+    !role_access
   )
     return true;
   const moduleObj = moduleList[moduleName];

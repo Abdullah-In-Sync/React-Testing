@@ -677,40 +677,43 @@ const Resource: NextPage = () => {
             >
               Approve Resource
             </Button>
-            <Button
-              className={`text-white`}
-              variant="contained"
-              sx={{
-                textTransform: "none",
-                height: "35px",
-              }}
-              data-testid="templateList"
-              href={"/admin/resource/template/list"}
-            >
-              Templates
-            </Button>
-            <Button
-              color={"secondary"}
-              variant="contained"
-              href="/admin/resource/add"
-              sx={{
-                textTransform: "none",
-                height: "35px",
-              }}
-            >
-              Add Resource
-            </Button>
-            <Button
-              color={"secondary"}
-              variant="contained"
-              href="/admin/resource/create"
-              sx={{
-                textTransform: "none",
-                height: "35px",
-              }}
-            >
-              Create Resource
-            </Button>
+            <NextLink href={"/admin/resource/template/list"} passHref>
+              <Button
+                className={`text-white`}
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  height: "35px",
+                }}
+                data-testid="templateList"
+              >
+                Templates
+              </Button>
+            </NextLink>
+            <NextLink href={"/admin/resource/add"} passHref>
+              <Button
+                color={"secondary"}
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  height: "35px",
+                }}
+              >
+                Add Resource
+              </Button>
+            </NextLink>
+            <NextLink href={"/admin/resource/create"} passHref>
+              <Button
+                color={"secondary"}
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  height: "35px",
+                }}
+              >
+                Create Resource
+              </Button>
+            </NextLink>
           </Grid>
         </Grid>
         {isFormulation ? (

@@ -36,7 +36,8 @@ const NavBar = () => {
 
   const infoModalRef = useRef<ConfirmInfoElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const { orgData: { logo_url } = {} } = useAppContext();
+  const { orgData } = useAppContext();
+  const { logo_url } = orgData || {};
 
   const userRoute = {
     patient: patient_routes,
