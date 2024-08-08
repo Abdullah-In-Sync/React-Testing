@@ -51,7 +51,7 @@ jobs:
 
       - name: Cache Packages
         id: yarn-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             **/node_modules
@@ -86,7 +86,7 @@ jobs:
 
     - name: Restore Cached Packages
       id: yarn-cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           **/node_modules
