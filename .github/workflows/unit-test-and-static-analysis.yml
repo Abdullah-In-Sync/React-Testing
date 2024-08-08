@@ -259,7 +259,7 @@ jobs:
         working-directory: src
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.0-beta.3
+        uses: codecov/codecov-action@v4.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./src/coverage/lcov.info
